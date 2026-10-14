@@ -11,7 +11,12 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+
   repository-quality:
     name: Repository Quality
     runs-on: ubuntu-latest
@@ -24,14 +29,64 @@ jobs:
         run: |
           test -f README.md
           test -f .gitignore
+          test -f pyproject.toml
           test -f .github/pull_request_template.md
 
-      - name: Check for obvious committed secrets
+      - name: Check forbidden committed files
         run: |
-          if git ls-files | grep -E '(^|/)\.env$|\.pem$|\.key$'; then
+          if git ls-files | grep -E '(^|/)\.env($|\.)|\.pem$|\.key$'; then
             echo "Potential secret file committed to repository."
             exit 1
           fi
 
-      - name: CI completed
-        run: echo "Repository Quality PASS"
+
+  python-quality:
+    name: Python Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Ruff lint
+        run: ruff check .
+
+      - name: Ruff format
+        run: ruff format --check .
+
+      - name: Type check
+        run: mypy .
+
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run unit tests
+        run: pytest tests/unit -v
