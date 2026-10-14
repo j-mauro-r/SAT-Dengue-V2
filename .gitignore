@@ -1,1 +1,5 @@
 .dwp/
+!.dwp/
+.dwp/*
+!.dwp/config.json
+tmp/

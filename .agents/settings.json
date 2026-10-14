@@ -1,0 +1,6 @@
+{
+  "defaultMode": "review-first",
+  "requireValidationEvidence": true,
+  "allowDirectCommit": false,
+  "notes": "Repository in foundation stage; prefer DWP flows for multi-step work."
+}
