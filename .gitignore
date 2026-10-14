@@ -1,5 +1,33 @@
+# DWP (Dot Workspace Project)
 .dwp/
 !.dwp/
 .dwp/*
 !.dwp/config.json
 tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment
+.env
+.env.*
+
+# IDE / OS
+.DS_Store
+.vscode/
+
+# Data
+data/raw/**
+data/interim/**
+data/processed/**
+
+# ML
+mlruns/
+artifacts/
+
+# Secrets
+*.pem
+*.key
