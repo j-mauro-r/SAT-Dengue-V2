@@ -36,9 +36,7 @@ jobs:
           test -f docs/roadmap/master-plan.md
 
       - name: DWP conformance
-        run: 
-          mkdir -p .dwp/plans
-          bash .agents/skills/deepworkplan/verify/conformance.sh
+        run: mkdir -p .dwp/plans && bash .agents/skills/deepworkplan/verify/conformance.sh
 
       - name: Documentation consistency inventory
         run: |
