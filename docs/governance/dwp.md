@@ -88,6 +88,10 @@ Onboarding actions completed:
 ## Foundation package execution notes
 
 - Branch used for this package: `docs/foundation-package-v1`.
-- DWP full plan for this work was created locally under `.dwp/plans/` before implementation.
-- Traceability discrepancy detected: requested baseline commit `5950021cb8a5eab49d5d5cba82f157568c216d0b` is not present in this local clone (`git cat-file -t` reports missing object).
-- Resolution used: continue from current repository head with discrepancy explicitly recorded for human review.
+- A DWP Full plan was created locally for the Foundation Package work under `.dwp/plans/` before implementation.
+- That Foundation Package plan is not the project-level SAT-Dengue V2 Master Plan.
+- The durable project roadmap is versioned in `docs/roadmap/master-plan.md`.
+- Operational DWP Full Master Plan for stages 0-10: **UNVERIFIED** until a separate project-level plan is created locally and its plan ID/status are recorded durably.
+- GitHub confirms PR #5 targets `main` at baseline commit `5950021cb8a5eab49d5d5cba82f157568c216d0b`.
+- The implementing local clone reported that baseline object as missing. This is a local clone/synchronization discrepancy, not evidence that the GitHub baseline commit is invalid.
+- The feature branch must be synchronized with current `main` and all affected validation gates re-run before Human Gate approval.
