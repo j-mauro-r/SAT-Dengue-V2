@@ -2,8 +2,8 @@
 
 ## Status, Authority, and Purpose
 
-**Document status: DRAFT — Phase B, pending Mauricio's review.**
-**Human Gate for PROD-04: UNAPPROVED.** Prepared on 2026-10-15 in the existing Stage 1 PR #7. This is a product document, not a functional implementation or an implementation plan. No merge, contract freeze, G0/G1 approval, or Stage 1 completion is implied.
+**Document status: CLOSED — Phase B. APPROVED TO MAURICIO**
+**Human Gate: UNAPPROVED.** Prepared on 2026-10-15 in the existing Stage 1 PR #7. This is a product document, not a functional implementation or an implementation plan. No merge, contract freeze, G0/G1 approval, or Stage 1 completion is implied.
 
 This document owns the master dashboard story, proposed screen behavior, chart selection, and acceptance criteria. [PROD-01](PROD-01-business-question.md) owns the business question and geography; [PROD-02](PROD-02-users.md) owns the primary user; [PROD-03](PROD-03-supported-decisions.md) owns the supported human decision. The [product baseline](../product-definition.md), [contract lifecycle](../../contracts/contract-lifecycle.md), and [master plan](../../roadmap/master-plan.md) remain authoritative for scientific scope and staged delivery.
 
