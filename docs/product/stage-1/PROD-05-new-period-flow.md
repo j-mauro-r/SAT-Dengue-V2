@@ -2,10 +2,10 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase C.**
+**Document status: DRAFT — Phase C.**  
 **Human Gate: UNAPPROVED.**
 
-This document defines the product workflow for processing a new monthly departmental period. It owns the user-visible sequence from file selection through validation, inference, result presentation, and persistence semantics. It does not define implementation architecture, endpoint shapes, final schemas, model internals, or frozen validation rules.
+This document defines the product workflow for processing a new monthly departmental period. It owns the user-visible sequence from file selection through validation, explicit predictive inference, result presentation, and persistence. It does not define implementation architecture, endpoint shapes, final schemas, model internals, retry/timeout behavior, cancellation, technical error taxonomies, or detailed partial-processing mechanics.
 
 Related sources of truth:
 
@@ -29,9 +29,9 @@ User selects department
     ↓
 User selects monthly departmental file
     ↓
-System validates file and period
+System validates file, municipality identities, required information, and period
     ↓
-If invalid → explain blocking errors; no inference
+If invalid → explain the blocking problem; no inference
     ↓
 If valid → user explicitly starts processing
     ↓
@@ -39,12 +39,12 @@ System performs predictive inference for eligible municipalities
     ↓
 System produces T+1 and T+2 results
     ↓
-System persists the completed run and its traceability
+System persists the completed result
     ↓
-Dashboard presents the new results
+Dashboard presents the new result
 ```
 
-The flow is a product contract. It does not prescribe whether the implementation uses synchronous or asynchronous jobs, queues, workers, storage engines, or a particular API design.
+The flow is a product contract. It does not prescribe synchronous versus asynchronous execution, queues, workers, storage engines, or a particular API design.
 
 ## Step-by-Step User Experience
 
@@ -67,40 +67,32 @@ The interface should show at minimum:
 - detected or declared reference period when available;
 - validation state.
 
-**TO BE FROZEN IN LATER STAGE:** accepted file format, size limits, encoding, sheet/tab rules, and exact period representation.
+**TO BE FROZEN IN LATER STAGE:** accepted file format and exact period representation.
 
 ### 3. Validate Before Inference
 
-Validation occurs before model execution. Validation must distinguish at least:
+Validation occurs before model execution. At product level it must determine whether:
 
-- file cannot be read;
-- structural/schema problem;
-- invalid or missing period information;
-- municipality identity problem;
-- required information missing for one or more municipalities;
-- duplicate/conflicting records;
-- incompatible or unsupported data values;
-- no municipality eligible for inference.
+- the file can be interpreted;
+- the municipality and period information are valid for the active department;
+- the required information is present;
+- there is sufficient eligible information to proceed to inference.
 
-A blocking validation failure prevents inference.
+A blocking validation failure prevents inference and must be explained to the user in understandable terms.
 
-A non-blocking issue may allow partial processing only if later product/data contracts explicitly authorize that behavior.
+Detailed technical validation taxonomies belong to later data/API contracts.
 
-**OPEN DECISION:** whether a departmental file with some invalid municipalities is rejected entirely or can proceed for the valid subset.
-
-### 4. Confirm and Start Processing
+### 4. Explicitly Start Processing
 
 After successful validation, the user explicitly initiates processing through an action such as **Process new period**.
 
-The product must make clear that processing may create a new persisted prediction run. The user should not need to understand the model implementation to execute this action.
-
-**OPEN DECISION:** whether an explicit confirmation step is required after validation and before inference, or whether the processing action itself is sufficient confirmation.
+The user should not need to understand model internals to perform this action. Selecting the file or validating it is not equivalent to running inference.
 
 ### 5. Predictive Inference
 
-The system uses historical information plus information available at the close of the newly loaded reference period to estimate dengue excess/outbreak-onset risk for T+1 and T+2.
+The system uses historical information plus information available at the close of the newly loaded reference period to estimate dengue excess/outbreak-related risk for T+1 and T+2.
 
-The product must not describe this as a regression operation. User-facing language should use predictive inference, risk estimation, or equivalent approved terminology.
+User-facing language should use predictive inference, risk estimation, or equivalent approved terminology.
 
 The flow must preserve the distinction between:
 
@@ -112,39 +104,29 @@ No public-health intervention is executed automatically.
 
 ### 6. Processing Outcome
 
-The workflow must end in one of these product states:
+If processing succeeds, the resulting T+1/T+2 prediction becomes available to the dashboard.
 
-- **COMPLETED:** a new valid run is available and can be displayed.
-- **VALIDATION FAILED:** inference was not started because the input did not satisfy blocking requirements.
-- **PROCESSING FAILED:** validation passed, but processing did not complete successfully.
-- **NO ELIGIBLE PREDICTION:** the input was processed but no municipality/horizon produced a valid prediction under later eligibility rules.
+If validation or processing fails, the user must receive a clear failure state and the previously persisted valid result must not be silently replaced or relabeled as the new result.
 
-These are product-level semantic states, not frozen API status codes.
-
-**TO BE FROZEN IN LATER STAGE:** retry behavior, timeout behavior, cancellation, partial-completion policy, and technical error taxonomy.
+Technical retry, timeout, cancellation, detailed partial-completion behavior, and internal error codes are outside this Stage 1 document.
 
 ### 7. Persist Completed Results
 
-A completed run must be persisted so that the dashboard can retrieve it later without rerunning inference.
+A completed result must be persisted so that the dashboard can retrieve it later without rerunning inference.
 
-At minimum, persistence must preserve enough information to reconstruct:
+At minimum, persistence must preserve enough product information to identify:
 
 - department;
 - reference period;
 - municipality-level T+1/T+2 results;
-- model/version identity;
-- generation time;
-- run identity;
-- origin of the run where relevant;
-- the association with the uploaded period/input version.
+- model version;
+- prediction generation date/time.
 
-Exact persistence technology and storage layout are implementation decisions for later stages.
+Exact persistence technology, internal identifiers, provenance fields, input-version associations, and storage layout belong to later engineering contracts.
 
 ### 8. Display the New Result
 
 After successful processing, the dashboard should load the newly completed result and expose the information defined by PROD-04 and PROD-06.
-
-If the new run fails, the previously persisted valid result must not be silently overwritten or relabeled as the new result.
 
 ## Result Reuse and Refresh Rules
 
@@ -156,29 +138,20 @@ If the new run fails, the previously persisted valid result must not be silently
 - Only an explicit new-period processing action may initiate inference.
 - A previously persisted result may be revisited without uploading the file again.
 
-## Duplicate or Repeated Period Handling
+## Repeated Period Rule
 
-A repeated submission for the same department and reference period must not silently destroy prior traceability.
+A repeated period must not silently overwrite an existing persisted result.
 
-**OPEN DECISION:** final product policy for same-period reprocessing:
-
-1. reject duplicate periods;
-2. allow reprocessing and create a new immutable run version;
-3. allow replacement under an explicitly governed correction workflow.
-
-Until this is decided, no overwrite-in-place behavior is approved.
+The final replacement, versioning, or correction policy belongs to later contracts and implementation design.
 
 ## Error Communication Principles
 
 Errors shown to the user must:
 
 - explain what prevented progression;
-- identify whether the problem is file-wide or municipality-specific when known;
 - avoid exposing internal stack traces or technical secrets;
-- avoid converting missing/invalid input into a low-risk prediction;
+- avoid converting missing or invalid input into a low-risk prediction;
 - preserve the previously valid persisted result when the new attempt fails.
-
-Exact error codes belong to the later Input/API contracts.
 
 ## Acceptance Criteria — DRAFT
 
@@ -186,20 +159,18 @@ Exact error codes belong to the later Input/API contracts.
 |---|---|---|
 | AC01 | The user selects a departmental file. | File selection alone does not start inference or replace persisted results. |
 | AC02 | The selected file contains a blocking validation problem. | Inference does not start and the user receives an understandable validation outcome. |
-| AC03 | Validation succeeds and the user explicitly starts processing. | The system may perform inference for eligible municipalities for T+1 and T+2. |
-| AC04 | Processing completes successfully. | A new traceable run is persisted and becomes available to the dashboard. |
-| AC05 | Processing fails after validation. | The failure is visible and a previous valid persisted result is not silently replaced. |
+| AC03 | Validation succeeds and the user explicitly starts processing. | The system performs predictive inference for eligible municipalities for T+1 and T+2. |
+| AC04 | Processing completes successfully. | The new result is persisted and becomes available to the dashboard. |
+| AC05 | Validation or processing fails. | The failure is visible and a previous valid persisted result is not silently replaced. |
 | AC06 | The user refreshes or revisits the dashboard. | Existing persisted results are read without triggering new inference or training. |
-| AC07 | A municipality has no valid prediction. | The UI shows an unavailable/ineligible state rather than zero risk or a fabricated alert. |
-| AC08 | The same period is submitted again. | The system does not silently overwrite prior traceability; final reprocessing policy remains governed by the later contract. |
+| AC07 | A municipality has no valid prediction. | The UI shows an unavailable state rather than zero risk or a fabricated alert. |
+| AC08 | The same period is submitted again. | The system does not silently overwrite the existing persisted result. |
 
-## Open Decisions and Later Freeze
+## Later Freeze
 
-- **OPEN DECISION:** whole-file rejection versus partial municipality processing.
-- **OPEN DECISION:** same-period reprocessing/versioning policy.
-- **OPEN DECISION:** whether a separate confirmation is required before inference.
-- **TO BE FROZEN IN LATER STAGE:** exact validation rules and error taxonomy.
-- **TO BE FROZEN IN LATER STAGE:** retry, timeout, cancellation, and partial-failure behavior.
-- **TO BE FROZEN IN LATER STAGE:** final input schema, prediction schema, API endpoints, persistence mechanism, and implementation architecture.
+- **TO BE FROZEN IN LATER STAGE:** exact validation rules.
+- **TO BE FROZEN IN LATER STAGE:** final input schema and prediction schema.
+- **TO BE FROZEN IN LATER STAGE:** replacement/versioning policy for repeated periods.
+- **TO BE FROZEN IN LATER STAGE:** API endpoints, persistence mechanism, and implementation architecture.
 
-This document does not approve PROD-06, PROD-07, PROD-08, Gate G1, or Stage 1 completion.
+This document does not approve Gate G1, Stage 1 completion, or any implementation detail beyond the product workflow defined above.
