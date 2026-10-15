@@ -31,3 +31,6 @@ artifacts/
 # Secrets
 *.pem
 *.key
+
+# Python package metadata
+*.egg-info/

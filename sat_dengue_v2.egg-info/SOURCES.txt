@@ -1,7 +1,0 @@
-README.md
-pyproject.toml
-sat_dengue_v2.egg-info/PKG-INFO
-sat_dengue_v2.egg-info/SOURCES.txt
-sat_dengue_v2.egg-info/dependency_links.txt
-sat_dengue_v2.egg-info/requires.txt
-sat_dengue_v2.egg-info/top_level.txt
