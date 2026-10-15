@@ -1,24 +1,14 @@
-# Engineering Standards
+# Standards (Entry Document)
 
-## Language and Communication
+Authoritative sources:
 
-- Repository documentation and commit messages are English-only.
-- Status updates must include objective evidence (command output summary or file diff summary).
+- `docs/standards/engineering-standards.md`
+- `docs/standards/ml-scientific-standards.md`
+- `docs/operations/validation-and-evidence.md`
 
-## Version Control
+## Foundation Summary
 
-- Use feature branches; do not work on `main` directly.
-- Use Conventional Commits: `type(scope): description`.
-- Current recommended scopes: `docs`, `governance`, `dwp`, `agents`, `infra`.
-
-## Change Discipline
-
-- Prefer minimal, reviewable diffs.
-- Do not introduce scope creep outside explicit user request.
-- Never introduce PITAGORAS-related files/configuration.
-
-## Validation Discipline
-
-- Select gates from touched surface, as defined in [TESTING_GUIDE.md](TESTING_GUIDE.md).
-- If scoped gates are ambiguous, run full gate.
-- Do not mark tasks complete without validation evidence.
+- Python quality gates are active on tests surface.
+- Evidence-state reporting is mandatory.
+- Scientific rigor requires anti-leakage and reproducibility discipline.
+- Notebook usage is allowed for exploration, but reusable logic belongs in modules.

@@ -1,23 +1,26 @@
-# Security
+# Security and Data Boundaries
 
-## Baseline Posture
+## Security Baseline
 
-- Never commit secrets, credentials, or private keys.
-- Never include tokens in logs, reports, or screenshots.
-- Keep sensitive values in environment variables or secret stores once runtime components are introduced.
+- Never commit credentials, keys, or secret tokens.
+- Never expose secrets in logs, reports, screenshots, or PR text.
+- Keep sensitive values in secure environment mechanisms when runtime services are introduced.
 
-## Agent Rules
+## Repository-Level Safety
 
-- Do not print secret values in command outputs.
-- Do not create credential files in repository paths.
-- Do not bypass validation or security review gates.
+- Run secret-pattern scans before merge.
+- Keep `.dwp/` runtime state untracked except approved tracked files.
+- Use least-privilege decisions for automation and CI.
 
-## Data Governance
+## Data Boundaries
 
-- Treat dataset-level personally identifiable information as sensitive by default.
-- Document anonymization and access controls before ingesting production datasets.
+Authoritative source: `docs/data/data-policy.md`
 
-## Vulnerability Handling
+- Large datasets are external (Kaggle/local/Colab).
+- Sensitive health data must be treated as restricted by default.
+- Tiny synthetic fixtures are the preferred repository test data.
 
-- Use private disclosure channels for third-party skill vulnerabilities.
-- Record security-relevant decisions in versioned documentation.
+## Vulnerability and Incident Handling
+
+- Record material security decisions in versioned docs/ADRs.
+- Escalate suspected vulnerabilities through private channels before disclosure.
