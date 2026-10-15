@@ -2,7 +2,7 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase A, pending Mauricio's review.**
+**Document status: DRAFT — Phase A. CLOSED. APPROVED TO MAURICIO**
 **Human Gate: UNAPPROVED.** This records the approved direction below; the document itself is not approved. It does not close G0, approve G1, or mark Stage 1 DONE. The [master plan](../../roadmap/master-plan.md) remains authoritative for stage status.
 
 This document owns the business question, intended value, and Phase A source register. [PROD-02](PROD-02-users.md) owns users; [PROD-03](PROD-03-supported-decisions.md) owns supported human decisions. The [product definition](../product-definition.md) remains the existing scientific and dashboard baseline.
@@ -27,7 +27,7 @@ This asks whether predictive inference adds useful advance information to observ
 ## Assumptions and Open Questions
 
 - **ASSUMPTION — pending validation:** the information available at each cutoff will be sufficiently timely and complete to support useful advance estimates. Historical records may be revised; retrospective availability must not be confused with operational availability.
-- **OPEN DECISION:** which municipalities within Tolima and Meta are eligible for initial use, and under what coverage/data-quality criteria? Departmental scope does not establish universal municipal coverage.
+- **TO BE FROZEN IN LATER STAGE — municipal coverage within Tolima and Meta**: the geographic scope is defined at the departmental level and includes all municipalities in Tolima and all municipalities in Meta. Each department will be evaluated separately and will have its own dedicated dashboard tab. The specific eligibility, data-quality, coverage, and minimum-history criteria required for a municipality to produce a valid prediction will be frozen during Stage 2 Data & Target Freeze.
 - **TO BE FROZEN IN LATER STAGE:** the epidemiological definition of excess, onset versus continuation, target construction, and temporal availability rules belong to Stage 2 Data & Target Freeze. A predicted excess must not automatically be called a new onset.
 - **TO BE FROZEN IN LATER STAGE:** exact input variables, file format, historical-window requirements, validation rules, and prediction fields. The Input Contract is not frozen; final product contracts belong to Stage 6.
 - **OPEN DECISION:** acceptable false-alarm/missed-event tradeoffs and evidence needed for operational usefulness. The proposal's scientific evaluation criteria are source context, not a newly approved operational acceptance threshold.
