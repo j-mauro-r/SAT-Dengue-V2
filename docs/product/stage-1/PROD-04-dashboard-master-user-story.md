@@ -7,7 +7,7 @@
 
 This document owns the master dashboard story, proposed screen behavior, chart selection, and acceptance criteria. [PROD-01](PROD-01-business-question.md) owns the business question and geography; [PROD-02](PROD-02-users.md) owns the primary user; [PROD-03](PROD-03-supported-decisions.md) owns the supported human decision. The [product baseline](../product-definition.md), [contract lifecycle](../../contracts/contract-lifecycle.md), and [master plan](../../roadmap/master-plan.md) remain authoritative for scientific scope and staged delivery.
 
-The explicit current request authorizes drafting PROD-04 in the same PR. Phase A files were inspected at PR head `1bc5e11832518b74b8b4ce9968a75efb4b12789d` and are preserved. PROD-02/03 record approval; PROD-01 has a CLOSED/APPROVED heading alongside an UNAPPROVED body. This status inconsistency is not resolved by this document and does not grant any stage-gate approval.
+The latest explicit request authorizes revising PROD-04 in the same PR: retain the dashboard views, simplify operational and audit detail, remove numeric case-count projections, and consolidate visible acceptance criteria. The complete document remains subject to review. Phase A files were inspected at PR head `1bc5e11832518b74b8b4ce9968a75efb4b12789d` and are preserved. PROD-02/03 record approval; PROD-01 has a CLOSED/APPROVED heading alongside an UNAPPROVED body. This status inconsistency is not resolved by this document and does not grant any stage-gate approval.
 
 Status labels throughout:
 
@@ -30,14 +30,15 @@ A prediction supports the decision in PROD-03; it neither guarantees a peak nor 
 |---|---|---|
 | R01 | Separate Tolima and Meta tabs; evaluate each department independently. Geographic scope includes all municipalities in each department; eligibility for a valid prediction remains subject to Stage 2. | USER REQUIREMENT and current PROD-01 |
 | R02 | Offer upload of the latest month's departmental file, containing multiple municipalities. | USER REQUIREMENT; exact input schema deferred |
-| R03 | Without a new upload, retrieve the latest available prediction, including the last model-training result when that is the only available result. | USER REQUIREMENT |
+| R03 | Without a new upload, retrieve the latest available prediction, including a persisted model-training result when that is the only available result, without retraining. | USER REQUIREMENT |
 | R04 | The API supplies the data needed for the endemic channel and all other charts. | USER REQUIREMENT |
-| R05 | Show a monthly endemic channel with a projection line at T+1 and T+2. | USER REQUIREMENT; numeric projection feasibility requires resolution below |
 | R06 | Select exactly two additional primary charts with rationale from real-world systems. | USER REQUIREMENT; selected designs are DRAFT PRODUCT DECISIONS |
 | R07 | Remove the insights and recommendations section for now. | USER REQUIREMENT |
-| R08 | Show audit information including date and time of the last data upload. | USER REQUIREMENT |
+| R08 | Show the reference period, prediction generation date/time, model version, and last data upload date/time. | USER REQUIREMENT |
 | R09 | Show the current date, distinct from the data period and upload date. | USER REQUIREMENT |
-| R10 | Preserve separate T+1/T+2 traffic-light alerts, complementary information, municipal selection, and traceability. | Approved direction in PROD-01..03 and existing product baseline |
+| R10 | Preserve separate T+1/T+2 traffic-light alerts, complementary information, municipal selection, and basic traceability. | USER REQUIREMENT and existing product baseline |
+
+R05 has been removed following Mauricio's review. Numeric T+1/T+2 case-count projections are outside this story; the endemic channel remains, and future risk is shown through alerts and probabilities.
 
 ### Mockup Provenance and Boundaries
 
@@ -59,42 +60,33 @@ Do not adopt the mock's illustrative 50% cutoff, P25/P50/P75 channel constructio
 
 ### Load, Reuse, and Update
 
-1. On dashboard opening, retrieve the latest available successful, persisted result for the selected context. Opening, refreshing, switching tabs, and changing municipality/horizon only retrieve data; they do not trigger inference or training.
-2. If the only result is from model training/evaluation, display it with an explicit historical/model-training origin label and its real reference/target periods. Reuse a saved compatible result; never launch training merely to populate the dashboard or relabel a historical result as current operational inference.
-3. The user selects a new monthly departmental file and explicitly initiates upload/processing. Show validation, processing, success, or failure. Merely selecting a file does not silently replace displayed results.
-4. Validate department, reference period, municipal identifiers/coverage, and required data under the eventual Input Contract. Show actionable errors. A mixed/wrong-department file cannot contaminate the active department. Duplicate, revised, skipped, or out-of-order months require policy in PROD-05/08 rather than silently overwriting history.
-5. After validation and successful inference/persistence, display the new result and matching audit context together. Retain prior successful results for history. Pending/failed attempts must not masquerade as the latest successful prediction.
-6. On failure, retain the previous valid result with a visible failure/previous-result notice. Distinguish the latest upload attempt from the accepted dataset and from the dataset used by the displayed prediction. If no result exists, show a clear empty state and upload option.
+1. On dashboard opening, retrieve the latest available persisted prediction for the selected context. Opening, refreshing, switching tabs, and changing municipality/horizon only retrieve data; they do not trigger inference or training.
+2. If only a compatible persisted model-training result exists, display it with a historical/model-training label and its actual reference and target periods. Never launch training merely to populate the dashboard or present historical results as current forecasts.
+3. The user selects a monthly departmental file and explicitly initiates upload/processing. Show clear validation, processing, completion, or error feedback; mere file selection does not update results.
+4. After successful processing, show the available prediction and its basic audit information. If no prediction is available, explain that state and offer the monthly upload action.
 
-For this draft, “latest” means the latest successful published result eligible for display, with explicit reference period and run time; corrections, historical training publications, and tie-breaking precedence remain OPEN DECISION in PROD-05/07. The API must identify the chosen result and its origin consistently; the client must not guess by sorting unrelated timestamps. This proposal does not require a fresh prediction for every scoped municipality when coverage is incomplete.
+Detailed upload validation, persistence, and result-selection policies belong to PROD-05..08. This master story defines only the visible upload and reuse experience.
 
 ### Three Primary Visualizations
 
 | Chart | User question | Proposed visual behavior and data |
 |---|---|---|
-| 1. Monthly endemic channel with observed cases and T+1/T+2 projection | How does the observed trajectory compare with expected seasonal levels, and what is projected next? | Selected municipality; month/year axis; case-count axis; observed line through T; API-provided endemic bands/thresholds with method labels; forecast boundary and visually distinct projection line at T+1/T+2. Dates must cross year boundaries correctly. Show uncertainty only when supplied with a defined method and coverage level. |
+| 1. Monthly endemic channel with observed cases | How does the observed trajectory compare with expected seasonal levels? | Selected municipality; month/year axis; case-count axis; observed line through reference month T; API-provided endemic bands/thresholds with method labels. T+1/T+2 risk is presented in the alerts and probability chart, with actual target months, rather than as projected case counts. |
 | 2. Probability of excess by horizon | How does estimated risk differ between next month and the following month? | Two bars or points for the selected municipality, T+1 and T+2 with actual target month/year; common 0–100% scale; values and alert labels. Show applicable API-supplied operational probability threshold(s), clearly distinguished from case-count thresholds. If thresholds differ by horizon, label each separately. |
-| 3. Municipal predictive-alert map | Where in this department are signals concentrated for the selected future month? | Municipal choropleth for the active department; explicit T+1/T+2 toggle and target month; API-provided alert categories and compatible probabilities; legend distinguishes unavailable, insufficient-data, and ineligible municipalities from valid alert categories. Selection reveals municipality name/code, horizon, probability, alert, reference period, and run. Provide an equivalent municipality table for accessible inspection and map failure. |
+| 3. Municipal predictive-alert map | Where in this department are signals concentrated for the selected future month? | Municipal choropleth for the active department; explicit T+1/T+2 toggle and target month; API-provided alert categories and compatible probabilities; legend distinguishes unavailable, insufficient-data, and ineligible municipalities from valid alert categories. Selection reveals municipality name/code, horizon, probability, alert, reference period, and generation date. Provide an equivalent municipality table for accessible inspection and map failure. |
 
-Chart 3 is a visualization of predicted alert categories, not a case-count, incidence, or causal-risk map. Chart 2 compares horizons within a municipality, not departments with different periods. The map and equivalent table must disclose any municipalities using different periods/runs and exclude them from an apparently same-period comparison unless explicitly labeled; no silent mixing.
-
-### Case Projection Is a Separate Scientific Requirement
-
-**OPEN DECISION — material feasibility:** R05 requests numeric case projections on the case-count axis. The baseline objective is risk of excess/onset; a classifier's probability is not a case forecast. Do not convert 78% risk into 78 cases or multiply a probability by the endemic threshold to fabricate a line.
-
-The required end state remains a validated API-supplied case projection for T+1/T+2, with target definition and provenance compatible with observed cases. Whether an existing model can supply it or a separately validated estimation method is necessary requires Mauricio's decision and later scientific evaluation; this document selects neither a regression model nor a new target. Until resolved, the channel may show observed data, endemic context, and labeled future month positions with “Case projection unavailable”; this is a degraded state, **not acceptance of R05 as complete**. Risk estimates remain on Chart 2. The final implementation cannot claim full story acceptance while R05 is unresolved.
+Chart 3 is a visualization of predicted alert categories, not a case-count, incidence, or causal-risk map. Chart 2 compares horizons within a municipality, not departments with different periods. The map and equivalent table identify the displayed reference and target periods so users can interpret the departmental context.
 
 ### Freshness, Audit, and History
 
-Display separate, clearly labeled values for:
+Show today's date separately from these four basic audit values:
 
-- Today's date.
-- Latest upload attempt: date/time and outcome, when known.
-- Last accepted data upload: date/time and reference month, or “No user upload recorded”.
-- Displayed prediction: reference month T, actual target months, input availability cutoff/as-of when known, generation date/time, result/run identifier, model version, and origin (operational inference or model-training/historical result).
-- Upload/dataset association for that prediction; if the latest accepted upload has no successful prediction, state that the displayed result still belongs to the previous dataset.
+- Reference period of the displayed prediction (month/year T).
+- Prediction generation date/time.
+- Model version.
+- Last data upload date/time, or “No user upload recorded” when appropriate.
 
-Never invent an upload timestamp for a training result. Render available timestamps consistently with timezone; missing audit metadata is “Unavailable”, not today's date. A historical target month that has already passed must remain historical and be labeled accordingly. A quantitative stale-data tolerance is OPEN DECISION; displaying actual dates is required regardless of that policy. Provide read-only access to persisted prediction history with original periods/origins; selecting a historical result must visibly label historical mode and keep its associated audit metadata together.
+Use consistent timezone labels. Missing metadata is “Unavailable”; never substitute today's date or invent an upload timestamp for a model-training result. T+1/T+2 displays identify their actual target months. Historical results retain their original dates and are visibly labeled historical. Read-only prediction history remains within the product baseline; its detailed information treatment belongs to PROD-06.
 
 ## Evidence-Informed Chart Selection
 
@@ -118,12 +110,12 @@ The [WHO 2020 dashboard guide landing page](https://www.who.int/publications/i/i
 The API must supply consistent, display-ready domain information for:
 
 - Department/municipality identity, full geographic inventory and prediction eligibility/coverage.
-- Observed monthly series; case definition/units; endemic bands and epidemiological thresholds with method, period, and geographic provenance; independently valid case projections and uncertainty metadata when available.
-- Per-municipality/per-horizon probability, alert category, applicable operational probability threshold, actual target month, prediction availability/reason, origin, and run/model identity.
-- Reference period, cutoff/as-of, generation timestamp, input dataset/upload association, upload timestamps/status, and retrievable prediction history.
+- Observed monthly series through reference month T; case definition/units; endemic bands and epidemiological thresholds with method, period, and geographic provenance.
+- Per-municipality/per-horizon probability, alert category, applicable operational probability threshold, actual target month, prediction availability/reason, historical/model-training labeling where applicable, and model version.
+- Basic audit information: reference period, generation timestamp, model version, and last upload timestamp.
 - Map-compatible municipal identifiers, data and boundary-source/version association. Geometry delivery versus a separately versioned boundary asset remains an implementation decision; no external forecasting service or patient-level location is required.
 
-The client renders and formats these values. It must not fit an endemic channel, invent probabilities/projections, select scientific thresholds, or compute new alert semantics from the mockup. Missing/contradictory data yields a visible unavailable/inconsistent state for the affected view. Exact fields, endpoints, file formats, validation codes, persistence mechanics, and response schemas belong to PROD-05..08 and the later contract/API stages. No new fields are frozen here.
+The client renders and formats these values. It must not fit an endemic channel, invent probabilities or projected case counts, select scientific thresholds, or compute new alert semantics from the mockup. Missing/contradictory data yields a visible unavailable/inconsistent state for the affected view. Exact fields, endpoints, file formats, validation codes, persistence mechanics, and response schemas belong to PROD-05..08 and the later contract/API stages. No new fields are frozen here.
 
 ## Acceptance Criteria — DRAFT Product Acceptance Contract
 
@@ -131,44 +123,31 @@ These are testable expectations for the future dashboard, not claims that softwa
 
 | ID | Given / When | Then |
 |---|---|---|
-| AC01 | The dashboard opens. | It exposes distinct Tolima and Meta tabs and identifies the active department; no Cali/Bucaramanga default or severe-dengue-only claim is inherited from the mock. |
-| AC02 | The user switches departments after selecting a municipality. | Municipality options, results, map, coverage and audit belong to the new department; no previous department's data is presented as its own. Switching makes no inference/training request. |
-| AC03 | A scoped municipality lacks sufficient data or eligibility. | It remains discoverable and displays its availability/reason; it is not omitted from coverage or assigned a low-risk alert by default. |
-| AC04 | A saved successful result exists and no new file is uploaded. | Opening/reopening/refreshing retrieves that result with its original periods and metadata; no inference or training is triggered. |
-| AC05 | Only a compatible persisted model-training result exists. | It is shown with training/historical origin, actual T/target dates and model/run identity; upload time is absent unless real, and expired horizons are labeled historical. |
-| AC06 | No compatible saved result exists. | An empty state explains the absence and offers upload; the page fabricates neither example predictions nor a green alert. |
-| AC07 | The user selects a file, then explicitly initiates processing. | The interface identifies department and candidate period, shows validation/processing state, and prevents accidental duplicate submission while pending; mere file selection does not replace results. |
-| AC08 | Validation rejects a wrong/mixed department, invalid period/municipality or missing required data under the eventual contract. | A useful error identifies the issue; no invalid prediction is published or successful-upload status fabricated. Correction/duplicate-period policy follows PROD-05/08. |
-| AC09 | Validation, inference and persistence succeed. | New results, dataset association and audit appear consistently; T+1/T+2 are relative to the accepted reference month, and previous successful results remain retrievable. |
-| AC10 | Upload/inference fails, or a newer accepted dataset has no successful prediction. | Any prior valid result stays explicitly labeled as previous with its own dates; failure/latest-attempt status is visible and cannot overwrite its provenance. With no prior result, show the empty/error state. |
-| AC11 | A municipality and a persisted result are selected. | Summaries expose separate T+1/T+2 alert labels, valid probabilities, target month/year, observed status, and data/run context; conflicting horizons remain separate and no automatic public-health action is prescribed. |
-| AC12 | The endemic channel renders valid data. | Month/year labels, case units, observed line through T, supplied endemic bands/threshold legend, and a clear observed/forecast boundary are present for that municipality and case definition. |
-| AC13 | Valid case projections are supplied for both horizons. | A distinct projection line plots T+1/T+2 on the same case-count scale with dated points and available uncertainty metadata. December T correctly produces January/February of the next year. |
-| AC14 | Only risk probabilities, not validated case projections, are supplied. | No probability is plotted as case counts and no forecast line is fabricated. The chart states projection unavailable; R05/AC13 remain unmet, preventing full story acceptance. |
-| AC15 | The probability chart renders. | T+1/T+2 use actual target month/year and a common 0–100% axis; values/labels match summaries and applicable API thresholds, with horizon-specific differences labeled. A case threshold is not shown as a probability cutoff. |
-| AC16 | The municipal map horizon changes. | The map and legend identify that horizon and month; municipalities use matching API alerts, unavailable/ineligible states are distinct, and different periods/runs are disclosed rather than silently compared. |
-| AC17 | A municipality is selected on the map or selector. | Selected-municipality summaries and Charts 1/2 agree; the departmental map retains context. The equivalent municipality table provides the same values/selection access if the map cannot render. |
-| AC18 | A chart lacks data, the API fails, or a response conflicts with active context/run. | The affected view reports loading/error/unavailable/inconsistent state and a safe retry where applicable; no zero value, low-risk category, mismatched series, or mock data substitutes for missing information. |
-| AC19 | The user inspects dates and audit. | Today's Bogota date, last upload attempt/status, last accepted upload, T, actual target months, generation time, origin, run/model and associated dataset are separately identifiable where available; missing metadata is explicitly unavailable. |
-| AC20 | Dates are old or a historical prediction is selected. | Original dates/origin remain visible and historical mode is explicit; no date is refreshed merely by viewing. Any eventual staleness warning uses an approved policy. |
-| AC21 | Probability thresholds, case thresholds or uncertainty are absent. | The interface says the relevant information is unavailable; it invents no 50% cutoff, P75 rule, 95% interval, onset/continuation label or green category. Uncertainty is named according to its validated meaning. |
-| AC22 | The dashboard is inspected for the current scope. | Exactly the three selected primary visualizations are specified; no insights/recommendations panel, SHAP primary chart or generated intervention advice appears. Data-quality notices and factual legends remain allowed. |
-| AC23 | The user navigates with keyboard or cannot distinguish colors. | Tabs, selectors, upload and history controls are operable; alert labels accompany color, legends identify series, and chart values are available as text or tables. On smaller screens all controls, dates and chart labels remain reachable/readable. |
-| AC24 | The user changes municipality, horizon or prediction-history selection. | Values and metadata derive from the selected API context/result; the client neither retrains nor recomputes epidemiological thresholds or alert semantics. |
+| AC01 | The dashboard opens or the user switches department. | Distinct Tolima and Meta tabs identify the active department; municipality options, results, map and audit information correspond to that department. |
+| AC02 | The user selects a municipality through the selector or map. | Summaries, endemic channel and probability chart update consistently for that municipality; the map retains departmental context. Municipalities without predictions remain discoverable. |
+| AC03 | A saved prediction exists and no new file is uploaded. | Opening or refreshing retrieves it without inference or retraining. If only a compatible persisted model-training result exists, show its historical origin and original periods. |
+| AC04 | No prediction is available for the selected municipality/context. | A clear state explains the absence and offers monthly upload; missing or ineligible predictions are never shown as zero probability, low risk or illustrative results. |
+| AC05 | The user selects a monthly departmental file and explicitly initiates processing. | Selection alone does not update results; the interface shows understandable validation, processing, completion or error feedback and displays the available prediction after successful processing. |
+| AC06 | A valid prediction is displayed. | Separate T+1/T+2 alerts show labels as well as colors, valid probabilities and actual target month/year; the observed epidemiological status remains distinct from predicted risk. |
+| AC07 | The endemic channel has data. | It shows the selected municipality's observed monthly cases through T, month/year labels, case units, and API-supplied endemic bands/thresholds with a legend. It requires no numeric T+1/T+2 case projection and never plots risk probability as case counts. |
+| AC08 | The probability comparison chart has data. | T+1/T+2 use actual target months and a common 0–100% scale; values and alert labels agree with summaries. Supplied operational probability thresholds are distinguished from endemic case thresholds; missing values or thresholds are not invented. |
+| AC09 | The user views the municipal alert map or changes its horizon. | The active department, selected T+1/T+2 horizon and target month are explicit; API-supplied alert categories and unavailable states have distinct labels. An equivalent municipality table supports inspection and selection when the map cannot render. |
+| AC10 | The user inspects freshness or a historical result. | Today's Bogota date is separate from the reference period, generation date/time, model version and last upload date/time. Original dates remain visible, missing metadata is explicit, and historical results are labeled accordingly. |
+| AC11 | The user interacts with the dashboard, including loading, missing-data or API-error states. | The affected view explains its state without substituting mock data, zero values or low-risk alerts. Available chart values are accessible as text/tables, and controls and labels remain readable and operable with a keyboard and on smaller screens. |
+| AC12 | The dashboard is inspected within the approved scope. | It contains the endemic channel, T+1/T+2 probability comparison and municipal alert map, using API-supplied domain information. No insights/recommendations panel or automatic intervention advice appears; navigation does not retrain or recompute scientific thresholds. |
 
 ## Open Decisions, Dependencies, and Review Boundary
 
 | Item | Required resolution / owner stage |
 |---|---|
-| Additional chart approval | Mauricio validates the horizon-probability chart and municipal predictive-alert map proposed here. External evidence does not replace this product decision. |
-| Numeric T+1/T+2 case line | Mauricio resolves the output requirement with scientific feasibility evidence; compatible projection method/target must be validated before R05/AC13 can pass. Risk probability alone is insufficient. |
+| Retained chart direction | Mauricio's latest review retains the horizon-probability chart and municipal predictive-alert map. Exact arrangement and presentation remain subject to review of this draft. |
 | Target, channel and coverage | Stage 2 freezes case/target definition, excess/onset/continuation, historical-channel method and valid municipal eligibility/data-quality/history rules. Department-wide geography does not guarantee every municipality a valid output. |
 | Alert and probability semantics | Later modeling/evaluation and final contracts establish calibration, thresholds, alert categories and uncertainty meaning. No numerical alert policy is approved by this draft. |
-| Loading and result precedence | PROD-05/07/08 specify revised/duplicate/out-of-order periods, partial municipal success, latest-result precedence and historical training-result publication rules. Reuse requires persisted compatible outputs. |
-| Freshness | Mauricio reviews the proposed timezone/display and stale-data behavior; exact tolerated age is undecided. Actual dates and historical labeling are required. |
-| Supporting information | PROD-06 specifies climatic context, valid explainability, audit display detail, and chart/table information without restoring the removed recommendations panel. |
+| Monthly loading and reuse | PROD-05..08 define detailed operational policies and contracts. This story retains explicit monthly upload and reuse of persisted predictions without retraining. |
+| Freshness | The proposed timezone/display convention remains subject to review. Actual dates and historical labeling are required; any detailed freshness policy belongs to later documents. |
+| Supporting information | PROD-06 specifies climatic context, valid explainability, presentation of the four basic audit values, and chart/table information without restoring the removed recommendations panel. |
 | API and persistence | PROD-07/08 draft information contracts; Stage 6 freezes final contracts; subsequent API/dashboard stages implement and verify this story. No schema or endpoint is approved here. |
 
 Out of scope for this PR update: functional dashboard/API/model/pipeline implementation, automatic interventions or notifications, access-role expansion, new DWP plans, PROD-05..08 authoring, changes to Stage 2+ documents, merge, and stage closure. This story describes future behavior; it is not eight separate implementation HUs.
 
-Review stops at PROD-04. Mauricio may approve or correct this draft in PR #7 before progression to PROD-05. Full future story acceptance requires all applicable criteria, including the requested case-projection line; partial/degraded rendering is not a substitute for a resolved product/scientific requirement.
+Review stops at PROD-04. Mauricio may approve or correct this draft in PR #7 before progression to PROD-05. Future story acceptance is assessed against the 12 visible-behavior criteria above. Numeric case-count projections are not a requirement or an acceptance dependency for this story.
