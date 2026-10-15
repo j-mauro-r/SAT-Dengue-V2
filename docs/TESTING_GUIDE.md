@@ -1,67 +1,67 @@
 # Testing and Validation Guide
 
-## Current Repository State
+## Validation Policy
 
-There is no application source tree, package manifest, or runtime-specific test framework yet.
+Validation is mapped by touched surface and reported using explicit evidence states.
 
-## Current Verified Gates
+Evidence states:
 
-### Full validation
+- PASS
+- FAIL
+- BLOCKED
+- UNVERIFIED
 
-- Command: `bash .agents/skills/deepworkplan/verify/conformance.sh`
-- Working directory: repository root
-- Purpose: validate AI-first harness conformance (AGENTS/docs/.agents/.dwp contract)
-- Current status: runnable and used as primary objective gate
+## Foundation Gate Set
 
-### Scoped validation
+### Prerequisite
 
-- Command: `test -e docs/README.md && echo OK || echo MISSING`
-- Working directory: repository root
-- Scope model: single path existence check
-- Status: proposed/unverified (utility command, not yet adopted as mandatory gate)
+- `python -m pip install --upgrade pip && pip install -e ".[dev]"`
 
-## Source-to-Test Mapping (Current)
+### Full gate (required before merge)
 
-- `AGENTS.md`, `docs/`, `.agents/commands/`, and `.agents/docs/` changes map to harness conformance gate.
-- Governance-only edits in `docs/governance/` still require conformance check before completion.
+- `bash .agents/skills/deepworkplan/verify/conformance.sh`
+- `ruff check tests`
+- `ruff format --check tests`
+- `mypy tests`
+- `pytest tests/unit -v`
 
-## Blind Spots and Escalation Paths
+### Security and policy scans (required)
 
-Blind spots in current stage:
+- PITAGORAS exclusion scan:
+  - `grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp --exclude-dir=.github --include='*.py' --include='*.json' --include='*.toml' --include='*.sh' || true`
+- Secret pattern scan:
+  - `grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . --exclude-dir=.git --exclude=skills-lock.json || true`
 
-- No runtime test suite for data/ML/business logic yet.
-- No package-level lint/type gates yet.
+### Documentation consistency checks (required)
 
-Escalation/full-run triggers:
+- `python3 scripts/check_markdown_links.py`
 
-- Any change under `.agents/skills/` or command delegation files.
-- Any change in DWP contract files (`AGENTS.md`, `.dwp/config.json`, `.gitignore` DWP rules).
-- Any change touching planned dependency/toolchain definition.
+## Surface-to-Gate Mapping
 
-Fallback statement:
+- `docs/**`, `AGENTS.md`, `.github/**` changes:
+  - run full gate set above.
+- `.agents/**` and DWP governance changes:
+  - full gate set + DWP conformance is mandatory.
+- Python source/tests changes (future stages):
+  - full gate set plus scope-specific tests as required.
 
-- When mapping is uncertain, run full gate: `bash .agents/skills/deepworkplan/verify/conformance.sh`.
+## Escalation Rule
 
-## Proposed Toolchain (Target, Unverified)
+If test mapping is ambiguous, run the full gate set.
 
-This section defines the first implementation-ready baseline once Python source is introduced.
+## Scoped Commands, Mapping, Fallback (Documentation Standard 3.4)
 
-### Proposed full commands
+Scoped commands:
 
-- `pytest -q`
-- `ruff check .`
-- `mypy src`
+- `git status --short --branch`
+- `find docs -type f -name '*.md' | sort`
+- `test -f docs/governance/ai-developer-first.md && echo OK || echo MISSING`
 
-### Proposed scoped commands
+Mapping rule:
 
-- `pytest tests/test_placeholder.py -q`
-- `ruff check docs`
-- `mypy docs`
+- Use scoped commands for fast local inspection.
+- Use the full gate set for merge readiness and any material change.
 
-### Proposed conventions
+Fallback rule:
 
-- Unit tests first, with deterministic fixtures.
-- Integration tests for data contracts, persistence seams, and API boundaries.
-- End-to-end tests only for high-value workflows.
-
-No proposed command is marked as verified until executed in this repository after toolchain scaffolding.
+- When command mapping is uncertain, default to the full gate set.

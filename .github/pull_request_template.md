@@ -1,19 +1,21 @@
 ## Goal
 
-Describe el resultado que implementa este PR.
+Describe the concrete outcome delivered by this PR.
 
-## Source of authority
+## Source Of Authority
 
-- HU / requerimiento:
-- DWP:
-- ADR / contrato aplicable:
+- Requirement or request:
+- DWP plan/task:
+- Applicable ADR/contract/policy:
 
 ## Scope
 
-### Incluido
+Included:
+
 -
 
-### No incluido
+Not included:
+
 -
 
 ## Changes
@@ -22,24 +24,32 @@ Describe el resultado que implementa este PR.
 
 ## Validation
 
-- [ ] Validación local ejecutada
-- [ ] Tests ejecutados
-- [ ] CI PASS
-- [ ] Diff revisado completamente
+Record command + result state (PASS/FAIL/BLOCKED/UNVERIFIED):
+
+- [ ] `bash .agents/skills/deepworkplan/verify/conformance.sh`
+- [ ] `ruff check tests`
+- [ ] `ruff format --check tests`
+- [ ] `mypy tests`
+- [ ] `pytest tests/unit -v`
+- [ ] `find docs -type f -name '*.md' | sort` and `git diff -- docs AGENTS.md README.md .github`
+- [ ] `python3 scripts/check_markdown_links.py`
+- [ ] `grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp --exclude-dir=.github --include='*.py' --include='*.json' --include='*.toml' --include='*.sh' || true`
+- [ ] `grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . --exclude-dir=.git --exclude=skills-lock.json || true`
 
 ## Evidence
 
-Indicar comandos, resultados o evidencia relevante.
+Summarize command outputs and include any relevant links/screenshots.
 
-## Risks / limitations
+## Risks And Limitations
 
 -
 
-## Independent review
+## Independent Review
 
-- [ ] Realizada
-- [ ] Sin findings críticos/altos abiertos
+- [ ] Performed
+- [ ] No open critical/high findings
+- Reviewer summary:
 
 ## Human Gate
 
-- [ ] Listo para decisión de merge
+- [ ] Ready for Mauricio merge decision

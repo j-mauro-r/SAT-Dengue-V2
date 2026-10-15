@@ -1,26 +1,32 @@
 # Development Commands
 
-## Current Verified Commands (Foundation Stage)
+## Environment Bootstrap
 
 | Area | Type | Command |
 |---|---|---|
-| Harness conformance | full | `bash .agents/skills/deepworkplan/verify/conformance.sh` |
-| Git status | full | `git status --short --branch` |
-| Documentation inventory | scoped | `find docs -type f -name '*.md'` |
-| File existence probe | scoped | `test -e docs/README.md && echo OK || echo MISSING` |
+| Install dev dependencies | full | `python -m pip install --upgrade pip && pip install -e ".[dev]"` |
 
-## Proposed Commands (Implementation Stage, Unverified)
+## Foundation Commands
+
+| Area | Type | Command | Expected State |
+|---|---|---|---|
+| DWP conformance | full | `bash .agents/skills/deepworkplan/verify/conformance.sh` | PASS required |
+| Lint tests | full | `ruff check tests` | PASS required |
+| Format check tests | full | `ruff format --check tests` | PASS required |
+| Type check tests | full | `mypy tests` | PASS required |
+| Unit tests | full | `pytest tests/unit -v` | PASS required |
+| Repo status | scoped | `git status --short --branch` | informational |
+| Documentation inventory | scoped | `find docs -type f -name '*.md' | sort` | informational |
+
+## Governance and Security Checks
 
 | Area | Type | Command |
 |---|---|---|
-| Python tests | full | `pytest -q` |
-| Python tests by scope | scoped | `pytest tests/test_placeholder.py -q` |
-| Python lint | full | `ruff check .` |
-| Python lint by scope | scoped | `ruff check docs` |
-| Python type-check | full | `mypy src` |
-| Python type-check by scope | scoped | `mypy docs` |
+| PITAGORAS runtime/config exclusion | scoped | `grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp --exclude-dir=.github --include='*.py' --include='*.json' --include='*.toml' --include='*.sh' || true` |
+| Secret pattern scan | scoped | `grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . --exclude-dir=.git --exclude=skills-lock.json || true` |
+| Markdown link consistency | scoped | `python3 scripts/check_markdown_links.py` |
 
 ## Notes
 
-- Proposed commands are intentionally non-authoritative until dependency manifests and source layout are added.
-- Commands that require CI-only or container-only runtime must be labeled when introduced.
+- Run full foundation commands before merge on documentation/governance pull requests.
+- Re-run affected checks after evidence-sensitive diffs.

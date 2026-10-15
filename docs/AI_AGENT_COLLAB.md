@@ -1,22 +1,28 @@
 # AI Agent Collaboration
 
-## Ownership Model
+## Collaboration Model
 
-- One execution owner per active task.
-- Reviewers validate evidence, constraints, and scope adherence.
-- Escalations go to repository owner only for scope/authority blockers.
+- One primary execution owner per task at a time.
+- Independent reviewer checks risk, regressions, and validation evidence.
+- Human owner resolves scope and merge decisions.
 
 ## Handoff Protocol
 
-Every handoff must include:
+Every handoff includes:
 
-- Goal and scope boundaries.
-- Files touched and pending files.
-- Validation commands run and outcomes.
-- Open risks and recommended next action.
+- task objective and remaining scope,
+- touched files,
+- validation commands run and outcomes,
+- open risks/blockers,
+- recommended next action.
 
-## Conflict Avoidance
+## Conflict Prevention
 
-- Do not run parallel edits over the same file unless explicitly coordinated.
-- Prefer atomic commits by concern.
-- Rebase/merge decisions must preserve audit trail and validation evidence.
+- Avoid parallel edits on the same file unless explicitly coordinated.
+- Keep commits atomic by concern.
+- Preserve traceability when rebasing/merging.
+
+## Review Expectations
+
+- Findings are reported by severity with concrete file references.
+- High/critical findings are resolved or explicitly accepted by human authority.

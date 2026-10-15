@@ -84,3 +84,10 @@ Onboarding actions completed:
 - Optional addons (devcontainer, dailybot, dependency-upgrade, design-system, agentkit, herdr, vim)
 - Project functional implementation (notebooks, models, API, dashboard)
 - PITAGORAS setup
+
+## Foundation package execution notes
+
+- Branch used for this package: `docs/foundation-package-v1`.
+- DWP full plan for this work was created locally under `.dwp/plans/` before implementation.
+- Traceability discrepancy detected: requested baseline commit `5950021cb8a5eab49d5d5cba82f157568c216d0b` is not present in this local clone (`git cat-file -t` reports missing object).
+- Resolution used: continue from current repository head with discrepancy explicitly recorded for human review.

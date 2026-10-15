@@ -1,121 +1,90 @@
 # SAT-Dengue-V2 — Agent Entry Point
 
-DWP standard: 7.0.0 (onboarded 2026-10-14; skill 7.8.1)
+DWP standard: 7.0.0 (installed skill 7.8.1)
 
 ## Repository Purpose
 
-SAT-Dengue-V2 is currently in foundation stage. The repository is prepared as an AI-first engineering harness for building the next generation of SAT-Dengue using Deep Work Plan, Codex/Copilot, GitHub, GitHub Actions, and CRISP-ML(Q).
+SAT-Dengue-V2 is in Foundation stage. This repository is the AI-first execution and governance layer for building the SAT-Dengue V2 product under CRISP-ML(Q), DWP, and GitHub workflows.
 
-## Documentation Index
+## Start Here
 
-| Document | Purpose |
-|---|---|
-| [docs/README.md](docs/README.md) | Master index for technical repository documentation. |
-| [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md) | Product intent, users, success criteria, and non-goals. |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Current harness architecture and planned solution layers. |
-| [docs/STANDARDS.md](docs/STANDARDS.md) | Coding, branching, review, and documentation standards. |
-| [docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md) | Validation strategy, mapped gates, scoped/full commands, and proposed test stack. |
-| [docs/DEVELOPMENT_COMMANDS.md](docs/DEVELOPMENT_COMMANDS.md) | Canonical command reference for setup, validation, and operations. |
-| [docs/SECURITY.md](docs/SECURITY.md) | Security handling, data boundaries, and secret rules. |
-| [docs/PERFORMANCE.md](docs/PERFORMANCE.md) | Performance posture and budget strategy for upcoming components. |
-| [docs/AI_AGENT_ONBOARDING.md](docs/AI_AGENT_ONBOARDING.md) | First-session onboarding checklist for coding agents. |
-| [docs/AI_AGENT_COLLAB.md](docs/AI_AGENT_COLLAB.md) | Multi-agent collaboration and handoff protocol. |
-| [docs/governance/dwp.md](docs/governance/dwp.md) | DWP adoption governance record and version evidence. |
+1. Read `docs/README.md`.
+2. Read `docs/governance/ai-developer-first.md`.
+3. Confirm branch state: `git status --short --branch`.
+4. Run conformance gate: `bash .agents/skills/deepworkplan/verify/conformance.sh`.
 
-## Repository Structure
+## Authority Model (highest to lowest)
 
-```text
-SAT-Dengue-V2/
-├── AGENTS.md
-├── CLAUDE.md -> AGENTS.md
-├── docs/
-│   ├── governance/
-│   ├── PRODUCT_SPEC.md
-│   ├── ARCHITECTURE.md
-│   ├── STANDARDS.md
-│   ├── TESTING_GUIDE.md
-│   ├── DEVELOPMENT_COMMANDS.md
-│   ├── SECURITY.md
-│   ├── PERFORMANCE.md
-│   ├── AI_AGENT_ONBOARDING.md
-│   └── AI_AGENT_COLLAB.md
-├── .agents/
-│   ├── agents/
-│   ├── commands/
-│   ├── docs/
-│   ├── settings.json
-│   └── skills/
-├── .dwp/
-│   ├── plans/
-│   ├── config.json
-│   └── onboard/
-└── tmp/
-```
+1. Explicit human-approved decisions and ADRs
+2. Governance policies
+3. Product/data/model/API contracts
+4. Active requirements and task contracts
+5. Architecture and methodology docs
+6. DWP plans for current work
+7. Implementation diffs
+8. Validation evidence
+
+Authoritative references:
+
+- `docs/governance/ai-developer-first.md`
+- `docs/decisions/adr-0001-foundation-boundaries.md`
+- `docs/contracts/contract-lifecycle.md`
+- `docs/roadmap/master-plan.md`
+- `docs/governance/dwp.md`
 
 ## Mandatory Rules
 
-- Language: all commit messages, docs, and agent reports must be in English.
-- Commit style: use Conventional Commits `type(scope): description`.
-- Allowed scopes in this stage: `docs`, `governance`, `dwp`, `agents`, `infra`.
-- Validation rule: select gates from touched surface using [docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md). If mapping is ambiguous, run full validation gate.
-- Logging rule: never include secrets, tokens, personal data, or credentials in logs, reports, or commits.
-- Repository boundary: write only inside this repository; never mutate external repositories from this context.
-- Reporting: progress reports must not block work execution.
+- Language: commit messages, docs, and reports in English.
+- Commit style: Conventional Commits `type(scope): description`.
+- Stage scopes: `docs`, `governance`, `dwp`, `agents`, `infra`.
+- Validate by touched surface using `docs/TESTING_GUIDE.md`.
+- Never include secrets or credentials in logs/commits.
+- Write only inside this repository.
 - PITAGORAS is out of scope and must not be introduced.
 
 ## Quick Commands
 
-Current repository has no application runtime or dependency manifest yet. Commands below are real and runnable for the present stage.
-
-| Goal | Scope | Command | Status |
-|---|---|---|---|
-| DWP conformance check | full | `bash .agents/skills/deepworkplan/verify/conformance.sh` | verified |
-| Git working tree check | full | `git status --short --branch` | verified |
-| Inspect generated docs | scoped | `find docs -type f -name '*.md'` | verified |
-| Check one path exists | scoped | `test -e docs/README.md && echo OK || echo MISSING` | verified |
-| Python tests (`pytest -q`) | full | `pytest -q` | proposed/unverified |
-| Python tests by target (`pytest tests/test_placeholder.py -q`) | scoped | `pytest tests/test_placeholder.py -q` | proposed/unverified |
-| Lint (`ruff check .`) | full | `ruff check .` | proposed/unverified |
-| Lint by target (`ruff check docs`) | scoped | `ruff check docs` | proposed/unverified |
-| Type check (`mypy src`) | full | `mypy src` | proposed/unverified |
-| Type check by target (`mypy docs`) | scoped | `mypy docs` | proposed/unverified |
-
-## Deep Work Plans — Invocation
-
-Structured work runs through the local DWP flows (`.agents/commands/dwp-*` delegators; flows live in `.agents/skills/deepworkplan/`; discovery is local and does not require network).
-
-| Intent | Route |
+| Goal | Command |
 |---|---|
-| plan this work / create a plan | `/dwp-create` |
-| execute / run the plan | `/dwp-execute` |
-| continue interrupted plan | `/dwp-resume` |
-| plan status / what is left | `/dwp-status` (read-only) |
-| verify repo/plan conformance | `/dwp-verify` (read-only) |
-| direct edit request (fix/rename/update) | execute directly; do not silently convert to plan |
+| Branch status | `git status --short --branch` |
+| DWP conformance | `bash .agents/skills/deepworkplan/verify/conformance.sh` |
+| Ruff lint (tests) | `ruff check tests` |
+| Ruff format check (tests) | `ruff format --check tests` |
+| mypy (tests) | `mypy tests` |
+| pytest unit tests | `pytest tests/unit -v` |
+| PITAGORAS runtime/config scan | `grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp --exclude-dir=.github --include='*.py' --include='*.json' --include='*.toml' --include='*.sh' || true` |
+| Secret pattern scan | `grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . --exclude-dir=.git --exclude=skills-lock.json || true` |
 
-Hosts without slash commands invoke the same flows with `#deepworkplan-*` or plain text. `trust`/`auto` allows unattended continuation inside the selected flow only; it is not a flow selector.
+## DWP Invocation
 
-## Local Security Review
+Use local command delegators:
 
-- Local reviewer skill installed: `.agents/skills/ai-diff-reviewer` (v3.3.14).
-- Active mode: Flow A (local review baseline).
-- Extension file: `.review/extension.md`.
-- CI Flow B is optional and not enabled in this onboarding run.
+- Create plan: `/dwp-create`
+- Execute plan: `/dwp-execute`
+- Resume plan: `/dwp-resume`
+- Plan status: `/dwp-status`
+- Conformance verify: `/dwp-verify`
 
-## Working Principles
+Direct edit requests should be implemented directly unless the user requests a DWP flow.
 
-- Own outcomes end-to-end, including validation evidence.
-- Investigate locally before escalating.
-- Decide routine implementation details autonomously within scope.
-- Escalate only when authority, scope, or requirements are unclear.
-- Ask approvals with concrete options, risks, and recommendation.
-- Recover from blockers with fallback plans before pausing progress.
-- Respect explicit scope, constraints, and non-goals.
-- Apply rigor proportionate to risk and blast radius.
-- Communicate directly, with precise status and evidence.
-- Never claim done without running and reporting relevant checks.
+## Validation Baseline (Foundation)
 
-## Scratch and Plan State
+- DWP conformance: `bash .agents/skills/deepworkplan/verify/conformance.sh`
+- Lint tests: `ruff check tests`
+- Format checks: `ruff format --check tests`
+- Type checks: `mypy tests`
+- Unit tests: `pytest tests/unit -v`
 
-- `.dwp/` stores DWP working state and plan artifacts.
-- `tmp/` is for disposable local scratch output.
+## Human Gate Boundaries
+
+Escalate for human decision when:
+
+- Product scope changes materially.
+- Contract/data/security boundaries change.
+- Merge/release approval is needed.
+- Authority sources conflict.
+
+## Local State Notes
+
+- Runtime plan state is local in `.dwp/` (except tracked `.dwp/config.json`).
+- Disposable artifacts belong in `tmp/`.

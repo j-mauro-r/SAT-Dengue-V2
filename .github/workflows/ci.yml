@@ -31,11 +31,46 @@ jobs:
           test -f .gitignore
           test -f pyproject.toml
           test -f .github/pull_request_template.md
+          test -f docs/README.md
+          test -f docs/governance/ai-developer-first.md
+          test -f docs/roadmap/master-plan.md
+
+      - name: DWP conformance
+        run: bash .agents/skills/deepworkplan/verify/conformance.sh
+
+      - name: Documentation consistency inventory
+        run: |
+          find docs -type f -name '*.md' | sort
+          python3 scripts/check_markdown_links.py
+          git diff --name-only -- docs AGENTS.md README.md .github || true
 
       - name: Check forbidden committed files
         run: |
           if git ls-files | grep -E '(^|/)\.env($|\.)|\.pem$|\.key$'; then
             echo "Potential secret file committed to repository."
+            exit 1
+          fi
+
+      - name: Scan forbidden PITAGORAS runtime references
+        run: |
+          if grep -RIn "PITAGORAS" . \
+            --exclude-dir=.git \
+            --exclude-dir=.dwp \
+            --exclude-dir=.github \
+            --include='*.py' \
+            --include='*.json' \
+            --include='*.toml' \
+            --include='*.sh'; then
+            echo "Forbidden PITAGORAS runtime/config reference found."
+            exit 1
+          fi
+
+      - name: Secret pattern scan
+        run: |
+          if grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . \
+            --exclude-dir=.git \
+            --exclude=skills-lock.json; then
+            echo "Potential credential pattern detected."
             exit 1
           fi
 
