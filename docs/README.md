@@ -55,7 +55,7 @@ This index defines where authoritative knowledge lives in the repository.
 
 ### Roadmap
 
-- `roadmap/master-plan.md`: durable stage-based roadmap mirror.
+- `roadmap/master-plan.md`: single durable master plan for all Stages 0–10 and their gate evidence.
 
 ## Compatibility Entry Documents (Root docs/)
 
