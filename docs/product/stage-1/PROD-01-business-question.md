@@ -2,7 +2,7 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase A. CLOSED. APPROVED TO MAURICIO**
+**Document status: CLOSED — Phase A. APPROVED TO MAURICIO**
 **Human Gate: UNAPPROVED.** This records the approved direction below; the document itself is not approved. It does not close G0, approve G1, or mark Stage 1 DONE. The [master plan](../../roadmap/master-plan.md) remains authoritative for stage status.
 
 This document owns the business question, intended value, and Phase A source register. [PROD-02](PROD-02-users.md) owns users; [PROD-03](PROD-03-supported-decisions.md) owns supported human decisions. The [product definition](../product-definition.md) remains the existing scientific and dashboard baseline.
