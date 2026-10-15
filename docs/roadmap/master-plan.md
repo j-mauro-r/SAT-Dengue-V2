@@ -1,10 +1,33 @@
-# SAT-Dengue V2 Master Roadmap (Durable Mirror)
+# SAT-Dengue V2 Master Plan
 
-This document is the durable project-level mirror of the DWP master planning direction. It summarizes stage goals, dependencies, and stage gates without storing runtime task state.
+This document is the single durable master plan for the project. It defines all Stages 0–10, their goals, dependencies, gates, and stage-level progress. Runtime task state remains local.
 
-## DWP Master Plan Status
+## Planning and Execution Policy
 
-The durable roadmap is defined here. The operational DWP Full Master Plan for the complete SAT-Dengue V2 lifecycle must exist separately in local `.dwp/` state and be traceable by plan ID. Until that project-level plan is created and verified, its status is **UNVERIFIED**.
+- A project-wide DWP Full Master Plan is not required and will not be created.
+- DWP Full plans per Stage are deprecated and will not be created.
+- Execute incrementally through bounded user stories (HUs), each with scope, acceptance criteria, validation, and evidence. Do not execute an entire Stage or the project in a single prompt.
+- Use DWP only when a concrete HU/task warrants an execution plan because of complexity, risk, dependencies, or work across sessions. Select the appropriate plan format for that bounded objective.
+- Record stage progress and gate evidence here; record HU/task acceptance and validation in its issue/PR. No separate DWP master-plan ID is a prerequisite for G0.
+
+## Current Status (2026-10-15)
+
+- Stage 0: **IN PROGRESS — closure evidence pending**.
+- Gate G0: **UNVERIFIED** pending independent review evidence required by governance.
+- Current Stage: **Stage 0 — Engineering Foundation (closure)**.
+- Next Stage: **Stage 1 — Product Definition**, after G0 passes.
+- Stages 1–10: **NOT STARTED**; their gates are **UNVERIFIED**.
+
+### G0 Evidence
+
+| Criterion | State | Evidence |
+|---|---|---|
+| Foundation documentation accepted | PASS | [PR #5](https://github.com/j-mauro-r/SAT-Dengue-V2/pull/5) merged on 2026-10-14 (America/Bogota), merge commit `1abbc08b8429c15b9145119da13cfc955da03067`. |
+| DWP conformance | PASS | [Main CI run 38790310683](https://github.com/j-mauro-r/SAT-Dengue-V2/actions/runs/38790310683), commit `4e816d43e92638f773f26bdb2d0ec8929ffeb4c2`: DWP conformance step succeeded. |
+| Repository validation baseline | PASS | Same main CI run: Repository Quality, Python Quality, and Unit Tests succeeded, including documentation links and policy/security scans. |
+| Independent review evidence | UNVERIFIED | PR #5 has no submitted reviews or discussion comments as inspected on 2026-10-15; its description still marks current-head review pending. No independent review artifact was found in the repository. |
+
+Remaining closure action: supply or perform the independent review required by `docs/governance/ai-developer-first.md` and `docs/operations/validation-and-evidence.md`, resolve or explicitly accept any high/critical findings, and record the evidence. Then update Stage 0 to DONE, G0 to PASS, and Current Stage to Stage 1. The merged PR's historical synchronization warning is no longer an active blocker. This documentation change still requires its own validation, independent review, and Human Gate before merge.
 
 ## Stage Plan
 
@@ -20,6 +43,7 @@ Gate G0 — Engineering Foundation Ready:
 - Foundation documentation accepted.
 - DWP conformance passes.
 - Repository validation baseline is green.
+- Independent review evidence is recorded under the governance and validation policies.
 
 ### Stage 1 — Product Definition
 

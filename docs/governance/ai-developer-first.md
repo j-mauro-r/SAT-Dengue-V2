@@ -26,7 +26,7 @@ This policy defines how SAT-Dengue V2 is executed under an AI Developer First mo
 
 1. Reconnaissance: read relevant authority sources and current repository state.
 2. Preflight: define scope, non-goals, risks, and validation strategy.
-3. DWP planning: create/adjust plan before non-trivial multi-file work.
+3. HU/task scoping: define bounded scope, acceptance criteria, validation, and evidence. Create/adjust a DWP plan only when that concrete HU/task warrants it because of complexity, risk, dependencies, or work across sessions.
 4. Implementation: execute one bounded objective at a time.
 5. Validation: run mapped gates and update evidence.
 6. Independent review: reviewer evaluates findings and residual risk.
@@ -85,9 +85,11 @@ No completion claim is valid without explicit evidence state.
 
 ## DWP Role
 
-- DWP is the execution contract for significant work.
-- Plans define tasks, acceptance criteria, validation gates, and final review.
-- Runtime plan state in .dwp is local; durable project-level direction is mirrored in versioned docs.
+- `docs/roadmap/master-plan.md` is the single durable master plan for all Stages 0–10, dependencies, gates, and stage progress.
+- Do not require or create a project-wide DWP Full Master Plan. DWP Full plans per Stage are deprecated and will not be created.
+- Execute incrementally through user stories (HUs), with scope, acceptance criteria, validation, and evidence; do not execute a whole Stage or project in a single prompt.
+- DWP provides an execution contract only when a concrete HU/task warrants it. Choose the plan format appropriate to that objective.
+- Such plans define tasks, acceptance criteria, validation gates, and final review. Runtime plan state in `.dwp/` is local; HU/task evidence belongs in the issue/PR and stage status in the master plan.
 
 ## Explicit Exclusions
 

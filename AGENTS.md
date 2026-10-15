@@ -4,7 +4,7 @@ DWP standard: 7.0.0 (installed skill 7.8.1)
 
 ## Repository Purpose
 
-SAT-Dengue-V2 is in Foundation stage. This repository is the AI-first execution and governance layer for building the SAT-Dengue V2 product under CRISP-ML(Q), DWP, and GitHub workflows.
+SAT-Dengue-V2 is in Stage 0 — Engineering Foundation (closure evidence pending); G0 is UNVERIFIED. See `docs/roadmap/master-plan.md` for evidence and the transition to Stage 1. This repository is the AI-first execution and governance layer for building the SAT-Dengue V2 product under CRISP-ML(Q), DWP, and GitHub workflows.
 
 ## Start Here
 
@@ -65,7 +65,9 @@ Use local command delegators:
 - Plan status: `/dwp-status`
 - Conformance verify: `/dwp-verify`
 
-Direct edit requests should be implemented directly unless the user requests a DWP flow.
+`docs/roadmap/master-plan.md` is the single durable master plan for Stages 0–10. Do not require or create a project-wide DWP Full Master Plan or DWP Full per Stage; per-Stage Full plans are deprecated.
+
+Execute incrementally by user stories (HUs), each with bounded scope, acceptance criteria, validation, and evidence. Use DWP only when a concrete HU/task warrants it because of complexity, risk, dependencies, or work across sessions. Direct edit requests should be implemented directly unless the user requests a DWP flow. Do not execute a whole Stage or project in one prompt.
 
 ## Validation Baseline (Foundation)
 

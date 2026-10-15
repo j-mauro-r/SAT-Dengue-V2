@@ -5,7 +5,8 @@ Describe the concrete outcome delivered by this PR.
 ## Source Of Authority
 
 - Requirement or request:
-- DWP plan/task:
+- HU/task and acceptance criteria:
+- DWP plan/task (if warranted; otherwise N/A with rationale):
 - Applicable ADR/contract/policy:
 
 ## Scope
