@@ -2,11 +2,11 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase F.**
-**Human Gate: UNAPPROVED.**
+**Document status: DRAFT — Phase F.**  
+**Human Gate: UNAPPROVED.**  
 **Contract maturity: DRAFT PRODUCT/DATA CONTRACT — NOT FROZEN.**
 
-This document defines the initial product-facing input expectations for loading a new monthly departmental period. It intentionally does not freeze the final schema, exact variable list, file format, or data-quality thresholds.
+This document defines the initial product-facing input expectations for loading a new monthly departmental period. It intentionally does not freeze the final schema, exact variable list, file format, or detailed operational validation rules.
 
 The final Input Contract will be frozen only after Stage 2 Data Understanding, target definition, operational availability analysis, and later product-contract reconciliation.
 
@@ -27,7 +27,7 @@ The exact input variables are **not frozen**. They depend on:
 
 - final model requirements;
 - operational data availability at inference time;
-- what the user can realistically supply;
+- what is supplied through the departmental monthly file;
 - what SAT-Dengue can derive from historical/reference data;
 - information required by the dashboard and prediction contract.
 
@@ -35,33 +35,33 @@ No field should be required merely because it existed in SAT-Dengue V1.
 
 ## Input Responsibility Model
 
-A useful Input Contract must distinguish four categories.
+The draft contract distinguishes four categories.
 
-### A. User-supplied monthly fields
+### A. User-supplied monthly data
 
-Information that the departmental user or their operational process can realistically include in the monthly file.
+The departmental file contains the minimum operational information required for the new reference period T.
 
 Potential examples to evaluate later include:
 
 - municipality identifier;
 - reference year/month;
 - observed dengue information for the closed period;
-- other epidemiological values demonstrably available at that cutoff.
+- other epidemiological values demonstrated to be available at that cutoff.
 
 These are examples, not approved mandatory columns.
 
 ### B. System reference data
 
-Information SAT-Dengue should preferably control centrally instead of asking the user to repeat it in every upload, when feasible:
+SAT-Dengue should centrally control reference information when feasible, such as:
 
 - municipality master data;
 - department-municipality association;
 - stable territorial identifiers;
 - static or slowly changing reference metadata.
 
-### C. System-derived fields
+### C. System-derived data
 
-Information that can be generated reproducibly from accepted source data and prior periods:
+SAT-Dengue should generate reproducible derived information internally when it can do so reliably, including, when later approved:
 
 - temporal features;
 - lags;
@@ -69,17 +69,17 @@ Information that can be generated reproducibly from accepted source data and pri
 - target periods;
 - endemic-channel values;
 - current-state indicators;
-- other approved derived features.
+- other model features derived from accepted historical/input data.
 
-The final rules belong to later data/feature contracts.
+The user should not be required to calculate internal feature-engineering values such as lags or rolling windows when SAT-Dengue can derive them reproducibly.
 
-### D. System-obtained external fields
+### D. System-obtained external data
 
-Information SAT-Dengue may retrieve or prepare from controlled external sources rather than requiring the user to upload it, if operational timing and reproducibility support that design.
+SAT-Dengue may obtain data from controlled external sources when operational timing and reproducibility support that design.
 
 Possible examples include climatic/environmental variables.
 
-**OPEN DECISION:** which variables, if any, must be supplied by the user versus obtained automatically by SAT-Dengue.
+**OPEN DECISION:** final responsibility split between user-supplied monthly fields and system-obtained external data.
 
 ## Conceptual Input Envelope
 
@@ -89,14 +89,12 @@ This is an information model, not a frozen CSV/Excel/JSON schema:
 MonthlyDepartmentInput
 ├── department identity
 ├── reference period T
-├── file/source metadata
 └── municipality records[]
     ├── municipality identity
-    ├── user-supplied observations
-    └── optional/source-specific information
+    └── user-supplied monthly observations
 ```
 
-The final inference dataset may contain many additional derived or externally obtained features that are not expected to appear in the user-uploaded file.
+The final inference dataset may contain additional historical, derived, reference, or externally obtained features that are not expected to appear in the user-uploaded file.
 
 ## Candidate Field Classes
 
@@ -106,23 +104,39 @@ The final inference dataset may contain many additional derived or externally ob
 | Reference period | Closed month/year T | USER-supplied or inferred under approved rule | Required concept; format TO BE FROZEN. |
 | Municipality identity | Stable municipality code/name | USER + REFERENCE DATA reconciliation | Required concept; identifier TO BE FROZEN. |
 | Observed dengue measure(s) | Epidemiological information available for municipality at T | Likely USER/SOURCE input | Exact case/event definition TO BE FROZEN. |
-| Historical context | Prior periods needed by model | SYSTEM history | Must not require repeated full-history upload unless justified later. |
-| Endemic-channel inputs | Historical values required to compute approved channel | SYSTEM/DATA pipeline | Exact method TO BE FROZEN in Stage 2. |
-| Climatic/environmental values | Operationally available climate context/features | USER or EXTERNAL/SYSTEM | Responsibility and variables OPEN DECISION. |
+| Historical context | Prior periods needed by model | SYSTEM history | Should not require repeated full-history upload unless later justified. |
+| Derived temporal/model features | Lags, rolling windows, target periods, approved derived indicators | SYSTEM | Exact rules TO BE FROZEN later. |
+| Endemic-channel inputs/results | Historical/context information required by the approved method | SYSTEM/DATA pipeline | Exact method TO BE FROZEN in Stage 2. |
+| Climatic/environmental values | Operationally available external/context variables | EXTERNAL/SYSTEM or USER if later justified | Responsibility and variables OPEN DECISION. |
 | Population/reference denominators | Stable or period-specific denominators if later required | REFERENCE/EXTERNAL | Only if scientifically required. |
-| Source/version metadata | Origin or version of loaded data where needed for traceability | SYSTEM and/or USER | Exact fields TO BE FROZEN. |
 
-## User-Supplied Data Principle
+## Core Validation Areas
 
-The user should supply only information that:
+Before inference, the input must be validated across four product-level areas:
 
-1. is operationally available at the end of period T;
-2. can reasonably be produced by the departmental workflow;
-3. is necessary and cannot be obtained more reliably by SAT-Dengue elsewhere;
-4. has a clear definition the user can follow;
-5. can be validated before inference.
+### 1. File structure
 
-The contract should avoid exposing internal model feature engineering as an upload burden. For example, if the model needs lags or rolling windows that SAT-Dengue can derive from retained history, the user should not normally be required to calculate those values manually.
+The file must be readable and contain the required conceptual information in an accepted structure.
+
+Exact format, encoding, column names, data types, and sheet/tab rules are **TO BE FROZEN IN LATER STAGE**.
+
+### 2. Municipality and period
+
+The system must be able to reconcile each record with the active Tolima or Meta context and a valid reference period T.
+
+The input must not silently mix a municipality from another department or use future information beyond the approved inference cutoff.
+
+### 3. Required data
+
+The data required for the final model and approved product context must be present or obtainable through controlled system sources.
+
+Missing required observations must not be silently converted to zero or to a low-risk prediction.
+
+### 4. Eligibility for inference
+
+A structurally valid record may still be unavailable for prediction if it does not satisfy later-approved scientific or data-quality eligibility rules.
+
+Eligibility rules belong to Stage 2 and later contracts.
 
 ## Department and Municipality Coverage
 
@@ -130,116 +144,27 @@ The operational file is departmental and may contain multiple municipalities.
 
 The geographic product scope includes municipalities in Tolima or Meta, but valid predictive coverage may be narrower according to later eligibility, history, and data-quality rules.
 
-The input contract must therefore support explicit identification of:
-
-- municipalities present in the file;
-- municipalities expected for the department;
-- municipalities missing from the file;
-- municipalities present but ineligible for inference;
-- unknown or mismatched municipalities.
-
-**OPEN DECISION:** whether every departmental municipality must appear in each file or whether missing municipalities are allowed with explicit availability status.
+**OPEN DECISION:** whether every municipality in the active department must appear in each monthly file or whether missing municipalities are allowed and represented as unavailable.
 
 ## Temporal Rules
 
-At minimum, the input must support a single reference period T representing the latest closed period being processed.
+The input represents one intended reference period T and must use only information that was available by the approved cutoff for that period.
 
-The final contract must prevent mixing unavailable future information into that cutoff.
+The exact date representation, source publication lags, and cutoff rules are **TO BE FROZEN IN LATER STAGE**.
 
-Later validation must define:
+Historical corrections, backfills, resubmission workflows, and detailed partial-processing policies are outside this Stage 1 contract.
 
-- accepted date/month representation;
-- whether every row must share the same reference period;
-- handling of late corrections/revisions;
-- whether backfilling older periods is allowed;
-- whether periods must be processed sequentially;
-- operational publication lag for each source.
+A repeated period must not silently overwrite previously persisted data or results.
 
-These are **TO BE FROZEN IN LATER STAGE**.
+## Error Semantics
 
-## Draft Validation Categories
+At Stage 1, the product only needs to distinguish:
 
-Validation should be layered so the user can understand why processing cannot continue.
+- **blocking input problem:** inference must not start because the file or required data cannot be safely interpreted;
+- **unavailable municipality prediction:** the file may be structurally valid, but that municipality cannot produce a valid prediction under later-approved eligibility rules;
+- **warning:** the input remains processable, but the user should be informed of a non-blocking condition.
 
-### 1. File-level validation
-
-Examples:
-
-- file unreadable;
-- unsupported format;
-- empty file;
-- wrong department context;
-- missing period information;
-- invalid encoding/structure.
-
-### 2. Schema-level validation
-
-Examples:
-
-- required conceptual field missing;
-- duplicate/conflicting column meaning;
-- wrong data type;
-- unrecognized municipality identifier field.
-
-Exact field names and types are not frozen.
-
-### 3. Municipality-record validation
-
-Examples:
-
-- unknown municipality;
-- municipality does not belong to active department;
-- duplicate municipality-period row;
-- required observation missing;
-- impossible or invalid value under later domain rules.
-
-### 4. Temporal validation
-
-Examples:
-
-- mixed reference periods in the same file when not allowed;
-- future period relative to allowed processing cutoff;
-- period incompatible with retained history;
-- late/revised period requiring a governed reprocessing policy.
-
-### 5. Eligibility/readiness validation
-
-Examples:
-
-- insufficient historical window;
-- missing required external/system-derived data;
-- contract/model incompatibility;
-- no municipality ready for inference.
-
-Eligibility is not the same as file validity. A structurally valid file can still contain municipalities that cannot produce a valid prediction.
-
-## Draft Error Semantics
-
-The product should distinguish errors by effect, not just technical cause.
-
-### BLOCKING ERROR
-
-The run must not start because the input cannot be safely or consistently interpreted.
-
-Examples may include unreadable file, invalid department, missing reference period, or schema incompatibility.
-
-### RECORD ERROR
-
-A municipality record is invalid or incomplete.
-
-Whether other municipalities may continue is an **OPEN DECISION** tied to whole-file versus partial processing policy in PROD-05.
-
-### WARNING
-
-The input is interpretable and processing may continue, but the user should know about a non-blocking condition.
-
-Warnings must not be used to bypass missing fields that are scientifically required by the final model.
-
-### SYSTEM DEPENDENCY ERROR
-
-User input may be valid, but SAT-Dengue cannot complete preparation because a required system/external dependency is unavailable or incompatible.
-
-Exact error codes and API transport are **TO BE FROZEN IN LATER STAGE**.
+Detailed error codes, transport semantics, dependency failures, and support diagnostics belong to later implementation/API contracts.
 
 ## Invalid Values Must Not Become Predictions
 
@@ -247,36 +172,32 @@ The system must not silently:
 
 - coerce unknown municipalities into valid ones;
 - replace missing required observations with zero unless an approved data rule explicitly defines zero as correct;
-- use a future value to fill a missing current value;
+- use future information to complete the current period;
 - infer a low-risk result from missing data;
-- use retrospective data that would not have been operationally available at T without documenting the rule;
 - accept conflicting duplicate records by arbitrary row order.
 
-Any imputation or correction that affects scientific inputs must be governed by later data-engineering rules and reproducible evidence.
+Any imputation or correction affecting scientific inputs must be governed by later data-engineering rules and reproducible evidence.
 
 ## Draft Input Invariants
 
 1. One processing attempt belongs to one department context.
-2. The input represents one intended reference period T unless later correction/backfill rules explicitly state otherwise.
+2. The input represents one intended reference period T.
 3. Every municipality record must be reconcilable to a controlled municipality identity before inference.
-4. User-supplied data must reflect information operationally available by the approved cutoff.
-5. Blocking validation failures prevent inference.
+4. User-supplied data must reflect information available by the approved cutoff.
+5. Blocking input problems prevent inference.
 6. Missing or invalid input must not be translated into low risk.
-7. Derived features should be generated by the system when reproducible rather than manually calculated by the user without need.
-8. The exact model feature vector is not equivalent to the user-upload schema.
-9. The final contract must be versioned and traceable to the model/prediction contract that consumes it.
+7. Derived features should be generated by SAT-Dengue when reproducible rather than manually calculated by the user.
+8. The model feature vector is not equivalent to the user-upload schema.
+9. A repeated period must not silently overwrite persisted data or results.
 
 ## Open Decisions and Later Freeze
 
-- **OPEN DECISION:** exact fields the departmental user can and should supply.
-- **OPEN DECISION:** which climatic/environmental variables are user-supplied versus system-obtained.
+- **OPEN DECISION:** exact fields required in the departmental monthly file.
+- **OPEN DECISION:** which climatic/environmental variables, if any, are user-supplied versus system-obtained.
 - **OPEN DECISION:** whether all municipalities must be present in each departmental file.
-- **OPEN DECISION:** whole-file rejection versus partial processing for municipality-level errors.
-- **OPEN DECISION:** policy for corrections, backfills, and same-period resubmission.
 - **TO BE FROZEN IN LATER STAGE:** final case/event definitions and units.
-- **TO BE FROZEN IN LATER STAGE:** accepted file format, encoding, size, sheet/tab conventions, and exact column names/types.
+- **TO BE FROZEN IN LATER STAGE:** accepted file format, encoding, exact column names, and data types.
 - **TO BE FROZEN IN LATER STAGE:** operational availability cutoff for each data source.
-- **TO BE FROZEN IN LATER STAGE:** complete validation/error taxonomy.
-- **TO BE FROZEN IN LATER STAGE:** final data schema, data contract versioning, feature derivation rules, and model compatibility rules.
+- **TO BE FROZEN IN LATER STAGE:** final data schema, feature derivation rules, validation details, and model compatibility rules.
 
 This document is explicitly a **DRAFT** and must not be used as a frozen ingestion or API implementation contract.
