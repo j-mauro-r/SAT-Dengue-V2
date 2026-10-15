@@ -2,8 +2,8 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase C.**  
-**Human Gate: UNAPPROVED.**
+**Document status: CLOSED — Phase C. APPROVED TO MAURICIO**
+**Human Gate: APPROVED.** 
 
 This document defines the product workflow for processing a new monthly departmental period. It owns the user-visible sequence from file selection through validation, explicit predictive inference, result presentation, and persistence. It does not define implementation architecture, endpoint shapes, final schemas, model internals, retry/timeout behavior, cancellation, technical error taxonomies, or detailed partial-processing mechanics.
 

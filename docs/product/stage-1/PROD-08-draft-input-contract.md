@@ -2,8 +2,8 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase F.**  
-**Human Gate: UNAPPROVED.**  
+**Document status: CLOSSED — Phase F.**  
+**Human Gate: APPROVED.**  
 **Contract maturity: DRAFT PRODUCT/DATA CONTRACT — NOT FROZEN.**
 
 This document defines the initial product-facing input expectations for loading a new monthly departmental period. It intentionally does not freeze the final schema, exact variable list, file format, or detailed operational validation rules.

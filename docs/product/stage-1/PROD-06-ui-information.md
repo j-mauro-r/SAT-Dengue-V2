@@ -2,8 +2,8 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase D.**  
-**Human Gate: UNAPPROVED.**
+**Document status: CLOSED — Phase C. APPROVED TO MAURICIO**
+**Human Gate: APPROVED.** 
 
 This document defines what information the SAT-Dengue V2 interface should expose, its product priority, and its intended source. It does not freeze a final API schema, storage model, visual layout, or scientific definition.
 

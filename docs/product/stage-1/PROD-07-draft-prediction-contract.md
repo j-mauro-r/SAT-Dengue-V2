@@ -2,8 +2,8 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase E.**  
-**Human Gate: UNAPPROVED.**  
+**Document status: CLOSSED — Phase E.**  
+**Human Gate: APPROVED.**  
 **Contract maturity: DRAFT PRODUCT/MODEL CONTRACT — NOT FROZEN.**
 
 This document defines the initial business semantics of prediction output required by SAT-Dengue V2. It is intentionally incomplete and must not be treated as the final API, storage, or model schema.
