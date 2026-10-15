@@ -2,8 +2,8 @@
 
 ## Status and Purpose
 
-**Document status: DRAFT — Phase E.**
-**Human Gate: UNAPPROVED.**
+**Document status: DRAFT — Phase E.**  
+**Human Gate: UNAPPROVED.**  
 **Contract maturity: DRAFT PRODUCT/MODEL CONTRACT — NOT FROZEN.**
 
 This document defines the initial business semantics of prediction output required by SAT-Dengue V2. It is intentionally incomplete and must not be treated as the final API, storage, or model schema.
@@ -21,7 +21,7 @@ Related product sources:
 
 A valid prediction represents a **predictive risk estimate** for dengue excess/outbreak-related risk at a future horizon. It is not certainty and does not autonomously prescribe a public-health action.
 
-Each completed run is expected to provide municipality-level results for two distinct horizons:
+Each completed result is expected to provide municipality-level outputs for two distinct horizons:
 
 - **T+1:** the month immediately following reference period T.
 - **T+2:** the second month following reference period T.
@@ -39,31 +39,28 @@ The product must not describe prediction generation as “performing a regressio
 The following is a conceptual information structure, not a frozen JSON schema:
 
 ```text
-PredictionRun
-├── run identity and provenance
+PredictionResult
 ├── department
 ├── reference period T
-├── generation metadata
-├── model identity
+├── generation date/time
+├── model version
 └── municipality results[]
     ├── municipality identity
     ├── current observed state/context
     ├── T+1 prediction
     │   ├── target period
     │   ├── probability / risk score
-    │   ├── applicable threshold
+    │   ├── prediction/decision threshold
     │   ├── alert category
-    │   ├── availability state
-    │   └── event interpretation, when valid
+    │   └── availability
     ├── T+2 prediction
     │   ├── target period
     │   ├── probability / risk score
-    │   ├── applicable threshold
+    │   ├── prediction/decision threshold
     │   ├── alert category
-    │   ├── availability state
-    │   └── event interpretation, when valid
-    ├── epidemiological context
-    └── explanation/context, when scientifically valid
+    │   └── availability
+    ├── endemic/epidemiological context
+    └── optional supporting information
 ```
 
 Names, nesting, data types, required/optional fields, enums, precision, serialization, and API transport are **TO BE FROZEN IN LATER STAGE**.
@@ -72,27 +69,25 @@ Names, nesting, data types, required/optional fields, enums, precision, serializ
 
 | Conceptual field | Business meaning | Maturity |
 |---|---|---|
-| `run_id` | Unique identity of the persisted prediction run for audit/retrieval. | DRAFT; format not frozen. |
-| `run_origin` | Distinguishes operational user-triggered processing from historical/model-training results when those are surfaced. | DRAFT product requirement from PROD-04. |
-| `department` | Tolima or Meta context to which the run belongs. | Approved geography; encoding not frozen. |
-| `reference_period` | Latest loaded/available period T used as the operational cutoff for the run. | Approved concept; representation not frozen. |
-| `generated_at` | Date/time when the prediction run was produced. | Approved traceability concept. |
-| `model_name` | Model identity used to produce the run. | DRAFT field; final naming governed later. |
+| `department` | Tolima or Meta context to which the result belongs. | Approved geography; encoding not frozen. |
+| `reference_period` | Latest loaded/available period T used as the operational cutoff. | Approved concept; representation not frozen. |
+| `generated_at` | Date/time when the prediction was produced. | Approved visible traceability concept. |
 | `model_version` | Version/identifier of the model artifact. | Approved traceability need; representation not frozen. |
-| `municipality_id` | Stable municipality identity. | Required concept; exact code field TO BE FROZEN. |
+| `municipality_id` | Stable municipality identity. | Required concept; exact identifier TO BE FROZEN. |
 | `municipality_name` | Human-readable municipality name. | Required UI concept. |
 | `current_state` | Observed epidemiological state at T under the later approved epidemiological definition. | TO BE FROZEN in Stage 2. |
 | `current_cases` | Observed case count/context at T when part of the approved product definition. | DRAFT; case definition and aggregation TO BE FROZEN. |
 | `horizon` | Identifies T+1 versus T+2. | Approved semantics. |
 | `target_period` | Actual future month/year represented by the horizon. | Approved semantics. |
 | `risk_probability` | Model-produced or approved calibrated probability/risk score for the target event at that horizon. | DRAFT; calibration semantics TO BE FROZEN. |
-| `threshold` | Operational predictive threshold applicable to that horizon/model version. | DRAFT; value and selection policy TO BE FROZEN after evaluation. |
+| `threshold` | Prediction/decision threshold applicable to that horizon/model version. | DRAFT; value and selection policy TO BE FROZEN after evaluation. |
 | `alert_category` | User-facing risk/traffic-light category derived under approved semantics. | Required product output; exact categories/colors TO BE FROZEN. |
-| `availability_state` | Indicates whether a valid prediction exists or why it does not. | Required product concept; enum TO BE FROZEN. |
+| `availability` | Indicates whether a valid prediction exists. If unavailable, a user-understandable reason must be provided under the later contract. | Required product concept; detailed reasons TO BE FROZEN. |
 | `event_type` | Onset, continuation, or no outbreak predicted when scientifically valid. | DRAFT; depends on Stage 2 target/current-state definition. |
-| `explanation` | Scientifically valid factors/attributions associated with the prediction. | OPTIONAL DRAFT; method TO BE FROZEN after model evaluation. |
-| `climate_context` | Relevant climatic context where operationally timely and scientifically useful. | OPTIONAL DRAFT; exact variables TO BE FROZEN. |
 | `endemic_context` | Approved observed/channel information for contextual interpretation. | DRAFT; method and fields TO BE FROZEN in Stage 2. |
+| `supporting_information` | Optional explanation or climatic/context information, subject to later scientific validation. | OPTIONAL DRAFT. |
+
+Internal run identifiers, run origin, checksums, contract versions, and other engineering provenance may be added later for reproducibility. They are not primary Stage 1 product semantics.
 
 ## Horizon Semantics
 
@@ -115,24 +110,19 @@ A probability or risk score shown to the user must originate from the approved m
 - whether the product exposes a calibrated probability in `[0,1]`, percentage form, or both;
 - calibration method;
 - precision/rounding;
-- uncertainty representation;
-- minimum evidence required before probability is considered operationally interpretable.
+- uncertainty representation.
 
 No probability value is approved in Stage 1.
 
-## Threshold Semantics
+## Prediction / Decision Threshold Semantics
 
-The prediction threshold is distinct from epidemiological/endemic-channel case thresholds.
+The prediction/decision threshold is distinct from epidemiological/endemic-channel case thresholds.
 
-A predictive threshold may differ by:
-
-- horizon;
-- model version;
-- later approved calibration/decision policy.
+A threshold may differ by horizon, model version, or later approved calibration/decision policy.
 
 The final threshold must be evidence-backed and selected without using unavailable future information.
 
-**TO BE FROZEN IN LATER STAGE:** numeric values, selection rule, stability/recalibration policy, and whether exact threshold values are always user-visible.
+**TO BE FROZEN IN LATER STAGE:** numeric values, selection rule, recalibration policy, and whether exact threshold values are always user-visible.
 
 ## Traffic-Light / Alert Semantics
 
@@ -140,91 +130,59 @@ The dashboard must show an alert level using both color and text. Color alone is
 
 At this stage, only the existence of a traffic-light-style alert is approved. The exact number of levels, labels, colors, and probability boundaries are not approved.
 
-A valid final design must also represent conditions that are not risk levels, such as:
-
-- unavailable prediction;
-- insufficient data;
-- municipality ineligible under later rules;
-- processing/contract inconsistency.
-
-These states must not be represented as green/low risk.
+Unavailable predictions must never be represented as green/low risk.
 
 ## Current State and Event Interpretation
 
 `current_state` belongs to observed epidemiological context at reference period T.
 
-`event_type` may eventually distinguish:
+A future excess prediction does not automatically mean outbreak onset. Event interpretation can be frozen only after Stage 2 formally defines excess, onset, continuation, and current state.
 
-- `ONSET` — predicted future excess when current state is not already in the later-defined excess/boutbreak state;
-- `CONTINUATION` — predicted future excess while current state is already in that state;
-- `NO_OUTBREAK_PREDICTED` — later-approved interpretation when future prediction is below the relevant rule.
+## Optional Supporting Information
 
-These labels are **DRAFT SEMANTICS ONLY**. They cannot be frozen before Stage 2 formally defines excess, outbreak onset, continuation, and current state.
-
-## Explanation Semantics
-
-Explanation is supporting information, not a causal claim.
-
-If the final model supports valid explainability, the contract may expose:
-
-- top contributing variables/features;
-- contribution direction/sign where meaningful;
-- explanation method/version;
-- scope of explanation (local versus global).
-
-The product must not state that a feature “caused” the predicted dengue risk merely because an attribution method assigns it importance.
-
-**TO BE FROZEN IN LATER STAGE:** whether explanations are mandatory, method used, number of factors, units, and user-facing wording.
+Explanation and climatic/context information are optional supporting information, subject to later scientific validation. They must not be treated as causal evidence or as mandatory Stage 1 output semantics.
 
 ## Traceability Requirements
 
-A displayed prediction must be traceable to at least:
+A displayed prediction must be traceable at product level to at least:
 
-- reference period;
 - department and municipality;
+- reference period;
 - target period/horizon;
-- model identity/version;
-- generation time;
-- run identity;
-- origin of the run where historical/model-training results are exposed.
+- model version;
+- generation date/time.
 
-Later engineering contracts should additionally preserve contract/data/model versions and checksums where needed for reproducibility, but exact technical provenance fields are not frozen here.
+Additional technical provenance belongs to later engineering contracts.
 
 ## Availability and Missing Results
 
-The contract must distinguish a valid low-risk prediction from absence of a valid prediction.
+The contract must distinguish only two product-level conditions at this stage:
 
-A municipality/horizon may be unavailable because of later-defined reasons such as:
+- **valid prediction**;
+- **unavailable prediction**.
 
-- insufficient history;
-- missing required data;
-- failed validation;
-- ineligible municipality;
-- inference failure;
-- model/contract incompatibility.
-
-The exact reason taxonomy is **TO BE FROZEN IN LATER STAGE**.
+When unavailable, the final contract must provide a user-understandable reason. The exact reason taxonomy is **TO BE FROZEN IN LATER STAGE**.
 
 ## Draft Invariants
 
 1. Every valid prediction belongs to one municipality, one reference period, and one horizon.
 2. Every valid horizon result identifies its actual target period.
-3. Observed state at T and future prediction must remain semantically separate.
+3. Observed state at T and future prediction remain semantically separate.
 4. A missing prediction cannot be represented as probability `0`, threshold failure, or green/low risk.
-5. Alert category, probability, and threshold shown together must come from the same approved model/run context.
+5. Alert category, probability, and threshold shown together must come from the same approved model context.
 6. The UI must not invent or recalculate scientific values absent from the contract.
-7. Historical/model-training results must retain their true periods and be visibly distinguishable from current operational runs.
+7. T+1 and T+2 are independent outputs.
 8. No field in this draft implies autonomous intervention or guaranteed outbreak prevention.
 
 ## Open Decisions and Later Freeze
 
 - **OPEN DECISION:** exact traffic-light categories and human-readable labels.
-- **OPEN DECISION:** whether exact threshold values are always visible to the primary user.
+- **OPEN DECISION:** whether exact prediction/decision threshold values are always visible to the primary user.
 - **TO BE FROZEN IN LATER STAGE:** formal target/excess/onset/continuation semantics.
 - **TO BE FROZEN IN LATER STAGE:** probability calibration and threshold-selection method.
 - **TO BE FROZEN IN LATER STAGE:** uncertainty representation.
-- **TO BE FROZEN IN LATER STAGE:** final availability/error enums.
-- **TO BE FROZEN IN LATER STAGE:** explainability method and fields.
-- **TO BE FROZEN IN LATER STAGE:** exact schema, types, endpoint representation, versioning, and compatibility rules.
+- **TO BE FROZEN IN LATER STAGE:** detailed availability reasons.
+- **TO BE FROZEN IN LATER STAGE:** optional supporting information semantics.
+- **TO BE FROZEN IN LATER STAGE:** exact schema, types, endpoint representation, versioning, compatibility rules, and technical provenance.
 
 This document is explicitly a **DRAFT** and must not be used as a frozen implementation contract.
