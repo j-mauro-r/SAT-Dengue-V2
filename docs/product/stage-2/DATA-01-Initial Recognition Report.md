@@ -258,6 +258,38 @@ Prepare a **documentation-only priority field matrix** (do not execute yet) with
 - Intended meaning.
 - Source reference URL.
 - Source version/period.
+
+Status update:
+- Completed in this Stage 2 increment as `docs/product/stage-2/DATA-01-Priority Field Matrix.md`.
+
+## 10. Brief update from the official notebook EDA increment
+
+Notebook reference:
+- [notebooks/01_stage2_residence_onset_eda.ipynb](../../../notebooks/01_stage2_residence_onset_eda.ipynb)
+
+Scope reminder:
+- This notebook increment is bounded to Stage 2 Data Understanding (no cleaning/imputation/integration/model training).
+- `dengue` and `dengue_grave` were analyzed separately.
+
+Key confirmed outputs (aggregated):
+- In-scope residence records (Tolima + Meta):
+  - `dengue`: 235,501 of 1,705,604 total.
+  - `dengue_grave`: 4,619 of 50,101 total.
+- `INI_SIN` quality in-scope:
+  - `dengue` missing: 7 records total (Meta 6, Tolima 1); invalid parse count 0.
+  - `dengue_grave` missing: 0; invalid parse count 0.
+- Notification delay signal (`FEC_NOT - INI_SIN`, in-scope comparable pairs):
+  - Negative delays appear in `dengue` (Meta 3,597; Tolima 4,959) and were kept as observed evidence.
+  - No automatic replacement of `INI_SIN` by `FEC_NOT` was applied.
+- Climate file (`google_earth_engine.csv`) under validated in-scope residence municipalities:
+  - Rows in scope: 525,084.
+  - Date range: 2007-01-01 to 2025-12-31.
+  - Missingness by the 9 prioritized climate variables: 0 in this restricted subset.
+  - Duplicate municipality-date keys: 0.
+
+Open items preserved after notebook execution:
+- Official municipality completeness baseline remains **BLOCKED** (no in-repo official municipality inventory artifact for direct benchmarking).
+- Final target definition and modeling decisions remain **UNVERIFIED** and out of scope for this Stage 2 increment.
 - Open doubts and validation status.
 
 Suggested first scope for that matrix:
@@ -267,7 +299,7 @@ Suggested first scope for that matrix:
 
 Rationale: this resolves interpretation uncertainty before deeper exploratory analysis or any integration decision.
 
-## 10. Evidence classification summary
+## 11. Evidence classification summary
 - **Confirmed in data:** file inventory, dimensions, date ranges, presence of Tolima/Meta, missingness counts, key-repetition counts, schema equality check.
 - **Documented in source:** external environmental dictionary/workflow references; expected official SIVIGILA and dengue guideline scope.
 - **Hypothesis:** row-level semantic interpretation, severe-vs-general dengue inclusion relationship, and partial explanation of `ANO` vs `FEC_NOT` differences.

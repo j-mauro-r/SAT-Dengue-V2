@@ -96,3 +96,26 @@ El resultado permitirá justificar qué municipios tienen información suficient
 ## 7. Alcance de esta revisión
 
 Se leyeron las notas del experto, la propuesta y el reporte del microproyecto; se consultaron los métodos de los cinco artículos citados y el diccionario del INS. No se auditaron sus códigos completos, suplementos ni todas sus cifras. No se verificaron los CSV originales, no se ejecutaron nuevos análisis de datos y no se modificaron los archivos sincronizados de `sources/` ni el repositorio `SAT-Dengue-V2`.
+
+## 8. Reconciliación con el notebook oficial Stage 2 (incremento acotado)
+
+Referencia:
+- `notebooks/01_stage2_residence_onset_eda.ipynb`
+
+Evidencia nueva incorporada (sin cambiar decisiones de arquitectura):
+- Se ejecutó un EDA acotado sobre residencia en Tolima/Meta, con `dengue` y `dengue_grave` analizados por separado.
+- `INI_SIN` se mantuvo como fecha candidata principal y se verificó su calidad en alcance:
+  - `dengue`: 7 faltantes en total (Meta 6, Tolima 1), inválidos 0.
+  - `dengue_grave`: faltantes 0, inválidos 0.
+- Se midió señal de retraso `FEC_NOT - INI_SIN` y se preservó la regla de no sustitución automática de `INI_SIN` por `FEC_NOT`.
+- En clima, la evaluación se restringió a municipios de residencia validados y a la ventana temporal común explícita (intersección epidemiología-clima).
+
+Implicación para esta nota:
+- La evidencia refuerza la decisión vigente de separar dos capas:
+  - fecha epidemiológica de atribución del caso (`INI_SIN`), y
+  - fecha de disponibilidad operativa (notificación).
+- No resuelve todavía la política final de respaldo temporal ni la decisión final sobre unidad de entrenamiento (compartida, departamental o municipal).
+
+Estado de gobernanza:
+- Stage 2 continúa abierto.
+- G2 no está aprobado.

@@ -127,5 +127,7 @@ Esta aproximación se considera completa cuando permite entender qué contienen 
 
 1. `docs/product/stage-2/DATA-01-Data Understanding.md` (este brief de reconocimiento).
 2. `docs/product/stage-2/DATA-01-Initial Recognition Report.md` (informe de reconocimiento inicial).
+3. `docs/product/stage-2/DATA-01-Priority Field Matrix.md` (matriz priorizada de campos y referencias, artefacto de trabajo).
+4. `notebooks/01_stage2_residence_onset_eda.ipynb` (incremento oficial de EDA acotado para evidencia agregada).
 
-La ejecución de esta aproximación termina al entregar el informe inicial para revisión.
+La ejecución de esta aproximación termina al entregar estos artefactos para revisión y detenerse (sin avanzar automáticamente a limpieza, integración o modelado).
