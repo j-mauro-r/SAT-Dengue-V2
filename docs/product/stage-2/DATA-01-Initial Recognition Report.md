@@ -8,9 +8,65 @@ This report documents a controlled first-pass, read-only recognition of:
 
 This is an initial recognition checkpoint only. It does **not** close Stage 2 and does **not** approve G2 (Data & Target Freeze).
 
-## 1. Inventory and file structure
+Evidence labels used in this report:
+- **Confirmed in data:** directly observed in inspected CSV files during this recognition.
+- **Documented in source:** described by referenced documentation.
+- **Hypothesis:** plausible interpretation not yet validated end-to-end.
+- **Pending:** unresolved check or decision.
 
-### 1.1 File inventory
+## 1. Documentary references
+
+### 1.1 Environmental dictionary and extraction workflow (project reference)
+
+References consulted:
+- https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv
+- https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/README.MD
+- https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/gee-query-dengue.py
+
+Version/period identified from those references:
+- The repository view reports recent updates around commit `c0b5b13` (as shown in GitHub file pages).
+- `gee-query-dengue.py` is configured with `START_YEAR = 2018` and `END_YEAR = 2024`.
+
+Documented in source:
+- A data dictionary exists for 18 environmental fields, including:
+  - Temporal fields (`date`, `year`, `month`, `day_of_year`).
+  - DIVIPOLA geographic codes (`dpto_ccdgo`, `dpto_cnmbr`, `mpio_ccdgo`, `mpio_cdpmp`, `mpio_cnmbr`).
+  - Nine climate variables with type, units, source, definitions, and usage comments.
+- The extraction script documents dataset sources and transformations (for example Kelvin to Celsius, meters to mm, J/m² to MJ/m²/day, and ECMWF evaporation sign convention).
+- The README documents an operational flow for Earth Engine extraction and monthly CSV exports.
+
+Limitations:
+- These references are external to this repository and were not used as proof of provenance of `google_earth_engine.csv`.
+- Similarity of column names is **not** sufficient to confirm origin.
+
+### 1.2 Official SIVIGILA dictionary reference
+
+Reference consulted:
+- https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf
+
+Documented in source (scope expectation):
+- The official dictionary is expected to provide technical names, types, lengths, allowed values, and validations.
+- The requested interpretation for `AÑO` is epidemiological-week year (not strictly calendar year).
+
+Limitation in this session:
+- Direct machine-readable text extraction from this PDF was not successful with available local tooling, so the exact clause could not be quoted in-session.
+- Therefore, the `ANO` ↔ official `AÑO` correspondence is incorporated as a documented reference target and remains pending direct textual verification in this workspace.
+
+### 1.3 Dengue event-specific guideline reference
+
+Reference consulted:
+- https://www.ins.gov.co/BibliotecaDigital/210_220_580_Dengue_2019.pdf
+
+Documented in source (scope expectation):
+- Event categories in scope: 210 (dengue), 220 (severe dengue), 580 (dengue mortality).
+- Intended as reference for complementary variables and event-specific categories.
+
+Limitation in this session:
+- Direct text extraction from this PDF was also not successful with available local tooling, so event-specific wording and validation rules could not be quoted verbatim.
+
+## 2. Inventory and file structure
+
+### 2.1 File inventory
 
 | File | Size (bytes) | Rows (excluding header) | Columns | Separator | Header |
 |---|---:|---:|---:|---|---|
@@ -27,14 +83,14 @@ Version/ambiguity check:
 - `find data -type f \( -name 'dengue.csv' -o -name 'dengue_grave.csv' -o -name 'google_earth_engine.csv' \) | sort`
 - Result: one unique path per required file (no ambiguous duplicate versions found inside `data/`).
 
-### 1.2 Minimal structural samples (PII-safe)
+### 2.2 Minimal structural samples (PII-safe)
 - Sample extraction method: `head -n 3`.
 - For epidemiological files, sample rows were **not reproduced** in this report to avoid exposing potentially sensitive row-level details.
 - For climate file, sample confirmed daily records with municipality and climate variables; one sampled row also showed empty climate fields.
 
-## 2. Description by file (first-pass)
+## 3. Description by file (first-pass)
 
-### 2.1 `data/raw/dengue.csv`
+### 3.1 `data/raw/dengue.csv`
 - Apparent structure:
   - 69 columns including event metadata, demographic fields, geography, dates, and case status fields.
   - `COD_EVE` observed as `210` in sampled/unique checks.
@@ -45,7 +101,7 @@ Version/ambiguity check:
 - Geographic fields observed:
   - `COD_DPTO_O`, `COD_MUN_O`, department/municipality name fields for occurrence, residence, and notification.
 
-### 2.2 `data/raw/dengue_grave.csv`
+### 3.2 `data/raw/dengue_grave.csv`
 - Apparent structure:
   - Same 69-column header as `dengue.csv` (header equality check: yes).
   - `COD_EVE` observed as `220` in sampled/unique checks.
@@ -54,7 +110,7 @@ Version/ambiguity check:
 - Temporal/geographic fields:
   - Same pattern as `dengue.csv`.
 
-### 2.3 `data/raw/google_earth_engine.csv`
+### 3.3 `data/raw/google_earth_engine.csv`
 - Apparent structure:
   - 18 columns.
   - Includes `date`, `year`, `month`, `day_of_year`, geographic codes/names, and climate variables.
@@ -63,9 +119,23 @@ Version/ambiguity check:
 - Noted parsing caveat:
   - Quoted geographic names contain commas (for example district names), so CSV-aware parsing is required.
 
-## 3. Temporal and geographic coverage
+Documented in source:
+- The project environmental dictionary documents the same 18 field names with units and sources.
+- The extraction script and README describe a municipality-day extraction process compatible at schema level.
 
-### 3.1 Confirmed (full-file checks)
+Confirmed in data vs documented in source distinction:
+- **Confirmed in data:** `google_earth_engine.csv` has 18 columns matching the observed names.
+- **Documented in source:** there is a published process and dictionary for similarly named environmental outputs.
+- **Pending:** provenance linkage between this specific CSV file and that external process is not confirmed in this report.
+
+Differences identified between references and inspected files:
+- Reference script period is configured as 2018–2024, while inspected climate CSV covers 2007-01-01 to 2025-12-31.
+- Reference README export examples include 2007 monthly files, which differs from script configuration and suggests workflow evolution or multiple runs.
+- Asset naming differs between reference README (`municipio-dane-optimized`) and reference script (`municipios-dane-optimized`).
+
+## 4. Temporal and geographic coverage
+
+### 4.1 Confirmed in data (full-file checks)
 - `dengue.csv`
   - `FEC_NOT` parsed date range: 2006-05-05 to 2026-03-27.
   - `ANO` range observed: 2007 to 2025.
@@ -87,13 +157,23 @@ Version/ambiguity check:
     - `dpto_cnmbr = TOLIMA`: 324,723 rows
     - `dpto_cnmbr = META`: 200,361 rows
 
-### 3.2 Pending
+### 4.2 Documented in source
+- Environmental dictionary describes `year` as calendar year in climate records.
+- SIVIGILA dictionary reference is expected to define official field semantics for surveillance datasets, including temporal fields.
+- Requested interpretation for official `AÑO`: epidemiological-week year.
+
+Important interpretation guardrail:
+- If `ANO` in inspected epidemiological CSV corresponds to official `AÑO` (epidemiological-week year), then mismatch against calendar year from `FEC_NOT` is **not automatically an error**.
+
+### 4.3 Pending
+- Direct textual confirmation of the official `AÑO` definition from the cited PDF remains pending due extraction limitations in this session.
 - Coverage completeness by municipality over the full period is not confirmed yet.
 - Alignment of epidemiological coverage (including 2026 dates in `FEC_NOT`) versus climate coverage ending 2025 is unresolved.
+- Even with epidemiological-week-year semantics, not all date anomalies or out-of-period records are explained.
 
-## 4. Basic quality signals (no correction performed)
+## 5. Basic quality signals (no correction performed)
 
-## 4.1 Confirmed (full-file checks)
+### 5.1 Confirmed in data (full-file checks)
 - Essential-field missingness:
   - `dengue.csv`
     - `FEC_NOT`, `SEMANA`, `ANO`, `COD_MUN_O`, `Departamento_ocurrencia`: 0 missing
@@ -121,16 +201,21 @@ Version/ambiguity check:
     - `dengue.csv`: 6,277
     - `dengue_grave.csv`: 426
 
-## 4.2 Hypothesis
-- Some `ANO`/`FEC_NOT` mismatches may correspond to surveillance period conventions (for example epidemiological-week assignment) rather than raw data errors.
+### 5.2 Documented in source
+- The official SIVIGILA dictionary reference (2018–2020) is expected to provide temporal validation semantics.
+- The dengue event reference (2019) is expected to define event-level category behavior for 210/220/580.
 
-## 4.3 Pending
+### 5.3 Hypothesis
+- A portion of `ANO`/`FEC_NOT` mismatches may be expected under epidemiological-week-year conventions.
+
+### 5.4 Pending
 - Exact duplicate full-row detection across all files was not run in this pass (would require heavier processing and explicit approval for deeper checks).
-- Dictionary/metadata validation for category codes, units, and abbreviations remains pending.
+- Full 69-column epidemiological mapping against official dictionaries/instructives remains pending.
+- Historical applicability check is pending: official references consulted are period-bounded (for example 2018–2020 and 2019), while inspected data span includes other years.
 
-## 5. Preliminary compatibility between files
+## 6. Preliminary compatibility between files
 
-## 5.1 Confirmed
+### 6.1 Confirmed in data
 - `dengue.csv` and `dengue_grave.csv` share the same 69-column schema.
 - Event code differs (`210` vs `220`), indicating separate event coding.
 - A small overlap exists in `CONSECUTIVE` IDs between files:
@@ -138,37 +223,52 @@ Version/ambiguity check:
   - unique `CONSECUTIVE` IDs in `dengue_grave.csv`: 50,096
 - Climate file provides daily date and municipality-level geographic keys (`dpto_ccdgo`, `mpio_cdpmp`).
 
-## 5.2 Hypothesis
+### 6.2 Documented in source
+- Dengue-specific guide reference covers events 210, 220, and 580.
+- Distinct event codes are documented categories, but code distinction alone does not prove mutually exclusive record sets between files.
+
+### 6.3 Hypothesis
 - Severe dengue may be represented as a related but not fully nested event stream relative to dengue, based on differing event codes and low `CONSECUTIVE` overlap.
 - Potential epidemiology-climate linkage keys may involve municipality and time, but harmonization rules are required first:
   - municipality coding alignment (`COD_DPTO_O` + `COD_MUN_O` vs `mpio_cdpmp`)
   - temporal alignment (case date/epi week vs daily climate date)
 
-## 5.3 Pending
+### 6.4 Pending
 - Relationship semantics (whether severe dengue is included in dengue by definition or operationally separate) need authoritative domain confirmation.
-- Unit and aggregation-method confirmation for climate variables requires source documentation.
+- Relationship semantics for `CONSECUTIVE` overlap require formal event-process clarification.
+- Applicability and coverage of official references across all 69 epidemiological columns and all years in the inspected files remain pending.
 
-## 6. Checks omitted and why
+## 7. Checks omitted and why
 - Full EDA, visual profiling, joins, and aggregations: out of scope by instruction.
 - Full deduplication/record linkage analysis: out of scope for this recognition pass.
 - Final target (`Y`) definition and municipality eligibility decisions: out of scope for this step.
 
-## 7. Questions for review before next step
-1. Which epidemiological date should anchor Stage 2 alignment (`FEC_NOT`, `INI_SIN`, or another date field)?
-2. How should `ANO`/`FEC_NOT` mismatches be interpreted for this product context?
-3. Is `COD_MUN_O = 000` considered unknown/invalid for downstream selection, and what policy applies?
-4. Should municipality-level linkage use occurrence geography, residence geography, or notification geography?
-5. What is the authoritative source for climate variable units and aggregation semantics in `google_earth_engine.csv`?
+## 8. Questions for review before next step
+1. Can we obtain a directly extractable/citable copy of the official SIVIGILA dictionary and dengue guideline PDFs to validate clauses in-session?
+2. Should `ANO` be formally mapped to official `AÑO` (epidemiological-week year) for this project, and with what exception rules?
+3. Which epidemiological date should anchor Stage 2 alignment (`FEC_NOT`, `INI_SIN`, or another date field)?
+4. Is `COD_MUN_O = 000` considered unknown/invalid for downstream selection, and what policy applies?
+5. Should municipality-level linkage use occurrence geography, residence geography, or notification geography?
+6. What evidence will be accepted to confirm provenance (or non-provenance) of `google_earth_engine.csv` relative to external extraction workflows?
+7. How will we validate the 69-column epidemiological mapping against official references, including historical applicability outside 2018–2020/2019 windows?
 
-## 8. Proposed next small step
-Run a **documentation-only field contract draft** (no data mutation, no joins) listing:
-- candidate linkage fields,
-- date-field options with pros/cons,
-- explicit handling hypotheses for unknown municipality codes and year mismatches.
+## 9. Proposed next small step
+Prepare a **documentation-only priority field matrix** (do not execute yet) with columns:
+- Original column name in CSV.
+- Intended meaning.
+- Source reference URL.
+- Source version/period.
+- Open doubts and validation status.
 
-Rationale: this resolves key interpretation uncertainty before any deeper exploratory analysis.
+Suggested first scope for that matrix:
+- Temporal fields (`ANO`, `SEMANA`, `FEC_NOT`, `INI_SIN`).
+- Geographic keys (`COD_DPTO_O`, `COD_MUN_O`, `mpio_cdpmp`).
+- Event/category fields (`COD_EVE`, key status/classification fields).
 
-## 9. Evidence classification summary
-- **Confirmed:** file inventory, dimensions, date ranges, presence of Tolima/Meta, missingness counts, key-repetition counts, schema equality check.
-- **Hypothesis:** row-level semantic interpretation, severe-vs-general dengue inclusion relationship, likely linkage strategy.
-- **Pending:** definitive relation semantics, unit dictionaries, complete duplicate detection strategy, and downstream contract decisions.
+Rationale: this resolves interpretation uncertainty before deeper exploratory analysis or any integration decision.
+
+## 10. Evidence classification summary
+- **Confirmed in data:** file inventory, dimensions, date ranges, presence of Tolima/Meta, missingness counts, key-repetition counts, schema equality check.
+- **Documented in source:** external environmental dictionary/workflow references; expected official SIVIGILA and dengue guideline scope.
+- **Hypothesis:** row-level semantic interpretation, severe-vs-general dengue inclusion relationship, and partial explanation of `ANO` vs `FEC_NOT` differences.
+- **Pending:** direct textual verification from official PDFs in this workspace, full 69-column official mapping, historical applicability across all years, definitive relation semantics, and provenance confirmation for `google_earth_engine.csv`.
