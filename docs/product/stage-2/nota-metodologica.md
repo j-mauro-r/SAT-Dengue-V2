@@ -25,7 +25,7 @@ El inicio de síntomas define a qué periodo se atribuye un caso. La fecha en qu
 
 ### Notas de la sesión con el experto
 
-Fuente: [Sesion_1_con_Experto_Notas.docx](/Users/mauriciorodriguez/.codex/.chatgpt-projects/g-p-6a7796c7ddd88191bc71cf8fe4c406e4/sources/Sesion_1_con_Experto_Notas.docx), secciones 3 y 4.
+Fuente externa al repositorio: `Sesion_1_con_Experto_Notas.docx` (documento privado local), secciones 3 y 4.
 
 Las notas aconsejan no comenzar entrenando modelos independientes para todos los municipios de Colombia y proponen un piloto reducido, posiblemente de tres municipios, seleccionado con criterios objetivos. Presentan la secuencia municipio → serie temporal → características → modelo → riesgo T+2 y sugieren evaluar el inicio de síntomas como fecha de referencia.
 
@@ -35,13 +35,13 @@ La sugerencia histórica de un piloto de tres municipios no modifica el alcance 
 
 ### Propuesta de proyecto de grado
 
-Fuente: [Formato-propuesta_Proyecto-de-grado-Mauricio.pdf](/Users/mauriciorodriguez/.codex/.chatgpt-projects/g-p-6a7796c7ddd88191bc71cf8fe4c406e4/sources/Formato-propuesta_Proyecto-de-grado-Mauricio.pdf), páginas 3–7.
+Fuente externa al repositorio: `Formato-propuesta_Proyecto-de-grado-Mauricio.pdf` (documento privado local), páginas 3–7.
 
 La propuesta plantea un panel municipio-mes, comparación de XGBoost, LightGBM y GAM, horizontes T+1/T+2 y evaluación temporal con resultados municipales y agregados. No fija explícitamente si el entrenamiento debe ser compartido o independiente por ubicación. Tener un panel municipal tampoco decide por sí solo esa cuestión.
 
 ### Antecedente del microproyecto
 
-Fuente: [Reporte_Entrega3_final-2.docx](/Users/mauriciorodriguez/.codex/.chatgpt-projects/g-p-6a7796c7ddd88191bc71cf8fe4c406e4/sources/Reporte_Entrega3_final-2.docx), sección 3.1 y tabla de fuentes.
+Fuente externa al repositorio: `Reporte_Entrega3_final-2.docx` (documento privado local), sección 3.1 y tabla de fuentes.
 
 El reporte describe una entrada de dos filas, Cali y Bucaramanga, que alimenta el Champion para producir cuatro predicciones: dos municipios y dos horizontes. También documenta `INI_SIN` con notificación como respaldo. Esto es un antecedente de inferencia conjunta; no acredita por sí solo la procedencia exacta de los datos de entrenamiento de cada artefacto. Ni esas ciudades ni el respaldo temporal pasan automáticamente a ser decisiones de V2.
 

@@ -246,11 +246,9 @@ Important interpretation guardrail:
 ## 8. Questions for review before next step
 1. Can we obtain a directly extractable/citable copy of the official SIVIGILA dictionary and dengue guideline PDFs to validate clauses in-session?
 2. Should `ANO` be formally mapped to official `AÑO` (epidemiological-week year) for this project, and with what exception rules?
-3. Which epidemiological date should anchor Stage 2 alignment (`FEC_NOT`, `INI_SIN`, or another date field)?
-4. Is `COD_MUN_O = 000` considered unknown/invalid for downstream selection, and what policy applies?
-5. Should municipality-level linkage use occurrence geography, residence geography, or notification geography?
-6. What evidence will be accepted to confirm provenance (or non-provenance) of `google_earth_engine.csv` relative to external extraction workflows?
-7. How will we validate the 69-column epidemiological mapping against official references, including historical applicability outside 2018–2020/2019 windows?
+3. What policy should be applied to in-scope residence rows with missing/invalid/non-identifiable municipality codes in downstream Stage 2 denominator definitions?
+4. What evidence will be accepted to confirm provenance (or non-provenance) of `google_earth_engine.csv` relative to external extraction workflows?
+5. How will we validate the 69-column epidemiological mapping against official references, including historical applicability outside 2018–2020/2019 windows?
 
 ## 9. Proposed next small step
 Prepare a **documentation-only priority field matrix** (do not execute yet) with columns:
@@ -262,7 +260,7 @@ Prepare a **documentation-only priority field matrix** (do not execute yet) with
 Status update:
 - Completed in this Stage 2 increment as `docs/product/stage-2/DATA-01-Priority Field Matrix.md`.
 
-## 10. Brief update from the official notebook EDA increment
+## 10. Brief update from the official notebook EDA increment (methodology-corrected run)
 
 Notebook reference:
 - [notebooks/01_stage2_residence_onset_eda.ipynb](../../../notebooks/01_stage2_residence_onset_eda.ipynb)
@@ -270,27 +268,52 @@ Notebook reference:
 Scope reminder:
 - This notebook increment is bounded to Stage 2 Data Understanding (no cleaning/imputation/integration/model training).
 - `dengue` and `dengue_grave` were analyzed separately.
+- Residence geography (Tolima/Meta) was used as approved scope.
+- `INI_SIN` was kept as the onset-date candidate for epidemiological diagnostics, without automatic replacement by `FEC_NOT`.
+
+Run traceability:
+- Runtime and reproducibility metadata: notebook code cell 3.
+- Header and schema checks: notebook code cell 4.
+- Residence filtering controls and synthetic tests: notebook code cell 6.
+- Epidemiological quality and `INI_SIN` diagnostics: notebook code cells 7 and 8.
+- Climate coverage/gap diagnostics: notebook code cells 9 and 10.
+- Evidence-state and key-metric summary: notebook code cell 11.
 
 Key confirmed outputs (aggregated):
 - In-scope residence records (Tolima + Meta):
-  - `dengue`: 235,501 of 1,705,604 total.
+  - `dengue`: 235,501 of 1,705,604 total (Meta 106,457; Tolima 129,044).
   - `dengue_grave`: 4,619 of 50,101 total.
 - `INI_SIN` quality in-scope:
   - `dengue` missing: 7 records total (Meta 6, Tolima 1); invalid parse count 0.
   - `dengue_grave` missing: 0; invalid parse count 0.
 - Notification delay signal (`FEC_NOT - INI_SIN`, in-scope comparable pairs):
   - Negative delays appear in `dengue` (Meta 3,597; Tolima 4,959) and were kept as observed evidence.
+  - `dengue_grave` has 0 records with `INI_SIN > FEC_NOT` under current in-scope filters.
   - No automatic replacement of `INI_SIN` by `FEC_NOT` was applied.
-- Climate file (`google_earth_engine.csv`) under validated in-scope residence municipalities:
-  - Rows in scope: 525,084.
-  - Date range: 2007-01-01 to 2025-12-31.
-  - Missingness by the 9 prioritized climate variables: 0 in this restricted subset.
+- Comparison against previously reported 8,556 consistency alerts:
+  - Recomputed `INI_SIN > FEC_NOT` total alerts (all datasets, Tolima+Meta in-scope): 8,556.
+  - Difference vs prior reported value: 0.
+- Climate file (`google_earth_engine.csv`) diagnostics under in-scope residence-derived expected municipalities:
+  - Rows in target departments by code: 525,084.
+  - Overlap window (epidemiology vs climate): 2007-01-01 to 2025-12-31 (6,940 days).
+  - Expected municipalities from epidemiology: 76; observed in climate: 76.
+  - Expected-without-climate: 0; climate-without-epidemiology: 0.
+  - Missingness in prioritized climate variables: 0 for all 9 variables.
+  - Zero-value profile separated from missingness: `rain_mm_day` zero proportion 44.6858%; `surface_runoff_mm_day` zero proportion 0.5239%; remaining prioritized variables 0 zero proportion.
+  - Gap-pattern control: all 76 expected municipalities share the same computed 31 missing dates (2020-01-01 to 2020-01-31); this was computed from data, not hardcoded.
   - Duplicate municipality-date keys: 0.
+
+Coverage-control states from notebook checks:
+- `PASS`: expected municipalities are not restricted to `INI_SIN`-interpretable records.
+- `PASS`: source windows and overlap window are explicit and reconciled.
+- `PASS`: missing-date counts are computed, not fixed constants.
+- `PASS`: municipality gap-pattern comparison is explicit (`unique_gap_pattern_count = 1`).
+- `PASS`: no automatic `INI_SIN` substitution by `FEC_NOT`.
+- `BLOCKED`: official municipality inventory completeness baseline (no official in-repo inventory artifact).
 
 Open items preserved after notebook execution:
 - Official municipality completeness baseline remains **BLOCKED** (no in-repo official municipality inventory artifact for direct benchmarking).
 - Final target definition and modeling decisions remain **UNVERIFIED** and out of scope for this Stage 2 increment.
-- Open doubts and validation status.
 
 Suggested first scope for that matrix:
 - Temporal fields (`ANO`, `SEMANA`, `FEC_NOT`, `INI_SIN`).
