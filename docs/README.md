@@ -23,14 +23,15 @@ This index defines where authoritative knowledge lives in the repository.
 ### Product
 
 - `product/product-definition.md`: product objective, scope, and dashboard functional baseline.
-- `product/stage-2/DATA-01-Data Understanding.md`: bounded Stage 2 recognition brief and constraints.
-- `product/stage-2/DATA-01-Initial Recognition Report.md`: initial recognition evidence and open checks.
-- `product/stage-2/DATA-01-Priority Field Matrix.md`: documentation-only priority field mapping (working artifact).
-- `product/stage-2/nota-metodologica.md`: methodological framing and evidence-based decision boundaries.
+- [Stage 2 brief](product/stage-2/DATA-01-Data%20Understanding.md): scope, completed increments and review constraints.
+- [Recognition report](product/stage-2/DATA-01-Initial%20Recognition%20Report.md): historical recognition and saved corrected EDA findings.
+- [Canonical priority field matrix](product/stage-2/DATA-01-Priority%20Field%20Matrix.md): single field-definition reference; observed headers and pending aliases.
+- [Source provenance](product/stage-2/DATA-01-Source%20Provenance.md): input fingerprints, saved-run metadata and reference lineage limits.
+- [Methodological note](product/stage-2/nota-metodologica.md): approved residence/onset choices, literature context and open model decisions.
 
 ### Notebooks
 
-- `../notebooks/01_stage2_residence_onset_eda.ipynb`: official Stage 2 bounded EDA increment (Tolima/Meta residence scope, no modeling).
+- [Official Stage 2 notebook](../notebooks/01_stage2_residence_onset_eda.ipynb): bounded residence/onset EDA; saved outputs remain unchanged by documentary consolidation.
 
 ### Methodology
 

@@ -1,65 +1,90 @@
-# SAT-Dengue V2 — DATA-01 Priority Field Matrix
+# SAT-Dengue V2 — Canonical Priority Field Matrix
 
-Date: 2026-10-15
-Status: Stage 2 working artifact (Data Understanding). Not a final 69-column signed mapping.
+Revision: 2026-10-16. Status: working definitions for Data Understanding; G2 is not approved.
 
-## Purpose
+This is the single field-definition reference for the bounded Stage 2 EDA. It consolidates the former `priority-field-matrix.md` and the previously indexed DATA-01 matrix. It does not replace the roadmap's DATA-02 download task or freeze a Data Contract.
 
-This matrix documents the first priority fields for Stage 2 checks, linking observed CSV names to intended meaning and source references.
+Related records: [scope and constraints](DATA-01-Data%20Understanding.md), [recognition and saved results](DATA-01-Initial%20Recognition%20Report.md), [methodological decisions](nota-metodologica.md), [source provenance](DATA-01-Source%20Provenance.md), and [official notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb).
 
-Scope limits:
-- Documentation-only matrix.
-- No data transformation decisions are approved by this file.
-- Stage 2 remains open and G2 is not approved.
+## 1. Approved decisions and evidence labels
 
-## Priority Field Matrix
+- **Approved:** case attribution uses municipality of residence and symptom onset (`INI_SIN`), within Tolima and Meta. Outputs remain municipal at T+1/T+2.
+- **Header confirmed:** present in the current CSV header inspected on 2026-10-16. This is not a value-domain or clinical-quality assessment.
+- **Saved EDA evidence:** observed in the committed notebook outputs, not recomputed during this consolidation.
+- **Documented definition:** supported by an identified reference; export aliases and historical applicability are separate questions.
+- **Pending:** an unverified mapping, source lineage, value rule or policy; it must not be silently treated as approved.
 
-| Domain | CSV field | Intended meaning (working) | Source reference | Source version/period | Evidence state | Notes |
-|---|---|---|---|---|---|---|
-| Epidemiological | COD_EVE | Event code (e.g., dengue, severe dengue) | https://www.ins.gov.co/BibliotecaDigital/210_220_580_Dengue_2019.pdf | INS guideline (2019) | Documented in source | Session could not extract machine-readable clauses from PDF; verify with citable text later. |
-| Epidemiological | INI_SIN | Symptom onset date | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Documented in source + Confirmed in data (field presence) | In-scope quality checks executed in notebook. |
-| Epidemiological | FEC_NOT | Notification date | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Documented in source + Confirmed in data (field presence) | Used only for diagnostics and consistency checks; no automatic replacement policy applied. |
-| Epidemiological | ANO | Epidemiological year candidate | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Confirmed in data + Pending official textual confirmation | Descriptive consistency checks against ISO week-year were run; not an official rule validation. |
-| Epidemiological | SEMANA | Epidemiological week candidate | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Confirmed in data + Pending official textual confirmation | Descriptive checks only; semantics pending official confirmation. |
-| Epidemiological | COD_DPTO_R | Residence department code | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Confirmed in data | Used for Tolima/Meta residence filtering in official notebook. |
-| Epidemiological | COD_MUN_R | Residence municipality code | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Confirmed in data | Treated as string-style code fields in notebook to preserve leading zeros. |
-| Epidemiological | Departamento_residencia | Residence department label | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Confirmed in data | Used as secondary consistency signal for residence scope. |
-| Epidemiological | Municipio_residencia | Residence municipality label | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Confirmed in data | Used as descriptive metadata in municipality-level outputs. |
-| Epidemiological | CONSECUTIVE | Record identifier candidate | https://www.ins.gov.co/Direcciones/Vigilancia/Lineamientosydocumentos/3.%20Diccionario_de_datos_Sivigila%202018_2020.pdf | INS SIVIGILA dictionary (2018–2020) | Confirmed in data + Pending semantics | Cross-file overlap is non-zero but interpretation is unresolved. |
-| Climate | date | Municipality-day date | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | In-scope climate window in notebook: 2007-01-01 to 2025-12-31. |
-| Climate | year | Calendar year | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Treated as descriptive field in this increment. |
-| Climate | month | Calendar month | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | No temporal aggregation decisions approved here. |
-| Climate | dpto_ccdgo | Department code | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Used for in-scope department filtering checks. |
-| Climate | mpio_cdpmp | Municipality code (DANE-like) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Used as climate-side municipality key for scope checks. |
-| Climate | rain_mm_day | Daily rainfall (mm/day) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Missingness in notebook in-scope subset: 0; zero-value proportion: 44.6858%. |
-| Climate | temp_mean_c | Daily mean air temperature (deg C) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Missingness in notebook in-scope subset: 0. |
-| Climate | dewpoint_mean_c | Daily dew point temperature (deg C) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Missingness in notebook in-scope subset: 0. |
-| Climate | soil_water_l1_mean | Layer-1 soil water indicator | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Unit/processing assumptions remain external-reference dependent. |
-| Climate | surface_runoff_mm_day | Daily surface runoff (mm/day) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Missingness in notebook in-scope subset: 0; zero-value proportion: 0.5239%. |
-| Climate | total_evaporation_mm_day_ecmwf | Daily evaporation proxy (mm/day, ECMWF convention) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/gee-query-dengue.py | External reference repo, observed at commit view c0b5b13 | Documented in source + Confirmed in data (field presence) | Sign convention documented externally; in-repo provenance not yet proven. |
-| Climate | wind_u_mean_ms | Zonal wind component (m/s) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Missingness in notebook in-scope subset: 0. |
-| Climate | wind_v_mean_ms | Meridional wind component (m/s) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Missingness in notebook in-scope subset: 0. |
-| Climate | solar_radiation_mj_m2_day | Daily solar radiation (MJ/m2/day) | https://github.com/j-mauro-r/microproyecto-tema3/blob/main/data/docs/diccionario_datos_ambiente_dengue.csv | External reference repo, observed at commit view c0b5b13 | Confirmed in data + Documented in source | Missingness in notebook in-scope subset: 0. |
+No automatic replacement of missing/invalid onset dates by notification is approved. Municipal eligibility, case inclusion, deduplication, target definition, climate aggregation and training granularity remain open. A municipality in geographic scope is not guaranteed a valid prediction.
 
-## Traceability to notebook evidence
+## 2. Sources and version boundaries
 
-Official Stage 2 bounded EDA notebook:
-- `notebooks/01_stage2_residence_onset_eda.ipynb`
+Use source IDs in the [provenance register](DATA-01-Source%20Provenance.md): S (INS dictionary 2018–2020), D (INS dengue form 2019), E1–E3 (pinned environmental dictionary, workflow and script), N (saved notebook), and H (current header-only check).
 
-This notebook provides:
-- Header correspondence checks for required fields.
-- In-scope residence filtering diagnostics (Tolima/Meta).
-- `INI_SIN` quality and delay diagnostics.
-- Climate coverage and missingness diagnostics for validated residence municipalities.
+Definitions from S and D were readable and verified. The earlier extraction-tool failure is historical, not an unresolved official definition. Their applicability to every year in our exports remains pending. Only the priority fields below are interpreted; the remaining columns are inventoried by header count without speculative definitions.
 
-Cell-level traceability in the current corrected run:
-- Code cell 6: residence filtering controls and synthetic tests.
-- Code cells 7 and 8: `INI_SIN` quality and temporal diagnostics.
-- Code cells 9 and 10: climate coverage, missing-vs-zero diagnostics, and municipality gap patterns.
-- Code cell 11: evidence states and key metrics table used for documentation reconciliation.
+## 3. Epidemiological fields used by the EDA
 
-## Pending for full mapping completion
+All ten field names below are present in both epidemiological CSV headers (H) and in the notebook's selected columns (N).
 
-- Complete 69-column official mapping against citable INS clauses and period applicability notes.
-- Resolve historical applicability of references outside 2018–2020 / 2019 windows.
-- Confirm or reject provenance linkage between `data/raw/google_earth_engine.csv` and external extraction workflow artifacts.
+| CSV field | Working meaning / source | Intended role | What remains pending |
+|---|---|---|---|
+| `INI_SIN` | Symptom onset, S | Approved case-period reference | Syntactic interpretability is distinct from consistency. Saved EDA has 7 missing dengue values and 8,556 onset-after-notification alerts; treatment is unresolved. |
+| `FEC_NOT` | Notification date, S | Delay and availability diagnostics | Not a substitute for onset; cannot reconstruct every later revision. |
+| `ANO` | Candidate export alias of S `AÑO`, the epidemiological-week year | Source temporal reference | Verify export lineage and its assignment rule. A calendar-year or ISO comparison alone is not official validation. |
+| `SEMANA` | Epidemiological week, S | Source temporal reference | Confirm event-date and Colombian-calendar correspondence; do not assume ISO equivalence. |
+| `COD_DPTO_R` | Residence department, S | Departmental scope | Current code uses 50/Meta and 73/Tolima. Official inventory/version reconciliation remains pending. |
+| `COD_MUN_R` | Residence municipal code; S calls the residence field `MUN_PRO` | Municipal identity together with department | Header is confirmed; alias lineage and official catalogue membership are not. Preserve original text and distinguish format checks from catalogue validation. |
+| `Departamento_residencia` | Residence label in the export, H/N | Cross-check and display | Derivation/version not established. A label must not silently override a conflicting code. |
+| `Municipio_residencia` | Residence label in the export, H/N | Display and reconciliation | Do not group identical codes separately because labels differ. |
+| `COD_EVE` | Event code; D identifies 210 dengue, 220 severe dengue and 580 mortality | Keep the two inputs distinct | Separate event codes do not prove mutually exclusive cases; presence of 580 in these files is not established. |
+| `CONSECUTIVE` | Export record identifier candidate, H/N | Traceability diagnostic only | No verified uniqueness domain across years, events, files or revisions. Its overlap is not proof of patient/case overlap or exclusion. |
+
+Residence is selected. Occurrence and notification geography are context, not alternative scope filters. The saved corrected run reports zero name-fallback records and zero department code/name conflicts. Its fallback branch still exists in code; this documentation does not approve it as a future attribution policy.
+
+## 4. Present fields reserved for subsequent case-definition work
+
+Header-only checks confirm `TIP_CAS`, `AJUSTE`, `FEC_AJU`, `confirmados`, `Estado_final_de_caso`, and `nom_est_f_caso` in both inputs. They are not profiled or selected by this EDA.
+
+| CSV field | Documented concept or limit | Pending use |
+|---|---|---|
+| `TIP_CAS` | Initial classification, S | Verify historical encodings before deciding which notifications count. |
+| `AJUSTE` | Follow-up/classification adjustment, S | No inclusion/exclusion or revision-precedence rule is approved. |
+| `FEC_AJU` | Entry/adjustment timestamp, S | Determine actual export semantics and whether history survives. |
+| `confirmados`, `Estado_final_de_caso`, `nom_est_f_caso` | Export fields with no verified definition in this review | Do not infer meanings or assume equivalence from names. |
+| `CLASFINAL` | Final dengue severity in S/D; **absent** from both current headers | No export alias is established. In particular, do not equate it automatically with `Estado_final_de_caso`. |
+
+S uses `COD_MUN` for occurrence municipality and `MUN_PRO` for residence in this edition. Current headers instead include `COD_MUN_O` and `COD_MUN_R`, plus `COD_DPTO_N`, `COD_MUN_N`, `Departamento_Notificacion` and `Municipio_notificacion`. These headers are confirmed, but this consolidation does not approve cross-version aliases or use notification for attribution.
+
+The historical grouping `ANO + SEMANA + COD_MUN_O` omitted department. Its counts are retained only in the historical report; they do not establish national municipal uniqueness or duplicate cases. Multiple cases can legitimately share a complete municipal-period grouping.
+
+## 5. Environmental fields
+
+All 18 names below are confirmed in the current climate header (H) and checked in saved notebook header outputs (N). Definitions and units are from E1. This agreement is schema compatibility, not proof that E3 generated this CSV.
+
+| Field | Reference meaning / unit | EDA role |
+|---|---|---|
+| `date` | Calendar date, YYYY-MM-DD | Climate time axis |
+| `year`, `month`, `day_of_year` | Calendar components | Header checked; not loaded by the climate diagnostic |
+| `dpto_ccdgo`, `mpio_ccdgo` | Department and local municipal codes | Department loaded; local code header checked only |
+| `mpio_cdpmp` | Full municipal DIVIPOLA code | Candidate municipal key; catalogue vintage pending |
+| `dpto_cnmbr`, `mpio_cnmbr` | Department/municipality labels | Cross-check and display |
+| `rain_mm_day` | CHIRPS rainfall, mm/day | Missing-versus-zero diagnostics |
+| `temp_mean_c` | ERA5-Land air temperature at 2 m, °C | Missing-versus-zero diagnostics |
+| `dewpoint_mean_c` | ERA5-Land dewpoint at 2 m, °C | Missing-versus-zero diagnostics |
+| `soil_water_l1_mean` | ERA5-Land surface-layer soil water, m³/m³ | Missing-versus-zero diagnostics |
+| `surface_runoff_mm_day` | ERA5-Land daily runoff, mm/day | Missing-versus-zero diagnostics |
+| `total_evaporation_mm_day_ecmwf` | ERA5-Land daily evaporation, mm/day, ECMWF sign | Sign interpretation remains explicit; no inversion approved |
+| `wind_u_mean_ms`, `wind_v_mean_ms` | ERA5-Land wind components at 10 m, m/s | Missing-versus-zero diagnostics |
+| `solar_radiation_mj_m2_day` | ERA5-Land daily solar energy, MJ/m²/day | Missing-versus-zero diagnostics |
+
+E1/E3 describe municipal spatial averaging and unit conversions. Daily accumulations and daily means must not be aggregated identically by assumption; future monthly rules remain pending. The script's configured period and asset naming differ from the saved climate export context; see provenance.
+
+Saved outputs show no empty values in the nine climate variables within the inspected subset, while all 76 observed municipalities lack January 2020. Absent dates, empty cells and zeros are different conditions. The previously reported 44.6858% rain-zero proportion is an EDA observation, not a missingness rate or proof of source quality.
+
+## 6. Scope of completed consolidation and remaining review
+
+Completed: both matrices reconciled into this file; used-field headers confirmed without reading patient records; source definitions distinguished from export mappings; source identities recorded; approved residence/onset decisions made consistent.
+
+Pending: official municipal inventory; export and extraction lineage; historical dictionary applicability; 2013 date anomaly; January 2020 recovery/treatment; case inclusion and identifier semantics; missing-onset policy; municipal eligibility; channel/target definition and information-availability rules. Model comparison remains a later evidence-based decision described in the methodological note.
+
+No data were cleaned, joined or recalculated. No notebook code or saved outputs were changed. Stage 2 remains open; G2 is not approved.

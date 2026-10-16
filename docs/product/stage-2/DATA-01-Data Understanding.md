@@ -1,133 +1,55 @@
-# SAT-Dengue V2 — Stage 2: Data Understanding
-## Primera aproximación controlada a los datos
+# SAT-Dengue V2 — Stage 2 Data Understanding Brief
 
-**Estado:** reconocimiento inicial autorizado (pendiente de revisión de resultados)  
-**Alcance:** inspección básica de tres archivos existentes  
-**Punto de control:** revisión de resultados por ChatGPT antes de profundizar
+Revision: 2026-10-16. Status: initial recognition and bounded EDA completed for review; documentary consolidation completed; Stage 2 open and G2 not approved.
 
-## 1. Objetivo
+## 1. Objective
 
-Obtener una primera descripción verificable de los datos disponibles y detectar las preguntas que deben resolverse antes de realizar análisis exploratorio, transformaciones o desarrollo de código.
+Understand the existing dengue, severe-dengue and climate inputs through inspectable evidence before approving preparation, target construction or modeling. This brief defines scope and review boundaries; it is not a full-stage execution plan.
 
-Esta actividad es únicamente el inicio de Stage 2. No pretende completar la etapa ni aprobar el gate **G2 — Data & Target Freeze**.
+## 2. Approved analytical scope
 
-## 2. Archivos por inspeccionar
+- Epidemiological attribution: **municipality of residence** in Tolima and Meta.
+- Case-period reference: **symptom onset**, using the confirmed `INI_SIN` header.
+- Product outputs: municipality-level risk at T+1/T+2.
+- Dengue and severe-dengue files remain separate until their case relationship is established.
+- No automatic substitution of missing/invalid `INI_SIN` by `FEC_NOT` is approved.
+- Geographic scope does not guarantee every municipality a valid prediction; eligibility remains pending.
 
-- `dengue.csv`
-- `dengue_grave.csv`
-- `google_earth_engine.csv`
+## 3. Inputs and reference ownership
 
-Los dos primeros contienen aparentemente información de dengue y dengue grave; el tercero, información climática. Estas descripciones deben verificarse con el contenido disponible.
+Inputs are `data/raw/dengue.csv`, `data/raw/dengue_grave.csv` and `data/raw/google_earth_engine.csv`. Raw data remain read-only and excluded from Git under the [data policy](../../data/data-policy.md).
 
-**No asumir que un archivo está limpio o listo para modelar por su apariencia o nombre.**
+| Artifact | Responsibility |
+|---|---|
+| [Recognition report](DATA-01-Initial%20Recognition%20Report.md) | Historical evidence and saved corrected EDA findings |
+| [Canonical priority matrix](DATA-01-Priority%20Field%20Matrix.md) | Single field-definition reference and mapping status |
+| [Source provenance](DATA-01-Source%20Provenance.md) | Input fingerprints, saved-run metadata, reference versions and lineage limits |
+| [Methodological note](nota-metodologica.md) | Approved scientific choices, literature context and open decisions |
+| [Official notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb) | Executable evidence for the bounded residence/onset EDA |
 
-Si los archivos no están disponibles o existen varias versiones, reportar la situación y detener la inspección afectada. No descargar ni sustituir datos por iniciativa propia.
+The duplicate matrix was consolidated into the canonical DATA-01 file; no parallel field dictionary is maintained. Other original source documents remain read-only references.
 
-## 3. Alcance y restricciones
+## 4. Completed increments
 
-Realizar una inspección de solo lectura, utilizando herramientas existentes y el mínimo procesamiento necesario.
+1. Initial recognition: structure, coverage signals and unresolved semantics, without assuming inputs are clean.
+2. Bounded EDA: residence filters, onset interpretability/consistency, municipal-period coverage and climate missing-versus-zero/gap checks. This explicitly superseded the initial brief's restriction against notebooks and diagnostic aggregation, only for that authorized increment.
+3. Current documentary consolidation: merged matrices, reconciled decisions, checked headers only, and recorded file/reference identities. No EDA code, metrics or original data changed.
 
-- No modificar, sobrescribir, renombrar ni limpiar los archivos.
-- No instalar dependencias ni crear scripts, notebooks, pipelines o pruebas.
-- No modificar el repositorio fuera de documentación y artefactos internos de DWP autorizados.
-- No generar archivos de resultados fuera de los entregables documentales autorizados.
-- Si una comprobación requiere código nuevo o un procesamiento considerable, dejarla pendiente y explicar su propósito.
+The repository's engineering, scientific, security and validation standards continue to apply. Prior notebook installation/execution does not authorize arbitrary new analysis or infrastructure.
 
-## 4. Comprobaciones de primera pasada
+## 5. Remaining interpretation and data-quality work
 
-### A. Estructura de cada archivo
+- Official municipal inventory and coverage eligibility.
+- Required-field aliases and historical dictionary applicability.
+- Case inclusion, adjustments, duplicate/identifier semantics and dengue/severe-dengue relationship.
+- Missing-onset policy, 2013 temporal alerts and January 2020 climate gap.
+- Upstream file/export lineage and climate extraction-run evidence.
+- Channel, target and historical information-availability rules.
 
-Identificar:
+These are review topics, not authorization to resolve them automatically during this consolidation. Full interpretation of every unused epidemiological column is not a prerequisite for the next bounded step.
 
-- Tamaño del archivo y número de filas y columnas, cuando sea sencillo obtenerlos.
-- Separador, encabezados y posibles dificultades de lectura.
-- Nombres de columnas y tipos aparentes.
-- Una muestra breve de registros que permita comprender su estructura.
-- Qué parece representar una fila y si esto puede confirmarse.
+## 6. Restrictions and review gate
 
-Distinguir los tipos observados de su interpretación: por ejemplo, un código municipal puede contener números sin ser una variable numérica.
+Do not overwrite, clean, rename or delete raw inputs. Do not expose patient-level records. Do not silently impute missing data, union case streams, turn absent months into confirmed zero cases, or choose a training architecture.
 
-### B. Cobertura temporal y geográfica
-
-Comprobar:
-
-- Columnas que representan fechas o periodos.
-- Formato y frecuencia aparente: diaria, semanal, mensual u otra.
-- Periodo mínimo y máximo, si puede determinarse sin transformaciones complejas.
-- Campos de departamento, municipio y códigos geográficos.
-- Presencia identificable de **Tolima** y **Meta**.
-
-No inferir cobertura completa por encontrar algunos registros. Señalar si faltan elementos para verificarla.
-
-### C. Señales básicas de calidad
-
-Identificar, sin corregir:
-
-- Valores vacíos en campos que parecen esenciales.
-- Formatos inconsistentes o valores evidentemente sospechosos.
-- Posibles filas repetidas.
-- Repeticiones de una posible clave municipio-periodo.
-- Unidades, abreviaturas o categorías cuyo significado no esté documentado.
-
-Una clave repetida no debe declararse un error hasta comprender qué representa cada fila. Si se informan conteos, indicar cómo se obtuvieron.
-
-### D. Relación potencial entre los archivos
-
-Evaluar preliminarmente:
-
-- Si dengue y dengue grave comparten estructura y cobertura.
-- Si dengue grave podría estar incluido en dengue o representar un conjunto independiente.
-- Qué campos permitirían relacionar los datos epidemiológicos y climáticos.
-- Si coinciden las unidades temporales y geográficas.
-- Si las variables climáticas tienen unidades y método de agregación identificables.
-
-**No sumar casos, unir archivos, agregar periodos ni resolver estas relaciones mediante supuestos.** Presentar las relaciones propuestas como hipótesis cuando falte evidencia.
-
-## 5. Evidencia esperada
-
-Entregar un informe breve con:
-
-1. **Inventario:** archivo, dimensiones disponibles, lectura y estructura.
-2. **Descripción por archivo:** columnas, muestra mínima, cobertura y significado aparente de una fila.
-3. **Hallazgos prioritarios:** observación, evidencia, posible implicación y duda pendiente.
-4. **Compatibilidad preliminar:** posibles campos de relación y obstáculos.
-5. **Preguntas para revisión:** decisiones necesarias antes de continuar.
-6. **Siguiente paso propuesto:** una actividad pequeña, justificada por los hallazgos.
-
-Separar explícitamente:
-
-- **Confirmado:** respaldado por contenido observado.
-- **Hipótesis:** interpretación pendiente de validación.
-- **Pendiente:** comprobación que no se realizó.
-
-No incluir registros individuales sensibles en la respuesta; enmascararlos si aparecen.
-
-## 6. Fuera de alcance
-
-En esta primera aproximación no se realizará:
-
-- EDA completo ni elaboración masiva de gráficos.
-- Limpieza, imputación, eliminación de duplicados o tratamiento de atípicos.
-- Integración de datos o ingeniería de variables.
-- Construcción del canal endémico.
-- Definición definitiva de la variable objetivo `Y`.
-- Selección definitiva de municipios.
-- Entrenamiento, evaluación o comparación de modelos.
-- Elaboración del Data Contract final.
-
-## 7. Punto de parada y revisión
-
-**Detenerse al entregar el informe de reconocimiento.**
-
-ChatGPT revisará la evidencia con el usuario para decidir qué dudas resolver y qué actividad autorizar a continuación. No continuar automáticamente con limpieza, integración, EDA o modelado.
-
-Esta aproximación se considera completa cuando permite entender qué contienen los archivos, qué permanece incierto y cuál es el siguiente paso razonable. **No equivale al cierre de Stage 2 ni a la aprobación de G2.**
-
-## 8. Entregables documentales autorizados
-
-1. `docs/product/stage-2/DATA-01-Data Understanding.md` (este brief de reconocimiento).
-2. `docs/product/stage-2/DATA-01-Initial Recognition Report.md` (informe de reconocimiento inicial).
-3. `docs/product/stage-2/DATA-01-Priority Field Matrix.md` (matriz priorizada de campos y referencias, artefacto de trabajo).
-4. `notebooks/01_stage2_residence_onset_eda.ipynb` (incremento oficial de EDA acotado para evidencia agregada).
-
-La ejecución de esta aproximación termina al entregar estos artefactos para revisión y detenerse (sin avanzar automáticamente a limpieza, integración o modelado).
+A new bounded request is required before deeper analysis, data preparation, endemic-channel construction, target definition or modeling. G2 is approved only when the sources, temporal rules, target and leakage constraints have evidence and explicit human approval under the [master plan](../../roadmap/master-plan.md).
