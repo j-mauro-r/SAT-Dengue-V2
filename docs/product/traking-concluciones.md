@@ -1,0 +1,1202 @@
+# SAT-Dengue V2 Registro de decisiones de datos y modelo
+
+Archivo: `traking-concluciones.md`. Auditoría y actualización: **2026-10-17**, America/Bogota. Rama activa: **Stage2/Data-Understanding**. Referencia de Git inspeccionada: `1d7450ca9a15d376f404af13ff472a6d39bcde04`.
+
+## Alcance de esta revisión
+
+Este registro contiene exclusivamente decisiones y asuntos pendientes directamente relacionados con **análisis, interpretación y tratamiento de datos, construcción de variables y Y, diseño, entrenamiento, calibración y evaluación del modelo**. Se excluyen marcos de metodología de gestión, planificación por etapas, gobierno de agentes, interfaz, API, despliegue e infraestructura. Se conserva la validación estadística y temporal porque afecta directamente el desarrollo del modelo; no se confunde con una metodología de gestión del proyecto.
+
+La auditoría revisó el texto extraíble de las **seis fuentes del proyecto**, hizo inventario y cribado de **77 documentos narrativos locales** (29 en `docs/`, 44 registros y planes locales en `.dwp/`, dos entradas raíz y dos documentos de revisión/plantilla), revisó el código y resultados guardados del cuaderno de **17 celdas**, e inventarió siete archivos de referencia en `data/sources/`. Entre los 77 se incluye la versión previa de este registro, utilizada solo para conservar su historia, no como corroboración independiente. Los catálogos y archivos anuales son datos, no documentos narrativos: se consultaron sus metadatos y evidencia agregada ya existente, sin un nuevo perfilado de pacientes. Las dependencias y manuales de herramientas de `.agents/`, entornos virtuales y cachés no se consideran decisiones científicas del proyecto.
+
+Es una **auditoría documental**, no una nueva ejecución del análisis, revisión del código remoto de V1 ni comprobación independiente de sus resultados publicados. La bibliografía citada en los documentos se conserva como contexto, no se convierte automáticamente en decisiones adoptadas. No se modificaron fuentes sincronizadas, datos, cuaderno, diccionario ni otros documentos.
+
+Resultado del alcance: **46 entradas anteriores conservadas y 38 incorporadas = 84 entradas científicas**, de las cuales 29 aceptadas, 16 abiertas, 13 propuestas, 12 históricas no adoptadas, 10 aplicadas en diagnóstico, tres reemplazadas y una documentada en fuente. Los estados no equivalen entre sí.
+
+El [diccionario canónico](stage-2/DATA-01-Priority%20Field%20Matrix.md) conserva la única definición de campos. El [registro de procedencia](stage-2/DATA-01-Source%20Provenance.md) identifica insumos; el [informe de reconocimiento](stage-2/DATA-01-Initial%20Recognition%20Report.md) y la [investigación de 2013](stage-2/DATA-01-2013-date-inconsistency-investigation.md) documentan resultados. Este archivo registra decisiones y sus límites; no duplica el diccionario ni convierte observaciones en aprobaciones.
+
+## Consecutivos, estados y fechas
+
+Los códigos DEC existentes conservan su identidad. Por reducción explícita del alcance se retiraron del registro vigente 18 entradas ajenas a datos/modelo o redundantes con la conservación de fuentes. Sus códigos quedan **reservados y no se reutilizan**: DEC-001, DEC-003, DEC-004, DEC-005, DEC-006, DEC-007, DEC-008, DEC-011, DEC-049, DEC-052, DEC-053, DEC-054, DEC-055, DEC-056, DEC-057, DEC-058, DEC-063, DEC-064. Esta salida por alcance no es deprecación de una decisión científica. Su contenido anterior se preserva en el historial de la conversación; no se crea otro documento competidor. Los nuevos códigos son DEC-065 a DEC-102 y continúan la numeración anterior; los huecos en el índice son intencionales.
+
+- **ACEPTADA:** existe instrucción explícita o acuerdo/documento vigente que la respalda, limitado a su alcance. No implica implementación completa ni evidencia predictiva favorable.
+- **PROPUESTA:** recomendación del usuario, experto, propuesta de grado o asistente sin adopción final documentada. Proponer escenarios no selecciona uno como política de limpieza.
+- **ABIERTA:** decisión o evidencia aún por resolver; no se inventa una regla para completarla.
+- **REEMPLAZADA:** convención o interpretación anterior sustituida, con motivo y código sucesor. Se declara cuando era una interpretación del asistente y no una política aprobada.
+- **HISTÓRICA_NO_ADOPTADA:** antecedente o sugerencia de V1/fuentes no adoptada automáticamente en V2; no se finge una aprobación o revocación de V2.
+- **APLICADA_EN_DIAGNÓSTICO:** opción identificada en el cuaderno o diagnóstico guardado. Acredita uso acotado, **no aprobación de producción** ni autorización para extenderla a todo el tratamiento.
+- **DOCUMENTADA_EN_FUENTE:** atribución o especificación que consta en la fuente, sin confirmar el procedimiento que generó los datos locales.
+
+Por autorización del usuario, las incorporaciones se registran con fecha **2026-10-17**. Esa fecha identifica la auditoría documental; no se presenta como aprobación histórica. Las fechas anteriores se conservan; DESCONOCIDA o No aplica evita inventar fechas. **Revisada el** es siempre la fecha de esta auditoría. La fecha de deprecación solo se completa si hay evidencia; una entrada histórica nunca adoptada no necesita una falsa fecha de retiro. La actualización documental no modifica el corte analítico 2026-10-15 del cuaderno existente.
+
+Para cambiar una decisión: conservar el código y evidencia, registrar el evento y autoridad; si hay reemplazo, agregar sucesora, fecha y justificación y actualizar referencias recíprocas. Nunca reutilizar códigos, borrar incertidumbre, crear ciclos de reemplazo o aprobar propuestas por silencio. Un cambio de datos o Y debe indicar qué conteos, variables, particiones y resultados requieren regeneración.
+
+## Fuentes examinadas
+
+### Fuentes completas del proyecto
+
+| Archivo | Tratamiento en la auditoría | SHA-256 de la copia revisada |
+|---|---|---|
+| `AI-DEVELOPER-FIRST-FRAMEWORK.md` | Excluida: marco de gestión de otro producto; no contiene decisiones adoptadas de datos/modelo de SAT-Dengue. | `cccf970fed3c25bfdf72c3b135ef9ab187909f71f9923a5e310867800769955a` |
+| `Avance entrega 3 microproyecto.pdf` | Excluida como autoridad de dengue: trata PulmoIA e imágenes; no se transfieren sus decisiones de modelos ni entrenamiento. | `83ca481185db394decd7650e38b89415a97e63b3874321cee4f5716267281001` |
+| `Formato-propuesta_Proyecto-de-grado-Mauricio.pdf` | Fuente científica principal: objetivos, fuentes, panel, modelos, validación y métricas; distinguir propuesta y aprobación. | `2d9ca5c0786858e7f5dd50dacd1db20dbd5027c2eba077792651f39028f045ce` |
+| `Reporte_Entrega3_final-2.docx` | Antecedente V1: preparación, variables, particiones, calibración y limitaciones; no validación del modelo V2. | `fe06c42fa21bcac7a76590cfee76b2176fdc7892478f0a080644c64644fb7d49` |
+| `Sesion_1_con_Experto_Notas.docx` | Recomendaciones y acuerdo conceptual del experto; notas consolidadas, no transcripción literal. | `8b5f899930c0ed94e8adc970f9bf790ea95ec191ff28257a91100debf6b84c72` |
+| `prueba-dashboard.md` | Solo evidencia de entradas y probabilidades del modelo V1; las pruebas visuales no validan inferencia ni exactitud predictiva. | `11b5df5fbace62efe601b1d4d14f171e4ee48f9e2c7b2ff4a8a22d2b0ee93d9e` |
+
+Códigos de las fuentes privadas: **SRC-E** = notas del experto; **SRC-R** = reporte de Entrega 3; **SRC-P** = propuesta de grado. Se mantienen nombre, sección/página y huella; no se copian los documentos al repositorio.
+
+### Documentos y evidencia locales
+
+| Código | Fuente / ubicación | Uso y límite |
+|---|---|---|
+| PRODUCT | [Definición del producto](product-definition.md) | Solo objetivo, horizontes, familias de modelos y referencias predictivas. |
+| NOTE | [Nota de decisiones y fuentes](stage-2/nota-metodologica.md) | Solo contenidos de datos/modelo y alternativas; no se registran marcos de gestión. |
+| MATRIX | [Diccionario de campos](stage-2/DATA-01-Priority%20Field%20Matrix.md) | Significados, códigos, fechas, prioridades y limitaciones del export. |
+| RECOG | [Reconocimiento y cobertura](stage-2/DATA-01-Initial%20Recognition%20Report.md) | Resultados agregados guardados; algunas secciones de próximos pasos están desactualizadas. |
+| PROV | [Registro de procedencia](stage-2/DATA-01-Source%20Provenance.md) | Identidad y límites de fuentes, versiones y ventanas. |
+| INVEST | [Investigación de 2013](stage-2/DATA-01-2013-date-inconsistency-investigation.md) | Comparación anual y escenarios diagnósticos ejecutados; no corrección aprobada. |
+| DATA | [Política de datos](../data/data-policy.md) | Solo preservación de insumos y tratamiento restringido de registros individuales; no infraestructura. |
+| PROD4 / PROD5 / PROD6 | [Cobertura](stage-1/PROD-04-dashboard-master-user-story.md), [validación de insumos](stage-1/PROD-05-new-period-flow.md), [semántica analítica](stage-1/PROD-06-ui-information.md) | Solo cláusulas de cobertura, calidad, datos o explicabilidad; excluir diseño de interfaz y operación del producto. |
+| ML | [Estándares científicos del modelo](../standards/ml-scientific-standards.md) | Validación temporal, prevención de fuga y evidencia comparable. |
+| PROD1 / PROD7 / PROD8 | [Pregunta científica](stage-1/PROD-01-business-question.md), [semántica de predicción](stage-1/PROD-07-draft-prediction-contract.md), [variables de entrada](stage-1/PROD-08-draft-input-contract.md) | Extraer solo población, horizonte, disponibilidad y variables; ignorar interfaz/API. |
+| Cuaderno | [01_stage2_residence_onset_eda.ipynb](../../notebooks/01_stage2_residence_onset_eda.ipynb) | Código, parámetros y resultados guardados; celdas numeradas desde 0 para localizar evidencia. No reejecutado en esta auditoría. |
+| PLAN003 | `.dwp/plans/PLAN_003_validate_divipola_municipal_coverage/` | Solo tareas 1–3 y evidencia de catálogo, cobertura y continuidad; no decisiones de gestión del plan. |
+| PLAN004 / CONCLUSIONES004 | `.dwp/plans/PLAN_004_dengue_date_inconsistency_investigation/`, tareas 1–5 y `analysis_results/CONCLUSIONS.md` | Comparabilidad, llaves, fechas y escenarios; sus archivos locales ignorados pueden no existir en un checkout limpio. |
+| Datos de referencia | `data/sources/` | Tres fuentes anuales 2012/2013/2014, dos catálogos DIVIPOLA, `Listados_DIVIPOLA.xlsx` y `divipola-provenance.json`; no nuevas muestras de pacientes. |
+| Artefactos agregados | `data/interim/stage2_dengue_date_investigation/` y `data/interim/stage2_divipola_validation/` | Metadatos, llaves, correspondencias, fechas, escenarios y controles guardados; no se recalcularon en esta tarea. |
+
+El cribado también incluyó los demás documentos locales (índices, seguridad, producto, contratos, operaciones y planes): se extrajeron solo cláusulas con efecto directo sobre datos o modelo; el resto se excluyó. El registro anterior no se usa como fuente independiente de aprobación. Para las entradas retenidas que citan PROD4/PROD5/PROD6/DATA, esas referencias identifican únicamente la cláusula científica o de insumos ya documentada, no incorporan decisiones ajenas al alcance.
+
+### Acuerdos de esta conversación
+
+| Código | Evidencia de 2026-10-17 | Límite |
+|---|---|---|
+| CHAT-01 | Auditoría de las 69 columnas reales. | No aprobación de limpieza. |
+| CHAT-02 | Solicitud de un único diccionario completo como fuente de verdad. | No cierre de definiciones operativas insuficientes. |
+| CHAT-03 | Propuesta mensual y tolerancia de siete días; análisis con consulta como corroboración. | Recomendaciones y cálculos exploratorios no incorporados al cuaderno. |
+| CHAT-04 | Propuesta de correlación mensual y escenarios 1–3. | No escenario elegido ni estudio nuevo ejecutado. |
+| CHAT-05 | Identificación de Y ya acordada por el grupo y revisión de las fuentes. | Concepto respaldado; parametrización definitiva pendiente. |
+| AUD-2026-10-17 | Solicitud actual de auditoría de fuentes y documentos, limitada a datos y modelo. | Autoriza esta actualización; no aprueba automáticamente las alternativas encontradas. |
+
+## Índice de decisiones de datos y modelo
+
+| Código | Decisión | Estado | Reemplazada por |
+|---|---|---|---|
+| [DEC-002](#dec-002) | Validar modelos y resultados de V2 sin transferir evidencia de V1 | ACEPTADA | No aplica |
+| [DEC-009](#dec-009) | Planteamiento nacional y piloto municipal de V1 | HISTÓRICA_NO_ADOPTADA | DEC-010 |
+| [DEC-010](#dec-010) | Definir el dominio analítico en municipios de Tolima y Meta | ACEPTADA | No aplica |
+| [DEC-012](#dec-012) | Usar granularidad municipal y de año-mes calendario | ACEPTADA | No aplica |
+| [DEC-013](#dec-013) | Producir pronósticos distintos para T+1 y T+2 | ACEPTADA | No aplica |
+| [DEC-014](#dec-014) | Respetar la cronología y la disponibilidad de información | ACEPTADA | No aplica |
+| [DEC-015](#dec-015) | Agrupar por ocurrencia en el reconocimiento inicial | REEMPLAZADA | DEC-016 |
+| [DEC-016](#dec-016) | Atribuir los casos por residencia | ACEPTADA | No aplica |
+| [DEC-017](#dec-017) | Usar el inicio de síntomas como fecha epidemiológica | ACEPTADA | No aplica |
+| [DEC-018](#dec-018) | No reemplazar silenciosamente un inicio ausente o inconsistente | ACEPTADA | No aplica |
+| [DEC-019](#dec-019) | Conservar los archivos originales y señalar anomalías | ACEPTADA | No aplica |
+| [DEC-020](#dec-020) | Identificar municipios con códigos validados | ACEPTADA | No aplica |
+| [DEC-021](#dec-021) | Definir la inclusión de casos y la identidad de episodios | ABIERTA | No aplica |
+| [DEC-022](#dec-022) | Mantener separados 210 y 220 durante el análisis exploratorio actual | ACEPTADA | No aplica |
+| [DEC-023](#dec-023) | Serie principal de dengue y serie auxiliar de dengue grave en V1 | HISTÓRICA_NO_ADOPTADA | DEC-021, DEC-022 |
+| [DEC-024](#dec-024) | Elegir el entrenamiento compartido, departamental o municipal | ABIERTA | No aplica |
+| [DEC-025](#dec-025) | Comparar el ajuste compartido con el departamental | PROPUESTA | No aplica |
+| [DEC-026](#dec-026) | Comparar las familias de modelos candidatas | ACEPTADA | No aplica |
+| [DEC-027](#dec-027) | Usar modelos de referencia epidemiológicos | ACEPTADA | No aplica |
+| [DEC-028](#dec-028) | Aplicar validación temporal y evidencia comparable | ACEPTADA | No aplica |
+| [DEC-029](#dec-029) | Separar la autoridad semántica oficial de la procedencia del CSV | ACEPTADA | No aplica |
+| [DEC-030](#dec-030) | Registrar identidades inmutables y límites de las fuentes | ACEPTADA | No aplica |
+| [DEC-031](#dec-031) | Usar una matriz limitada a campos prioritarios | REEMPLAZADA | DEC-032 |
+| [DEC-032](#dec-032) | Usar un único diccionario canónico completo | ACEPTADA | No aplica |
+| [DEC-033](#dec-033) | Mantener explícitas las definiciones insuficientes | ACEPTADA | No aplica |
+| [DEC-034](#dec-034) | Tratar Y como completamente indefinida | REEMPLAZADA | DEC-035, DEC-037 |
+| [DEC-035](#dec-035) | Definir conceptualmente Y como exceso futuro de dengue | ACEPTADA | No aplica |
+| [DEC-036](#dec-036) | Usar P75 y umbrales numéricos anteriores en V1 | HISTÓRICA_NO_ADOPTADA | DEC-037, DEC-040 |
+| [DEC-037](#dec-037) | Aprobar definitivamente la construcción del canal y las etiquetas | ABIERTA | No aplica |
+| [DEC-038](#dec-038) | Priorizar la detección de nuevos inicios de brote | ACEPTADA | No aplica |
+| [DEC-039](#dec-039) | Formalizar el inicio del mes objetivo frente al mes anterior | PROPUESTA | No aplica |
+| [DEC-040](#dec-040) | Seleccionar posteriormente los umbrales operativos de probabilidad | ABIERTA | No aplica |
+| [DEC-041](#dec-041) | No corregir ni descartar automáticamente las 8.556 anomalías | ACEPTADA | No aplica |
+| [DEC-042](#dec-042) | Política de coincidencia mensual y reasignación de hasta siete días | PROPUESTA | No aplica |
+| [DEC-043](#dec-043) | Comparar los tres escenarios solicitados para las anomalías | PROPUESTA | No aplica |
+| [DEC-044](#dec-044) | Explorar asociaciones cronológicas antes de seleccionar variables | PROPUESTA | No aplica |
+| [DEC-045](#dec-045) | Separar asociación de influencia predictiva o causal | ACEPTADA | No aplica |
+| [DEC-046](#dec-046) | Usar la consulta como corroboración o candidata a imputación validada | PROPUESTA | No aplica |
+| [DEC-047](#dec-047) | Resolver la procedencia climática y la ausencia de enero de 2020 | ABIERTA | No aplica |
+| [DEC-048](#dec-048) | Definir elegibilidad predictiva sin reducir el alcance geográfico | ABIERTA | No aplica |
+| [DEC-050](#dec-050) | Definir el contexto de datos de cada inferencia mensual | ACEPTADA | No aplica |
+| [DEC-051](#dec-051) | Validar los datos de entrada antes de inferir | ACEPTADA | No aplica |
+| [DEC-059](#dec-059) | Definir el conjunto final de variables y sus esquemas analíticos | ABIERTA | No aplica |
+| [DEC-060](#dec-060) | Validar explicaciones e importancia del modelo | ACEPTADA | No aplica |
+| [DEC-061](#dec-061) | Preferencias de evaluación científica de la propuesta de grado | PROPUESTA | No aplica |
+| [DEC-062](#dec-062) | Seleccionar el modelo y calibrador de V2 únicamente con evidencia comparable | ABIERTA | No aplica |
+| [DEC-065](#dec-065) | Distinguir periodos ausentes, datos vacíos y ceros observados | ACEPTADA | No aplica |
+| [DEC-066](#dec-066) | Panel con ceros explícitos usado en V1 | HISTÓRICA_NO_ADOPTADA | DEC-065 |
+| [DEC-067](#dec-067) | Sustitución de inicio por notificación usada en V1 | HISTÓRICA_NO_ADOPTADA | DEC-018 |
+| [DEC-068](#dec-068) | Conjunto de 39 variables y exclusiones de V1 | HISTÓRICA_NO_ADOPTADA | DEC-059 |
+| [DEC-069](#dec-069) | Rezagos epidemiológicos concretos del antecedente | HISTÓRICA_NO_ADOPTADA | No aplica |
+| [DEC-070](#dec-070) | Rezagos climáticos y estacionalidad usados en V1 | HISTÓRICA_NO_ADOPTADA | No aplica |
+| [DEC-071](#dec-071) | Familias de variables temporales sugeridas por el experto | PROPUESTA | No aplica |
+| [DEC-072](#dec-072) | Densidad poblacional como covariable condicionada | PROPUESTA | No aplica |
+| [DEC-073](#dec-073) | TerraClimate como fuente climática sugerida | HISTÓRICA_NO_ADOPTADA | No aplica |
+| [DEC-074](#dec-074) | Agregación espacial del clima a límites municipales | PROPUESTA | No aplica |
+| [DEC-075](#dec-075) | Definir agregaciones climáticas mensuales y unidades | ABIERTA | No aplica |
+| [DEC-076](#dec-076) | CHIRPS y ERA5-Land como referencias del esquema climático actual | DOCUMENTADA_EN_FUENTE | No aplica |
+| [DEC-077](#dec-077) | SARIMAX y LSTM como alternativas sugeridas por el experto | HISTÓRICA_NO_ADOPTADA | No aplica |
+| [DEC-078](#dec-078) | Partición y calibración cronológicas descritas en V1 | HISTÓRICA_NO_ADOPTADA | No aplica |
+| [DEC-079](#dec-079) | Ventanas expansivas y bloque temporal final reservado | PROPUESTA | No aplica |
+| [DEC-080](#dec-080) | Calibración de Platt y umbrales por horizonte del antecedente | HISTÓRICA_NO_ADOPTADA | No aplica |
+| [DEC-081](#dec-081) | Independencia de calibración y selección de umbrales | ABIERTA | No aplica |
+| [DEC-082](#dec-082) | Ablación de variables próximas al canal y al estado actual | PROPUESTA | No aplica |
+| [DEC-083](#dec-083) | Auditar las variables del periodo objetivo y su disponibilidad | ABIERTA | No aplica |
+| [DEC-084](#dec-084) | Regenerar importancia y SHAP para el modelo realmente evaluado | ABIERTA | No aplica |
+| [DEC-085](#dec-085) | Interpretar métricas por horizonte, municipio y número de inicios | PROPUESTA | No aplica |
+| [DEC-086](#dec-086) | Definir el universo territorial independientemente de las filas observadas | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-087](#dec-087) | Separar formato del código de pertenencia al catálogo | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-088](#dec-088) | Sustitución de código territorial por nombre cuando falta el código | ABIERTA | No aplica |
+| [DEC-089](#dec-089) | No fragmentar un municipio por variantes de nombre | ACEPTADA | No aplica |
+| [DEC-090](#dec-090) | Conservar el corte analítico de la ejecución existente | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-091](#dec-091) | Separar presencia territorial de continuidad temporal | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-092](#dec-092) | Definir ventanas de intersección epidemiológica y climática | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-093](#dec-093) | Clasificar fechas interpretables, ausentes e inconsistentes | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-094](#dec-094) | No validar ANO y SEMANA únicamente con calendario ISO | ACEPTADA | No aplica |
+| [DEC-095](#dec-095) | Controlar las llaves y la cardinalidad al comparar fuentes | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-096](#dec-096) | Conservar separados los escenarios A–D ya ejecutados y los 1–3 propuestos | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-097](#dec-097) | Verificar año y comparabilidad de las descargas anuales por contenido | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-098](#dec-098) | Separar confirmación, gravedad, hospitalización y condición vital | ACEPTADA | No aplica |
+| [DEC-099](#dec-099) | Definir representación y agregación mensual por tipo de variable | ABIERTA | No aplica |
+| [DEC-100](#dec-100) | Resolver ponderación y heterogeneidad del panel municipal | ABIERTA | No aplica |
+| [DEC-101](#dec-101) | Verificar que una coincidencia de fechas no se interprete como intercambio | ABIERTA | No aplica |
+| [DEC-102](#dec-102) | Comprobar duplicados climáticos sin confundirlos con repeticiones de casos | APLICADA_EN_DIAGNÓSTICO | No aplica |
+
+## Registros detallados
+
+<a id="dec-002"></a>
+### DEC-002 Validar modelos y resultados de V2 sin transferir evidencia de V1
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-14 (ADR aceptado y fechado). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** No transferir los modelos ajustados, resultados, contrato de variables o desempeño de V1 como evidencia de validez del modelo V2.
+- **Justificación:** Los datos, alcance geográfico y objetivos evaluados son diferentes; la generalización debe comprobarse con el conjunto y protocolo de V2.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, secciones 1–2; PRODUCT; NOTE.
+- **Límites y validación pendiente:** V1 conserva valor como antecedente de variables, calibración y riesgos; no demuestra desempeño científico de V2.
+
+<a id="dec-009"></a>
+### DEC-009 Planteamiento nacional y piloto municipal de V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; propuesta original, notas del experto y reporte de V1. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica; no adoptada como alcance actual del producto V2. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-010.
+- **Decisión, propuesta o práctica documentada:** Los materiales anteriores plantean Colombia, un piloto municipal acotado o Cali/Bucaramanga.
+- **Justificación:** Explican la historia de la investigación, pero no autorizan una implementación nacional de V2 ni la restringen a las ciudades de V1.
+- **Motivo de deprecación o no adopción:** La orientación explícita hacia Tolima/Meta rige V2; los documentos fuente siguen siendo evidencia histórica.
+- **Evidencia y autoridad:** SRC-P, secciones 4–5; SRC-E, sección 3; SRC-R, sección 1; PROD1.
+- **Límites y validación pendiente:** No se estableció una fecha de adopción o reversión de esos alcances en V2.
+
+<a id="dec-010"></a>
+### DEC-010 Definir el dominio analítico en municipios de Tolima y Meta
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; referencia de producto aceptada documentada a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-009. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** El dominio de los datos y las predicciones de V2 comprende todos los municipios de Tolima y Meta; los resultados siguen siendo municipales.
+- **Justificación:** Delimita la población y unidad de análisis sin confundir la inclusión geográfica con la suficiencia de datos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROD1; NOTE.
+- **Límites y validación pendiente:** La elegibilidad por historia o calidad se resuelve en DEC-048; no se documentan aquí pestañas, usuarios o interfaz.
+
+<a id="dec-012"></a>
+### DEC-012 Usar granularidad municipal y de año-mes calendario
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentado a más tardar el 2026-10-15; reafirmada explícitamente el 2026-10-17. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Construir el panel analítico a nivel municipio-mes. Interpretar mismo mes como coincidencia tanto de año como de mes.
+- **Justificación:** Corresponde a los horizontes del producto y a las comparaciones endémicas estacionales, conservando la heterogeneidad territorial.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-P, secciones 7–8; NOTE; CHAT-04.
+- **Límites y validación pendiente:** Conservar las fechas diarias originales para comprobar procedencia, consistencia y disponibilidad; el análisis mensual no autoriza borrarlas.
+
+<a id="dec-013"></a>
+### DEC-013 Producir pronósticos distintos para T+1 y T+2
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; referencia de producto aceptada documentada a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** T es el último mes de referencia cargado; T+1 y T+2 son el mes calendario inmediatamente siguiente y el segundo siguiente.
+- **Justificación:** Permite la preparación inmediata y las acciones que requieren mayor anticipación.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROD1; PROD7; SRC-P, objectives.
+- **Límites y validación pendiente:** Dos salidas distintas no implican modelos ajustados por separado ni umbrales de probabilidad iguales.
+
+<a id="dec-014"></a>
+### DEC-014 Respetar la cronología y la disponibilidad de información
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (revisión y registro; fecha original de aprobación específica no acreditada). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Predecir con información disponible al corte de referencia; separar el mes de ocurrencia o inicio de síntomas del momento en que se conoció o revisó la información.
+- **Justificación:** Evita que información futura y revisiones retrospectivas inflen el desempeño predictivo aparente.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** ML; PROD1; NOTE; CHAT-03.
+- **Límites y validación pendiente:** La notificación por sí sola no reconstruye todas las revisiones históricas. Una fecha de notificación imposible no demuestra disponibilidad previa confiable.
+
+<a id="dec-015"></a>
+### DEC-015 Agrupar por ocurrencia en el reconocimiento inicial
+
+- **Estado:** REEMPLAZADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; diagnóstico histórico registrado a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** DESCONOCIDA; reemplazo documentado a más tardar el 2026-10-16. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-016.
+- **Decisión, propuesta o práctica documentada:** El reconocimiento inicial utilizó campos de ocurrencia y ANO + SEMANA + COD_MUN_O para agrupaciones exploratorias.
+- **Justificación:** Conservar los conteos históricos como evidencia de ejecución; la agrupación omitía departamento y no demostraba unicidad municipal nacional ni duplicación de casos.
+- **Motivo de deprecación o no adopción:** Se seleccionó explícitamente residencia; ocurrencia y notificación no pueden ser filtros alternativos de alcance y un código municipal local no es único nacionalmente.
+- **Evidencia y autoridad:** RECOG; NOTE; MATRIX.
+- **Límites y validación pendiente:** Era una convención diagnóstica, no prueba de una decisión previa aprobada de atribución territorial del producto.
+
+<a id="dec-016"></a>
+### DEC-016 Atribuir los casos por residencia
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentada como vigente a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-015. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar COD_DPTO_R y COD_MUN_R para la atribución municipal y el alcance de Tolima/Meta.
+- **Justificación:** Define una ubicación analítica poblacional estable, distinta del prestador que notifica o del lugar de ocurrencia.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE; MATRIX.
+- **Límites y validación pendiente:** El clima de residencia no prueba dónde se adquirió la infección; la aplicabilidad histórica del catálogo continúa pendiente.
+
+<a id="dec-017"></a>
+### DEC-017 Usar el inicio de síntomas como fecha epidemiológica
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-15 (decisión humana explícita registrada en el informe de reconocimiento). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Asignar el periodo epidemiológico a partir de INI_SIN.
+- **Justificación:** El inicio de síntomas describe el momento de la enfermedad, en lugar del reporte administrativo, y es la referencia temporal del evento documentada.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** RECOG, sección 0.1; NOTE; MATRIX.
+- **Límites y validación pendiente:** La validez cronológica y las políticas para anomalías son distintas del significado del campo.
+
+<a id="dec-018"></a>
+### DEC-018 No reemplazar silenciosamente un inicio ausente o inconsistente
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentada como vigente a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-067. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** No sustituir automáticamente por FEC_NOT, intercambiar fechas ni convertir un inicio ausente en una fecha inventada.
+- **Justificación:** Los campos representan procesos diferentes; el orden invertido por sí solo no identifica el campo erróneo ni demuestra un intercambio.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE; INVEST; MATRIX.
+- **Límites y validación pendiente:** No impide adoptar después una política de imputación o corrección explícitamente validada.
+
+<a id="dec-019"></a>
+### DEC-019 Conservar los archivos originales y señalar anomalías
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentada como vigente a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Conservar los insumos originales; realizar los diagnósticos y tratamientos por escenario en análisis derivados, preservando valores originales e indicadores de calidad.
+- **Justificación:** Favorece la reversibilidad, la trazabilidad y la separación entre incertidumbre de medición e información corregida.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** DATA; NOTE; INVEST; MATRIX; CHAT-03.
+- **Límites y validación pendiente:** Conservar el volumen o suavizar una curva no valida su exactitud temporal Los resultados comunicados se mantienen agregados, sin ejemplos identificables de pacientes.
+
+<a id="dec-020"></a>
+### DEC-020 Identificar municipios con códigos validados
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentada como vigente a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar identificadores territoriales completos y referencias DIVIPOLA aplicables, en lugar de unir por nombre.
+- **Justificación:** Los nombres municipales pueden variar y los códigos locales de tres caracteres se repiten entre departamentos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE; PROV; MATRIX.
+- **Límites y validación pendiente:** La pertenencia al catálogo actual y la procedencia reportada no certifican los límites históricos; el código de notificación tiene cinco posiciones en los CSV actuales.
+
+<a id="dec-021"></a>
+### DEC-021 Definir la inclusión de casos y la identidad de episodios
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; asunto documentado a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Resolver la inclusión de probables, confirmados y descartados, el ámbito de los identificadores, la precedencia de revisiones y la eliminación de duplicados antes de fijar conteos definitivos.
+- **Justificación:** Las notificaciones no son automáticamente casos confirmados ni episodios únicos. CONSECUTIVE no es un identificador de paciente verificado.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX; NOTE; CHAT-01.
+- **Límites y validación pendiente:** Este registro no adopta una nueva regla de inclusión o exclusión.
+
+<a id="dec-022"></a>
+### DEC-022 Mantener separados 210 y 220 durante el análisis exploratorio actual
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentada como vigente a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Describir por separado dengue y dengue grave hasta establecer su relación, inclusión y eliminación de duplicados.
+- **Justificación:** Los códigos de evento distintos no demuestran conjuntos de casos disjuntos; una unión sin validar puede duplicar conteos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE; MATRIX; objetivo del cuaderno.
+- **Límites y validación pendiente:** Es la convención del análisis exploratorio acotado, no una regla definitiva que obligue a usar dengue grave como objetivo separado.
+
+<a id="dec-023"></a>
+### DEC-023 Serie principal de dengue y serie auxiliar de dengue grave en V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; SRC-R secciones 1.3 y 2.1. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica; sin adopción automática en V2. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-021, DEC-022.
+- **Decisión, propuesta o práctica documentada:** V1 usó el evento 210 como serie principal y el 220 para historia y variables auxiliares rezagadas.
+- **Justificación:** Explica la construcción previa de etiquetas sin decidir la unión o inclusión de eventos en V2.
+- **Motivo de deprecación o no adopción:** Las exportaciones actuales requieren verificar inclusión y relaciones entre eventos o episodios antes de seleccionar la definición definitiva del conteo.
+- **Evidencia y autoridad:** SRC-R, secciones 1.3 y 2.1.
+- **Límites y validación pendiente:** El reporte llama dengue total a su serie; ese nombre por sí solo no resuelve cómo contar 210/220.
+
+<a id="dec-024"></a>
+### DEC-024 Elegir el entrenamiento compartido, departamental o municipal
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; alternativas registradas el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** La granularidad del entrenamiento sigue sin decidirse.
+- **Justificación:** La salida municipal no determina cuántos modelos se ajustan; la historia local y la escasez de inicios pueden limitar el entrenamiento independiente.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE; PROD1.
+- **Límites y validación pendiente:** El volumen de notificaciones no equivale al número de observaciones municipio-mes ni decide la arquitectura.
+
+<a id="dec-025"></a>
+### DEC-025 Comparar el ajuste compartido con el departamental
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-15 (recomendación documentada). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Considerar una comparación controlada con el mismo panel, etiquetas, variables, horizontes y particiones temporales; evaluar ajustes municipales solo donde la evidencia lo sustente.
+- **Justificación:** Mide si la especialización geográfica aporta valor sin introducir factores de confusión en la comparación.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE, secciones 4–5.
+- **Límites y validación pendiente:** Este registro no autoriza ni ejecuta experimentos ni selecciona una arquitectura ganadora.
+
+<a id="dec-026"></a>
+### DEC-026 Comparar las familias de modelos candidatas
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; presente en los fundamentos o referencia del producto a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Mantener XGBoost, LightGBM y GAM como familias candidatas; la selección final depende de la evidencia.
+- **Justificación:** Compara modelos no lineales y con interacciones con una alternativa más interpretable bajo un protocolo común.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PRODUCT; SRC-P, sección 7.
+- **Límites y validación pendiente:** No ordena reutilizar el modelo seleccionado de V1 ni declarar superioridad sin evidencia de V2.
+
+<a id="dec-027"></a>
+### DEC-027 Usar modelos de referencia epidemiológicos
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; referencia del producto documentada a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Comparar con el canal endémico y la persistencia; usar Poisson únicamente cuando corresponda metodológicamente.
+- **Justificación:** Permite evaluar si el aprendizaje automático agrega anticipación útil frente al estado epidemiológico actual y la historia simple.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PRODUCT; SRC-P, secciones 7 y 10.
+- **Límites y validación pendiente:** Son necesarios periodos de evaluación idénticos; un canal del estado observado no constituye automáticamente un pronóstico futuro desplegable.
+
+<a id="dec-028"></a>
+### DEC-028 Aplicar validación temporal y evidencia comparable
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (revisión y registro; fecha original de aprobación específica no acreditada). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar evaluación temporal estricta, ajustar transformaciones solo con entrenamiento y aplicar un protocolo común; no seleccionar modelos únicamente por resultados de entrenamiento.
+- **Justificación:** Controla la fuga temporal, el sobreajuste y las afirmaciones basadas en comparaciones incompatibles.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** ML; SRC-P, sección 10.
+- **Límites y validación pendiente:** La propuesta especifica ventanas expansivas y un bloque posterior sin usar; las fechas exactas de V2 siguen pendientes de aprobación definitiva.
+
+<a id="dec-029"></a>
+### DEC-029 Separar la autoridad semántica oficial de la procedencia del CSV
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (adoptada mediante el diccionario canónico solicitado). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar las definiciones técnicas del INS como autoridad semántica e identificar por separado las correspondencias empíricas de los archivos exportados.
+- **Justificación:** Es posible establecer significados oficiales sin demostrar el procedimiento que generó un archivo local; nombres y huellas digitales no prueban por sí solos su procedencia.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-01; CHAT-02; MATRIX; PROV.
+- **Límites y validación pendiente:** No se aprueba un nuevo flujo de descarga desde el origen ni se reescribe silenciosamente la estrategia Kaggle/local.
+
+<a id="dec-030"></a>
+### DEC-030 Registrar identidades inmutables y límites de las fuentes
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentada como vigente a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Registrar fuente, versión, evidencia de recuperación y huellas digitales cuando estén disponibles; separar modificación y ejecución local de publicación de la fuente y cortes analíticos.
+- **Justificación:** Permite la replicación y evita presentar huellas posteriores como prueba de una ejecución anterior que no las registró.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROV; NOTE.
+- **Límites y validación pendiente:** La procedencia DANE suministrada por una persona es atribución, no autenticación independiente; sigue pendiente la procedencia de la extracción climática.
+
+<a id="dec-031"></a>
+### DEC-031 Usar una matriz limitada a campos prioritarios
+
+- **Estado:** REEMPLAZADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; alcance documental registrado el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** 2026-10-17. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-032.
+- **Decisión, propuesta o práctica documentada:** La matriz canónica anterior interpretaba campos seleccionados e inventariaba los restantes mediante su cantidad.
+- **Justificación:** Era adecuada para el análisis exploratorio inicial acotado, pero insuficiente para interpretar todas las columnas de los CSV.
+- **Motivo de deprecación o no adopción:** Mauricio solicitó un diccionario de campos completo para ambas exportaciones de dengue en el mismo archivo canónico.
+- **Evidencia y autoridad:** Revisión anterior de la matriz conservada en Git; CHAT-02.
+- **Límites y validación pendiente:** Se retira ese alcance limitado, no las definiciones correctamente sustentadas.
+
+<a id="dec-032"></a>
+### DEC-032 Usar un único diccionario canónico completo
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (solicitud explícita en esta conversación). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-031. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** DATA-01-Priority Field Matrix.md es la única referencia de definición de los 69 campos compartidos; no mantener otro diccionario competidor.
+- **Justificación:** Centraliza nombres, significados, codificaciones, prioridades, fuentes y aspectos semánticos pendientes de la exportación.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-02; MATRIX.
+- **Límites y validación pendiente:** Hay 63 conceptos con respaldo oficial y seis definiciones operativas insuficientes; la cobertura no es certificación científica. El diccionario conserva las definiciones, este registro solo su decisión de uso.
+
+<a id="dec-033"></a>
+### DEC-033 Mantener explícitas las definiciones insuficientes
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (parte de la solicitud del diccionario canónico). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Mantener explícitamente sin resolver el significado operativo de CONSECUTIVE, GRU_POB, confirmados, va_sispro, Estado_final_de_caso y nom_est_f_caso.
+- **Justificación:** Las menciones institucionales o relaciones observadas no establecen algoritmos oficiales, versiones de catálogo ni ámbitos de identidad.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX; CHAT-01.
+- **Límites y validación pendiente:** La correspondencia observada entre estado final y confirmación es empírica; nunca equipararla con la gravedad clínica CLASFINAL.
+
+<a id="dec-034"></a>
+### DEC-034 Tratar Y como completamente indefinida
+
+- **Estado:** REEMPLAZADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (interpretación anterior del asistente, no un método aprobado por una persona). **Revisada el:** 2026-10-17.
+- **Deprecada el:** 2026-10-17. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-035, DEC-037.
+- **Decisión, propuesta o práctica documentada:** Una respuesta anterior planteó decidir si Y significaba conteos o inicio de brote sin revisar primero las fuentes conservadas del grupo.
+- **Justificación:** Conservar el error interpretativo para que su corrección sea visible, en lugar de reescribir silenciosamente el historial.
+- **Motivo de deprecación o no adopción:** El usuario señaló los acuerdos existentes del grupo; revisar las fuentes estableció exceso binario y un objetivo científico centrado en inicios. Los detalles operativos siguen abiertos.
+- **Evidencia y autoridad:** CHAT-05; SRC-E; SRC-R; SRC-P.
+- **Límites y validación pendiente:** Este registro documenta una interpretación corregida, no una elección científica previamente aprobada.
+
+<a id="dec-035"></a>
+### DEC-035 Definir conceptualmente Y como exceso futuro de dengue
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA para el acuerdo original del grupo; reconocimiento respaldado por fuentes el 2026-10-17. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-034. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Para el municipio m y h en {1,2}, Y(m,t,h)=1 cuando los casos en t+h superan el límite histórico de exceso aplicable, y 0 en caso contrario; estimar su probabilidad.
+- **Justificación:** Las notas del experto definen explícitamente exceso/no exceso; la propuesta de grado se centra en anticipar transiciones y no en pronosticar conteos como único resultado.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-05; SRC-E, sección 5; SRC-R, sección 2.1; SRC-P, secciones 5 y 10.
+- **Límites y validación pendiente:** El acuerdo conceptual no fija la definición del conteo ni el procedimiento para generar el límite. Este registro no convierte P75 o una regla nueva en parámetros aprobados.
+
+<a id="dec-036"></a>
+### DEC-036 Usar P75 y umbrales numéricos anteriores en V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; documentado en SRC-R. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica; no adoptada automáticamente en V2. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-037, DEC-040.
+- **Decisión, propuesta o práctica documentada:** V1 usó conteos futuros superiores a P75 para definir exceso y umbrales de integración 0.34/0.27 para las probabilidades de T+1/T+2.
+- **Justificación:** Registra un antecedente real y distingue el límite del conteo de casos del umbral de probabilidad del modelo.
+- **Motivo de deprecación o no adopción:** V2 requiere validar método, ventana, casos y calibración; las constantes históricas no se transfieren como reglas definitivamente aprobadas.
+- **Evidencia y autoridad:** SRC-R, secciones 2.1 y 3.2; PROD7.
+- **Límites y validación pendiente:** La implementación anterior no establece una justificación epidemiológica universal ni una aprobación para V2.
+
+<a id="dec-037"></a>
+### DEC-037 Aprobar definitivamente la construcción del canal y las etiquetas
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; dependencia de la etapa 2; aclarada el 2026-10-17. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-036, DEC-034. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Elegir método, ventana histórica, referencia estacional, tratamiento de brotes previos y periodos sin casos, y si se conserva P75; ajustar solo con la historia permitida.
+- **Justificación:** Estas elecciones cambian materialmente Y y pueden incorporar información futura si se estiman con toda la serie.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE; PROD1; CHAT-05.
+- **Límites y validación pendiente:** El exceso binario está definido conceptualmente; la construcción definitiva del conteo y umbral de V2 no lo está.
+
+<a id="dec-038"></a>
+### DEC-038 Priorizar la detección de nuevos inicios de brote
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; propuesta de grado; reconocida el 2026-10-17. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Evaluar por separado la anticipación de inicios y la continuidad del exceso; reportar sensibilidad y cantidades absolutas de inicios.
+- **Justificación:** Un buen desempeño durante brotes persistentes puede ocultar fallas para anticipar episodios nuevos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-P, secciones 2, 5 y 10; SRC-R, secciones 2.3 y 4; CHAT-05.
+- **Límites y validación pendiente:** El desempeño con tres transiciones de V1 no demuestra superioridad de V2 ni fija criterios numéricos de aceptación.
+
+<a id="dec-039"></a>
+### DEC-039 Formalizar el inicio del mes objetivo frente al mes anterior
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (formalización del asistente basada en fuentes). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** El indicador candidato de inicio en s es exceso(s)=1 y exceso(s-1)=0; para T+2, el mes anterior es t+1.
+- **Justificación:** Separa una transición nueva de la persistencia y evita evaluar T+2 contra el mes incorrecto.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-05; SRC-R, secciones 2.1 y 3.3.
+- **Límites y validación pendiente:** La expresión mensual es una formalización explícita; las reglas de persistencia, reingreso y estados no disponibles aún requieren aprobación de la etapa 2.
+
+<a id="dec-040"></a>
+### DEC-040 Seleccionar posteriormente los umbrales operativos de probabilidad
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; conservada desde la etapa 1. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-036. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Seleccionar calibración, umbrales por horizonte y niveles de alerta mediante validación temporal y un equilibrio explícito entre eventos omitidos y falsas alarmas.
+- **Justificación:** El umbral de probabilidad es distinto del límite epidemiológico del conteo; un color no constituye validación científica.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROD6; PROD7; SRC-P, secciones 9–10.
+- **Límites y validación pendiente:** No se adoptan 0.34, 0.27, 50%, colores fijos ni un umbral común para ambos horizontes.
+
+<a id="dec-041"></a>
+### DEC-041 No corregir ni descartar automáticamente las 8.556 anomalías
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; límite de investigación documentado el 2026-10-17. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Mantener visible el inicio posterior a la notificación; no se aprueba un intercambio, reemplazo, exclusión general ni descarte de un año en producción.
+- **Justificación:** Las fechas afectadas pueden diferir por meses; su orden no identifica la columna errónea y perder registros puede distorsionar los picos epidémicos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** INVEST; MATRIX; CHAT-03.
+- **Límites y validación pendiente:** Esta restricción permanece hasta decidir un tratamiento y es compatible con escenarios de sensibilidad controlados.
+
+<a id="dec-042"></a>
+### DEC-042 Política de coincidencia mensual y reasignación de hasta siete días
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (propuesta del usuario). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Considerar conservar el inicio cuando coincidan año y mes y una regla de asignación mensual cuando las fechas crucen un límite de mes por hasta siete días.
+- **Justificación:** Busca conservar la cronología mensual; la coincidencia de año-mes elimina la ambigüedad entre esas dos asignaciones mensuales.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-03.
+- **Límites y validación pendiente:** Hay 784 registros con igual año-mes, 42 con cambio de mes dentro de siete días y 7.730 con diferencias mayores; siete días no es una regla correctiva establecida por el INS. No se aprueba un mes de destino ni una política general.
+
+<a id="dec-043"></a>
+### DEC-043 Comparar los tres escenarios solicitados para las anomalías
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (propuesta explícita del usuario; ejecución pausada para documentar). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** El escenario 1 conserva los 8.556 registros en su mes original de inicio; el 2 conserva solo los 784 con igual año-mes de inicio y notificación y excluye 7.772; el 3 excluye los 8.556.
+- **Justificación:** Mide cómo la incertidumbre temporal cambia conteos municipio-mes, picos, estacionalidad, asociaciones y etiquetas posteriores.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-04; CHAT-03.
+- **Límites y validación pendiente:** Aplicar la selección solo al grupo anómalo; los demás registros reciben idéntico tratamiento. No filtrar toda la base por coincidencia mensual. No se elige ningún escenario como verdad de producción.
+
+<a id="dec-044"></a>
+### DEC-044 Explorar asociaciones cronológicas antes de seleccionar variables
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (propuesta explícita del usuario; ejecución pausada para documentar). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Estudiar relaciones temporales mensuales dentro de dengue y dengue grave, entre ambos y con las covariables, incluidos rezagos pertinentes y sensibilidad por escenario.
+- **Justificación:** La exploración puede identificar relaciones candidatas mientras se completa la construcción operativa de Y.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-04.
+- **Límites y validación pendiente:** Este registro no inicia el estudio de correlación, autoriza agregaciones arbitrarias de códigos nominales ni certifica un conjunto definitivo de variables.
+
+<a id="dec-045"></a>
+### DEC-045 Separar asociación de influencia predictiva o causal
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (revisión y registro; fecha original de aprobación específica no acreditada). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Tratar las correlaciones como exploratorias; evaluar su aporte predictivo adicional frente a Y futura mediante validación temporal y controles de estacionalidad, tendencia y disponibilidad.
+- **Justificación:** La estacionalidad compartida, la autocorrelación y la fuga de información pueden crear importancia aparente engañosa; la asociación predictiva no establece causalidad.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** ML; CHAT-04.
+- **Límites y validación pendiente:** En esta sesión no se declaran variables como las más influyentes ni se eliminan del modelo.
+
+<a id="dec-046"></a>
+### DEC-046 Usar la consulta como corroboración o candidata a imputación validada
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (recomendación del asistente). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar FEC_CON para evaluar plausibilidad; si fuera necesario estimar, evaluar un modelo de retraso desde el inicio con registros confiables e incertidumbre.
+- **Justificación:** En el diagnóstico focalizado, las 8.556 consultas fueron simultáneas o posteriores al inicio y 7.832 compartían su mes, lo que respalda investigar antes que sustituir automáticamente por notificación.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** CHAT-03; MATRIX.
+- **Límites y validación pendiente:** Son observaciones internas, no prueba independiente de fechas correctas; no se adopta sustitución por FEC_CON ni imputación.
+
+<a id="dec-047"></a>
+### DEC-047 Resolver la procedencia climática y la ausencia de enero de 2020
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; documentado a más tardar el 2026-10-16. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Resolver cobertura ausente de enero de 2020, procedencia de extracción, agregación diaria a mensual y convenciones de unidades y signos antes de fijar las variables climáticas.
+- **Justificación:** Fechas ausentes, celdas vacías y precipitación cero son distintas; acumulaciones y promedios diarios requieren agregaciones diferentes.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX; PROV; NOTE.
+- **Límites y validación pendiente:** No se aprueban interpolación, llenado con ceros, inversión de signos ni un método de recuperación climática.
+
+<a id="dec-048"></a>
+### DEC-048 Definir elegibilidad predictiva sin reducir el alcance geográfico
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; dependencia de la etapa 2. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Determinar historia mínima, completitud, validez del catálogo y evidencia de eventos necesarias para emitir una predicción municipal.
+- **Justificación:** Todos los municipios permanecen en el alcance, pero evidencia insuficiente no puede transformarse en una predicción de bajo riesgo.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROD1; PROD4; NOTE.
+- **Límites y validación pendiente:** No se aprueba excluir municipios específicos ni convertir periodos ausentes en cero.
+
+<a id="dec-050"></a>
+### DEC-050 Definir el contexto de datos de cada inferencia mensual
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; referencia de producto aceptada documentada a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** El insumo para inferencia corresponde a un departamento Tolima/Meta y a un mes de referencia cerrado, con registros de varios municipios.
+- **Justificación:** Establece la población, el periodo y el conjunto de información permitido al modelo.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROD1; PROD5; PROD8.
+- **Límites y validación pendiente:** Es una dirección documentada de los insumos; formato exacto, variables requeridas, omisiones admisibles y disponibilidad real siguen pendientes. Se excluye el mecanismo de carga en interfaz.
+
+<a id="dec-051"></a>
+### DEC-051 Validar los datos de entrada antes de inferir
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; referencia de producto aceptada documentada a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Comprobar departamento, periodo, identidad municipal e información requerida antes de aplicar el modelo; impedir la inferencia con datos que incumplan las condiciones bloqueantes.
+- **Justificación:** Evita aplicar el modelo a observaciones territorial o temporalmente inconsistentes o a variables incompatibles.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROD5.
+- **Límites y validación pendiente:** Las reglas exactas de validación y tratamiento de casos parciales siguen abiertas. No se registran aquí flujos de interfaz ni persistencia del producto.
+
+<a id="dec-059"></a>
+### DEC-059 Definir el conjunto final de variables y sus esquemas analíticos
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; pospuestos explícitamente en la etapa 1. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-068. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Resolver variables de entrada y derivadas, representación, tipos, ventanas históricas y compatibilidad entre entrenamiento e inferencia antes de fijar el conjunto final del modelo.
+- **Justificación:** Sin un esquema analítico estable no se pueden reproducir las predicciones ni distinguir diferencias de datos de diferencias entre modelos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX; NOTE; PROD7; PROD8.
+- **Límites y validación pendiente:** Las 39 variables de V1 no se transfieren automáticamente. Se excluyen contratos de API, transporte y detalles de infraestructura.
+
+<a id="dec-060"></a>
+### DEC-060 Validar explicaciones e importancia del modelo
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; referencia de producto aceptada documentada a más tardar el 2026-10-15. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar explicaciones e importancia de variables solo cuando correspondan al modelo evaluado y a los datos y particiones declarados; no inventar atribuciones.
+- **Justificación:** Una explicación de la salida del modelo no demuestra causalidad y puede quedar obsoleta después de reentrenar.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PROD6; PROD7; SRC-P, sección 9.
+- **Límites y validación pendiente:** No se aprueba aún un método específico de explicabilidad para V2. Su presentación en interfaz está fuera de este registro.
+
+<a id="dec-061"></a>
+### DEC-061 Preferencias de evaluación científica de la propuesta de grado
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** DESCONOCIDA; especificación de la fuente; revisada el 2026-10-17. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Priorizar sensibilidad sobre inicios y cantidades absolutas detectadas/total; revisar también falsas alarmas, precisión, F1, PR-AUC, puntuación de Brier y calibración por horizonte y municipio.
+- **Justificación:** Las transiciones escasas y el desbalance de clases hacen insuficientes la exactitud general o el F1 de estados persistentes.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-P, sección 10; SRC-R, secciones 2.3 y 4; NOTE.
+- **Límites y validación pendiente:** La propuesta sugiere igualar la sensibilidad del canal, superar la persistencia y aumentar como máximo cinco puntos porcentuales las falsas alarmas; son criterios propuestos, no umbrales aprobados para V2.
+
+<a id="dec-062"></a>
+### DEC-062 Seleccionar el modelo y calibrador de V2 únicamente con evidencia comparable
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** No aplica; etapas posteriores de modelado y evaluación. **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Evaluar modelos, calibración, umbrales operativos y desempeño local antes de declarar un modelo seleccionado para V2.
+- **Justificación:** La integración de V1 y sus resultados SHAP no prueban superioridad predictiva, calibración ni anticipación confiable de V2.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PRODUCT; NOTE; SRC-R, secciones 2.2–2.5.
+- **Límites y validación pendiente:** Esta tarea documental no ejecuta entrenamiento de V2 ni experimentos de selección de variables.
+
+<a id="dec-065"></a>
+### DEC-065 Distinguir periodos ausentes, datos vacíos y ceros observados
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** DEC-066. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** No convertir automáticamente meses sin registros, celdas vacías o municipios ausentes en cero casos o cero precipitación.
+- **Justificación:** El cero describe una observación; la ausencia puede deberse a falta de reporte, cobertura o extracción y sesgar tanto Y como los rezagos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** RECOG, secciones de continuidad; MATRIX, sección ambiental; NOTE.
+- **Límites y validación pendiente:** La imputación, las condiciones que permiten afirmar cero y el tratamiento de periodos incompletos siguen abiertos.
+
+<a id="dec-066"></a>
+### DEC-066 Panel con ceros explícitos usado en V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-065.
+- **Decisión, propuesta o práctica documentada:** El reporte de V1 describe un panel de 1.114 municipios con ceros explícitos.
+- **Justificación:** Es un antecedente de preparación que afecta la distribución de conteos y la etiqueta; debe distinguirse de la evidencia actual sobre cobertura.
+- **Motivo de deprecación o no adopción:** La convención de V1 no se adopta automáticamente; V2 exige distinguir ausencia y cero.
+- **Evidencia y autoridad:** SRC-R, sección 1.3, párrafos 34–36.
+- **Límites y validación pendiente:** No establece que toda ausencia de V2 sea un cero real. No se ha auditado el código generador de V1 en esta tarea.
+
+<a id="dec-067"></a>
+### DEC-067 Sustitución de inicio por notificación usada en V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-018.
+- **Decisión, propuesta o práctica documentada:** V1 usaba INI_SIN con notificación como respaldo cuando correspondía según su flujo previo.
+- **Justificación:** Permite rastrear el antecedente de la discusión sobre continuidad temporal.
+- **Motivo de deprecación o no adopción:** La decisión vigente de V2 prohíbe sustituir fechas automáticamente; el antecedente se conserva sin fingir una revocación histórica en V2.
+- **Evidencia y autoridad:** SRC-R, sección 1.3, párrafo 35; NOTE, referencia al microproyecto.
+- **Límites y validación pendiente:** No demuestra que ese respaldo sea adecuado para las 8.556 inconsistencias de V2.
+
+<a id="dec-068"></a>
+### DEC-068 Conjunto de 39 variables y exclusiones de V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** DEC-059.
+- **Decisión, propuesta o práctica documentada:** V1 construía 41 variables numéricas y usaba 39; excluía los conteos contemporáneos crudos casos_clasico y casos_grave, manteniendo historia por rezagos y ventanas móviles.
+- **Justificación:** Es una decisión concreta de selección de variables del antecedente que faltaba en el registro.
+- **Motivo de deprecación o no adopción:** No se transfiere el conjunto fijo de V1 a V2 sin evaluar datos, Y y contribución predictiva.
+- **Evidencia y autoridad:** SRC-R, secciones 1.4 y 2.2, párrafos 40 y 50–68.
+- **Límites y validación pendiente:** No prueba que los conteos actuales sean inválidos o indisponibles al cierre de t; su inclusión en V2 se decide con disponibilidad y validación, no copiando V1.
+
+<a id="dec-069"></a>
+### DEC-069 Rezagos epidemiológicos concretos del antecedente
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** V1 incluía casos_clasico y casos_grave con rezagos 1, 2, 3, 4 y 6 meses y promedios móviles de tres meses.
+- **Justificación:** Documenta la memoria temporal efectivamente descrita en el reporte, en lugar de una referencia vaga a historia.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, sección 2.2, párrafos 57–59.
+- **Límites y validación pendiente:** Son 12 variables históricas reportadas; longitud de memoria, cierre de la ventana y tratamiento de huecos de V2 no están seleccionados.
+
+<a id="dec-070"></a>
+### DEC-070 Rezagos climáticos y estacionalidad usados en V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** V1 incluía temperatura y lluvia rezagadas 1, 2 y 3 meses, además de mes_sin y mes_cos como representación cíclica del mes.
+- **Justificación:** Aporta antecedentes concretos de ingeniería temporal y estacionalidad.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, sección 2.2, párrafos 60–65.
+- **Límites y validación pendiente:** No se adopta automáticamente ese conjunto ni se considera la estacionalidad una prueba causal del aporte climático.
+
+<a id="dec-071"></a>
+### DEC-071 Familias de variables temporales sugeridas por el experto
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Evaluar casos históricos, rezagos, tendencias recientes, ventanas móviles, estacionalidad y autocorrelación, usando únicamente información anterior al horizonte predicho.
+- **Justificación:** Permite estudiar cuánta señal predictiva aporta el pasado y separar persistencia de anticipación.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-E, sección 6, párrafos 31–41.
+- **Límites y validación pendiente:** La selección final, rezagos máximos y ventanas dependen de Y, historia válida y validación temporal; la recomendación no congela variables.
+
+<a id="dec-072"></a>
+### DEC-072 Densidad poblacional como covariable condicionada
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Considerar densidad poblacional solo si su fuente, cobertura espacial, vigencia y frecuencia permiten alinearla de forma defendible con el panel mensual.
+- **Justificación:** El experto identificó su posible valor y la limitación de no disponer necesariamente de variación mensual adecuada.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-E, sección 6, párrafo 42.
+- **Límites y validación pendiente:** No se inventan valores mensuales ni se aprueba interpolar población. No está seleccionada como variable final.
+
+<a id="dec-073"></a>
+### DEC-073 TerraClimate como fuente climática sugerida
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Las notas del experto mencionan TerraClimate entre los conjuntos por evaluar en Google Earth Engine.
+- **Justificación:** Conserva una sugerencia de fuente distinta de CHIRPS y ERA5-Land para no borrar la historia de alternativas.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-E, sección 7, párrafos 43–48.
+- **Límites y validación pendiente:** No identifica el origen del CSV actual ni autoriza sustituir productos o mezclar sus unidades sin validación.
+
+<a id="dec-074"></a>
+### DEC-074 Agregación espacial del clima a límites municipales
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Obtener variables climáticas municipales a partir de píxeles dentro de los límites municipales y una agregación espacial explícita.
+- **Justificación:** La geometría, resolución, ponderación y producto condicionan qué exposición climática representa cada fila municipal.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-E, sección 7; SRC-P, sección 8; MATRIX, sección ambiental; PROV, E1–E3.
+- **Límites y validación pendiente:** La referencia ambiental describe promedios espaciales; no prueba que ese procedimiento generara el CSV actual ni dónde se adquirió cada infección.
+
+<a id="dec-075"></a>
+### DEC-075 Definir agregaciones climáticas mensuales y unidades
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Especificar por variable si corresponde promedio, suma u otra agregación del dato diario; conservar unidades y convención de signos, incluida evaporación ECMWF.
+- **Justificación:** Un acumulado diario y una media diaria no admiten automáticamente la misma operación mensual.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX, sección ambiental; PROV, referencias E1–E3.
+- **Límites y validación pendiente:** No se aprueba aquí una suma de precipitación, promedio térmico, cambio de signo o conversión nueva; esas reglas requieren evidencia del producto y extracción.
+
+<a id="dec-076"></a>
+### DEC-076 CHIRPS y ERA5-Land como referencias del esquema climático actual
+
+- **Estado:** DOCUMENTADA_EN_FUENTE.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** El diccionario ambiental de referencia atribuye lluvia a CHIRPS y temperatura, rocío, suelo, escorrentía, evaporación, viento y radiación a ERA5-Land.
+- **Justificación:** Permite interpretar las nueve covariables sin confundir compatibilidad de nombres con trazabilidad de extracción.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX, sección ambiental; PROV, E1–E3; SRC-P, sección 8; SRC-R, sección 2.2.
+- **Límites y validación pendiente:** La configuración 2018–2024 del script y el intervalo 2007–2025 del CSV difieren; la versión y el trabajo generador real permanecen pendientes.
+
+<a id="dec-077"></a>
+### DEC-077 SARIMAX y LSTM como alternativas sugeridas por el experto
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** El experto sugirió inicialmente SARIMAX, LSTM y XGBoost; la propuesta y referencia actuales de V2 priorizan XGBoost, LightGBM y GAM.
+- **Justificación:** Explicita la diferencia entre sugerencias exploratorias y familias actualmente previstas.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-E, sección 8, párrafos 49–54; SRC-P, sección 7; PRODUCT.
+- **Límites y validación pendiente:** No se declara que SARIMAX/LSTM hayan sido rechazados experimentalmente, evaluados o aprobados para V2.
+
+<a id="dec-078"></a>
+### DEC-078 Partición y calibración cronológicas descritas en V1
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** El reporte de V1 describe entrenamiento hasta 2022, prueba 2023–2025, validación temporal interna y calibración posterior con datos 2021–2022.
+- **Justificación:** Son decisiones concretas del antecedente que afectan la comparación de resultados y requieren trazabilidad.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, sección 1.3, párrafo 36; sección 2.1.
+- **Límites y validación pendiente:** No se transfieren estas fechas a V2 ni se certifica independencia de la calibración: el periodo descrito coincide temporalmente con parte del entrenamiento.
+
+<a id="dec-079"></a>
+### DEC-079 Ventanas expansivas y bloque temporal final reservado
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Aplicar validación cruzada temporal con ventana expansiva durante el entrenamiento y reservar un bloque posterior para evaluación final; recalcular el canal dentro de cada partición con historia permitida.
+- **Justificación:** Evita que el límite de exceso y las transformaciones aprendan de los periodos que se pretende evaluar.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-P, secciones 7 y 10; ML; NOTE.
+- **Límites y validación pendiente:** El principio de validación temporal está aceptado en DEC-028; las fechas, tamaños, separación y maduración de reportes de V2 siguen pendientes.
+
+<a id="dec-080"></a>
+### DEC-080 Calibración de Platt y umbrales por horizonte del antecedente
+
+- **Estado:** HISTÓRICA_NO_ADOPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** V1 reporta calibración de probabilidades de XGBoost mediante Platt y umbrales 0.34 para T+1 y 0.27 para T+2.
+- **Justificación:** Separa el método para ajustar probabilidades del umbral operativo y del límite epidemiológico P75.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, secciones 2.1 y 3.2; prueba-dashboard.md, sección 5.
+- **Límites y validación pendiente:** El documento no demuestra que ese método sea óptimo o válido en V2; comparar calibración con datos independientes y no copiar umbrales.
+
+<a id="dec-081"></a>
+### DEC-081 Independencia de calibración y selección de umbrales
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Definir qué datos se usarán para ajustar calibración y umbrales sin usar la prueba final ni generar predicciones de calibración sobre datos de ajuste del modelo.
+- **Justificación:** La descripción V1 de calibración 2021–2022 y entrenamiento hasta 2022 no basta para demostrar independencia; se requiere revisar cómo se produjeron esas predicciones.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, secciones 1.3 y 2.1; ML; NOTE.
+- **Límites y validación pendiente:** Se registra un vacío de evidencia, no una afirmación de fuga demostrada. No se selecciona un procedimiento nuevo para V2.
+
+<a id="dec-082"></a>
+### DEC-082 Ablación de variables próximas al canal y al estado actual
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Comparar el modelo completo con una variante sin brote, brote_lag_1, zona_canal y sir; declarar si también se retiran percentiles y variables del canal del periodo objetivo.
+- **Justificación:** El profesor solicitó distinguir aporte adicional de la persistencia; el reporte señala importancia previa aproximada de 0.41 para brote_lag_1.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, sección 2.2.1, párrafos 69 y 73.
+- **Límites y validación pendiente:** No existe en la fuente una corrida de ablación reproducible ni una mejora medida. La propuesta no elimina variables de V2 ni acredita importancia vigente.
+
+<a id="dec-083"></a>
+### DEC-083 Auditar las variables del periodo objetivo y su disponibilidad
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Verificar cómo se construyen p25_objetivo, p75_objetivo y zona_objetivo y si cada valor puede obtenerse al cierre de t sin observar el futuro.
+- **Justificación:** Una referencia estacional calculada con historia puede estar disponible; una zona basada en casos futuros sería fuga. El nombre no permite resolverlo.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, sección 2.2, párrafo 67; SRC-E, sección 2; MATRIX; NOTE.
+- **Límites y validación pendiente:** No se etiqueta automáticamente toda variable con sufijo objetivo como inválida ni se certifica su seguridad sin inspeccionar la construcción.
+
+<a id="dec-084"></a>
+### DEC-084 Regenerar importancia y SHAP para el modelo realmente evaluado
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Vincular importancia y explicaciones a la versión ajustada, corte, variables y conjunto evaluado; regenerar análisis cuando cambie el modelo.
+- **Justificación:** El reporte advierte que los SHAP guardados antecedían al reentrenamiento con corte 2022 y no se reutilizaron como evidencia del modelo vigente.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-R, sección 2.2, párrafos 69–70; DEC-060.
+- **Límites y validación pendiente:** Es un problema de evidencia analítica, no un requisito de interfaz; no se afirma disponer ya de SHAP válidos para V2.
+
+<a id="dec-085"></a>
+### DEC-085 Interpretar métricas por horizonte, municipio y número de inicios
+
+- **Estado:** PROPUESTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Reportar resultados por horizonte y municipio, con número absoluto de inicios detectados y totales; controlar si los agregados ocultan fallas locales.
+- **Justificación:** Con pocos inicios, una transición modifica fuertemente la sensibilidad; V1 reporta tres y la evidencia T+2 no incluye todos los modelos de referencia bajo el mismo protocolo.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** SRC-P, sección 10; SRC-R, secciones 2.3 y 4; NOTE, sección 5.
+- **Límites y validación pendiente:** Las cifras V1 no se convierten en desempeño de V2. PR-AUC, Brier y falsas alarmas se complementan, no sustituyen la evaluación de inicios.
+
+<a id="dec-086"></a>
+### DEC-086 Definir el universo territorial independientemente de las filas observadas
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Construir el universo esperado de municipios desde DIVIPOLA y comparar por separado presencia en dengue, dengue grave y clima.
+- **Justificación:** Evita excluir del análisis de cobertura los municipios que no aparecen en un archivo.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** RECOG, sección DIVIPOLA; cuaderno, celdas 8 y 11; PLAN003, tarea 2.
+- **Límites y validación pendiente:** El diagnóstico encuentra 29 municipios de Meta y 47 de Tolima; no demuestra que toda ausencia sea cero ni aprueba elegibilidad predictiva.
+
+<a id="dec-087"></a>
+### DEC-087 Separar formato del código de pertenencia al catálogo
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Evaluar por separado longitud, caracteres y relleno explícito de ceros, coherencia entre código completo y departamento, y pertenencia al catálogo.
+- **Justificación:** Un código de cinco dígitos puede tener formato válido sin corresponder a un municipio de la referencia.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** Cuaderno, celdas 5, 8 y 11; PLAN003, tareas 1–2; MATRIX.
+- **Límites y validación pendiente:** El relleno se realiza en variables derivadas; no se truncan códigos largos ni se sobrescriben los originales. El catálogo actual no acredita validez histórica.
+
+<a id="dec-088"></a>
+### DEC-088 Sustitución de código territorial por nombre cuando falta el código
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Resolver si alguna vez se permite atribución por nombre y cómo bloquear contradicciones entre nombre y código.
+- **Justificación:** El cuaderno conserva una rama de respaldo por nombre; el resultado guardado informa cero usos y cero conflictos, lo que no valida la política futura.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** Cuaderno, celda 5; MATRIX, geografía; NOTE.
+- **Límites y validación pendiente:** No se convierte la presencia de esa rama en una decisión científica aprobada; la regla vigente prioriza códigos validados.
+
+<a id="dec-089"></a>
+### DEC-089 No fragmentar un municipio por variantes de nombre
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar el código municipal completo validado como identidad de agrupación; tratar el nombre como atributo de conciliación.
+- **Justificación:** Agrupar por código y nombre puede partir una misma serie en varias y alterar correlaciones, continuidad y tamaño del panel.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX; PLAN003, tarea 2; cuaderno, celda 5.
+- **Límites y validación pendiente:** El resumen municipal inicial todavía agrupa por departamento, código y nombre. La regla documental no prueba cumplimiento integral; no se modifica el cuaderno en esta auditoría.
+
+<a id="dec-090"></a>
+### DEC-090 Conservar el corte analítico de la ejecución existente
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** La ejecución existente fija ANALYSIS_CUTOFF_DATE y PREVIOUS_EXECUTION_CUTOFF_DATE en 2026-10-15 y registra aparte el momento de ejecución.
+- **Justificación:** Permite repetir diagnósticos sin desplazar silenciosamente la referencia temporal al día de auditoría.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** Cuaderno, celdas 2–3; PROV, sección 3; RECOG.
+- **Límites y validación pendiente:** La fecha 2026-10-17 de este registro no cambia el corte de datos ni define las futuras particiones de entrenamiento.
+
+<a id="dec-091"></a>
+### DEC-091 Separar presencia territorial de continuidad temporal
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Medir presencia de municipios y continuidad por municipio y fuente con ventanas explícitas, distinguiendo periodos previos, huecos internos y periodos posteriores.
+- **Justificación:** Estar presente alguna vez no implica una serie mensual completa.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** RECOG, secciones territorial y temporal; cuaderno, celda 11; PLAN003, tarea 3.
+- **Límites y validación pendiente:** La ausencia de meses no se rellena con cero y no se descartan municipios automáticamente.
+
+<a id="dec-092"></a>
+### DEC-092 Definir ventanas de intersección epidemiológica y climática
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Distinguir ventanas de unión e intersección entre fuentes; calcular la cobertura climática sobre el periodo común explícito.
+- **Justificación:** Evita interpretar como faltantes internos los periodos fuera de la cobertura disponible de otra fuente.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** Cuaderno, celdas 6, 9 y 11; RECOG; PROV.
+- **Límites y validación pendiente:** La ventana común guardada es 2007-01-01 a 2025-12-31; no es una partición definitiva del modelo ni una autorización para eliminar observaciones externas.
+
+<a id="dec-093"></a>
+### DEC-093 Clasificar fechas interpretables, ausentes e inconsistentes
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Interpretar fechas epidemiológicas con día/mes/año y clima con año-mes-día en variables derivadas; separar ausencia, error de conversión, futuro respecto al corte y contradicción cronológica.
+- **Justificación:** Una fecha convertible puede ser cronológicamente imposible; una cadena vacía no es equivalente a un valor inválido.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** Cuaderno, celdas 5, 9 y 11; INVEST; MATRIX.
+- **Límites y validación pendiente:** Los sufijos horarios se ignoran en el diagnóstico por fecha; no se certifica precisión intradiaria ni se corrigen fechas originales.
+
+<a id="dec-094"></a>
+### DEC-094 No validar ANO y SEMANA únicamente con calendario ISO
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Usar el año y semana epidemiológicos del evento y verificar la edición y calendario colombiano; la comparación ISO del cuaderno es descriptiva.
+- **Justificación:** Los límites de semana y año pueden diferir, generando discrepancias legítimas o errores que requieren revisión diferenciada.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX, sección de fechas; RECOG; cuaderno, celda 5.
+- **Límites y validación pendiente:** Para 210/220 las ediciones oficiales consultadas vinculan semana con inicio de síntomas; sigue pendiente demostrar la regla aplicada en el export concreto.
+
+<a id="dec-095"></a>
+### DEC-095 Controlar las llaves y la cardinalidad al comparar fuentes
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Evaluar completitud y unicidad de CONSECUTIVE en cada subconjunto comparable y realizar correspondencia uno a uno solo donde sea defendible; contar no correspondidos en ambos sentidos.
+- **Justificación:** Evita que una unión muchos-a-muchos multiplique registros y que la unicidad local se confunda con identidad global del paciente.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** INVEST, sección 3; PLAN004, tarea 4; comparison_key_stability.csv; comparison_match_outcomes.csv.
+- **Límites y validación pendiente:** Los subconjuntos anuales muestran unicidad local; no prueba estabilidad universal, equivalencia clínica, autenticidad de la fuente o un identificador de paciente.
+
+<a id="dec-096"></a>
+### DEC-096 Conservar separados los escenarios A–D ya ejecutados y los 1–3 propuestos
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** La investigación ejecutó A conservar, B intercambiar fechas afectadas, C excluir y D usar referencia 2013 con respaldo a A; son distintos de los escenarios 1–3 propuestos en DEC-043.
+- **Justificación:** Evita atribuir ejecución al escenario nuevo de coincidencia año-mes solo porque existe un escenario B anterior.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** INVEST, secciones 3–4; PLAN004, tarea 5; cuaderno, celdas 14–16; CHAT-04.
+- **Límites y validación pendiente:** El intercambio elimina retrasos negativos por construcción; conservar volumen o coincidir con la referencia anual no prueba fechas verdaderas. Ningún escenario se adopta como limpieza definitiva.
+
+<a id="dec-097"></a>
+### DEC-097 Verificar año y comparabilidad de las descargas anuales por contenido
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Inventariar fuentes de 2012–2014 por contenido y cobertura de fechas, no solo nombre; distinguir año de síntomas, notificación y ANO y conservar denominadores comparables.
+- **Justificación:** Los subconjuntos anuales, poblaciones y años de fecha pueden no coincidir; un nombre de archivo no define el periodo clínico real.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** PLAN004, tareas 1–3; INVEST; source_inventory.csv; baseline_anomaly_by_year_dimensions.csv.
+- **Límites y validación pendiente:** La reproducción de las 8.556 alertas no identifica por sí sola el origen causal de la inconsistencia.
+
+<a id="dec-098"></a>
+### DEC-098 Separar confirmación, gravedad, hospitalización y condición vital
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Interpretar TIP_CAS/AJUSTE y estados derivados como clasificación de confirmación, CLASFINAL como gravedad, PAC_HOS como hospitalización y CON_FIN como condición vital, sin equivalencias automáticas.
+- **Justificación:** Confundir estos ejes cambia el conteo de casos y la población de Y.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX, secciones de codificación y estados derivados.
+- **Límites y validación pendiente:** CLASFINAL no está en los encabezados; la correspondencia empírica de confirmados con estados 3/5 no constituye una fórmula oficial para cualquier export.
+
+<a id="dec-099"></a>
+### DEC-099 Definir representación y agregación mensual por tipo de variable
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Elegir para cada campo si procede conteo, proporción, distribución, indicador u otra representación; no correlacionar como magnitudes códigos nominales por ser numéricos.
+- **Justificación:** La correlación y la selección de variables requieren semántica compatible, denominadores y granularidad; el número asignado a un municipio o categoría no es una medida continua.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** MATRIX, tipos y códigos; CHAT-04; NOTE.
+- **Límites y validación pendiente:** Se registra una necesidad de diseño derivada del diccionario, no una codificación final ni nuevas variables aprobadas. Fechas de hospitalización o ajustes posteriores deben superar el control de disponibilidad.
+
+<a id="dec-100"></a>
+### DEC-100 Resolver ponderación y heterogeneidad del panel municipal
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Definir si el ajuste compartido o departamental necesita ponderación o controles por municipio y cómo medir estabilidad local bajo el mismo protocolo.
+- **Justificación:** Una ciudad con muchas notificaciones no aporta automáticamente más filas mensuales, pero escala del conteo, brotes y heterogeneidad pueden dominar el ajuste o las métricas.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** NOTE, secciones 4–5; RECOG, hallazgos epidemiológicos.
+- **Límites y validación pendiente:** No se aprueban pesos, exclusiones de ciudades, normalización de incidencia ni modelos municipales separados.
+
+<a id="dec-101"></a>
+### DEC-101 Verificar que una coincidencia de fechas no se interprete como intercambio
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Antes de usar exact_swapped_pairs como evidencia de fechas intercambiadas, verificar que la métrica excluya pares donde inicio y notificación ya son iguales.
+- **Justificación:** Si dos fechas son iguales, también satisfacen la igualdad invertida; la métrica por sí sola no identifica una inversión.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** comparison_date_pairs.csv; INVEST, sección 4.3; CONCLUSIONES004, sección 3.
+- **Límites y validación pendiente:** Es una limitación lógica de interpretación detectada en auditoría; no se recalculó la métrica ni se afirma que todos sus pares sean iguales. No se adopta corrección de fechas.
+
+<a id="dec-102"></a>
+### DEC-102 Comprobar duplicados climáticos sin confundirlos con repeticiones de casos
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en esta auditoría; no implica aprobación original en esta fecha). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Evaluar duplicados por municipio-fecha en el clima y tratar por separado la identidad de casos epidemiológicos; muchos casos pueden compartir municipio y periodo.
+- **Justificación:** La unidad de observación difiere entre una medición climática municipal diaria y una notificación individual. Aplicar la misma regla de unicidad eliminaría casos válidos.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** RECOG, secciones de clima e interpretación; cuaderno, celdas 9 y 11; MATRIX.
+- **Límites y validación pendiente:** El diagnóstico climático acotado reporta cero duplicados municipio-fecha; no prueba ausencia de duplicados de pacientes ni autoriza borrar notificaciones por una llave mensual repetida.
+
+## Hallazgos de coherencia que afectan datos y modelo
+
+1. **Comparación de 2013 ya ejecutada frente a textos antiguos.** INVEST, las celdas 14–16 y los artefactos anuales documentan la comparación. RECOG, PROV y NOTE conservan frases que aún la anuncian como futura. Se usa la evidencia ejecutada para describir el diagnóstico, sin afirmar que la causa o el tratamiento estén resueltos. Los otros documentos no se modifican en esta auditoría.
+2. **Unicidad local frente a identidad global.** Los controles guardados permiten correspondencia por CONSECUTIVE en ciertos subconjuntos anuales; esto no resuelve su ámbito global ni prueba identidad de paciente. No es una contradicción que el diccionario mantenga esa semántica abierta.
+3. **Escenarios distintos.** Los A–D ejecutados incluyen intercambio y referencia anual. Los 1–3 propuestos incluyen coincidencia año-mes. No se atribuye al nuevo escenario 2 evidencia producida para B. Los cálculos exploratorios de 784/42/7.730 requieren incorporación reproducible antes de usarse como resultados de tesis.
+4. **Calibración descrita sin independencia demostrada.** V1 reporta calibración 2021–2022 y entrenamiento hasta 2022. Sin inspeccionar cómo se generaron las predicciones no se acredita independencia ni se declara fuga demostrada. La elección para V2 permanece abierta.
+5. **Variables del periodo objetivo.** El reporte enumera `zona_objetivo` y percentiles del objetivo. Se debe revisar su construcción y disponibilidad; no se deduce seguridad ni fuga únicamente del nombre.
+6. **Importancia y explicabilidad desactualizadas.** Los SHAP anteriores al reentrenamiento no describen necesariamente el modelo vigente; la importancia previa y la integración técnica no demuestran superioridad predictiva ni causalidad.
+7. **Meses de exceso frente a inicios.** Y conceptual está respaldada. El comparador de inicio T+2 debe revisarse contra t+1 y no solo t; eso no convierte la regla propuesta en una aprobación de duración o reingreso de episodios.
+8. **Agrupación por nombre y convención por código.** La norma científica exige identidad municipal por código; el resumen inicial del cuaderno todavía agrupa también por nombre. No se confunde la regla escrita con implementación integral.
+9. **Coincidencia invertida no prueba intercambio.** El indicador de pares invertidos debe distinguir fechas iguales. Se registra el vacío de interpretación sin recalcular ni reinterpretar automáticamente todas sus observaciones.
+10. **Privacidad y granularidad de origen.** La propuesta describe trabajo con datos agregados; el cuaderno parte de CSV individuales. No se presenta la unidad final municipio-mes como prueba de que el origen no contenga datos sensibles. Los resultados analíticos comunicados deben seguir agregados y sin ejemplos identificables.
+
+## Cambios de esta auditoría
+
+| Fecha | Cambio | Consecuencia científica |
+|---|---|---|
+| 2026-10-17 | Reducción del registro al análisis/tratamiento de datos y al diseño, desarrollo y evaluación del modelo. | Se reservan 18 códigos retirados por alcance; no se renumeran las decisiones científicas ni se presenta su salida como deprecación científica. |
+| 2026-10-17 | Conservación de 46 entradas y ampliación con DEC-065–DEC-102. | Se incorporan antecedentes de variables, ceros, sustitución de fechas, particiones, calibración, ablación, alternativas y controles del diagnóstico. |
+| 2026-10-17 | Separación entre decisiones aceptadas, propuestas, asuntos abiertos y prácticas implementadas solo en diagnóstico. | Una fuente, una ejecución o una solicitud de auditar no se convierten en aprobación de producción. |
+| 2026-10-17 | Conservación del español, las fechas históricas conocidas y los vínculos de reemplazo. | La fecha de hoy se aplica al registro/auditoría sin fabricar aprobación original; en DEC-014/028/045 se corrige la atribución previa a una fecha general de fundamentos, que no acreditaba una aprobación estadística específica. |
+
+Para un cambio posterior registrar: fecha, código, estado anterior/nuevo, evidencia de autoridad, razón, deprecación y sucesora cuando apliquen, e impacto sobre conteos, Y, variables, particiones, calibración y resultados que deban regenerarse. No se elige hoy un tratamiento de 2013, conjunto definitivo de variables, arquitectura ganadora o método de calibración.
