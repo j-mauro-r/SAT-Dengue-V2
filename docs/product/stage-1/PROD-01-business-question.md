@@ -2,12 +2,12 @@
 
 ## Status and Purpose
 
-**Document status: CLOSED — Phase A. APPROVED TO MAURICIO**
-**Human Gate: UNAPPROVED.** This records the approved direction below; the document itself is not approved. It does not close G0, approve G1, or mark Stage 1 DONE. The [master plan](../../roadmap/master-plan.md) remains authoritative for stage status.
+**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
+**Human Gate: APPROVED for Stage 1 scope.** The [master plan](../../roadmap/master-plan.md) records closure and the separate historical G0 evidence gap.
 
 This document owns the business question, intended value, and Phase A source register. [PROD-02](PROD-02-users.md) owns users; [PROD-03](PROD-03-supported-decisions.md) owns supported human decisions. The [product definition](../product-definition.md) remains the existing scientific and dashboard baseline.
 
-## Business Question — DRAFT Wording
+## Business Question
 
 Can officials responsible for epidemiological surveillance in the departmental Health Secretariats of Tolima and Meta use predictive risk estimates for T+1 and T+2 to identify dengue excess/outbreak-onset risk early enough to inform preventive action and health-system preparation before a potential peak?
 
@@ -39,7 +39,7 @@ Repository references were inspected on `main` at `a4863057780dbeb32f7c180a71092
 
 | Source | Use and boundary |
 |---|---|
-| Mauricio's explicit Phase A request and authorization to draft in this session | Authority for the approved decisions recorded here and in PROD-02/03. Document approval remains pending. |
+| Mauricio's explicit Phase A request and authorization to draft in this session | Authority for the approved decisions recorded here and in PROD-02/03. Stage 1 closure was subsequently confirmed by Mauricio. |
 | `Formato-propuesta_Proyecto-de-grado-Mauricio.pdf`, pp. 1–3, 6–8 | Scientific purpose, anticipation of onset, municipal context, decision-support value, and evaluation concerns. National research framing does not expand approved V2 geography. |
 | `Sesion_1_con_Experto_Notas.docx`, sections 2–5 and 9 | BIOMAC context: anticipation, temporal availability, justified geographic selection, and need to define excess. Suggested municipality counts and models are not adopted as V2 decisions. |
 | `Reporte_Entrega3_final-2.docx`, sections 1, 2.3, 3, and 4 | V1 historical reference: decision support and distinction between onset and continuation; limited onset evidence does not establish V2 performance. Cali/Bucaramanga, 39 features, thresholds, and Champion are not V2 requirements. |

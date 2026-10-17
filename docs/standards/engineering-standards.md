@@ -30,3 +30,7 @@
 - Single source of truth per topic.
 - ADRs for material technical decisions.
 - Resolve contradictions instead of accumulating duplicates.
+
+## Performance Readiness
+
+Stage 2 has local EDA workloads but no measured production service budgets. Record execution time and memory when relevant to reproducibility. Define component latency/throughput targets and regression checks when production pipelines, API/dashboard or training workloads are implemented; do not present planned budgets as measurements.

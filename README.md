@@ -4,7 +4,7 @@ SAT-Dengue V2 is an AI-first, scientific-engineering repository for building an 
 
 ## Current Stage
 
-Stage 0 — Engineering Foundation (closure evidence pending). Stage 0 remains IN PROGRESS and G0 is UNVERIFIED pending independent review evidence; the merged foundation package and green main CI are recorded in `docs/roadmap/master-plan.md`. Stage 1 — Product Definition is next after G0 passes.
+**Stage 2 — Data Understanding is active; G2 is open.** Mauricio confirmed Stage 1 closure after merging PR #7. Initial EDA and DIVIPOLA coverage diagnostics are complete with documented exceptions. Next is comparison with a fresh 2013 SIVIGILA download being obtained by Mauricio. Historical G0 review evidence remains UNVERIFIED; see the [master plan](docs/roadmap/master-plan.md) for status and remaining decisions.
 
 ## Product Direction
 

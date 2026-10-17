@@ -16,5 +16,5 @@ User uploads new period input -> validation -> backend/API -> inference pipeline
 
 ## Architecture Decisions Deferred
 
-- Exact API contracts are deferred until dashboard functional scope is stabilized.
-- Exact input column schema is intentionally not frozen in foundation stage.
+- Dashboard functional scope was defined in Stage 1; final API contracts remain deferred until Stage 6 scientific/model evidence is available.
+- Exact input schema is not frozen during the current Stage 2 analysis.

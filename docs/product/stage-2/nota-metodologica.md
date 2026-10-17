@@ -2,7 +2,7 @@
 
 Original review: 2026-10-15. Documentary reconciliation: 2026-10-16.
 
-This note owns approved scientific choices, the previously reviewed literature context and remaining methodological decisions. Field definitions belong to the [canonical matrix](DATA-01-Priority%20Field%20Matrix.md), numerical findings to the [recognition report](DATA-01-Initial%20Recognition%20Report.md), and file/reference identities to the [provenance register](DATA-01-Source%20Provenance.md). This revision did not rerun EDA or train models. Stage 2 remains open and G2 is not approved.
+This note owns approved scientific choices, the previously reviewed literature context and remaining methodological decisions. Field definitions belong to the [canonical matrix](DATA-01-Priority%20Field%20Matrix.md), numerical findings to the [recognition report](DATA-01-Initial%20Recognition%20Report.md), and file/reference identities to the [provenance register](DATA-01-Source%20Provenance.md). Existing diagnostics were rerun during reconciliation; no new scientific analysis or model training was added. Stage 2 remains open and G2 is not approved.
 
 ## 1. Approved decisions and open policies
 
@@ -83,7 +83,7 @@ This proposal chooses no winner and authorizes no training during Stage 2.
 
 Residence and symptom onset are approved decisions. Official meanings are documented; historical aliases, case eligibility and information-availability rules remain pending.
 
-Saved EDA described onset quality, the 2013 temporal alerts and a shared January 2020 climate gap. It established neither causes nor correction policies. The 76 municipalities are observed coverage, not an officially reconciled denominator. Code formatting alone does not establish catalogue membership. Climate at residence does not prove where infection was acquired.
+Saved EDA described onset quality, the 2013 temporal alerts and a shared January 2020 climate gap. It established neither causes nor correction policies. The supplied DIVIPOLA snapshot establishes 76 expected municipalities; dengue and climate contain all 76, while severe dengue contains 71. Code formatting alone does not establish catalogue membership. Climate at residence does not prove where infection was acquired.
 
 No silent fallback dates, discarded year, climate imputation, deduplication or union of dengue streams is approved.
 
@@ -91,10 +91,14 @@ No silent fallback dates, discarded year, climate imputation, deduplication or u
 
 On 2026-10-16 both field matrices were merged into the indexed DATA-01 matrix, stale statements reconciled, current headers checked and file/reference identities recorded. Earlier INS PDF-extraction difficulty is no longer treated as missing official semantics. Verified reference definitions and unproven export lineage remain distinct.
 
-Private sources remain named references; no copies or synchronized `sources/` files were modified. Notebook code and saved outputs were preserved. This note does not claim a new audit of every paper's code, supplements or figures.
+Private sources remain named references; no copies or synchronized `sources/` files were modified. The notebook was subsequently extended with DIVIPOLA diagnostics and rerun; raw inputs were preserved. This note does not claim a new audit of every paper's code, supplements or figures.
 
 ## 8. Next bounded work
 
-Investigate source/export evidence for the 2013 anomaly and January 2020 gap, reconcile the official municipal inventory, and establish required-field and case-count semantics before channel and target work. Outbreak onsets can only be counted after channel/label definition and validation.
+Investigate source/export evidence for the 2013 anomaly and January 2020 gap, resolve the recorded municipal-code exceptions and establish required-field and case-count semantics before channel and target work. Outbreak onsets can only be counted after channel/label definition and validation.
 
 Later architecture choices must follow that evidence rather than dashboard tab count. Stage 2 remains open; G2 is not approved.
+
+## 2013 source comparison
+
+Mauricio is obtaining the original 2013 SIVIGILA download for comparison with the current export. The comparison has not occurred. Swapping onset and notification when onset is later remains an unapproved hypothesis: reversed order alone does not establish a column swap. Preserve original dates and defer any correction policy until source comparison and sensitivity evidence are reviewed.

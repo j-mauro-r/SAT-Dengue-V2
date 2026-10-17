@@ -1,7 +1,7 @@
 # PROD-02 — Users
 
 Status and Purpose
-**Document status: CLOSED — Phase A. APPROVED TO MAURICIO**
+**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
 Human Gate: APPROVED.
 This document defines only the primary user of SAT-Dengue V2. Detailed dashboard functionality and information requirements belong to PROD-04.
 Primary User — Approved Decision

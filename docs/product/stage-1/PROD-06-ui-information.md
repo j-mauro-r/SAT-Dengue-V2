@@ -2,7 +2,7 @@
 
 ## Status and Purpose
 
-**Document status: CLOSED — Phase C. APPROVED TO MAURICIO**
+**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
 **Human Gate: APPROVED.** 
 
 This document defines what information the SAT-Dengue V2 interface should expose, its product priority, and its intended source. It does not freeze a final API schema, storage model, visual layout, or scientific definition.

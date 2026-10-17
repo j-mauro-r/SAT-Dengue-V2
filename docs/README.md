@@ -1,81 +1,35 @@
-# SAT-Dengue-V2 Documentation Map
+# SAT-Dengue V2 — Documentation Map
 
-This index defines where authoritative knowledge lives in the repository.
+[Current status and stage gates](roadmap/master-plan.md) are maintained only in the master plan. **Stage 2 — Data Understanding is active; G2 is open.**
 
-## Authority Hierarchy
+## Authority
 
-1. Human-approved decisions and ADRs
-2. Governance policies
-3. Product/data/model/API contracts
-4. Active requirements and task contracts
-5. Architecture and methodology docs
-6. DWP plans for current work
-7. Implementation diffs
-8. Validation evidence
+Human-approved decisions and ADRs → governance → contracts → active requirements → architecture/methodology → DWP execution records → implementation → validation evidence. Historical evidence is dated; it must not override a later explicit human decision.
 
-## Domain Index
+## References by responsibility
 
-### Governance
+| Topic | Authoritative reference |
+|---|---|
+| Agent entry and commands | [AGENTS](../AGENTS.md) |
+| Governance and handoff | [AI Developer First](governance/ai-developer-first.md) |
+| DWP installation and planning policy | [DWP adoption](governance/dwp.md) |
+| Current audit and validation evidence | [Validation operations](operations/validation-and-evidence.md) |
+| Validation commands | [Testing guide](TESTING_GUIDE.md) |
+| Product direction | [Product definition](product/product-definition.md) |
+| Stage 1 requirements | [Business question](product/stage-1/PROD-01-business-question.md), [users](product/stage-1/PROD-02-users.md), [supported decisions](product/stage-1/PROD-03-supported-decisions.md), [dashboard story](product/stage-1/PROD-04-dashboard-master-user-story.md) |
+| Stage 1 workflow and draft contracts | [New period](product/stage-1/PROD-05-new-period-flow.md), [UI information](product/stage-1/PROD-06-ui-information.md), [prediction draft](product/stage-1/PROD-07-draft-prediction-contract.md), [input draft](product/stage-1/PROD-08-draft-input-contract.md) |
+| Stage 2 scope, results and next decisions | [Recognition report](product/stage-2/DATA-01-Initial%20Recognition%20Report.md) |
+| Stage 2 field definitions | [Canonical field matrix](product/stage-2/DATA-01-Priority%20Field%20Matrix.md) |
+| Stage 2 source identities and lineage | [Source provenance](product/stage-2/DATA-01-Source%20Provenance.md) |
+| Scientific decisions and literature | [Methodological note](product/stage-2/nota-metodologica.md) |
+| Executable Stage 2 evidence | [Official notebook](../notebooks/01_stage2_residence_onset_eda.ipynb) |
+| Data boundaries | [Data policy](data/data-policy.md) |
+| Security | [Security policy](SECURITY.md) |
+| Engineering and performance | [Engineering standards](standards/engineering-standards.md) |
+| Scientific rigor | [ML standards](standards/ml-scientific-standards.md) |
+| Architecture | [System overview](architecture/system-overview.md) |
+| Methodology | [CRISP-ML(Q)](methodology/crisp-mlq-framework.md) |
+| Contract maturity | [Contract lifecycle](contracts/contract-lifecycle.md) |
+| Foundation decisions | [ADR 0001](decisions/adr-0001-foundation-boundaries.md) |
 
-- `governance/ai-developer-first.md`: AI Developer First policy and operating boundaries.
-- `governance/dwp.md`: DWP adoption and conformance evidence log.
-
-### Product
-
-- `product/product-definition.md`: product objective, scope, and dashboard functional baseline.
-- [Stage 2 brief](product/stage-2/DATA-01-Data%20Understanding.md): scope, completed increments and review constraints.
-- [Recognition report](product/stage-2/DATA-01-Initial%20Recognition%20Report.md): historical recognition and saved corrected EDA findings.
-- [Canonical priority field matrix](product/stage-2/DATA-01-Priority%20Field%20Matrix.md): single field-definition reference; observed headers and pending aliases.
-- [Source provenance](product/stage-2/DATA-01-Source%20Provenance.md): input fingerprints, saved-run metadata and reference lineage limits.
-- [Methodological note](product/stage-2/nota-metodologica.md): approved residence/onset choices, literature context and open model decisions.
-
-### Notebooks
-
-- [Official Stage 2 notebook](../notebooks/01_stage2_residence_onset_eda.ipynb): bounded residence/onset EDA; saved outputs remain unchanged by documentary consolidation.
-
-### Methodology
-
-- `methodology/crisp-mlq-framework.md`: scientific lifecycle application.
-
-### Data
-
-- `data/data-policy.md`: data boundaries and lifecycle policy.
-
-### Architecture
-
-- `architecture/system-overview.md`: planned system structure and runtime flow.
-
-### Contracts
-
-- `contracts/contract-lifecycle.md`: contract ordering and freeze/change rules.
-
-### Standards
-
-- `standards/engineering-standards.md`: engineering/testing/Git/documentation standards.
-- `standards/ml-scientific-standards.md`: ML, leakage, reproducibility, and notebook standards.
-
-### Decisions
-
-- `decisions/adr-0001-foundation-boundaries.md`: accepted foundation-level decisions.
-
-### Operations
-
-- `operations/validation-and-evidence.md`: evidence-state and validation operations.
-
-### Roadmap
-
-- `roadmap/master-plan.md`: single durable master plan for all Stages 0–10 and their gate evidence.
-
-## Compatibility Entry Documents (Root docs/)
-
-The files below are maintained as stable entry points and summaries:
-
-- `PRODUCT_SPEC.md`
-- `ARCHITECTURE.md`
-- `STANDARDS.md`
-- `TESTING_GUIDE.md`
-- `DEVELOPMENT_COMMANDS.md`
-- `SECURITY.md`
-- `PERFORMANCE.md`
-- `AI_AGENT_ONBOARDING.md`
-- `AI_AGENT_COLLAB.md`
+Redundant compatibility summaries and the superseded Stage 2 brief were consolidated into the references above. Stage 1 documents retain distinct requirement/contract ownership; they are not duplicate implementation specifications.

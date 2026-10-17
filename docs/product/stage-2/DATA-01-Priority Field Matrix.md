@@ -4,7 +4,7 @@ Revision: 2026-10-16. Status: working definitions for Data Understanding; G2 is 
 
 This is the single field-definition reference for the bounded Stage 2 EDA. It consolidates the former `priority-field-matrix.md` and the previously indexed DATA-01 matrix. It does not replace the roadmap's DATA-02 download task or freeze a Data Contract.
 
-Related records: [scope and constraints](DATA-01-Data%20Understanding.md), [recognition and saved results](DATA-01-Initial%20Recognition%20Report.md), [methodological decisions](nota-metodologica.md), [source provenance](DATA-01-Source%20Provenance.md), and [official notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb).
+Related records: [recognition and saved results](DATA-01-Initial%20Recognition%20Report.md), [methodological decisions](nota-metodologica.md), [source provenance](DATA-01-Source%20Provenance.md), and [official notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb).
 
 ## 1. Approved decisions and evidence labels
 
@@ -32,8 +32,8 @@ All ten field names below are present in both epidemiological CSV headers (H) an
 | `FEC_NOT` | Notification date, S | Delay and availability diagnostics | Not a substitute for onset; cannot reconstruct every later revision. |
 | `ANO` | Candidate export alias of S `AÑO`, the epidemiological-week year | Source temporal reference | Verify export lineage and its assignment rule. A calendar-year or ISO comparison alone is not official validation. |
 | `SEMANA` | Epidemiological week, S | Source temporal reference | Confirm event-date and Colombian-calendar correspondence; do not assume ISO equivalence. |
-| `COD_DPTO_R` | Residence department, S | Departmental scope | Current code uses 50/Meta and 73/Tolima. Official inventory/version reconciliation remains pending. |
-| `COD_MUN_R` | Residence municipal code; S calls the residence field `MUN_PRO` | Municipal identity together with department | Header is confirmed; alias lineage and official catalogue membership are not. Preserve original text and distinguish format checks from catalogue validation. |
+| `COD_DPTO_R` | Residence department, S | Departmental scope | Current code uses 50/Meta and 73/Tolima. Current DIVIPOLA membership was checked in the executed diagnostic; historical catalogue applicability remains pending. |
+| `COD_MUN_R` | Residence municipal code; S calls the residence field `MUN_PRO` | Municipal identity together with department | Header and current catalogue membership diagnostics are confirmed; alias lineage and historical applicability remain pending. Preserve original text and distinguish format checks from catalogue validation. |
 | `Departamento_residencia` | Residence label in the export, H/N | Cross-check and display | Derivation/version not established. A label must not silently override a conflicting code. |
 | `Municipio_residencia` | Residence label in the export, H/N | Display and reconciliation | Do not group identical codes separately because labels differ. |
 | `COD_EVE` | Event code; D identifies 210 dengue, 220 severe dengue and 580 mortality | Keep the two inputs distinct | Separate event codes do not prove mutually exclusive cases; presence of 580 in these files is not established. |
@@ -66,7 +66,7 @@ All 18 names below are confirmed in the current climate header (H) and checked i
 | `date` | Calendar date, YYYY-MM-DD | Climate time axis |
 | `year`, `month`, `day_of_year` | Calendar components | Header checked; not loaded by the climate diagnostic |
 | `dpto_ccdgo`, `mpio_ccdgo` | Department and local municipal codes | Department loaded; local code header checked only |
-| `mpio_cdpmp` | Full municipal DIVIPOLA code | Candidate municipal key; catalogue vintage pending |
+| `mpio_cdpmp` | Full municipal DIVIPOLA code | Municipal comparison key; supplied current vintage recorded, historical applicability pending |
 | `dpto_cnmbr`, `mpio_cnmbr` | Department/municipality labels | Cross-check and display |
 | `rain_mm_day` | CHIRPS rainfall, mm/day | Missing-versus-zero diagnostics |
 | `temp_mean_c` | ERA5-Land air temperature at 2 m, °C | Missing-versus-zero diagnostics |
@@ -85,6 +85,6 @@ Saved outputs show no empty values in the nine climate variables within the insp
 
 Completed: both matrices reconciled into this file; used-field headers confirmed without reading patient records; source definitions distinguished from export mappings; source identities recorded; approved residence/onset decisions made consistent.
 
-Pending: official municipal inventory; export and extraction lineage; historical dictionary applicability; 2013 date anomaly; January 2020 recovery/treatment; case inclusion and identifier semantics; missing-onset policy; municipal eligibility; channel/target definition and information-availability rules. Model comparison remains a later evidence-based decision described in the methodological note.
+Pending: historical municipal-catalogue applicability; export and extraction lineage; historical dictionary applicability; 2013 date anomaly; January 2020 recovery/treatment; case inclusion and identifier semantics; missing-onset policy; municipal eligibility; channel/target definition and information-availability rules. Model comparison remains a later evidence-based decision described in the methodological note.
 
-No data were cleaned, joined or recalculated. No notebook code or saved outputs were changed. Stage 2 remains open; G2 is not approved.
+No raw data were corrected or joined. Notebook diagnostics were extended and re-executed; see the recognition report. Stage 2 remains open; G2 is not approved.

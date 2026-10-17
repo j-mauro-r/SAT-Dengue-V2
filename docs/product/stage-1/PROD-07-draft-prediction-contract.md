@@ -2,7 +2,7 @@
 
 ## Status and Purpose
 
-**Document status: CLOSSED — Phase E.**  
+**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
 **Human Gate: APPROVED.**  
 **Contract maturity: DRAFT PRODUCT/MODEL CONTRACT — NOT FROZEN.**
 
