@@ -65,3 +65,11 @@ Mapping rule:
 Fallback rule:
 
 - When command mapping is uncertain, default to the full gate set.
+
+## Stage 2 bounded panel review
+
+Synthetic regressions: `.venv/bin/python -m pytest tests/unit/test_stage2_panel_review.py -q`. They run without the large private snapshots. They cover independent joins, scenario removal, missingness, geography, non-swaps and calendar-adjacent support.
+
+Local data reconstruction: run `scripts/stage2_panel_review.py` with `--phase panel`, `--phase analysis`, `--phase rules`, then `--phase validate`, using the project environment. This requires supplied local raw/reference files and writes aggregate ignored outputs only. Validation checks content and source hashes; existence alone is not scientific acceptance.
+
+Also lint and format `scripts/stage2_panel_review.py` with Ruff, run the full unit suite and `mypy tests`, and run `scripts/check_markdown_links.py`. The new plan must pass scoped DWP conformance; report the pre-existing legacy-plan global failure separately without weakening or rewriting that historical gate.

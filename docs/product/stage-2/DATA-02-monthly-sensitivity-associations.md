@@ -1,5 +1,7 @@
 # DATA-02 Monthly Sensitivity and Temporal Associations (Exploratory)
 
+> Historical PLAN_005 results. The source joins and association interpretations below are superseded by the [PLAN_006 review](DATA-03-panel-review.md). Original outputs are preserved for audit. Its severe/climate joins lost support, unknown codes entered the panel, and missing reporting was filled with zeros. Do not use the historical candidate list as a validated selection.
+
 ## Scope
 This report documents a reproducible exploratory study of monthly municipality-level dengue (210) and severe dengue (220) behavior in Tolima and Meta under three anomaly-handling scenarios for 2013 date inconsistencies.
 

@@ -101,4 +101,4 @@ Later architecture choices must follow that evidence rather than dashboard tab c
 
 ## 2013 source comparison
 
-Mauricio is obtaining the original 2013 SIVIGILA download for comparison with the current export. The comparison has not occurred. Swapping onset and notification when onset is later remains an unapproved hypothesis: reversed order alone does not establish a column swap. Preserve original dates and defer any correction policy until source comparison and sensitivity evidence are reviewed.
+The supplied 2012–2014 references have now been compared in PLAN_004 and re-read in PLAN_006. All 481/66/540 naive inverted pairs are equal dates; no genuine non-equal swaps were found in the matched records. The anomaly persists in the supplied 2013 reference. Preserve original dates and retain S1/S2/S3 until a final policy is supported. See the [panel review](DATA-03-panel-review.md) and [bounded retrospective rules](DATA-04-retrospective-use-rules.md). This does not approve a final cleaning policy, channel or target.

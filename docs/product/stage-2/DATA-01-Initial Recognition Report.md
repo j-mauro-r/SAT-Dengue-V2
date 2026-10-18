@@ -80,7 +80,7 @@ Occurrence-based national counts from initial recognition are historical and do 
 
 ## Next decisions and stop point
 
-1. **2013 source comparison:** Mauricio is obtaining the original SIVIGILA 2013 download. Compare it with the current export before approving a correction; no new source has yet been compared. Swapping dates remains an unapproved hypothesis.
+1. **2013 source comparison completed:** PLAN_004/006 compared supplied annual references. PLAN_006 found zero genuine non-equal swapped pairs. Source authenticity and correct dates remain unresolved; see the [current panel review](DATA-03-panel-review.md).
 2. Resolve January 2020 climate absence, missing-onset policy, unresolved municipal codes and reporting/zero distinctions.
 3. Define case inclusion, adjustment/identifier semantics, municipal eligibility and information availability at historical cutoffs.
 4. Establish channel, target Y, leakage rules and Data Contract before G2 review. Geographic training strategy remains open.

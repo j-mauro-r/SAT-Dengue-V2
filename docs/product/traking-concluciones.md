@@ -1272,3 +1272,27 @@ Esta actualización agrega decisiones y estados específicos del estudio reprodu
 - **Motivo de deprecación o no adopción:** No aplica.
 - **Evidencia y autoridad:** `preflight_protocol.json`; notebook 02 secciones 12-13; `DATA-02-monthly-sensitivity-associations.md`.
 - **Límites y validación pendiente:** Sin reconstrucción as-of, la evidencia actual permanece exploratoria y no operacional.
+
+## Incremental PLAN_006 review (2026-10-18)
+
+These entries update current evidence without rewriting historical approvals. See [DATA-03](stage-2/DATA-03-panel-review.md) and [DATA-04](stage-2/DATA-04-retrospective-use-rules.md). Stage 2/G2 remain open.
+
+### DEC-108 Independent source joins and explicit territorial exceptions
+
+Status: APPLIED_IN_DIAGNOSTIC. The 76-code grid independently retains dengue, severe and climate. Unknown 50000/73000 rows stay outside municipal analysis but inside reconciliation. All 4,598 identified severe rows are conserved, with 21 unknown-code rows reported separately. This supersedes the PLAN_005 panel as current analytical evidence; old outputs remain unchanged.
+
+### DEC-109 Absence is not a certified zero
+
+Status: APPLIED_IN_DIAGNOSTIC. Mauricio confirmed no further evidence of reporting interruptions or incomplete downloads. Numerical retained-row counts and nullable disease-count proxies are separate. No confirmed disease zeros or operational completeness are asserted. Scenario removal has its own state.
+
+### DEC-110 Equal-date pairs do not demonstrate exchanged dates
+
+Status: VERIFIED_DIAGNOSTIC; resolves the metric question in DEC-101. Original annual references were re-read: the 481/66/540 naive inverted pairs are all equal dates, with zero genuine unequal-date inversions. This supersedes the earlier swap-signal interpretation, not the unresolved cause of 2013 anomalies.
+
+### DEC-111 Preserve 2013 scenarios and selected-sample association limits
+
+Status: APPLIED_IN_DIAGNOSTIC; final cleaning OPEN. S1/S2/S3 remain uncertainty alternatives. The descriptive prior-year maximum comparison is not an endemic channel. Repeated associations use common observed support, explicit municipal/time controls and no self-conditioning. Prior inferential p-values and candidate rankings are not carried forward; no predictive utility or causality is established.
+
+### DEC-112 Reproducible retrospective population and availability rules
+
+Status: APPLIED_IN_DIAGNOSTIC; operational policy OPEN. Count source notification rows, keep streams separate, preserve original onset and do not infer patient identity or deduplicate. Historical as-of snapshots cannot be reconstructed from the available consolidated files. DATA-04 and `retrospective_rules.json` govern this review only; final population, maturation, eligibility, channel, Y and Data Contract remain open.

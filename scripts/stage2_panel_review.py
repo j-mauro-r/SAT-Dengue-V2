@@ -775,6 +775,11 @@ def validate_sensitivity() -> None:
                 .any()
             )
     annual = pd.read_csv(OUT / "annual_reference_date_audit.csv")
+    assert set(annual.source_year) == {2012, 2013, 2014}
+    assert annual.matched_rows.gt(0).all()
+    assert annual.matched_rows.eq(annual.reference_scope_rows).all()
+    assert annual.comparable_pairs.gt(0).all()
+    assert annual.reference_unmatched_unique_rows.eq(0).all()
     assert annual.genuine_non_equal_inverted_pairs.eq(0).all()
     assert annual.naive_inverted_pairs.eq(annual.equal_date_inverted_pairs).all()
     print("PASS: local scenario losses, fixed support, adjusted controls and equal-date audit")
@@ -789,6 +794,156 @@ def run_analysis() -> None:
     validate_sensitivity()
 
 
+def eligibility_table(p: pd.DataFrame) -> pd.DataFrame:
+    d = p[p.common_source_window].copy()
+    for horizon in [1, 2]:
+        future = d.groupby("mun_full").dengue_count.shift(-horizon)
+        d[f"observed_pair_t{horizon}"] = d.dengue_count.notna() & future.notna()
+    d["observed_dengue"] = d.dengue_count.notna()
+    d["observed_severe"] = d.severe_count.notna()
+    d["complete_climate"] = d.climate_state.eq("complete")
+    for col in CLIMATE:
+        d["complete_climate"] &= d[col + "_valid_days"].eq(d.expected_climate_days)
+    result = (
+        d.groupby(["mun_full", "municipality_name", "department_name"])
+        .agg(
+            calendar_months=("year_month", "size"),
+            dengue_observed_months=("observed_dengue", "sum"),
+            severe_observed_months=("observed_severe", "sum"),
+            climate_complete_months=("complete_climate", "sum"),
+            observed_pairs_t1=("observed_pair_t1", "sum"),
+            observed_pairs_t2=("observed_pair_t2", "sum"),
+        )
+        .reset_index()
+    )
+    result["dengue_no_records_months"] = result.calendar_months - result.dengue_observed_months
+    result["reporting_completeness"] = "unknown"
+    result["operational_eligible"] = False
+    result["reason"] = "no_asof_snapshots_or_reporting_completeness_evidence"
+    return result
+
+
+def retrospective_rules() -> dict:
+    return {
+        "version": "stage2-review-v1",
+        "status": "bounded_retrospective_rules_not_final_data_contract",
+        "authority": "User-authorized three-step review; no extra reporting-completeness knowledge",
+        "population": (
+            "source notification rows by residence; not unique patients or confirmed incidence"
+        ),
+        "streams": {"dengue": "COD_EVE=210", "severe": "COD_EVE=220", "combine": False},
+        "municipality": (
+            "exact membership in supplied current DIVIPOLA catalog; historical changes unverified"
+        ),
+        "onset": "INI_SIN parsed day/month/year; no substitute or date swap",
+        "missing_onset": "exclude from monthly placement; retain aggregate reconciliation",
+        "unknown_geography": "quarantine with aggregate counts; no inferred assignment",
+        "case_inclusion": (
+            "all provided stream rows meeting geography and onset rules; no confirmed-only filter"
+        ),
+        "classification": (
+            "TIP_CAS initial, AJUSTE adjustment, confirmados supplied "
+            "retrospective flag; no inferred clinical severity equivalence"
+        ),
+        "duplicates": (
+            "retain rows; audit CONSECUTIVE and year/event composite keys; no "
+            "patient-level deduplication authority"
+        ),
+        "zero_policy": "recorded_count=0 means no retained rows; no certified disease zeros",
+        "absence": "unknown_reporting; scenario removal is a separate state",
+        "climate": (
+            "independent monthly daily-variable means plus observed and expected "
+            "day counts; no imputation; complete months for correlations"
+        ),
+        "scenario_policy": "S1/S2/S3 retained as uncertainty alternatives; production choice open",
+        "retrospective_window": ["2007-01", "2025-12"],
+        "association_support": (
+            "same keys across scenarios, observed current/future dengue, "
+            "available feature; selected sample only"
+        ),
+        "cutoff_audit": (
+            "hypothetical month end for timing counts; exact operational schedule "
+            "and maturation policy open"
+        ),
+        "timing_semantics": {
+            "INI_SIN": "event date",
+            "FEC_NOT": "notification date, not full availability proof",
+            "FEC_AJU": "entry/latest adjustment, not version history",
+            "FEC_ARC_XL": "export generation, not first record availability",
+        },
+        "historical_availability_reconstructed": False,
+        "operational_feature_use_approved": False,
+        "G2_closed": False,
+        "open_decisions": [
+            "final case population and episode identity",
+            "historical territorial applicability",
+            "reporting completeness and true zeros",
+            "January 2020 climate lineage",
+            "2013 source lineage and cleaning policy",
+            "historical versioned availability",
+            "operational cutoff and maturation",
+            "prediction eligibility minimum history",
+            "endemic channel, target Y and Data Contract",
+        ],
+    }
+
+
+def write_rules() -> None:
+    ps = panels()
+    save_json("retrospective_rules.json", retrospective_rules())
+    eligibility_table(ps["S1"]).to_csv(OUT / "municipality_coverage_eligibility.csv", index=False)
+    frames = []
+    for label in ["dengue", "severe"]:
+        a = pd.read_csv(OUT / f"{label}_availability_audit.csv")
+        a.insert(0, "stream", label)
+        a["after_month_end_pct"] = 100 * a.after_onset_month_end / a.onset_comparable_rows
+        a["asof_interpretation"] = "timing_warning_only_not_reconstructed_historical_availability"
+        frames.append(a)
+    pd.concat(frames).to_csv(OUT / "availability_summary.csv", index=False)
+    b = ps["S1"]
+    old = pd.read_csv(PREVIOUS / "monthly_panel_s1.csv", dtype={"mun_full": str})
+    joined = b.merge(
+        old[KEY + ["severe_count", "temp_mean_c"]], on=KEY, suffixes=("_review", "_previous")
+    )
+    summary = {
+        "panel_rows": len(b),
+        "municipalities": b.mun_full.nunique(),
+        "included_dengue": int(b.dengue_recorded_count.sum()),
+        "included_severe": int(b.severe_recorded_count.sum()),
+        "recovered_identified_severe_records": int(
+            joined.loc[joined.severe_count_previous.isna(), "severe_recorded_count"].sum()
+        ),
+        "recovered_temperature_cells": int(
+            (joined.temp_mean_c_previous.isna() & joined.temp_mean_c_review.notna()).sum()
+        ),
+        "scenario_totals": {s: int(p.dengue_recorded_count.sum()) for s, p in ps.items()},
+        "certified_zero_months": 0,
+        "operational_eligible_months": 0,
+        "population_warning": "notification rows; retrospective; no operational proof",
+    }
+    save_json("review_summary.json", summary)
+    validate_rules()
+    print(json.dumps(summary, indent=2))
+
+
+def validate_rules() -> None:
+    r = json.loads((OUT / "retrospective_rules.json").read_text())
+    assert not r["historical_availability_reconstructed"]
+    assert not r["operational_feature_use_approved"] and not r["G2_closed"]
+    assert not r["streams"]["combine"]
+    c = pd.read_csv(OUT / "municipality_coverage_eligibility.csv", dtype={"mun_full": str})
+    assert set(c.mun_full) == set(catalog().mun_full)
+    assert len(c) == 76 and c.calendar_months.eq(228).all()
+    assert not c.operational_eligible.any()
+    assert (c.dengue_observed_months + c.dengue_no_records_months).eq(c.calendar_months).all()
+    a = pd.read_csv(OUT / "availability_summary.csv")
+    assert len(a) == 8
+    assert a.after_onset_month_end.le(a.date_available_rows).all()
+    assert (a.date_available_rows + a.date_missing_rows).eq(a.onset_comparable_rows).all()
+    assert (ROOT / "docs/product/stage-2/DATA-04-retrospective-use-rules.md").exists()
+    print("PASS: retrospective rules, availability denominators and no operational approval")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -799,8 +954,12 @@ def main() -> None:
         build_panels()
     elif args.phase == "analysis":
         run_analysis()
+    elif args.phase == "rules":
+        write_rules()
     elif args.phase == "validate":
         validate_panels()
+        validate_sensitivity()
+        validate_rules()
         record_inputs()
     else:
         raise NotImplementedError(f"Phase {args.phase} is not implemented yet")

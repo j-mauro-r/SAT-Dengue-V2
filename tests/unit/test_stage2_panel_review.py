@@ -97,3 +97,36 @@ def test_sensitivity_support_is_common_and_excludes_unknown_target_and_partial_c
     frames["S2"].loc[2, "target"] = float("nan")
     frames["S3"].loc[3, "target_window"] = False
     assert review.common_support(frames, "temp_mean_c").tolist() == [True, False, False, False]
+
+
+def test_rules_never_promote_retrospective_rows_to_operational_approval() -> None:
+    rules = review.retrospective_rules()
+    assert rules["historical_availability_reconstructed"] is False
+    assert rules["operational_feature_use_approved"] is False
+    assert rules["G2_closed"] is False
+    assert rules["streams"]["combine"] is False
+    assert "no certified disease zeros" in rules["zero_policy"]
+    assert "no patient-level deduplication authority" in rules["duplicates"]
+
+
+def test_rules_eligibility_counts_calendar_adjacent_observations_only() -> None:
+    d = pd.DataFrame(
+        {
+            "mun_full": ["50001"] * 4,
+            "municipality_name": ["EXAMPLE"] * 4,
+            "department_name": ["Meta"] * 4,
+            "year_month": ["2020-01", "2020-02", "2020-03", "2020-04"],
+            "common_source_window": [True] * 4,
+            "dengue_count": [1.0, float("nan"), 2.0, 3.0],
+            "severe_count": [float("nan")] * 4,
+            "climate_state": ["complete"] * 4,
+            "expected_climate_days": [31, 29, 31, 30],
+        }
+    )
+    for col in review.CLIMATE:
+        d[col + "_valid_days"] = d.expected_climate_days
+    result = review.eligibility_table(d)
+    assert result.loc[0, "observed_pairs_t1"] == 1
+    assert result.loc[0, "observed_pairs_t2"] == 1
+    assert result.loc[0, "dengue_no_records_months"] == 1
+    assert not result.loc[0, "operational_eligible"]

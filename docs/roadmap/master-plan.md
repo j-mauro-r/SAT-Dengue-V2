@@ -25,8 +25,8 @@ The human-authorized progression to Stage 2 is recorded separately from the unre
 
 - Documentary definitions consolidated; residence in Tolima/Meta and symptom onset (`INI_SIN`) are approved.
 - Bounded EDA and DIVIPOLA territorial/continuity diagnostics completed with exceptions. Supplied DANE provenance is recorded; diagnostic completion does not establish complete reporting or historical boundary validity.
-- **Next:** investigate the 2013 onset-after-notification anomaly. Mauricio is downloading the original 2013 SIVIGILA source; comparison has not yet occurred. Date swapping is a hypothesis, not an approved correction.
-- Then resolve January 2020 climate absence, missing-onset and case-inclusion/identifier policies, municipal eligibility, historical availability/leakage rules, endemic-channel method, target Y and Data Contract.
+- PLAN_006 reconciled the independent-source municipal panel, compared S1/S2/S3 and re-read the 2012–2014 references. All reported inverted pairs were equal dates; no genuine exchange was found. The 2013 treatment remains open. See [review](../product/stage-2/DATA-03-panel-review.md).
+- Bounded [retrospective rules](../product/stage-2/DATA-04-retrospective-use-rules.md) now distinguish notification rows, exceptions and unknown reporting. **Next:** resolve missing provenance/reporting and historical availability evidence, production case/identity and eligibility rules, January 2020 climate absence, endemic-channel method, target Y and Data Contract. No operational eligibility or G2 approval is inferred.
 - Model granularity remains open. Stage 3 requires explicit G2 approval.
 
 ### Historical foundation evidence

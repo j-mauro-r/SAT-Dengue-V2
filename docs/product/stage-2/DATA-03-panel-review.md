@@ -22,7 +22,7 @@ Climate retains daily coverage counts and expected calendar days; incomplete mon
 
 ## Validation
 
-The panel gate checks municipal membership, unique keys, exhaustive source reconciliation, severe/climate equality across scenarios, unknown states and January 2020. Synthetic tests exercise a month with climate/severe records and no dengue, complete scenario removal, unknown codes and date parsing. Later plan tasks add sensitivity and availability evidence before the review closes.
+The panel gate checks municipal membership, unique keys, exhaustive source reconciliation, severe/climate equality across scenarios, unknown states and January 2020. Synthetic tests exercise a month with climate/severe records and no dengue, complete scenario removal, unknown codes and date parsing. Sensitivity and availability checks are included in the subsequent phases.
 
 ## Step 1 results
 
@@ -41,3 +41,13 @@ Annual references are re-read from the supplied Excel files and matched on uniqu
 The association rerun retains the previous variables and horizons, on the same eligible keys across scenarios. Unknown current/future dengue months are excluded, which creates a selected observed-positive sample and prevents population-wide interpretation. Climate requires complete daily coverage. Adjusted lead correlations include municipal effects, trend, annual seasonality and current dengue rank for other predictors; self-conditioning and contemporaneous adjusted rows are omitted. No p-values, significance claims or feature-selection recommendation are issued because the prior permutation design was not established for missing-coverage data.
 
 Decision for this bounded study: preserve S1/S2/S3 as uncertainty scenarios. No option is approved as the true 2013 history or a production cleaning policy. Prefer repairing source lineage before any irreversible scientific selection; otherwise carry the scenarios into a later human decision.
+
+## Measured review outcomes
+
+- Among valid municipalities, S1/S2/S3 retain 235,111 / 227,368 / 226,587 dengue notification rows. Exclusions are 7,743 / 8,524; the difference from the original 7,772 / 8,556 is entirely in quarantined geographic codes. All scenarios retain the same 4,598 severe rows and the same 17,252 complete municipality-month climate observations.
+- Against the earlier panel on the same valid keys, 113 severe rows and 5,765 temperature cells are restored. All 118 previously lost severe rows are accounted for: 113 belong to valid municipalities and five belong to unresolved codes retained in exceptions.
+- Of 528 municipality-months with the required pre-2013 observed history, 234/132/118 exceed the prior observed maximum under S1/S2/S3. This substantial change is descriptive sensitivity, not outbreak detection.
+- Re-reading annual references matches 10,715 / 20,296 / 15,216 rows. All 481 / 66 / 540 naive inverted pairs have equal dates; genuine unequal-date inversions are zero. The 8,556 anomalies also appear in the matched 2013 reference. Upstream truth and extraction lineage remain unresolved.
+- S1 pooled raw T+1 correlations are approximately 0.798 for dengue, 0.508 for severe, 0.215 for confirmation, 0.022 for rainfall and 0.013 for temperature. The corresponding adjusted leads are 0.674, 0.050, 0.046, -0.025 and 0.054. Sample sizes differ by feature (9,632 / 1,710 / 9,632 / 9,577 / 9,577); these numbers do not compare predictive utility. The severe sample only includes months with recorded severe notifications.
+
+See [the use-rules guide](DATA-04-retrospective-use-rules.md) for population, identity, missingness, eligibility and historical availability. All values derive from the local aggregate output tables. Raw inputs and historical PLAN_004/005 evidence remain unchanged.
