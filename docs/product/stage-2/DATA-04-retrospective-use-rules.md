@@ -10,7 +10,7 @@ Version: stage2-review-v1; baseline policy addendum 2026-10-18 (DEC-113). The ex
 4. Preserve all rows meeting those conditions. `CONSECUTIVE` alone is not a patient identifier: 762 dengue rows belong to repeated values across this departmental scope, whereas the observed year-plus-identifier candidate is unique. This is an export-key observation, not evidence that there are no repeated clinical episodes. No automatic deduplication or union of streams is justified.
 5. Interpret TIP_CAS, AJUSTE, confirmation, hospitalization and vital status separately as documented in the [field matrix](DATA-01-Priority%20Field%20Matrix.md). `confirmados` is a supplied retrospective flag with unresolved generation/version semantics. AJUSTE 0/7 are not automatic discard codes. Future populations containing different states require a new review; the input-hash guard prevents unnoticed snapshot replacement.
 
-## What missing information means
+## Historical PLAN_006 missing-information policy (superseded for the baseline by DEC-120)
 
 - `*_recorded_count` counts retained source rows. Its zero means that no retained rows were found, not that disease was absent.
 - Nullable `dengue_count` and `severe_count` stay missing when no retained records exist. Reporting completeness remains unknown throughout.
@@ -18,7 +18,11 @@ Version: stage2-review-v1; baseline policy addendum 2026-10-18 (DEC-113). The ex
 - No confirmed disease-zero month is certified. Such certification would require an explicit zero report or another reliable completeness source.
 - Climate joins independently. Monthly values are means of the available daily variables, retaining their original units (daily rainfall mean is not monthly rainfall total). Expected versus observed days and variable-specific valid-day counts accompany them. No interpolation is performed. January 2020 remains missing for all 76 municipalities.
 
-## Which months can participate
+## Approved baseline zero-count rule (2026-10-18)
+
+Under DEC-120, municipality-months with no epidemiological source records within the supplied coverage are represented as zero counts for the baseline, separately for dengue and severe dengue. These are aggregate zero-case months under the approved reliance on supplied data, not fabricated patient records or independent proof of reporting completeness. Their provenance remains identifiable. A covered zero-case month is a valid value in the five-year same-month P75 reference; a genuinely unavailable historical observation is not. Do not infer municipal coverage from its first positive case. Months outside supplied coverage, unassignable case records, scenario removals and missing climate are distinct; January 2020 climate is not zero-filled. Previous generated PLAN_006 outputs retain the earlier policy and require regeneration before claims about the new zero-inclusive baseline/target population.
+
+## Which months can participate (historical diagnostic support)
 
 All 76 valid municipalities are represented in the audit grid. The shared descriptive window is January 2007–December 2025, 228 calendar months per municipality. Coverage is published by municipality; a municipal row in this inventory is not approval for forecasting.
 
@@ -59,3 +63,8 @@ Resolved for the supplied baseline: all notification classifications are include
 ```
 
 The three source snapshots and supplied references stay read-only. Local outputs live in `data/interim/stage2_panel_review/`: `retrospective_rules.json`, `municipality_coverage_eligibility.csv`, `availability_summary.csv`, classification/identity audits, `review_summary.json`, reconciliations, scenario comparisons and source hashes. No individual-level export is produced.
+
+
+## Approved channel-method clarification (2026-10-18)
+
+DEC-119 selects the INS median-and-percentile channel family, with excess strictly above P75, for the already approved monthly five-year same-month project configuration. The official [INS period-IV 2023 report, page 3](https://www.ins.gov.co/buscador-eventos/Informesdeevento/DENGUE%20PE%20IV%202023.pdf) documents weekly histories and distinguishes P75 from Bortman's upper confidence limit. Project-specific monthly/history choices remain explicit adaptations. That report does not provide a numerical sample-percentile interpolation convention. This subsequent method approval supersedes earlier method-selection uncertainty; target sensitivity and G2 remain unverified/open.
