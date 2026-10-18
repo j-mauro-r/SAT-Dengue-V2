@@ -64,3 +64,36 @@ def test_panel_date_parser_does_not_swap_ambiguous_dates() -> None:
     parsed = review.parse_date(pd.Series(["03/04/2013 12:00:00 a. m.", "31/02/2013", None]))
     assert parsed.iloc[0] == pd.Timestamp("2013-04-03")
     assert parsed.iloc[1:].isna().all()
+
+
+def test_sensitivity_equal_dates_are_not_true_swaps() -> None:
+    d = pd.DataFrame(
+        {
+            "ini_current": pd.to_datetime(["2013-01-01", "2013-01-02", "2013-01-03"]),
+            "not_current": pd.to_datetime(["2013-01-01", "2013-01-03", "2013-01-02"]),
+            "ini_reference": pd.to_datetime(["2013-01-01", "2013-01-02", "2013-01-02"]),
+            "not_reference": pd.to_datetime(["2013-01-01", "2013-01-03", "2013-01-03"]),
+        }
+    )
+    result = review.date_pair_metrics(d)
+    assert result["naive_inverted_pairs"] == 2
+    assert result["equal_date_inverted_pairs"] == 1
+    assert result["genuine_non_equal_inverted_pairs"] == 1
+
+
+def test_sensitivity_support_is_common_and_excludes_unknown_target_and_partial_climate() -> None:
+    f = pd.DataFrame(
+        {
+            "common_source_window": [True] * 4,
+            "target_window": [True] * 4,
+            "dengue_count": [1.0, 2.0, 3.0, 4.0],
+            "target": [2.0, 3.0, 4.0, 5.0],
+            "temp_mean_c": [20.0] * 4,
+            "temp_mean_c_valid_days": [31, 30, 31, 31],
+            "expected_climate_days": [31] * 4,
+        }
+    )
+    frames = {s: f.copy() for s in ["S1", "S2", "S3"]}
+    frames["S2"].loc[2, "target"] = float("nan")
+    frames["S3"].loc[3, "target_window"] = False
+    assert review.common_support(frames, "temp_mean_c").tolist() == [True, False, False, False]
