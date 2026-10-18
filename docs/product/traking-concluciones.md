@@ -16,7 +16,7 @@ El [diccionario canónico](stage-2/DATA-01-Priority%20Field%20Matrix.md) conserv
 
 ## Consecutivos, estados y fechas
 
-Los códigos DEC existentes conservan su identidad. Por reducción explícita del alcance se retiraron del registro vigente 18 entradas ajenas a datos/modelo o redundantes con la conservación de fuentes. Sus códigos quedan **reservados y no se reutilizan**: DEC-001, DEC-003, DEC-004, DEC-005, DEC-006, DEC-007, DEC-008, DEC-011, DEC-049, DEC-052, DEC-053, DEC-054, DEC-055, DEC-056, DEC-057, DEC-058, DEC-063, DEC-064. Esta salida por alcance no es deprecación de una decisión científica. Su contenido anterior se preserva en el historial de la conversación; no se crea otro documento competidor. Los nuevos códigos son DEC-065 a DEC-102 y continúan la numeración anterior; los huecos en el índice son intencionales.
+Los códigos DEC existentes conservan su identidad. Por reducción explícita del alcance se retiraron del registro vigente 18 entradas ajenas a datos/modelo o redundantes con la conservación de fuentes. Sus códigos quedan **reservados y no se reutilizan**: DEC-001, DEC-003, DEC-004, DEC-005, DEC-006, DEC-007, DEC-008, DEC-011, DEC-049, DEC-052, DEC-053, DEC-054, DEC-055, DEC-056, DEC-057, DEC-058, DEC-063, DEC-064. Esta salida por alcance no es deprecación de una decisión científica. Su contenido anterior se preserva en el historial de la conversación; no se crea otro documento competidor. Los nuevos códigos llegan hasta DEC-107 y continúan la numeración anterior; los huecos en el índice son intencionales.
 
 - **ACEPTADA:** existe instrucción explícita o acuerdo/documento vigente que la respalda, limitado a su alcance. No implica implementación completa ni evidencia predictiva favorable.
 - **PROPUESTA:** recomendación del usuario, experto, propuesta de grado o asistente sin adopción final documentada. Proponer escenarios no selecciona uno como política de limpieza.
@@ -1200,3 +1200,75 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 | 2026-10-17 | Conservación del español, las fechas históricas conocidas y los vínculos de reemplazo. | La fecha de hoy se aplica al registro/auditoría sin fabricar aprobación original; en DEC-014/028/045 se corrige la atribución previa a una fecha general de fundamentos, que no acreditaba una aprobación estadística específica. |
 
 Para un cambio posterior registrar: fecha, código, estado anterior/nuevo, evidencia de autoridad, razón, deprecación y sucesora cuando apliquen, e impacto sobre conteos, Y, variables, particiones, calibración y resultados que deban regenerarse. No se elige hoy un tratamiento de 2013, conjunto definitivo de variables, arquitectura ganadora o método de calibración.
+
+## Actualización incremental PLAN_005 (2026-10-17)
+
+Esta actualización agrega decisiones y estados específicos del estudio reproducible de sensibilidad mensual S1/S2/S3 y asociaciones temporales exploratorias del PLAN_005. No reabre decisiones cerradas previas ni convierte correlaciones en evidencia causal o predictiva concluyente.
+
+| Código | Decisión | Estado | Reemplazada por |
+|---|---|---|---|
+| [DEC-103](#dec-103) | Reproducir y bloquear interpretación sin ajuste de cardinalidad anómala 2013 | ACEPTADA | No aplica |
+| [DEC-104](#dec-104) | Escenarios S1/S2/S3 como análisis de sensibilidad exploratoria acotada | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-105](#dec-105) | Controlar estacionalidad, tendencia y autocorrelación al contrastar asociaciones | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-106](#dec-106) | Tratar asociaciones como candidatas y no como utilidad predictiva demostrada | ACEPTADA | No aplica |
+| [DEC-107](#dec-107) | Mantener pendiente la reconstrucción as-of para evaluación operativa real | ABIERTA | No aplica |
+
+<a id="dec-103"></a>
+### DEC-103 Reproducir y bloquear interpretación sin ajuste de cardinalidad anómala 2013
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en ejecución de PLAN_005). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Toda comparación de sensibilidad debe iniciar con reproducción de 8.556 anomalías, 784 coincidencias año-mes y 7.772 diferencias año-mes; si falla, se documenta discrepancia antes de interpretar.
+- **Justificación:** Evita interpretar sensibilidad con base en un conjunto mal definido o no reproducible.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** `data/interim/stage2_monthly_sensitivity_associations/anomaly_cardinality_summary.csv`; `anomaly_discrepancy_log.md`; notebook 02 sección 3.
+- **Límites y validación pendiente:** Confirmar cardinalidad no resuelve por sí sola la causa de la inconsistencia ni autoriza correcciones automáticas.
+
+<a id="dec-104"></a>
+### DEC-104 Escenarios S1/S2/S3 como análisis de sensibilidad exploratoria acotada
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (ejecución acotada en PLAN_005). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Ejecutar exactamente S1/S2/S3 y aplicar diferencias únicamente al grupo anómalo, manteniendo base municipio-mes comparable entre escenarios.
+- **Justificación:** Permite cuantificar sensibilidad sin mezclar con tratamientos A-D anteriores ni alterar reglas del resto de registros.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** `monthly_panel_s1.csv`, `monthly_panel_s2.csv`, `monthly_panel_s3.csv`; `sensitivity_summary_by_geo.csv`; notebook 02 secciones 4-6.
+- **Límites y validación pendiente:** Es evidencia exploratoria de sensibilidad; no selecciona una política definitiva de limpieza para producción.
+
+<a id="dec-105"></a>
+### DEC-105 Controlar estacionalidad, tendencia y autocorrelación al contrastar asociaciones
+
+- **Estado:** APLICADA_EN_DIAGNÓSTICO.
+- **Fecha de decisión o incorporación:** 2026-10-17 (ejecución acotada en PLAN_005). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Reportar asociaciones crudas y controladas, y acompañar inferencia exploratoria con multiplicidad y pruebas de permutación compatibles con dependencia temporal.
+- **Justificación:** Reduce sobreinterpretación de correlaciones dominadas por estacionalidad/autocorrelación y explicita incertidumbre.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** `associations_raw.csv`; `associations_controlled.csv`; `associations_method_notes.md`; notebook 02 secciones 9-10.
+- **Límites y validación pendiente:** No equivale a validación predictiva fuera de muestra ni a prueba causal.
+
+<a id="dec-106"></a>
+### DEC-106 Tratar asociaciones como candidatas y no como utilidad predictiva demostrada
+
+- **Estado:** ACEPTADA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en PLAN_005). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Las asociaciones estables identificadas se usan solo para priorización de candidatos a evaluación posterior, sin declararlas utilidad predictiva probada.
+- **Justificación:** Mantiene coherencia con el estado abierto de Y final, validación temporal y disponibilidad as-of.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** `associations_stability_summary.csv`; `DATA-02-monthly-sensitivity-associations.md`; notebook 02 sección 11.
+- **Límites y validación pendiente:** Requiere protocolo de entrenamiento/validación temporal estricto antes de cualquier afirmación operativa.
+
+<a id="dec-107"></a>
+### DEC-107 Mantener pendiente la reconstrucción as-of para evaluación operativa real
+
+- **Estado:** ABIERTA.
+- **Fecha de decisión o incorporación:** 2026-10-17 (incorporación documental en PLAN_005). **Revisada el:** 2026-10-17.
+- **Deprecada el:** No aplica. **Reemplaza a:** No aplica. **Reemplazada por:** No aplica.
+- **Decisión, propuesta o práctica documentada:** Antes de evaluar desempeño operativo se debe reconstruir qué información estaba disponible en cada corte temporal, incluyendo maduración de reportes.
+- **Justificación:** Los exportes retrospectivos consolidados pueden inducir optimismo si se usan como sustituto de disponibilidad histórica real.
+- **Motivo de deprecación o no adopción:** No aplica.
+- **Evidencia y autoridad:** `preflight_protocol.json`; notebook 02 secciones 12-13; `DATA-02-monthly-sensitivity-associations.md`.
+- **Límites y validación pendiente:** Sin reconstrucción as-of, la evidencia actual permanece exploratoria y no operacional.
