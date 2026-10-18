@@ -40,7 +40,7 @@ Annual references are re-read from the supplied Excel files and matched on uniqu
 
 The association rerun retains the previous variables and horizons, on the same eligible keys across scenarios. Unknown current/future dengue months are excluded, which creates a selected observed-positive sample and prevents population-wide interpretation. Climate requires complete daily coverage. Adjusted lead correlations include municipal effects, trend, annual seasonality and current dengue rank for other predictors; self-conditioning and contemporaneous adjusted rows are omitted. No p-values, significance claims or feature-selection recommendation are issued because the prior permutation design was not established for missing-coverage data.
 
-Decision for this bounded study: preserve S1/S2/S3 as uncertainty scenarios. No option is approved as the true 2013 history or a production cleaning policy. Prefer repairing source lineage before any irreversible scientific selection; otherwise carry the scenarios into a later human decision.
+Subsequent human decision (2026-10-18, DEC-113): use S1 for the baseline, retaining the supplied 2013 records and dates without anomaly-based deletion, replacement or reassignment. Replacement/removal experiments may be considered only after establishing that baseline. S2/S3 remain historical sensitivity evidence. This policy does not establish the true historical dates; source-lineage uncertainty remains.
 
 ## Measured review outcomes
 

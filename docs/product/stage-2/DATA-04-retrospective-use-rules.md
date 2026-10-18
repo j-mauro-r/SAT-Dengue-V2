@@ -1,10 +1,10 @@
 # DATA-04 — Rules for the bounded retrospective review
 
-Version: stage2-review-v1. These rules make PLAN_006 reproducible; they do not freeze the final Data Contract, target, training population or G2. Mauricio confirmed that no additional information is available about municipal reporting interruptions or incomplete downloads.
+Version: stage2-review-v1; baseline policy addendum 2026-10-18 (DEC-113). The existing machine-readable review outputs retain their original diagnostic version. These rules make PLAN_006 reproducible; they do not freeze the final Data Contract, target, training population or G2. Mauricio confirmed that no additional information is available about municipal reporting interruptions or incomplete downloads.
 
 ## What is counted
 
-1. Keep dengue (event 210) and severe dengue (event 220) separate. Count supplied **notification rows**, not unique patients, episodes or confirmed incidence. Both probable and confirmed source classifications remain in this diagnostic population.
+1. Keep dengue (event 210) and severe dengue (event 220) separate. Count supplied **notification rows**, not unique patients, episodes or confirmed incidence. Mauricio approved all supplied records for the baseline on 2026-10-18 (DEC-118): include probable and confirmed classifications without a confirmation-status filter. All source rows are preserved and reconciled; rows outside the study scope or without usable municipality/onset are accounted for separately rather than assigned invented keys.
 2. Attribute rows to municipality of residence using exact code membership in the supplied current DIVIPOLA catalog. Codes 50000/73000 remain in aggregate exceptions. The current catalog does not prove historical boundary stability.
 3. Assign the original symptom-onset date, parsed as day/month/year. A missing/unparseable onset cannot be placed in a month and is reconciled separately. Never replace it with notification or exchange dates automatically.
 4. Preserve all rows meeting those conditions. `CONSECUTIVE` alone is not a patient identifier: 762 dengue rows belong to repeated values across this departmental scope, whereas the observed year-plus-identifier candidate is unique. This is an export-key observation, not evidence that there are no repeated clinical episodes. No automatic deduplication or union of streams is justified.
@@ -45,9 +45,9 @@ With the available consolidated exports, historical as-of states cannot be recon
 
 ## Decisions and remaining evidence
 
-Applied now: original onset, residence codes, exhaustive row reconciliation, independent source joins, explicit unknown reporting, separate source streams and S1/S2/S3 as uncertainty alternatives. These are bounded review rules.
+Applied now: original onset, residence codes, exhaustive row reconciliation, independent source joins, explicit unknown reporting, separate source streams and historical S1/S2/S3 sensitivity evidence. Mauricio subsequently selected S1 for the baseline: preserve the supplied 2013 records without anomaly-based deletion, date replacement or reassignment. Any replacement/removal experiments come after the baseline (DEC-113).
 
-Open: final case definition and episode identity; real reporting zeros/completeness; historical territory; January 2020 extraction provenance; true 2013 dates and final treatment; historic availability and maturation; prediction eligibility; endemic channel, Y and Data Contract. The plan can finish with these explicitly open; Stage 2 cannot be declared frozen from this review.
+Resolved for the supplied baseline: all notification classifications are included (DEC-118), with no unsupported duplicate removal (DEC-114). Open: independently verified episode identity; real reporting zeros/completeness; historical territory; January 2020 extraction provenance; true 2013 dates (baseline retention is decided); historic availability and maturation; prediction eligibility; operational endemic-channel and label construction, and Data Contract. Future-excess Y at T+1/T+2 and special attention to new onsets are already accepted in DEC-013/035/038. The plan can finish with these explicitly open; Stage 2 cannot be declared frozen from this review.
 
 ## Reproduce and inspect
 

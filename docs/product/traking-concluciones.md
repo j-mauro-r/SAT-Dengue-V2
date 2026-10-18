@@ -1291,8 +1291,66 @@ Status: VERIFIED_DIAGNOSTIC; resolves the metric question in DEC-101. Original a
 
 ### DEC-111 Preserve 2013 scenarios and selected-sample association limits
 
-Status: APPLIED_IN_DIAGNOSTIC; final cleaning OPEN. S1/S2/S3 remain uncertainty alternatives. The descriptive prior-year maximum comparison is not an endemic channel. Repeated associations use common observed support, explicit municipal/time controls and no self-conditioning. Prior inferential p-values and candidate rankings are not carried forward; no predictive utility or causality is established.
+Status: APPLIED_IN_DIAGNOSTIC; baseline policy subsequently selected by DEC-113 (2026-10-18). S1/S2/S3 remain historical sensitivity evidence; S1 is now the approved baseline treatment. The descriptive prior-year maximum comparison is not an endemic channel. Repeated associations use common observed support, explicit municipal/time controls and no self-conditioning. Prior inferential p-values and candidate rankings are not carried forward; no predictive utility or causality is established.
 
 ### DEC-112 Reproducible retrospective population and availability rules
 
 Status: APPLIED_IN_DIAGNOSTIC; operational policy OPEN. Count source notification rows, keep streams separate, preserve original onset and do not infer patient identity or deduplicate. Historical as-of snapshots cannot be reconstructed from the available consolidated files. DATA-04 and `retrospective_rules.json` govern this review only; final population, maturation, eligibility, channel, Y and Data Contract remain open.
+
+
+## Baseline decision and target clarification (2026-10-18)
+
+<a id="dec-113"></a>
+### DEC-113 Keep the supplied 2013 records unchanged for the baseline
+
+- **Status:** ACCEPTED by Mauricio in the project conversation on 2026-10-18.
+- **Decision:** Build the baseline with the 2013 records exactly as supplied. Do not delete, replace, exchange or reassign dates because of the 8,556 onset-after-notification anomalies. This selects S1 for the baseline.
+- **Sequence:** Only after the baseline has been established may replacement or removal of those anomaly records be evaluated as separate experiments. The existing S2/S3 diagnostics remain historical evidence, not a modified baseline or authorization to run new experiments now.
+- **Relationship:** Resolves the baseline-treatment question left open in DEC-111 and strengthens DEC-041. It does not establish which historical date is true. DEC-042's proposed reassignment is not adopted for the baseline.
+- **Scope accounting:** The 8,556 anomalies refer to the original departmental audit. Of these, 8,524 have valid municipal geography in the reviewed panel; the other 32 remain in geographic exceptions. No record is newly excluded because its dates are anomalous; existing geographic/missing-date reconciliation remains explicit.
+- **Effect:** Future baseline construction must use original supplied dates and no anomaly-based exclusion. Previous diagnostic outputs and input snapshots are preserved. No baseline model, new experiment or G2 approval is claimed by this documentation update.
+
+### Existing target agreement — clarification, not a new definition
+
+DEC-013 already accepts distinct T+1/T+2 forecasts; DEC-035 accepts binary future excess above the applicable historical limit; DEC-038 accepts special evaluation of new outbreak onsets. These agreements remain authoritative. The assistant's subsequent checklist described Y too broadly as undefined. DEC-037 still records the operational channel method/window/seasonal reference and count construction as open; DEC-039 records the exact onset-transition rule as proposed. Historical P75 in DEC-036 is not automatically an approved V2 parameter. No existing target decision is revoked or silently promoted by this clarification.
+
+
+## User observations and operational proposals (2026-10-18)
+
+<a id="dec-114"></a>
+### DEC-114 No duplicate-case removal without precise evidence
+
+Status: ACCEPTED working assumption, explicit human instruction on 2026-10-18. For the baseline, assume no demonstrated duplicate cases and preserve supplied notification rows. Do not eliminate cases based on suspected identity or repeated export identifiers alone. This is a preparation rule, not an empirical proof of patient/episode uniqueness. Revisit only if precise evidence becomes available. No current row is removed by this decision.
+
+<a id="dec-115"></a>
+### DEC-115 Rely on supplied observations without inventing reporting interruptions
+
+Status: ACCEPTED, explicit human instruction on 2026-10-18. Use available records; do not infer municipal reporting cessation or exclude municipalities on that unsupported assumption. Do not estimate or fabricate unreported cases. Completeness is unverified, not a demonstrated reporting failure. A zero retained-row count describes the export; it does not certify that no disease occurred. Existing geographic/date exceptions remain separately reconciled. This decision alone does not supply a disease-zero rule, final modeling eligibility threshold or an imputation policy.
+
+<a id="dec-116"></a>
+### DEC-116 User-reported climate construction and reconstruction option
+
+Status: SOURCE_ACCOUNT_RECORDED. Mauricio states that the climate file was constructed by downloading Google Earth Engine information and linking municipalities through DIVIPOLA codes. This supplies human provenance evidence, not independent verification of the exact generating run, products/versions, spatial aggregation, conversions or missing January 2020. Rebuilding/enriching the climate dataset is an available option if necessary; no new download, source replacement or expanded climate experiment is initiated by this entry.
+
+### Target specification clarification from the supplied screenshot
+
+The screenshot reiterates the existing agreement: for municipality m and horizon h in {1,2}, Y(m,t,h)=1[C(m,t+h)>U(m,t+h)]. C is the monthly count under an agreed case-population rule; U is the applicable historical excess limit. Y=0 applies when both quantities are defined and C does not exceed U; an unknown count/limit is not automatically Y=0. The model estimates the probability of excess, rather than directly producing the historical label.
+
+The documented candidate new-onset evaluation is Inicio(m,s)=1[Exceso(m,s)=1 and Exceso(m,s-1)=0]. Thus T+2 onset compares t+2 with t+1. Preserve DEC-039's proposed operational status: the screenshot is a prior assistant explanation, not independent human approval of every persistence/re-entry/unknown-state rule. DEC-035/038 remain accepted. The notification-classification population for C is now resolved by DEC-118: include all supplied classifications. Remaining construction choices are the method and seasonal/history window for U (P75 is a V1 precedent), and allowed history at each temporal evaluation cutoff. The 2013 baseline treatment is now resolved by DEC-113. The case-count limit U is separate from the probability threshold used to issue an alert.
+
+<a id="dec-117"></a>
+### DEC-117 Re-run forecasts when uploaded historical data change
+
+Status: USER_PROPOSAL_RECORDED; detailed product behavior not yet frozen. Mauricio proposes an initial run on the morning of the first day of the month and re-execution when prior-month records change, conditional on minimum input quality. Re-running should apply whether the preceding result showed an alert or not. No monotonicity guarantee exists: additional rows, corrections, changed features or a revised reference can increase, decrease or preserve predicted risk. A recommendation is to retain each input version, execution time and horizon-specific output so revisions remain inspectable. No new alert-latching policy, retraining schedule or operating cutoff is approved here.
+
+Re-execution addresses updates after deployment; it does not reconstruct the incomplete files that a historical user would have possessed. Consolidated retrospective evaluation remains distinct from a real-time simulation. Future saved input snapshots could provide evidence for that later evaluation. These limitations do not require estimating the unknowable number of unreported cases now.
+
+
+<a id="dec-118"></a>
+### DEC-118 Include all supplied records in the baseline population
+
+- **Status:** ACCEPTED. Explicit instruction from Mauricio on 2026-10-18: use ALL records; omit none based on case classification.
+- **Rule:** Include probable, laboratory-confirmed and epidemiological-link-confirmed notification rows. Do not apply a confirmed-only filter, nor discard records because TIP_CAS, AJUSTE, Estado_final_de_caso, nom_est_f_caso or confirmados indicates a non-confirmed classification. Preserve supplied records and their original values. Keep dengue and severe-dengue streams separate; this does not authorize summing them as unique patients.
+- **Relationship:** Resolves the probable-versus-confirmed baseline population choice. Complements DEC-113 (unchanged 2013), DEC-114 (no unsupported duplicate removal) and DEC-115 (rely on supplied observations). Earlier statements that this classification choice remains open are superseded.
+- **Accounting:** All supplied rows remain preserved and reconciled. The established Tolima/Meta residence scope remains in effect; rows outside it are not silently attributed to the study municipalities. Rows without usable geography or onset remain visible in separate reconciliation, rather than being deleted or assigned invented municipality/month values. Therefore inclusion of all source records does not imply that every record can contribute to a valid municipality-month count.
+- **Implementation status:** The reviewed S1 panel already counts both probable and confirmed rows without a confirmation filter. This update records the approved population; it does not rerun a model or alter the source snapshots. No new assumptions are made about codes absent from these supplied snapshots. Channel construction and G2 remain open.
