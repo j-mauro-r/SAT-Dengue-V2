@@ -14,6 +14,8 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Governance and handoff | [AI Developer First](governance/ai-developer-first.md) |
 | DWP installation and planning policy | [DWP adoption](governance/dwp.md) |
 | Current audit and validation evidence | [Validation operations](operations/validation-and-evidence.md) |
+| Stage 2 PR preservation and reconciliation | [Reconciliation and recovery](operations/stage2-pr-reconciliation.md) |
+| Source-linked historical outbreak context | [Outbreak event register](research/colombia-dengue-outbreak-events.md) |
 | Validation commands | [Testing guide](TESTING_GUIDE.md) |
 | Product direction | [Product definition](product/product-definition.md) |
 | Stage 1 requirements | [Business question](product/stage-1/PROD-01-business-question.md), [users](product/stage-1/PROD-02-users.md), [supported decisions](product/stage-1/PROD-03-supported-decisions.md), [dashboard story](product/stage-1/PROD-04-dashboard-master-user-story.md) |
