@@ -1,3 +1,5 @@
+> **DEPRECATED — experimental EDA retired on 2026-10-19 by Mauricio.** Historical evidence only; the [active decision register](../../../product/traking-concluciones.md) governs current scientific decisions. Instructions, pending reruns, results and dates below describe the historical experiment and are not current execution requirements.
+
 # SAT-Dengue V2 — Stage 2 Recognition and Coverage Results
 
 Updated: 2026-10-16. **Stage 2 active; G2 open.** This is the current results reference, replacing accumulated recognition/EDA addenda and the superseded initial brief. Diagnostic completion is separate from data-quality approval.
@@ -6,14 +8,14 @@ Updated: 2026-10-16. **Stage 2 active; G2 open.** This is the current results re
 
 Case attribution is **residence in Tolima/Meta**, with **symptom onset (`INI_SIN`)** as the approved epidemiological date. Dengue and severe dengue remain separate. Analysis cutoff stays fixed at 2026-10-15; rerun time is not the analytical cutoff.
 
-- [Official notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb): calculations and saved outputs.
+- [Official notebook](../notebooks/01_stage2_residence_onset_eda.ipynb): calculations and saved outputs.
 - [Date inconsistency investigation](DATA-01-2013-date-inconsistency-investigation.md): bounded analysis of 8,556 `INI_SIN > FEC_NOT` records using 2012-2014 references.
 - [Canonical field matrix](DATA-01-Priority%20Field%20Matrix.md): meanings and unresolved export aliases.
 - [Source provenance](DATA-01-Source%20Provenance.md): snapshot identities and lineage limits.
 - [Methodological note](nota-metodologica.md): scientific decisions and literature.
-- [Master plan](../../roadmap/master-plan.md): stage progress and next work.
+- [Master plan](../../../roadmap/master-plan.md): stage progress and next work.
 
-No raw correction, date replacement, imputation, case-stream union, channel construction, target definition or training was performed. Raw data remain restricted under the [data policy](../../data/data-policy.md); outputs contain aggregates only.
+No raw correction, date replacement, imputation, case-stream union, channel construction, target definition or training was performed. Raw data remain restricted under the [data policy](../../../data/data-policy.md); outputs contain aggregates only.
 
 ## Input inventory
 

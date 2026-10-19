@@ -1,3 +1,5 @@
+> **DEPRECATED — experimental EDA retired on 2026-10-19 by Mauricio.** Historical evidence only; the [active decision register](../../../product/traking-concluciones.md) governs current scientific decisions. Instructions, pending reruns, results and dates below describe the historical experiment and are not current execution requirements.
+
 # SAT-Dengue V2 — Case Date and Geographic Modeling Strategy
 
 Original review: 2026-10-15. Documentary reconciliation: 2026-10-16.

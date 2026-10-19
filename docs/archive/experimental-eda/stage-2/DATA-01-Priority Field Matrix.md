@@ -1,10 +1,12 @@
+> **DEPRECATED — experimental EDA retired on 2026-10-19 by Mauricio.** Historical evidence only; the [active decision register](../../../product/traking-concluciones.md) governs current scientific decisions. Instructions, pending reruns, results and dates below describe the historical experiment and are not current execution requirements.
+
 # SAT-Dengue V2 — Canonical Field Dictionary and Priority Matrix
 
 Revision: 2026-10-17. Status: complete inventory of the current epidemiological export fields; working interpretations for Data Understanding; G2 is not approved.
 
 This file is the **single source of truth for field definitions** for `data/raw/dengue.csv` and `data/raw/dengue_grave.csv`. Both files share the same 69-column ordered header; section 3 documents every column once and applies to both files. Do not maintain a second field dictionary or a competing appendix elsewhere. The existing environmental definitions remain in this document for the companion climate input. Full field coverage does not mean every definition, export transformation or historical encoding has been resolved, and does not freeze a Data Contract.
 
-Related records: [recognition and saved results](DATA-01-Initial%20Recognition%20Report.md), [methodological decisions](nota-metodologica.md), [source provenance](DATA-01-Source%20Provenance.md), and [official notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb). Those records own analytical results, decisions, lineage and execution respectively; they should reference this file for meanings rather than duplicate a dictionary.
+Related records: [recognition and saved results](DATA-01-Initial%20Recognition%20Report.md), [methodological decisions](nota-metodologica.md), [source provenance](DATA-01-Source%20Provenance.md), and [official notebook](../notebooks/01_stage2_residence_onset_eda.ipynb). Those records own analytical results, decisions, lineage and execution respectively; they should reference this file for meanings rather than duplicate a dictionary.
 
 ## 1. Approved decisions, scope and evidence
 
@@ -34,7 +36,7 @@ S/D/E1–E3 retain the IDs used in the provenance register. B/X/M/P/A/C are addi
 | P | [INS collection/processing manual, 2026-01-02](https://www.ins.gov.co/conocenos/sig/SIG/MNL-R02.4030-004.pdf) | Initial-entry/latest-adjustment date, Excel-generation date and decoded output labels. Does not document the current CSV generation recipe. |
 | A | [INS-published Valle del Cauca operational research plan 2025, Annex 1, viewer pp. 98–100](https://www.ins.gov.co/Portalweb2025/Plan_Investigaci%C3%B3n_Operativa_Valle%20del%20Cauca_2025.pdf) | Supporting inventory of export names, not the controlling dengue dictionary. Contains tautological labels, duplicates and incorrect descriptions; never overrides technical S/B/M/P definitions. |
 | E1–E3 | Pinned environmental dictionary, workflow and extraction script in the [provenance register](DATA-01-Source%20Provenance.md) | Project references for the 18 climate fields; not INS epidemiological definitions. |
-| H / N | Current read-only CSV audit / [saved notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb) | Empirical schema/domains / saved diagnostics. Neither establishes an official rule. |
+| H / N | Current read-only CSV audit / [saved notebook](../notebooks/01_stage2_residence_onset_eda.ipynb) | Empirical schema/domains / saved diagnostics. Neither establishes an official rule. |
 
 Exact source-to-export lineage remains pending across the 2007–2025 epidemiological-year range. The PDF previously linked as `diccionario-datos-sivigila-2026-VF.pdf` could not be retrieved in the audit and is not verified evidence here. Current manuals cannot retroactively certify every historical encoding.
 

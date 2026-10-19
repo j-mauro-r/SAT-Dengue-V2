@@ -21,7 +21,7 @@ Pinned installation references (historical, not instructions to reinstall):
 - Work incrementally by bounded HU/task. No project-wide Full DWP or Full plan per Stage is required or created.
 - Use a DWP when task complexity/risk/dependencies justify it, or when Mauricio explicitly requests one. Direct edits can proceed directly under `AGENTS.md`.
 - Follow local create/execute/refine/resume/status/verify delegators and the installed skill's versioned lifecycle. Do not mix plan generations or fabricate gate evidence.
-- `.dwp/` contains ignored local runtime history, except tracked `.dwp/config.json`. Notebook/results and the current audit remain discoverable through the documentation index.
+- `.dwp/` contains ignored local runtime history, except tracked `.dwp/config.json`. Retired experimental EDA is discoverable through the historical archive in the documentation index; the active scientific decision register and current audit remain indexed separately. Historical plan locations, contracts and journals are retained unchanged; retirement notices are additive and do not rewrite past gates.
 - Planning policy does not waive validation, independent review, human merge approval or explicit no-publication restrictions.
 
 ## Current status versus historical installation

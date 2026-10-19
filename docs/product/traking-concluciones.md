@@ -1,3 +1,21 @@
+# Current decision status — experimental EDA retirement on 2026-10-19
+
+Mauricio explicitly retired **all experimental EDA** after using it to approach and refine the data. This file remains the single active **Stage 2 scientific decision register**. The [master plan](../roadmap/master-plan.md), governance and Stage 1 requirements keep their separate responsibilities. This section takes precedence over the historical entries below, including earlier references to pending January data or mandatory reruns of retired notebooks.
+
+| Topic | Current status and limit |
+|---|---|
+| Experimental EDA | DEPRECATED: both exploratory notebooks, all eight Stage 2 experimental reports, PLAN_005 derivatives and subsequent experimental panel/association analyses are archived. See the [historical archive](../archive/experimental-eda/README.md) and its [path/hash manifest](../archive/experimental-eda/manifest.json). Archived outputs are not current feature selection, target validation or predictive evidence. |
+| Approved decisions | Preserved: residence in Tolima/Meta and symptom onset; unchanged supplied 2013 dates/records (DEC-113); separate epidemiological streams and no unsupported duplicate deletion (DEC-114); all supplied notification classifications (DEC-118); approved initial Y and horizons (DEC-119/121); covered no-case months counted as zero (DEC-120). Retirement does not revoke an approved decision or approve an experimental choice. |
+| January 2020 climate | Existing local recovery/incorporation evidence records 2,356 municipality-days = 76 municipalities × 31 days, with nine climate variables in the Tolima/Meta scope. The incorporated `google_earth_engine.csv`, epidemiological sources and backups are unchanged by this cleanup. This is not a claim of national completeness. The old January-gap statements below are historical and superseded for that scope. |
+| Provenance limitations | Original manifest reconstruction was limited; the historical reconciliation records `prior_equals_baseline = false` and `all_passed = false`. The archive does not repair or conceal that mismatch or overwritten backup-metadata history. Source hashes and recovery evidence remain locally inspectable in `data/interim/stage2_manifest_traceability/` and `data/interim/stage2_january_2020_incorporation/`. |
+| Field definitions | The former field matrix and source-provenance report are historical references in the archive; they do not constitute a newly approved or frozen Data Contract. |
+| Next analytical work | Do not rerun or maintain retired studies solely to refresh their outputs. Define any future EDA as a new bounded task using the refined sources and current approved decisions. Numerical target/evaluability specifications, future approved sensitivity work and monthly aggregation rules still need their own evidence; this cleanup supplies none. |
+| Stage gate | Stage 2/G2 remain OPEN. No Data/Target Freeze, model training or stage closure is asserted. |
+
+The earlier reconciliation and full decision history are retained below, with links relocated to archived evidence. Historical counts, dates, states, dictionaries and "pending" wording describe their original review, not the current work queue. Decision IDs remain stable and are not reused.
+
+---
+
 # Current decision status — reconciliation on 2026-10-18
 
 This current-status section takes precedence over superseded open questions in the preserved historical sections below. The complete local register and complete PR #9 document are retained verbatim for traceability; earlier pending statements are not silently converted into current requirements.
@@ -31,7 +49,7 @@ Es una **auditoría documental**, no una nueva ejecución del análisis, revisi�
 
 Resultado del alcance: **46 entradas anteriores conservadas y 38 incorporadas = 84 entradas científicas**, de las cuales 29 aceptadas, 16 abiertas, 13 propuestas, 12 históricas no adoptadas, 10 aplicadas en diagnóstico, tres reemplazadas y una documentada en fuente. Los estados no equivalen entre sí.
 
-El [diccionario canónico](stage-2/DATA-01-Priority%20Field%20Matrix.md) conserva la única definición de campos. El [registro de procedencia](stage-2/DATA-01-Source%20Provenance.md) identifica insumos; el [informe de reconocimiento](stage-2/DATA-01-Initial%20Recognition%20Report.md) y la [investigación de 2013](stage-2/DATA-01-2013-date-inconsistency-investigation.md) documentan resultados. Este archivo registra decisiones y sus límites; no duplica el diccionario ni convierte observaciones en aprobaciones.
+El [diccionario canónico](../archive/experimental-eda/stage-2/DATA-01-Priority%20Field%20Matrix.md) conserva la única definición de campos. El [registro de procedencia](../archive/experimental-eda/stage-2/DATA-01-Source%20Provenance.md) identifica insumos; el [informe de reconocimiento](../archive/experimental-eda/stage-2/DATA-01-Initial%20Recognition%20Report.md) y la [investigación de 2013](../archive/experimental-eda/stage-2/DATA-01-2013-date-inconsistency-investigation.md) documentan resultados. Este archivo registra decisiones y sus límites; no duplica el diccionario ni convierte observaciones en aprobaciones.
 
 ## Consecutivos, estados y fechas
 
@@ -69,16 +87,16 @@ Códigos de las fuentes privadas: **SRC-E** = notas del experto; **SRC-R** = rep
 | Código | Fuente / ubicación | Uso y límite |
 |---|---|---|
 | PRODUCT | [Definición del producto](product-definition.md) | Solo objetivo, horizontes, familias de modelos y referencias predictivas. |
-| NOTE | [Nota de decisiones y fuentes](stage-2/nota-metodologica.md) | Solo contenidos de datos/modelo y alternativas; no se registran marcos de gestión. |
-| MATRIX | [Diccionario de campos](stage-2/DATA-01-Priority%20Field%20Matrix.md) | Significados, códigos, fechas, prioridades y limitaciones del export. |
-| RECOG | [Reconocimiento y cobertura](stage-2/DATA-01-Initial%20Recognition%20Report.md) | Resultados agregados guardados; algunas secciones de próximos pasos están desactualizadas. |
-| PROV | [Registro de procedencia](stage-2/DATA-01-Source%20Provenance.md) | Identidad y límites de fuentes, versiones y ventanas. |
-| INVEST | [Investigación de 2013](stage-2/DATA-01-2013-date-inconsistency-investigation.md) | Comparación anual y escenarios diagnósticos ejecutados; no corrección aprobada. |
+| NOTE | [Nota de decisiones y fuentes](../archive/experimental-eda/stage-2/nota-metodologica.md) | Solo contenidos de datos/modelo y alternativas; no se registran marcos de gestión. |
+| MATRIX | [Diccionario de campos](../archive/experimental-eda/stage-2/DATA-01-Priority%20Field%20Matrix.md) | Significados, códigos, fechas, prioridades y limitaciones del export. |
+| RECOG | [Reconocimiento y cobertura](../archive/experimental-eda/stage-2/DATA-01-Initial%20Recognition%20Report.md) | Resultados agregados guardados; algunas secciones de próximos pasos están desactualizadas. |
+| PROV | [Registro de procedencia](../archive/experimental-eda/stage-2/DATA-01-Source%20Provenance.md) | Identidad y límites de fuentes, versiones y ventanas. |
+| INVEST | [Investigación de 2013](../archive/experimental-eda/stage-2/DATA-01-2013-date-inconsistency-investigation.md) | Comparación anual y escenarios diagnósticos ejecutados; no corrección aprobada. |
 | DATA | [Política de datos](../data/data-policy.md) | Solo preservación de insumos y tratamiento restringido de registros individuales; no infraestructura. |
 | PROD4 / PROD5 / PROD6 | [Cobertura](stage-1/PROD-04-dashboard-master-user-story.md), [validación de insumos](stage-1/PROD-05-new-period-flow.md), [semántica analítica](stage-1/PROD-06-ui-information.md) | Solo cláusulas de cobertura, calidad, datos o explicabilidad; excluir diseño de interfaz y operación del producto. |
 | ML | [Estándares científicos del modelo](../standards/ml-scientific-standards.md) | Validación temporal, prevención de fuga y evidencia comparable. |
 | PROD1 / PROD7 / PROD8 | [Pregunta científica](stage-1/PROD-01-business-question.md), [semántica de predicción](stage-1/PROD-07-draft-prediction-contract.md), [variables de entrada](stage-1/PROD-08-draft-input-contract.md) | Extraer solo población, horizonte, disponibilidad y variables; ignorar interfaz/API. |
-| Cuaderno | [01_stage2_residence_onset_eda.ipynb](../../notebooks/01_stage2_residence_onset_eda.ipynb) | Código, parámetros y resultados guardados; celdas numeradas desde 0 para localizar evidencia. No reejecutado en esta auditoría. |
+| Cuaderno | [01_stage2_residence_onset_eda.ipynb](../archive/experimental-eda/notebooks/01_stage2_residence_onset_eda.ipynb) | Código, parámetros y resultados guardados; celdas numeradas desde 0 para localizar evidencia. No reejecutado en esta auditoría. |
 | PLAN003 | `.dwp/plans/PLAN_003_validate_divipola_municipal_coverage/` | Solo tareas 1–3 y evidencia de catálogo, cobertura y continuidad; no decisiones de gestión del plan. |
 | PLAN004 / CONCLUSIONES004 | `.dwp/plans/PLAN_004_dengue_date_inconsistency_investigation/`, tareas 1–5 y `analysis_results/CONCLUSIONS.md` | Comparabilidad, llaves, fechas y escenarios; sus archivos locales ignorados pueden no existir en un checkout limpio. |
 | Datos de referencia | `data/sources/` | Tres fuentes anuales 2012/2013/2014, dos catálogos DIVIPOLA, `Listados_DIVIPOLA.xlsx` y `divipola-provenance.json`; no nuevas muestras de pacientes. |
@@ -1294,7 +1312,7 @@ Esta actualización agrega decisiones y estados específicos del estudio reprodu
 
 ## Incremental PLAN_006 review (2026-10-18)
 
-These entries update current evidence without rewriting historical approvals. See [DATA-03](stage-2/DATA-03-panel-review.md) and [DATA-04](stage-2/DATA-04-retrospective-use-rules.md). Stage 2/G2 remain open.
+These entries update current evidence without rewriting historical approvals. See [DATA-03](../archive/experimental-eda/stage-2/DATA-03-panel-review.md) and [DATA-04](../archive/experimental-eda/stage-2/DATA-04-retrospective-use-rules.md). Stage 2/G2 remain open.
 
 ### DEC-108 Independent source joins and explicit territorial exceptions
 

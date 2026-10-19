@@ -1,3 +1,5 @@
+> **DEPRECATED — experimental EDA retired on 2026-10-19 by Mauricio.** Historical evidence only; the [active decision register](../../../product/traking-concluciones.md) governs current scientific decisions. Instructions, pending reruns, results and dates below describe the historical experiment and are not current execution requirements.
+
 # DATA-02 Monthly Sensitivity and Temporal Associations (Exploratory)
 
 > Historical PLAN_005 results. The source joins and association interpretations below are superseded by the [PLAN_006 review](DATA-03-panel-review.md). Original outputs are preserved for audit. Its severe/climate joins lost support, unknown codes entered the panel, and missing reporting was filled with zeros. Do not use the historical candidate list as a validated selection.

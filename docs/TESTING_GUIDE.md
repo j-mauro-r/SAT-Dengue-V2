@@ -66,14 +66,15 @@ Fallback rule:
 
 - When command mapping is uncertain, default to the full gate set.
 
-## Stage 2 bounded panel review
+## Stage 2 data integrity and retired experimental EDA
 
-Synthetic regressions: `.venv/bin/python -m pytest tests/unit/test_stage2_panel_review.py -q`. They run without the large private snapshots. They cover independent joins, scenario removal, missingness, geography, non-swaps and calendar-adjacent support.
+The [experimental EDA](archive/experimental-eda/README.md) was retired on 2026-10-19. Its notebooks, reports and pending rerun instructions are historical. Do not run the old panel/analysis/rules phases as the default Stage 2 workflow. New analysis requires a new bounded task and current acceptance criteria; retirement does not approve scientific outputs or close G2.
 
-Local data reconstruction: run `scripts/stage2_panel_review.py` with `--phase panel`, `--phase analysis`, `--phase rules`, then `--phase validate`, using the project environment. This requires supplied local raw/reference files and writes aggregate ignored outputs only. Validation checks content and source hashes; existence alone is not scientific acceptance.
+Keep all existing tests enabled. Synthetic regressions (`.venv/bin/python -m pytest tests/unit/test_stage2_panel_review.py -q`) run without private snapshots and preserve independent-join, missingness, geography, non-swap and calendar-adjacent safeguards. The three tests against ignored historical monthly-association outputs remain artifact-consistency checks; their passing status does not make those results current analytical evidence. The historical analytical scripts stay at their import paths with deprecation docstrings and unchanged logic because tests and local historical validators depend on them.
 
-Also lint and format `scripts/stage2_panel_review.py` with Ruff, run the full unit suite and `mypy tests`, and run `scripts/check_markdown_links.py`. The new plan must pass scoped DWP conformance; report the pre-existing legacy-plan global failure separately without weakening or rewriting that historical gate.
+Active data-integrity safeguards: `.venv/bin/python -m pytest tests/unit/test_january_2020_climate_incorporation.py tests/unit/test_stage2_manifest_traceability.py -q`. These verify incorporation/traceability behavior on test fixtures; they do not download or reintegrate source data. Run the full unit suite, Ruff checks, `mypy tests` and `scripts/check_markdown_links.py` under the foundation gate policy above. Also lint/format any touched Python script.
 
+For this archival migration, local PLAN_012 validates the path/hash manifest, byte-identical notebooks, restricted report transformations, unchanged script logic, original data/evidence hashes and preserved historical plan records. It is a one-time migration check, not a new recurring scientific gate. New DWP work must pass scoped conformance; report pre-existing legacy-plan global failures separately without rewriting their records or weakening validation.
 
 ## Clean-checkout CI installation
 

@@ -1,3 +1,5 @@
+> **DEPRECATED — experimental EDA retired on 2026-10-19 by Mauricio.** Historical evidence only; the [active decision register](../../../product/traking-concluciones.md) governs current scientific decisions. Instructions, pending reruns, results and dates below describe the historical experiment and are not current execution requirements.
+
 # SAT-Dengue V2 — Source Provenance Register
 
 Revision: 2026-10-16. Branch: `Stage2/Data-Understanding`. Status: documentary traceability established for current files; upstream extraction lineage and G2 remain pending.
@@ -12,7 +14,7 @@ Current bytes, headers and notebook-execution metadata are identified without pa
 | Saved numerical findings | [Recognition report](DATA-01-Initial%20Recognition%20Report.md) |
 | Bounded anomaly comparison evidence | [Date inconsistency investigation](DATA-01-2013-date-inconsistency-investigation.md) |
 | Approved scientific decisions | [Methodological note](nota-metodologica.md) |
-| Executable evidence | [Official notebook](../../../notebooks/01_stage2_residence_onset_eda.ipynb) |
+| Executable evidence | [Official notebook](../notebooks/01_stage2_residence_onset_eda.ipynb) |
 
 ## 2. Current file identities
 
@@ -31,7 +33,7 @@ Initial inspection HEAD: `8e90d554bd0c0f29ecbbcad78caf723427eb3e94`. HEAD at fin
 
 The analytical cutoff is fixed at **2026-10-15**; audit date is **2026-10-16**. The current execution start and environment are saved in the notebook's parameters/environment outputs. Package versions are evidence of this local run; a dedicated EDA dependency lock is not yet provided by the project. Do not confuse local execution time, extraction time and analytical cutoff. The original 2026-10-15 run did not capture input hashes; later hashes cannot retroactively prove its exact input bytes.
 
-The notebook now loads and validates DIVIPOLA before climate coverage checks. It records supplied metadata, compares hash-bound snapshots, and exports aggregate evidence. The [recognition report](DATA-01-Initial%20Recognition%20Report.md) owns findings/artifact descriptions; [validation operations](../../operations/validation-and-evidence.md) owns current audit outcomes.
+The notebook now loads and validates DIVIPOLA before climate coverage checks. It records supplied metadata, compares hash-bound snapshots, and exports aggregate evidence. The [recognition report](DATA-01-Initial%20Recognition%20Report.md) owns findings/artifact descriptions; [validation operations](../../../operations/validation-and-evidence.md) owns current audit outcomes.
 
 ## 4. External source register
 

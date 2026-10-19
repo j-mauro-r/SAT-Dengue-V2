@@ -1,3 +1,5 @@
+> **DEPRECATED — experimental EDA retired on 2026-10-19 by Mauricio.** Historical evidence only; the [active decision register](../../../product/traking-concluciones.md) governs current scientific decisions. Instructions, pending reruns, results and dates below describe the historical experiment and are not current execution requirements.
+
 # DATA-03 — Independent-source monthly panel review
 
 Stage 2 remains open. This bounded review implements the three-step request recorded in PLAN_006_stage2_panel_review. The user has no further evidence of reporting interruptions or incomplete downloads.

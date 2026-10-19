@@ -1,3 +1,10 @@
+"""DEPRECATED: experimental EDA retired on 2026-10-19.
+
+Retained at this path for historical reproduction and regression imports.
+See docs/archive/experimental-eda/README.md and the active decision register.
+Do not treat its outputs as current scientific acceptance or a required rerun.
+"""
+
 from __future__ import annotations
 
 import argparse
