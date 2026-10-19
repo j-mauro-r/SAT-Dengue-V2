@@ -134,6 +134,36 @@ def _eligible_mask(panel: pd.DataFrame, spec: VariableSpec) -> pd.Series:
     raise ValueError(f"Unsupported eligible_rule: {spec.eligible_rule}")
 
 
+def _y_non_evaluable_reasons(frame: pd.DataFrame, horizon: int) -> dict[str, int]:
+    """Summarize non-evaluable Y reasons for a horizon.
+
+    Args:
+        frame: Panel slice containing y_evaluable/y_status columns.
+        horizon: Horizon number (1 or 2).
+
+    Returns:
+        Mapping of status reason to count.
+    """
+
+    evaluable_column = f"y_evaluable_t{horizon}"
+    status_column = f"y_status_t{horizon}"
+    required = {evaluable_column, status_column}
+    if not required.issubset(frame.columns):
+        return {}
+
+    non_evaluable = frame[~frame[evaluable_column].fillna(False).astype(bool)]
+    if non_evaluable.empty:
+        return {}
+
+    return {
+        str(key): int(value)
+        for key, value in non_evaluable[status_column]
+        .astype(str)
+        .value_counts(dropna=False)
+        .items()
+    }
+
+
 def build_missingness_inventory(
     panel_development: pd.DataFrame,
     specs: list[VariableSpec],
@@ -199,9 +229,15 @@ def build_missingness_inventory(
     denominator_note: dict[str, object] = {
         "development_start": str(calendar.min()),
         "development_end": str(calendar.max()),
+        "examples_total": int(len(work)),
         "municipality_count": len(municipalities),
         "calendar_months_per_municipality": len(calendar),
         "calendar_rows_total": int(len(calendar_frame)),
+        "in_coverage_rows": int(work["in_epi_coverage"].fillna(False).sum()),
+        "y_non_evaluable_reasons": {
+            "t1": _y_non_evaluable_reasons(work, 1),
+            "t2": _y_non_evaluable_reasons(work, 2),
+        },
         "variable_denominators": variable_denominators,
     }
 
@@ -209,12 +245,33 @@ def build_missingness_inventory(
         if spec.name not in merged.columns:
             continue
 
-        eligible = _eligible_mask(merged, spec) & merged["is_in_panel"]
+        eligible_base = _eligible_mask(merged, spec).astype(bool)
+        eligible = eligible_base & merged["is_in_panel"]
         value_missing = merged[spec.name].isna()
         eligible_missing = eligible & value_missing
 
-        outside_panel = ~merged["is_in_panel"]
-        out_of_coverage = merged["is_in_panel"] & ~_eligible_mask(merged, spec)
+        outside_panel = ~merged["is_in_panel"].astype(bool)
+        out_of_coverage = merged["is_in_panel"] & ~eligible_base
+
+        non_evaluable_rows = 0
+        non_evaluable_reasons: dict[str, int] = {}
+        if spec.eligible_rule in {"y_evaluable_t1", "y_evaluable_t2"}:
+            horizon = 1 if spec.eligible_rule.endswith("t1") else 2
+            evaluable_column = f"y_evaluable_t{horizon}"
+            status_column = f"y_status_t{horizon}"
+            non_evaluable_mask = merged["is_in_panel"] & ~merged[evaluable_column].fillna(
+                False
+            ).astype(bool)
+            non_evaluable_rows = int(non_evaluable_mask.sum())
+            if status_column in merged.columns:
+                non_evaluable_reasons = {
+                    str(key): int(value)
+                    for key, value in merged.loc[non_evaluable_mask, status_column]
+                    .astype(str)
+                    .value_counts(dropna=False)
+                    .items()
+                }
+            out_of_coverage = merged["is_in_panel"] & ~merged["in_epi_coverage"].fillna(False)
 
         expected_eligible = int(eligible.sum())
         missing_count = int(eligible_missing.sum())
@@ -261,6 +318,8 @@ def build_missingness_inventory(
             "eligible_rule": spec.eligible_rule,
             "outside_panel_rows": int(outside_panel.sum()),
             "out_of_coverage_rows": int(out_of_coverage.sum()),
+            "non_evaluable_rows": non_evaluable_rows,
+            "non_evaluable_reasons": non_evaluable_reasons,
         }
 
         rows.append(
@@ -278,6 +337,8 @@ def build_missingness_inventory(
                 "absence_type": absence_type,
                 "outside_panel_rows": int(outside_panel.sum()),
                 "out_of_coverage_rows": int(out_of_coverage.sum()),
+                "non_evaluable_rows": non_evaluable_rows,
+                "non_evaluable_reasons": json.dumps(non_evaluable_reasons, sort_keys=True),
                 "impact_score": impact_score,
             }
         )
@@ -288,6 +349,63 @@ def build_missingness_inventory(
     )
     compact = inventory.head(top_k).reset_index(drop=True)
     return inventory.reset_index(drop=True), compact, denominator_note
+
+
+def summarize_profile_scope(raw_sample: pd.DataFrame, sample_size: int) -> dict[str, object]:
+    """Summarize scope limitations for category profiling in Chapter 5.
+
+    Args:
+        raw_sample: Sampled dengue-general rows used for profiling.
+        sample_size: Requested sample size.
+
+    Returns:
+        Scope summary dictionary with temporal concentration diagnostics.
+    """
+
+    period_counts: dict[str, int] = {}
+    ini_sin_year_min: int | None = None
+    ini_sin_year_max: int | None = None
+    share_2006_2011: float | None = None
+
+    if "INI_SIN" in raw_sample.columns:
+        ini_token = (
+            raw_sample["INI_SIN"]
+            .astype(str)
+            .str.extract(
+                r"(\d{2}/\d{2}/\d{4})",
+                expand=False,
+            )
+        )
+        parsed_ini_sin = pd.to_datetime(
+            ini_token,
+            format="%d/%m/%Y",
+            errors="coerce",
+        )
+        year_series = parsed_ini_sin.dt.year.dropna().astype(int)
+        if not year_series.empty:
+            ini_sin_year_min = int(year_series.min())
+            ini_sin_year_max = int(year_series.max())
+            period_counts = {
+                str(key): int(value)
+                for key, value in year_series.value_counts().sort_index().items()
+            }
+            in_focus = year_series.between(2006, 2011)
+            share_2006_2011 = float(in_focus.sum() / len(year_series))
+
+    return {
+        "source_stream": "dengue_general_only",
+        "sample_rows_requested": int(sample_size),
+        "sample_rows_loaded": int(len(raw_sample)),
+        "includes_dengue_grave_stream": False,
+        "representativeness_limits": {
+            "severe_dengue_stream": "not_included_in_this_profile",
+            "temporal": "sample_concentration_must_be_read_as_partial_scope",
+        },
+        "ini_sin_year_min": ini_sin_year_min,
+        "ini_sin_year_max": ini_sin_year_max,
+        "ini_sin_year_distribution": period_counts,
+        "share_rows_2006_2011": share_2006_2011,
+    }
 
 
 def compute_municipality_seasonality(
@@ -453,21 +571,81 @@ def point_biserial_correlation(x: pd.Series, y: pd.Series) -> float:
     return float(corr)
 
 
+def add_months(period: str, months: int) -> str:
+    """Shift a ``YYYY-MM`` period by an integer number of months.
+
+    Args:
+        period: Base period.
+        months: Signed month shift.
+
+    Returns:
+        Shifted period in ``YYYY-MM`` format.
+    """
+
+    return str(pd.Period(period, freq="M") + months)
+
+
+def select_supervised_rows(
+    panel: pd.DataFrame,
+    horizon: int,
+    *,
+    target_min_period: str | None = None,
+    target_max_period: str | None = None,
+    reference_max_period: str | None = None,
+) -> pd.DataFrame:
+    """Select supervised rows by horizon using target-period safety rules.
+
+    Args:
+        panel: Municipality-month panel.
+        horizon: Horizon in months (1 or 2).
+        target_min_period: Optional lower target-period bound (inclusive).
+        target_max_period: Optional upper target-period bound (inclusive).
+        reference_max_period: Optional upper reference-period bound (inclusive).
+
+    Returns:
+        Filtered dataframe with evaluable labels satisfying temporal bounds.
+    """
+
+    target_column = f"target_period_t{horizon}"
+    evaluable_column = f"y_evaluable_t{horizon}"
+    required = {"year_month", target_column, evaluable_column}
+    missing = sorted(required - set(panel.columns))
+    if missing:
+        raise ValueError(f"panel missing required columns for horizon t{horizon}: {missing}")
+
+    selected = panel.copy()
+    selected["year_month"] = selected["year_month"].astype(str)
+    selected[target_column] = selected[target_column].astype(str)
+
+    mask = selected[evaluable_column].fillna(False).astype(bool)
+    if reference_max_period is not None:
+        mask &= selected["year_month"] <= str(reference_max_period)
+    if target_min_period is not None:
+        mask &= selected[target_column] >= str(target_min_period)
+    if target_max_period is not None:
+        mask &= selected[target_column] <= str(target_max_period)
+    return selected[mask].copy()
+
+
 def compute_lag_association_summary(
     panel_development: pd.DataFrame,
     predictors: list[PredictorSpec],
     min_rows_per_municipality: int = 12,
+    development_target_max: str | None = None,
+    development_reference_max: str | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
     """Compute municipality-adjusted lag associations with Y(T+1/T+2).
 
-    Associations are estimated within municipality, then aggregated across
-    municipalities with an unweighted median to avoid implicit weighting by
-    municipality size.
+    Associations are estimated within municipality and aggregated across
+    municipalities with an unweighted median. Supervised selection is
+    horizon-aware and can enforce both reference- and target-period limits.
 
     Args:
         panel_development: Development split panel.
         predictors: Predictor specification list.
         min_rows_per_municipality: Minimum rows for municipality-level estimate.
+        development_target_max: Optional max target period for development usage.
+        development_reference_max: Optional max reference period for development usage.
 
     Returns:
         Aggregate table, municipality-level detail table, and metadata.
@@ -489,9 +667,12 @@ def compute_lag_association_summary(
 
     for horizon in (1, 2):
         y_column = f"y_t{horizon}"
-        evaluable_column = f"y_evaluable_t{horizon}"
-
-        scoped = frame[frame[evaluable_column].fillna(False)].copy()
+        scoped = select_supervised_rows(
+            frame,
+            horizon,
+            target_max_period=development_target_max,
+            reference_max_period=development_reference_max,
+        )
         municipality_total = int(scoped["municipality_code"].nunique())
 
         for predictor in predictors:
@@ -584,23 +765,121 @@ def compute_lag_association_summary(
     meta = {
         "method": "point_biserial_within_municipality_unweighted_median",
         "min_rows_per_municipality": min_rows_per_municipality,
+        "selection": {
+            "reference_max_period": development_reference_max,
+            "target_max_period": development_target_max,
+        },
         "interpretation_limit": "descriptive_association_not_causality_or_model_selection",
     }
     return aggregate, detail, meta
 
 
-def add_months(period: str, months: int) -> str:
-    """Shift a ``YYYY-MM`` period by an integer number of months.
+def build_correlation_diagnostics(
+    panel_development: pd.DataFrame,
+    features: list[str],
+    *,
+    redundancy_threshold: float = 0.90,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict[str, object]]:
+    """Build raw and month-adjusted correlation diagnostics.
+
+    Month adjustment is global (calendar-month mean centering), not a
+    municipality trend model and not causal evidence.
 
     Args:
-        period: Base period.
-        months: Signed month shift.
+        panel_development: Development split panel.
+        features: Feature list to include.
+        redundancy_threshold: Absolute Spearman threshold for candidate pairs.
 
     Returns:
-        Shifted period in ``YYYY-MM`` format.
+        Tuple of raw matrix, adjusted matrix, redundancy table, and metadata.
     """
 
-    return str(pd.Period(period, freq="M") + months)
+    available = [feature for feature in features if feature in panel_development.columns]
+    corr_data = panel_development[available].apply(pd.to_numeric, errors="coerce")
+    raw_correlation = corr_data.corr(method="spearman", min_periods=60)
+
+    adjusted = panel_development.copy()
+    adjusted["calendar_month"] = adjusted["year_month"].astype(str).str.slice(5, 7)
+    for feature in available:
+        adjusted[feature] = pd.to_numeric(adjusted[feature], errors="coerce")
+        adjusted[feature] = adjusted[feature] - adjusted.groupby("calendar_month")[
+            feature
+        ].transform("mean")
+
+    adjusted_correlation = adjusted[available].corr(method="spearman", min_periods=60)
+
+    redundancy_rows: list[dict[str, object]] = []
+    for idx, left in enumerate(available):
+        for right in available[idx + 1 :]:
+            value = raw_correlation.loc[left, right]
+            if pd.isna(value):
+                continue
+            if abs(float(value)) >= redundancy_threshold:
+                redundancy_rows.append(
+                    {
+                        "feature_left": left,
+                        "feature_right": right,
+                        "spearman_raw": float(value),
+                        "spearman_month_adjusted": float(adjusted_correlation.loc[left, right]),
+                        "recommendation": "candidate_ablation_pair_review",
+                    }
+                )
+
+    redundancy = pd.DataFrame(redundancy_rows)
+    meta = {
+        "method": "spearman",
+        "min_periods": 60,
+        "month_adjustment": "global_calendar_month_mean_centering",
+        "redundancy_threshold_abs": redundancy_threshold,
+        "interpretation_limit": "descriptive_association_not_causal_or_auto_feature_drop",
+    }
+    return raw_correlation, adjusted_correlation, redundancy, meta
+
+
+def summarize_endemic_channel(panel: pd.DataFrame) -> dict[str, object]:
+    """Summarize current endemic-channel availability and zone distribution.
+
+    Args:
+        panel: Panel dataframe with endemic-channel columns.
+
+    Returns:
+        Summary dictionary suitable for notebook/report metadata.
+    """
+
+    required = {"p25_canal_t", "p50_canal_t", "p75_canal_t", "zona_canal_t"}
+    missing = sorted(required - set(panel.columns))
+    if missing:
+        return {
+            "status": "missing_columns",
+            "missing_columns": missing,
+        }
+
+    thresholds = panel[["p25_canal_t", "p50_canal_t", "p75_canal_t"]].apply(
+        pd.to_numeric,
+        errors="coerce",
+    )
+    zone = panel["zona_canal_t"].astype("string")
+
+    thresholds_complete = thresholds.notna().all(axis=1)
+    zone_available = zone.notna()
+
+    zone_counts: dict[str, int] = {}
+    for key, value in zone.value_counts(dropna=False).items():
+        zone_key = "NA" if pd.isna(key) else str(key)
+        zone_counts[zone_key] = int(value)
+
+    return {
+        "status": "ok",
+        "rows": int(len(panel)),
+        "rows_with_complete_thresholds": int(thresholds_complete.sum()),
+        "rows_with_zone": int(zone_available.sum()),
+        "rows_null_zone": int((~zone_available).sum()),
+        "rows_null_zone_with_any_threshold_value": int(
+            (~zone_available & thresholds.any(axis=1)).sum()
+        ),
+        "rows_zone_with_missing_threshold": int((zone_available & ~thresholds_complete).sum()),
+        "zone_counts": zone_counts,
+    }
 
 
 def build_temporal_validation_audit(
@@ -618,7 +897,7 @@ def build_temporal_validation_audit(
         predictor_columns_used: Predictor columns used in this scope.
 
     Returns:
-        Audit dataframe with one row per temporal window.
+        Audit dataframe with one row per temporal window and horizon.
     """
 
     rows: list[dict[str, object]] = []
@@ -627,39 +906,7 @@ def build_temporal_validation_audit(
     for train_end in window_train_endpoints:
         validation_start = add_months(train_end, 1)
         validation_end = add_months(train_end, 6)
-
-        train_scope = panel_development[panel_development["year_month"] <= train_end].copy()
-        validation_scope = panel_development[
-            panel_development["year_month"].between(validation_start, validation_end)
-        ].copy()
-
         train_before_validation = train_end < validation_start
-
-        obs_failures = []
-        for horizon in (1, 2):
-            target_column = f"target_period_t{horizon}"
-            evaluable_column = f"y_evaluable_t{horizon}"
-            scoped = train_scope[train_scope[evaluable_column].fillna(False)]
-            if scoped.empty:
-                continue
-            violations = scoped[target_column].astype(str) > train_end
-            if bool(violations.any()):
-                obs_failures.append(f"t{horizon}:{int(violations.sum())}")
-        labels_observable = len(obs_failures) == 0
-
-        both_eval = train_scope[
-            train_scope["y_evaluable_t1"].fillna(False)
-            & train_scope["y_evaluable_t2"].fillna(False)
-        ]
-        if both_eval.empty:
-            horizon_separation_ok = False
-            horizon_reason = "no_rows_with_both_horizons_evaluable"
-        else:
-            expected_t2 = both_eval["target_period_t1"].astype(str).map(lambda v: add_months(v, 1))
-            horizon_separation_ok = bool(
-                both_eval["target_period_t2"].astype(str).equals(expected_t2.astype(str))
-            )
-            horizon_reason = "ok" if horizon_separation_ok else "t1_to_t2_offset_mismatch"
 
         leakage_columns = [
             column
@@ -671,78 +918,149 @@ def build_temporal_validation_audit(
         transformation_status = "NOT_EXECUTED"
         transformation_reason = "no_fitted_transformer_artifact_in_this_scope"
 
-        reserved_excluded = True
-        reserved_reason = "ok"
-        if reserved_start is not None and validation_end >= reserved_start:
-            reserved_excluded = False
-            reserved_reason = "validation_overlaps_reserved_block"
-
-        train_unique_start = train_scope.groupby("municipality_code")["year_month"].min().nunique()
-        train_unique_end = train_scope.groupby("municipality_code")["year_month"].max().nunique()
-        val_unique_start = (
-            validation_scope.groupby("municipality_code")["year_month"].min().nunique()
+        train_reference_scope = panel_development[
+            panel_development["year_month"] <= train_end
+        ].copy()
+        train_unique_start = (
+            train_reference_scope.groupby("municipality_code")["year_month"].min().nunique()
         )
-        val_unique_end = validation_scope.groupby("municipality_code")["year_month"].max().nunique()
-        shared_cutoffs = (
-            train_unique_start == 1
-            and train_unique_end == 1
-            and val_unique_start <= 1
-            and val_unique_end <= 1
+        train_unique_end = (
+            train_reference_scope.groupby("municipality_code")["year_month"].max().nunique()
         )
+        shared_train_cutoffs = train_unique_start == 1 and train_unique_end == 1
 
-        temporal_ok = all(
-            [
-                train_before_validation,
-                labels_observable,
-                horizon_separation_ok,
-                no_future_labels_in_x,
-                reserved_excluded,
-                shared_cutoffs,
-            ]
-        )
+        selected_train = {
+            horizon: select_supervised_rows(
+                panel_development,
+                horizon,
+                reference_max_period=train_end,
+                target_max_period=train_end,
+            )
+            for horizon in (1, 2)
+        }
+        last_train_target = {
+            horizon: (
+                None
+                if selected_train[horizon].empty
+                else str(selected_train[horizon][f"target_period_t{horizon}"].max())
+            )
+            for horizon in (1, 2)
+        }
 
-        reasons = []
-        if not train_before_validation:
-            reasons.append("train_not_before_validation")
-        if not labels_observable:
-            reasons.append(f"labels_not_observable_at_cutoff:{'|'.join(obs_failures)}")
-        if not horizon_separation_ok:
-            reasons.append(horizon_reason)
-        if not no_future_labels_in_x:
-            reasons.append(f"leakage_columns:{'|'.join(leakage_columns)}")
-        if not reserved_excluded:
-            reasons.append(reserved_reason)
-        if not shared_cutoffs:
-            reasons.append("municipality_cutoff_inconsistency")
+        for horizon in (1, 2):
+            target_column = f"target_period_t{horizon}"
+            train_scope = selected_train[horizon]
 
-        rows.append(
-            {
-                "window_id": f"window_until_{train_end}",
-                "horizon": "t1_and_t2",
-                "train_start": str(train_scope["year_month"].min())
-                if not train_scope.empty
-                else None,
-                "train_end": train_end,
-                "validation_start": validation_start,
-                "validation_end": validation_end,
-                "last_train_target_period_t1": add_months(train_end, 1),
-                "last_train_target_period_t2": add_months(train_end, 2),
-                "train_rows": int(len(train_scope)),
-                "train_municipalities": int(train_scope["municipality_code"].nunique()),
-                "validation_rows": int(len(validation_scope)),
-                "validation_municipalities": int(validation_scope["municipality_code"].nunique()),
-                "check_train_before_validation": "PASS" if train_before_validation else "FAIL",
-                "check_labels_observable_at_cutoff": "PASS" if labels_observable else "FAIL",
-                "check_horizon_separation": "PASS" if horizon_separation_ok else "FAIL",
-                "check_no_future_labels_in_x": "PASS" if no_future_labels_in_x else "FAIL",
-                "check_transform_fit_train_only": transformation_status,
-                "check_reserved_block_excluded": "PASS" if reserved_excluded else "FAIL",
-                "check_shared_cutoffs_by_municipality": "PASS" if shared_cutoffs else "FAIL",
-                "temporal_validation_result": "PASS" if temporal_ok else "FAIL",
-                "reason_if_not_pass": "ok" if temporal_ok else "; ".join(reasons),
-                "transform_note": transformation_reason,
-            }
-        )
+            validation_target_end = validation_end
+            if reserved_start is not None:
+                validation_target_end = min(validation_target_end, add_months(reserved_start, -1))
+
+            validation_scope = select_supervised_rows(
+                panel_development,
+                horizon,
+                target_min_period=validation_start,
+                target_max_period=validation_target_end,
+            )
+
+            labels_observable = True
+            labels_observable_reason = "ok"
+            if not train_scope.empty:
+                labels_observable = bool(
+                    (train_scope[target_column].astype(str) <= train_end).all()
+                )
+                labels_observable_reason = (
+                    "ok" if labels_observable else "train_target_after_cutoff_detected"
+                )
+
+            horizon_alignment_ok = True
+            horizon_reason = "ok"
+            if not train_scope.empty:
+                lag_offset = horizon
+                expected_target = (
+                    train_scope["year_month"]
+                    .astype(str)
+                    .map(lambda period, offset=lag_offset: add_months(period, offset))
+                )
+                horizon_alignment_ok = bool(
+                    train_scope[target_column].astype(str).equals(expected_target.astype(str))
+                )
+                if not horizon_alignment_ok:
+                    horizon_reason = "target_period_alignment_mismatch"
+
+            reserved_excluded = True
+            reserved_reason = "ok"
+            if reserved_start is not None and not validation_scope.empty:
+                reserved_excluded = bool(
+                    (validation_scope[target_column].astype(str) < reserved_start).all()
+                )
+                if not reserved_excluded:
+                    reserved_reason = "validation_contains_reserved_target"
+
+            shared_cutoffs = shared_train_cutoffs
+            if not validation_scope.empty:
+                val_unique_start = (
+                    validation_scope.groupby("municipality_code")["year_month"].min().nunique()
+                )
+                val_unique_end = (
+                    validation_scope.groupby("municipality_code")["year_month"].max().nunique()
+                )
+                shared_cutoffs = shared_cutoffs and val_unique_start <= 1 and val_unique_end <= 1
+
+            temporal_ok = all(
+                [
+                    train_before_validation,
+                    labels_observable,
+                    horizon_alignment_ok,
+                    no_future_labels_in_x,
+                    reserved_excluded,
+                    shared_cutoffs,
+                ]
+            )
+
+            reasons = []
+            if not train_before_validation:
+                reasons.append("train_not_before_validation")
+            if not labels_observable:
+                reasons.append(labels_observable_reason)
+            if not horizon_alignment_ok:
+                reasons.append(horizon_reason)
+            if not no_future_labels_in_x:
+                reasons.append(f"leakage_columns:{'|'.join(leakage_columns)}")
+            if not reserved_excluded:
+                reasons.append(reserved_reason)
+            if not shared_cutoffs:
+                reasons.append("municipality_cutoff_inconsistency")
+
+            rows.append(
+                {
+                    "window_id": f"window_until_{train_end}",
+                    "horizon": f"t{horizon}",
+                    "train_start": str(train_scope["year_month"].min())
+                    if not train_scope.empty
+                    else None,
+                    "train_end": train_end,
+                    "validation_start": validation_start,
+                    "validation_end": validation_end,
+                    "last_train_target_period_t1": last_train_target[1],
+                    "last_train_target_period_t2": last_train_target[2],
+                    "train_rows": int(len(train_scope)),
+                    "train_municipalities": int(train_scope["municipality_code"].nunique()),
+                    "validation_rows": int(len(validation_scope)),
+                    "validation_municipalities": int(
+                        validation_scope["municipality_code"].nunique()
+                    ),
+                    "check_train_before_validation": "PASS" if train_before_validation else "FAIL",
+                    "check_labels_observable_at_cutoff": "PASS" if labels_observable else "FAIL",
+                    "check_horizon_separation": "PASS" if horizon_alignment_ok else "FAIL",
+                    "check_no_future_labels_in_x": "PASS" if no_future_labels_in_x else "FAIL",
+                    "check_transform_fit_train_only": transformation_status,
+                    "check_reserved_block_excluded": "PASS" if reserved_excluded else "FAIL",
+                    "check_shared_cutoffs_by_municipality": "PASS" if shared_cutoffs else "FAIL",
+                    "temporal_validation_result": "PASS" if temporal_ok else "FAIL",
+                    "reason_if_not_pass": "ok" if temporal_ok else "; ".join(reasons),
+                    "transform_note": transformation_reason,
+                }
+            )
 
     return pd.DataFrame(rows)
 

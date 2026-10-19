@@ -68,6 +68,8 @@ Y_HORIZONS = (1, 2)
 Y_REFERENCE_YEARS = 5
 Y_PERCENTILE = 0.75
 Y_PERCENTILE_METHOD = "hyndman_fan_type7_linear"
+CANAL_PERCENTILES = (0.25, 0.50, 0.75)
+CANAL_ZONE_VALUES = ("EXITO", "SEGURIDAD", "ALERTA", "EXCESO")
 
 
 class PipelineValidationError(RuntimeError):
@@ -967,6 +969,166 @@ def history_periods_for_target(target_period: str, history_years: int) -> list[s
     ]
 
 
+def classify_endemic_zone(current_count: float, p25: float, p50: float, p75: float) -> str:
+    """Classify current endemic-channel zone from municipality-month thresholds.
+
+    Args:
+        current_count: Current municipality-month dengue count at period T.
+        p25: Historical P25 threshold from same-month prior years.
+        p50: Historical P50 threshold from same-month prior years.
+        p75: Historical P75 threshold from same-month prior years.
+
+    Returns:
+        Canonical endemic-channel zone.
+    """
+
+    if current_count < p25:
+        return "EXITO"
+    if current_count <= p50:
+        return "SEGURIDAD"
+    if current_count <= p75:
+        return "ALERTA"
+    return "EXCESO"
+
+
+def compute_current_endemic_channel(
+    panel: pd.DataFrame,
+    *,
+    history_years: int = Y_REFERENCE_YEARS,
+) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any]]:
+    """Compute current-period endemic-channel thresholds and zone at reference month T.
+
+    Args:
+        panel: Monthly panel with dengue notification counts.
+        history_years: Number of same-month prior-year observations required.
+
+    Returns:
+        Tuple of (panel_with_channel_columns, traceability_table, summary).
+    """
+
+    required = {"municipality_code", "year_month", "dengue_notifications_count"}
+    missing_required = sorted(required - set(panel.columns))
+    if missing_required:
+        raise PipelineValidationError(
+            f"Cannot compute current endemic channel, panel missing columns: {missing_required}"
+        )
+
+    channel_panel = (
+        panel.sort_values(["municipality_code", "year_month"]).reset_index(drop=True).copy()
+    )
+
+    lookup = channel_panel.set_index(["municipality_code", "year_month"])[
+        "dengue_notifications_count"
+    ].to_dict()
+
+    p25_values: list[float | None] = []
+    p50_values: list[float | None] = []
+    p75_values: list[float | None] = []
+    zone_values: list[str | None] = []
+
+    trace_rows: list[dict[str, Any]] = []
+
+    for row in channel_panel.itertuples(index=False):
+        municipality_code = str(row.municipality_code)
+        reference_period = str(row.year_month)
+
+        history_periods_expected = history_periods_for_target(reference_period, history_years)
+        history_used: list[str] = []
+        history_missing: list[str] = []
+        history_values: list[float] = []
+
+        for history_period in history_periods_expected:
+            history_value = lookup.get((municipality_code, history_period), pd.NA)
+            if pd.isna(history_value):
+                history_missing.append(history_period)
+                continue
+            history_used.append(history_period)
+            history_values.append(float(history_value))
+
+        current_count_raw = lookup.get((municipality_code, reference_period), pd.NA)
+
+        p25_value: float | None = None
+        p50_value: float | None = None
+        p75_value: float | None = None
+        zone_value: str | None = None
+        canal_status = "insufficient_history"
+
+        if pd.isna(current_count_raw):
+            canal_status = "current_count_missing"
+        elif len(history_values) < history_years:
+            canal_status = "insufficient_history"
+        else:
+            current_count = float(current_count_raw)
+            p25_value = percentile_type7(history_values, CANAL_PERCENTILES[0])
+            p50_value = percentile_type7(history_values, CANAL_PERCENTILES[1])
+            p75_value = percentile_type7(history_values, CANAL_PERCENTILES[2])
+            zone_value = classify_endemic_zone(current_count, p25_value, p50_value, p75_value)
+            canal_status = "evaluable"
+
+        p25_values.append(p25_value)
+        p50_values.append(p50_value)
+        p75_values.append(p75_value)
+        zone_values.append(zone_value)
+
+        trace_rows.append(
+            {
+                "municipality_code": municipality_code,
+                "reference_period": reference_period,
+                "current_count": (None if pd.isna(current_count_raw) else float(current_count_raw)),
+                "history_required_years": history_years,
+                "history_valid_years": len(history_values),
+                "history_periods_expected": "|".join(history_periods_expected),
+                "history_periods_used": "|".join(history_used),
+                "history_missing_periods": "|".join(history_missing),
+                "p25_canal_t": p25_value,
+                "p50_canal_t": p50_value,
+                "p75_canal_t": p75_value,
+                "zona_canal_t": zone_value,
+                "canal_status": canal_status,
+            }
+        )
+
+    channel_panel["p25_canal_t"] = pd.Series(p25_values, dtype="float64")
+    channel_panel["p50_canal_t"] = pd.Series(p50_values, dtype="float64")
+    channel_panel["p75_canal_t"] = pd.Series(p75_values, dtype="float64")
+    channel_panel["zona_canal_t"] = pd.array(zone_values, dtype="string")
+
+    traceability = pd.DataFrame(trace_rows).sort_values(["municipality_code", "reference_period"])
+    traceability = traceability.reset_index(drop=True)
+
+    status_counts = {
+        str(key): int(value)
+        for key, value in traceability["canal_status"].value_counts(dropna=False).items()
+    }
+
+    zone_counts: dict[str, int] = {}
+    for key, value in traceability["zona_canal_t"].value_counts(dropna=False).items():
+        zone_key = "NA" if pd.isna(key) else str(key)
+        zone_counts[zone_key] = int(value)
+
+    summary = {
+        "reference_period_basis": "current_month_t",
+        "reference_years": history_years,
+        "percentile_method": Y_PERCENTILE_METHOD,
+        "percentiles": {
+            "p25": CANAL_PERCENTILES[0],
+            "p50": CANAL_PERCENTILES[1],
+            "p75": CANAL_PERCENTILES[2],
+        },
+        "zone_values": list(CANAL_ZONE_VALUES),
+        "zone_rule": {
+            "EXITO": "c < p25",
+            "SEGURIDAD": "p25 <= c <= p50",
+            "ALERTA": "p50 < c <= p75",
+            "EXCESO": "c > p75",
+        },
+        "status_counts": status_counts,
+        "zone_counts": zone_counts,
+    }
+
+    return channel_panel, traceability, summary
+
+
 def compute_y_labels(
     panel: pd.DataFrame,
     *,
@@ -1221,6 +1383,16 @@ def compute_schema_contract(
         ]
         if column in panel_columns
     ]
+    endemic_channel_columns = [
+        column
+        for column in [
+            "p25_canal_t",
+            "p50_canal_t",
+            "p75_canal_t",
+            "zona_canal_t",
+        ]
+        if column in panel_columns
+    ]
 
     return {
         "contract_version": version,
@@ -1245,6 +1417,32 @@ def compute_schema_contract(
             "percentile": Y_PERCENTILE,
             "percentile_method": Y_PERCENTILE_METHOD,
         },
+        "current_endemic_channel_policy": {
+            "series": "dengue_notifications_count",
+            "reference_period": "current_month_t",
+            "reference_years": Y_REFERENCE_YEARS,
+            "historical_reference_rule": (
+                "For reference month T (YYYY-MM), use the same MM from the five prior years "
+                "(YYYY-5..YYYY-1) without substituting older years when a required observation "
+                "is genuinely missing."
+            ),
+            "percentiles": {
+                "p25": CANAL_PERCENTILES[0],
+                "p50": CANAL_PERCENTILES[1],
+                "p75": CANAL_PERCENTILES[2],
+            },
+            "percentile_method": Y_PERCENTILE_METHOD,
+            "zone_values": list(CANAL_ZONE_VALUES),
+            "zone_rule": {
+                "EXITO": "c < p25",
+                "SEGURIDAD": "p25 <= c <= p50",
+                "ALERTA": "p50 < c <= p75",
+                "EXCESO": "c > p75",
+            },
+            "non_evaluable_rule": (
+                "missing_current_count_or_insufficient_history_yields_null_zone_and_thresholds"
+            ),
+        },
         "datasets": {
             "dengue_y_dengue_grave": {
                 "row_unit": "notification_row",
@@ -1262,6 +1460,7 @@ def compute_schema_contract(
                     ],
                     "historical_references": historical_reference_columns,
                     "labels": label_columns,
+                    "current_endemic_channel": endemic_channel_columns,
                 },
                 "schema": describe_schema(panel),
             },
@@ -1418,6 +1617,7 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
     consolidated_output = paths.processed_dir / "dengue_y_dengue_grave.csv"
     panel_output = paths.processed_dir / "panel_mensual_dengue_clima.csv"
     y_traceability_output = paths.interim_dir / "y_label_history_traceability.csv"
+    channel_traceability_output = paths.interim_dir / "current_endemic_channel_traceability.csv"
 
     ensure_directory(paths.processed_dir)
     backups_dir = paths.interim_dir / "backups"
@@ -1569,6 +1769,20 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
     if not panel[["municipality_code", "year_month"]].equals(panel_keys_before_labels):
         raise PipelineValidationError("Y labeling modified panel key columns")
 
+    panel_rows_before_channel = len(panel)
+    panel_keys_before_channel = panel[["municipality_code", "year_month"]].copy()
+    panel, channel_traceability, channel_summary = compute_current_endemic_channel(panel)
+
+    if len(panel) != panel_rows_before_channel:
+        raise PipelineValidationError(
+            "Current endemic-channel computation changed panel row cardinality, "
+            "which is not allowed"
+        )
+    if not panel[["municipality_code", "year_month"]].equals(panel_keys_before_channel):
+        raise PipelineValidationError(
+            "Current endemic-channel computation modified panel key columns"
+        )
+
     if panel.duplicated(["municipality_code", "year_month"]).any():
         raise PipelineValidationError("Panel key municipality_code+year_month is not unique")
 
@@ -1620,6 +1834,10 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
 
     panel_tmp = write_dataframe_to_tmp(panel, panel_output)
     y_traceability_tmp = write_dataframe_to_tmp(y_traceability, y_traceability_output)
+    channel_traceability_tmp = write_dataframe_to_tmp(
+        channel_traceability,
+        channel_traceability_output,
+    )
 
     consolidated_schema = describe_consolidated_schema_from_columns(consolidated_columns)
     candidate_contract = compute_schema_contract(
@@ -1643,6 +1861,11 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
         y_traceability_backup = safe_replace_file(
             tmp_path=y_traceability_tmp,
             final_path=y_traceability_output,
+            backup_dir=backups_dir,
+        )
+        channel_traceability_backup = safe_replace_file(
+            tmp_path=channel_traceability_tmp,
+            final_path=channel_traceability_output,
             backup_dir=backups_dir,
         )
 
@@ -1669,9 +1892,12 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
             panel_tmp.unlink()
         if y_traceability_tmp.exists():
             y_traceability_tmp.unlink()
+        if channel_traceability_tmp.exists():
+            channel_traceability_tmp.unlink()
         consolidated_backup = {}
         panel_backup = {}
         y_traceability_backup = {}
+        channel_traceability_backup = {}
         contract_backup = {}
 
     input_fingerprints_after = fingerprint_inputs(paths)
@@ -1723,6 +1949,13 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
             ),
             **y_label_summary,
         },
+        "current_endemic_channel": {
+            "retrospective_assumption": (
+                "At reference month T, the current municipality count compares against P25/P50/P75 "
+                "from the same month across the five prior years before reference-year T."
+            ),
+            **channel_summary,
+        },
         "outputs": {
             "dengue_y_dengue_grave": {
                 "path": str(consolidated_output.relative_to(paths.root)),
@@ -1755,6 +1988,18 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
                 if y_traceability_output.exists()
                 else None,
                 "backup": y_traceability_backup,
+            },
+            "current_endemic_channel_traceability": {
+                "path": str(channel_traceability_output.relative_to(paths.root)),
+                "rows": int(len(channel_traceability)),
+                "columns": int(len(channel_traceability.columns)),
+                "sha256": sha256_file(channel_traceability_output)
+                if channel_traceability_output.exists()
+                else None,
+                "bytes": channel_traceability_output.stat().st_size
+                if channel_traceability_output.exists()
+                else None,
+                "backup": channel_traceability_backup,
             },
             "candidate_contract": {
                 "path": str(candidate_contract_path.relative_to(paths.root)),

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import cast
 
 import pandas as pd  # type: ignore[import-untyped]
 
@@ -10,6 +11,7 @@ from scripts.stage2_notebook_visual_assets import (
     VariableSpec,
     add_consecutive_lag,
     assert_notebook_code_only,
+    build_correlation_diagnostics,
     build_missingness_inventory,
     build_month_calendar,
     build_temporal_validation_audit,
@@ -17,6 +19,9 @@ from scripts.stage2_notebook_visual_assets import (
     compute_municipality_seasonality,
     longest_true_run,
     point_biserial_correlation,
+    select_supervised_rows,
+    summarize_endemic_channel,
+    summarize_profile_scope,
 )
 
 
@@ -62,6 +67,24 @@ def test_missingness_inventory_distinguishes_zero_missing_and_calendar_gaps() ->
             "rain_mm_month_sum": [10.0, None, 30.0, 5.0, 7.0, 8.0, None],
             "y_evaluable_t1": [True, True, True, True, True, False, False],
             "y_evaluable_t2": [True, True, True, True, True, False, False],
+            "y_status_t1": [
+                "evaluable",
+                "evaluable",
+                "evaluable",
+                "evaluable",
+                "evaluable",
+                "insufficient_history",
+                "target_outside_panel",
+            ],
+            "y_status_t2": [
+                "evaluable",
+                "evaluable",
+                "evaluable",
+                "evaluable",
+                "evaluable",
+                "future_observation_missing",
+                "target_outside_panel",
+            ],
             "y_t1": [0.0, None, 1.0, 1.0, 0.0, None, None],
             "y_t2": [0.0, None, 1.0, 1.0, 0.0, None, None],
         }
@@ -87,9 +110,38 @@ def test_missingness_inventory_distinguishes_zero_missing_and_calendar_gaps() ->
     assert int(y_row["expected_eligible_rows"]) == 5
     assert int(y_row["missing_rows"]) == 1
     assert y_row["absence_type"] == "non_evaluable_distinguished_from_predictor_missingness"
+    assert int(y_row["non_evaluable_rows"]) == 2
 
     assert len(compact) == 2
     assert note["municipality_count"] == 2
+    assert note["examples_total"] == 7
+    y_reasons = cast(dict[str, dict[str, int]], note["y_non_evaluable_reasons"])
+    assert y_reasons["t1"]["insufficient_history"] == 1
+    assert y_reasons["t1"]["target_outside_panel"] == 1
+
+
+def test_summarize_profile_scope_declares_sample_limits() -> None:
+    raw_sample = pd.DataFrame(
+        {
+            "INI_SIN": [
+                "01/01/2006",
+                "15/06/2008",
+                "01/01/2011",
+                "05/01/2019",
+                "",
+            ]
+        }
+    )
+
+    summary = summarize_profile_scope(raw_sample, sample_size=150_000)
+
+    assert summary["source_stream"] == "dengue_general_only"
+    assert summary["includes_dengue_grave_stream"] is False
+    assert summary["sample_rows_requested"] == 150_000
+    assert summary["sample_rows_loaded"] == 5
+    assert summary["ini_sin_year_min"] == 2006
+    assert summary["ini_sin_year_max"] == 2019
+    assert summary["share_rows_2006_2011"] == 0.75
 
 
 def test_compute_municipality_seasonality_handles_constant_and_zero_profiles() -> None:
@@ -152,6 +204,35 @@ def test_add_consecutive_lag_respects_calendar_gaps() -> None:
     assert lagged.iloc[2] == 2.0
 
 
+def test_select_supervised_rows_excludes_reserved_targets_and_keeps_horizon_scope() -> None:
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["50001"] * 5,
+            "year_month": ["2024-09", "2024-10", "2024-11", "2024-12", "2025-01"],
+            "target_period_t1": ["2024-10", "2024-11", "2024-12", "2025-01", "2025-02"],
+            "target_period_t2": ["2024-11", "2024-12", "2025-01", "2025-02", "2025-03"],
+            "y_evaluable_t1": [True, True, True, True, True],
+            "y_evaluable_t2": [True, True, True, True, True],
+        }
+    )
+
+    selected_t1 = select_supervised_rows(
+        panel,
+        1,
+        reference_max_period="2024-12",
+        target_max_period="2024-12",
+    )
+    selected_t2 = select_supervised_rows(
+        panel,
+        2,
+        reference_max_period="2024-12",
+        target_max_period="2024-12",
+    )
+
+    assert selected_t1["target_period_t1"].tolist() == ["2024-10", "2024-11", "2024-12"]
+    assert selected_t2["target_period_t2"].tolist() == ["2024-11", "2024-12"]
+
+
 def test_point_biserial_rejects_invalid_support() -> None:
     x_constant = pd.Series([1.0, 1.0, 1.0])
     y_binary = pd.Series([0, 1, 0])
@@ -171,6 +252,8 @@ def test_compute_lag_association_marks_non_evaluable_groups() -> None:
             {
                 "municipality_code": "50001",
                 "year_month": str(period),
+                "target_period_t1": str(period + 1),
+                "target_period_t2": str(period + 2),
                 "dengue_notifications_count": float(i + 1),
                 "rain_mm_month_sum": float((i % 5) + 1),
                 "y_evaluable_t1": True,
@@ -183,6 +266,8 @@ def test_compute_lag_association_marks_non_evaluable_groups() -> None:
             {
                 "municipality_code": "50002",
                 "year_month": str(period),
+                "target_period_t1": str(period + 1),
+                "target_period_t2": str(period + 2),
                 "dengue_notifications_count": 10.0,
                 "rain_mm_month_sum": 2.0,
                 "y_evaluable_t1": True,
@@ -212,7 +297,50 @@ def test_compute_lag_association_marks_non_evaluable_groups() -> None:
     assert counts["constant_predictor"] >= 1
 
 
-def test_temporal_validation_audit_detects_invalid_window_and_reserved_overlap() -> None:
+def test_build_correlation_diagnostics_reports_global_month_adjustment() -> None:
+    months = pd.period_range("2018-01", "2023-12", freq="M")
+    panel = pd.DataFrame(
+        {
+            "year_month": [str(period) for period in months],
+            "dengue_notifications_count": [float(i + 1) for i, _ in enumerate(months)],
+            "rain_mm_month_sum": [float((i + 1) * 2) for i, _ in enumerate(months)],
+            "temp_mean_c_month_mean": [float(500 - i) for i, _ in enumerate(months)],
+        }
+    )
+
+    raw, adjusted, redundancy, meta = build_correlation_diagnostics(
+        panel,
+        ["dengue_notifications_count", "rain_mm_month_sum", "temp_mean_c_month_mean"],
+        redundancy_threshold=0.90,
+    )
+
+    assert raw.shape == (3, 3)
+    assert adjusted.shape == (3, 3)
+    assert meta["month_adjustment"] == "global_calendar_month_mean_centering"
+    assert meta["interpretation_limit"] == "descriptive_association_not_causal_or_auto_feature_drop"
+    assert len(redundancy) >= 1
+
+
+def test_summarize_endemic_channel_reports_null_threshold_consistency() -> None:
+    panel = pd.DataFrame(
+        {
+            "p25_canal_t": [1.0, None, None],
+            "p50_canal_t": [2.0, None, None],
+            "p75_canal_t": [3.0, None, 1.0],
+            "zona_canal_t": ["SEGURIDAD", None, None],
+        }
+    )
+
+    summary = summarize_endemic_channel(panel)
+
+    assert summary["status"] == "ok"
+    assert summary["rows_with_zone"] == 1
+    assert summary["rows_null_zone"] == 2
+    assert summary["rows_null_zone_with_any_threshold_value"] == 1
+    assert summary["rows_zone_with_missing_threshold"] == 0
+
+
+def test_temporal_validation_audit_uses_safe_target_selection_per_horizon() -> None:
     rows = []
     for period in pd.period_range("2024-01", "2024-06", freq="M"):
         rows.append(
@@ -240,11 +368,11 @@ def test_temporal_validation_audit_detects_invalid_window_and_reserved_overlap()
         predictor_columns_used=["dengue_lag1", "rain_lag1"],
     )
 
-    assert len(audit) == 1
-    row = audit.iloc[0]
-    assert row["check_labels_observable_at_cutoff"] == "FAIL"
-    assert row["check_reserved_block_excluded"] == "FAIL"
-    assert row["temporal_validation_result"] == "FAIL"
+    assert len(audit) == 2
+    assert set(audit["horizon"].tolist()) == {"t1", "t2"}
+    assert set(audit["check_labels_observable_at_cutoff"].tolist()) == {"PASS"}
+    assert set(audit["check_reserved_block_excluded"].tolist()) == {"PASS"}
+    assert set(audit["temporal_validation_result"].tolist()) == {"PASS"}
 
 
 def test_notebook_is_code_only() -> None:

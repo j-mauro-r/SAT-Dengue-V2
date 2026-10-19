@@ -50,3 +50,21 @@ The contract is explicitly a candidate construction contract and must not be int
 ## Current status statement
 
 The generated CSV files are candidate artifacts for downstream analysis only. No claim of final training readiness is made in this chapter.
+
+## Baseline readiness and conservative eligibility policy
+
+- Baseline preservation receipt and readiness checks are tracked through `scripts/validate_stage2_training_readiness.py` and plan-local evidence for bounded Stage 2 closeout work.
+- Source-coverage support and model-eligibility are treated as separate concepts:
+  - Source coverage support is backed by source notification-year metadata plus execution-manifest fingerprints.
+  - Model eligibility is conservative and requires target periods inside backed coverage, outside the reserved final block, and with sufficient same-month history.
+- Edge symptom periods outside backed coverage remain preserved in the candidate panel for traceability and diagnostics; they are not deleted or rewritten.
+- Existing future-label columns (`y_t1`, `y_t2`, `p75_t1`, `p75_t2` and related status/evaluable fields) are preserved as historical outputs and must not be redefined by closeout tasks.
+- Current endemic-channel candidate fields (`p25_canal_t`, `p50_canal_t`, `p75_canal_t`, `zona_canal_t`) are computed at reference month T per municipality using the same calendar month from the five prior years (type-7 percentiles at q=0.25/0.50/0.75).
+- Current endemic-channel zone convention is explicit and deterministic: `EXITO` if `c < p25`, `SEGURIDAD` if `p25 <= c <= p50`, `ALERTA` if `p50 < c <= p75`, `EXCESO` if `c > p75`; missing current count or insufficient history yields null thresholds and null zone.
+- Retrospective consolidated data remain a limitation: temporal ordering in this dataset does not certify historical operational as-of availability.
+
+## Bounded descriptive scope notes
+
+- Category/cardinality profiling in notebook Chapter 5 is intentionally partial: the profile uses the first 150,000 rows from `data/raw/dengue.csv` (general dengue stream only), so severe-dengue representativeness is out of scope in that chapter.
+- The chapter-5 matrix remains a sampled diagnostic aid and does not claim exhaustive production-grade profiling for all 69 source columns.
+- Correlation diagnostics in notebook Chapter 7 use global calendar-month mean centering as a descriptive adjustment only; results are not causal evidence and do not trigger automatic predictor removal.

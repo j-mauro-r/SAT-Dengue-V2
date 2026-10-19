@@ -542,6 +542,236 @@ def test_compute_y_labels_independent_from_climate_columns() -> None:
     pd.testing.assert_series_equal(labeled_a["p75_t1"], labeled_b["p75_t1"])
 
 
+def test_compute_current_endemic_channel_boundaries_and_traceability() -> None:
+    rows: list[dict[str, object]] = []
+    expected_zone_by_period = {
+        "2024-01": "EXITO",
+        "2024-02": "SEGURIDAD",
+        "2024-03": "SEGURIDAD",
+        "2024-04": "ALERTA",
+        "2024-05": "ALERTA",
+        "2024-06": "EXCESO",
+    }
+    current_by_period = {
+        "2024-01": 1.0,
+        "2024-02": 2.0,
+        "2024-03": 4.0,
+        "2024-04": 5.0,
+        "2024-05": 6.0,
+        "2024-06": 7.0,
+    }
+
+    for month in range(1, 7):
+        history_periods = [f"{year:04d}-{month:02d}" for year in range(2019, 2024)]
+        for history_period, history_value in zip(
+            history_periods,
+            [0.0, 2.0, 4.0, 6.0, 8.0],
+            strict=False,
+        ):
+            rows.append(
+                {
+                    "municipality_code": "50001",
+                    "year_month": history_period,
+                    "dengue_notifications_count": history_value,
+                }
+            )
+
+        period = f"2024-{month:02d}"
+        rows.append(
+            {
+                "municipality_code": "50001",
+                "year_month": period,
+                "dengue_notifications_count": current_by_period[period],
+            }
+        )
+
+    panel = pd.DataFrame(rows)
+    labeled, traceability, _summary = pipeline.compute_current_endemic_channel(panel)
+
+    for period, expected_zone in expected_zone_by_period.items():
+        row = labeled[labeled["year_month"] == period].iloc[0]
+        assert row["p25_canal_t"] == 2.0
+        assert row["p50_canal_t"] == 4.0
+        assert row["p75_canal_t"] == 6.0
+        assert row["zona_canal_t"] == expected_zone
+
+    trace_row = traceability[traceability["reference_period"] == "2024-03"].iloc[0]
+    assert trace_row["history_periods_expected"] == "2019-03|2020-03|2021-03|2022-03|2023-03"
+    assert trace_row["history_periods_used"] == "2019-03|2020-03|2021-03|2022-03|2023-03"
+    assert trace_row["history_valid_years"] == 5
+    assert trace_row["canal_status"] == "evaluable"
+
+
+def test_compute_current_endemic_channel_zero_and_null_handling() -> None:
+    rows: list[dict[str, object]] = []
+
+    for month in (7, 8):
+        for year in range(2019, 2024):
+            rows.append(
+                {
+                    "municipality_code": "50001",
+                    "year_month": f"{year:04d}-{month:02d}",
+                    "dengue_notifications_count": 0.0,
+                }
+            )
+
+    rows.extend(
+        [
+            {
+                "municipality_code": "50001",
+                "year_month": "2024-07",
+                "dengue_notifications_count": 0.0,
+            },
+            {
+                "municipality_code": "50001",
+                "year_month": "2024-08",
+                "dengue_notifications_count": 1.0,
+            },
+        ]
+    )
+
+    for period, value in [
+        ("2019-09", 1.0),
+        ("2020-09", 2.0),
+        ("2021-09", pd.NA),
+        ("2022-09", 4.0),
+        ("2023-09", 5.0),
+        ("2024-09", 3.0),
+    ]:
+        rows.append(
+            {
+                "municipality_code": "50001",
+                "year_month": period,
+                "dengue_notifications_count": value,
+            }
+        )
+
+    for year, value in zip(
+        range(2019, 2024),
+        [1.0, 2.0, 3.0, 4.0, 5.0],
+        strict=False,
+    ):
+        rows.append(
+            {
+                "municipality_code": "50001",
+                "year_month": f"{year:04d}-10",
+                "dengue_notifications_count": value,
+            }
+        )
+    rows.append(
+        {
+            "municipality_code": "50001",
+            "year_month": "2024-10",
+            "dengue_notifications_count": pd.NA,
+        }
+    )
+
+    panel = pd.DataFrame(rows)
+    labeled, traceability, _summary = pipeline.compute_current_endemic_channel(panel)
+
+    row_07 = labeled[labeled["year_month"] == "2024-07"].iloc[0]
+    assert row_07["p25_canal_t"] == 0.0
+    assert row_07["p50_canal_t"] == 0.0
+    assert row_07["p75_canal_t"] == 0.0
+    assert row_07["zona_canal_t"] == "SEGURIDAD"
+
+    row_08 = labeled[labeled["year_month"] == "2024-08"].iloc[0]
+    assert row_08["zona_canal_t"] == "EXCESO"
+
+    row_09 = labeled[labeled["year_month"] == "2024-09"].iloc[0]
+    assert pd.isna(row_09["p25_canal_t"])
+    assert pd.isna(row_09["p50_canal_t"])
+    assert pd.isna(row_09["p75_canal_t"])
+    assert pd.isna(row_09["zona_canal_t"])
+
+    row_10 = labeled[labeled["year_month"] == "2024-10"].iloc[0]
+    assert pd.isna(row_10["zona_canal_t"])
+
+    trace_09 = traceability[traceability["reference_period"] == "2024-09"].iloc[0]
+    assert trace_09["canal_status"] == "insufficient_history"
+    trace_10 = traceability[traceability["reference_period"] == "2024-10"].iloc[0]
+    assert trace_10["canal_status"] == "current_count_missing"
+
+
+def test_compute_current_endemic_channel_isolation_and_future_invariance() -> None:
+    rows: list[dict[str, object]] = []
+
+    for year in range(2019, 2024):
+        rows.append(
+            {
+                "municipality_code": "50001",
+                "year_month": f"{year:04d}-01",
+                "dengue_notifications_count": 1.0,
+            }
+        )
+        rows.append(
+            {
+                "municipality_code": "50002",
+                "year_month": f"{year:04d}-01",
+                "dengue_notifications_count": 10.0,
+            }
+        )
+
+    rows.extend(
+        [
+            {
+                "municipality_code": "50001",
+                "year_month": "2024-01",
+                "dengue_notifications_count": 2.0,
+            },
+            {
+                "municipality_code": "50002",
+                "year_month": "2024-01",
+                "dengue_notifications_count": 2.0,
+            },
+            {
+                "municipality_code": "50001",
+                "year_month": "2023-02",
+                "dengue_notifications_count": 999.0,
+            },
+            {
+                "municipality_code": "50001",
+                "year_month": "2026-01",
+                "dengue_notifications_count": 100.0,
+            },
+        ]
+    )
+
+    base_panel = pd.DataFrame(rows)
+    variant_panel = base_panel.copy()
+    variant_panel.loc[
+        (variant_panel["municipality_code"] == "50001")
+        & (variant_panel["year_month"] == "2026-01"),
+        "dengue_notifications_count",
+    ] = 5_000.0
+
+    labeled_base, _trace_base, _summary_base = pipeline.compute_current_endemic_channel(base_panel)
+    labeled_variant, _trace_variant, _summary_variant = pipeline.compute_current_endemic_channel(
+        variant_panel
+    )
+
+    base_a = labeled_base[
+        (labeled_base["municipality_code"] == "50001") & (labeled_base["year_month"] == "2024-01")
+    ].iloc[0]
+    base_b = labeled_base[
+        (labeled_base["municipality_code"] == "50002") & (labeled_base["year_month"] == "2024-01")
+    ].iloc[0]
+    variant_a = labeled_variant[
+        (labeled_variant["municipality_code"] == "50001")
+        & (labeled_variant["year_month"] == "2024-01")
+    ].iloc[0]
+
+    assert base_a["p75_canal_t"] == 1.0
+    assert base_a["zona_canal_t"] == "EXCESO"
+    assert base_b["p75_canal_t"] == 10.0
+    assert base_b["zona_canal_t"] == "EXITO"
+
+    assert base_a["p25_canal_t"] == variant_a["p25_canal_t"]
+    assert base_a["p50_canal_t"] == variant_a["p50_canal_t"]
+    assert base_a["p75_canal_t"] == variant_a["p75_canal_t"]
+    assert base_a["zona_canal_t"] == variant_a["zona_canal_t"]
+
+
 def test_summarize_y_labels_reports_horizon_counts() -> None:
     panel = pd.DataFrame(
         {
