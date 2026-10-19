@@ -21,6 +21,7 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Stage 1 requirements | [Business question](product/stage-1/PROD-01-business-question.md), [users](product/stage-1/PROD-02-users.md), [supported decisions](product/stage-1/PROD-03-supported-decisions.md), [dashboard story](product/stage-1/PROD-04-dashboard-master-user-story.md) |
 | Stage 1 workflow and draft contracts | [New period](product/stage-1/PROD-05-new-period-flow.md), [UI information](product/stage-1/PROD-06-ui-information.md), [prediction draft](product/stage-1/PROD-07-draft-prediction-contract.md), [input draft](product/stage-1/PROD-08-draft-input-contract.md) |
 | Stage 2 scientific decisions and current data/model status | [Active decision register](product/traking-concluciones.md) |
+| Stage 2 chapter-1 candidate datasets | [Candidate construction record](product/stage-2/CH1-dataset-construction-candidate.md) |
 | Retired experimental EDA, field dictionary and lineage reports | [Historical archive — DEPRECATED](archive/experimental-eda/README.md) |
 | Data boundaries | [Data policy](data/data-policy.md) |
 | Security | [Security policy](SECURITY.md) |
