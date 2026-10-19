@@ -73,3 +73,10 @@ Synthetic regressions: `.venv/bin/python -m pytest tests/unit/test_stage2_panel_
 Local data reconstruction: run `scripts/stage2_panel_review.py` with `--phase panel`, `--phase analysis`, `--phase rules`, then `--phase validate`, using the project environment. This requires supplied local raw/reference files and writes aggregate ignored outputs only. Validation checks content and source hashes; existence alone is not scientific acceptance.
 
 Also lint and format `scripts/stage2_panel_review.py` with Ruff, run the full unit suite and `mypy tests`, and run `scripts/check_markdown_links.py`. The new plan must pass scoped DWP conformance; report the pre-existing legacy-plan global failure separately without weakening or rewriting that historical gate.
+
+
+## Clean-checkout CI installation
+
+The Stage 2 project distribution is metadata-only: setuptools has an explicit empty package list, so `data/` and `notebooks/` are never auto-discovered as installable packages. The `dev` extra declares NumPy and pandas because the synthetic panel tests import them. This changes neither data publication policy nor analysis-population rules.
+
+Validate packaging changes from a fresh Git archive/checkout in a separate temporary environment: install `.[dev]`, run `pytest tests/unit -q`, `ruff check tests`, `ruff format --check tests` and `mypy tests`; build a wheel with `pip wheel --no-deps .` and inspect that it contains no source datasets/notebooks. The three tests backed by ignored private analytical outputs are expected to skip in a public checkout; synthetic regressions still run. Keep a separate local full-suite check when those outputs are available. Never copy private datasets into CI to make these checks pass.

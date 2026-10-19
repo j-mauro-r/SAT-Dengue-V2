@@ -39,3 +39,8 @@ The executable evidence lives in the local DWP `PLAN_007_reconcile_stage2_pull_r
 The repository-wide DWP check has a pre-existing mixed-lifecycle failure in the old initial-recognition plan. It is reported separately; the new plan must pass scoped conformance. Historical G0 evidence and G2 are not silently approved by integration.
 
 Use [PR #10](https://github.com/j-mauro-r/SAT-Dengue-V2/pull/10) as the integrated review candidate. PRs #8/#9 and all original branches remain open/intact until Mauricio decides their disposition. Merging or closing them is not part of this reconciliation. Before merge, review the latest checks on the exact PR #10 head and the remaining scientific tasks in the master plan.
+
+
+## CI repair discovered during publication
+
+The first reconciled push exposed an existing packaging defect in a fresh GitHub checkout: setuptools automatically treated `data/` and `notebooks/` as competing Python packages and failed before testing. The project now explicitly ships a metadata-only distribution and declares NumPy/pandas in the development extra used by the synthetic tests. A fresh checkout/environment verifies editable installation, the public-checkout test set, lint/types and the built wheel's exclusion of datasets/notebooks. No CI checks are disabled and no private source data are uploaded for testing.
