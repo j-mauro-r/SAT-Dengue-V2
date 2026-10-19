@@ -83,7 +83,7 @@ This proposal chooses no winner and authorizes no training during Stage 2.
 
 Residence and symptom onset are approved decisions. Official meanings are documented; historical aliases, case eligibility and information-availability rules remain pending.
 
-Saved EDA described onset quality, the 2013 temporal alerts and a shared January 2020 climate gap. It established neither causes nor correction policies. The supplied DIVIPOLA snapshot establishes 76 expected municipalities; dengue and climate contain all 76, while severe dengue contains 71. Code formatting alone does not establish catalogue membership. Climate at residence does not prove where infection was acquired.
+Saved EDA described onset quality, the 2013 temporal alerts and a shared January 2020 climate gap in the original local snapshot. It established neither causes nor correction policies. Under PLAN_010, January 2020 climate rows were later incorporated into the local supplied dataset with backup, atomic replace and idempotence controls; this resolves local panel coverage but does not by itself prove upstream lineage/completeness. The supplied DIVIPOLA snapshot establishes 76 expected municipalities; dengue and climate contain all 76, while severe dengue contains 71. Code formatting alone does not establish catalogue membership. Climate at residence does not prove where infection was acquired.
 
 No silent fallback dates, discarded year, climate imputation, deduplication or union of dengue streams is approved.
 
@@ -95,7 +95,7 @@ Private sources remain named references; no copies or synchronized `sources/` fi
 
 ## 8. Next bounded work
 
-Investigate source/export evidence for the 2013 anomaly and January 2020 gap, resolve the recorded municipal-code exceptions and establish required-field and case-count semantics before channel and target work. Outbreak onsets can only be counted after channel/label definition and validation.
+Investigate source/export evidence for the 2013 anomaly and for upstream lineage/completeness of recovered January 2020 climate rows, resolve the recorded municipal-code exceptions and establish required-field and case-count semantics before channel and target work. Outbreak onsets can only be counted after channel/label definition and validation.
 
 Later architecture choices must follow that evidence rather than dashboard tab count. Stage 2 remains open; G2 is not approved.
 

@@ -15,6 +15,23 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+try:
+    from stage2_manifest_traceability import (
+        MANIFEST_HISTORY_DIR,
+        MANIFEST_PATH,
+        MANIFEST_TRANSITION_LOG,
+        ManifestTransitionContext,
+        apply_manifest_transition,
+    )
+except ModuleNotFoundError:
+    from scripts.stage2_manifest_traceability import (
+        MANIFEST_HISTORY_DIR,
+        MANIFEST_PATH,
+        MANIFEST_TRANSITION_LOG,
+        ManifestTransitionContext,
+        apply_manifest_transition,
+    )
+
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data/interim/stage2_panel_review"
 PREVIOUS = ROOT / "data/interim/stage2_monthly_sensitivity_associations"
@@ -86,11 +103,29 @@ def protected_inputs() -> list[Path]:
     return sorted(set(paths))
 
 
-def record_inputs() -> None:
+def record_inputs(
+    *,
+    authorize_transition: bool = False,
+    transition_reason: str | None = None,
+    authorized_plan: str | None = None,
+    transition_evidence_paths: list[str] | None = None,
+    transition_backup_reference: str | None = None,
+) -> None:
     hashes = {str(p.relative_to(ROOT)): sha256(p) for p in protected_inputs()}
-    manifest = OUT / "input_hashes.json"
-    if manifest.exists():
-        assert json.loads(manifest.read_text()) == hashes, "Protected inputs changed"
+    if MANIFEST_PATH.exists():
+        apply_manifest_transition(
+            manifest_path=MANIFEST_PATH,
+            new_hashes=hashes,
+            history_dir=MANIFEST_HISTORY_DIR,
+            transition_log_path=MANIFEST_TRANSITION_LOG,
+            context=ManifestTransitionContext(
+                authorized=authorize_transition,
+                reason=transition_reason,
+                authorized_plan=authorized_plan,
+                evidence_paths=transition_evidence_paths or [],
+                backup_reference=transition_backup_reference,
+            ),
+        )
     else:
         save_json("input_hashes.json", hashes)
 
@@ -311,9 +346,15 @@ def source_audits(d: pd.DataFrame, label: str) -> None:
     pd.DataFrame(timing).to_csv(OUT / f"{label}_availability_audit.csv", index=False)
 
 
-def build_panels() -> None:
+def build_panels(args: argparse.Namespace) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    record_inputs()
+    record_inputs(
+        authorize_transition=args.authorize_hash_transition,
+        transition_reason=args.transition_reason,
+        authorized_plan=args.authorized_plan,
+        transition_evidence_paths=args.transition_evidence_path,
+        transition_backup_reference=args.transition_backup_reference,
+    )
     c = catalog()
     c.to_csv(OUT / "municipality_catalog.csv", index=False)
     d = partition_epi(read_epi("dengue.csv"), c, "210")
@@ -969,9 +1010,14 @@ def main() -> None:
     parser.add_argument(
         "--phase", choices=["panel", "analysis", "rules", "validate"], required=True
     )
+    parser.add_argument("--authorize-hash-transition", action="store_true")
+    parser.add_argument("--transition-reason")
+    parser.add_argument("--authorized-plan")
+    parser.add_argument("--transition-evidence-path", action="append", default=[])
+    parser.add_argument("--transition-backup-reference")
     args = parser.parse_args()
     if args.phase == "panel":
-        build_panels()
+        build_panels(args)
     elif args.phase == "analysis":
         run_analysis()
     elif args.phase == "rules":
@@ -980,7 +1026,13 @@ def main() -> None:
         validate_panels()
         validate_sensitivity()
         validate_rules()
-        record_inputs()
+        record_inputs(
+            authorize_transition=args.authorize_hash_transition,
+            transition_reason=args.transition_reason,
+            authorized_plan=args.authorized_plan,
+            transition_evidence_paths=args.transition_evidence_path,
+            transition_backup_reference=args.transition_backup_reference,
+        )
     else:
         raise NotImplementedError(f"Phase {args.phase} is not implemented yet")
 

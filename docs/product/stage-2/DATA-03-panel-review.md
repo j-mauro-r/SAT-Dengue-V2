@@ -18,7 +18,7 @@ Each row is one catalog municipality and calendar month in the union of source d
 
 `*_recorded_count` measures source rows, including a numerical zero when no rows were found; that zero is not a certified absence of disease. Nullable `dengue_count`/`severe_count` remain missing when no retained records exist. States distinguish records present, no records/reporting unknown, and records removed by a scenario. No month is assigned a confirmed-zero status because no completeness evidence was supplied.
 
-Climate retains daily coverage counts and expected calendar days; incomplete months are visible without imputation. The 2007–2025 common source window is flagged for descriptive comparisons, not automatically approved for operational training. January 2020 remains absent.
+Climate retains daily coverage counts and expected calendar days; incomplete months are visible without imputation. The 2007–2025 common source window is flagged for descriptive comparisons, not automatically approved for operational training. Historical evidence preserves that the original local snapshot lacked January 2020 rows; after PLAN_010 controlled incorporation, the recomputed panel shows January 2020 climate coverage for all 76 Tolima/Meta municipalities (0 `climate_state=missing` rows for `2020-01`).
 
 ## Validation
 
@@ -44,10 +44,23 @@ Subsequent human decision (2026-10-18, DEC-113): use S1 for the baseline, retain
 
 ## Measured review outcomes
 
-- Among valid municipalities, S1/S2/S3 retain 235,111 / 227,368 / 226,587 dengue notification rows. Exclusions are 7,743 / 8,524; the difference from the original 7,772 / 8,556 is entirely in quarantined geographic codes. All scenarios retain the same 4,598 severe rows and the same 17,252 complete municipality-month climate observations.
+- Among valid municipalities, S1/S2/S3 retain 235,111 / 227,368 / 226,587 dengue notification rows. Exclusions are 7,743 / 8,524; the difference from the original 7,772 / 8,556 is entirely in quarantined geographic codes. All scenarios retain the same 4,598 severe rows and the same 17,328 complete municipality-month climate observations after January 2020 incorporation.
 - Against the earlier panel on the same valid keys, 113 severe rows and 5,765 temperature cells are restored. All 118 previously lost severe rows are accounted for: 113 belong to valid municipalities and five belong to unresolved codes retained in exceptions.
 - Of 528 municipality-months with the required pre-2013 observed history, 234/132/118 exceed the prior observed maximum under S1/S2/S3. This substantial change is descriptive sensitivity, not outbreak detection.
 - Re-reading annual references matches 10,715 / 20,296 / 15,216 rows. All 481 / 66 / 540 naive inverted pairs have equal dates; genuine unequal-date inversions are zero. The 8,556 anomalies also appear in the matched 2013 reference. Upstream truth and extraction lineage remain unresolved.
 - S1 pooled raw T+1 correlations are approximately 0.798 for dengue, 0.508 for severe, 0.215 for confirmation, 0.022 for rainfall and 0.013 for temperature. The corresponding adjusted leads are 0.674, 0.050, 0.046, -0.025 and 0.054. Sample sizes differ by feature (9,632 / 1,710 / 9,632 / 9,577 / 9,577); these numbers do not compare predictive utility. The severe sample only includes months with recorded severe notifications.
 
 See [the use-rules guide](DATA-04-retrospective-use-rules.md) for population, identity, missingness, eligibility and historical availability. All values derive from the local aggregate output tables. Raw inputs and historical PLAN_004/005 evidence remain unchanged.
+
+## Post-incorporation recomputation reconciliation (PLAN_011)
+
+After the authorized January 2020 climate incorporation, affected derived outputs were rerun in script-defined order: `panel -> analysis -> rules -> validate`. This order matters: `validate` checks existing artifacts and guards, but does not rebuild analysis outputs by itself.
+
+Observed reconciliation from `data/interim/stage2_derived_recompute_reconciliation/derived_comparison_summary.json`:
+
+- January climate coverage is complete for the reviewed scope: 76 municipalities, 31 days and all nine climate variables with complete valid-day support.
+- Epidemiological totals and scenario rules remain unchanged (S1/S2/S3 dengue counts and severe counts are conserved exactly).
+- Non-January climate monthly aggregates remain unchanged.
+- Association outputs were recomputed and changed where expected under temporal propagation: row membership is unchanged, while `n_obs`/`rho` changed in 243 raw rows and 162 controlled rows, consistent with lag/window support updates after January climate availability.
+
+Historical outputs under `data/interim/stage2_monthly_sensitivity_associations/` are retained as historical reference and were not recomputed in this bounded task; treat them as potentially stale for post-incorporation interpretation.
