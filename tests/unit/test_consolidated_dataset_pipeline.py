@@ -4,6 +4,7 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
@@ -16,6 +17,228 @@ assert SPEC and SPEC.loader
 pipeline = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = pipeline
 SPEC.loader.exec_module(pipeline)
+
+
+def _prepare_reuse_manifest_fixture(
+    tmp_path: Path,
+) -> tuple[Path, Any, dict[str, object], tuple[str, ...]]:
+    root = tmp_path / "repo"
+    (root / "data/raw").mkdir(parents=True)
+    (root / "data/sources").mkdir(parents=True)
+    (root / "data/processed").mkdir(parents=True)
+    (root / "data/interim/stage2_consolidated_dataset_pipeline").mkdir(parents=True)
+
+    for relative_path, content in {
+        "data/raw/dengue.csv": "a,b\n1,2\n",
+        "data/raw/dengue_grave.csv": "a,b\n3,4\n",
+        "data/raw/google_earth_engine.csv": "date,dpto_ccdgo,mpio_cdpmp\n2020-01-01,50,50001\n",
+        "data/sources/Divipola-municipios.md": "{}\n",
+        "data/sources/divipola-provenance.json": "{}\n",
+        "scripts/stage2_consolidated_dataset_pipeline.py": "# synthetic pipeline module\n",
+    }.items():
+        file_path = root / relative_path
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")
+
+    output_payloads = {
+        "dengue_y_dengue_grave": ("data/processed/dengue_y_dengue_grave.csv", "x\n1\n", 1),
+        "panel_mensual_dengue_clima": (
+            "data/processed/panel_mensual_dengue_clima.csv",
+            "municipality_code,year_month\n50001,2020-01\n",
+            1,
+        ),
+        "y_label_history_traceability": (
+            "data/interim/stage2_consolidated_dataset_pipeline/y_label_history_traceability.csv",
+            "x\n1\n",
+            1,
+        ),
+        "current_endemic_channel_traceability": (
+            "data/interim/stage2_consolidated_dataset_pipeline/current_endemic_channel_traceability.csv",
+            "x\n1\n",
+            1,
+        ),
+        "candidate_contract": (
+            "data/interim/stage2_consolidated_dataset_pipeline/candidate_construction_contract_v1.json",
+            "{}\n",
+            0,
+        ),
+    }
+
+    outputs: dict[str, object] = {}
+    for output_key, (relative_path, content, rows) in output_payloads.items():
+        output_path = root / relative_path
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(content, encoding="utf-8")
+        outputs[output_key] = {
+            "path": relative_path,
+            "rows": rows,
+            "sha256": pipeline.sha256_file(output_path),
+            "bytes": output_path.stat().st_size,
+        }
+
+    cfg = pipeline.PipelineConfig(
+        chunksize_epi=200_000,
+        chunksize_climate=250_000,
+        contract_version="candidate-construction-v1",
+        perform_safe_write=True,
+    )
+    paths = pipeline.build_paths(root)
+    manifest = {
+        "pipeline": pipeline.build_pipeline_signature(paths, cfg),
+        "input_fingerprints_before": pipeline.fingerprint_inputs(paths),
+        "input_fingerprints_after": pipeline.fingerprint_inputs(paths),
+        "outputs": outputs,
+    }
+    required_output_keys = tuple(output_payloads.keys())
+    return root, cfg, manifest, required_output_keys
+
+
+def test_validate_manifest_reuse_candidate_allows_reuse_when_everything_matches(
+    tmp_path: Path,
+) -> None:
+    root, cfg, manifest, required_output_keys = _prepare_reuse_manifest_fixture(tmp_path)
+
+    can_reuse, reasons, summary = pipeline.validate_manifest_reuse_candidate(
+        root=root,
+        config=cfg,
+        manifest=manifest,
+        required_output_keys=required_output_keys,
+    )
+
+    assert can_reuse is True
+    assert reasons == []
+    assert summary["consolidated_rows"] == 1
+    assert summary["panel_rows"] == 1
+
+
+def test_validate_manifest_reuse_candidate_rejects_code_change_with_same_inputs_and_config(
+    tmp_path: Path,
+) -> None:
+    root, cfg, manifest, required_output_keys = _prepare_reuse_manifest_fixture(tmp_path)
+
+    # Regression guard for the previous blind spot: code drift with stable input/config.
+    module_path = root / "scripts/stage2_consolidated_dataset_pipeline.py"
+    module_path.write_text("# synthetic pipeline module changed\n", encoding="utf-8")
+
+    can_reuse, reasons, _summary = pipeline.validate_manifest_reuse_candidate(
+        root=root,
+        config=cfg,
+        manifest=manifest,
+        required_output_keys=required_output_keys,
+    )
+
+    assert can_reuse is False
+    assert "pipeline_module_sha256_mismatch" in reasons
+
+
+def test_validate_manifest_reuse_candidate_rejects_input_and_config_changes(
+    tmp_path: Path,
+) -> None:
+    root, cfg, manifest, required_output_keys = _prepare_reuse_manifest_fixture(tmp_path)
+
+    (root / "data/raw/dengue.csv").write_text("a,b\n7,8\n", encoding="utf-8")
+    can_reuse_inputs, reasons_inputs, _summary_inputs = pipeline.validate_manifest_reuse_candidate(
+        root=root,
+        config=cfg,
+        manifest=manifest,
+        required_output_keys=required_output_keys,
+    )
+
+    assert can_reuse_inputs is False
+    assert "input_fingerprints_before_mismatch" in reasons_inputs
+    assert "input_fingerprints_after_mismatch" in reasons_inputs
+
+    can_reuse_cfg, reasons_cfg, _summary_cfg = pipeline.validate_manifest_reuse_candidate(
+        root=root,
+        config=pipeline.PipelineConfig(
+            chunksize_epi=cfg.chunksize_epi,
+            chunksize_climate=cfg.chunksize_climate,
+            contract_version="candidate-construction-v2",
+            perform_safe_write=True,
+        ),
+        manifest=manifest,
+        required_output_keys=required_output_keys,
+    )
+
+    assert can_reuse_cfg is False
+    assert "pipeline_contract_version_mismatch" in reasons_cfg
+
+
+def test_validate_manifest_reuse_candidate_rejects_missing_code_hash_and_tampered_output(
+    tmp_path: Path,
+) -> None:
+    root, cfg, manifest, required_output_keys = _prepare_reuse_manifest_fixture(tmp_path)
+
+    missing_hash_manifest = json.loads(json.dumps(manifest))
+    del missing_hash_manifest["pipeline"]["module_sha256"]
+    can_reuse_missing, reasons_missing, _summary_missing = (
+        pipeline.validate_manifest_reuse_candidate(
+            root=root,
+            config=cfg,
+            manifest=missing_hash_manifest,
+            required_output_keys=required_output_keys,
+        )
+    )
+
+    assert can_reuse_missing is False
+    assert "pipeline_module_sha256_missing" in reasons_missing
+
+    missing_bytes_manifest = json.loads(json.dumps(manifest))
+    del missing_bytes_manifest["outputs"]["candidate_contract"]["bytes"]
+    can_reuse_missing_bytes, reasons_missing_bytes, _summary_missing_bytes = (
+        pipeline.validate_manifest_reuse_candidate(
+            root=root,
+            config=cfg,
+            manifest=missing_bytes_manifest,
+            required_output_keys=required_output_keys,
+        )
+    )
+
+    assert can_reuse_missing_bytes is False
+    assert "output_bytes_missing:candidate_contract" in reasons_missing_bytes
+
+    tampered_panel_path = root / "data/processed/panel_mensual_dengue_clima.csv"
+    tampered_panel_path.write_text(
+        "municipality_code,year_month\n50001,2020-02\n", encoding="utf-8"
+    )
+    can_reuse_tampered, reasons_tampered, _summary_tampered = (
+        pipeline.validate_manifest_reuse_candidate(
+            root=root,
+            config=cfg,
+            manifest=manifest,
+            required_output_keys=required_output_keys,
+        )
+    )
+
+    assert can_reuse_tampered is False
+    assert "output_sha256_mismatch:panel_mensual_dengue_clima" in reasons_tampered
+
+
+def test_validate_manifest_reuse_candidate_rejects_output_alias_path_spoofing(
+    tmp_path: Path,
+) -> None:
+    root, cfg, manifest, required_output_keys = _prepare_reuse_manifest_fixture(tmp_path)
+
+    spoofed_manifest = json.loads(json.dumps(manifest))
+    spoofed_manifest["outputs"]["panel_mensual_dengue_clima"]["path"] = (
+        "data/processed/dengue_y_dengue_grave.csv"
+    )
+    spoofed_manifest["outputs"]["panel_mensual_dengue_clima"]["sha256"] = spoofed_manifest[
+        "outputs"
+    ]["dengue_y_dengue_grave"]["sha256"]
+    spoofed_manifest["outputs"]["panel_mensual_dengue_clima"]["bytes"] = spoofed_manifest[
+        "outputs"
+    ]["dengue_y_dengue_grave"]["bytes"]
+
+    can_reuse, reasons, _summary = pipeline.validate_manifest_reuse_candidate(
+        root=root,
+        config=cfg,
+        manifest=spoofed_manifest,
+        required_output_keys=required_output_keys,
+    )
+
+    assert can_reuse is False
+    assert "output_path_mismatch:panel_mensual_dengue_clima" in reasons
 
 
 def test_normalize_code_preserves_leading_zeroes_and_rejects_invalid_values() -> None:

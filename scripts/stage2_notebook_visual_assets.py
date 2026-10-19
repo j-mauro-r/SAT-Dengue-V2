@@ -589,6 +589,7 @@ def select_supervised_rows(
     panel: pd.DataFrame,
     horizon: int,
     *,
+    reference_min_period: str | None = None,
     target_min_period: str | None = None,
     target_max_period: str | None = None,
     reference_max_period: str | None = None,
@@ -598,6 +599,7 @@ def select_supervised_rows(
     Args:
         panel: Municipality-month panel.
         horizon: Horizon in months (1 or 2).
+        reference_min_period: Optional lower reference-period bound (inclusive).
         target_min_period: Optional lower target-period bound (inclusive).
         target_max_period: Optional upper target-period bound (inclusive).
         reference_max_period: Optional upper reference-period bound (inclusive).
@@ -618,6 +620,8 @@ def select_supervised_rows(
     selected[target_column] = selected[target_column].astype(str)
 
     mask = selected[evaluable_column].fillna(False).astype(bool)
+    if reference_min_period is not None:
+        mask &= selected["year_month"] >= str(reference_min_period)
     if reference_max_period is not None:
         mask &= selected["year_month"] <= str(reference_max_period)
     if target_min_period is not None:
@@ -631,6 +635,7 @@ def compute_lag_association_summary(
     panel_development: pd.DataFrame,
     predictors: list[PredictorSpec],
     min_rows_per_municipality: int = 12,
+    development_target_min: str | None = None,
     development_target_max: str | None = None,
     development_reference_max: str | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
@@ -644,6 +649,7 @@ def compute_lag_association_summary(
         panel_development: Development split panel.
         predictors: Predictor specification list.
         min_rows_per_municipality: Minimum rows for municipality-level estimate.
+        development_target_min: Optional min target period for development usage.
         development_target_max: Optional max target period for development usage.
         development_reference_max: Optional max reference period for development usage.
 
@@ -670,6 +676,7 @@ def compute_lag_association_summary(
         scoped = select_supervised_rows(
             frame,
             horizon,
+            target_min_period=development_target_min,
             target_max_period=development_target_max,
             reference_max_period=development_reference_max,
         )
@@ -766,6 +773,7 @@ def compute_lag_association_summary(
         "method": "point_biserial_within_municipality_unweighted_median",
         "min_rows_per_municipality": min_rows_per_municipality,
         "selection": {
+            "target_min_period": development_target_min,
             "reference_max_period": development_reference_max,
             "target_max_period": development_target_max,
         },
@@ -887,6 +895,9 @@ def build_temporal_validation_audit(
     panel_reserved: pd.DataFrame,
     window_train_endpoints: list[str],
     predictor_columns_used: list[str],
+    *,
+    development_target_min: str | None = None,
+    development_target_max: str | None = None,
 ) -> pd.DataFrame:
     """Build executable temporal protocol audit by window.
 
@@ -895,6 +906,8 @@ def build_temporal_validation_audit(
         panel_reserved: Reserved final-block split panel.
         window_train_endpoints: Train-end checkpoints.
         predictor_columns_used: Predictor columns used in this scope.
+        development_target_min: Optional minimum eligible target month.
+        development_target_max: Optional maximum eligible target month.
 
     Returns:
         Audit dataframe with one row per temporal window and horizon.
@@ -929,12 +942,17 @@ def build_temporal_validation_audit(
         )
         shared_train_cutoffs = train_unique_start == 1 and train_unique_end == 1
 
+        train_target_upper = train_end
+        if development_target_max is not None:
+            train_target_upper = min(train_target_upper, str(development_target_max))
+
         selected_train = {
             horizon: select_supervised_rows(
                 panel_development,
                 horizon,
                 reference_max_period=train_end,
-                target_max_period=train_end,
+                target_min_period=development_target_min,
+                target_max_period=train_target_upper,
             )
             for horizon in (1, 2)
         }
@@ -951,16 +969,39 @@ def build_temporal_validation_audit(
             target_column = f"target_period_t{horizon}"
             train_scope = selected_train[horizon]
 
+            validation_target_start = validation_start
+            if development_target_min is not None:
+                validation_target_start = max(
+                    validation_target_start,
+                    str(development_target_min),
+                )
+
             validation_target_end = validation_end
+            if development_target_max is not None:
+                validation_target_end = min(validation_target_end, str(development_target_max))
             if reserved_start is not None:
                 validation_target_end = min(validation_target_end, add_months(reserved_start, -1))
 
-            validation_scope = select_supervised_rows(
-                panel_development,
-                horizon,
-                target_min_period=validation_start,
-                target_max_period=validation_target_end,
-            )
+            validation_scope = panel_development.head(0).copy()
+            if validation_target_start <= validation_target_end:
+                validation_scope = select_supervised_rows(
+                    panel_development,
+                    horizon,
+                    reference_min_period=train_end,
+                    reference_max_period=validation_end,
+                    target_min_period=validation_target_start,
+                    target_max_period=validation_target_end,
+                )
+
+            reference_cutoff_ok = True
+            reference_cutoff_reason = "ok"
+            reference_before_cutoff_count = 0
+            if not validation_scope.empty:
+                reference_before_cutoff = validation_scope["year_month"].astype(str) < train_end
+                reference_before_cutoff_count = int(reference_before_cutoff.sum())
+                reference_cutoff_ok = reference_before_cutoff_count == 0
+                if not reference_cutoff_ok:
+                    reference_cutoff_reason = "validation_reference_before_train_cutoff"
 
             labels_observable = True
             labels_observable_reason = "ok"
@@ -996,6 +1037,20 @@ def build_temporal_validation_audit(
                 if not reserved_excluded:
                     reserved_reason = "validation_contains_reserved_target"
 
+            target_window_ok = True
+            target_window_reason = "ok"
+            if not validation_scope.empty:
+                target_values = validation_scope[target_column].astype(str)
+                target_window_ok = bool(
+                    target_values.between(
+                        validation_start,
+                        validation_end,
+                        inclusive="both",
+                    ).all()
+                )
+                if not target_window_ok:
+                    target_window_reason = "validation_target_outside_declared_window"
+
             shared_cutoffs = shared_train_cutoffs
             if not validation_scope.empty:
                 val_unique_start = (
@@ -1012,6 +1067,8 @@ def build_temporal_validation_audit(
                     labels_observable,
                     horizon_alignment_ok,
                     no_future_labels_in_x,
+                    reference_cutoff_ok,
+                    target_window_ok,
                     reserved_excluded,
                     shared_cutoffs,
                 ]
@@ -1026,6 +1083,10 @@ def build_temporal_validation_audit(
                 reasons.append(horizon_reason)
             if not no_future_labels_in_x:
                 reasons.append(f"leakage_columns:{'|'.join(leakage_columns)}")
+            if not reference_cutoff_ok:
+                reasons.append(reference_cutoff_reason)
+            if not target_window_ok:
+                reasons.append(target_window_reason)
             if not reserved_excluded:
                 reasons.append(reserved_reason)
             if not shared_cutoffs:
@@ -1041,6 +1102,10 @@ def build_temporal_validation_audit(
                     "train_end": train_end,
                     "validation_start": validation_start,
                     "validation_end": validation_end,
+                    "configured_target_min": validation_start,
+                    "configured_target_max": validation_end,
+                    "effective_target_min": validation_target_start,
+                    "effective_target_max": validation_target_end,
                     "last_train_target_period_t1": last_train_target[1],
                     "last_train_target_period_t2": last_train_target[2],
                     "train_rows": int(len(train_scope)),
@@ -1053,12 +1118,43 @@ def build_temporal_validation_audit(
                     "check_labels_observable_at_cutoff": "PASS" if labels_observable else "FAIL",
                     "check_horizon_separation": "PASS" if horizon_alignment_ok else "FAIL",
                     "check_no_future_labels_in_x": "PASS" if no_future_labels_in_x else "FAIL",
+                    "check_validation_reference_at_or_after_cutoff": (
+                        "PASS" if reference_cutoff_ok else "FAIL"
+                    ),
+                    "check_validation_target_within_declared_window": (
+                        "PASS" if target_window_ok else "FAIL"
+                    ),
                     "check_transform_fit_train_only": transformation_status,
                     "check_reserved_block_excluded": "PASS" if reserved_excluded else "FAIL",
                     "check_shared_cutoffs_by_municipality": "PASS" if shared_cutoffs else "FAIL",
                     "temporal_validation_result": "PASS" if temporal_ok else "FAIL",
                     "reason_if_not_pass": "ok" if temporal_ok else "; ".join(reasons),
                     "transform_note": transformation_reason,
+                    "train_reference_min_selected": str(train_scope["year_month"].min())
+                    if not train_scope.empty
+                    else None,
+                    "train_reference_max_selected": str(train_scope["year_month"].max())
+                    if not train_scope.empty
+                    else None,
+                    "train_target_min_selected": str(train_scope[target_column].min())
+                    if not train_scope.empty
+                    else None,
+                    "train_target_max_selected": str(train_scope[target_column].max())
+                    if not train_scope.empty
+                    else None,
+                    "validation_reference_min_selected": str(validation_scope["year_month"].min())
+                    if not validation_scope.empty
+                    else None,
+                    "validation_reference_max_selected": str(validation_scope["year_month"].max())
+                    if not validation_scope.empty
+                    else None,
+                    "validation_target_min_selected": str(validation_scope[target_column].min())
+                    if not validation_scope.empty
+                    else None,
+                    "validation_target_max_selected": str(validation_scope[target_column].max())
+                    if not validation_scope.empty
+                    else None,
+                    "validation_reference_before_cutoff_count": reference_before_cutoff_count,
                 }
             )
 

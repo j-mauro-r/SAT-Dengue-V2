@@ -244,6 +244,68 @@ def test_point_biserial_rejects_invalid_support() -> None:
         raise AssertionError("Expected constant_predictor ValueError")
 
 
+def test_select_supervised_rows_enforces_target_min_and_accepts_boundary() -> None:
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["50001"] * 6,
+            "year_month": ["2011-10", "2011-11", "2011-12", "2012-01", "2012-02", "2012-03"],
+            "target_period_t1": ["2011-11", "2011-12", "2012-01", "2012-02", "2012-03", "2012-04"],
+            "target_period_t2": ["2011-12", "2012-01", "2012-02", "2012-03", "2012-04", "2012-05"],
+            "y_evaluable_t1": [True] * 6,
+            "y_evaluable_t2": [True] * 6,
+        }
+    )
+
+    t1 = select_supervised_rows(
+        panel,
+        1,
+        target_min_period="2012-01",
+        target_max_period="2012-04",
+    )
+    t2 = select_supervised_rows(
+        panel,
+        2,
+        target_min_period="2012-01",
+        target_max_period="2012-05",
+    )
+
+    assert bool((t1["target_period_t1"].astype(str) < "2012-01").any()) is False
+    assert bool((t2["target_period_t2"].astype(str) < "2012-01").any()) is False
+    assert "2012-01" in t1["target_period_t1"].astype(str).tolist()
+    assert "2012-01" in t2["target_period_t2"].astype(str).tolist()
+
+
+def test_validation_t2_rejects_pre_cutoff_reference_and_keeps_cutoff_boundary() -> None:
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["50001", "50001", "50001"],
+            "year_month": ["2018-11", "2018-12", "2019-01"],
+            "target_period_t1": ["2018-12", "2019-01", "2019-02"],
+            "target_period_t2": ["2019-01", "2019-02", "2019-03"],
+            "y_evaluable_t1": [True, True, True],
+            "y_evaluable_t2": [True, True, True],
+        }
+    )
+
+    legacy_t2 = select_supervised_rows(
+        panel,
+        2,
+        target_min_period="2019-01",
+        target_max_period="2019-06",
+    )
+    corrected_t2 = select_supervised_rows(
+        panel,
+        2,
+        reference_min_period="2018-12",
+        target_min_period="2019-01",
+        target_max_period="2019-06",
+    )
+
+    assert "2018-11" in legacy_t2["year_month"].astype(str).tolist()
+    assert "2018-11" not in corrected_t2["year_month"].astype(str).tolist()
+    assert "2018-12" in corrected_t2["year_month"].astype(str).tolist()
+
+
 def test_compute_lag_association_marks_non_evaluable_groups() -> None:
     months = pd.period_range("2022-01", "2023-12", freq="M")
     rows = []
@@ -371,8 +433,77 @@ def test_temporal_validation_audit_uses_safe_target_selection_per_horizon() -> N
     assert len(audit) == 2
     assert set(audit["horizon"].tolist()) == {"t1", "t2"}
     assert set(audit["check_labels_observable_at_cutoff"].tolist()) == {"PASS"}
+    assert set(audit["check_validation_reference_at_or_after_cutoff"].tolist()) == {"PASS"}
+    assert set(audit["check_validation_target_within_declared_window"].tolist()) == {"PASS"}
     assert set(audit["check_reserved_block_excluded"].tolist()) == {"PASS"}
     assert set(audit["temporal_validation_result"].tolist()) == {"PASS"}
+
+
+def test_temporal_windows_apply_policy_bounds_and_fix_t2_reference_leakage() -> None:
+    municipalities = [f"{50001 + idx:05d}" for idx in range(76)]
+    periods = pd.period_range("2011-01", "2024-12", freq="M")
+
+    rows: list[dict[str, object]] = []
+    for municipality in municipalities:
+        for period in periods:
+            rows.append(
+                {
+                    "municipality_code": municipality,
+                    "year_month": str(period),
+                    "target_period_t1": str(period + 1),
+                    "target_period_t2": str(period + 2),
+                    "y_evaluable_t1": True,
+                    "y_evaluable_t2": True,
+                }
+            )
+
+    panel_development = pd.DataFrame(rows)
+    panel_reserved = pd.DataFrame(
+        {
+            "municipality_code": municipalities,
+            "year_month": ["2025-01"] * len(municipalities),
+        }
+    )
+    window_train_endpoints = ["2018-12", "2020-12", "2022-12", "2024-06"]
+
+    audit = build_temporal_validation_audit(
+        panel_development,
+        panel_reserved,
+        window_train_endpoints=window_train_endpoints,
+        predictor_columns_used=["rain_lag1"],
+        development_target_min="2012-01",
+        development_target_max="2024-12",
+    )
+
+    assert len(audit) == len(window_train_endpoints) * 2
+    assert set(audit["temporal_validation_result"].tolist()) == {"PASS"}
+
+    for train_end in window_train_endpoints:
+        validation_start = f"{int(train_end[:4]) + 1:04d}-01" if train_end.endswith("-12") else None
+        # Legacy selection (without reference_min_period) incorrectly includes one extra
+        # reference month per municipality for T+2 (e.g., 2018-11 -> target 2019-01).
+        legacy_t2 = select_supervised_rows(
+            panel_development,
+            2,
+            target_min_period=str(pd.Period(train_end, freq="M") + 1),
+            target_max_period=str(pd.Period(train_end, freq="M") + 6),
+        )
+        corrected_t2 = select_supervised_rows(
+            panel_development,
+            2,
+            reference_min_period=train_end,
+            reference_max_period=str(pd.Period(train_end, freq="M") + 6),
+            target_min_period=max(str(pd.Period(train_end, freq="M") + 1), "2012-01"),
+            target_max_period=min(str(pd.Period(train_end, freq="M") + 6), "2024-12"),
+        )
+        assert int(len(legacy_t2) - len(corrected_t2)) == 76
+        if validation_start is not None:
+            assert validation_start >= "2012-01"
+
+    assert bool((audit["validation_reference_before_cutoff_count"] == 0).all()) is True
+    assert bool((audit["check_validation_reference_at_or_after_cutoff"] == "PASS").all()) is True
+    assert bool((audit["validation_target_min_selected"].dropna() >= "2012-01").all()) is True
+    assert bool((audit["validation_target_max_selected"].dropna() <= "2024-12").all()) is True
 
 
 def test_notebook_is_code_only() -> None:

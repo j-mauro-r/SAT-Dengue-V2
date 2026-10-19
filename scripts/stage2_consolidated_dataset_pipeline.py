@@ -64,6 +64,20 @@ SOURCE_LABEL_BY_FILE = {
     "dengue_grave.csv": "dengue_grave",
 }
 
+EXPECTED_OUTPUT_PATH_BY_KEY = {
+    "dengue_y_dengue_grave": "data/processed/dengue_y_dengue_grave.csv",
+    "panel_mensual_dengue_clima": "data/processed/panel_mensual_dengue_clima.csv",
+    "y_label_history_traceability": (
+        "data/interim/stage2_consolidated_dataset_pipeline/y_label_history_traceability.csv"
+    ),
+    "current_endemic_channel_traceability": (
+        "data/interim/stage2_consolidated_dataset_pipeline/current_endemic_channel_traceability.csv"
+    ),
+    "candidate_contract": (
+        "data/interim/stage2_consolidated_dataset_pipeline/candidate_construction_contract_v1.json"
+    ),
+}
+
 Y_HORIZONS = (1, 2)
 Y_REFERENCE_YEARS = 5
 Y_PERCENTILE = 0.75
@@ -104,12 +118,14 @@ class PipelineConfig:
         chunksize_climate: Chunksize for climate CSV reads.
         contract_version: Candidate construction contract version string.
         perform_safe_write: If true, write outputs to disk; else dry run.
+        reuse_existing_outputs: If true, reuse existing outputs when manifest checks pass.
     """
 
     chunksize_epi: int = 200_000
     chunksize_climate: int = 250_000
     contract_version: str = "candidate-construction-v1"
     perform_safe_write: bool = True
+    reuse_existing_outputs: bool = False
 
 
 @dataclass
@@ -1551,6 +1567,227 @@ def fingerprint_inputs(paths: PipelinePaths) -> dict[str, Any]:
     }
 
 
+def build_pipeline_signature(paths: PipelinePaths, config: PipelineConfig) -> dict[str, Any]:
+    """Build a deterministic pipeline signature for reuse validation.
+
+    Args:
+        paths: Pipeline paths.
+        config: Active pipeline configuration.
+
+    Returns:
+        Signature dictionary that includes module identity and configuration.
+    """
+
+    module_relpath = "scripts/stage2_consolidated_dataset_pipeline.py"
+    module_path = paths.root / module_relpath
+    return {
+        "module": module_relpath,
+        "module_sha256": sha256_file(module_path),
+        "contract_version": config.contract_version,
+        "chunksize_epi": config.chunksize_epi,
+        "chunksize_climate": config.chunksize_climate,
+    }
+
+
+def validate_manifest_reuse_candidate(
+    *,
+    root: Path,
+    config: PipelineConfig,
+    manifest: dict[str, Any],
+    required_output_keys: Iterable[str],
+) -> tuple[bool, list[str], dict[str, Any]]:
+    """Validate whether execution-manifest artifacts are safe to reuse.
+
+    Args:
+        root: Repository root.
+        config: Active pipeline configuration.
+        manifest: Loaded execution manifest.
+        required_output_keys: Required output aliases for reuse.
+
+    Returns:
+        Tuple ``(can_reuse, reasons, summary)``.
+        ``reasons`` is empty when reuse is allowed.
+    """
+
+    paths = build_paths(root)
+    reasons: list[str] = []
+
+    expected_signature = build_pipeline_signature(paths, config)
+    manifest_pipeline = manifest.get("pipeline")
+    if not isinstance(manifest_pipeline, dict):
+        reasons.append("pipeline_signature_missing")
+        manifest_pipeline = {}
+
+    for key, expected_value in expected_signature.items():
+        if key not in manifest_pipeline:
+            reasons.append(f"pipeline_{key}_missing")
+            continue
+        if manifest_pipeline[key] != expected_value:
+            reasons.append(f"pipeline_{key}_mismatch")
+
+    expected_inputs = fingerprint_inputs(paths)
+    for field in ("input_fingerprints_before", "input_fingerprints_after"):
+        observed = manifest.get(field)
+        if not isinstance(observed, dict):
+            reasons.append(f"{field}_missing")
+            continue
+        if observed != expected_inputs:
+            reasons.append(f"{field}_mismatch")
+
+    outputs = manifest.get("outputs")
+    if not isinstance(outputs, dict):
+        reasons.append("outputs_section_missing")
+        outputs = {}
+
+    for output_key in required_output_keys:
+        output_info = outputs.get(output_key)
+        if not isinstance(output_info, dict):
+            reasons.append(f"output_entry_missing:{output_key}")
+            continue
+
+        relative_path = output_info.get("path")
+        if not isinstance(relative_path, str):
+            reasons.append(f"output_path_missing:{output_key}")
+            continue
+
+        expected_relative_path = EXPECTED_OUTPUT_PATH_BY_KEY.get(output_key)
+        if expected_relative_path is not None and relative_path != expected_relative_path:
+            reasons.append(f"output_path_mismatch:{output_key}")
+            continue
+
+        output_path = root / relative_path
+        if not output_path.exists():
+            reasons.append(f"output_file_missing:{output_key}")
+            continue
+
+        expected_sha256 = output_info.get("sha256")
+        if not isinstance(expected_sha256, str):
+            reasons.append(f"output_sha256_missing:{output_key}")
+        else:
+            actual_sha256 = sha256_file(output_path)
+            if actual_sha256 != expected_sha256:
+                reasons.append(f"output_sha256_mismatch:{output_key}")
+
+        expected_bytes = output_info.get("bytes")
+        if expected_bytes is None:
+            reasons.append(f"output_bytes_missing:{output_key}")
+        else:
+            actual_bytes = int(output_path.stat().st_size)
+            try:
+                if int(expected_bytes) != actual_bytes:
+                    reasons.append(f"output_bytes_mismatch:{output_key}")
+            except (TypeError, ValueError):
+                reasons.append(f"output_bytes_invalid:{output_key}")
+
+    can_reuse = len(reasons) == 0
+    summary: dict[str, Any] = {}
+    if can_reuse:
+        consolidated = outputs.get("dengue_y_dengue_grave", {})
+        panel = outputs.get("panel_mensual_dengue_clima", {})
+        if isinstance(consolidated, dict) and isinstance(panel, dict):
+            summary = {
+                "consolidated_path": str(Path(str(consolidated.get("path", "")))),
+                "panel_path": str(Path(str(panel.get("path", "")))),
+                "consolidated_rows": int(consolidated.get("rows", -1)),
+                "panel_rows": int(panel.get("rows", -1)),
+            }
+
+    return can_reuse, sorted(set(reasons)), summary
+
+
+def _coerce_non_negative_int(value: Any) -> int | None:
+    """Best-effort parse for non-negative integer metadata fields."""
+
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed >= 0 else None
+
+
+def build_pipeline_result_from_manifest(
+    paths: PipelinePaths, manifest: dict[str, Any]
+) -> PipelineResult:
+    """Build a ``PipelineResult`` from an already-validated execution manifest.
+
+    Args:
+        paths: Pipeline paths.
+        manifest: Loaded execution manifest.
+
+    Returns:
+        Reconstructed pipeline result.
+
+    Raises:
+        PipelineValidationError: If required output paths are missing.
+    """
+
+    outputs = manifest.get("outputs")
+    if not isinstance(outputs, dict):
+        raise PipelineValidationError("Execution manifest outputs section missing for reuse")
+
+    def required_output_path(output_key: str) -> Path:
+        output_info = outputs.get(output_key)
+        if not isinstance(output_info, dict):
+            raise PipelineValidationError(f"Execution manifest output missing: {output_key}")
+        relative_path = output_info.get("path")
+        if not isinstance(relative_path, str):
+            raise PipelineValidationError(f"Execution manifest path missing: {output_key}")
+        absolute_path = paths.root / relative_path
+        if not absolute_path.exists():
+            raise PipelineValidationError(f"Execution manifest file missing: {relative_path}")
+        return absolute_path
+
+    consolidated_path = required_output_path("dengue_y_dengue_grave")
+    panel_path = required_output_path("panel_mensual_dengue_clima")
+    y_traceability_path = required_output_path("y_label_history_traceability")
+    contract_path = required_output_path("candidate_contract")
+
+    consolidated_info = outputs.get("dengue_y_dengue_grave", {})
+    panel_info = outputs.get("panel_mensual_dengue_clima", {})
+    consolidated_rows = (
+        _coerce_non_negative_int(consolidated_info.get("rows"))
+        if isinstance(consolidated_info, dict)
+        else None
+    )
+    consolidated_columns = (
+        _coerce_non_negative_int(consolidated_info.get("columns"))
+        if isinstance(consolidated_info, dict)
+        else None
+    )
+    panel_rows = (
+        _coerce_non_negative_int(panel_info.get("rows")) if isinstance(panel_info, dict) else None
+    )
+    panel_columns = (
+        _coerce_non_negative_int(panel_info.get("columns"))
+        if isinstance(panel_info, dict)
+        else None
+    )
+
+    if consolidated_rows is None or consolidated_columns is None:
+        consolidated_header = pd.read_csv(consolidated_path, nrows=0)
+        consolidated_columns = int(consolidated_header.shape[1])
+        with consolidated_path.open("r", encoding="utf-8") as stream:
+            consolidated_rows = max(sum(1 for _ in stream) - 1, 0)
+
+    if panel_rows is None or panel_columns is None:
+        panel_header = pd.read_csv(panel_path, nrows=0)
+        panel_columns = int(panel_header.shape[1])
+        with panel_path.open("r", encoding="utf-8") as stream:
+            panel_rows = max(sum(1 for _ in stream) - 1, 0)
+
+    return PipelineResult(
+        consolidated_path=consolidated_path,
+        panel_path=panel_path,
+        consolidated_rows=int(consolidated_rows),
+        panel_rows=int(panel_rows),
+        consolidated_columns=int(consolidated_columns),
+        panel_columns=int(panel_columns),
+        manifest_path=paths.interim_dir / "execution_manifest.json",
+        contract_path=contract_path,
+        y_traceability_path=y_traceability_path,
+    )
+
+
 def write_dataframe_to_tmp(frame: pd.DataFrame, output_path: Path) -> Path:
     """Write dataframe to temp CSV in destination directory.
 
@@ -1594,6 +1831,24 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
     repo_root = resolve_repo_root(root)
     paths = build_paths(repo_root)
     ensure_directory(paths.interim_dir)
+
+    if cfg.perform_safe_write and cfg.reuse_existing_outputs:
+        manifest_path = paths.interim_dir / "execution_manifest.json"
+        if manifest_path.exists():
+            try:
+                manifest_payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                manifest_payload = {}
+
+            if isinstance(manifest_payload, dict):
+                can_reuse, _reasons, _summary = validate_manifest_reuse_candidate(
+                    root=repo_root,
+                    config=cfg,
+                    manifest=manifest_payload,
+                    required_output_keys=EXPECTED_OUTPUT_PATH_BY_KEY.keys(),
+                )
+                if can_reuse:
+                    return build_pipeline_result_from_manifest(paths, manifest_payload)
 
     input_fingerprints_before = fingerprint_inputs(paths)
 
@@ -1906,12 +2161,7 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
 
     summary = {
         "generated_utc": utc_now_iso(),
-        "pipeline": {
-            "module": "scripts/stage2_consolidated_dataset_pipeline.py",
-            "contract_version": cfg.contract_version,
-            "chunksize_epi": cfg.chunksize_epi,
-            "chunksize_climate": cfg.chunksize_climate,
-        },
+        "pipeline": build_pipeline_signature(paths, cfg),
         "input_fingerprints_before": input_fingerprints_before,
         "input_fingerprints_after": input_fingerprints_after,
         "headers": {
@@ -2006,6 +2256,9 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
                 "sha256": sha256_file(candidate_contract_path)
                 if candidate_contract_path.exists()
                 else None,
+                "bytes": candidate_contract_path.stat().st_size
+                if candidate_contract_path.exists()
+                else None,
                 "backup": contract_backup,
             },
         },
@@ -2093,6 +2346,14 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         default=PipelineConfig.chunksize_climate,
         help="Chunksize for climate source reads.",
     )
+    parser.add_argument(
+        "--reuse-existing-outputs",
+        action="store_true",
+        help=(
+            "Reuse existing outputs when execution-manifest validation confirms "
+            "inputs, code fingerprint, and artifact hashes are unchanged."
+        ),
+    )
     return parser.parse_args(list(argv) if argv is not None else None)
 
 
@@ -2111,6 +2372,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         chunksize_epi=args.chunksize_epi,
         chunksize_climate=args.chunksize_climate,
         perform_safe_write=not args.dry_run,
+        reuse_existing_outputs=args.reuse_existing_outputs,
     )
 
     root = resolve_repo_root()
