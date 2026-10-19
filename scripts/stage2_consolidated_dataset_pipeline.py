@@ -939,6 +939,34 @@ def percentile_type7(values: list[float], q: float) -> float:
     return ordered[lower_index] + fraction * (ordered[upper_index] - ordered[lower_index])
 
 
+def history_periods_for_target(target_period: str, history_years: int) -> list[str]:
+    """Build same-month historical reference periods for a target period.
+
+    The reference set uses the same calendar month from the `history_years`
+    immediately prior years relative to the target-year component.
+
+    Args:
+        target_period: Target period in YYYY-MM format.
+        history_years: Number of prior years to reference.
+
+    Returns:
+        Ordered list of historical YYYY-MM periods.
+
+    Raises:
+        PipelineValidationError: If target_period format is invalid.
+    """
+
+    parts = target_period.split("-")
+    if len(parts) != 2 or len(parts[0]) != 4 or len(parts[1]) != 2:
+        raise PipelineValidationError(f"Invalid target period format: {target_period}")
+
+    target_year = int(parts[0])
+    target_month = parts[1]
+    return [
+        f"{year:04d}-{target_month}" for year in range(target_year - history_years, target_year)
+    ]
+
+
 def compute_y_labels(
     panel: pd.DataFrame,
     *,
@@ -950,7 +978,7 @@ def compute_y_labels(
     Args:
         panel: Monthly panel with dengue notification counts.
         horizons: Prediction horizons in months.
-        history_years: Number of prior complete calendar years required.
+        history_years: Number of prior same-month yearly observations required.
 
     Returns:
         Tuple of (panel_with_labels, traceability_table).
@@ -989,12 +1017,7 @@ def compute_y_labels(
             target_period = add_months(cutoff_period, horizon)
             target_periods.append(target_period)
 
-            target_year = int(target_period[:4])
-            target_month = target_period[5:7]
-            history_periods_expected = [
-                f"{year:04d}-{target_month}"
-                for year in range(target_year - history_years, target_year)
-            ]
+            history_periods_expected = history_periods_for_target(target_period, history_years)
             history_periods_expected_values.append("|".join(history_periods_expected))
 
             history_used: list[str] = []
@@ -1212,6 +1235,11 @@ def compute_schema_contract(
             "horizons_months": list(Y_HORIZONS),
             "reference_years": Y_REFERENCE_YEARS,
             "seasonality_basis": "same_calendar_month",
+            "historical_reference_rule": (
+                "For target period YYYY-MM, use the same MM from the five prior years "
+                "(YYYY-5..YYYY-1) without substituting older years when a required observation "
+                "is genuinely missing."
+            ),
             "decision_rule": "label_1_if_observed_strictly_greater_than_p75",
             "non_evaluable_rule": "missing_future_or_insufficient_history_yields_null_label",
             "percentile": Y_PERCENTILE,
@@ -1691,7 +1719,7 @@ def run_pipeline(root: Path | None = None, config: PipelineConfig | None = None)
         "target_labeling": {
             "retrospective_assumption": (
                 "At cutoff T, each horizon target compares observed dengue count at T+h against "
-                "P75 from the same target month across the five prior complete calendar years."
+                "P75 from the same target month across the five prior years before target year."
             ),
             **y_label_summary,
         },

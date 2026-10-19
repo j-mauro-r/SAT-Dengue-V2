@@ -26,7 +26,7 @@ This current-status section takes precedence over superseded open questions in t
 | Baseline records | All supplied notification classifications included; streams separate; no unsupported duplicate deletion (DEC-114/118). Unassignable geography/onset retained in reconciliation. |
 | 2013 | Keep original records/dates unchanged for the baseline (DEC-113). |
 | Baseline no-case months | Within supplied coverage, no case records means aggregate count zero under the approved dataset assumption (DEC-120). Such zeros are valid P75 observations. Climate gaps and outside-coverage history are distinct. |
-| Initial Y | Approved: municipality-month, median/percentile channel, strict count > P75; five complete prior calendar years available at T; same calendar month; epidemic years included; horizons T+1/T+2 (PR #9 and DEC-119/121). |
+| Initial Y | Approved: municipality-month, median/percentile channel, strict count > P75; five same-month historical observations from the five years prior to target year, available under retrospective consolidated data constraints; epidemic years included; horizons T+1/T+2 (PR #9 and DEC-119/121/122). |
 | Onset/continuation | For T+1 compare T with T+1; for T+2 compare T+1 with T+2. Future states are evaluation outcomes, never predictors at T (approved PR #9 configuration). |
 | Evidence not yet earned | Exact numerical percentile convention, evaluability of genuinely unavailable history and consistent consecutive-state references need implementation specifications; 5/7/9-year target sensitivity has not run. |
 | Deferred operation | User-requested forecast re-execution belongs to product behavior, not a Stage 2 closing condition. Historical availability remains a limitation of the consolidated retrospective data, not a demand to reconstruct unavailable snapshots before this bounded closure. |
@@ -1550,8 +1550,20 @@ La evaluación retrospectiva de inicio en **T+2** requiere el estado observado d
 ### DEC-121 Reconcile approved Y configuration and preserve all decision histories
 
 - **Status:** APPROVED_CONFIGURATION_RECONCILED on 2026-10-18. The explicit approval by Mauricio in “Plan SAT-Dengue V2” is recorded in PR #9 under DEC-Y-2026-10-18-01. This reconciliation preserves its full text and the existing local register, including DEC-119/120. No new scientific parameter is selected here.
-- **Imported approved choices:** Binary future excess; P75; five prior complete calendar years available at cutoff T; same calendar month; all epidemic years including 2013; strict greater-than rule; T+1/T+2; sensitivity against seven and nine years. The main label is excess; onset/continuation is separately evaluated with correctly aligned consecutive months.
+- **Imported approved choices:** Binary future excess; P75; same calendar month; all epidemic years including 2013; strict greater-than rule; T+1/T+2; sensitivity against seven and nine years. Historical reference interpretation is clarified in DEC-122 as five same-month observations from the five years prior to target year.
 - **Supersession:** Resolves method/window/seasonal uncertainty in DEC-037/111/112 and earlier explanatory notes to the extent covered by this approval. DEC-119 selects the INS percentile-channel family. DEC-118 resolves case classifications. DEC-114 prohibits unsupported duplicate removal. DEC-120 supersedes the baseline unknown-versus-zero question for covered no-case months. Missing climate and genuinely unavailable historical observations are not filled by DEC-120.
 - **Outstanding implementation/evidence:** Document a deterministic numerical percentile convention, coverage/insufficient-history handling and consistent reference for consecutive states. Implement the approved policy and perform the 5/7/9 comparison; it is approved work, not completed evidence. Prior PLAN_006 artifacts preserve their original unknown-state population and are not evidence for an unexecuted zero-inclusive target.
 - **External research:** PR #8's full source-linked outbreak inventory is preserved unchanged in docs/research/colombia-dengue-outbreak-events.md. It supplies context/qualitative checks, not automatic training labels or first-onset dates.
 - **Git disposition:** Main, PR #8 and PR #9 histories are integrated into Stage2/Data-Understanding for PR #10. Original refs and all source-file bytes are privately backed up. The PRs are not closed or merged into main by this work. This is documentary reconciliation, not approval of G2 or predictive performance.
+
+
+<a id="dec-122"></a>
+### DEC-122 Clarify same-month historical reference without whole-year closure requirement
+
+- **Status:** ACCEPTED_CLARIFICATION on 2026-10-19 by explicit instruction from Mauricio during Stage 2 follow-up.
+- **Clarified rule:** For a target period `T+h` (YYYY-MM), build the historical reference with the same month `MM` from the five years immediately prior to target year (`YYYY-5` .. `YYYY-1`).
+- **Interpretation boundary:** This clarification supersedes wording that could be read as requiring each full historical calendar year to be fully completed before using that year's same-month observation. Month-level closure of each referenced period is sufficient under this retrospective consolidated dataset context.
+- **Example:** Cutoff November 2024, horizon `T+2`, target January 2025 -> reference months January 2020, 2021, 2022, 2023 and 2024.
+- **Non-substitution rule:** If one required same-month historical observation is genuinely missing, keep the label non-evaluable; do not silently backfill with an older year.
+- **Retrospective limitation:** This project uses consolidated retrospective data. Temporal ordering of the computation does not prove historical operational availability of each value version at real-time cutoff.
+- **Relationship:** Refines DEC-121 wording and keeps DEC-119 method-family, DEC-120 zero-in-coverage rule and DEC-118 inclusion policy unchanged.

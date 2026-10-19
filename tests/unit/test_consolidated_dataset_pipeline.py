@@ -589,6 +589,196 @@ def test_compute_schema_contract_includes_y_column_roles() -> None:
     assert contract["target_labeling_policy"]["percentile_method"] == "hyndman_fan_type7_linear"
 
 
+def _independent_history_periods(target_period: str, years: int = 5) -> list[str]:
+    target_year = int(target_period[:4])
+    target_month = target_period[5:7]
+    return [f"{year:04d}-{target_month}" for year in range(target_year - years, target_year)]
+
+
+def test_temporal_regression_november_to_january_main_case() -> None:
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["50001"] * 8,
+            "year_month": [
+                "2020-01",
+                "2021-01",
+                "2022-01",
+                "2023-01",
+                "2024-01",
+                "2024-11",
+                "2025-01",
+                "2026-01",
+            ],
+            "dengue_notifications_count": [2.0, 3.0, 4.0, 5.0, 100.0, 0.0, 5.0, 999.0],
+        }
+    )
+
+    labeled, traceability = pipeline.compute_y_labels(panel)
+    row = labeled[labeled["year_month"] == "2024-11"].iloc[0]
+    assert row["target_period_t2"] == "2025-01"
+    assert row["history_periods_expected_t2"] == "2020-01|2021-01|2022-01|2023-01|2024-01"
+    assert row["history_periods_used_t2"] == "2020-01|2021-01|2022-01|2023-01|2024-01"
+    assert row["p75_t2"] == 5.0
+    assert row["y_t2"] == 0
+
+    trace_row = traceability[
+        (traceability["cutoff_period"] == "2024-11") & (traceability["horizon_months"] == 2)
+    ].iloc[0]
+    assert trace_row["history_periods_used"] == "2020-01|2021-01|2022-01|2023-01|2024-01"
+
+
+def test_temporal_regression_november_to_december_reference() -> None:
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["50001"] * 7,
+            "year_month": [
+                "2019-12",
+                "2020-12",
+                "2021-12",
+                "2022-12",
+                "2023-12",
+                "2024-11",
+                "2024-12",
+            ],
+            "dengue_notifications_count": [1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 6.0],
+        }
+    )
+
+    labeled, _traceability = pipeline.compute_y_labels(panel)
+    row = labeled[labeled["year_month"] == "2024-11"].iloc[0]
+    assert row["target_period_t1"] == "2024-12"
+    assert row["history_periods_used_t1"] == "2019-12|2020-12|2021-12|2022-12|2023-12"
+    assert row["p75_t1"] == 4.0
+    assert row["y_t1"] == 1
+
+
+def test_temporal_regression_december_to_january_and_february() -> None:
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["50001"] * 13,
+            "year_month": [
+                "2020-01",
+                "2021-01",
+                "2022-01",
+                "2023-01",
+                "2024-01",
+                "2020-02",
+                "2021-02",
+                "2022-02",
+                "2023-02",
+                "2024-02",
+                "2024-12",
+                "2025-01",
+                "2025-02",
+            ],
+            "dengue_notifications_count": [
+                2.0,
+                3.0,
+                4.0,
+                5.0,
+                6.0,
+                1.0,
+                1.0,
+                2.0,
+                2.0,
+                3.0,
+                0.0,
+                4.0,
+                3.0,
+            ],
+        }
+    )
+
+    labeled, _traceability = pipeline.compute_y_labels(panel)
+    row = labeled[labeled["year_month"] == "2024-12"].iloc[0]
+    assert row["target_period_t1"] == "2025-01"
+    assert row["target_period_t2"] == "2025-02"
+    assert row["history_periods_used_t1"] == "2020-01|2021-01|2022-01|2023-01|2024-01"
+    assert row["history_periods_used_t2"] == "2020-02|2021-02|2022-02|2023-02|2024-02"
+
+
+def test_temporal_regression_all_cutoff_months_and_horizons_reference_rule() -> None:
+    rows: list[dict[str, object]] = []
+    municipality = "50001"
+    cutoff_months = [f"2024-{month:02d}" for month in range(1, 13)]
+
+    for month in range(1, 13):
+        for year in range(2019, 2027):
+            rows.append(
+                {
+                    "municipality_code": municipality,
+                    "year_month": f"{year:04d}-{month:02d}",
+                    "dengue_notifications_count": float((year - 2018) + month),
+                }
+            )
+
+    panel = pd.DataFrame(rows).drop_duplicates(["municipality_code", "year_month"])
+    labeled, _traceability = pipeline.compute_y_labels(panel)
+
+    for cutoff in cutoff_months:
+        current = labeled[labeled["year_month"] == cutoff].iloc[0]
+        for horizon in (1, 2):
+            suffix = f"t{horizon}"
+            target_period = str(current[f"target_period_{suffix}"])
+            expected = "|".join(_independent_history_periods(target_period, years=5))
+            assert current[f"history_periods_expected_{suffix}"] == expected
+
+
+def test_temporal_regression_target_count_change_does_not_change_its_own_threshold() -> None:
+    base = pd.DataFrame(
+        {
+            "municipality_code": ["50001"] * 7,
+            "year_month": [
+                "2020-01",
+                "2021-01",
+                "2022-01",
+                "2023-01",
+                "2024-01",
+                "2024-11",
+                "2025-01",
+            ],
+            "dengue_notifications_count": [2.0, 3.0, 4.0, 5.0, 100.0, 0.0, 5.0],
+        }
+    )
+
+    variant = base.copy()
+    variant.loc[variant["year_month"] == "2025-01", "dengue_notifications_count"] = 50.0
+
+    labeled_base, _trace_a = pipeline.compute_y_labels(base)
+    labeled_variant, _trace_b = pipeline.compute_y_labels(variant)
+
+    row_a = labeled_base[labeled_base["year_month"] == "2024-11"].iloc[0]
+    row_b = labeled_variant[labeled_variant["year_month"] == "2024-11"].iloc[0]
+    assert row_a["p75_t2"] == row_b["p75_t2"]
+
+
+def test_temporal_regression_missing_required_history_never_substitutes_older_year() -> None:
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["50001"] * 8,
+            "year_month": [
+                "2019-01",
+                "2020-01",
+                "2021-01",
+                "2023-01",
+                "2024-01",
+                "2024-11",
+                "2025-01",
+                "2018-01",
+            ],
+            "dengue_notifications_count": [1.0, 2.0, 3.0, 5.0, 100.0, 0.0, 5.0, 99.0],
+        }
+    )
+
+    labeled, _traceability = pipeline.compute_y_labels(panel)
+    row = labeled[labeled["year_month"] == "2024-11"].iloc[0]
+    assert row["history_periods_expected_t2"] == "2020-01|2021-01|2022-01|2023-01|2024-01"
+    assert row["history_missing_periods_t2"] == "2022-01"
+    assert row["history_valid_years_t2"] == 4
+    assert row["y_status_t2"] == "insufficient_history"
+    assert pd.isna(row["y_t2"])
+
+
 def test_compute_y_labels_requires_expected_columns() -> None:
     with pytest.raises(pipeline.PipelineValidationError):
         pipeline.compute_y_labels(pd.DataFrame({"municipality_code": ["50001"]}))
