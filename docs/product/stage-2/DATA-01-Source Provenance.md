@@ -60,7 +60,7 @@ References reviewed at immutable repository commit `b63257c17f3064a0dcda6fcf4e70
 
 E3 names CHIRPS Daily and ERA5-Land Daily Aggregated products. Its configured years are 2018–2024, while saved climate output coverage is 2007–2025 and E2 shows export examples starting in 2007. E2 and E3 also differ on asset spelling (`municipio` versus `municipios`). These differences may reflect different runs/versions; they do not prove an error or establish the current run.
 
-Pending: actual generating commit, year/month job manifest, asset version, source-product versions and export/concatenation completeness for `google_earth_engine.csv`. January 2020 is absent in saved diagnostics; the cause and recovery policy remain unverified.
+Pending: actual generating commit, year/month job manifest, asset version, source-product versions and export/concatenation completeness for `google_earth_engine.csv`. A bounded raw-file audit on 2026-10-19 confirmed zero January-2020 rows in the original local snapshot (same SHA-256 as this register). The upstream extraction lineage cause and recovery policy remain unverified.
 
 ### Private project references
 

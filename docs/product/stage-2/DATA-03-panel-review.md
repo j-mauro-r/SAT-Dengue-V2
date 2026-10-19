@@ -22,7 +22,7 @@ Climate retains daily coverage counts and expected calendar days; incomplete mon
 
 ## Validation
 
-The panel gate checks municipal membership, unique keys, exhaustive source reconciliation, severe/climate equality across scenarios, unknown states and January 2020. Synthetic tests exercise a month with climate/severe records and no dengue, complete scenario removal, unknown codes and date parsing. Sensitivity and availability checks are included in the subsequent phases.
+The panel gate checks municipal membership, unique keys, exhaustive source reconciliation, severe/climate equality across scenarios, unknown states, and climate-day lineage conservation between `climate_monthly.csv` and final panel rows (including missing-source months represented as `climate_days=0`). Synthetic tests exercise a month with climate/severe records and no dengue, complete scenario removal, unknown codes, date parsing and climate-lineage consistency. Sensitivity and availability checks are included in the subsequent phases.
 
 ## Step 1 results
 

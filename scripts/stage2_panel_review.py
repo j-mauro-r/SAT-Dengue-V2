@@ -390,10 +390,32 @@ def panels() -> dict[str, pd.DataFrame]:
     }
 
 
+def assert_climate_days_conservation(panel: pd.DataFrame, climate_monthly: pd.DataFrame) -> None:
+    source = climate_monthly[KEY + ["climate_days"]].copy()
+    source["climate_days"] = source["climate_days"].astype(int)
+    source_idx = source.set_index(KEY)["climate_days"]
+
+    current = panel[KEY + ["climate_days"]].copy()
+    current_idx = current.set_index(KEY)["climate_days"].astype(int)
+
+    present = current_idx.index.intersection(source_idx.index)
+    missing = current_idx.index.difference(source_idx.index)
+
+    if len(present):
+        pd.testing.assert_series_equal(
+            current_idx.loc[present].sort_index(),
+            source_idx.loc[present].sort_index(),
+            check_names=False,
+        )
+    if len(missing):
+        assert current_idx.loc[missing].eq(0).all()
+
+
 def validate_panels() -> None:
     ps = panels()
     c = catalog()
     baseline = ps["S1"]
+    climate_monthly = pd.read_csv(OUT / "climate_monthly.csv", dtype={"mun_full": str})
     metadata = json.loads((OUT / "metadata.json").read_text())
     invariant_cols = [
         *KEY,
@@ -413,7 +435,7 @@ def validate_panels() -> None:
         assert p.loc[p.severe_recorded_count.eq(0), "severe_count"].isna().all()
         assert p.reporting_completeness.eq("unknown").all()
         assert not p.operational_asof_eligible.any()
-        assert p.loc[p.year_month.eq("2020-01"), "climate_days"].eq(0).all()
+        assert_climate_days_conservation(p, climate_monthly)
     for label in ["dengue", "severe"]:
         r = pd.read_csv(OUT / f"{label}_reconciliation.csv")
         assert r.records.sum() == metadata[f"{label}_scope"]
@@ -426,9 +448,7 @@ def validate_panels() -> None:
             .eq(0)
             .all()
         )
-    print(
-        "PASS: panel keys, source conservation, invariant support, unknown states and January 2020"
-    )
+    print("PASS: panel keys, source conservation, invariant support, unknown states")
 
 
 def date_pair_metrics(matched: pd.DataFrame) -> dict[str, int]:

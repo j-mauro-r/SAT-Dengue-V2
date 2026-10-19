@@ -99,6 +99,48 @@ def test_sensitivity_support_is_common_and_excludes_unknown_target_and_partial_c
     assert review.common_support(frames, "temp_mean_c").tolist() == [True, False, False, False]
 
 
+def test_climate_days_conservation_accepts_zero_for_source_missing_keys() -> None:
+    panel = pd.DataFrame(
+        {
+            "mun_full": ["50001", "50001", "73001", "73001"],
+            "year_month": ["2020-01", "2020-02", "2020-01", "2020-02"],
+            "climate_days": [0, 29, 0, 29],
+        }
+    )
+    climate_monthly = pd.DataFrame(
+        {
+            "mun_full": ["50001", "73001"],
+            "year_month": ["2020-02", "2020-02"],
+            "climate_days": [29, 29],
+        }
+    )
+    review.assert_climate_days_conservation(panel, climate_monthly)
+
+
+def test_climate_days_conservation_rejects_nonzero_when_source_key_missing() -> None:
+    panel = pd.DataFrame(
+        {
+            "mun_full": ["50001", "50001"],
+            "year_month": ["2020-01", "2020-02"],
+            "climate_days": [1, 29],
+        }
+    )
+    climate_monthly = pd.DataFrame(
+        {
+            "mun_full": ["50001"],
+            "year_month": ["2020-02"],
+            "climate_days": [29],
+        }
+    )
+
+    raised = False
+    try:
+        review.assert_climate_days_conservation(panel, climate_monthly)
+    except AssertionError:
+        raised = True
+    assert raised
+
+
 def test_rules_never_promote_retrospective_rows_to_operational_approval() -> None:
     rules = review.retrospective_rules()
     assert rules["historical_availability_reconstructed"] is False

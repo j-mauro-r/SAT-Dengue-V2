@@ -57,7 +57,7 @@ Municipal epidemiological continuity is described separately for each input usin
 
 Climate diagnostics cover 525,084 target-department rows. The common epidemiological/climate window is 2007-01-01 through 2025-12-31 (6,940 days). All 76 municipalities share 31 dates without climate rows: January 2020. In the inspected target-department subset, nine prioritized climate variables have no empty values and municipality-date duplicates are zero. Rainfall zeros are 44.6858%; runoff zeros are 0.5239%.
 
-Missing dates, empty cells and observed zeros are different. Earlier national climate blanks do not contradict zero blanks in this bounded subset. The cause and treatment of January 2020 remain unresolved. A current DIVIPOLA snapshot does not prove unchanged territorial boundaries throughout the historical series.
+Missing dates, empty cells and observed zeros are different. Earlier national climate blanks do not contradict zero blanks in this bounded subset. A bounded raw-file audit (2026-10-19) confirmed that January 2020 has zero climate rows in the original local snapshot with matching provenance hash; this resolves the local-source-presence question but not the upstream extraction lineage or recovery policy. A current DIVIPOLA snapshot does not prove unchanged territorial boundaries throughout the historical series.
 
 ## Reproducible aggregate evidence
 
