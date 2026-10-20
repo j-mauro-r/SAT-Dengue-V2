@@ -1,4 +1,6 @@
-# Stage 2 pull-request reconciliation and recovery
+# Historical Stage 2 pull-request reconciliation and recovery — 2026-10-18
+
+This is a dated preservation/recovery record. PR #10 was subsequently merged into local history at `97f0aee`; the active preparation branch descends from it. The instructions below about an unmerged PR, future squash merge, branch disposition and "before merge" checks describe that earlier operation, not pending instructions for the active branch. Other remote PR states were not rechecked by this documentary audit. Consult the [master plan](../roadmap/master-plan.md) for current work; retain this record for recovery and published-history provenance.
 
 ## Purpose and source identities
 

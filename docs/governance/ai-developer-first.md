@@ -50,6 +50,12 @@ Agents must escalate when:
 - Merge/release decisions are required.
 - Required authority source is missing or contradictory.
 
+## Contract Change Governance
+
+The [master plan](../roadmap/master-plan.md) owns contract maturity and freeze order. Product contracts define user-visible behavior; data/feature contracts define input and transformation rules; model/prediction contracts define output interpretation and traceability; API contracts define request/response behavior after scientific/product alignment.
+
+Material changes require an explicit rationale, an update to the owning contract or decision record, validation impact analysis and human approval. Implemented candidate contracts and passing tests do not automatically freeze product or scientific boundaries. Preserve explicit authorization already given; routine documentation reconciliation does not require a second approval.
+
 ## Evidence States
 
 - PASS: check executed and succeeded.
@@ -62,7 +68,7 @@ No completion claim is valid without explicit evidence state.
 ## Codex Operating Rules
 
 - Use progressive disclosure: load only necessary context for each task.
-- Do not treat chat text as durable authority.
+- Explicit human instructions in the current session authorize work. Record consequential scientific/scope decisions in their durable owner; do not treat an earlier assistant suggestion or copied conversation as human approval.
 - Keep AGENTS as map/index, not encyclopedia.
 - One DWP task equals one independently verifiable objective.
 - Re-run invalidated gates after evidence-sensitive diffs.

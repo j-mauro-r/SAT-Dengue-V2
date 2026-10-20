@@ -14,7 +14,7 @@ Related sources of truth:
 - [PROD-03](PROD-03-supported-decisions.md): supported human decision.
 - [PROD-04](PROD-04-dashboard-master-user-story.md): dashboard experience and visible behaviors.
 - [Product definition](../product-definition.md): current product baseline.
-- [Contract lifecycle](../../contracts/contract-lifecycle.md): contract maturity and freeze order.
+- [Contract maturity and stage gates](../../roadmap/master-plan.md): contract maturity and freeze order.
 
 ## Approved Product Direction
 

@@ -45,7 +45,7 @@ Repository references were inspected on `main` at `a4863057780dbeb32f7c180a71092
 | `Reporte_Entrega3_final-2.docx`, sections 1, 2.3, 3, and 4 | V1 historical reference: decision support and distinction between onset and continuation; limited onset evidence does not establish V2 performance. Cali/Bucaramanga, 39 features, thresholds, and Champion are not V2 requirements. |
 | `prueba-dashboard.md`, sections 1–2 and 9–13 | Historical dashboard/inference separation. Its V1 upload restrictions and implementation details do not override V2's expected departmental upload. |
 | [Master plan](../../roadmap/master-plan.md), [product definition](../product-definition.md), and [system overview](../../architecture/system-overview.md) | Current V2 planning/configuration: stage ordering, monthly horizons, existing dashboard baseline, and deferred input schema. |
-| [AI Developer First](../../governance/ai-developer-first.md), [contract lifecycle](../../contracts/contract-lifecycle.md), and [CRISP-ML(Q)](../../methodology/crisp-mlq-framework.md) | Human authority, evidence states, staged contract maturity, and current methodology. |
+| [AI Developer First](../../governance/ai-developer-first.md), [contract change governance](../../governance/ai-developer-first.md#contract-change-governance), and [scientific methodology](../../standards/ml-scientific-standards.md#methodology) | Human authority, evidence states, staged contract maturity, and current methodology. |
 
 ### Source Reconciliation
 

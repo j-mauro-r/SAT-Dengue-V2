@@ -4,7 +4,7 @@ SAT-Dengue V2 is an AI-first, scientific-engineering repository for building an 
 
 ## Current Stage
 
-**Stage 2 — Data Understanding is active; G2 is open.** Mauricio confirmed Stage 1 closure after merging PR #7. Initial EDA and DIVIPOLA coverage diagnostics are complete with documented exceptions. Next is comparison with a fresh 2013 SIVIGILA download being obtained by Mauricio. Historical G0 review evidence remains UNVERIFIED; see the [master plan](docs/roadmap/master-plan.md) for status and remaining decisions.
+See the [master plan](docs/roadmap/master-plan.md) for the dated implementation status, outstanding human gates and next bounded task. Notebook 03 builds the consolidated datasets and bounded EDA; notebook 04 prepares temporal model inputs. Their code, contracts and evidence are available locally; model training and runtime product components are subsequent work.
 
 ## Product Direction
 
@@ -56,7 +56,7 @@ Primary entry points:
 
 ## What Is Not Implemented Yet
 
-- Production-ready data pipelines
+- Trained/selected predictors and operational inference pipelines
 - Final API contracts and runtime implementation
 - Dashboard runtime implementation
 - End-to-end deployment workflows

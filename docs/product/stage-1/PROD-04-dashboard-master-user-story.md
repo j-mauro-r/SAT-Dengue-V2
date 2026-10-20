@@ -5,7 +5,7 @@
 **Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
 **Human Gate: APPROVED for Stage 1 product scope.** Stage 1 closure was confirmed by Mauricio after PR #7 merge; final scientific definitions and technical contracts remain pending in their designated stages.
 
-This document owns the master dashboard story, proposed screen behavior, chart selection, and acceptance criteria. [PROD-01](PROD-01-business-question.md) owns the business question and geography; [PROD-02](PROD-02-users.md) owns the primary user; [PROD-03](PROD-03-supported-decisions.md) owns the supported human decision. The [product baseline](../product-definition.md), [contract lifecycle](../../contracts/contract-lifecycle.md), and [master plan](../../roadmap/master-plan.md) remain authoritative for scientific scope and staged delivery.
+This document owns the master dashboard story, proposed screen behavior, chart selection, and acceptance criteria. [PROD-01](PROD-01-business-question.md) owns the business question and geography; [PROD-02](PROD-02-users.md) owns the primary user; [PROD-03](PROD-03-supported-decisions.md) owns the supported human decision. The [product baseline](../product-definition.md), [contract change governance](../../governance/ai-developer-first.md#contract-change-governance), and [master plan](../../roadmap/master-plan.md) remain authoritative for scientific scope and staged delivery.
 
 Status labels throughout:
 

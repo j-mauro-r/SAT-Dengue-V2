@@ -18,6 +18,12 @@ dev = [
     "pandas>=2.2",
 ]
 
+notebook = [
+    "nbformat>=5.10",
+    "nbclient>=0.10",
+    "ipykernel>=6.29",
+]
+
 [tool.setuptools]
 # Stage 2 uses repository scripts and notebooks; no importable package ships yet.
 packages = []

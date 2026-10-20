@@ -2,5 +2,5 @@
   "defaultMode": "review-first",
   "requireValidationEvidence": true,
   "allowDirectCommit": false,
-  "notes": "Repository in foundation stage; prefer DWP flows for multi-step work."
+  "notes": "Informational preferences only; custom keys are not enforcement. AGENTS.md and docs/TESTING_GUIDE.md own policy; docs/roadmap/master-plan.md owns status."
 }

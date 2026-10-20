@@ -1,0 +1,641 @@
+{
+  "version": "training-preparation-v1.2",
+  "classification": "bounded_preparation_candidate_not_training_freeze",
+  "panel_path": "data/processed/panel_mensual_dengue_clima.csv",
+  "upstream_contract_path": "data/interim/stage2_consolidated_dataset_pipeline/candidate_construction_contract_v1.json",
+  "schema": [
+    {
+      "name": "municipality_code",
+      "dtype": "str",
+      "nullable": false
+    },
+    {
+      "name": "department_code",
+      "dtype": "str",
+      "nullable": false
+    },
+    {
+      "name": "municipality_name",
+      "dtype": "str",
+      "nullable": false
+    },
+    {
+      "name": "year_month",
+      "dtype": "str",
+      "nullable": false
+    },
+    {
+      "name": "dengue_notifications_count",
+      "dtype": "float64",
+      "nullable": false
+    },
+    {
+      "name": "dengue_grave_notifications_count",
+      "dtype": "float64",
+      "nullable": false
+    },
+    {
+      "name": "climate_days_observed",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "expected_days_in_month",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "rain_mm_month_sum",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "rain_mm_month_sum_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "surface_runoff_mm_month_sum",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "surface_runoff_mm_month_sum_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "total_evaporation_mm_month_sum_ecmwf",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "total_evaporation_mm_month_sum_ecmwf_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "solar_radiation_mj_m2_month_sum",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "solar_radiation_mj_m2_month_sum_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "temp_mean_c_month_mean",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "temp_mean_c_month_mean_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "dewpoint_mean_c_month_mean",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "dewpoint_mean_c_month_mean_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "soil_water_l1_month_mean",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "soil_water_l1_month_mean_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "wind_u_ms_month_mean",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "wind_u_ms_month_mean_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "wind_v_ms_month_mean",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "wind_v_ms_month_mean_valid_days",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "in_epi_coverage",
+      "dtype": "bool",
+      "nullable": false
+    },
+    {
+      "name": "total_notifications_count",
+      "dtype": "float64",
+      "nullable": false
+    },
+    {
+      "name": "epi_count_status",
+      "dtype": "str",
+      "nullable": false
+    },
+    {
+      "name": "target_period_t1",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "p75_t1",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "history_valid_years_t1",
+      "dtype": "int64",
+      "nullable": false
+    },
+    {
+      "name": "history_periods_expected_t1",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "history_periods_used_t1",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "history_missing_periods_t1",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "y_evaluable_t1",
+      "dtype": "bool",
+      "nullable": false
+    },
+    {
+      "name": "y_status_t1",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "y_t1",
+      "dtype": "Int64",
+      "nullable": true
+    },
+    {
+      "name": "target_period_t2",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "p75_t2",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "history_valid_years_t2",
+      "dtype": "int64",
+      "nullable": false
+    },
+    {
+      "name": "history_periods_expected_t2",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "history_periods_used_t2",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "history_missing_periods_t2",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "y_evaluable_t2",
+      "dtype": "bool",
+      "nullable": false
+    },
+    {
+      "name": "y_status_t2",
+      "dtype": "string",
+      "nullable": false
+    },
+    {
+      "name": "y_t2",
+      "dtype": "Int64",
+      "nullable": true
+    },
+    {
+      "name": "p25_canal_t",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "p50_canal_t",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "p75_canal_t",
+      "dtype": "float64",
+      "nullable": true
+    },
+    {
+      "name": "zona_canal_t",
+      "dtype": "string",
+      "nullable": true
+    }
+  ],
+  "roles": {
+    "keys": [
+      "municipality_code",
+      "year_month"
+    ],
+    "predictors": [
+      "dengue_notifications_count",
+      "dengue_grave_notifications_count",
+      "rain_mm_month_sum",
+      "temp_mean_c_month_mean",
+      "dewpoint_mean_c_month_mean",
+      "surface_runoff_mm_month_sum",
+      "total_evaporation_mm_month_sum_ecmwf",
+      "solar_radiation_mj_m2_month_sum",
+      "soil_water_l1_month_mean",
+      "wind_u_ms_month_mean",
+      "wind_v_ms_month_mean",
+      "zona_canal_t"
+    ],
+    "targets": [
+      "y_t1",
+      "y_t2"
+    ],
+    "controls": [
+      "department_code",
+      "municipality_name",
+      "climate_days_observed",
+      "expected_days_in_month",
+      "rain_mm_month_sum_valid_days",
+      "surface_runoff_mm_month_sum_valid_days",
+      "total_evaporation_mm_month_sum_ecmwf_valid_days",
+      "solar_radiation_mj_m2_month_sum_valid_days",
+      "temp_mean_c_month_mean_valid_days",
+      "dewpoint_mean_c_month_mean_valid_days",
+      "soil_water_l1_month_mean_valid_days",
+      "wind_u_ms_month_mean_valid_days",
+      "wind_v_ms_month_mean_valid_days",
+      "in_epi_coverage",
+      "total_notifications_count",
+      "epi_count_status",
+      "target_period_t1",
+      "p75_t1",
+      "history_valid_years_t1",
+      "history_periods_expected_t1",
+      "history_periods_used_t1",
+      "history_missing_periods_t1",
+      "y_evaluable_t1",
+      "y_status_t1",
+      "target_period_t2",
+      "p75_t2",
+      "history_valid_years_t2",
+      "history_periods_expected_t2",
+      "history_periods_used_t2",
+      "history_missing_periods_t2",
+      "y_evaluable_t2",
+      "y_status_t2",
+      "p25_canal_t",
+      "p50_canal_t",
+      "p75_canal_t"
+    ],
+    "excluded_predictors": [
+      "municipality_code",
+      "year_month",
+      "y_t1",
+      "y_t2",
+      "department_code",
+      "municipality_name",
+      "climate_days_observed",
+      "expected_days_in_month",
+      "rain_mm_month_sum_valid_days",
+      "surface_runoff_mm_month_sum_valid_days",
+      "total_evaporation_mm_month_sum_ecmwf_valid_days",
+      "solar_radiation_mj_m2_month_sum_valid_days",
+      "temp_mean_c_month_mean_valid_days",
+      "dewpoint_mean_c_month_mean_valid_days",
+      "soil_water_l1_month_mean_valid_days",
+      "wind_u_ms_month_mean_valid_days",
+      "wind_v_ms_month_mean_valid_days",
+      "in_epi_coverage",
+      "total_notifications_count",
+      "epi_count_status",
+      "target_period_t1",
+      "p75_t1",
+      "history_valid_years_t1",
+      "history_periods_expected_t1",
+      "history_periods_used_t1",
+      "history_missing_periods_t1",
+      "y_evaluable_t1",
+      "y_status_t1",
+      "target_period_t2",
+      "p75_t2",
+      "history_valid_years_t2",
+      "history_periods_expected_t2",
+      "history_periods_used_t2",
+      "history_missing_periods_t2",
+      "y_evaluable_t2",
+      "y_status_t2",
+      "p25_canal_t",
+      "p50_canal_t",
+      "p75_canal_t"
+    ]
+  },
+  "categories": {
+    "zona_canal_t": [
+      "EXITO",
+      "SEGURIDAD",
+      "ALERTA",
+      "EXCESO"
+    ],
+    "epi_count_status": [
+      "zero_in_coverage",
+      "records_present",
+      "outside_epi_coverage_missing"
+    ],
+    "y_status_t1": [
+      "evaluable",
+      "insufficient_history",
+      "target_outside_panel",
+      "future_observation_missing"
+    ],
+    "y_status_t2": [
+      "evaluable",
+      "insufficient_history",
+      "target_outside_panel",
+      "future_observation_missing"
+    ]
+  },
+  "scientific_invariants": [
+    "Y and zona_canal_t use general dengue only; severe dengue remains separate.",
+    "Combined dengue counts are excluded from X; a combined target is a later experiment.",
+    "Preserve supplied labels, percentiles, coverage zeros and source bytes.",
+    "Historical operational availability is unproven; data are retrospective consolidated."
+  ],
+  "planned_families": {
+    "current_counts": [
+      "dengue_notifications_count",
+      "dengue_grave_notifications_count"
+    ],
+    "lags": {
+      "dengue_notifications_count": [
+        1,
+        2,
+        3
+      ],
+      "dengue_grave_notifications_count": [
+        1,
+        2
+      ],
+      "rain_mm_month_sum": [
+        1,
+        2
+      ],
+      "temp_mean_c_month_mean": [
+        1,
+        2
+      ],
+      "dewpoint_mean_c_month_mean": [
+        1
+      ],
+      "surface_runoff_mm_month_sum": [
+        1
+      ],
+      "zona_canal_t": [
+        1
+      ]
+    },
+    "dengue_monthly_change": "T minus T-1 within municipality",
+    "dengue_retrospective_mean": "dengue_media_3m: mean of T, T-1, T-2; all three required; no centered windows.",
+    "cyclic_calendar": [
+      "sin(2*pi*(month-1)/12)",
+      "cos(2*pi*(month-1)/12)"
+    ]
+  },
+  "deterministic_operations": [
+    "input validation",
+    "municipality-local past shifts",
+    "past-only rolling summaries",
+    "calendar encoding"
+  ],
+  "training_fold_only": [
+    "imputation if later authorized",
+    "scaling",
+    "learned category encoding",
+    "feature selection",
+    "resampling",
+    "calibration"
+  ],
+  "temporal_policy": {
+    "reserved_final_block_start": "2025-01",
+    "selection": "Develop reference rows through 2024-12 using full earlier history. Audit existing horizon eligibility after feature construction; no training folds or fitted transformations.",
+    "future_target_controls": "All target/history/evaluability metadata excluded from X; no fitted transformations in milestone 1."
+  },
+  "derived_features": {
+    "dengue_lag_1": {
+      "operation": "lag",
+      "source": "dengue_notifications_count",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "dengue_lag_2": {
+      "operation": "lag",
+      "source": "dengue_notifications_count",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "dengue_lag_3": {
+      "operation": "lag",
+      "source": "dengue_notifications_count",
+      "months": 3,
+      "missing": "preserve"
+    },
+    "grave_lag_1": {
+      "operation": "lag",
+      "source": "dengue_grave_notifications_count",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "grave_lag_2": {
+      "operation": "lag",
+      "source": "dengue_grave_notifications_count",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "dengue_cambio_1m": {
+      "operation": "difference",
+      "source": "dengue_notifications_count",
+      "formula": "T minus T-1",
+      "negative_values": "valid"
+    },
+    "dengue_media_3m": {
+      "operation": "mean",
+      "source": "dengue_notifications_count",
+      "offsets_months": [
+        0,
+        1,
+        2
+      ],
+      "min_observations": 3,
+      "centered": false
+    },
+    "zona_canal_lag_1": {
+      "operation": "lag",
+      "source": "zona_canal_t",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "lluvia_lag_1": {
+      "operation": "lag",
+      "source": "rain_mm_month_sum",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "lluvia_lag_2": {
+      "operation": "lag",
+      "source": "rain_mm_month_sum",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "temperatura_lag_1": {
+      "operation": "lag",
+      "source": "temp_mean_c_month_mean",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "temperatura_lag_2": {
+      "operation": "lag",
+      "source": "temp_mean_c_month_mean",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "rocio_lag_1": {
+      "operation": "lag",
+      "source": "dewpoint_mean_c_month_mean",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "escorrentia_lag_1": {
+      "operation": "lag",
+      "source": "surface_runoff_mm_month_sum",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "mes_sin": {
+      "operation": "cyclic_calendar",
+      "formula": "sin(2*pi*(month-1)/12)"
+    },
+    "mes_cos": {
+      "operation": "cyclic_calendar",
+      "formula": "cos(2*pi*(month-1)/12)"
+    }
+  },
+  "development_output": {
+    "base_dir": "data/processed/training_preparation/development",
+    "reference_end": "2024-12",
+    "layout": {
+      "keys.csv": [
+        "municipality_code",
+        "year_month"
+      ],
+      "features.csv": [
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "rain_mm_month_sum",
+        "temp_mean_c_month_mean",
+        "dewpoint_mean_c_month_mean",
+        "surface_runoff_mm_month_sum",
+        "total_evaporation_mm_month_sum_ecmwf",
+        "solar_radiation_mj_m2_month_sum",
+        "soil_water_l1_month_mean",
+        "wind_u_ms_month_mean",
+        "wind_v_ms_month_mean",
+        "zona_canal_t",
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_lag_1",
+        "lluvia_lag_1",
+        "lluvia_lag_2",
+        "temperatura_lag_1",
+        "temperatura_lag_2",
+        "rocio_lag_1",
+        "escorrentia_lag_1",
+        "mes_sin",
+        "mes_cos"
+      ],
+      "controls.csv": "Keys, original controls and Y; reserved-target metadata masked; horizon eligibility flags only outside X.",
+      "manifest.json": "Deterministic identity, fingerprints, column roles, development coverage and expected missingness."
+    },
+    "existing_policy": "reuse_identical",
+    "replacement_policy": "Never replace an existing identity directory. New data/config/code/runtime means a new bundle; identical identity is reused only after all expected bytes and manifest match.",
+    "eligibility": "Existing notification-year-backed five-year-history policy; audit counts only, no row removal before feature construction.",
+    "reserved": "Do not derive or summarize reserved reference rows; mask target outcome/trace controls crossing 2025-01. Original inputs unchanged."
+  },
+  "temporal_preparation": {
+    "base_dir": "data/processed/training_preparation/temporal",
+    "notebook_receipts_dir": "data/interim/training_preparation/notebook_execution",
+    "cutoffs": [
+      "2018-12",
+      "2020-12",
+      "2022-12",
+      "2024-06"
+    ],
+    "target_start": "2012-01",
+    "target_end": "2024-12",
+    "validation_target_months": 6,
+    "training_rule": "Observable target <= cutoff; evaluable Y; development target bounds.",
+    "validation_rule": "Origin >= cutoff; target in next six configured months, within development and evaluable. Later origins are successive predictions, not one forecast issued at fit time.",
+    "municipality_representation": "Explicitly join municipality_code from keys as one categorical X component; all other keys and controls stay outside X.",
+    "profiles": {
+      "native": {
+        "encoding": "native",
+        "numeric_scaling": "none",
+        "numeric_missing": "error",
+        "unknown_municipality": "explicit"
+      },
+      "onehot_standard": {
+        "encoding": "onehot",
+        "numeric_scaling": "standard",
+        "numeric_missing": "error",
+        "unknown_municipality": "explicit"
+      }
+    },
+    "known_zones": [
+      "EXITO",
+      "SEGURIDAD",
+      "ALERTA",
+      "EXCESO"
+    ],
+    "missing_categories": "__MISSING__ token is distinct from SEGURIDAD. Unknown zones error; unknown municipalities map to __UNKNOWN__ or error by configuration.",
+    "fitting": "Only X_train of the same horizon and cutoff; never Y, validation or reserved block.",
+    "numeric_missing": "Default error because eligible data are complete. Configurable preserve mode keeps NaN without imputation; all-missing scaling history errors.",
+    "serialization": "Safe JSON parameters, category vocabularies, ordered input/output columns, training-X fingerprint, configuration and runtime versions; no pickle.",
+    "notebook_identity": "Code-only identity excludes outputs/counts; separate fresh-kernel receipt verifies saved notebook bytes and displayed current artifact identities."
+  }
+}
