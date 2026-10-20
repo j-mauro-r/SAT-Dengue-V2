@@ -229,6 +229,12 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 | [DEC-100](#dec-100) | Resolver ponderación y heterogeneidad del panel municipal | ABIERTA | No aplica |
 | [DEC-101](#dec-101) | Verificar que una coincidencia de fechas no se interprete como intercambio | ABIERTA | No aplica |
 | [DEC-102](#dec-102) | Comprobar duplicados climáticos sin confundirlos con repeticiones de casos | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-124](#dec-124) | Freeze Stage 5 research scope and alert meaning | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-125](#dec-125) | Set provisional research utility criteria | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-126](#dec-126) | Evaluate original and sigmoid-calibrated probabilities | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-127](#dec-127) | Select alert thresholds within temporal development | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-128](#dec-128) | Compare candidates with existing metrics and support | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-129](#dec-129) | Freeze the selected protocol before reserved evaluation | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
 
 ## Registros detallados
 
@@ -772,6 +778,7 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 - **Motivo de deprecación o no adopción:** No aplica.
 - **Evidencia y autoridad:** SRC-P, sección 10; SRC-R, secciones 2.3 y 4; NOTE.
 - **Límites y validación pendiente:** La propuesta sugiere igualar la sensibilidad del canal, superar la persistencia y aumentar como máximo cinco puntos porcentuales las falsas alarmas; son criterios propuestos, no umbrales aprobados para V2.
+- **Current disposition (2026-10-20):** [DEC-125](#dec-125) now governs the accepted Stage 5 research utility criteria, with an explicit persistence reference and false-alert-ratio denominator. The source proposal and its broader metric list remain historical; no operational threshold is approved here.
 
 <a id="dec-062"></a>
 ### DEC-062 Seleccionar el modelo y calibrador de V2 únicamente con evidencia comparable
@@ -1602,3 +1609,77 @@ La evaluación retrospectiva de inicio en **T+2** requiere el estado observado d
 - **Selection:** Technical eligibility first; inner-training mean AP, then Brier, then predeclared within-family simplicity. Fixed external candidates use equally weighted mean AP across four windows, with separate horizon rankings and accompanying Brier/temporal/territorial evidence. No arbitrary event-metric composite, repeated external tuning or final-block use. Stage 4 ranking is not an approved champion.
 - **Owner:** Executable numerical tie tolerance, family-specific simplicity rules and boundary details live in `docs/product/stage-4/model_engineering_contract_v1.json` and its existing README; do not maintain a second implementation here.
 - **Scope:** Authorizes correction, reference regeneration, meaningful tests, independent review and same branch/PR #15 update. No candidate training, Y/channel/population/window/source changes, EDA, merge or automatic G2/G3/G4 approval. PLAN_020 approval and old metric artifacts remain historical; this correction supersedes affected evaluation results.
+
+
+---
+
+## Stage 5 research protocol — approved for implementation, 2026-10-20
+
+**Authority and execution state:** Mauricio explicitly requested creation of the Stage 5 branch and registration of the preceding proposed decisions in this conversation on 2026-10-20. DEC-124–129 record that research protocol; they are not earlier assistant suggestions treated as approval by silence. Implementation and validation remain NOT_EXECUTED for this protocol. The working branch is `Stage5/Model-Evaluation`, created from the clean `Stage4/Model-Engineering` HEAD `c8daf08f613340e86170f0fbbbbb6ce60a20c4b4`. This registration does not approve G2/G3/G4/G5, select a champion, publish an operational threshold, authorize deployment, or merge a PR.
+
+<a id="dec-124"></a>
+### DEC-124 Freeze Stage 5 research scope and alert meaning
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20 by the explicit registration instruction above.
+- **Decision:** Preserve approved Y/channel rules (DEC-118–122), features, three candidate families (XGBoost, LightGBM, GAM), references and scientific population from Stage 4. Evaluate T+1 and T+2 separately. Do not reopen EDA, add model families or change labels to improve scores.
+- **Alert meaning:** A thresholded prediction is a warning of excess in its exact target month, supporting review/preparedness. It is not an official outbreak declaration or an automatic intervention. Future excess may be a continuation; reporting a correct excess alert does not prove detection of a new onset.
+- **Onset boundary:** Keep the approved observed-state transition at target S and exactly S−1, separately from the excess label. Do not train an onset target or inject those future states into X.
+- **Limitation:** Consolidated retrospective data and correct calendar ordering do not establish historical real-time publication/revision availability. G4 acceptance remains separate from technical completion.
+
+<a id="dec-125"></a>
+### DEC-125 Set provisional research utility criteria
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; pilot research criteria, not deployment requirements.
+- **Decision:** For each horizon, require an absolute improvement of at least **0.10 (10 percentage points)** in onset sensitivity over persistence, while allowing at most **0.05 (5 percentage points)** additional false-alert ratio relative to persistence on the same evaluation cohorts. These are differences in proportions, not relative percentage increases. Preserve predeclared window weighting and evaluability rules; do not change aggregation after viewing results.
+- **Definitions:** Onset sensitivity is detected evaluable new onsets / all evaluable real new onsets, with DEC-123 missing-prediction safeguards. False-alert ratio is alerts whose target Y is 0 / all emitted alerts. A correctly predicted continuation is not a false excess alert, but is not a detected onset. Unknown outcomes are not negatives. No emitted alerts makes the false-alert ratio unavailable, not zero; such a policy cannot pass by avoiding all warnings. An absent onset denominator remains unavailable.
+- **Rationale and authority:** Ten percentage points is an explicitly proposed project-level minimum research gain, not a literature/INS standard or proof of health-service adequacy. The five-point allowance adapts SRC-P section 10's pending proposal, now explicitly using persistence and the false-alert-ratio denominator. It does not copy a false-positive-rate bound or promise the Colombian EWARS results.
+- **Relationship:** Supersedes DEC-061's pending utility-criterion wording only for this Stage 5 research protocol. It does not adopt every metric in DEC-061, silently substitute a separately defined channel forecast, or alter the Stage 4 selection policy. No independent channel comparator is presumed to exist merely because persistence uses the current channel state.
+- **Acceptance boundary:** A ten-point gain can still be operationally insufficient, particularly against a weak baseline. Report event counts and uncertainty. Insufficient evidence is an allowed conclusion; deployment needs separate agreement with the health-service user on missed events and unnecessary actions.
+
+<a id="dec-126"></a>
+### DEC-126 Evaluate original and sigmoid-calibrated probabilities
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; no calibrator fitted by this registration.
+- **Decision:** Compare unchanged probabilities against a sigmoid (Platt-style) correction by candidate/horizon. Use Brier and reliability curves with sample/event support; retain a correction only when independently evaluated development evidence supports it. No automatic calibration or flexible-method search is authorized.
+- **Interpretation:** Brier measures overall probabilistic error, not calibration alone. Curves compare predicted probabilities with observed excess frequencies; small municipal samples cannot establish precise calibration. Maintain original probabilities and provenance alongside any corrected version.
+- **Temporal control:** Calibrator fitting must use out-of-time predictions from models that did not fit those outcomes. Selection and evaluation of calibration remain separated under DEC-127. Do not reuse V1 thresholds or confuse EWARS configuration tuning with probability calibration.
+- **Relationship:** Resolves DEC-081's conceptual independence requirement for this protocol; the executable split schedule and calibration acceptance/tie details must be fixed in the future Stage 5 contract before execution. DEC-062's empirical model/calibrator choice remains open until evidence exists.
+
+<a id="dec-127"></a>
+### DEC-127 Select alert thresholds within temporal development
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; no numerical probability threshold selected.
+- **Decision:** Select one probability threshold per candidate/horizon, initially shared across municipalities. Maximize onset sensitivity subject to the DEC-125 false-alert constraint in permitted development data. Break equal-sensitivity choices by fewer false alerts; declare no feasible policy when none meets the constraint. Do not impose 0.5 or copy published EWARS/V1 thresholds.
+- **Chronology:** Predeclare temporal roles for base-model training, calibration fitting, threshold selection and subsequent evaluation. Labels used in any adjustment must be observable by its adjustment cutoff; prediction origins must not precede the fitted system's availability. Fit all learned preprocessing within the corresponding training subset. Do not use random folds.
+- **Evaluation boundary:** Existing Stage 4 external windows and their `evaluation_context.csv` remain evaluation-only and must not become threshold/calibrator fitting inputs. A future Stage 5 contract must explicitly define permitted historical development context for onset-based threshold selection, separate from external evaluation context and X. Do not reinterpret this decision as permission to tune on prior external results.
+- **Remaining implementation detail:** Specify exact split dates, threshold candidate/tie conventions and artifact identity/reuse before running the bounded DWP implementation. This is implementation preparation, not permission to alter existing scientific cohorts.
+
+<a id="dec-128"></a>
+### DEC-128 Compare candidates with existing metrics and support
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20.
+- **Decision:** Retain four core metrics: grouped-tie non-interpolated AP, Brier, onset sensitivity and false-alert ratio. Preserve DEC-123's separate-horizon, equal-window AP ranking, with utility qualification reported separately under DEC-125; the highest-AP candidate need not be operationally eligible. Do not create a weighted composite or an arbitrary cross-family complexity score.
+- **Evidence:** Report all declared periods, departments and municipalities with selected population, emitted alerts, evaluable outcomes and real/detected onset counts. Report unavailable metrics explicitly, including one-class AP and missing-context cases; never improve a ranking by silently dropping difficult windows or territories. Quantify uncertainty with dependence-aware methods specified before execution, rather than treating all municipality-month rows as independent.
+- **Stability:** Examine period and territorial variability without fitting 76 local thresholds/calibrators on small samples. Previously inspected Stage 4 development results are not a newly untouched test. This decision does not expand the scientific population or permit repeated external hyperparameter tuning.
+
+<a id="dec-129"></a>
+### DEC-129 Freeze the selected protocol before reserved evaluation
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; reserved evaluation NOT_EXECUTED.
+- **Decision:** Freeze selected candidate, preparation, calibration, alert threshold, temporal evaluation/update policy and acceptance rules before opening the final target-period block starting **2025-01**. Maintain separation by target period for both horizons, including rows originating before 2025 whose targets fall in the reserved block.
+- **Outcome:** Evaluate the frozen procedure and classify the evidence as meets criteria, does not meet criteria, or insufficient evidence. Do not adjust/reselect on the reserved outcomes or call the same block untouched again after inspecting it. Research closure may conclude that no candidate qualifies; it need not produce a champion.
+- **Human boundary:** Research utility is distinct from operational authorization. Record unresolved real-time availability limitations and any required prospective pilot. Acceptance/approval of G4/G5, deployment and merge remain human decisions, not consequences of this branch or passing tests.
+
+### Evidence supporting DEC-124–129
+
+The sources below support the evaluation design and contextual limitations. None establishes our 10-point improvement or 5-point allowance as a universal standard; the numeric research criteria derive from the explicit project decision in DEC-125.
+
+| Source | Contribution and transfer limit |
+|---|---|
+| SRC-P, proposal section 10; historical DEC-061 | Temporal reserved evaluation, onset counts, probability calibration, and a proposed five-percentage-point false-alarm allowance. The reference and denominator are made explicit by DEC-125 rather than assumed interchangeable. |
+| [Schlesinger et al. (2024), Colombia EWARS-csd](https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2024.1323618/full) | Municipality-dependent sensitivity/PPV trade-offs; weekly hospitalization outcomes and optimal retrospective configurations are not directly transferable to our monthly onset assessment. |
+| [Hussain-Alkhateeb et al. (2018), EWARS including Brazil](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0196811) | Local alarm settings and joint sensitivity/PPV assessment; published probability cutoffs are not defaults for V2. |
+| [Infodengue-Mosqlimate 2025 protocol, Brazil](https://sprint.mosqlimate.org/sprint/2025/) | Explicit historical cutoffs, season-specific validation and a separate true forecast; case-curve forecasting differs from our binary target. |
+| [Van Calster et al. (2019), probability calibration](https://link.springer.com/article/10.1186/s12916-019-1466-7) | Reliability assessment, adequate sample support and limitations of apparent discrimination; clinical-model guidance is methodological evidence, not a dengue alert threshold. |
+| [scikit-learn 1.7 calibration documentation](https://scikit-learn.org/1.7/modules/calibration.html) | Disjoint calibration fitting, sigmoid/isotonic trade-offs, and distinction between Brier and calibration alone. |
+| [Campbell et al. (2026), operational D-MOSS evaluation](https://journals.plos.org/globalpublichealth/article?id=10.1371/journal.pgph.0005867) | Alert thresholds trade off missed episodes and false alarms by action/territory; Vietnamese operational results do not certify V2 or retrospective as-of availability. |
