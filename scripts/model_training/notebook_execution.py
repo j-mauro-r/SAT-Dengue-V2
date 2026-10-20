@@ -7,6 +7,7 @@ import hashlib
 import os
 import sys
 import tempfile
+from collections.abc import Callable
 from importlib import import_module
 from importlib.metadata import version
 from pathlib import Path
@@ -84,15 +85,21 @@ def _execution_environment(root: Path) -> dict[str, str]:
     return env
 
 
-def execute_notebook(root: Path) -> None:
+def execute_notebook(
+    root: Path,
+    *,
+    notebook_path: Path = NOTEBOOK_PATH,
+    fingerprints: Callable[[Path], dict[str, Any]] = code_fingerprints,
+    extract_summary: Callable[[dict[str, Any]], dict[str, Any]] = extract_saved_summary,
+) -> None:
     """Run every notebook cell in a fresh kernel and save outputs atomically."""
     env = _execution_environment(root)
     nbformat = import_module("nbformat")
     KernelManager = import_module("jupyter_client").KernelManager
     NotebookClient = import_module("nbclient").NotebookClient
 
-    path = root / NOTEBOOK_PATH
-    before = code_fingerprints(root)
+    path = root / notebook_path
+    before = fingerprints(root)
     notebook = nbformat.read(path, as_version=4)
     km = KernelManager(
         kernel_name="python3",
@@ -116,8 +123,8 @@ def execute_notebook(root: Path) -> None:
         if km.has_kernel:
             km.shutdown_kernel(now=True)
         km.cleanup_resources()
-    extract_saved_summary(notebook)
-    if code_fingerprints(root) != before:
+    extract_summary(notebook)
+    if fingerprints(root) != before:
         raise ModelTrainingError("Code changed during fresh-kernel execution")
     fd, temporary = tempfile.mkstemp(prefix=".notebook05-", suffix=".ipynb", dir=path.parent)
     try:

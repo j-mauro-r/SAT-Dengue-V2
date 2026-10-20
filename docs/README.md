@@ -26,7 +26,7 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Stage 2 canonical definitions of all 69 epidemiological fields | [Active field dictionary and priority matrix](product/stage-2/DATA-01-Priority%20Field%20Matrix.md) |
 | Retired experimental EDA and lineage reports | [Historical archive — DEPRECATED](archive/experimental-eda/README.md) |
 | Implemented training preparation pipeline | [Preparation contract and technical validation](product/stage-3/README.md) |
-| Stage 4 shared references and baseline pipeline | [Model engineering delivery 1](product/stage-4/README.md) |
+| Stage 4 shared references and XGBoost candidate | [Model engineering deliveries](product/stage-4/README.md) |
 | Data boundaries | [Data policy](data/data-policy.md) |
 | Security | [Security policy](SECURITY.md) |
 | Engineering and performance | [Engineering standards](standards/engineering-standards.md) |

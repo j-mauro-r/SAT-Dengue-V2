@@ -1,6 +1,6 @@
 {
   "schema": "stage4-model-engineering-contract-v1",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "stage3_contract_path": "docs/product/stage-3/training_preparation_contract_v1.json",
   "windows": [
     "2018-12_t1",
@@ -115,5 +115,89 @@
     "external_boundary": "No repeated candidate/hyperparameter/threshold adjustment to external validation; final reserved block from2025-01 remains untouched.",
     "reference_boundary": "This delivery emits diagnostic reference metrics only, no ranking mixing deterministic persistence with probabilistic references or candidates.",
     "gate_boundary": "Stage4 ranking is not an approved Stage5 champion; no model adapters/search implemented by this correction."
+  },
+  "xgboost_candidate": {
+    "seed": 42,
+    "threads": 1,
+    "inner_folds": 2,
+    "inner_cutoff_offsets_months": [
+      12,
+      6
+    ],
+    "inner_validation_months": 6,
+    "maximum_configurations": 6,
+    "maximum_fits_per_run": 104,
+    "preparer": {
+      "encoding": "onehot",
+      "numeric_scaling": "none",
+      "numeric_missing": "error",
+      "unknown_municipality": "explicit"
+    },
+    "early_stopping": false,
+    "class_weighting": "none; scale_pos_weight=1",
+    "threshold_policy": null,
+    "model_format": "native JSON",
+    "tree_method": "hist",
+    "device": "cpu",
+    "configurations": [
+      {
+        "n_estimators": 80,
+        "max_depth": 2,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 160,
+        "max_depth": 2,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 80,
+        "max_depth": 4,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 160,
+        "max_depth": 4,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 80,
+        "max_depth": 2,
+        "eta": 0.1,
+        "reg_lambda": 5,
+        "reg_alpha": 0.1,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 160,
+        "max_depth": 4,
+        "eta": 0.1,
+        "reg_lambda": 5,
+        "reg_alpha": 0.1,
+        "max_bin": 128,
+        "min_child_weight": 5
+      }
+    ],
+    "artifacts_dir": "artifacts/model_training/xgboost",
+    "execution_policy": "reuse verified identical identity; never refit on verify",
+    "roundtrip_tolerance": 0,
+    "calibration": "diagnostics only; no calibrator fitted"
   }
 }

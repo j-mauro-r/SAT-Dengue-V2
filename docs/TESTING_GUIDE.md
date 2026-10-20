@@ -204,3 +204,30 @@ context in `evaluation_context.csv` only; never feed it into X or fit/selection.
 
 PLAN_021 is a corrective audit of previously accredited PLAN_020 results; the
 latter's contract, journals and approval remain untouched historical evidence.
+
+
+## Stage 4 XGBoost candidate (delivery 2)
+
+`test_xgboost_candidate.py` maps adapter, nested selection, candidate persistence
+and notebook06 orchestration to synthetic temporal-key expectations, fresh
+inner-only vocabulary, forbidden target/event controls, explicit missing history,
+approved tie rules, bounded search, native inference roundtrip and a real
+orchestration perturbation test: changing external labels/features/categories
+cannot change the fitted model, preparation or selected configuration. Input,
+configuration and code changes invalidate reuse; payload corruption fails closed.
+
+Install `requirements-modeling.txt` alongside `.[dev]` in local/CI environments.
+The separate pinned file avoids invalidating Stage3's fingerprinted pyproject.
+Run all unit tests, Ruff/format on tests and model_training, mypy on tests and
+explicit-package-bases model_training, Markdown links and scoped DWP conformance.
+Run notebook06 with `python -m scripts.model_training.candidate_notebook --execute`
+from the repository environment, followed separately by `--verify`. The latter
+checks current identity and native inference without refitting. Refresh and
+verify notebook05 when shared code/config fingerprints change. All cells of
+both notebooks must be code. Preserve prior immutable artifacts and03/04 bytes.
+
+Real-data evidence checks all eight cohorts, declared inner cutoffs/observable
+labels,104fit budget, complete AP/Brier support, pending threshold metrics,
+preparation/model roundtrips and equal-weight horizon comparisons. Bounded
+runtime and resubstitution/calibration/territorial diagnostics do not approve a
+scientific gate or authorize external-validation tuning.

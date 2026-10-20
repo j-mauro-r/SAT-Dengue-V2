@@ -20,7 +20,7 @@ Implementation and human gate approval are separate. Current bounded work is on 
 | Stage 1 product definition / G1 | Delivered in PR #7 | CLOSED by Mauricio's explicit confirmation; final runtime schemas remain unfrozen. |
 | Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 OPEN: no explicit Data & Target Freeze recorded. Retired notebooks 01/02 are historical; notebook 03 is the current pipeline. |
 | Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 OPEN: PLAN_018 technical closure and tests are evidence, not human gate approval. |
-| Stage 4 model engineering / G4 | Shared pipeline, notebook 05 and persistence/train-prevalence references implemented; corrective evaluation tracked in PLAN_021 / PR #15 | G4 OPEN. Candidate XGBoost/LightGBM/GAM training has not run. |
+| Stage 4 model engineering / G4 | Shared references corrected in PLAN_021; first XGBoost candidate and notebook06 executed under PLAN_022 / draft PR #15 | G4 OPEN. LightGBM/GAM, operational thresholds and scientific acceptance remain pending. |
 | Stages 5–10 / G5–G10 | NOT STARTED | Model comparison, champion, final product contracts, API/dashboard and deployment remain future work. |
 
 Mauricio authorized the bounded preparation implementation before a formal G2 freeze was recorded. Record that actual progression without inventing a past approval. Stage dependencies below remain the acceptance order; branch names, plan completion and passing tests do not themselves close gates.
@@ -44,7 +44,7 @@ January 2020 climate has been recovered/incorporated for the 76 reviewed municip
 ### Next bounded work — close the handoff, then model
 
 1. Present the existing data/target and preparation evidence for an explicit G2/G3 disposition. Do not equate this documentation update with approval or restart completed EDA. The previously planned 5/7/9-year target sensitivity has no completed evidence here; Mauricio must decide its disposition for the freeze rather than an agent silently deleting it or declaring it completed.
-2. Use the corrected reference evaluation and approved selection policy before separately authorized XGBoost, LightGBM and GAM experiments, once the applicable gate disposition is recorded. Reuse notebook 04 modules, saved preparation state and keyed X/Y; select the representation required by each estimator.
+2. Use the corrected reference evaluation, approved selection policy and PLAN_022 XGBoost evidence for the next separately scoped candidate delivery; LightGBM/GAM and scientific gate dispositions remain pending. Reuse notebook 04 modules, saved preparation state and keyed X/Y; select the representation required by each estimator.
 3. Keep objectives from 2025-01 reserved. Compare candidates using the same development windows; evaluate calibration, false alarms and outbreak onsets as specified by the product/scientific decisions. No final-block tuning.
 4. Update this status table when a bounded milestone or human gate decision changes. Put scientific decisions in the register, executable schemas in contracts and command details in the testing guide; do not copy their inventories here.
 
