@@ -93,6 +93,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
+          pip install -r requirements-modeling.txt
 
       - name: Ruff lint
         run: ruff check tests
@@ -122,6 +123,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
+          pip install -r requirements-modeling.txt
 
       - name: Run unit tests
         run: pytest tests/unit -v

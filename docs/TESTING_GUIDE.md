@@ -158,3 +158,91 @@ partitions must agree with reference key sets; 456 T+1 and 380 T+2 validation
 examples per cutoff are expected for the current data, not forced sample limits.
 Configured six-month target intervals and actual horizon-specific origin/target
 support are reported separately. No predictor training is part of these checks.
+
+## Stage 4 shared references (delivery 1)
+
+Stage 4 delivery 1 maps `scripts/model_training/**`, notebook 05 and
+`docs/product/stage-4/model_engineering_contract_v1.json` to bounded reference
+execution only. This surface runs persistence and train-prevalence references
+over verified Stage 3 artifacts; it does not train XGBoost, LightGBM or GAM.
+
+Use at least the following checks:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_model_training.py -q
+.venv/bin/python -m ruff check scripts/model_training tests/unit/test_model_training.py
+.venv/bin/python -m mypy --explicit-package-bases scripts/model_training tests/unit/test_model_training.py
+.venv/bin/python -m scripts.model_training.execution --execute
+.venv/bin/python -m scripts.model_training.execution --verify
+.venv/bin/python -m scripts.model_training.notebook_execution --execute
+.venv/bin/python -m scripts.model_training.notebook_execution --verify
+.venv/bin/python scripts/check_markdown_links.py
+```
+
+Reference metrics must keep non-evaluable states explicit when denominators or
+class support are missing. Probabilistic references must not emit event alert
+metrics unless a threshold policy is declared by contract. Artifacts are local
+only under `artifacts/model_training/` and must use immutable identity reuse.
+
+
+### Stage 4 metric correction
+
+`tests/unit/test_model_metrics.py` supplies independent expected AP fractions for
+constant/partial/binary ties and permutations, perfect ranking, unavailable/invalid
+inputs, exact calendar predecessor lookup (including the first validation month),
+municipality isolation and T+1/T+2 differences. Its integration fixture verifies
+source hashes, keyed context, independent dictionary/calendar event counts and
+prediction invariance under changed retrospective evaluation context.
+
+Run it with `test_model_training.py`, the full foundation suite and Ruff/mypy on
+`scripts/model_training`. Execute notebook 05 in a fresh kernel and verify its
+receipt using the separate `--execute` and `--verify` commands above. Correction
+evidence must compare old/new metrics while preserving old artifacts, prediction
+bytes, Stage 3 cohort/manifests and original scientific source hashes. No numeric
+historical diagnostic may be imposed on the regenerated outputs. Evaluate
+context in `evaluation_context.csv` only; never feed it into X or fit/selection.
+
+PLAN_021 is a corrective audit of previously accredited PLAN_020 results; the
+latter's contract, journals and approval remain untouched historical evidence.
+
+
+## Stage 4 XGBoost candidate (delivery 2)
+
+`test_xgboost_candidate.py` maps adapter, nested selection, candidate persistence
+and notebook06 orchestration to synthetic temporal-key expectations, fresh
+inner-only vocabulary, forbidden target/event controls, explicit missing history,
+approved tie rules, bounded search, native inference roundtrip and a real
+orchestration perturbation test: changing external labels/features/categories
+cannot change the fitted model, preparation or selected configuration. Input,
+configuration and code changes invalidate reuse; payload corruption fails closed.
+
+Install `requirements-modeling.txt` alongside `.[dev]` in local/CI environments.
+The separate pinned file avoids invalidating Stage3's fingerprinted pyproject.
+Run all unit tests, Ruff/format on tests and model_training, mypy on tests and
+explicit-package-bases model_training, Markdown links and scoped DWP conformance.
+Run notebook06 with `python -m scripts.model_training.candidate_notebook --execute`
+from the repository environment, followed separately by `--verify`. The latter
+checks current identity and native inference without refitting. Refresh and
+verify notebook05 when shared code/config fingerprints change. All cells of
+both notebooks must be code. Preserve prior immutable artifacts and03/04 bytes.
+
+Real-data evidence checks all eight cohorts, declared inner cutoffs/observable
+labels,104fit budget, complete AP/Brier support, pending threshold metrics,
+preparation/model roundtrips and equal-weight horizon comparisons. Bounded
+runtime and resubstitution/calibration/territorial diagnostics do not approve a
+scientific gate or authorize external-validation tuning.
+
+
+## Stage4 families and ablations (delivery3)
+
+`test_candidate_families.py` covers LightGBM/GAM safe roundtrips, explicit
+missing/unknown categories, forbidden controls, internal-only vocabulary and
+GAM knots, binary non-evaluability, independent library spline agreement and
+removal invariance of all ablated values/encodings. The existing orchestration
+perturbation/reuse/corruption test now runs for all three families. Run both
+family and XGBoost tests plus the full foundation gates and lint/type checks
+for model_training. Fresh-kernel notebooks05 and06 must verify their current
+receipts. PLAN023 audits all40 fitted outer models, shared cohorts, inner
+boundaries,264-fit budget, unchanged scientific sources/prior artifacts,
+fixed-parameter ablations and all four metric records including territorial
+non-evaluability. Scientific acceptance, calibration and thresholds remain open.

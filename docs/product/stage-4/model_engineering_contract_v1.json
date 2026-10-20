@@ -1,0 +1,360 @@
+{
+  "schema": "stage4-model-engineering-contract-v1",
+  "version": "1.3.0",
+  "stage3_contract_path": "docs/product/stage-3/training_preparation_contract_v1.json",
+  "windows": [
+    "2018-12_t1",
+    "2018-12_t2",
+    "2020-12_t1",
+    "2020-12_t2",
+    "2022-12_t1",
+    "2022-12_t2",
+    "2024-06_t1",
+    "2024-06_t2"
+  ],
+  "rules": {
+    "reserved_final_block_start": "2025-01",
+    "objective_policy": "Keep all targets in reserved block excluded from development evaluation.",
+    "x_y_key_separation": "Keep predictors, labels and linkage keys separated in all artifacts."
+  },
+  "references": {
+    "persistence": {
+      "kind": "deterministic",
+      "formula": "predict_excess_t_plus_h = 1 if zona_canal_t == EXCESO else 0",
+      "threshold_policy": "deterministic",
+      "non_evaluable_states": [
+        "missing_zone",
+        "unknown_zone"
+      ]
+    },
+    "train_prevalence": {
+      "kind": "probabilistic",
+      "formula": "mean(Y_train) per window and horizon",
+      "threshold_policy": null,
+      "train_only": true
+    }
+  },
+  "planned_references_not_in_scope": [
+    "Poisson baseline (future proposal)"
+  ],
+  "metrics": {
+    "primary": [
+      "average_precision",
+      "onset_sensitivity",
+      "false_alarm_ratio",
+      "brier"
+    ],
+    "event_definition": "Onset at target S requires observed excess(S)=1 and observed excess(S-1)=0 for the same municipality and exactly the previous calendar month.",
+    "anticipation": "One-step issuance: each prediction is evaluated at its own target period (t+h).",
+    "evaluable_population": "All selected keys retained. True onset denominator depends only on evaluable scientific S/S-1 states, never prediction availability.",
+    "unknown_periods_treatment": "Unknown/missing scientific S or S-1 is explicitly counted/excluded from real-onset evaluability. Missing alerts retain true onsets in denominator; sensitivity value is unavailable and detected/all-real-onsets is an explicitly named lower bound.",
+    "average_precision_definition": "Non-interpolated AP = sum over distinct descending score thresholds of recall increment times precision; tied scores enter together.",
+    "event_context_source": "Hash-verified Stage3 development keys/features, scientifically approved zona_canal_t at S and S-1; no recalculation of Y/channel/percentiles.",
+    "event_context_scope": "Only selected development target months S and required S-1 (which may precede the validation window); never use origin state as S-1 for T+2.",
+    "invalid_prediction_policy": "Misalignment, malformed/nonfinite numbers, nonbinary labels or out-of-range probabilities raise. Missing required predictions make AP/Brier/alert ratios non-evaluable for the whole selected population with missing counts; no silent complete-case ranking.",
+    "event_information_boundary": "Retrospective evaluation_context.csv is never X, fitting data, hyperparameter search data or threshold-selection input.",
+    "probabilistic_event_metrics": "Without a declared threshold policy, event metrics and detection lower bounds are unavailable; actual onset counts remain reported separately."
+  },
+  "artifacts": {
+    "base_dir": "artifacts/model_training",
+    "notebook_receipts_dir": "artifacts/model_training/notebook_execution",
+    "existing_policy": "reuse_identical",
+    "save_predictions": true,
+    "save_metrics": true,
+    "save_config_provenance": true
+  },
+  "seed": 42,
+  "determinism_limits": [
+    "Pinned CPU candidate libraries, one thread, fixed seed, native/numeric inference verification; cross-version equality is not assumed.",
+    "Deterministic references depend on zone state availability and valid temporal linkage.",
+    "Notebook receipts depend on kernel package versions."
+  ],
+  "selection_policy": {
+    "authority": "Explicit Mauricio instruction in corrective request, 2026-10-20; DEC-123.",
+    "technical_eligibility": "Reject runs with leakage, invalid/unavailable required predictions, key/cohort misalignment or unverifiable artifacts before considering scores.",
+    "hyperparameters": "Maximize arithmetic mean AP across declared temporal inner-training splits only; all fitted steps stay within each inner-training split.",
+    "inner_tiebreak": [
+      "Minimize mean Brier on the same inner splits for probabilistic candidates.",
+      "Prefer simpler configuration under the predeclared within-family lexicographic rule."
+    ],
+    "numeric_ties": {
+      "absolute_tolerance": 1e-12,
+      "relative_tolerance": 0,
+      "rule": "Form ties within absolute tolerance of the best AP; among them within tolerance of the best (minimum) Brier. This is a fixed computational rule, not statistical equivalence."
+    },
+    "simplicity": {
+      "comparison": "Within family only; compare the following tuples lexicographically, smallest first. Normalize unlimited depth to positive infinity. If tuples tie, retain a scientific tie and use canonical configuration ID only for reproducible display.",
+      "XGBoost": [
+        "number_of_input_features",
+        "max_depth_unlimited_as_infinity",
+        "n_estimators",
+        "max_bin"
+      ],
+      "LightGBM": [
+        "number_of_input_features",
+        "num_leaves",
+        "max_depth_unlimited_as_infinity",
+        "n_estimators",
+        "max_bin"
+      ],
+      "GAM": [
+        "number_of_interaction_terms",
+        "total_basis_functions",
+        "number_of_smooth_terms",
+        "negative_common_scalar_regularization_strength_if_comparable"
+      ],
+      "prerequisite": "Declare supported parameters, basis counting and search grid before any future search. Noncomparable regularization or different families remain tied on complexity; no arbitrary cross-family score."
+    },
+    "external_comparison": "Separate T+1 and T+2 rankings using equal-weight arithmetic mean AP over all four external windows, with candidate configurations fixed before viewing external results. Do not omit inconvenient/invalid windows.",
+    "accompanying_evidence": [
+      "Brier where probabilistic",
+      "per-window AP and temporal stability",
+      "territorial results and support"
+    ],
+    "events": "Onset sensitivity and false alarms require a declared threshold policy and are not combined into an arbitrary weighted selection score.",
+    "external_boundary": "No repeated candidate/hyperparameter/threshold adjustment to external validation; final reserved block from2025-01 remains untouched.",
+    "reference_boundary": "This delivery emits diagnostic reference metrics only, no ranking mixing deterministic persistence with probabilistic references or candidates.",
+    "gate_boundary": "Stage4 ranking is not an approved Stage5 champion; no model adapters/search implemented by this correction."
+  },
+  "xgboost_candidate": {
+    "seed": 42,
+    "threads": 1,
+    "inner_folds": 2,
+    "inner_cutoff_offsets_months": [
+      12,
+      6
+    ],
+    "inner_validation_months": 6,
+    "maximum_configurations": 6,
+    "maximum_fits_per_run": 104,
+    "preparer": {
+      "encoding": "onehot",
+      "numeric_scaling": "none",
+      "numeric_missing": "error",
+      "unknown_municipality": "explicit"
+    },
+    "early_stopping": false,
+    "class_weighting": "none; scale_pos_weight=1",
+    "threshold_policy": null,
+    "model_format": "native JSON",
+    "tree_method": "hist",
+    "device": "cpu",
+    "configurations": [
+      {
+        "n_estimators": 80,
+        "max_depth": 2,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 160,
+        "max_depth": 2,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 80,
+        "max_depth": 4,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 160,
+        "max_depth": 4,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 80,
+        "max_depth": 2,
+        "eta": 0.1,
+        "reg_lambda": 5,
+        "reg_alpha": 0.1,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      {
+        "n_estimators": 160,
+        "max_depth": 4,
+        "eta": 0.1,
+        "reg_lambda": 5,
+        "reg_alpha": 0.1,
+        "max_bin": 128,
+        "min_child_weight": 5
+      }
+    ],
+    "artifacts_dir": "artifacts/model_training/xgboost",
+    "execution_policy": "reuse verified identical identity; never refit on verify",
+    "roundtrip_tolerance": 0,
+    "calibration": "diagnostics only; no calibrator fitted"
+  },
+  "lightgbm_candidate": {
+    "seed": 42,
+    "threads": 1,
+    "inner_folds": 2,
+    "inner_cutoff_offsets_months": [
+      12,
+      6
+    ],
+    "inner_validation_months": 6,
+    "preparer": {
+      "encoding": "onehot",
+      "numeric_scaling": "none",
+      "numeric_missing": "error",
+      "unknown_municipality": "explicit"
+    },
+    "early_stopping": false,
+    "threshold_policy": null,
+    "execution_policy": "reuse verified identical identity; never refit on verify",
+    "roundtrip_tolerance": 0,
+    "calibration": "diagnostics only; no calibrator fitted",
+    "maximum_configurations": 4,
+    "maximum_fits_per_run": 72,
+    "artifacts_dir": "artifacts/model_training/lightgbm",
+    "model_format": "native text",
+    "class_weighting": "none",
+    "configurations": [
+      {
+        "n_estimators": 80,
+        "num_leaves": 7,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "lambda_l1": 0,
+        "lambda_l2": 1,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      },
+      {
+        "n_estimators": 160,
+        "num_leaves": 7,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "lambda_l1": 0,
+        "lambda_l2": 1,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      },
+      {
+        "n_estimators": 80,
+        "num_leaves": 15,
+        "max_depth": 4,
+        "learning_rate": 0.1,
+        "lambda_l1": 0.1,
+        "lambda_l2": 5,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      },
+      {
+        "n_estimators": 160,
+        "num_leaves": 15,
+        "max_depth": 4,
+        "learning_rate": 0.1,
+        "lambda_l1": 0.1,
+        "lambda_l2": 5,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      }
+    ]
+  },
+  "gam_candidate": {
+    "seed": 42,
+    "threads": 1,
+    "inner_folds": 2,
+    "inner_cutoff_offsets_months": [
+      12,
+      6
+    ],
+    "inner_validation_months": 6,
+    "preparer": {
+      "encoding": "onehot",
+      "numeric_scaling": "none",
+      "numeric_missing": "error",
+      "unknown_municipality": "explicit"
+    },
+    "early_stopping": false,
+    "threshold_policy": null,
+    "execution_policy": "reuse verified identical identity; never refit on verify",
+    "roundtrip_tolerance": 0,
+    "calibration": "diagnostics only; no calibrator fitted",
+    "maximum_configurations": 4,
+    "maximum_fits_per_run": 72,
+    "artifacts_dir": "artifacts/model_training/gam",
+    "model_format": "numeric JSON coefficient and BSpline state",
+    "class_weighting": "none",
+    "configurations": [
+      {
+        "n_knots": 4,
+        "C": 0.1
+      },
+      {
+        "n_knots": 4,
+        "C": 1.0
+      },
+      {
+        "n_knots": 6,
+        "C": 0.1
+      },
+      {
+        "n_knots": 6,
+        "C": 1.0
+      }
+    ],
+    "representation": {
+      "distribution": "Bernoulli",
+      "link": "logit",
+      "numeric": "univariate cubic B-splines, uniform training-range knots, constant extrapolation, no interactions; training-constant terms frozen at zero",
+      "calendar": "existing mes_sin and mes_cos as linear Fourier pair",
+      "categories": "Stage3 onehot, unscaled, explicit missing/unknown tokens",
+      "penalty": "L2 basis coefficient shrinkage including category/Fourier terms; inverse C. Not curvature or second-derivative penalization. Intercept unpenalized.",
+      "basis_count": "sum of retained spline basis columns plus linear category/Fourier/constant columns; no intercept",
+      "solver": "scikit-learn LogisticRegression lbfgs; max_iter=2000, tol=1e-7; convergence warning fails closed"
+    }
+  },
+  "ablations": {
+    "without_climate": [
+      "rain_mm_month_sum",
+      "temp_mean_c_month_mean",
+      "dewpoint_mean_c_month_mean",
+      "surface_runoff_mm_month_sum",
+      "total_evaporation_mm_month_sum_ecmwf",
+      "solar_radiation_mj_m2_month_sum",
+      "soil_water_l1_month_mean",
+      "wind_u_ms_month_mean",
+      "wind_v_ms_month_mean",
+      "lluvia_lag_1",
+      "lluvia_lag_2",
+      "temperatura_lag_1",
+      "temperatura_lag_2",
+      "rocio_lag_1",
+      "escorrentia_lag_1"
+    ],
+    "without_zones": [
+      "zona_canal_t",
+      "zona_canal_lag_1"
+    ]
+  },
+  "candidate_suite": {
+    "maximum_fits_per_run": 264,
+    "ablation_policy": "XGBoost only, full model selected parameters per window/horizon, no new search; fresh reduced training-only preparation; same keys. Differences are not causal.",
+    "dependencies": {
+      "xgboost": "3.0.5",
+      "lightgbm": "4.6.0",
+      "scikit-learn": "1.7.2",
+      "scipy": "1.18.1",
+      "threadpoolctl": "3.7.0"
+    },
+    "scientific_boundary": "No champion, operational threshold, final calibration, reserved evaluation or human G4/G5 approval."
+  }
+}

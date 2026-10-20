@@ -1593,3 +1593,12 @@ La evaluación retrospectiva de inicio en **T+2** requiere el estado observado d
 - **Non-substitution rule:** If one required same-month historical observation is genuinely missing, keep the label non-evaluable; do not silently backfill with an older year.
 - **Retrospective limitation:** This project uses consolidated retrospective data. Temporal ordering of the computation does not prove historical operational availability of each value version at real-time cutoff.
 - **Relationship:** Refines DEC-121 wording and keeps DEC-119 method-family, DEC-120 zero-in-coverage rule and DEC-118 inclusion policy unchanged.
+
+
+### DEC-123 Approve Stage 4 selection and corrective evaluation policy
+
+- **Status:** ACCEPTED by Mauricio's explicit corrective instruction on 2026-10-20.
+- **Decision:** Correct non-interpolated AP by distinct score thresholds and evaluate onset from observed excess at exactly S/S−1, including context before the validation boundary. Unknown scientific context remains explicit; prediction failures cannot improve sensitivity by shrinking true-event denominators. Retrospective states are evaluation-only.
+- **Selection:** Technical eligibility first; inner-training mean AP, then Brier, then predeclared within-family simplicity. Fixed external candidates use equally weighted mean AP across four windows, with separate horizon rankings and accompanying Brier/temporal/territorial evidence. No arbitrary event-metric composite, repeated external tuning or final-block use. Stage 4 ranking is not an approved champion.
+- **Owner:** Executable numerical tie tolerance, family-specific simplicity rules and boundary details live in `docs/product/stage-4/model_engineering_contract_v1.json` and its existing README; do not maintain a second implementation here.
+- **Scope:** Authorizes correction, reference regeneration, meaningful tests, independent review and same branch/PR #15 update. No candidate training, Y/channel/population/window/source changes, EDA, merge or automatic G2/G3/G4 approval. PLAN_020 approval and old metric artifacts remain historical; this correction supersedes affected evaluation results.
