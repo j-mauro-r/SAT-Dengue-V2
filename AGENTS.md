@@ -4,7 +4,7 @@ DWP standard: 7.0.0 (installed skill 7.8.1)
 
 ## Repository Purpose
 
-SAT-Dengue-V2 is in Stage 0 — Engineering Foundation (closure evidence pending); G0 is UNVERIFIED. See `docs/roadmap/master-plan.md` for evidence and the transition to Stage 1. This repository is the AI-first execution and governance layer for building the SAT-Dengue V2 product under CRISP-ML(Q), DWP, and GitHub workflows.
+SAT-Dengue-V2 is in Stage 2 — Data Understanding. Mauricio confirmed Stage 1 closure after merging PR #7. Stage 2/G2 remain open; historical G0 independent-review evidence remains UNVERIFIED. See `docs/roadmap/master-plan.md` for the authoritative current status and pending work. This repository is the AI-first execution and governance layer for building the SAT-Dengue V2 product under CRISP-ML(Q), DWP, and GitHub workflows.
 
 ## Start Here
 

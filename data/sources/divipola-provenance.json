@@ -1,0 +1,18 @@
+{
+  "authority": "DANE / DIVIPOLA",
+  "download_date": "2026-10-16",
+  "reported_version_date": "2026-09-30",
+  "metadata_basis": "URLs, download date and version supplied by Mauricio in the project conversation; bound here to the supplied local snapshots by SHA-256.",
+  "historical_applicability": "UNVERIFIED: current snapshot is not a historical municipal change log.",
+  "publication_version_independently_verified": false,
+  "files": {
+    "Divipola-departamentos.md": {
+      "source_url": "https://geoportal.dane.gov.co/laboratorio/serviciosjson/gdivipola/servicios/departamentos.php",
+      "sha256": "6f93361c96a860c941a657fcb938c7698df3cfbe8eb04396fdf076209498e959"
+    },
+    "Divipola-municipios.md": {
+      "source_url": "https://geoportal.dane.gov.co/laboratorio/serviciosjson/gdivipola/servicios/municipios.php",
+      "sha256": "72eabcea0ff26370d23b9688e8d8f2246946cc815c040ccf1a6966b37a1de9f3"
+    }
+  }
+}

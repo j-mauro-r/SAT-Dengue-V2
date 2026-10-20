@@ -95,3 +95,7 @@ No completion claim is valid without explicit evidence state.
 
 - PITAGORAS is out of scope.
 - This policy does not authorize functional product implementation by itself.
+
+## Task Handoff
+
+Keep one implementation owner per task. Handoffs identify objective, remaining work, touched files, validations and unresolved risks. Independent reviewers report severity, concrete references and resolution notes. Preserve existing work; coordinate before concurrent edits.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate local Markdown links for repository-tracked .md files."""
+"""Validate local Markdown links for existing tracked and untracked project Markdown files."""
 
 from __future__ import annotations
 
@@ -18,9 +18,12 @@ def tracked_markdown_files(repo_root: Path) -> list[Path]:
         [
             "git",
             "ls-files",
+            "--cached",
+            "--others",
+            "--exclude-standard",
             "AGENTS.md",
             "README.md",
-            "docs/**/*.md",
+            ":(glob)docs/**/*.md",
             ".github/pull_request_template.md",
         ],
         cwd=repo_root,
@@ -29,7 +32,7 @@ def tracked_markdown_files(repo_root: Path) -> list[Path]:
         text=True,
     )
     files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
-    return [repo_root / rel for rel in files]
+    return [repo_root / rel for rel in sorted(set(files)) if (repo_root / rel).is_file()]
 
 
 def normalized_target(source: Path, target: str, repo_root: Path) -> Path | None:

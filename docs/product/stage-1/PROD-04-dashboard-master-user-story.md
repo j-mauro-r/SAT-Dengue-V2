@@ -2,17 +2,15 @@
 
 ## Status, Authority, and Purpose
 
-**Document status: CLOSED — Phase B. APPROVED TO MAURICIO**
-**Human Gate: APPROVED.** Prepared on 2026-10-15 in the existing Stage 1 PR #7. This is a product document, not a functional implementation or an implementation plan. No merge, contract freeze, G0/G1 approval, or Stage 1 completion is implied.
+**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
+**Human Gate: APPROVED for Stage 1 product scope.** Stage 1 closure was confirmed by Mauricio after PR #7 merge; final scientific definitions and technical contracts remain pending in their designated stages.
 
 This document owns the master dashboard story, proposed screen behavior, chart selection, and acceptance criteria. [PROD-01](PROD-01-business-question.md) owns the business question and geography; [PROD-02](PROD-02-users.md) owns the primary user; [PROD-03](PROD-03-supported-decisions.md) owns the supported human decision. The [product baseline](../product-definition.md), [contract lifecycle](../../contracts/contract-lifecycle.md), and [master plan](../../roadmap/master-plan.md) remain authoritative for scientific scope and staged delivery.
 
-The latest explicit request authorizes revising PROD-04 in the same PR: retain the dashboard views, simplify operational and audit detail, remove numeric case-count projections, and consolidate visible acceptance criteria. The complete document remains subject to review. Phase A files were inspected at PR head `1bc5e11832518b74b8b4ce9968a75efb4b12789d` and are preserved. PROD-02/03 record approval; PROD-01 has a CLOSED/APPROVED heading alongside an UNAPPROVED body. This status inconsistency is not resolved by this document and does not grant any stage-gate approval.
-
 Status labels throughout:
 
-- **USER REQUIREMENT:** expressly requested behavior, preserved as direction; not approval of this entire document.
-- **DRAFT PRODUCT DECISION:** proposed interpretation or design, requiring Mauricio's review.
+- **USER REQUIREMENT:** expressly requested behavior retained in the approved Stage 1 product baseline.
+- **DRAFT PRODUCT DECISION:** product-level interpretation retained in the approved baseline; technical/scientific details still require their later gates.
 - **RESEARCH EVIDENCE:** externally documented practice; does not approve a V2 decision.
 - **OPEN DECISION / TO BE FROZEN IN LATER STAGE:** unresolved scope or scientific/contract definition, respectively.
 

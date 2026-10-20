@@ -2,8 +2,7 @@
 
 ## Repository Context
 
-This repository is in foundation stage and is currently harness-first.
-Primary risk in this stage is governance drift (unsafe rules, missing validation, or hidden scope expansion), not runtime defects.
+This repository is in Stage 2 — Data Understanding. Review governance consistency, raw-data immutability, health-data privacy, reproducibility, provenance attribution and the distinction between executed diagnostics and resolved scientific quality. Production API/dashboard implementation has not started.
 
 ## Review Priorities
 

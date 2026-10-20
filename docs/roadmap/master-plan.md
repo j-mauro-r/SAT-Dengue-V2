@@ -10,24 +10,33 @@ This document is the single durable master plan for the project. It defines all 
 - Use DWP only when a concrete HU/task warrants an execution plan because of complexity, risk, dependencies, or work across sessions. Select the appropriate plan format for that bounded objective.
 - Record stage progress and gate evidence here; record HU/task acceptance and validation in its issue/PR. No separate DWP master-plan ID is a prerequisite for G0.
 
-## Current Status (2026-10-15)
+## Current Status — 2026-10-19
 
-- Stage 0: **IN PROGRESS — closure evidence pending**.
-- Gate G0: **UNVERIFIED** pending independent review evidence required by governance.
-- Current Stage: **Stage 0 — Engineering Foundation (closure)**.
-- Next Stage: **Stage 1 — Product Definition**, after G0 passes.
-- Stages 1–10: **NOT STARTED**; their gates are **UNVERIFIED**.
-
-### G0 Evidence
-
-| Criterion | State | Evidence |
+| Stage / gate | Current state | Basis |
 |---|---|---|
-| Foundation documentation accepted | PASS | [PR #5](https://github.com/j-mauro-r/SAT-Dengue-V2/pull/5) merged on 2026-10-14 (America/Bogota), merge commit `1abbc08b8429c15b9145119da13cfc955da03067`. |
-| DWP conformance | PASS | [Main CI run 38790310683](https://github.com/j-mauro-r/SAT-Dengue-V2/actions/runs/38790310683), commit `4e816d43e92638f773f26bdb2d0ec8929ffeb4c2`: DWP conformance step succeeded. |
-| Repository validation baseline | PASS | Same main CI run: Repository Quality, Python Quality, and Unit Tests succeeded, including documentation links and policy/security scans. |
-| Independent review evidence | UNVERIFIED | PR #5 has no submitted reviews or discussion comments as inspected on 2026-10-15; its description still marks current-head review pending. No independent review artifact was found in the repository. |
+| Stage 0 foundation / G0 | Foundation delivered; G0 review evidence UNVERIFIED | PR #5 merged; historical CI passed. A dedicated independent foundation review has not been established. This evidence gap is retained, not retroactively waived. |
+| Stage 1 product definition / G1 | CLOSED by human confirmation | Mauricio explicitly confirmed Stage 1 closure after merging PR #7 and directed progression to Stage 2. Product scope is approved; final input/prediction/API schemas remain unfrozen. |
+| Stage 2 / G2 | IN PROGRESS / OPEN | Experimental EDA retired by Mauricio on 2026-10-19. Current approved decisions remain in the [decision register](../product/traking-concluciones.md); reports/notebooks are historical. Local January climate recovery/incorporation is retained. No Data & Target Freeze is approved. |
+| Stages 3–10 | NOT STARTED; gates UNVERIFIED | Preparation, modeling and runtime product implementation remain future work. |
 
-Remaining closure action: supply or perform the independent review required by `docs/governance/ai-developer-first.md` and `docs/operations/validation-and-evidence.md`, resolve or explicitly accept any high/critical findings, and record the evidence. Then update Stage 0 to DONE, G0 to PASS, and Current Stage to Stage 1. The merged PR's historical synchronization warning is no longer an active blocker. This documentation change still requires its own validation, independent review, and Human Gate before merge.
+The human-authorized progression to Stage 2 is recorded separately from the unresolved historical G0 evidence. No new gate approval is inferred from code execution or from this audit.
+
+### Completed Stage 2 work and next decisions
+
+- Documentary definitions consolidated; residence in Tolima/Meta and symptom onset (`INI_SIN`) are approved.
+- The completed experimental EDA and municipal-coverage diagnostics are now [archived](../archive/experimental-eda/README.md), together with both notebooks and subsequent experimental reports. Their historical results do not establish reporting completeness, historical boundary validity, feature selection or target validation. No rerun is mandated by retirement.
+- Historical PLAN_006 compared independent-source panels and 2013 scenarios. Mauricio's subsequent baseline decision remains unchanged supplied 2013 records/dates (S1, DEC-113). The [archived review](../archive/experimental-eda/stage-2/DATA-03-panel-review.md) is provenance, not the active analytical work queue.
+- The initial Y configuration is approved and reconciled from PR #9 (DEC-119/121): median/percentile channel, strict count > P75, five prior complete calendar years available at T, same calendar month, epidemic years included, T+1/T+2. **Next:** implement deterministic numerical/evaluability/consecutive-state rules, run the approved 5/7/9-year target sensitivity, specify monthly climate aggregation, then finalize the Data Contract and G2 evidence. The January 2020 gap has been recovered/incorporated for the reviewed 76 municipalities; data-repair evidence remains local and is not retired with the EDA. Historical availability is a retrospective-study limitation; operational re-execution is deferred product work. No target-sensitivity result or G2 approval is inferred.
+- Baseline population is approved: use all supplied notification classifications without a confirmation filter (DEC-118), preserving all rows in source/reconciliation and keeping unusable geography/onset outside invented municipal-month assignments. No duplicate removal is applied without precise evidence (DEC-114). The remaining case-population question is no longer probable versus confirmed.
+- Baseline zero-month policy is approved (DEC-120): covered municipality-months without case records have count zero, including in historical P75 references. Archived PLAN_006 outputs retain their earlier unknown-state policy and are not current baseline acceptance evidence; implement and validate the new rule for baseline/target construction. Missing climate and out-of-coverage history remain distinct.
+- PRs #8/#9 and main are reconciled into the existing PR #10 integration branch. All original decision text and research evidence are preserved; see [recovery and reconciliation](../operations/stage2-pr-reconciliation.md). Source workbooks remain private local files, not part of the cleaned final PR tree.
+- Model granularity remains open. Stage 3 requires explicit G2 approval.
+
+### Historical foundation evidence
+
+- [PR #5](https://github.com/j-mauro-r/SAT-Dengue-V2/pull/5) merged on 2026-10-14, commit `1abbc08b8429c15b9145119da13cfc955da03067`.
+- [Main CI run 38790310683](https://github.com/j-mauro-r/SAT-Dengue-V2/actions/runs/38790310683) passed on commit `4e816d43e92638f773f26bdb2d0ec8929ffeb4c2`; this is dated CI evidence, not current full-workspace conformity.
+- Independent foundation review remains UNVERIFIED. Current audit/review does not claim to supply the missing historical review.
 
 ## Stage Plan
 

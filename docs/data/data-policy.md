@@ -2,7 +2,7 @@
 
 ## Current Source Strategy
 
-Primary large dataset is externally hosted in Kaggle and consumed through reproducible download and local/Colab processing workspaces.
+Current epidemiological and climate CSV snapshots are supplied locally for read-only Stage 2 analysis. Kaggle/local/Colab is the intended large-data strategy; exact upstream versions and reproducible retrieval of these snapshots are not yet established. The Stage 2 provenance register records those limits. Supplied DIVIPOLA reference snapshots have human-provided DANE provenance bound to local hashes.
 
 ## Git Data Boundaries
 
@@ -18,7 +18,7 @@ Allowed in repository:
 - Tiny non-sensitive examples required for CI
 - Metadata/configuration for reproducible data workflows
 
-## Current Lifecycle (conceptual)
+## Intended Lifecycle (not yet an implemented pipeline)
 
 Kaggle -> reproducible download -> local/Colab workspace -> processing pipeline -> training/evaluation
 

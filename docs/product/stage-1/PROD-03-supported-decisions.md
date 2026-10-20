@@ -1,6 +1,6 @@
 # PROD-03 — Supported Decisions
 Status and Purpose
-**Document status: CLOSED — Phase A. APPROVED TO MAURICIO**
+**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
 Human Gate: APPROVED.
 This document defines the type of human decision that SAT-Dengue V2 is intended to support. Detailed dashboard behavior belongs to PROD-04.
 Decision-Support Boundary — Approved Decision

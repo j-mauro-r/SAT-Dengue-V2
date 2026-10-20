@@ -1,0 +1,85 @@
+{
+  "status": "DEPRECATED",
+  "retired_on": "2026-10-19",
+  "authority": "Mauricio: Todo el EDA experimental",
+  "active_decision_register": "docs/product/traking-concluciones.md",
+  "items": [
+    {
+      "original_path": "docs/product/stage-2/DATA-01-2013-date-inconsistency-investigation.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/DATA-01-2013-date-inconsistency-investigation.md",
+      "original_sha256": "736e77ddd4bf765869a83e9263bb9c36eb5660a97c97a0d5c5b305da1df2a263",
+      "archive_sha256": "fefe01d2e1478e3378f6ebdeb7c117479806129e53104aa657c1bd74a88a55da",
+      "transformation": "retirement banner and relocated Markdown links only"
+    },
+    {
+      "original_path": "docs/product/stage-2/DATA-01-Initial Recognition Report.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/DATA-01-Initial Recognition Report.md",
+      "original_sha256": "f14fd0e80e5a138f46967a4a197b5062e5f668da75472255918431b39d52b603",
+      "archive_sha256": "b7355a6c697c6cb2429e461bf785ee949d2180f9bb78a54ae5f35d1d26afcf3c",
+      "transformation": "retirement banner and relocated Markdown links only"
+    },
+    {
+      "original_path": "docs/product/stage-2/DATA-01-Priority Field Matrix.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/DATA-01-Priority Field Matrix.md",
+      "original_sha256": "bc5f1338b7682b537b117573d204ea58e5d76995ae15b4ace5a6ecfcd793b4bb",
+      "archive_sha256": "ce617a7b31e0e2dd561fafac4962058419d9528a5a343d08709894253994ef9e",
+      "transformation": "Field definitions restored to active_path; archive_path now contains only a compatibility pointer. Original retirement hash retained in retirement_snapshot.",
+      "retirement_snapshot": {
+        "archive_sha256": "bdfc0cc0bc97d4f37e90c5d0c985b00905d4c2b4288968c7ed1202b73e9851b2",
+        "transformation": "retirement banner and relocated Markdown links only"
+      },
+      "status": "RESTORED_TO_ACTIVE_REFERENCE",
+      "active_path": "docs/product/stage-2/DATA-01-Priority Field Matrix.md",
+      "active_sha256": "68544cae5766f719df2bd1ed78da693ddc1034e77ea8d1ff9343248a761d68f2"
+    },
+    {
+      "original_path": "docs/product/stage-2/DATA-01-Source Provenance.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/DATA-01-Source Provenance.md",
+      "original_sha256": "ab5129b6fc289d9e4af4c2eff91d642d1c3c63e3616b252777aaca853f3881e2",
+      "archive_sha256": "96ff5c9feab1b1e03e813a66fcf267afd777c8dc06b4568c4a7b25d95c47cc76",
+      "transformation": "retirement banner and relocated Markdown links only"
+    },
+    {
+      "original_path": "docs/product/stage-2/DATA-02-monthly-sensitivity-associations.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/DATA-02-monthly-sensitivity-associations.md",
+      "original_sha256": "abaedf18387f9ab4675a4fdbe8c9b122bcdefba2c2327b3dddc9f5cbf674f6ee",
+      "archive_sha256": "fcc706a6bc306c23ec8e3a317de2745dd16b3aa19e33f576f60b1ba4d4d9477f",
+      "transformation": "retirement banner and relocated Markdown links only"
+    },
+    {
+      "original_path": "docs/product/stage-2/DATA-03-panel-review.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/DATA-03-panel-review.md",
+      "original_sha256": "270a7cf0745ddcea0b875870c4fb333d3a7bc1a4f05e4cf5b82a5ac3e9e99748",
+      "archive_sha256": "7411ac2c9662f1078b38c9a1d5b3fd32cca0f15d8c2a21077ffde48ffa7d9466",
+      "transformation": "retirement banner and relocated Markdown links only"
+    },
+    {
+      "original_path": "docs/product/stage-2/DATA-04-retrospective-use-rules.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/DATA-04-retrospective-use-rules.md",
+      "original_sha256": "08f9774ec01c87b90c78fab7947d5f0f4c6f55c29876f22ae13bf2b4edcba575",
+      "archive_sha256": "2ecae0be22da83e4bf86f836b6c8446eb88bed779b1a8c4e3acfca5ac8c0130b",
+      "transformation": "retirement banner and relocated Markdown links only"
+    },
+    {
+      "original_path": "docs/product/stage-2/nota-metodologica.md",
+      "archive_path": "docs/archive/experimental-eda/stage-2/nota-metodologica.md",
+      "original_sha256": "80157c7c9cc41ce8ac850d574f4094f67c45adce9ec791c9dba74dd48fe7baee",
+      "archive_sha256": "05d46252f8276b69767dab22f5d9502d897f51431c9394028557b57bff983800",
+      "transformation": "retirement banner and relocated Markdown links only"
+    },
+    {
+      "original_path": "notebooks/01_stage2_residence_onset_eda.ipynb",
+      "archive_path": "docs/archive/experimental-eda/notebooks/01_stage2_residence_onset_eda.ipynb",
+      "original_sha256": "3d90353983bdffdacb2c227db5cdd1f6f94606d3843de1a9ee2f785ff9fb6a3c",
+      "archive_sha256": "3d90353983bdffdacb2c227db5cdd1f6f94606d3843de1a9ee2f785ff9fb6a3c",
+      "transformation": "byte-identical move"
+    },
+    {
+      "original_path": "notebooks/02_stage2_monthly_sensitivity_associations.ipynb",
+      "archive_path": "docs/archive/experimental-eda/notebooks/02_stage2_monthly_sensitivity_associations.ipynb",
+      "original_sha256": "eb044ae75f39e9b06dfeeab7c68296b47d88886bb4c34c945f78246aee59d4c1",
+      "archive_sha256": "eb044ae75f39e9b06dfeeab7c68296b47d88886bb4c34c945f78246aee59d4c1",
+      "transformation": "byte-identical move"
+    }
+  ]
+}

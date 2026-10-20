@@ -14,11 +14,19 @@ dev = [
     "pytest-cov>=6.0",
     "ruff>=0.8",
     "mypy>=1.13",
+    "numpy>=2.0",
+    "pandas>=2.2",
 ]
+
+[tool.setuptools]
+# Stage 2 uses repository scripts and notebooks; no importable package ships yet.
+packages = []
+include-package-data = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100
