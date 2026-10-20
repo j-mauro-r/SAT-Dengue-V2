@@ -4,7 +4,7 @@ DWP standard: 7.0.0 (installed skill 7.8.1)
 
 ## Repository Purpose
 
-SAT-Dengue-V2 is in Stage 2 — Data Understanding. Mauricio confirmed Stage 1 closure after merging PR #7. Stage 2/G2 remain open; historical G0 independent-review evidence remains UNVERIFIED. See `docs/roadmap/master-plan.md` for the authoritative current status and pending work. This repository is the AI-first execution and governance layer for building the SAT-Dengue V2 product under CRISP-ML(Q), DWP, and GitHub workflows.
+SAT-Dengue-V2 builds a monthly dengue early-warning system under CRISP-ML(Q), DWP and GitHub workflows. Read `docs/roadmap/master-plan.md` for implementation progress, open human gates and the next bounded task. Do not infer stage approval from a branch name or completed plan.
 
 ## Start Here
 
@@ -28,7 +28,6 @@ Authoritative references:
 
 - `docs/governance/ai-developer-first.md`
 - `docs/decisions/adr-0001-foundation-boundaries.md`
-- `docs/contracts/contract-lifecycle.md`
 - `docs/roadmap/master-plan.md`
 - `docs/governance/dwp.md`
 
@@ -69,13 +68,9 @@ Use local command delegators:
 
 Execute incrementally by user stories (HUs), each with bounded scope, acceptance criteria, validation, and evidence. Use DWP only when a concrete HU/task warrants it because of complexity, risk, dependencies, or work across sessions. Direct edit requests should be implemented directly unless the user requests a DWP flow. Do not execute a whole Stage or project in one prompt.
 
-## Validation Baseline (Foundation)
+## Validation Ownership
 
-- DWP conformance: `bash .agents/skills/deepworkplan/verify/conformance.sh`
-- Lint tests: `ruff check tests`
-- Format checks: `ruff format --check tests`
-- Type checks: `mypy tests`
-- Unit tests: `pytest tests/unit -v`
+`docs/TESTING_GUIDE.md` owns required gates and source-to-test mapping. Quick Commands above are shortcuts, not a second validation policy. Report repo-only, scoped-plan and all-plan conformance separately; historical plan failures must not be presented as current code failures or silently waived.
 
 ## Human Gate Boundaries
 
@@ -85,6 +80,13 @@ Escalate for human decision when:
 - Contract/data/security boundaries change.
 - Merge/release approval is needed.
 - Authority sources conflict.
+
+## Documentation Ownership
+
+- `docs/README.md` maps topics to their single owner; follow those links selectively.
+- Scientific choices belong in `docs/product/traking-concluciones.md`; executable input/feature rules belong in their current contracts.
+- Dated audit reports and retired EDA are historical evidence, not standing work instructions. Do not restart them to refresh old outputs.
+- Tool manuals under `.agents/skills/` are pinned dependencies, not project specifications; do not edit or prune them as project prose.
 
 ## Local State Notes
 

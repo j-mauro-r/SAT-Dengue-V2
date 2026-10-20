@@ -2,7 +2,7 @@
 
 ## Repository Context
 
-This repository is in Stage 2 — Data Understanding. Review governance consistency, raw-data immutability, health-data privacy, reproducibility, provenance attribution and the distinction between executed diagnostics and resolved scientific quality. Production API/dashboard implementation has not started.
+Consult `docs/roadmap/master-plan.md` for current implementation and open gates. Review source/data immutability, health-data privacy, temporal causality, separated X/Y, train-only fitted transformations, reserved-target isolation and code/data/runtime-bound artifact identities. Distinguish technical evidence from scientific approval and operational availability. Production API/dashboard work remains planned.
 
 ## Review Priorities
 

@@ -26,6 +26,8 @@ Pinned installation references (historical, not instructions to reinstall):
 
 ## Current status versus historical installation
 
-Stage 2 is active following Mauricio's confirmation of Stage 1 closure. Installation PASS does not imply present conformity of all local plans or G0 approval. See [current validation](../operations/validation-and-evidence.md) for the legacy mixed-lifecycle failure and PLAN_003 narrative/ledger discrepancy; see the master plan for the unresolved historical G0 review evidence.
+The [master plan](../roadmap/master-plan.md) owns current progress; this document owns the planning policy and installation baseline. Installation PASS does not imply current all-plan conformity or G0 approval. [Validation operations](../operations/validation-and-evidence.md) separates current checks from historical audit outcomes.
+
+Use `conformance.sh --repo-only` to check the harness, `--plan <path>` for the bounded plan, and the default invocation for the repository plus all local plans. Run the full required gate before merge and disclose legacy failures separately; never rewrite historical journals to turn them green. No new plan is needed merely to refresh a status paragraph or merge duplicate prose.
 
 No historical plan contract, journal or terminal result was rewritten to make these controls pass.

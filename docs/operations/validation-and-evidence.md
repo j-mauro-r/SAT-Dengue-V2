@@ -11,7 +11,13 @@ Successful notebook execution does not approve date quality, complete reporting 
 
 Independent review records severity, concrete references and resolution notes. Human approval governs merge and stage freezes. Dated historical outcomes remain historical; current evidence owns the present assessment.
 
-## Current reconciliation audit — 2026-10-16
+## Current evidence navigation
+
+Use the [master plan](../roadmap/master-plan.md) for progress and human gate status, the [preparation validation report](../product/stage-3/milestone-3-validation.md) for implemented pipeline evidence, and the [2026-10-20 harness audit](harness-documentation-audit-2026-10-20.md) for documentation changes and checks. Revalidate affected surfaces after edits; an earlier PASS is not a current test result.
+
+The record below is historical. Its references to a current notebook, recognition report, open PR or then-active Stage describe 2026-10-16 and must not be used to resurrect the retired EDA or overwrite later decisions. Its original limitations are preserved.
+
+## Historical reconciliation audit — 2026-10-16
 
 Scope: all first-party project documentation, Stage 1/2 requirements, notebook source/saved results, local DWP status, link-check tooling and entry/review instructions. This is a consistency and reproducibility audit, not a new clinical/source audit or production implementation review.
 

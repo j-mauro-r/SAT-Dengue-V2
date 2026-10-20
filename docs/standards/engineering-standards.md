@@ -33,4 +33,4 @@
 
 ## Performance Readiness
 
-Stage 2 has local EDA workloads but no measured production service budgets. Record execution time and memory when relevant to reproducibility. Define component latency/throughput targets and regression checks when production pipelines, API/dashboard or training workloads are implemented; do not present planned budgets as measurements.
+Local consolidation and preparation pipelines exist; production service budgets have not been measured. Record execution time and memory when they affect reproducibility. Establish latency/throughput targets for implemented training/runtime workloads when needed; do not introduce a benchmark system or present planned budgets as measurements.

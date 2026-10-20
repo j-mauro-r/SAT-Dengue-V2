@@ -15,7 +15,7 @@ Related sources:
 - [PROD-05](PROD-05-new-period-flow.md): upload, validation, inference, result, and persistence flow.
 - [PROD-06](PROD-06-ui-information.md): information required by the interface.
 - [PROD-07](PROD-07-draft-prediction-contract.md): conceptual output semantics.
-- [Contract lifecycle](../../contracts/contract-lifecycle.md): staged contract maturity.
+- [Contract maturity and stage gates](../../roadmap/master-plan.md): staged contract maturity.
 
 ## Approved Product Direction
 

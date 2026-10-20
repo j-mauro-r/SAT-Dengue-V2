@@ -42,7 +42,7 @@ Evidence states:
   - run full gate set above.
 - `.agents/**` and DWP governance changes:
   - full gate set + DWP conformance is mandatory.
-- Python source/tests changes (future stages):
+- Maintained Python source/tests changes:
   - full gate set plus scope-specific tests as required.
 
 ## Escalation Rule

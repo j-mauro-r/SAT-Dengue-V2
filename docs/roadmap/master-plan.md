@@ -10,27 +10,45 @@ This document is the single durable master plan for the project. It defines all 
 - Use DWP only when a concrete HU/task warrants an execution plan because of complexity, risk, dependencies, or work across sessions. Select the appropriate plan format for that bounded objective.
 - Record stage progress and gate evidence here; record HU/task acceptance and validation in its issue/PR. No separate DWP master-plan ID is a prerequisite for G0.
 
-## Current Status — 2026-10-19
+## Current Status — 2026-10-20
 
-| Stage / gate | Current state | Basis |
+Implementation and human gate approval are separate. This snapshot is based on local branch `Stage3/Data-Preparation`, implementation HEAD `2e1c919` and its tracked evidence; it is not a new remote PR/CI inspection or a scientific freeze.
+
+| Stage / gate | Implementation state | Gate / evidence state |
 |---|---|---|
-| Stage 0 foundation / G0 | Foundation delivered; G0 review evidence UNVERIFIED | PR #5 merged; historical CI passed. A dedicated independent foundation review has not been established. This evidence gap is retained, not retroactively waived. |
-| Stage 1 product definition / G1 | CLOSED by human confirmation | Mauricio explicitly confirmed Stage 1 closure after merging PR #7 and directed progression to Stage 2. Product scope is approved; final input/prediction/API schemas remain unfrozen. |
-| Stage 2 / G2 | IN PROGRESS / OPEN | Experimental EDA retired by Mauricio on 2026-10-19. Current approved decisions remain in the [decision register](../product/traking-concluciones.md); reports/notebooks are historical. Local January climate recovery/incorporation is retained. No Data & Target Freeze is approved. |
-| Stages 3–10 | NOT STARTED; gates UNVERIFIED | Preparation, modeling and runtime product implementation remain future work. |
+| Stage 0 foundation / G0 | Foundation delivered in PR #5 | Historical dedicated independent foundation review remains UNVERIFIED. Later reviews do not retroactively supply it. |
+| Stage 1 product definition / G1 | Delivered in PR #7 | CLOSED by Mauricio's explicit confirmation; final runtime schemas remain unfrozen. |
+| Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 OPEN: no explicit Data & Target Freeze recorded. Retired notebooks 01/02 are historical; notebook 03 is the current pipeline. |
+| Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 OPEN: PLAN_018 technical closure and tests are evidence, not human gate approval. |
+| Stage 4 model engineering / G4 | NOT STARTED; next implementation phase | Baselines and XGBoost/LightGBM/GAM have not been trained. |
+| Stages 5–10 / G5–G10 | NOT STARTED | Model comparison, champion, final product contracts, API/dashboard and deployment remain future work. |
 
-The human-authorized progression to Stage 2 is recorded separately from the unresolved historical G0 evidence. No new gate approval is inferred from code execution or from this audit.
+Mauricio authorized the bounded preparation implementation before a formal G2 freeze was recorded. Record that actual progression without inventing a past approval. Stage dependencies below remain the acceptance order; branch names, plan completion and passing tests do not themselves close gates.
 
-### Completed Stage 2 work and next decisions
+A separate local acceptance replay, `PLAN_019_notebook04_runtime_acceptance`, was observed in progress during this audit (T-runtime started, 0/2 journal-derived task closures at inspection). It checks fresh-kernel use of the delivered notebook, not new features or EDA. Its final acceptance must come from its own later evidence; PLAN_018 implementation closure must not be substituted for that run.
 
-- Documentary definitions consolidated; residence in Tolima/Meta and symptom onset (`INI_SIN`) are approved.
-- The completed experimental EDA and municipal-coverage diagnostics are now [archived](../archive/experimental-eda/README.md), together with both notebooks and subsequent experimental reports. Their historical results do not establish reporting completeness, historical boundary validity, feature selection or target validation. No rerun is mandated by retirement.
-- Historical PLAN_006 compared independent-source panels and 2013 scenarios. Mauricio's subsequent baseline decision remains unchanged supplied 2013 records/dates (S1, DEC-113). The [archived review](../archive/experimental-eda/stage-2/DATA-03-panel-review.md) is provenance, not the active analytical work queue.
-- The initial Y configuration is approved and reconciled from PR #9 (DEC-119/121): median/percentile channel, strict count > P75, five prior complete calendar years available at T, same calendar month, epidemic years included, T+1/T+2. **Next:** implement deterministic numerical/evaluability/consecutive-state rules, run the approved 5/7/9-year target sensitivity, specify monthly climate aggregation, then finalize the Data Contract and G2 evidence. The January 2020 gap has been recovered/incorporated for the reviewed 76 municipalities; data-repair evidence remains local and is not retired with the EDA. Historical availability is a retrospective-study limitation; operational re-execution is deferred product work. No target-sensitivity result or G2 approval is inferred.
-- Baseline population is approved: use all supplied notification classifications without a confirmation filter (DEC-118), preserving all rows in source/reconciliation and keeping unusable geography/onset outside invented municipal-month assignments. No duplicate removal is applied without precise evidence (DEC-114). The remaining case-population question is no longer probable versus confirmed.
-- Baseline zero-month policy is approved (DEC-120): covered municipality-months without case records have count zero, including in historical P75 references. Archived PLAN_006 outputs retain their earlier unknown-state policy and are not current baseline acceptance evidence; implement and validate the new rule for baseline/target construction. Missing climate and out-of-coverage history remain distinct.
-- PRs #8/#9 and main are reconciled into the existing PR #10 integration branch. All original decision text and research evidence are preserved; see [recovery and reconciliation](../operations/stage2-pr-reconciliation.md). Source workbooks remain private local files, not part of the cleaned final PR tree.
-- Model granularity remains open. Stage 3 requires explicit G2 approval.
+### Current deliverables and authoritative evidence
+
+| Delivered scope | Evidence owner | What it does not establish |
+|---|---|---|
+| Source decisions, residence/onset, supplied 2013 records unchanged, all notification classifications and coverage zeros | [Scientific decision register](../product/traking-concluciones.md), DEC-113/114/118/120/122 | Certified reporting completeness or historical operational availability |
+| All 69 source-field definitions and explicit unresolved semantics | [Active canonical matrix](../product/stage-2/DATA-01-Priority%20Field%20Matrix.md) | Selection of all fields as predictors; six insufficient operational definitions remain explicit |
+| Individual consolidated file, monthly climate panel, Y T+1/T+2 and current four-zone channel | [Notebook 03](../../notebooks/03_consolidated_dataset_pipeline.ipynb), [construction record](../product/stage-2/CH1-dataset-construction-candidate.md) and local construction contract/manifest | Final model suitability or G2 approval |
+| 16 derived candidates, 28 deterministic features, 29 raw model inputs, separate X/Y and eight temporal windows | [Preparation workflow and contract](../product/stage-3/README.md), [final technical evidence](../product/stage-3/milestone-3-validation.md), notebook 04 | Predictive utility, estimator compatibility or performance |
+| Executed code-only notebook, immutable artifact identities and training-only transformations | Same preparation evidence and local PLAN_018 journal/review | A trained or deployed predictor |
+
+The five-value channel rule is **five historical observations of the same calendar month from the five years before the target year**, with required month-level history and no future periods. Entire historical years need not have closed (DEC-122). November 2024 → January 2025 can use January 2020–2024. Current `zona_canal_t` describes T; future Y remains an outcome, never an input. General dengue defines the initial target; severe dengue stays separate. Combining streams for Y is a later experiment.
+
+January 2020 climate has been recovered/incorporated for the 76 reviewed municipalities (2,356 municipality-days). Monthly aggregation, numerical percentiles, evaluability, current zones and temporal selection are implemented; they are no longer blank implementation tasks. Source lineage and retrospective-availability limits remain explicit in their evidence owners.
+
+### Next bounded work — close the handoff, then model
+
+1. Present the existing data/target and preparation evidence for an explicit G2/G3 disposition. Do not equate this documentation update with approval or restart completed EDA. The previously planned 5/7/9-year target sensitivity has no completed evidence here; Mauricio must decide its disposition for the freeze rather than an agent silently deleting it or declaring it completed.
+2. Implement reference forecasts and initial XGBoost, LightGBM and GAM experiments under one temporal protocol, once the applicable gate decision is recorded. Reuse notebook 04 modules, saved preparation state and keyed X/Y; select the representation required by each estimator.
+3. Keep objectives from 2025-01 reserved. Compare candidates using the same development windows; evaluate calibration, false alarms and outbreak onsets as specified by the product/scientific decisions. No final-block tuning.
+4. Update this status table when a bounded milestone or human gate decision changes. Put scientific decisions in the register, executable schemas in contracts and command details in the testing guide; do not copy their inventories here.
+
+Historical experiments, old PR reconciliation instructions and local plan failures are provenance, not a recurring analysis backlog. Reopen an analysis only for a concrete unresolved question that affects the next decision. No new EDA chapter is required by this documentation audit.
 
 ### Historical foundation evidence
 

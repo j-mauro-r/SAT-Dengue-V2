@@ -1,4 +1,25 @@
-# Current decision status — experimental EDA retirement on 2026-10-19
+# Current scientific decision status — 2026-10-20
+
+This is the active scientific decision register. The current summary below and the latest explicit decisions govern; dated snapshots and preserved source records that follow are historical, including superseded "pending" statements. [The master plan](../roadmap/master-plan.md) alone owns stage progress. This reconciliation records implemented facts without changing scientific rules or granting a freeze.
+
+| Topic | Current rule / evidence / remaining limit |
+|---|---|
+| Population and geography | Residence in the 76 Tolima/Meta municipalities; symptom onset; supplied 2013 dates/records unchanged; all supplied notification classifications; no unsupported duplicate deletion (DEC-113/114/118). Unassignable records remain reconciled outside invented municipality-month keys. |
+| Epidemiological streams | General dengue defines the initial Y and `zona_canal_t`; severe dengue is a separate count/predictor. Combined-stream Y is a later experiment, not the current target. |
+| Covered no-case months | Count zero is valid within approved coverage (DEC-120). Missing climate, out-of-coverage months and insufficient history are not converted to zero. |
+| Historical channel and future Y | DEC-122 supersedes whole-year closure wording: five same-month observations from the five years before the target year, with required historical months. November 2024 → January 2025 can include January 2024. Strict count > P75 defines excess; missing required history/result stays non-evaluable. Y T+1/T+2 are outcomes, never predictors. |
+| Numerical and four-zone implementation | Notebook 03 and its local construction contract implement type-7 linear percentiles, evaluability and EXITO/SEGURIDAD/ALERTA/EXCESO at T with explicit tie rules. These are implemented candidate rules, not still absent specifications; the owning contract retains exact boundaries. |
+| Field definitions | [The canonical 69-field matrix](stage-2/DATA-01-Priority%20Field%20Matrix.md) is ACTIVE following Mauricio's restoration. Six insufficient operational definitions remain explicit; this does not mean 59 fields are undefined or that all 69 are model inputs. The archive copy is a pointer. |
+| Current outputs and analysis | Notebook 03 supplies the individual consolidated CSV, monthly climate panel, Y/current channel and bounded EDA. Only the older experimental notebooks 01/02 and their reports are retired. Candidate status does not negate their completed implementation or approve predictive utility. |
+| January 2020 | Incorporated for the reviewed 76 municipalities: 2,356 municipality-days, nine climate variables. Historical claims of that scoped gap are superseded; no national completeness claim. |
+| Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; no model has been trained. |
+| Evaluation support | Preparation uses target eligibility 2012-01..2024-12, excludes reserved targets from 2025-01 and requires validation origins >= fit cutoff. Later validation origins represent successive predictions. These are implemented controls, not evidence of real-time data availability. |
+| Remaining evidence | Historical as-of availability is unproven. The earlier 5/7/9-year sensitivity has no completed evidence recorded here; its freeze disposition needs an explicit human decision. Provenance reconstruction limits remain in the dated records below. Do not invent completion or restart retired EDA by default. |
+| Gate decisions | No explicit G2/G3 approval is recorded. Technical completion and human scientific acceptance remain separate; the master plan owns the next bounded handoff. |
+
+---
+
+# Historical snapshot — experimental EDA retirement on 2026-10-19
 
 Mauricio explicitly retired **all experimental EDA** after using it to approach and refine the data. This file remains the single active **Stage 2 scientific decision register**. The [master plan](../roadmap/master-plan.md), governance and Stage 1 requirements keep their separate responsibilities. This section takes precedence over the historical entries below, including earlier references to pending January data or mandatory reruns of retired notebooks.
 
@@ -17,7 +38,7 @@ The earlier reconciliation and full decision history are retained below, with li
 
 ---
 
-# Current decision status — reconciliation on 2026-10-18
+# Historical snapshot — reconciliation on 2026-10-18
 
 This current-status section takes precedence over superseded open questions in the preserved historical sections below. The complete local register and complete PR #9 document are retained verbatim for traceability; earlier pending statements are not silently converted into current requirements.
 
