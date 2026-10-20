@@ -14,6 +14,7 @@ import pandas as pd  # type: ignore[import-untyped]
 from scripts.training_preparation.pipeline import fingerprint
 
 from .contract import ModelTrainingConfig, ModelTrainingError, read_json
+from .events import load_event_context
 from .loading import WindowDataset, load_temporal_source, load_window_dataset
 from .metrics import evaluate_metrics
 from .persistence import (
@@ -102,6 +103,7 @@ def _enforce_window_rules(dataset: WindowDataset, *, reserved_start: str) -> Non
 def _build_window_outputs(
     dataset: WindowDataset,
     references: dict[str, Any],
+    event_context: pd.DataFrame,
 ) -> tuple[pd.DataFrame, list[dict[str, Any]], dict[str, Any]]:
     """Generate reference predictions and metrics for one window."""
     base = _window_base(dataset)
@@ -133,6 +135,7 @@ def _build_window_outputs(
             dataset.validation_index,
             target_column=dataset.target_column,
             threshold_policy_declared=threshold_declared,
+            event_context=event_context,
         )
         for row in metric_rows:
             row["window_id"] = dataset.window_id
@@ -187,11 +190,18 @@ def build_model_training(
     prediction_tables: list[pd.DataFrame] = []
     metric_rows: list[dict[str, Any]] = []
     window_summaries: list[dict[str, Any]] = []
+    contexts: list[pd.DataFrame] = []
 
     for window_id in contract["windows"]:
         dataset = load_window_dataset(source, window_id)
         _enforce_window_rules(dataset, reserved_start=reserved_start)
-        predictions, metrics, summary = _build_window_outputs(dataset, contract["references"])
+        context = load_event_context(
+            config, source, dataset.validation_index, target_column=dataset.target_column
+        )
+        predictions, metrics, summary = _build_window_outputs(
+            dataset, contract["references"], context
+        )
+        contexts.append(context.assign(window_id=window_id, horizon=dataset.horizon))
         prediction_tables.append(predictions)
         metric_rows.extend(metrics)
         window_summaries.append(summary)
@@ -217,6 +227,7 @@ def build_model_training(
 
     payloads = {
         "predictions.csv": serialize_table(predictions_df.reset_index(drop=True)),
+        "evaluation_context.csv": serialize_table(pd.concat(contexts, ignore_index=True)),
         "metrics.csv": serialize_table(metrics_df.reset_index(drop=True)),
         "run_summary.json": json_bytes(summary),
     }
@@ -232,6 +243,13 @@ def build_model_training(
         "metrics_rows": len(metrics_df),
         "window_count": len(window_summaries),
         "references_executed": ["persistence", "train_prevalence"],
+        "evaluation_context": {
+            "file": "evaluation_context.csv",
+            "role": "retrospective evaluation only; excluded from X, fitting and selection",
+            "keys": ["window_id", "municipality_code", "target_period"],
+            "source": source.manifest["development_bundle"],
+            "state_definition": "approved zona_canal_t at S and exact calendar S-1",
+        },
         "determinism_limits": contract["determinism_limits"],
         "files": {name: bytes_record(payload) for name, payload in payloads.items()},
     }

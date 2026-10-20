@@ -183,3 +183,24 @@ Reference metrics must keep non-evaluable states explicit when denominators or
 class support are missing. Probabilistic references must not emit event alert
 metrics unless a threshold policy is declared by contract. Artifacts are local
 only under `artifacts/model_training/` and must use immutable identity reuse.
+
+
+### Stage 4 metric correction
+
+`tests/unit/test_model_metrics.py` supplies independent expected AP fractions for
+constant/partial/binary ties and permutations, perfect ranking, unavailable/invalid
+inputs, exact calendar predecessor lookup (including the first validation month),
+municipality isolation and T+1/T+2 differences. Its integration fixture verifies
+source hashes, keyed context, independent dictionary/calendar event counts and
+prediction invariance under changed retrospective evaluation context.
+
+Run it with `test_model_training.py`, the full foundation suite and Ruff/mypy on
+`scripts/model_training`. Execute notebook 05 in a fresh kernel and verify its
+receipt using the separate `--execute` and `--verify` commands above. Correction
+evidence must compare old/new metrics while preserving old artifacts, prediction
+bytes, Stage 3 cohort/manifests and original scientific source hashes. No numeric
+historical diagnostic may be imposed on the regenerated outputs. Evaluate
+context in `evaluation_context.csv` only; never feed it into X or fit/selection.
+
+PLAN_021 is a corrective audit of previously accredited PLAN_020 results; the
+latter's contract, journals and approval remain untouched historical evidence.

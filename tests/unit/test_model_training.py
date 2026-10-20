@@ -8,6 +8,7 @@ from typing import cast
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
+from scripts.model_training.events import build_event_context
 from scripts.model_training.loading import WindowDataset, _validate_alignment
 from scripts.model_training.metrics import (
     average_precision_metric,
@@ -130,7 +131,20 @@ def test_metrics_with_empty_denominators_are_non_evaluable() -> None:
     ap = average_precision_metric(y_all_zero, scores)
     assert not ap["evaluable"]
 
-    onset = onset_sensitivity_metric(y_all_one, labels, index, target_column="target_period_t1")
+    context = build_event_context(
+        index,
+        pd.DataFrame(
+            {
+                "municipality_code": index["municipality_code"],
+                "target_period": index["target_period_t1"],
+                "excess": y_all_one,
+            }
+        ),
+        target_column="target_period_t1",
+    )
+    onset = onset_sensitivity_metric(
+        y_all_one, labels, index, target_column="target_period_t1", event_context=context
+    )
     assert not onset["evaluable"]
 
     far = false_alarm_ratio_metric(
@@ -161,6 +175,17 @@ def test_probabilistic_reference_needs_threshold_policy_for_event_metrics() -> N
         index,
         target_column="target_period_t1",
         threshold_policy_declared=False,
+        event_context=build_event_context(
+            index,
+            pd.DataFrame(
+                {
+                    "municipality_code": index["municipality_code"],
+                    "target_period": index["target_period_t1"],
+                    "excess": y,
+                }
+            ),
+            target_column="target_period_t1",
+        ),
     )
     by_name = {row["metric"]: row for row in metrics}
     assert by_name["average_precision"]["evaluable"]
@@ -194,6 +219,17 @@ def test_empty_prediction_frame_returns_non_evaluable_metrics() -> None:
         index,
         target_column="target_period_t1",
         threshold_policy_declared=False,
+        event_context=build_event_context(
+            index,
+            pd.DataFrame(
+                {
+                    "municipality_code": index["municipality_code"],
+                    "target_period": index["target_period_t1"],
+                    "excess": y,
+                }
+            ),
+            target_column="target_period_t1",
+        ),
     )
     assert len(metrics) == 4
     assert all(not row["evaluable"] for row in metrics)
