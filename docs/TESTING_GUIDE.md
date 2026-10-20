@@ -81,3 +81,23 @@ For this archival migration, local PLAN_012 validates the path/hash manifest, by
 The Stage 2 project distribution is metadata-only: setuptools has an explicit empty package list, so `data/` and `notebooks/` are never auto-discovered as installable packages. The `dev` extra declares NumPy and pandas because the synthetic panel tests import them. This changes neither data publication policy nor analysis-population rules.
 
 Validate packaging changes from a fresh Git archive/checkout in a separate temporary environment: install `.[dev]`, run `pytest tests/unit -q`, `ruff check tests`, `ruff format --check tests` and `mypy tests`; build a wheel with `pip wheel --no-deps .` and inspect that it contains no source datasets/notebooks. The three tests backed by ignored private analytical outputs are expected to skip in a public checkout; synthetic regressions still run. Keep a separate local full-suite check when those outputs are available. Never copy private datasets into CI to make these checks pass.
+
+## Training preparation inputs (milestone 1)
+
+The [preparation contract and workflow](product/stage-3/README.md) map
+`scripts/training_preparation/**`, notebook 04 and its preparation contract to
+`.venv/bin/python -m pytest tests/unit/test_training_preparation.py -q`.
+Synthetic tests reject schema/type/nullability errors, duplicate keys, missing
+months/municipalities, invalid categories/coverage, forbidden predictors and
+fingerprint tampering. No private input is needed for those tests.
+
+Run `.venv/bin/python -m scripts.training_preparation.audit` for read-only local
+validation of existing notebook 03 products, including manifest SHA-256 checks.
+This requires the private local products and never regenerates them. For a
+preservation audit, provide `--baseline <path>` with a pre-task fingerprint map.
+Execute notebook 04 cells sequentially with the repository environment; only
+aggregate evidence and contract roles are displayed. Run the full foundation
+gates, lint/format the new modules and check Markdown links for this surface.
+Use `--basetemp=tmp/pytest-training-preparation` when test artifacts must remain
+inside the repository. Report historical global DWP failures separately from
+`conformance.sh --plan .dwp/plans/PLAN_018_training_data_preparation`.
