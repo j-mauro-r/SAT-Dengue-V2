@@ -511,7 +511,10 @@ ROOT = Path(__file__).resolve().parents[2]
 NOTEBOOK_PATH = ROOT / "notebooks/03_consolidated_dataset_pipeline.ipynb"
 
 
-@pytest.mark.skipif(not NOTEBOOK_PATH.exists(), reason="notebook fixture is not present in this checkout")
+@pytest.mark.skipif(
+    not NOTEBOOK_PATH.exists(),
+    reason="notebook fixture is not present in this checkout",
+)
 def test_notebook_is_code_only() -> None:
     result = assert_notebook_code_only(NOTEBOOK_PATH)
     assert result["code_only"] is True
