@@ -1,17 +1,19 @@
 from __future__ import annotations
 
 import importlib.util
+import sys
 from pathlib import Path
 
 import pandas as pd  # type: ignore[import-untyped]
 
 ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location(
+SPEC = importlib.util.spec_from_file_location(
     "panel_review", ROOT / "scripts/stage2_panel_review.py"
 )
-assert spec and spec.loader
-review = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(review)
+assert SPEC and SPEC.loader
+review = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = review
+SPEC.loader.exec_module(review)
 
 
 def test_panel_independent_sources_survive_empty_dengue_month() -> None:

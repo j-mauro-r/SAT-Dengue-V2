@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import cast
 
 import pandas as pd  # type: ignore[import-untyped]
+import pytest
 
 from scripts.stage2_notebook_visual_assets import (
     PredictorSpec,
@@ -506,8 +507,12 @@ def test_temporal_windows_apply_policy_bounds_and_fix_t2_reference_leakage() -> 
     assert bool((audit["validation_target_max_selected"].dropna() <= "2024-12").all()) is True
 
 
+ROOT = Path(__file__).resolve().parents[2]
+NOTEBOOK_PATH = ROOT / "notebooks/03_consolidated_dataset_pipeline.ipynb"
+
+
+@pytest.mark.skipif(not NOTEBOOK_PATH.exists(), reason="notebook fixture is not present in this checkout")
 def test_notebook_is_code_only() -> None:
-    notebook_path = Path("notebooks/03_consolidated_dataset_pipeline.ipynb")
-    result = assert_notebook_code_only(notebook_path)
+    result = assert_notebook_code_only(NOTEBOOK_PATH)
     assert result["code_only"] is True
     assert result["non_code_cells"] == []

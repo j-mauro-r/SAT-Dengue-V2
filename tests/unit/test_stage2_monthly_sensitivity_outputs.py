@@ -5,7 +5,8 @@ from pathlib import Path
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-OUT_DIR = Path("data/interim/stage2_monthly_sensitivity_associations")
+ROOT = Path(__file__).resolve().parents[2]
+OUT_DIR = ROOT / "data/interim/stage2_monthly_sensitivity_associations"
 
 
 @pytest.mark.skipif(
