@@ -22,8 +22,15 @@
       "original_path": "docs/product/stage-2/DATA-01-Priority Field Matrix.md",
       "archive_path": "docs/archive/experimental-eda/stage-2/DATA-01-Priority Field Matrix.md",
       "original_sha256": "bc5f1338b7682b537b117573d204ea58e5d76995ae15b4ace5a6ecfcd793b4bb",
-      "archive_sha256": "bdfc0cc0bc97d4f37e90c5d0c985b00905d4c2b4288968c7ed1202b73e9851b2",
-      "transformation": "retirement banner and relocated Markdown links only"
+      "archive_sha256": "ce617a7b31e0e2dd561fafac4962058419d9528a5a343d08709894253994ef9e",
+      "transformation": "Field definitions restored to active_path; archive_path now contains only a compatibility pointer. Original retirement hash retained in retirement_snapshot.",
+      "retirement_snapshot": {
+        "archive_sha256": "bdfc0cc0bc97d4f37e90c5d0c985b00905d4c2b4288968c7ed1202b73e9851b2",
+        "transformation": "retirement banner and relocated Markdown links only"
+      },
+      "status": "RESTORED_TO_ACTIVE_REFERENCE",
+      "active_path": "docs/product/stage-2/DATA-01-Priority Field Matrix.md",
+      "active_sha256": "68544cae5766f719df2bd1ed78da693ddc1034e77ea8d1ff9343248a761d68f2"
     },
     {
       "original_path": "docs/product/stage-2/DATA-01-Source Provenance.md",

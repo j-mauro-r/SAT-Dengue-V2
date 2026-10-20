@@ -54,7 +54,7 @@ Es una **auditoría documental**, no una nueva ejecución del análisis, revisi�
 
 Resultado del alcance: **46 entradas anteriores conservadas y 38 incorporadas = 84 entradas científicas**, de las cuales 29 aceptadas, 16 abiertas, 13 propuestas, 12 históricas no adoptadas, 10 aplicadas en diagnóstico, tres reemplazadas y una documentada en fuente. Los estados no equivalen entre sí.
 
-El [diccionario canónico](../archive/experimental-eda/stage-2/DATA-01-Priority%20Field%20Matrix.md) conserva la única definición de campos. El [registro de procedencia](../archive/experimental-eda/stage-2/DATA-01-Source%20Provenance.md) identifica insumos; el [informe de reconocimiento](../archive/experimental-eda/stage-2/DATA-01-Initial%20Recognition%20Report.md) y la [investigación de 2013](../archive/experimental-eda/stage-2/DATA-01-2013-date-inconsistency-investigation.md) documentan resultados. Este archivo registra decisiones y sus límites; no duplica el diccionario ni convierte observaciones en aprobaciones.
+El [diccionario canónico](stage-2/DATA-01-Priority%20Field%20Matrix.md) conserva la única definición de campos. El [registro de procedencia](../archive/experimental-eda/stage-2/DATA-01-Source%20Provenance.md) identifica insumos; el [informe de reconocimiento](../archive/experimental-eda/stage-2/DATA-01-Initial%20Recognition%20Report.md) y la [investigación de 2013](../archive/experimental-eda/stage-2/DATA-01-2013-date-inconsistency-investigation.md) documentan resultados. Este archivo registra decisiones y sus límites; no duplica el diccionario ni convierte observaciones en aprobaciones.
 
 ## Consecutivos, estados y fechas
 
@@ -93,7 +93,7 @@ Códigos de las fuentes privadas: **SRC-E** = notas del experto; **SRC-R** = rep
 |---|---|---|
 | PRODUCT | [Definición del producto](product-definition.md) | Solo objetivo, horizontes, familias de modelos y referencias predictivas. |
 | NOTE | [Nota de decisiones y fuentes](../archive/experimental-eda/stage-2/nota-metodologica.md) | Solo contenidos de datos/modelo y alternativas; no se registran marcos de gestión. |
-| MATRIX | [Diccionario de campos](../archive/experimental-eda/stage-2/DATA-01-Priority%20Field%20Matrix.md) | Significados, códigos, fechas, prioridades y limitaciones del export. |
+| MATRIX | [Diccionario de campos](stage-2/DATA-01-Priority%20Field%20Matrix.md) | Significados, códigos, fechas, prioridades y limitaciones del export. |
 | RECOG | [Reconocimiento y cobertura](../archive/experimental-eda/stage-2/DATA-01-Initial%20Recognition%20Report.md) | Resultados agregados guardados; algunas secciones de próximos pasos están desactualizadas. |
 | PROV | [Registro de procedencia](../archive/experimental-eda/stage-2/DATA-01-Source%20Provenance.md) | Identidad y límites de fuentes, versiones y ventanas. |
 | INVEST | [Investigación de 2013](../archive/experimental-eda/stage-2/DATA-01-2013-date-inconsistency-investigation.md) | Comparación anual y escenarios diagnósticos ejecutados; no corrección aprobada. |
@@ -498,6 +498,7 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 - **Motivo de deprecación o no adopción:** No aplica.
 - **Evidencia y autoridad:** CHAT-02; MATRIX.
 - **Límites y validación pendiente:** Hay 63 conceptos con respaldo oficial y seis definiciones operativas insuficientes; la cobertura no es certificación científica. El diccionario conserva las definiciones, este registro solo su decisión de uso.
+- **Documentation restoration:** Mauricio explicitly restored the canonical matrix to `docs/product/stage-2/DATA-01-Priority Field Matrix.md`. All 69 fields are inventoried; the report must not interpret the notebook's 59 default classification labels as missing field definitions. DEC-033 still governs the six insufficient operational definitions.
 
 <a id="dec-033"></a>
 ### DEC-033 Mantener explícitas las definiciones insuficientes
