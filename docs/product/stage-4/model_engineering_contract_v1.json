@@ -1,0 +1,66 @@
+{
+  "schema": "stage4-model-engineering-contract-v1",
+  "version": "1.0.0",
+  "stage3_contract_path": "docs/product/stage-3/training_preparation_contract_v1.json",
+  "windows": [
+    "2018-12_t1",
+    "2018-12_t2",
+    "2020-12_t1",
+    "2020-12_t2",
+    "2022-12_t1",
+    "2022-12_t2",
+    "2024-06_t1",
+    "2024-06_t2"
+  ],
+  "rules": {
+    "reserved_final_block_start": "2025-01",
+    "objective_policy": "Keep all targets in reserved block excluded from development evaluation.",
+    "x_y_key_separation": "Keep predictors, labels and linkage keys separated in all artifacts."
+  },
+  "references": {
+    "persistence": {
+      "kind": "deterministic",
+      "formula": "predict_excess_t_plus_h = 1 if zona_canal_t == EXCESO else 0",
+      "threshold_policy": "deterministic",
+      "non_evaluable_states": [
+        "missing_zone",
+        "unknown_zone"
+      ]
+    },
+    "train_prevalence": {
+      "kind": "probabilistic",
+      "formula": "mean(Y_train) per window and horizon",
+      "threshold_policy": null,
+      "train_only": true
+    }
+  },
+  "planned_references_not_in_scope": [
+    "Poisson baseline (future proposal)"
+  ],
+  "metrics": {
+    "primary": [
+      "average_precision",
+      "onset_sensitivity",
+      "false_alarm_ratio",
+      "brier"
+    ],
+    "event_definition": "Onset event: target period with y=1 and previous target period y=0 for the same municipality.",
+    "anticipation": "One-step issuance: each prediction is evaluated at its own target period (t+h).",
+    "evaluable_population": "Rows with known binary y and required prediction fields.",
+    "unknown_periods_treatment": "Exclude unknown previous periods from onset denominator and report non-evaluable status."
+  },
+  "artifacts": {
+    "base_dir": "artifacts/model_training",
+    "notebook_receipts_dir": "artifacts/model_training/notebook_execution",
+    "existing_policy": "reuse_identical",
+    "save_predictions": true,
+    "save_metrics": true,
+    "save_config_provenance": true
+  },
+  "seed": 42,
+  "determinism_limits": [
+    "No candidate model stochastic training in this delivery.",
+    "Deterministic references depend on zone state availability and valid temporal linkage.",
+    "Notebook receipts depend on kernel package versions."
+  ]
+}

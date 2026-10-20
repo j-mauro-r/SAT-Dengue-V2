@@ -158,3 +158,28 @@ partitions must agree with reference key sets; 456 T+1 and 380 T+2 validation
 examples per cutoff are expected for the current data, not forced sample limits.
 Configured six-month target intervals and actual horizon-specific origin/target
 support are reported separately. No predictor training is part of these checks.
+
+## Stage 4 shared references (delivery 1)
+
+Stage 4 delivery 1 maps `scripts/model_training/**`, notebook 05 and
+`docs/product/stage-4/model_engineering_contract_v1.json` to bounded reference
+execution only. This surface runs persistence and train-prevalence references
+over verified Stage 3 artifacts; it does not train XGBoost, LightGBM or GAM.
+
+Use at least the following checks:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_model_training.py -q
+.venv/bin/python -m ruff check scripts/model_training tests/unit/test_model_training.py
+.venv/bin/python -m mypy --explicit-package-bases scripts/model_training tests/unit/test_model_training.py
+.venv/bin/python -m scripts.model_training.execution --execute
+.venv/bin/python -m scripts.model_training.execution --verify
+.venv/bin/python -m scripts.model_training.notebook_execution --execute
+.venv/bin/python -m scripts.model_training.notebook_execution --verify
+.venv/bin/python scripts/check_markdown_links.py
+```
+
+Reference metrics must keep non-evaluable states explicit when denominators or
+class support are missing. Probabilistic references must not emit event alert
+metrics unless a threshold policy is declared by contract. Artifacts are local
+only under `artifacts/model_training/` and must use immutable identity reuse.
