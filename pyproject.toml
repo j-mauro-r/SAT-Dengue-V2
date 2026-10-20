@@ -25,6 +25,7 @@ include-package-data = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-ra"
 pythonpath = ["."]
 
