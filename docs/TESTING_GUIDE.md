@@ -126,3 +126,35 @@ gates remain required. Check new modules with
 `.venv/bin/mypy --explicit-package-bases scripts/training_preparation`, plus
 required `mypy tests`, Ruff lint/format and Markdown links. Notebook 04 must remain
 code-only and execute sequentially; its summaries are development aggregates only.
+
+## Temporal partitions, inference preparers and executed notebook (milestone 3)
+
+`tests/unit/test_training_temporal.py` maps the temporal/preprocessing/execution
+modules to eight synthetic window/horizon comparisons against the existing
+reference, causal target/origin boundaries, training-only parameters under
+validation perturbation, explicit missing/unknown categories, JSON/CSV inference
+roundtrips, rejected Y/controls and stable notebook code/output identities.
+Run alongside all earlier preparation regressions and the full foundation gate:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_training_preparation.py tests/unit/test_training_temporal.py -q
+.venv/bin/python -m scripts.training_preparation.temporal
+.venv/bin/python -m scripts.training_preparation.temporal --verify \
+  --baseline .dwp/plans/PLAN_018_training_data_preparation/analysis_results/input_baseline.json
+.venv/bin/python -m scripts.training_preparation.notebook_execution --execute
+.venv/bin/python -m scripts.training_preparation.notebook_execution --verify
+```
+
+The baseline flag uses local plan evidence and may be omitted on another checkout;
+manifest/hash verification still applies. Notebook commands require the optional
+`notebook` extra declared in pyproject; synthetic tests do not require private data
+or notebook runtime packages. Use repository-local `--basetemp` for pytest. Run
+Ruff and explicit-package-bases mypy for all preparation modules, required
+`mypy tests`, Markdown links, policy scans and scoped DWP conformance. Saved
+notebook outputs must match the current artifacts and an actual new-kernel receipt.
+
+No final-block objective may enter adjustment or comparisons. All eight real
+partitions must agree with reference key sets; 456 T+1 and 380 T+2 validation
+examples per cutoff are expected for the current data, not forced sample limits.
+Configured six-month target intervals and actual horizon-specific origin/target
+support are reported separately. No predictor training is part of these checks.

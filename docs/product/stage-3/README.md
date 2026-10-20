@@ -1,4 +1,4 @@
-# Training preparation — milestones 1 and 2
+# Training preparation — deterministic and temporal pipeline
 
 Notebook [04](../../../notebooks/04_training_preparation_pipeline.ipynb) is the code-only configuration, execution and bounded review entry point. The [modules](../../../scripts/training_preparation/__init__.py) reuse existing notebook 03 products without running consolidation or EDA. Run from the repository root or `notebooks/` using the repository Python environment. The CLI resolves the repository by its markers rather than a personal absolute path:
 
@@ -7,7 +7,7 @@ Notebook [04](../../../notebooks/04_training_preparation_pipeline.ipynb) is the 
 .venv/bin/python -m scripts.training_preparation.development --verify
 ```
 
-The [preparation contract](training_preparation_contract_v1.json) remains separate from the [canonical 69-field dictionary](../stage-2/DATA-01-Priority%20Field%20Matrix.md). Its input schema mirrors the existing 51-column construction contract. It defines input roles and the development output roles without redefining scientific source concepts. The [milestone 1 evidence](milestone-1-validation.md) remains historical evidence for that implementation; notebook 04 now executes milestone 2. [Milestone 2 evidence](milestone-2-validation.md) records the current results.
+The [preparation contract](training_preparation_contract_v1.json) remains separate from the [canonical 69-field dictionary](../stage-2/DATA-01-Priority%20Field%20Matrix.md). Its input schema mirrors the existing 51-column construction contract. It defines input roles and the development output roles without redefining scientific source concepts. The [milestone 1 evidence](milestone-1-validation.md) remains historical evidence for that implementation; notebook 04 now integrates the complete preparation pipeline. [Milestone 2 evidence](milestone-2-validation.md) records the current results.
 
 Input validation checks exact schema/types/nullability, unique keys, complete monthly support including endpoints, DIVIPOLA scope, categories, coverage, count reconciliation, complete-day climate aggregation, target calendars and evaluability. SHA-256/byte verification includes the consolidated companion, panel, construction contract and trace files. Inputs are never repaired or rewritten. The standalone input audit remains available as `python -m scripts.training_preparation.audit`; `--baseline <path>` additionally checks a pre-task fingerprint map.
 
@@ -37,4 +37,48 @@ Identity covers exact input/configuration bytes, all preparation Python modules,
 
 The existing decisions still govern: general dengue defines Y and the current endemic zone; severe dengue remains separate. Combining counts for a new Y is a later experiment. Historical operational availability remains **unproven** because inputs are retrospectively consolidated. G2 and the scientific training contract remain open.
 
-Execution checkpoint: local `.dwp/plans/PLAN_018_training_data_preparation/`, same branch and phase plan. Only milestones 1/2 are implemented. Milestone 3 must isolate horizon-aware temporal folds before any learned imputation, scaling, encoding, selection, resampling or calibration. The reserved block begins 2025-01; it must not guide feature selection. No model training or phase Final Review has run.
+Execution checkpoint: local `.dwp/plans/PLAN_018_training_data_preparation/`, same branch and phase plan. All three implementation milestones are integrated; final review/closure is recorded in the same plan. Fitted preprocessing is isolated by horizon and training window. The reserved block begins 2025-01 and never guides feature selection. No predictor training has run.
+
+## Temporal preparation and inference interface (milestone 3)
+
+The [milestone 3 evidence](milestone-3-validation.md) records the completed temporal construction. Install the notebook tooling only when executing or verifying saved notebook outputs (`pip install -e '.[dev,notebook]'` in the repository environment). No estimator library is needed:
+
+```bash
+.venv/bin/python -m scripts.training_preparation.temporal
+.venv/bin/python -m scripts.training_preparation.temporal --verify
+.venv/bin/python -m scripts.training_preparation.notebook_execution --execute
+.venv/bin/python -m scripts.training_preparation.notebook_execution --verify
+```
+
+`temporal` calls the same input and deterministic feature modules, then consumes their verified immutable tables. It reuses `select_supervised_rows`, `independent_select_supervised_rows` and the existing temporal audit, without rerunning experimental EDA. The configured policy remains evaluable targets in 2012-01 through 2024-12, reserved targets from 2025-01 excluded, and fit cutoffs 2018-12, 2020-12, 2022-12 and 2024-06. Training Y must be observable by the cutoff. Validation requires origin >= cutoff and target in the six configured months after it. T+1 therefore covers all six target months; T+2 covers the last five because the first configured target would require a pre-fit origin. Actual origin/target ranges are stored separately from configured bounds. Each later origin is a successive prediction using information at that origin; these rows are not a multi-month forecast issued once at the initial cutoff.
+
+X/Y and key/index CSVs are separate for each of eight horizon/cutoff combinations. The only key explicitly introduced into raw model X is `municipality_code` as the user-authorized categorical representation; `year_month`, target history/evaluability and all other controls stay outside X. Thus deterministic `features.csv` retains 28 candidates while raw model X has 29 columns. This is a representation step, not a new demographic variable or result-driven selection.
+
+`PreparerSpec` configures `native`, `onehot` or `ordinal` categories; numeric scaling is independently `none` or `standard`. The two persisted default profiles are `native` without scaling (29 columns) and `onehot_standard` (114 columns). They are generic future-estimator options, not a claim that every estimator accepts the same dtype, scaling or missing-value policy. No predictor or Y-based encoding is fitted.
+
+The four known zone categories are EXITO, SEGURIDAD, ALERTA and EXCESO. Missing categories use `__MISSING__`, distinct from SEGURIDAD; unknown zones error. Municipality vocabularies are learned from X_train only; unseen values use a saved `__UNKNOWN__` category or error by configuration. No validation categories extend the training vocabulary. Standard scaling uses training means and population standard deviations; constant columns use scale 1. Default numeric missingness policy is error because eligible inputs are complete. Optional `preserve` keeps numeric NaN without imputation; scaling an entirely missing training column fails explicitly. Earlier insufficient-history rows remain visible in the deterministic bundle and are never manufactured into eligible examples.
+
+Each window/horizon/profile stores safe JSON state: names/order of raw and transformed columns, category vocabularies/order, numeric parameters, configuration, exact training-X fingerprint and Python/pandas/NumPy versions. Validation and inference call `transform_predictors` with that state and never refit it. Strict input-column order and version checks prevent silently changed inference representation. No pickle deserialization or external model code is involved.
+
+Temporal bundles live in `data/processed/training_preparation/temporal/<identity>/`, with raw X, Y, original feature-row indices, transformed matrices, preparer JSON and a manifest of hashes/selection support. They are separate from original data and deterministic feature bundles. New identities are required after any input/configuration/code/runtime change. The existing atomic immutable publication/reuse policy applies. Verify before loading:
+
+```python
+from scripts.training_preparation.contract import PreparationConfig
+from scripts.training_preparation.development import resolve_root
+from scripts.training_preparation.temporal import build_temporal, load_prepared_window
+from scripts.training_preparation.preprocessing import transform_predictors
+
+result = build_temporal(PreparationConfig(resolve_root()), verify_only=True)
+X_train, y_train, train_index, state = load_prepared_window(
+    result.bundle, "2024-06_t1", "native", "train"
+)
+X_validation, y_validation, validation_index, _ = load_prepared_window(
+    result.bundle, "2024-06_t1", "native", "validation"
+)
+# Future inference: transform_predictors(new_raw_X_in_saved_order, state)
+# Fit a future estimator only in a separately authorized modeling task.
+```
+
+Notebook 04 executes all modules in six code cells and displays bounded aggregate evidence. Its code-only identity excludes execution counts/outputs to avoid a circular artifact hash. `notebook_execution --execute` launches a new kernel using the repository interpreter over local IPC, keeps Jupyter/IPython writes in `tmp/`, saves outputs atomically, verifies displayed identities against regenerated current artifacts, and publishes an immutable receipt under `data/interim/training_preparation/notebook_execution/<receipt-identity>/`. The receipt binds saved notebook bytes, code identity, artifact manifest and runtime package versions. `--verify` requires that exact saved state and current artifacts; editing code, data, configuration or stale outputs causes failure. No individual case records or final-block outcome statistics are displayed.
+
+This technically completes preparation; independent review and final DWP closure evidence are recorded in [the final validation report](milestone-3-validation.md). It does not approve G2/G3, historical operational availability or predictive performance. Future model adapters must explicitly choose the matching representation and honor the saved categories, versions and ordered schema.

@@ -1,5 +1,5 @@
 {
-  "version": "training-preparation-v1.1",
+  "version": "training-preparation-v1.2",
   "classification": "bounded_preparation_candidate_not_training_freeze",
   "panel_path": "data/processed/panel_mensual_dengue_clima.csv",
   "upstream_contract_path": "data/interim/stage2_consolidated_dataset_pipeline/candidate_construction_contract_v1.json",
@@ -596,5 +596,46 @@
     "replacement_policy": "Never replace an existing identity directory. New data/config/code/runtime means a new bundle; identical identity is reused only after all expected bytes and manifest match.",
     "eligibility": "Existing notification-year-backed five-year-history policy; audit counts only, no row removal before feature construction.",
     "reserved": "Do not derive or summarize reserved reference rows; mask target outcome/trace controls crossing 2025-01. Original inputs unchanged."
+  },
+  "temporal_preparation": {
+    "base_dir": "data/processed/training_preparation/temporal",
+    "notebook_receipts_dir": "data/interim/training_preparation/notebook_execution",
+    "cutoffs": [
+      "2018-12",
+      "2020-12",
+      "2022-12",
+      "2024-06"
+    ],
+    "target_start": "2012-01",
+    "target_end": "2024-12",
+    "validation_target_months": 6,
+    "training_rule": "Observable target <= cutoff; evaluable Y; development target bounds.",
+    "validation_rule": "Origin >= cutoff; target in next six configured months, within development and evaluable. Later origins are successive predictions, not one forecast issued at fit time.",
+    "municipality_representation": "Explicitly join municipality_code from keys as one categorical X component; all other keys and controls stay outside X.",
+    "profiles": {
+      "native": {
+        "encoding": "native",
+        "numeric_scaling": "none",
+        "numeric_missing": "error",
+        "unknown_municipality": "explicit"
+      },
+      "onehot_standard": {
+        "encoding": "onehot",
+        "numeric_scaling": "standard",
+        "numeric_missing": "error",
+        "unknown_municipality": "explicit"
+      }
+    },
+    "known_zones": [
+      "EXITO",
+      "SEGURIDAD",
+      "ALERTA",
+      "EXCESO"
+    ],
+    "missing_categories": "__MISSING__ token is distinct from SEGURIDAD. Unknown zones error; unknown municipalities map to __UNKNOWN__ or error by configuration.",
+    "fitting": "Only X_train of the same horizon and cutoff; never Y, validation or reserved block.",
+    "numeric_missing": "Default error because eligible data are complete. Configurable preserve mode keeps NaN without imputation; all-missing scaling history errors.",
+    "serialization": "Safe JSON parameters, category vocabularies, ordered input/output columns, training-X fingerprint, configuration and runtime versions; no pickle.",
+    "notebook_identity": "Code-only identity excludes outputs/counts; separate fresh-kernel receipt verifies saved notebook bytes and displayed current artifact identities."
   }
 }

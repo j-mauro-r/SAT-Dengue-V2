@@ -220,7 +220,7 @@ def test_code_only_notebook_delegates_without_consolidation() -> None:
     notebook = read_json(ROOT / "notebooks/04_training_preparation_pipeline.ipynb")
     assert all(c["cell_type"] == "code" for c in notebook["cells"])
     source = "".join("".join(c["source"]) for c in notebook["cells"])
-    assert "build_development(config)" in source
+    assert "build_temporal(config)" in source
     assert "stage2_consolidated_dataset_pipeline" not in source
     for cell in notebook["cells"]:
         compile("".join(cell["source"]), "notebook04", "exec")

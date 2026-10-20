@@ -52,11 +52,25 @@ def code_fingerprints(root: Path) -> dict[str, Any]:
         root / p
         for p in (
             "scripts/validate_stage2_training_readiness.py",
+            "scripts/stage2_notebook_visual_assets.py",
             "pyproject.toml",
             "notebooks/04_training_preparation_pipeline.ipynb",
         )
     ]
-    return {str(p.relative_to(root)): fingerprint(p) for p in sorted(paths)}
+    records = {str(p.relative_to(root)): fingerprint(p) for p in sorted(paths)}
+    notebook = root / "notebooks/04_training_preparation_pipeline.ipynb"
+    content = read_json(notebook)
+    code = {
+        "cells": [
+            {"cell_type": c["cell_type"], "source": "".join(c["source"])} for c in content["cells"]
+        ],
+        "nbformat": content["nbformat"],
+    }
+    records[str(notebook.relative_to(root))] = {
+        **bytes_record(json_bytes(code)),
+        "kind": "notebook_code_only",
+    }
+    return records
 
 
 def serialize_table(frame: pd.DataFrame) -> bytes:
