@@ -197,14 +197,19 @@ def test_native_model_and_preparer_roundtrip(tmp_path: Path) -> None:
         restored.predict(d.validation_X.iloc[:, ::-1])
 
 
+@pytest.mark.parametrize("family", ["xgboost", "lightgbm", "gam"])
 def test_pipeline_external_perturbation_cannot_change_fitting(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, family: str
 ) -> None:
     """Run actual candidate orchestration twice with changed external data and lineage."""
     d = window()
     contract = copy.deepcopy(CONTRACT)
     contract["windows"] = [d.window_id]
-    contract["xgboost_candidate"] = settings()
+    candidate_settings = copy.deepcopy(CONTRACT[f"{family}_candidate"])
+    candidate_settings["configurations"] = candidate_settings["configurations"][:1]
+    if family != "gam":
+        candidate_settings["configurations"][0]["n_estimators"] = 3
+    contract[f"{family}_candidate"] = candidate_settings
     (tmp_path / "contract.json").write_bytes(json_bytes(contract))
     source_dir = tmp_path / "source"
     source_dir.mkdir()
@@ -251,7 +256,7 @@ def test_pipeline_external_perturbation_cannot_change_fitting(
 
     monkeypatch.setattr(candidates, "load_event_context", context)
     config = ModelTrainingConfig(tmp_path, Path("contract.json"))
-    first = candidates.build_candidates(config)
+    first = candidates.build_candidates(config, family=family)
     old_model = (first.bundle / f"{d.window_id}_model.json").read_bytes()
     old_prep = (first.bundle / f"{d.window_id}_preparer.json").read_bytes()
     old_search = read_json(first.bundle / f"{d.window_id}_search.json")
@@ -260,7 +265,7 @@ def test_pipeline_external_perturbation_cannot_change_fitting(
     d.validation_X["signal"] = 999.0
     d.validation_X["municipality_code"] = "05999"
     (source_dir / "manifest.json").write_bytes(json_bytes({"input": "perturbed external"}))
-    second = candidates.build_candidates(config)
+    second = candidates.build_candidates(config, family=family)
     assert first.bundle != second.bundle
     assert old_model == (second.bundle / f"{d.window_id}_model.json").read_bytes()
     assert old_prep == (second.bundle / f"{d.window_id}_preparer.json").read_bytes()
@@ -278,20 +283,22 @@ def test_pipeline_external_perturbation_cannot_change_fitting(
     monkeypatch.setattr(
         candidates, "select_and_fit", lambda *a, **kw: pytest.fail("reuse attempted fitting")
     )
-    assert candidates.build_candidates(config, verify_only=True).bundle == second.bundle
+    assert (
+        candidates.build_candidates(config, verify_only=True, family=family).bundle == second.bundle
+    )
     monkeypatch.setattr(candidates, "candidate_code", lambda root: {"code": "changed"})
     with pytest.raises(FileNotFoundError):
-        candidates.build_candidates(config, verify_only=True)
+        candidates.build_candidates(config, verify_only=True, family=family)
     monkeypatch.setattr(candidates, "candidate_code", lambda root: {"code": "fixture"})
-    contract["xgboost_candidate"]["seed"] = 43
+    contract[f"{family}_candidate"]["seed"] = 43
     (tmp_path / "contract.json").write_bytes(json_bytes(contract))
     with pytest.raises(FileNotFoundError):
-        candidates.build_candidates(config, verify_only=True)
-    contract["xgboost_candidate"]["seed"] = 42
+        candidates.build_candidates(config, verify_only=True, family=family)
+    contract[f"{family}_candidate"]["seed"] = 42
     (tmp_path / "contract.json").write_bytes(json_bytes(contract))
     (second.bundle / f"{d.window_id}_model.json").write_text("{}")
     with pytest.raises(ModelTrainingError, match="payload"):
-        candidates.build_candidates(config, verify_only=True)
+        candidates.build_candidates(config, verify_only=True, family=family)
 
 
 @pytest.mark.parametrize("column", ["actual_excess", "previous_excess", "actual_onset"])

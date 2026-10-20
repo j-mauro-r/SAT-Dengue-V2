@@ -11,10 +11,10 @@ import pandas as pd  # type: ignore[import-untyped]
 
 from scripts.training_preparation.temporal import WindowSelection, select_window
 
+from .candidate_families import FittedModel, fit_model, simplicity, validate_grid
 from .contract import ModelTrainingError
 from .metrics import average_precision_metric, brier_metric
 from .persistence import bytes_record, json_bytes, serialize_table
-from .xgboost_adapter import FittedCandidate, fit_candidate
 
 
 @dataclass
@@ -28,7 +28,7 @@ class SelectionResult:
         oof: Keyed internal out-of-sample probabilities for all configurations.
     """
 
-    fitted: FittedCandidate
+    fitted: FittedModel
     selected: dict[str, Any]
     evidence: dict[str, Any]
     oof: pd.DataFrame
@@ -116,6 +116,7 @@ def select_and_fit(
     horizon: int,
     settings: dict[str, Any],
     policy: dict[str, Any],
+    family: str = "xgboost",
 ) -> SelectionResult:
     """Select then refit using only outer-training inputs; external data are not accepted.
 
@@ -127,6 +128,7 @@ def select_and_fit(
         horizon: Forecast horizon.
         settings: Frozen grid, seed and resource limits.
         policy: Existing approved Stage 4 selection policy.
+        family: One of the three declared adapters.
 
     Returns:
         Selected fitted model, reproducible search evidence and internal predictions.
@@ -136,37 +138,24 @@ def select_and_fit(
     grid = settings["configurations"]
     if not 1 <= len(grid) <= 6 or settings["inner_folds"] != 2:
         raise ModelTrainingError("Search exceeds six configurations/two internal folds")
-    required = {
-        "n_estimators",
-        "max_depth",
-        "eta",
-        "reg_lambda",
-        "reg_alpha",
-        "max_bin",
-        "min_child_weight",
-    }
-    if any(
-        set(p) != required
-        or not 1 <= p["n_estimators"] <= 500
-        or not 1 <= p["max_depth"] <= 8
-        or not 0 < p["eta"] <= 1
-        or not 2 <= p["max_bin"] <= 256
-        or min(p["reg_lambda"], p["reg_alpha"], p["min_child_weight"]) < 0
-        for p in grid
-    ):
-        raise ModelTrainingError("Invalid bounded XGBoost parameter grid")
+    validate_grid(family, grid)
     folds = internal_folds(index, y, cutoff=cutoff, horizon=horizon)
     records: list[dict[str, Any]] = []
     oof: list[pd.DataFrame] = []
     summaries = []
     for number, params in enumerate(grid):
-        cid = f"xgb_{number:02d}"
+        cid = f"{family}_{number:02d}"
         local = []
         for fold_number, fold in enumerate(folds):
             tr, va = fold.train.index, fold.validation.index
             started = perf_counter()
-            fitted = fit_candidate(
-                X.loc[tr], y.loc[tr], params, seed=settings["seed"], threads=settings["threads"]
+            fitted = fit_model(
+                family,
+                X.loc[tr],
+                y.loc[tr],
+                params,
+                seed=settings["seed"],
+                threads=settings["threads"],
             )
             probability = fitted.predict(X.loc[va])
             ap = average_precision_metric(y.loc[va], probability)
@@ -198,18 +187,13 @@ def select_and_fit(
                 parameters=params,
                 ap=float(np.mean([r["ap"] for r in local])),
                 brier=float(np.mean([r["brier"] for r in local])),
-                simplicity=[
-                    X.shape[1],
-                    params["max_depth"] or float("inf"),
-                    params["n_estimators"],
-                    params["max_bin"],
-                ],
+                simplicity=simplicity(family, X.shape[1], params, fitted.preparer),
             )
         )
     selected_id = choose_configuration(summaries, policy)
     selected = next(r["parameters"] for r in summaries if r["id"] == selected_id)
     started = perf_counter()
-    final = fit_candidate(X, y, selected, seed=settings["seed"], threads=settings["threads"])
+    final = fit_model(family, X, y, selected, seed=settings["seed"], threads=settings["threads"])
     evidence = dict(
         selected_id=selected_id,
         residual_tied_ids=tied_configurations(summaries, policy),

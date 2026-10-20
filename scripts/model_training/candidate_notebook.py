@@ -9,7 +9,8 @@ from typing import Any
 
 from scripts.training_preparation.pipeline import fingerprint
 
-from .candidates import NOTEBOOK, build_candidates, candidate_code, candidate_summary
+from .candidate_suite import build_candidate_suite
+from .candidates import NOTEBOOK, candidate_code, candidate_summary
 from .contract import ModelTrainingConfig, ModelTrainingError, read_json, resolve_root
 from .notebook_execution import execute_notebook, extract_saved_summary
 from .persistence import json_bytes, publish_artifacts, verify_artifacts
@@ -27,7 +28,7 @@ def verify_execution(
     Returns:
         Reproducible receipt binding notebook bytes, models, runtime and displayed output.
     """
-    result = build_candidates(config, verify_only=True)
+    result = build_candidate_suite(config, verify_only=True)
     nb = read_json(config.resolve(NOTEBOOK))
     summary = extract_saved_summary(nb)
     if summary != candidate_summary(result, config.root):

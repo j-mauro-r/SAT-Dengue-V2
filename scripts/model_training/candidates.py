@@ -1,4 +1,4 @@
-"""Bounded XGBoost orchestration over the shared Stage 4 source and evaluation pipeline."""
+"""Bounded candidate orchestration over the shared Stage 4 source and evaluation pipeline."""
 
 from __future__ import annotations
 
@@ -13,7 +13,8 @@ import pandas as pd  # type: ignore[import-untyped]
 
 from scripts.training_preparation.pipeline import fingerprint
 
-from .candidate_selection import select_and_fit
+from .candidate_families import restore_model
+from .candidate_selection import SelectionResult, select_and_fit
 from .contract import ModelTrainingConfig, ModelTrainingError, read_json
 from .events import load_event_context
 from .loading import TemporalSource, load_temporal_source, load_window_dataset
@@ -32,7 +33,7 @@ from .pipeline import (
     build_model_training,
     code_fingerprints,
 )
-from .xgboost_adapter import restore_candidate
+from .xgboost_adapter import fit_candidate
 
 NOTEBOOK = Path("notebooks/06_candidate_models.ipynb")
 
@@ -62,18 +63,19 @@ def candidate_code(root: Path) -> dict[str, Any]:
     return records
 
 
-def probability_frame(probability: pd.Series) -> pd.DataFrame:
+def probability_frame(probability: pd.Series, name: str = "xgboost") -> pd.DataFrame:
     """Create shared metric inputs with explicitly unavailable event alerts.
 
     Args:
         probability: Key-aligned binary probabilities.
+        name: Family or ablation identifier.
 
     Returns:
         Shared prediction schema, with no provisional operational threshold.
     """
     return pd.DataFrame(
         dict(
-            reference="xgboost",
+            reference=name,
             prediction_kind="probabilistic",
             prediction_score=probability,
             prediction_probability=probability,
@@ -141,8 +143,10 @@ def verify_candidate_bundle(
         for key in ["municipality_code", "origin_period", "target_period", "feature_row"]:
             if saved[key].astype(str).tolist() != expected_keys[key].astype(str).tolist():
                 raise ModelTrainingError("Saved prediction cohort/order changed")
-        fitted = restore_candidate(
-            payloads[f"{window}_model.json"], read_json(bundle / f"{window}_preparer.json")
+        fitted = restore_model(
+            identity["family"],
+            payloads[f"{window}_model.json"],
+            read_json(bundle / f"{window}_preparer.json"),
         )
         reproduced = fitted.predict(dataset.validation_X)
         if not np.array_equal(reproduced.to_numpy(), saved.prediction_probability.to_numpy()):
@@ -151,19 +155,35 @@ def verify_candidate_bundle(
 
 
 def build_candidates(
-    config: ModelTrainingConfig, *, verify_only: bool = False
+    config: ModelTrainingConfig,
+    *,
+    verify_only: bool = False,
+    family: str = "xgboost",
+    ablation: str | None = None,
+    full_model: ModelTrainingResult | None = None,
+    references: ModelTrainingResult | None = None,
+    source: TemporalSource | None = None,
 ) -> ModelTrainingResult:
     """Execute a frozen bounded search or verify/reuse identical artifacts without refitting.
 
     Args:
         config: Existing repository-scoped Stage 4 configuration.
         verify_only: Require existing current artifacts, never fit or publish.
+        family: Declared model family.
+        ablation: Optional fixed-parameter XGBoost experiment.
+        full_model: Verified complete XGBoost result supplying selected parameters.
+        references: Already verified references for a suite run.
+        source: Already verified source for a suite run.
 
     Returns:
         Immutable candidate bundle with models, preparation, search and evaluation evidence.
     """
     contract = read_json(config.resolve(config.contract_path))
-    settings = contract["xgboost_candidate"]
+    settings = contract[f"{family}_candidate"]
+    excluded = contract["ablations"][ablation] if ablation else []
+    name = f"xgboost_{ablation}" if ablation else family
+    if ablation and (family != "xgboost" or full_model is None):
+        raise ModelTrainingError("Ablation requires verified full XGBoost selection")
     if (
         settings["threads"] != 1
         or settings["inner_cutoff_offsets_months"] != [12, 6]
@@ -173,7 +193,9 @@ def build_candidates(
         or settings["maximum_fits_per_run"] > 104
     ):
         raise ModelTrainingError("Unsupported bounded candidate protocol")
-    expected_fits = len(contract["windows"]) * (2 * len(settings["configurations"]) + 1)
+    expected_fits = len(contract["windows"]) * (
+        1 if ablation else 2 * len(settings["configurations"]) + 1
+    )
     if expected_fits > settings["maximum_fits_per_run"]:
         raise ModelTrainingError("Candidate fit budget exceeded before execution")
     if settings["preparer"] != {
@@ -183,19 +205,36 @@ def build_candidates(
         "unknown_municipality": "explicit",
     }:
         raise ModelTrainingError("Candidate requires the declared one-hot preparation profile")
-    references = build_model_training(config, verify_only=verify_only)
-    source = load_temporal_source(config)
+    references = references or build_model_training(config, verify_only=verify_only)
+    source = source or load_temporal_source(config)
     identity = dict(
         configuration=settings,
+        family=family,
+        experiment=name,
+        excluded_columns=excluded,
+        full_model_manifest=fingerprint(full_model.bundle / "manifest.json")
+        if full_model
+        else None,
         selection_policy=contract["selection_policy"],
         contract=fingerprint(config.resolve(config.contract_path)),
         temporal_manifest=fingerprint(source.bundle / "manifest.json"),
         reference_manifest=fingerprint(references.bundle / "manifest.json"),
         code=candidate_code(config.root),
-        runtime={name: version(name) for name in ("xgboost", "scipy", "numpy", "pandas")},
+        runtime={
+            name: version(name)
+            for name in (
+                "xgboost",
+                "lightgbm",
+                "scikit-learn",
+                "threadpoolctl",
+                "scipy",
+                "numpy",
+                "pandas",
+            )
+        },
     )
     bid = hashlib.sha256(json_bytes(identity)).hexdigest()
-    bundle = config.resolve(settings["artifacts_dir"]) / bid
+    bundle = config.resolve(settings["artifacts_dir"]) / (ablation or "full") / bid
     if bundle.exists() or verify_only:
         manifest = verify_candidate_bundle(bundle, identity, source)
         return ModelTrainingResult(bundle, manifest)
@@ -204,6 +243,7 @@ def build_candidates(
     metrics: list[dict[str, Any]] = []
     diagnostics = []
     territories = []
+    territorial_metrics: list[dict[str, Any]] = []
     calibration = []
     contexts = []
     started = perf_counter()
@@ -213,27 +253,54 @@ def build_candidates(
         _enforce_window_rules(
             dataset, reserved_start=contract["rules"]["reserved_final_block_start"]
         )
-        result = select_and_fit(
-            dataset.train_X,
-            dataset.train_y[dataset.y_column],
-            dataset.train_index,
-            cutoff=dataset.cutoff,
-            horizon=dataset.horizon,
-            settings=settings,
-            policy=contract["selection_policy"],
-        )
+        if ablation and full_model is not None:
+            selected = read_json(full_model.bundle / f"{window}_search.json")["selected"]
+            fit_started = perf_counter()
+            fitted = fit_candidate(
+                dataset.train_X,
+                dataset.train_y[dataset.y_column],
+                selected,
+                seed=settings["seed"],
+                threads=settings["threads"],
+                excluded=excluded,
+            )
+            evidence = dict(
+                selected=selected,
+                fit_count=1,
+                folds=[],
+                candidates=[],
+                selection_source=str(full_model.bundle.relative_to(config.root)),
+                excluded_columns=excluded,
+                outer_fit_seconds=perf_counter() - fit_started,
+                train_keys=bytes_record(serialize_table(dataset.train_index)),
+                validation_keys=bytes_record(serialize_table(dataset.validation_index)),
+            )
+            result = SelectionResult(
+                fitted, selected, evidence, pd.DataFrame(columns=["configuration_id"])
+            )
+        else:
+            result = select_and_fit(
+                dataset.train_X,
+                dataset.train_y[dataset.y_column],
+                dataset.train_index,
+                cutoff=dataset.cutoff,
+                horizon=dataset.horizon,
+                settings=settings,
+                policy=contract["selection_policy"],
+                family=family,
+            )
         total_fits += result.evidence["fit_count"]
         if total_fits > settings["maximum_fits_per_run"]:
             raise ModelTrainingError("Candidate fit budget exceeded")
         probability = result.fitted.predict(dataset.validation_X)
-        frame = probability_frame(probability)
+        frame = probability_frame(probability, name)
         predictions.append(pd.concat([_window_base(dataset), frame], axis=1))
         context = load_event_context(
             config, source, dataset.validation_index, target_column=dataset.target_column
         )
         contexts.append(context.assign(window_id=window, horizon=dataset.horizon))
         scored = evaluate_metrics(
-            "xgboost",
+            name,
             dataset.validation_y[dataset.y_column],
             frame,
             dataset.validation_index,
@@ -249,7 +316,7 @@ def build_candidates(
         payloads[f"{window}_preparer.json"] = json_bytes(result.fitted.preparer)
         payloads[f"{window}_search.json"] = json_bytes(result.evidence)
         payloads[f"{window}_inner_predictions.csv"] = serialize_table(result.oof)
-        restored = restore_candidate(payloads[f"{window}_model.json"], result.fitted.preparer)
+        restored = restore_model(family, payloads[f"{window}_model.json"], result.fitted.preparer)
         if not np.array_equal(
             probability.to_numpy(), restored.predict(dataset.validation_X).to_numpy()
         ):
@@ -279,6 +346,19 @@ def build_candidates(
         for municipality, idx in dataset.validation_index.groupby(
             "municipality_code"
         ).groups.items():
+            local_metrics = evaluate_metrics(
+                name,
+                dataset.validation_y.loc[idx, dataset.y_column].reset_index(drop=True),
+                frame.loc[idx].reset_index(drop=True),
+                dataset.validation_index.loc[idx].reset_index(drop=True),
+                target_column=dataset.target_column,
+                threshold_policy_declared=False,
+                event_context=context.loc[idx].reset_index(drop=True),
+            )
+            territorial_metrics.extend(
+                dict(r, window_id=window, horizon=dataset.horizon, municipality_code=municipality)
+                for r in local_metrics
+            )
             territories.append(
                 dict(
                     window_id=window,
@@ -334,13 +414,14 @@ def build_candidates(
             "metrics.csv": serialize_table(pd.DataFrame(metrics)),
             "comparison.csv": serialize_table(comparison),
             "horizon_means.csv": serialize_table(means),
+            "territorial_metrics.csv": serialize_table(pd.DataFrame(territorial_metrics)),
             "territorial_diagnostics.csv": serialize_table(pd.DataFrame(territories)),
             "calibration_diagnostics.csv": serialize_table(pd.DataFrame(calibration)),
             "run_summary.json": json_bytes(summary),
         }
     )
     manifest = dict(
-        schema="stage4-xgboost-v1",
+        schema="stage4-candidate-v2",
         bundle_id=bid,
         identity=identity,
         windows=contract["windows"],

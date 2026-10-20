@@ -1,6 +1,6 @@
 {
   "schema": "stage4-model-engineering-contract-v1",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "stage3_contract_path": "docs/product/stage-3/training_preparation_contract_v1.json",
   "windows": [
     "2018-12_t1",
@@ -65,7 +65,7 @@
   },
   "seed": 42,
   "determinism_limits": [
-    "No candidate model stochastic training in this delivery.",
+    "Pinned CPU candidate libraries, one thread, fixed seed, native/numeric inference verification; cross-version equality is not assumed.",
     "Deterministic references depend on zone state availability and valid temporal linkage.",
     "Notebook receipts depend on kernel package versions."
   ],
@@ -199,5 +199,162 @@
     "execution_policy": "reuse verified identical identity; never refit on verify",
     "roundtrip_tolerance": 0,
     "calibration": "diagnostics only; no calibrator fitted"
+  },
+  "lightgbm_candidate": {
+    "seed": 42,
+    "threads": 1,
+    "inner_folds": 2,
+    "inner_cutoff_offsets_months": [
+      12,
+      6
+    ],
+    "inner_validation_months": 6,
+    "preparer": {
+      "encoding": "onehot",
+      "numeric_scaling": "none",
+      "numeric_missing": "error",
+      "unknown_municipality": "explicit"
+    },
+    "early_stopping": false,
+    "threshold_policy": null,
+    "execution_policy": "reuse verified identical identity; never refit on verify",
+    "roundtrip_tolerance": 0,
+    "calibration": "diagnostics only; no calibrator fitted",
+    "maximum_configurations": 4,
+    "maximum_fits_per_run": 72,
+    "artifacts_dir": "artifacts/model_training/lightgbm",
+    "model_format": "native text",
+    "class_weighting": "none",
+    "configurations": [
+      {
+        "n_estimators": 80,
+        "num_leaves": 7,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "lambda_l1": 0,
+        "lambda_l2": 1,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      },
+      {
+        "n_estimators": 160,
+        "num_leaves": 7,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "lambda_l1": 0,
+        "lambda_l2": 1,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      },
+      {
+        "n_estimators": 80,
+        "num_leaves": 15,
+        "max_depth": 4,
+        "learning_rate": 0.1,
+        "lambda_l1": 0.1,
+        "lambda_l2": 5,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      },
+      {
+        "n_estimators": 160,
+        "num_leaves": 15,
+        "max_depth": 4,
+        "learning_rate": 0.1,
+        "lambda_l1": 0.1,
+        "lambda_l2": 5,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      }
+    ]
+  },
+  "gam_candidate": {
+    "seed": 42,
+    "threads": 1,
+    "inner_folds": 2,
+    "inner_cutoff_offsets_months": [
+      12,
+      6
+    ],
+    "inner_validation_months": 6,
+    "preparer": {
+      "encoding": "onehot",
+      "numeric_scaling": "none",
+      "numeric_missing": "error",
+      "unknown_municipality": "explicit"
+    },
+    "early_stopping": false,
+    "threshold_policy": null,
+    "execution_policy": "reuse verified identical identity; never refit on verify",
+    "roundtrip_tolerance": 0,
+    "calibration": "diagnostics only; no calibrator fitted",
+    "maximum_configurations": 4,
+    "maximum_fits_per_run": 72,
+    "artifacts_dir": "artifacts/model_training/gam",
+    "model_format": "numeric JSON coefficient and BSpline state",
+    "class_weighting": "none",
+    "configurations": [
+      {
+        "n_knots": 4,
+        "C": 0.1
+      },
+      {
+        "n_knots": 4,
+        "C": 1.0
+      },
+      {
+        "n_knots": 6,
+        "C": 0.1
+      },
+      {
+        "n_knots": 6,
+        "C": 1.0
+      }
+    ],
+    "representation": {
+      "distribution": "Bernoulli",
+      "link": "logit",
+      "numeric": "univariate cubic B-splines, uniform training-range knots, constant extrapolation, no interactions; training-constant terms frozen at zero",
+      "calendar": "existing mes_sin and mes_cos as linear Fourier pair",
+      "categories": "Stage3 onehot, unscaled, explicit missing/unknown tokens",
+      "penalty": "L2 basis coefficient shrinkage including category/Fourier terms; inverse C. Not curvature or second-derivative penalization. Intercept unpenalized.",
+      "basis_count": "sum of retained spline basis columns plus linear category/Fourier/constant columns; no intercept",
+      "solver": "scikit-learn LogisticRegression lbfgs; max_iter=2000, tol=1e-7; convergence warning fails closed"
+    }
+  },
+  "ablations": {
+    "without_climate": [
+      "rain_mm_month_sum",
+      "temp_mean_c_month_mean",
+      "dewpoint_mean_c_month_mean",
+      "surface_runoff_mm_month_sum",
+      "total_evaporation_mm_month_sum_ecmwf",
+      "solar_radiation_mj_m2_month_sum",
+      "soil_water_l1_month_mean",
+      "wind_u_ms_month_mean",
+      "wind_v_ms_month_mean",
+      "lluvia_lag_1",
+      "lluvia_lag_2",
+      "temperatura_lag_1",
+      "temperatura_lag_2",
+      "rocio_lag_1",
+      "escorrentia_lag_1"
+    ],
+    "without_zones": [
+      "zona_canal_t",
+      "zona_canal_lag_1"
+    ]
+  },
+  "candidate_suite": {
+    "maximum_fits_per_run": 264,
+    "ablation_policy": "XGBoost only, full model selected parameters per window/horizon, no new search; fresh reduced training-only preparation; same keys. Differences are not causal.",
+    "dependencies": {
+      "xgboost": "3.0.5",
+      "lightgbm": "4.6.0",
+      "scikit-learn": "1.7.2",
+      "scipy": "1.18.1",
+      "threadpoolctl": "3.7.0"
+    },
+    "scientific_boundary": "No champion, operational threshold, final calibration, reserved evaluation or human G4/G5 approval."
   }
 }

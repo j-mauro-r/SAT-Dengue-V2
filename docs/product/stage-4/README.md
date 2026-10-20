@@ -1,11 +1,11 @@
-# Stage 4 — shared references and XGBoost candidate
+# Stage 4 — shared references, candidate families and ablations
 
-The first bounded delivery implements a shared pipeline over verified Stage 3 temporal artifacts and these two references. Delivery 2 adds the XGBoost candidate described below:
+The shared pipeline consumes verified Stage3 temporal artifacts. Delivery1 introduced the references below, delivery2 added XGBoost, and delivery3 adds LightGBM, a binary GAM and two controlled XGBoost ablations.
 
 - Persistence: deterministic binary alert derived from current endemic-zone state.
 - Train prevalence: constant probability estimated from `Y_train` per window/horizon.
 
-The reference-only delivery does **not** train XGBoost, LightGBM or GAM; the delivery2 section below adds the first XGBoost candidate. It does not close G4, and it does not retroactively close G2/G3.
+The historical reference-only delivery trained no candidates. The current three-family workflow supplies technical evidence while G4 and earlier unapproved scientific gates remain open.
 
 ## Scope and inputs
 
@@ -63,7 +63,7 @@ Artifacts are written under `artifacts/model_training/` (gitignored), with immut
 
 ## Approved selection policy
 
-Mauricio approved this policy in the corrective request recorded as DEC-123. The executable declaration is `selection_policy` in the existing Stage 4 contract; no candidate adapter, search or ranking is implemented here.
+Mauricio approved this policy in the corrective request recorded as DEC-123. The executable declaration is `selection_policy` in the existing Stage4 contract. PLAN021 was a corrective delivery without adapters or searches; subsequent deliveries implement this unchanged policy.
 
 1. Reject technically ineligible runs first: leakage, invalid/unavailable required predictions, misalignment or unverifiable artifacts.
 2. Choose hyperparameters by highest mean AP over temporal inner-training splits. Break numerical ties by lower mean Brier on the same splits, then simpler within-family configuration.
@@ -132,7 +132,7 @@ Install the pinned modeling dependencies with:
 .venv/bin/python -m scripts.model_training.candidate_notebook --verify
 ```
 
-The native API avoids a new scikit-learn dependency. XGBoost 3.0.5 and SciPy
+Delivery2 used the native API without scikit-learn. Delivery3 adds it for the binary GAM. XGBoost 3.0.5 and SciPy
 1.18.1 are pinned separately so the fingerprinted Stage 3 project metadata and
 its already verified products remain intact. The adapter uses native JSON model
 IO as documented in the [XGBoost API](https://xgboost.readthedocs.io/en/release_3.0.0/python/python_api.html)
@@ -194,8 +194,7 @@ The common code changes require refreshing notebook05's identity; this does not
 change the corrected definitions or reopen PLAN_021.
 
 Technical execution and scientific improvement are reported separately. No
-champion is selected and G4/G5 remain open. Prompt3 must add its separately
-scoped candidate using this protocol, without tuning to these external results.
+champion is selected and G4/G5 remain open. Delivery3 extends this protocol without tuning to these external results.
 
 ### Executed candidate results — 2026-10-20
 
@@ -245,8 +244,149 @@ Event alert metrics remain pending an approved threshold criterion.
 
 Local candidate bundle:
 `artifacts/model_training/xgboost/3d8350b5c41c82124f4412bb75d25bbd57d1e7de8a50b5346d9fd17d7c10479c`.
-Current reference bundle:
+Delivery2 reference bundle:
 `artifacts/model_training/957a1fc145dab07a6cf0cb71c58a9d52c2d5a107d23f0e95d1c0d6b0fe43534b`.
 Detailed model/data evidence remains gitignored. PLAN_022 records the independent
 review, preservation audit, notebook receipts and mapped controls. Historical
 PLAN_020/021 and their artifact identities remain preserved.
+
+## Candidate families and controlled ablations — delivery 3
+
+The existing notebook06 now executes `candidate_suite.py`: XGBoost, LightGBM,
+and a binary additive GAM, followed by two XGBoost-only ablations. All share
+verified loading, unchanged temporal selectors, approved AP/Brier/simplicity
+selection, corrected metrics and immutable persistence. Notebook05 remains the
+reference entry point. Both notebooks contain code cells only.
+
+LightGBM **4.6.0** uses the native binary CPU booster and native text persistence,
+with deterministic single-thread column-wise histograms. Its four configurations
+vary trees80/160, leaves7/15, depth3/4, rate0.05/0.1 and L1/L2 penalties0/1 or
+0.1/5; max_bin128 and minimum leaf support20 are fixed. Existing one-hot
+preparation is fitted separately in each inner training and outer training;
+no scaling or missing-value imputation is introduced. See the primary
+[LightGBM parameter reference](https://lightgbm.readthedocs.io/en/v4.6.0/Parameters.html).
+
+The GAM is an **additive Bernoulli model with logit link**, implemented using
+scikit-learn **1.7.2** [SplineTransformer](https://scikit-learn.org/1.7/modules/generated/sklearn.preprocessing.SplineTransformer.html)
+and [LogisticRegression](https://scikit-learn.org/1.7/modules/generated/sklearn.linear_model.LogisticRegression.html).
+Each non-calendar numeric predictor has its own cubic B-spline basis, with
+uniform knots learned from the training range and constant extrapolation.
+The four frozen configurations use4/6 knots and inverse ridge strength C0.1/1.
+One basis column is dropped per smooth term; the intercept is unpenalized.
+Training-constant numeric terms remain zero at inference. Existing mes_sin and
+mes_cos remain linear Fourier terms, so their monthly cycle is preserved.
+Municipality and both zones use the existing explicit one-hot categories.
+There are no interactions, target encodings, count likelihoods or automatic
+standardization. L2 penalizes basis/category/Fourier coefficients; it is **not a
+curvature penalty** and this candidate does not claim automatic smoothing
+parameter estimation. LBFGS uses tolerance1e-7, maximum2000 iterations; a
+convergence warning fails the run. Threadpoolctl3.7.0 limits numerical threads.
+
+GAM inference uses saved numeric JSON coefficients/intercept and per-term
+SciPy BSpline knots, coefficient arrays, degrees and output order. Tests compare
+this exported basis against the library at and outside training boundaries.
+The same saved preparation generates inference inputs; no pickle is required.
+Library versions, inputs, code and configuration are part of every identity.
+
+The complete frozen suite allows **264 fits**:104 XGBoost,72 LightGBM,72 GAM,
+and16 ablation refits. Each new family has four configurations and two internal
+temporal folds per outer window/horizon. No early stopping, class reweighting,
+external tuning or alert-threshold search is used. Repeated verification loads
+models without fitting. A changed identity creates a new immutable bundle;
+prior results remain historical evidence. No dataset is copied into these runs.
+
+The XGBoost `without_climate` ablation removes the nine current climate columns
+and six climate lag columns listed explicitly in the contract. Calendar cycles
+remain. `without_zones` removes zona_canal_t and zona_canal_lag_1 and every
+corresponding encoded column. The Stage3 API receives empty category slots only
+to retain its existing schema; these slots never reach the estimator. Each
+ablation fits once per outer window using the **complete XGBoost's selected
+parameters**, with fresh reduced training preparation and identical keys.
+There is no ablation search. Changes in scores are descriptive, not causal
+attributions, and do not establish the same behavior for GAM or LightGBM.
+
+Suite artifacts reference all five component bundles and the references, and
+include all four metrics by window/horizon and territory with support and
+non-evaluable states, horizon summaries and paired ablation differences.
+Component artifacts retain models, fitted preparation, search evidence,
+train/validation diagnostics, fixed reliability bins and execution time.
+Event metrics remain unavailable for probabilistic models without a declared
+threshold; they are not replaced with provisional operational alerts.
+
+Repeat with the installation and notebook commands above, then also run
+`.venv/bin/python -m scripts.model_training.notebook_execution --verify`.
+Detailed local evidence belongs to `.dwp/plans/PLAN_023_stage4_candidates_ablations/`.
+Stage5 must assess temporal/territorial robustness and probabilistic calibration,
+resolve an approved operational threshold criterion using permitted development
+information, and define the final reserved evaluation protocol before accessing
+2025+ objectives. Retrospective consolidation does not establish operational
+availability. No champion or human G4/G5 acceptance is produced here.
+
+### Executed comparison and Stage5 handoff
+
+All three candidates and both references executed on the same eight partitions. Each experiment has3,344 external predictions across76 municipalities:456 T+1 and380 T+2 per cutoff. Target/origin intervals remain as documented above. AP support is the full selected population, with positive-class counts retained; Brier uses456/380 observed binary outcomes.
+
+The following are equal-weight means of four windows, separately by horizon. N/A event metrics for probabilistic models mean **no declared threshold**, not zero sensitivity or zero false alarms. Persistence Brier is not applicable. No mean establishes statistical superiority.
+
+| Horizon | Model | AP | Brier | Onset sensitivity | False-alarm ratio |
+|---|---|---:|---:|---:|---:|
+| T+1 | persistence | 0.581263 | N/A | 0.000000 | 0.324453 |
+| T+1 | train_prevalence | 0.421601 | 0.257645 | N/A | N/A |
+| T+1 | xgboost | 0.728860 | 0.150014 | N/A | N/A |
+| T+1 | lightgbm | 0.733269 | 0.148609 | N/A | N/A |
+| T+1 | gam | 0.715265 | 0.156403 | N/A | N/A |
+| T+2 | persistence | 0.546259 | N/A | 0.205154 | 0.363612 |
+| T+2 | train_prevalence | 0.438158 | 0.263932 | N/A | N/A |
+| T+2 | xgboost | 0.654211 | 0.182128 | N/A | N/A |
+| T+2 | lightgbm | 0.664200 | 0.181819 | N/A | N/A |
+| T+2 | gam | 0.655054 | 0.185708 | N/A | N/A |
+
+| Window | XGBoost AP / Brier | LightGBM AP / Brier | GAM AP / Brier |
+|---|---:|---:|---:|
+| 2018-12_t1 | 0.905040 / 0.170881 | 0.904208 / 0.167510 | 0.895587 / 0.181791 |
+| 2018-12_t2 | 0.884264 / 0.218751 | 0.888991 / 0.218906 | 0.881439 / 0.224480 |
+| 2020-12_t1 | 0.407156 / 0.061001 | 0.426171 / 0.060675 | 0.389883 / 0.061625 |
+| 2020-12_t2 | 0.277973 / 0.072476 | 0.289615 / 0.071791 | 0.307483 / 0.069376 |
+| 2022-12_t1 | 0.875400 / 0.181969 | 0.874771 / 0.180521 | 0.869264 / 0.185960 |
+| 2022-12_t2 | 0.841038 / 0.216370 | 0.853180 / 0.216117 | 0.837176 / 0.219146 |
+| 2024-06_t1 | 0.727843 / 0.186206 | 0.727928 / 0.185733 | 0.706328 / 0.196237 |
+| 2024-06_t2 | 0.613568 / 0.220914 | 0.625012 / 0.220461 | 0.594121 / 0.229831 |
+
+All three families have higher descriptive mean AP than the two references and lower mean Brier than train prevalence. LightGBM has the highest observed mean AP among these three full candidates in both horizons, but its differences from XGBoost are small and are not a champion decision. GAM is slightly above XGBoost in T+2 AP while its mean Brier is worse in both horizons. Window variation is substantial; the low-prevalence2020 windows have markedly lower AP.
+
+| Window | Persistence detected / real onsets | Persistence false / emitted alerts |
+|---|---:|---:|
+| 2018-12_t1 | 0/71 | 40/229 |
+| 2018-12_t2 | 12/60 | 26/173 |
+| 2020-12_t1 | 0/18 | 20/32 |
+| 2020-12_t2 | 0/14 | 18/25 |
+| 2022-12_t1 | 0/74 | 48/238 |
+| 2022-12_t2 | 14/57 | 38/187 |
+| 2024-06_t1 | 0/56 | 67/226 |
+| 2024-06_t2 | 18/48 | 72/189 |
+
+These scientific onset denominators also remain available for probabilistic candidates, whose detected-onset and false-alarm metrics remain unavailable. `territorial_metrics.csv` retains all17,024 model/window/territory/metric records, including unavailable metrics. Each model has608 territory/window groups with support5 or6;275 groups are single-class and have unavailable AP. No territory is silently omitted or used for tuning.
+
+| XGBoost ablation | Horizon | AP change | Brier change |
+|---|---|---:|---:|
+| xgboost_without_climate | T+1 | +0.004505 | -0.000541 |
+| xgboost_without_climate | T+2 | +0.014658 | +0.001102 |
+| xgboost_without_zones | T+1 | -0.085991 | +0.029261 |
+| xgboost_without_zones | T+2 | -0.049384 | +0.018590 |
+
+Changes are reduced minus full. Removing climate modestly raises AP in these fixed runs, with mixed Brier changes; removing zones reduces AP and worsens Brier. This does not prove climate is useless or zones are causal, and does not select a reduced model or generalize to other families. Per-window paired results remain in `ablation_deltas.csv`.
+
+No candidate produced invalid or constant validation probability vectors. Maximum train-minus-validation AP gaps were0.403 for XGBoost,0.409 for LightGBM and0.379 for GAM; resubstitution scores are optimistic diagnostics. Brier and fixed reliability bins describe probability quality without establishing calibration. No calibrator was fitted.
+
+The budget is264 fits per full execution. A review-driven preflight budget guard required a second execution with identical grids, for528 actual fits across both preserved identities; this was a reproducibility/implementation rerun, not an expanded search. All model probabilities, keys and metrics must match the first execution after that guard-only change. Technical verification includes exact saved-model inference for40 outer models and224 independently checked inner temporal/preparation records.
+
+G4 technical evidence now covers both references, all three requested candidate families, shared protocol, two bounded ablations and experiment/inference traceability. **G4 remains open pending human scientific acceptance**; no champion or G5 approval is claimed. Stage5 must review window/territory instability and support, validate calibration on permitted development partitions, approve an operational threshold criterion and event-evaluation protocol, then separately authorize final reserved evaluation. Historical operational availability remains unproven.
+
+The current post-budget-guard suite is
+`artifacts/model_training/candidate_suite/38bf0b7eb6e492feec1437d3782c7b528c787e78c63a016ed8499aa56e3dbfb2`.
+Its manifest identifies all five component bundles and the current references.
+Recorded search/fitting/evaluation times are47.98s XGBoost,34.46s LightGBM,
+49.64s GAM,6.35s without climate and7.55s without zones (145.98s combined).
+These exclude source verification and kernel startup; verification reuses models
+without fitting. The pre-budget-guard suite is preserved as historical evidence,
+not the final accepted identity.

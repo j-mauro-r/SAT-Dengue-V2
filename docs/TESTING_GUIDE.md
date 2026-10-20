@@ -231,3 +231,18 @@ labels,104fit budget, complete AP/Brier support, pending threshold metrics,
 preparation/model roundtrips and equal-weight horizon comparisons. Bounded
 runtime and resubstitution/calibration/territorial diagnostics do not approve a
 scientific gate or authorize external-validation tuning.
+
+
+## Stage4 families and ablations (delivery3)
+
+`test_candidate_families.py` covers LightGBM/GAM safe roundtrips, explicit
+missing/unknown categories, forbidden controls, internal-only vocabulary and
+GAM knots, binary non-evaluability, independent library spline agreement and
+removal invariance of all ablated values/encodings. The existing orchestration
+perturbation/reuse/corruption test now runs for all three families. Run both
+family and XGBoost tests plus the full foundation gates and lint/type checks
+for model_training. Fresh-kernel notebooks05 and06 must verify their current
+receipts. PLAN023 audits all40 fitted outer models, shared cohorts, inner
+boundaries,264-fit budget, unchanged scientific sources/prior artifacts,
+fixed-parameter ablations and all four metric records including territorial
+non-evaluability. Scientific acceptance, calibration and thresholds remain open.

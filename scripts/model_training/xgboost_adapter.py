@@ -9,12 +9,7 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import xgboost as xgb
 
-from scripts.training_preparation.preprocessing import (
-    PreparerSpec,
-    fit_preparer,
-    transform_predictors,
-)
-
+from .candidate_preparation import fit_representation, transform_representation, validate_training
 from .contract import ModelTrainingError
 
 
@@ -39,7 +34,7 @@ class FittedCandidate:
         Returns:
             Probabilities with the original row index.
         """
-        matrix = transform_predictors(X, self.preparer).to_numpy(dtype=np.float32)
+        matrix = transform_representation(X, self.preparer).to_numpy(dtype=np.float32)
         values = self.model.predict(xgb.DMatrix(matrix, nthread=1))
         if not np.isfinite(values).all() or not ((values >= 0) & (values <= 1)).all():
             raise ModelTrainingError("Invalid XGBoost probabilities")
@@ -66,7 +61,13 @@ def restore_candidate(model_bytes: bytes, preparer: dict[str, Any]) -> FittedCan
 
 
 def fit_candidate(
-    X: pd.DataFrame, y: pd.Series, parameters: dict[str, Any], *, seed: int, threads: int
+    X: pd.DataFrame,
+    y: pd.Series,
+    parameters: dict[str, Any],
+    *,
+    seed: int,
+    threads: int,
+    excluded: list[str] | None = None,
 ) -> FittedCandidate:
     """Fit a binary CPU histogram booster and one-hot preparer on training only.
 
@@ -76,24 +77,14 @@ def fit_candidate(
         parameters: Predeclared bounded tree/learning/regularization configuration.
         seed: Fixed model seed.
         threads: Explicit CPU thread budget.
+        excluded: Declared ablation columns removed before estimation.
 
     Returns:
         Fitted booster and preparation state for validation/inference.
     """
-    if not X.index.equals(y.index) or y.isna().any() or set(y.unique()) != {0, 1}:
-        raise ModelTrainingError("Training requires aligned, complete binary classes")
-    event_controls = {
-        "actual_excess",
-        "previous_excess",
-        "actual_onset",
-        "onset_evaluable",
-        "context_status",
-        "previous_target_period",
-    }
-    if event_controls.intersection(X.columns):
-        raise ModelTrainingError("Retrospective evaluation context is forbidden in X")
-    preparer = fit_preparer(X, PreparerSpec(encoding="onehot"))
-    matrix = transform_predictors(X, preparer).to_numpy(dtype=np.float32)
+    validate_training(X, y)
+    preparer = fit_representation(X, excluded)
+    matrix = transform_representation(X, preparer).to_numpy(dtype=np.float32)
     rounds = parameters["n_estimators"]
     params = {k: v for k, v in parameters.items() if k != "n_estimators"}
     params.update(

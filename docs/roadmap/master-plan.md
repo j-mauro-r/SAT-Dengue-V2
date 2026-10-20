@@ -20,7 +20,7 @@ Implementation and human gate approval are separate. Current bounded work is on 
 | Stage 1 product definition / G1 | Delivered in PR #7 | CLOSED by Mauricio's explicit confirmation; final runtime schemas remain unfrozen. |
 | Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 OPEN: no explicit Data & Target Freeze recorded. Retired notebooks 01/02 are historical; notebook 03 is the current pipeline. |
 | Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 OPEN: PLAN_018 technical closure and tests are evidence, not human gate approval. |
-| Stage 4 model engineering / G4 | Shared references corrected in PLAN_021; first XGBoost candidate and notebook06 executed under PLAN_022 / draft PR #15 | G4 OPEN. LightGBM/GAM, operational thresholds and scientific acceptance remain pending. |
+| Stage 4 model engineering / G4 | References corrected in PLAN_021; XGBoost in PLAN_022; three families and two controlled XGBoost ablations executed in PLAN_023 / draft PR #15 | G4 OPEN pending human scientific acceptance. Technical candidate/common-protocol evidence is available; calibration, operational thresholds and reserved evaluation belong to Stage5. |
 | Stages 5–10 / G5–G10 | NOT STARTED | Model comparison, champion, final product contracts, API/dashboard and deployment remain future work. |
 
 Mauricio authorized the bounded preparation implementation before a formal G2 freeze was recorded. Record that actual progression without inventing a past approval. Stage dependencies below remain the acceptance order; branch names, plan completion and passing tests do not themselves close gates.
@@ -130,6 +130,17 @@ Dependency:
 
 Gate G4 — Candidate Models Ready:
 - Candidate models and baselines complete under a common evaluation protocol.
+- PLAN_023 adds LightGBM and Bernoulli/logit additive GAM, preserving the approved
+  AP/Brier/simplicity policy and all eight cohorts. Notebook05/06 use fresh kernels;
+  five experiments (three full candidates, two fixed-parameter XGBoost ablations)
+  provide40 saved outer models,3,344 predictions each and territorial support.
+- Frozen budget264 fits per run; the budget-guard correction requires a second
+  identical run,528 actual fits in two preserved identities. No search expansion.
+- Technical results and limitations: [Stage4 evidence](../product/stage-4/README.md).
+  This supplies candidate-readiness evidence without accepting G4 or choosing a champion.
+- Stage5 handoff: review temporal/territorial variation, calibration and an approved
+  operational alert criterion; establish the reserved-evaluation protocol before
+  accessing objectives from2025-01. Retrospective availability remains unproven.
 
 ### Stage 5 — Evaluation and Quality Assurance
 
