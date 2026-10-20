@@ -101,3 +101,28 @@ gates, lint/format the new modules and check Markdown links for this surface.
 Use `--basetemp=tmp/pytest-training-preparation` when test artifacts must remain
 inside the repository. Report historical global DWP failures separately from
 `conformance.sh --plan .dwp/plans/PLAN_018_training_data_preparation`.
+
+## Deterministic development features (milestone 2)
+
+The same `tests/unit/test_training_preparation.py` also covers two-municipality
+isolation, row-order invariance, December/January boundaries, exact missing-month
+lookups, first observations, valid negative changes, complete T/T−1/T−2 means,
+January-phased cycles, future perturbation, reserved outcome masking, preservation
+of current climate signs, immutable atomic publication, corruption rejection and
+invalidation after data/config/code changes. Use repository-local `--basetemp`.
+
+Run the following to publish an immutable development bundle and then recompute
+all bytes, audit real horizon eligibility against the existing policy, and verify
+original scientific hashes:
+
+```bash
+.venv/bin/python -m scripts.training_preparation.development
+.venv/bin/python -m scripts.training_preparation.development --verify \
+  --baseline .dwp/plans/PLAN_018_training_data_preparation/analysis_results/input_baseline.json
+```
+
+No reserved reference features or model training is generated. Full foundation
+gates remain required. Check new modules with
+`.venv/bin/mypy --explicit-package-bases scripts/training_preparation`, plus
+required `mypy tests`, Ruff lint/format and Markdown links. Notebook 04 must remain
+code-only and execute sequentially; its summaries are development aggregates only.

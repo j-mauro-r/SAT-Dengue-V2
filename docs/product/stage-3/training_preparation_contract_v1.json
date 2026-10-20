@@ -1,5 +1,5 @@
 {
-  "version": "training-preparation-v1",
+  "version": "training-preparation-v1.1",
   "classification": "bounded_preparation_candidate_not_training_freeze",
   "panel_path": "data/processed/panel_mensual_dengue_clima.csv",
   "upstream_contract_path": "data/interim/stage2_consolidated_dataset_pipeline/candidate_construction_contract_v1.json",
@@ -427,10 +427,10 @@
       ]
     },
     "dengue_monthly_change": "T minus T-1 within municipality",
-    "dengue_retrospective_mean": "Past-only municipal window; specify window/min_periods in milestone 2 before implementation.",
+    "dengue_retrospective_mean": "dengue_media_3m: mean of T, T-1, T-2; all three required; no centered windows.",
     "cyclic_calendar": [
-      "sin(2*pi*month/12)",
-      "cos(2*pi*month/12)"
+      "sin(2*pi*(month-1)/12)",
+      "cos(2*pi*(month-1)/12)"
     ]
   },
   "deterministic_operations": [
@@ -449,7 +449,152 @@
   ],
   "temporal_policy": {
     "reserved_final_block_start": "2025-01",
-    "selection": "No selection by final-block results; no splitting or row eligibility filtering in milestone 1.",
+    "selection": "Develop reference rows through 2024-12 using full earlier history. Audit existing horizon eligibility after feature construction; no training folds or fitted transformations.",
     "future_target_controls": "All target/history/evaluability metadata excluded from X; no fitted transformations in milestone 1."
+  },
+  "derived_features": {
+    "dengue_lag_1": {
+      "operation": "lag",
+      "source": "dengue_notifications_count",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "dengue_lag_2": {
+      "operation": "lag",
+      "source": "dengue_notifications_count",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "dengue_lag_3": {
+      "operation": "lag",
+      "source": "dengue_notifications_count",
+      "months": 3,
+      "missing": "preserve"
+    },
+    "grave_lag_1": {
+      "operation": "lag",
+      "source": "dengue_grave_notifications_count",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "grave_lag_2": {
+      "operation": "lag",
+      "source": "dengue_grave_notifications_count",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "dengue_cambio_1m": {
+      "operation": "difference",
+      "source": "dengue_notifications_count",
+      "formula": "T minus T-1",
+      "negative_values": "valid"
+    },
+    "dengue_media_3m": {
+      "operation": "mean",
+      "source": "dengue_notifications_count",
+      "offsets_months": [
+        0,
+        1,
+        2
+      ],
+      "min_observations": 3,
+      "centered": false
+    },
+    "zona_canal_lag_1": {
+      "operation": "lag",
+      "source": "zona_canal_t",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "lluvia_lag_1": {
+      "operation": "lag",
+      "source": "rain_mm_month_sum",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "lluvia_lag_2": {
+      "operation": "lag",
+      "source": "rain_mm_month_sum",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "temperatura_lag_1": {
+      "operation": "lag",
+      "source": "temp_mean_c_month_mean",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "temperatura_lag_2": {
+      "operation": "lag",
+      "source": "temp_mean_c_month_mean",
+      "months": 2,
+      "missing": "preserve"
+    },
+    "rocio_lag_1": {
+      "operation": "lag",
+      "source": "dewpoint_mean_c_month_mean",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "escorrentia_lag_1": {
+      "operation": "lag",
+      "source": "surface_runoff_mm_month_sum",
+      "months": 1,
+      "missing": "preserve"
+    },
+    "mes_sin": {
+      "operation": "cyclic_calendar",
+      "formula": "sin(2*pi*(month-1)/12)"
+    },
+    "mes_cos": {
+      "operation": "cyclic_calendar",
+      "formula": "cos(2*pi*(month-1)/12)"
+    }
+  },
+  "development_output": {
+    "base_dir": "data/processed/training_preparation/development",
+    "reference_end": "2024-12",
+    "layout": {
+      "keys.csv": [
+        "municipality_code",
+        "year_month"
+      ],
+      "features.csv": [
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "rain_mm_month_sum",
+        "temp_mean_c_month_mean",
+        "dewpoint_mean_c_month_mean",
+        "surface_runoff_mm_month_sum",
+        "total_evaporation_mm_month_sum_ecmwf",
+        "solar_radiation_mj_m2_month_sum",
+        "soil_water_l1_month_mean",
+        "wind_u_ms_month_mean",
+        "wind_v_ms_month_mean",
+        "zona_canal_t",
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_lag_1",
+        "lluvia_lag_1",
+        "lluvia_lag_2",
+        "temperatura_lag_1",
+        "temperatura_lag_2",
+        "rocio_lag_1",
+        "escorrentia_lag_1",
+        "mes_sin",
+        "mes_cos"
+      ],
+      "controls.csv": "Keys, original controls and Y; reserved-target metadata masked; horizon eligibility flags only outside X.",
+      "manifest.json": "Deterministic identity, fingerprints, column roles, development coverage and expected missingness."
+    },
+    "existing_policy": "reuse_identical",
+    "replacement_policy": "Never replace an existing identity directory. New data/config/code/runtime means a new bundle; identical identity is reused only after all expected bytes and manifest match.",
+    "eligibility": "Existing notification-year-backed five-year-history policy; audit counts only, no row removal before feature construction.",
+    "reserved": "Do not derive or summarize reserved reference rows; mask target outcome/trace controls crossing 2025-01. Original inputs unchanged."
   }
 }

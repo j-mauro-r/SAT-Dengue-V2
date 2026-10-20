@@ -32,12 +32,15 @@ def fingerprint(path: Path) -> dict[str, Any]:
     return {"sha256": digest.hexdigest(), "bytes": size}
 
 
-def read_panel(path: Path, contract: dict[str, Any]) -> pd.DataFrame:
+def read_panel(
+    path: Path, contract: dict[str, Any], *, reference_end: str | None = None
+) -> pd.DataFrame:
     """Parse declared CSV types, preserving empty non-nullable trace strings.
 
     Args:
         path: Existing panel CSV path.
         contract: Preparation schema.
+        reference_end: Optional last reference month; filter before value parsing.
 
     Returns:
         Typed input frame, with no imputation or filtering.
@@ -53,6 +56,10 @@ def read_panel(path: Path, contract: dict[str, Any]) -> pd.DataFrame:
     expected = {f["name"] for f in contract["schema"]}
     if set(frame.columns) != expected:
         raise PreparationError("Schema mismatch in CSV header")
+    source_rows = len(frame)
+    if reference_end is not None:
+        frame = frame.loc[frame["year_month"] <= reference_end].copy()
+    frame.attrs["source_rows"] = source_rows
     for field in contract["schema"]:
         name = field["name"]
         s = frame[name]
@@ -91,11 +98,15 @@ class PreparationResult:
     report: dict[str, Any]
 
 
-def prepare_inputs(config: PreparationConfig) -> PreparationResult:
+def prepare_inputs(
+    config: PreparationConfig, *, reference_end: str | None = None
+) -> PreparationResult:
     """Verify manifest fingerprints and validate the existing panel without writes.
 
     Args:
         config: Repository and input configuration.
+        reference_end: Optional development boundary. Later rows are excluded
+            before typed validation or profiling.
 
     Returns:
         Validated panel, role contract and input-validation evidence.
@@ -132,9 +143,11 @@ def prepare_inputs(config: PreparationConfig) -> PreparationResult:
     upstream = read_json(config.resolve(contract["upstream_contract_path"]))
     if contract["schema"] != upstream["datasets"]["panel_mensual_dengue_clima"]["schema"]:
         raise PreparationError("Preparation schema differs from construction schema")
-    panel = read_panel(config.resolve(contract["panel_path"]), contract)
+    panel = read_panel(
+        config.resolve(contract["panel_path"]), contract, reference_end=reference_end
+    )
     record = manifest["outputs"]["panel_mensual_dengue_clima"]
-    if (len(panel), len(panel.columns)) != (record["rows"], record["columns"]):
+    if (panel.attrs["source_rows"], len(panel.columns)) != (record["rows"], record["columns"]):
         raise PreparationError("Panel dimensions differ from manifest")
     catalog_path = "data/sources/Divipola-municipios.md"
     before[catalog_path] = fingerprint(config.resolve(catalog_path))
@@ -146,7 +159,12 @@ def prepare_inputs(config: PreparationConfig) -> PreparationResult:
     }
     if set(panel["municipality_code"]) != codes:
         raise PreparationError("Panel municipalities differ from scope catalog")
-    report = validate_panel(panel, contract, manifest["coverage"])
+    coverage = dict(manifest["coverage"])
+    if reference_end is not None:
+        if reference_end >= contract["temporal_policy"]["reserved_final_block_start"]:
+            raise PreparationError("Development boundary enters reserved block")
+        coverage["panel_month_end"] = min(reference_end, coverage["panel_month_end"])
+    report = validate_panel(panel, contract, coverage)
     for relative, value in before.items():
         if fingerprint(config.resolve(relative)) != value:
             raise PreparationError(f"Input changed while validating: {relative}")

@@ -24,7 +24,7 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Stage 2 chapter-1 candidate datasets | [Candidate construction record](product/stage-2/CH1-dataset-construction-candidate.md) |
 | Stage 2 canonical definitions of all 69 epidemiological fields | [Active field dictionary and priority matrix](product/stage-2/DATA-01-Priority%20Field%20Matrix.md) |
 | Retired experimental EDA and lineage reports | [Historical archive — DEPRECATED](archive/experimental-eda/README.md) |
-| Bounded training preparation scaffold | [Milestone 1 contract and workflow](product/stage-3/README.md) |
+| Bounded training preparation scaffold | [Preparation contract and milestones 1/2](product/stage-3/README.md) |
 | Data boundaries | [Data policy](data/data-policy.md) |
 | Security | [Security policy](SECURITY.md) |
 | Engineering and performance | [Engineering standards](standards/engineering-standards.md) |
