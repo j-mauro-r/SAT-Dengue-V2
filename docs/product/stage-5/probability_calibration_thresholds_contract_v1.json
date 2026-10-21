@@ -1,0 +1,360 @@
+{
+  "schema": "stage5-probability-calibration-thresholds-contract-v1",
+  "version": "1.2.0",
+  "stage4_contract_path": "docs/product/stage-4/model_engineering_contract_v1.json",
+  "candidate_families": [
+    "xgboost",
+    "lightgbm",
+    "gam"
+  ],
+  "reserved_final_block_start": "2025-01",
+  "knobs": {
+    "max_false_alarm_increase_pp": 5.0,
+    "min_onset_sensitivity_gain_pp": 10.0,
+    "seed": 42
+  },
+  "rules": {
+    "false_alarm_constraint": "false_alarm_ratio_candidate <= false_alarm_ratio_persistence + max_false_alarm_increase_pp / 100",
+    "onset_constraint": "onset_sensitivity_candidate >= onset_sensitivity_persistence + min_onset_sensitivity_gain_pp / 100",
+    "denominator_boundary": "No emitted alerts keeps false_alarm_ratio unavailable; do not coerce unavailable denominators to zero.",
+    "context_boundary": "Stage4 external windows and evaluation_context.csv remain posterior-only; never use them to fit calibrators, select thresholds, or select hyperparameters.",
+    "selection_independence_boundary": "Any prediction used for calibration/selection/threshold must come from a configuration selected without that prediction target label.",
+    "monthly_availability": "Maximum labeled target and verified dependency availability <= minimum consumer prediction origin. Equality allowed under retrospective monthly closure; no operational publication-lag claim."
+  },
+  "window_role_calendar": {
+    "2018-12_t1": {
+      "hyperparameter_selection_targets": [
+        "2017-07",
+        "2017-08",
+        "2017-09",
+        "2017-10",
+        "2017-11",
+        "2017-12"
+      ],
+      "calibration_fit_targets": [
+        "2018-02",
+        "2018-03"
+      ],
+      "calibration_selection_targets": [
+        "2018-05",
+        "2018-06"
+      ],
+      "threshold_selection_targets": [
+        "2018-08",
+        "2018-09"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2018-12",
+        "end": "2019-05"
+      },
+      "external_evaluation_target_range": {
+        "start": "2019-01",
+        "end": "2019-06"
+      },
+      "component_available_by_origin": "2018-12",
+      "hyperparameter_model_fit_cutoff": "2017-06",
+      "internal_model_fit_cutoff": "2017-12"
+    },
+    "2018-12_t2": {
+      "hyperparameter_selection_targets": [
+        "2017-07",
+        "2017-08",
+        "2017-09",
+        "2017-10",
+        "2017-11",
+        "2017-12"
+      ],
+      "calibration_fit_targets": [
+        "2018-02",
+        "2018-03"
+      ],
+      "calibration_selection_targets": [
+        "2018-05",
+        "2018-06"
+      ],
+      "threshold_selection_targets": [
+        "2018-08",
+        "2018-09"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2018-12",
+        "end": "2019-04"
+      },
+      "external_evaluation_target_range": {
+        "start": "2019-02",
+        "end": "2019-06"
+      },
+      "component_available_by_origin": "2018-12",
+      "hyperparameter_model_fit_cutoff": "2017-05",
+      "internal_model_fit_cutoff": "2017-12"
+    },
+    "2020-12_t1": {
+      "hyperparameter_selection_targets": [
+        "2019-07",
+        "2019-08",
+        "2019-09",
+        "2019-10",
+        "2019-11",
+        "2019-12"
+      ],
+      "calibration_fit_targets": [
+        "2020-02",
+        "2020-03"
+      ],
+      "calibration_selection_targets": [
+        "2020-05",
+        "2020-06"
+      ],
+      "threshold_selection_targets": [
+        "2020-08",
+        "2020-09"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2020-12",
+        "end": "2021-05"
+      },
+      "external_evaluation_target_range": {
+        "start": "2021-01",
+        "end": "2021-06"
+      },
+      "component_available_by_origin": "2020-12",
+      "hyperparameter_model_fit_cutoff": "2019-06",
+      "internal_model_fit_cutoff": "2019-12"
+    },
+    "2020-12_t2": {
+      "hyperparameter_selection_targets": [
+        "2019-07",
+        "2019-08",
+        "2019-09",
+        "2019-10",
+        "2019-11",
+        "2019-12"
+      ],
+      "calibration_fit_targets": [
+        "2020-02",
+        "2020-03"
+      ],
+      "calibration_selection_targets": [
+        "2020-05",
+        "2020-06"
+      ],
+      "threshold_selection_targets": [
+        "2020-08",
+        "2020-09"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2020-12",
+        "end": "2021-04"
+      },
+      "external_evaluation_target_range": {
+        "start": "2021-02",
+        "end": "2021-06"
+      },
+      "component_available_by_origin": "2020-12",
+      "hyperparameter_model_fit_cutoff": "2019-05",
+      "internal_model_fit_cutoff": "2019-12"
+    },
+    "2022-12_t1": {
+      "hyperparameter_selection_targets": [
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12"
+      ],
+      "calibration_fit_targets": [
+        "2022-02",
+        "2022-03"
+      ],
+      "calibration_selection_targets": [
+        "2022-05",
+        "2022-06"
+      ],
+      "threshold_selection_targets": [
+        "2022-08",
+        "2022-09"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2022-12",
+        "end": "2023-05"
+      },
+      "external_evaluation_target_range": {
+        "start": "2023-01",
+        "end": "2023-06"
+      },
+      "component_available_by_origin": "2022-12",
+      "hyperparameter_model_fit_cutoff": "2021-06",
+      "internal_model_fit_cutoff": "2021-12"
+    },
+    "2022-12_t2": {
+      "hyperparameter_selection_targets": [
+        "2021-07",
+        "2021-08",
+        "2021-09",
+        "2021-10",
+        "2021-11",
+        "2021-12"
+      ],
+      "calibration_fit_targets": [
+        "2022-02",
+        "2022-03"
+      ],
+      "calibration_selection_targets": [
+        "2022-05",
+        "2022-06"
+      ],
+      "threshold_selection_targets": [
+        "2022-08",
+        "2022-09"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2022-12",
+        "end": "2023-04"
+      },
+      "external_evaluation_target_range": {
+        "start": "2023-02",
+        "end": "2023-06"
+      },
+      "component_available_by_origin": "2022-12",
+      "hyperparameter_model_fit_cutoff": "2021-05",
+      "internal_model_fit_cutoff": "2021-12"
+    },
+    "2024-06_t1": {
+      "hyperparameter_selection_targets": [
+        "2023-01",
+        "2023-02",
+        "2023-03",
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "calibration_fit_targets": [
+        "2023-08",
+        "2023-09"
+      ],
+      "calibration_selection_targets": [
+        "2023-11",
+        "2023-12"
+      ],
+      "threshold_selection_targets": [
+        "2024-02",
+        "2024-03"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2024-06",
+        "end": "2024-11"
+      },
+      "external_evaluation_target_range": {
+        "start": "2024-07",
+        "end": "2024-12"
+      },
+      "component_available_by_origin": "2024-06",
+      "hyperparameter_model_fit_cutoff": "2022-12",
+      "internal_model_fit_cutoff": "2023-06"
+    },
+    "2024-06_t2": {
+      "hyperparameter_selection_targets": [
+        "2023-01",
+        "2023-02",
+        "2023-03",
+        "2023-04",
+        "2023-05",
+        "2023-06"
+      ],
+      "calibration_fit_targets": [
+        "2023-08",
+        "2023-09"
+      ],
+      "calibration_selection_targets": [
+        "2023-11",
+        "2023-12"
+      ],
+      "threshold_selection_targets": [
+        "2024-02",
+        "2024-03"
+      ],
+      "external_evaluation_origin_range": {
+        "start": "2024-06",
+        "end": "2024-10"
+      },
+      "external_evaluation_target_range": {
+        "start": "2024-08",
+        "end": "2024-12"
+      },
+      "component_available_by_origin": "2024-06",
+      "hyperparameter_model_fit_cutoff": "2022-11",
+      "internal_model_fit_cutoff": "2023-06"
+    }
+  },
+  "role_reuse_policy": {
+    "hyperparameter_selection_source": "Generate six early target months C-17..C-12 using each unchanged Stage4 grid configuration; model/preparer fit through C-17-h. Only these labels select configuration.",
+    "development_predictions_source": "One selected model/preparer fitted through C-12 supplies all later calibration/threshold roles, without using any of their labels. Save all internal model states and keyed predictions.",
+    "outer_model_refit_policy": "Refit selected configuration once through external cutoff C; retain earlier calibrator and threshold unchanged. Availability includes all fitted/selected dependencies. Distribution transfer to this refit is a limitation, not recalibration on external outcomes.",
+    "calibrator_refit_policy": "Fit sigmoid calibrator per candidate/window/horizon using only calibration_fit role rows when both classes exist.",
+    "threshold_refit_policy": "Select threshold per candidate/window/horizon from threshold_selection role rows; no cross-window reuse."
+  },
+  "support_requirements": {
+    "min_hyperparameter_selection_months": 5,
+    "min_calibration_fit_months": 2,
+    "min_calibration_selection_months": 2,
+    "min_threshold_selection_months": 1
+  },
+  "execution_budget": {
+    "max_outer_model_refits": 24,
+    "max_sigmoid_fits": 24,
+    "notes": "112 fixed-grid early-selection fits +24 selected internal fits +24 outer fits; at most24 sigmoid fits. No expanded grids. Entire calendar/class/population preflight before fitting.",
+    "max_hyperparameter_model_fits": 112,
+    "max_internal_model_refits": 24,
+    "max_total_model_fits": 160,
+    "max_total_fits": 184
+  },
+  "calibration_policy": {
+    "method": "sigmoid",
+    "alternatives": [
+      "original",
+      "sigmoid"
+    ],
+    "curve_bins": 10,
+    "min_bin_support": 30,
+    "min_supported_bins": 2,
+    "brier_tolerance": 1e-12,
+    "calibration_gap_tolerance": 1e-06,
+    "acceptance_rule": "Select sigmoid only if development-selection Brier improves beyond tolerance, or if Brier ties and weighted supported calibration gap improves beyond tolerance. Otherwise keep original probabilities."
+  },
+  "threshold_policy": {
+    "shared_across_municipalities": true,
+    "candidate_grid": "unique_selected_probabilities_plus_bounds",
+    "probability_precision": 12,
+    "objective": "Maximize onset_sensitivity under false_alarm constraint; ties by fewer false alerts, then lower false_alarm_ratio, then higher threshold.",
+    "no_artificial_gain": "Do not tune threshold to force minimum onset gain. Report unmet gain explicitly."
+  },
+  "artifacts": {
+    "base_dir": "artifacts/model_evaluation",
+    "notebook_receipts_dir": "artifacts/model_evaluation/notebook_execution",
+    "existing_policy": "reuse_identical",
+    "save_development_predictions": true,
+    "save_posterior_predictions": true,
+    "save_temporal_audit": true,
+    "save_selection_evidence": true,
+    "save_manifest_provenance": true
+  },
+  "supersedes": {
+    "stage5_bundle_ids": [
+      "17b1d99f371b5aa6eb08ee45c8ce493fd599874f751981df0d1cfc117957eb98",
+      "2367c0d165de3cdb6123dae2d03e04d2fd303ec18045524579da13f7dde2b8ff",
+      "2bc97c66f0eccbaebc63c255b606dfe9956ac139df42584720131d812137d988",
+      "8d14b2bedfff75e293cd43da6dd5cbf4f7706089ace06a3ead472ad911d9ba95",
+      "acde04fffb283f1a48d68be57be3ec5b993bfdc76a19f8597df12e1dc66273d3",
+      "c1e1ea31ac2bb36390d027551b659dee0dc06fc0f5b6b6adf83f87156b1c64eb",
+      "ea5c2d8ce2128ed936f18b0119e9fb304dfdb0da518f467a2b0d17fe8640a605"
+    ],
+    "note": "Prior bundles including PLAN026 are historical and superseded: origin-origin checks did not establish label availability. Original bundles and plan records remain untouched."
+  },
+  "determinism_limits": [
+    "Stage5 verifies Stage4 identities and generates bounded earlier internal evidence from unchanged grids; historical late folds cannot establish this calibration calendar.",
+    "Corrected Stage5 refits one outer model per candidate/window/horizon using fixed family grid and seed.",
+    "Sigmoid calibration and threshold optimization are deterministic under fixed seed and stable dependencies.",
+    "Notebook execution receipts depend on kernel package versions."
+  ]
+}
