@@ -1,0 +1,29 @@
+{
+  "schema": "stage5-model-assessment-v1",
+  "status": "development_rules_active_final_protocol_proposed_pending_human_acceptance",
+  "approved_input_bundle": "7a4f36dc93ed1aba69ac00c6f086bf822f46bb2bfb640cd91dfde0ea4eebb257",
+  "knobs": {"max_false_alarm_increase_pp": 5.0, "min_onset_sensitivity_gain_pp": 10.0, "seed": 42},
+  "metrics": ["average_precision", "brier", "onset_sensitivity", "false_alarm_ratio"],
+  "development": {
+    "cutoffs": ["2018-12", "2020-12", "2022-12", "2024-06"],
+    "aggregation": "equal_weight_four_windows_separately_by_horizon; incomplete_metric_means_unavailable",
+    "reference": "persistence_on_identical_keys; deterministic_Brier_not_applicable",
+    "uncertainty": "paired_whole_window_bootstrap_all_256_ordered_draws; 2.5/97.5_percentiles_descriptive_only; four_clusters_do_not_establish_calibrated_confidence",
+    "territorial_policy": "support_and_non_evaluable_only; no_local_threshold_or_model_selection"
+  },
+  "proposed_final": {
+    "selection": "highest_equal_window_AP_among_candidates_meeting_DEC125_point_utility; exact_AP_ties_unresolved_require_human_choice; none_if_no_eligible_candidate",
+    "calibration_and_threshold": "retain_verified_internal_decisions_from_2024-06_window_of_selected_family; no_new_selection_or_refit",
+    "outer_training_target_end": {"1": "2024-12", "2": "2024-11"},
+    "outer_training_target_start": "2012-01",
+    "update_policy": "one_outer_model_and_train_only_preparer_per_horizon; fixed_throughout_reserved_period; zero_reserved_label_updates",
+    "target_start": "2025-01",
+    "target_end": "2025-12",
+    "cohort": "same_76_municipalities_all_12_target_months_per_horizon; origin=target-horizon; unknown_or_missing_rows_explicit; no_silent_drops; incomplete_evidence_cannot_pass",
+    "uncertainty": {"method": "paired_circular_moving_temporal_blocks_of_whole_municipality_panel", "block_months": 3, "resamples": 2000, "seed": 42, "percentiles": [2.5, 97.5], "event_context": "retain_original_S_and_S_minus_1_states; never_rebuild_onsets_at_resampled_joins", "limitation": "single_year_and_few_seasons; dependence_beyond_three_months_may_remain"},
+    "acceptance": "point_utility_failure=does_not_meet; incomplete_or_missing_required_evidence=insufficient; point_pass_with_lower_onset_gain_bound>=0.10_and_upper_FAR_increase_bound<=0.05=meets_research_criteria; otherwise_insufficient",
+    "authority": "explicit_human_G4_and_exact_freeze_proposal_acceptance_before_reserved_access; G5_not_automatic"
+  },
+  "operational_limitation": "retrospective_consolidated_data; historical_operational_availability_not_demonstrated",
+  "artifacts": "artifacts/model_assessment/<content_identity>; immutable_reuse_identical; verification_never_fits_or_repairs"
+}

@@ -1,4 +1,4 @@
-# Stage 5 — probability calibration and temporal thresholds (delivery 1)
+# Stage 5 — calibration, development assessment and final protocol
 
 Delivery 1 implements bounded Stage 5 development work over verified Stage 4 artifacts.
 It does not reopen EDA, change labels/features/population, select a champion, or use
@@ -120,3 +120,98 @@ Distinct configurations must create distinct bundle IDs and never overwrite prio
 - No champion selection.
 - No G4/G5 approval claim.
 - No merge authorization.
+
+## Delivery 2 — development assessment and pending final protocol
+
+The separate [assessment contract](model_evaluation_contract_v1.json) and
+[notebook08](../../../notebooks/08_model_evaluation.ipynb) consume the corrected
+PLAN_027 input without changing its code identity or refitting components.
+Implementation lives in [model_assessment](../../../scripts/model_assessment).
+AP ranking, DEC-125 point utility and uncertainty remain separate. All four
+windows have equal weight within each horizon. Missing metrics invalidate their
+aggregate; persistence has no probabilistic Brier score. Period, department and
+municipality tables retain counts and non-evaluable groups without local tuning.
+
+The development sensitivity analysis enumerates all 256 ordered whole-window
+bootstrap draws. It preserves the full municipal panel in each window. Four
+clusters cannot establish a calibrated confidence interval or remove dependence
+across seasons; its percentile ranges are descriptive.
+
+The final protocol is a **proposal requiring explicit human acceptance**:
+choose the highest-AP candidate meeting point utility per horizon, retain its
+verified 2024-06 internal configuration/calibration/threshold decisions, and refit
+only the outer model/preparer through December2024 for T+1 or November2024 for
+T+2. This preserves November2024 → January2025 rather than using later labels.
+Retained calibration transfer remains a limitation. There are no reserved-label
+updates. The proposed final cohort is all 76 municipalities for targets
+January–December2025, with missing evidence explicit. The contract specifies
+paired temporal-block uncertainty and a conservative three-way research
+conclusion; these scientific choices are not yet accepted.
+
+Before acceptance, the executable stops at a complete development comparison
+and immutable `freeze_proposal.json`. It has no reserved-execution switch and
+produces no final results or fitted final components. G4 remains open; G5 is not
+approved. A subsequent authorized task must implement and audit the accepted
+final procedure, including actual row-derived availability, before claiming final
+completion. Proposed dates are not evidence that final models have been fitted.
+
+Run from the repository root:
+
+```bash
+.venv/bin/python -m scripts.model_assessment.execution --execute
+.venv/bin/python -m scripts.model_assessment.execution --verify
+```
+
+Execution uses a fresh kernel, then verifies saved outputs against recomputed
+artifacts. Verification uses native input inference, never fallback training.
+Identical valid artifacts are reused; absent/corrupt artifacts fail verification.
+New source, input, contract or notebook code creates a distinct immutable identity.
+Local artifacts remain under `artifacts/model_assessment/` and execution receipts
+under `artifacts/model_assessment_notebook_executions/`; they are not Git deliverables.
+
+Validation for this surface (in addition to the repository foundation checks):
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_model_assessment.py -q
+.venv/bin/ruff check scripts/model_assessment tests/unit/test_model_assessment.py
+.venv/bin/ruff format --check scripts/model_assessment tests/unit/test_model_assessment.py
+.venv/bin/mypy --explicit-package-bases scripts/model_assessment tests/unit/test_model_assessment.py
+```
+
+The critical regressions cover early T+2 availability, reserved-target rejection
+and the approved onset/false-alert denominators and utility knobs. PLAN_028 owns
+execution evidence and independent review. Historical DWP conformance incidents
+remain separately recorded; they are not repaired by rewriting previous plans.
+
+### Corrected development comparison
+
+These are equal-weight means of all four windows, separately by horizon; they
+are not pooled ratios. Candidate coverage is 1,824 T+1 and 1,520 T+2 examples,
+with 76 municipalities at each cutoff. Source: corrected Stage5 bundle
+`7a4f36dc93ed1aba69ac00c6f086bf822f46bb2bfb640cd91dfde0ea4eebb257`.
+
+| Horizon | Procedure | AP | Brier | Onset sensitivity | False/emitted alerts | DEC-125 point utility |
+|---|---|---:|---:|---:|---:|---|
+| T+1 | XGBoost | 0.7281 | 0.1500 | 17.08% | 36.43% | Meets |
+| T+1 | LightGBM | 0.7244 | 0.1491 | 29.19% | 39.46% | Does not meet FAR constraint |
+| T+1 | GAM | 0.7144 | 0.1579 | 17.47% | 37.06% | Meets |
+| T+1 | Persistence | 0.5813 | N/A | 0.00% | 32.45% | Reference |
+| T+2 | LightGBM | 0.6642 | 0.1927 | 40.64% | 41.05% | Meets |
+| T+2 | XGBoost | 0.6578 | 0.1935 | 35.12% | 40.26% | Meets |
+| T+2 | GAM | 0.6570 | 0.2013 | 43.17% | 40.33% | Meets |
+| T+2 | Persistence | 0.5463 | N/A | 20.52% | 36.36% | Reference |
+
+All six candidate point decisions have complete global window metrics. Territorial
+and period metrics can be non-evaluable; their individual support is retained.
+`window_metrics.csv` records every numerator/denominator, and `comparison.csv`
+keeps count totals distinct from mean rates. For example, the proposed XGBoost
+T+1 has 44 detected / 219 known onsets and 231 false / 820 emitted alerts across
+all windows; LightGBM T+2 has 87 / 179 and 253 / 782 respectively. Those pooled
+counts must not be substituted for the approved equal-window rates above.
+
+The descriptive interval for XGBoost T+1 onset gain spans roughly 2.11–32.05pp,
+and FAR increase −0.66–6.91pp. For LightGBM T+2 the corresponding ranges are
+5.00–35.25pp and 2.14–6.83pp. Both cross required utility boundaries. Point utility
+and descriptive AP therefore support a proposal to evaluate, not established
+scientific acceptance. Final research conclusions remain unavailable until the
+separately authorized frozen evaluation is executed.

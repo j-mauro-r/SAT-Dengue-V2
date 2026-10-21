@@ -21,7 +21,8 @@ Implementation and human gate approval are separate. Current bounded work is on 
 | Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 OPEN: no explicit Data & Target Freeze recorded. Retired notebooks 01/02 are historical; notebook 03 is the current pipeline. |
 | Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 OPEN: PLAN_018 technical closure and tests are evidence, not human gate approval. |
 | Stage 4 model engineering / G4 | References corrected in PLAN_021; XGBoost in PLAN_022; three families and two controlled XGBoost ablations executed in PLAN_023 / draft PR #15 | G4 OPEN pending human scientific acceptance. Technical candidate/common-protocol evidence is available; calibration, operational thresholds and reserved evaluation belong to Stage5. |
-| Stages 5–10 / G5–G10 | NOT STARTED | Model comparison, champion, final product contracts, API/dashboard and deployment remain future work. |
+| Stage 5 / G5 | Corrected development calibration/threshold pipeline implemented and audited in PLAN_027; delivery2 comparison and final-protocol proposal in progress under PLAN_028 | G4 remains OPEN; final protocol and reserved access require explicit human acceptance. G5 not approved. |
+| Stages 6–10 / G6–G10 | NOT STARTED | Final product contracts, API/dashboard and deployment remain future work. |
 
 Mauricio authorized the bounded preparation implementation before a formal G2 freeze was recorded. Record that actual progression without inventing a past approval. Stage dependencies below remain the acceptance order; branch names, plan completion and passing tests do not themselves close gates.
 

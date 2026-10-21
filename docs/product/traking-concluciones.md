@@ -1,4 +1,4 @@
-# Current scientific decision status — 2026-10-20
+# Current scientific decision status — 2026-10-21
 
 This is the active scientific decision register. The current summary below and the latest explicit decisions govern; dated snapshots and preserved source records that follow are historical, including superseded "pending" statements. [The master plan](../roadmap/master-plan.md) alone owns stage progress. This reconciliation records implemented facts without changing scientific rules or granting a freeze.
 
@@ -12,10 +12,10 @@ This is the active scientific decision register. The current summary below and t
 | Field definitions | [The canonical 69-field matrix](stage-2/DATA-01-Priority%20Field%20Matrix.md) is ACTIVE following Mauricio's restoration. Six insufficient operational definitions remain explicit; this does not mean 59 fields are undefined or that all 69 are model inputs. The archive copy is a pointer. |
 | Current outputs and analysis | Notebook 03 supplies the individual consolidated CSV, monthly climate panel, Y/current channel and bounded EDA. Only the older experimental notebooks 01/02 and their reports are retired. Candidate status does not negate their completed implementation or approve predictive utility. |
 | January 2020 | Incorporated for the reviewed 76 municipalities: 2,356 municipality-days, nine climate variables. Historical claims of that scoped gap are superseded; no national completeness claim. |
-| Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; no model has been trained. |
+| Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; subsequent Stage 4/5 training evidence is recorded separately. |
 | Evaluation support | Preparation uses target eligibility 2012-01..2024-12, excludes reserved targets from 2025-01 and requires validation origins >= fit cutoff. Later validation origins represent successive predictions. These are implemented controls, not evidence of real-time data availability. |
 | Remaining evidence | Historical as-of availability is unproven. The earlier 5/7/9-year sensitivity has no completed evidence recorded here; its freeze disposition needs an explicit human decision. Provenance reconstruction limits remain in the dated records below. Do not invent completion or restart retired EDA by default. |
-| Gate decisions | No explicit G2/G3 approval is recorded. Technical completion and human scientific acceptance remain separate; the master plan owns the next bounded handoff. |
+| Gate decisions | No explicit G2/G3 approval is recorded; G4 remains open and G5 is not approved. Technical completion and human scientific acceptance remain separate; the master plan owns the next bounded handoff. |
 
 ---
 
@@ -1615,7 +1615,7 @@ La evaluación retrospectiva de inicio en **T+2** requiere el estado observado d
 
 ## Stage 5 research protocol — approved for implementation, 2026-10-20
 
-**Authority and execution state:** Mauricio explicitly requested creation of the Stage 5 branch and registration of the preceding proposed decisions in this conversation on 2026-10-20. DEC-124–129 record that research protocol; they are not earlier assistant suggestions treated as approval by silence. Implementation and validation remain NOT_EXECUTED for this protocol. The working branch is `Stage5/Model-Evaluation`, created from the clean `Stage4/Model-Engineering` HEAD `c8daf08f613340e86170f0fbbbbb6ce60a20c4b4`. This registration does not approve G2/G3/G4/G5, select a champion, publish an operational threshold, authorize deployment, or merge a PR.
+**Authority and execution state:** Mauricio explicitly requested creation of the Stage 5 branch and registration of the preceding proposed decisions in this conversation on 2026-10-20. DEC-124–129 record that research protocol; they are not earlier assistant suggestions treated as approval by silence. At registration, implementation and validation were NOT_EXECUTED. Current implementation evidence: PLAN_027 completed the corrected development pipeline at commit 85a315c; PLAN_028 is preparing comparison and a concrete final-protocol proposal. Reserved evaluation remains NOT_EXECUTED and requires the separate DEC-129 human gate. The working branch is `Stage5/Model-Evaluation`, created from the clean `Stage4/Model-Engineering` HEAD `c8daf08f613340e86170f0fbbbbb6ce60a20c4b4`. This registration does not approve G2/G3/G4/G5, select a champion, publish an operational threshold, authorize deployment, or merge a PR.
 
 <a id="dec-124"></a>
 ### DEC-124 Freeze Stage 5 research scope and alert meaning
@@ -1683,3 +1683,16 @@ The sources below support the evaluation design and contextual limitations. None
 | [Van Calster et al. (2019), probability calibration](https://link.springer.com/article/10.1186/s12916-019-1466-7) | Reliability assessment, adequate sample support and limitations of apparent discrimination; clinical-model guidance is methodological evidence, not a dengue alert threshold. |
 | [scikit-learn 1.7 calibration documentation](https://scikit-learn.org/1.7/modules/calibration.html) | Disjoint calibration fitting, sigmoid/isotonic trade-offs, and distinction between Brier and calibration alone. |
 | [Campbell et al. (2026), operational D-MOSS evaluation](https://journals.plos.org/globalpublichealth/article?id=10.1371/journal.pgph.0005867) | Alert thresholds trade off missed episodes and false alarms by action/territory; Vietnamese operational results do not certify V2 or retrospective as-of availability. |
+
+
+### Delivery2 implementation proposal — 2026-10-21 (not an accepted decision)
+
+The [assessment contract](stage-5/model_evaluation_contract_v1.json) records a
+concrete proposal under PLAN_028. It preserves DEC-123–129 and the 5pp/10pp/42
+knobs. Highest AP among point-utility-qualified candidates is a proposed family
+choice, not an already-approved champion. The proposed final calendar retains
+2024-06 internal decisions, with outer training through 2024-12 for T+1 and
+2024-11 for T+2. Final targets January–December2025, temporal-block uncertainty,
+acceptance rules and calibration transfer require explicit human acceptance tied
+to the immutable proposal identity. No reserved results have informed this design.
+G4/G5 are not approved by implementation or by this registration.
