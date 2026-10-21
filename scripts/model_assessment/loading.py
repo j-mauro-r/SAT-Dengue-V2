@@ -2,40 +2,46 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 
+from scripts.evaluation_metrics import evaluate_comparison_metrics
 from scripts.model_evaluation.contract import ModelEvaluationConfig
 from scripts.model_evaluation.pipeline import build_model_evaluation
 from scripts.model_training.contract import ModelTrainingConfig
 from scripts.model_training.events import load_event_context
 from scripts.model_training.loading import load_temporal_source, load_window_dataset
-from scripts.model_training.metrics import evaluate_metrics
 from scripts.model_training.references import persistence_reference
 
+from .input_validation import verify_equivalent_input
 from .policy import require_development
 
-APPROVED_BUNDLE = "7a4f36dc93ed1aba69ac00c6f086bf822f46bb2bfb640cd91dfde0ea4eebb257"
 
-
-def load_comparison(root: Path) -> tuple[Path, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def load_comparison(
+    root: Path,
+) -> tuple[Path, pd.DataFrame, pd.DataFrame, pd.DataFrame, dict[str, Any]]:
     """Verify native inference and rebuild development metrics from identical keys.
 
     Args:
         root: Repository root containing local trusted input artifacts.
 
     Returns:
-        Verified input, global metrics, territorial/period metrics and linked predictions.
+        Verified input, metrics, linked predictions and audited-equivalence receipt.
 
     Raises:
         ValueError: For substituted inputs, cohorts or disagreement with saved metrics.
     """
     result = build_model_evaluation(ModelEvaluationConfig(root), verify_only=True)
     bundle = result.bundle
-    if bundle.name != APPROVED_BUNDLE:
-        raise ValueError("Expected the corrected audited Stage 5 input")
+    contract = json.loads(
+        (root / "docs/product/stage-5/model_evaluation_contract_v1.json").read_text()
+    )
+    approved = root / "artifacts/model_evaluation" / contract["approved_input_bundle"]
+    input_receipt = verify_equivalent_input(bundle, approved)
     frame = pd.read_csv(bundle / "posterior_predictions.csv", dtype={"municipality_code": "string"})
     require_development(frame.target_period)
     saved = pd.read_csv(bundle / "posterior_metrics.csv")
@@ -99,7 +105,7 @@ def load_comparison(root: Path) -> tuple[Path, pd.DataFrame, pd.DataFrame, pd.Da
                     (scope, str(code), members.index) for code, members in codes.groupby(codes)
                 )
             for scope, group_id, positions in groups:
-                computed = evaluate_metrics(
+                computed = evaluate_comparison_metrics(
                     candidate,
                     y.loc[positions],
                     prediction.loc[positions],
@@ -121,7 +127,7 @@ def load_comparison(root: Path) -> tuple[Path, pd.DataFrame, pd.DataFrame, pd.Da
                     records.append(record)
     metrics = pd.DataFrame(records)
     overall = metrics[metrics.scope.eq("overall")].reset_index(drop=True)
-    for row in overall.itertuples():
+    for row in overall[overall.metric.ne("auroc")].itertuples():
         matches = saved[
             saved.candidate.eq(row.candidate)
             & saved.window_id.eq(row.window_id)
@@ -141,4 +147,5 @@ def load_comparison(root: Path) -> tuple[Path, pd.DataFrame, pd.DataFrame, pd.Da
         overall,
         metrics[~metrics.scope.eq("overall")].reset_index(drop=True),
         pd.concat(linked, ignore_index=True),
+        input_receipt,
     )

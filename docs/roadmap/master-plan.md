@@ -10,9 +10,9 @@ This document is the single durable master plan for the project. It defines all 
 - Use DWP only when a concrete HU/task warrants an execution plan because of complexity, risk, dependencies, or work across sessions. Select the appropriate plan format for that bounded objective.
 - Record stage progress and gate evidence here; record HU/task acceptance and validation in its issue/PR. No separate DWP master-plan ID is a prerequisite for G0.
 
-## Current Status — 2026-10-20
+## Current Status — 2026-10-21
 
-Implementation and human gate approval are separate. Current bounded work is on `Stage4/Model-Engineering`, PR #15, following preparation implementation `2e1c919`. Stage 4 delivery 1 references were delivered at `57323fc`; PLAN_021 corrects their previously accredited AP and event evaluation. Implementation progress is not a scientific freeze or gate approval.
+Implementation and human gate approval are separate. Current bounded work is on `Stage5/Model-Evaluation`. Mauricio accepted G4 and exact freeze proposal `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`; PLAN_028 then executed the authorized frozen 2025 evaluation without retuning. Stage 5 technical work is closed with an unsatisfactory scientific result. The recommendation is G5 `NOT_APPROVED`, pending Mauricio's explicit human disposition.
 
 | Stage / gate | Implementation state | Gate / evidence state |
 |---|---|---|
@@ -20,9 +20,10 @@ Implementation and human gate approval are separate. Current bounded work is on 
 | Stage 1 product definition / G1 | Delivered in PR #7 | CLOSED by Mauricio's explicit confirmation; final runtime schemas remain unfrozen. |
 | Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 OPEN: no explicit Data & Target Freeze recorded. Retired notebooks 01/02 are historical; notebook 03 is the current pipeline. |
 | Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 OPEN: PLAN_018 technical closure and tests are evidence, not human gate approval. |
-| Stage 4 model engineering / G4 | References corrected in PLAN_021; XGBoost in PLAN_022; three families and two controlled XGBoost ablations executed in PLAN_023 / draft PR #15 | G4 OPEN pending human scientific acceptance. Technical candidate/common-protocol evidence is available; calibration, operational thresholds and reserved evaluation belong to Stage5. |
-| Stage 5 / G5 | Corrected development calibration/threshold pipeline implemented and audited in PLAN_027; delivery2 comparison and final-protocol proposal in progress under PLAN_028 | G4 remains OPEN; final protocol and reserved access require explicit human acceptance. G5 not approved. |
-| Stages 6–10 / G6–G10 | NOT STARTED | Final product contracts, API/dashboard and deployment remain future work. |
+| Stage 4 model engineering / G4 | References corrected in PLAN_021; XGBoost in PLAN_022; three families and two controlled XGBoost ablations executed in PLAN_023 / draft PR #15 | G4 ACCEPTED by Mauricio for the exact PLAN_028 proposal/protocol on 2026-10-21. This does not approve a champion or G5. |
+| Stage 5 / G5 | PLAN_027 corrected development calibration/threshold availability; PLAN_028 executed and reproduced six frozen final model/preparer procedures over the complete 2025 block. All six candidate/horizon procedures are `does_not_meet`; Stage 5 technical work is closed with an unsatisfactory scientific result. | Scientific recommendation: G5 `NOT_APPROVED`; champion `not_selected`. Mauricio's explicit G5 disposition remains pending. The 2025 block is consumed for this comparison. |
+| Stage 6 / G6 | Model integration is BLOCKED pending a future G5 approval. Draft product and inference contracts may be prepared only when marked pending G5. | G6 OPEN; no champion may be connected to API or dashboard. |
+| Stages 7–10 / G7–G10 | NOT STARTED | API/dashboard model integration, deployment and later gates remain future work. |
 
 Mauricio authorized the bounded preparation implementation before a formal G2 freeze was recorded. Record that actual progression without inventing a past approval. Stage dependencies below remain the acceptance order; branch names, plan completion and passing tests do not themselves close gates.
 
@@ -42,12 +43,21 @@ The five-value channel rule is **five historical observations of the same calend
 
 January 2020 climate has been recovered/incorporated for the 76 reviewed municipalities (2,356 municipality-days). Monthly aggregation, numerical percentiles, evaluability, current zones and temporal selection are implemented; they are no longer blank implementation tasks. Source lineage and retrospective-availability limits remain explicit in their evidence owners.
 
-### Next bounded work — close the handoff, then model
+### Next bounded work
 
 1. Present the existing data/target and preparation evidence for an explicit G2/G3 disposition. Do not equate this documentation update with approval or restart completed EDA. The previously planned 5/7/9-year target sensitivity has no completed evidence here; Mauricio must decide its disposition for the freeze rather than an agent silently deleting it or declaring it completed.
-2. Use the corrected reference evaluation, approved selection policy and PLAN_022 XGBoost evidence for the next separately scoped candidate delivery; LightGBM/GAM and scientific gate dispositions remain pending. Reuse notebook 04 modules, saved preparation state and keyed X/Y; select the representation required by each estimator.
-3. Keep objectives from 2025-01 reserved. Compare candidates using the same development windows; evaluate calibration, false alarms and outbreak onsets as specified by the product/scientific decisions. No final-block tuning.
-4. Update this status table when a bounded milestone or human gate decision changes. Put scientific decisions in the register, executable schemas in contracts and command details in the testing guide; do not copy their inventories here.
+2. Present the PLAN_028 scientific recommendation for Mauricio's explicit G5
+   disposition. Do not infer approval from technical closure and do not connect a
+   model to Stage 6 while G5 remains `NOT_APPROVED`.
+3. If further scientific work is authorized, create a separate bounded plan and
+   protocol for the single recommended experiment: conservative shared-threshold
+   selection with nested rolling temporal development. Keep all three model families
+   as historical evidence, do not optimize on consumed 2025 results, and require a
+   later independent period or predeclared nested outer validation.
+4. Stage 6 may draft product/input/output/inference contracts labelled pending G5.
+   Update this status table only when a bounded milestone or explicit human gate
+   decision changes; put scientific decisions in the register and commands in the
+   testing guide.
 
 Historical experiments, old PR reconciliation instructions and local plan failures are provenance, not a recurring analysis backlog. Reopen an analysis only for a concrete unresolved question that affects the next decision. No new EDA chapter is required by this documentation audit.
 

@@ -246,3 +246,129 @@ receipts. PLAN023 audits all40 fitted outer models, shared cohorts, inner
 boundaries,264-fit budget, unchanged scientific sources/prior artifacts,
 fixed-parameter ablations and all four metric records including territorial
 non-evaluability. Scientific acceptance, calibration and thresholds remain open.
+
+
+## Stage 5 calibration and temporal thresholds (delivery 1)
+
+Stage 5 delivery 1 maps `scripts/model_evaluation/**`, notebook 07,
+`tests/unit/test_model_evaluation.py`, and
+`docs/product/stage-5/probability_calibration_thresholds_contract_v1.json` to
+bounded calibration/threshold development over verified Stage 4 artifacts.
+
+Run at least:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_model_evaluation.py -q
+.venv/bin/python -m ruff check scripts/model_evaluation tests/unit/test_model_evaluation.py
+.venv/bin/python -m ruff format --check scripts/model_evaluation tests/unit/test_model_evaluation.py
+.venv/bin/python -m mypy --explicit-package-bases scripts/model_evaluation tests/unit/test_model_evaluation.py
+.venv/bin/python -m scripts.model_evaluation.execution --execute
+.venv/bin/python -m scripts.model_evaluation.execution --verify
+.venv/bin/python -m scripts.model_evaluation.notebook_execution --execute
+.venv/bin/python -m scripts.model_evaluation.notebook_execution --verify
+```
+
+Required checks for this surface:
+
+- Enforce per-window role chronology from `window_role_calendar`:
+  `hyperparameter_selection -> calibration_fit -> calibration_selection -> threshold_selection -> external evaluation`.
+- Reject selection leakage: calibration/threshold rows must come from folds disjoint
+  from the fold used for hyperparameter selection.
+- Reject late component availability: `component_available_by_origin` must be <=
+  external origin start for each window/horizon.
+- Do not use Stage 4 external `evaluation_context.csv` to fit calibrators or
+  select thresholds.
+- Keep all adjustment targets before the reserved block (`2025-01`).
+- Keep denominator-unavailable cases explicit; do not coerce them to zero.
+- Require `temporal_audit.csv` and `independent_checks.csv` with all checks passing.
+- Distinct Stage 5 knob values must produce distinct immutable identities under
+  `artifacts/model_evaluation/` without overwriting previous bundles.
+
+Critical regression tests are encoded in `tests/unit/test_model_evaluation.py`:
+
+- reject calibrator/threshold availability after external origin;
+- reject reuse of labels for configuration selection and later adjustment roles.
+
+
+## Stage5 closure delivery1: six procedures and AUROC
+
+Map `scripts/evaluation_metrics.py`, `scripts/model_assessment/**`, notebook08
+and the owning model_evaluation contract to `tests/unit/test_model_assessment.py`.
+Preserve all prior equivalence/temporal tests. Add only critical AUROC pairwise
+reference (including ties), single-class/missing/alignment, equal-window aggregation
+and six-procedure early-T+2 calendar regressions.
+
+```bash
+.venv/bin/python -m pytest tests/unit -q
+.venv/bin/ruff check tests scripts/model_assessment scripts/evaluation_metrics.py
+.venv/bin/ruff format --check tests scripts/model_assessment scripts/evaluation_metrics.py
+.venv/bin/mypy tests
+.venv/bin/mypy --explicit-package-bases scripts/model_assessment scripts/evaluation_metrics.py
+.venv/bin/python scripts/check_markdown_links.py
+.venv/bin/python -m scripts.model_assessment.execution --execute
+.venv/bin/python -m scripts.model_assessment.execution --verify
+```
+
+Execute notebook08 from a fresh kernel and verify its saved receipt. Independently
+check AUROC, unchanged original metric records and all six exact retained component
+lineages. Guard real verify/reuse against fitting and silent repair; compare all
+historical artifact hashes. Keep live input verification plus exact scientific
+equivalence, not a single-current-ID restriction or a relaxed science check. Do not
+execute earlier training pipelines: their code/contracts and fitted outputs are
+inputs to this delivery. No2025 label/result/statistic access or new training.
+DWP acceptance is bounded to the revised development delivery; G4/G5 and future
+reserved execution remain separately authorized.
+
+## Stage5 closure delivery2: gated final evaluation
+
+Map `scripts/final_evaluation/**`, migrated notebook08 and its owning Stage5README
+to `tests/unit/test_final_evaluation.py`. Preserve frozen assessment/metric code,
+contract and every historical bundle. The preceding assessment CLI applies to its
+historical notebook revision; current notebook08 uses the final-route CLI.
+
+```bash
+.venv/bin/python -m pytest tests/unit -q
+.venv/bin/ruff check tests scripts/final_evaluation
+.venv/bin/ruff format --check tests scripts/final_evaluation
+.venv/bin/mypy tests
+.venv/bin/mypy --explicit-package-bases scripts/final_evaluation
+.venv/bin/python scripts/check_markdown_links.py
+.venv/bin/python -m scripts.final_evaluation.execution --execute
+.venv/bin/python -m scripts.final_evaluation.execution --verify
+```
+
+The default notebook mode checks development-only readiness. Add `--scientific`
+only after explicit human authorization; its presence never supplies authorization.
+Critical synthetic regressions exercise T2 November→January availability, both
+complete cohorts before any fit, predictor controls/future invariance, original
+S/S−1 monthly-block accounting, unavailable acceptance and native six-adapter
+round-trip/reuse with fitting blocked. Verify current development dependencies
+through their existing native verify-only path with fit/selection entrypoints
+blocked; do not retrain or inspect2025 to prepare approval. Check all historical
+hashes and separate the new notebook migration identity from the fixed proposal.
+Independent review must examine actual source and execution evidence. Actual final
+coverage/results require separate scientific authorization. After Mauricio's exact
+authorization, the observed gate is:
+
+```bash
+bash .dwp/plans/PLAN_028_stage5_comparison_reserved_evaluation/reserved_checks.sh
+```
+
+It verifies the current immutable final bundle, six saved inference round trips,
+complete 2025 cohorts, fit accounting, metric denominators, common temporal-block
+draws, protected inputs, full unit suite and scoped DWP conformance. It performs
+zero new model or preparer fits. G5 remains outside this gate.
+
+## Stage5 final scientific review and technical closure
+
+The final review reuses the immutable scientific bundle and runs verification only.
+It checks the final interpretation, decision boundary, documentation, security and
+review evidence, then repeats the repository controls for the touched surfaces.
+
+```bash
+bash .dwp/plans/PLAN_028_stage5_comparison_reserved_evaluation/final_checks.sh
+```
+
+The command must not call fit, search, calibration or threshold-selection entry
+points. It does not approve G5 or select a champion. Global DWP incidents in older
+plans remain visible separately; PLAN_028 acceptance uses scoped conformance.

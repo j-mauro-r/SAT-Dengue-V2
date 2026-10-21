@@ -15,7 +15,7 @@ This is the active scientific decision register. The current summary below and t
 | Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; subsequent Stage 4/5 training evidence is recorded separately. |
 | Evaluation support | Preparation uses target eligibility 2012-01..2024-12, excludes reserved targets from 2025-01 and requires validation origins >= fit cutoff. Later validation origins represent successive predictions. These are implemented controls, not evidence of real-time data availability. |
 | Remaining evidence | Historical as-of availability is unproven. The earlier 5/7/9-year sensitivity has no completed evidence recorded here; its freeze disposition needs an explicit human decision. Provenance reconstruction limits remain in the dated records below. Do not invent completion or restart retired EDA by default. |
-| Gate decisions | No explicit G2/G3 approval is recorded; G4 remains open and G5 is not approved. Technical completion and human scientific acceptance remain separate; the master plan owns the next bounded handoff. |
+| Gate decisions | No explicit G2/G3 approval is recorded. Mauricio accepted G4 and exact proposal/protocol `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09` on 2026-10-21 and authorized the frozen 2025 evaluation (DEC-132). The scientific recommendation is G5 `NOT_APPROVED`; no champion is selected, and the final human G5 disposition remains Mauricio's decision (DEC-133). |
 
 ---
 
@@ -235,6 +235,10 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 | [DEC-127](#dec-127) | Select alert thresholds within temporal development | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
 | [DEC-128](#dec-128) | Compare candidates with existing metrics and support | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
 | [DEC-129](#dec-129) | Freeze the selected protocol before reserved evaluation | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-130](#dec-130) | Compare all six procedures and add complementary development AUROC | ACCEPTED_IMPLEMENTATION_SCOPE | No aplica |
+| [DEC-131](#dec-131) | Implement the frozen final route before scientific authorization | ACCEPTED_IMPLEMENTATION_SCOPE | No aplica |
+| [DEC-132](#dec-132) | Accept G4 and execute the exact frozen 2025 protocol | ACCEPTED_AND_EXECUTED | No aplica |
+| [DEC-133](#dec-133) | Recommend G5 NOT_APPROVED after the frozen 2025 evaluation | PROPOSED_FOR_HUMAN_G5_DECISION | No aplica |
 
 ## Registros detallados
 
@@ -1615,7 +1619,7 @@ La evaluación retrospectiva de inicio en **T+2** requiere el estado observado d
 
 ## Stage 5 research protocol — approved for implementation, 2026-10-20
 
-**Authority and execution state:** Mauricio explicitly requested creation of the Stage 5 branch and registration of the preceding proposed decisions in this conversation on 2026-10-20. DEC-124–129 record that research protocol; they are not earlier assistant suggestions treated as approval by silence. At registration, implementation and validation were NOT_EXECUTED. Current implementation evidence: PLAN_027 completed the corrected development pipeline at commit 85a315c; PLAN_028 is preparing comparison and a concrete final-protocol proposal. Reserved evaluation remains NOT_EXECUTED and requires the separate DEC-129 human gate. The working branch is `Stage5/Model-Evaluation`, created from the clean `Stage4/Model-Engineering` HEAD `c8daf08f613340e86170f0fbbbbb6ce60a20c4b4`. This registration does not approve G2/G3/G4/G5, select a champion, publish an operational threshold, authorize deployment, or merge a PR.
+**Authority and execution state:** Mauricio explicitly requested creation of the Stage 5 branch and registration of DEC-124–129 on 2026-10-20. Those decisions record the research protocol; they are not assistant suggestions treated as approval by silence. PLAN_027 completed the corrected development pipeline at commit 85a315c. DEC-130/131 record the later six-procedure proposal and gated implementation. On 2026-10-21, DEC-132 records Mauricio's explicit G4, exact-protocol and final-execution authorization and the resulting reserved evaluation. The working branch is `Stage5/Model-Evaluation`, created from the clean `Stage4/Model-Engineering` HEAD `c8daf08f613340e86170f0fbbbbb6ce60a20c4b4`. G2/G3/G5 remain unapproved; no champion, deployment or merge is authorized.
 
 <a id="dec-124"></a>
 ### DEC-124 Freeze Stage 5 research scope and alert meaning
@@ -1665,7 +1669,7 @@ La evaluación retrospectiva de inicio en **T+2** requiere el estado observado d
 <a id="dec-129"></a>
 ### DEC-129 Freeze the selected protocol before reserved evaluation
 
-- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; reserved evaluation NOT_EXECUTED.
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; the separately authorized execution is recorded in DEC-132.
 - **Decision:** Freeze selected candidate, preparation, calibration, alert threshold, temporal evaluation/update policy and acceptance rules before opening the final target-period block starting **2025-01**. Maintain separation by target period for both horizons, including rows originating before 2025 whose targets fall in the reserved block.
 - **Outcome:** Evaluate the frozen procedure and classify the evidence as meets criteria, does not meet criteria, or insufficient evidence. Do not adjust/reselect on the reserved outcomes or call the same block untouched again after inspecting it. Research closure may conclude that no candidate qualifies; it need not produce a champion.
 - **Human boundary:** Research utility is distinct from operational authorization. Record unresolved real-time availability limitations and any required prospective pilot. Acceptance/approval of G4/G5, deployment and merge remain human decisions, not consequences of this branch or passing tests.
@@ -1685,7 +1689,7 @@ The sources below support the evaluation design and contextual limitations. None
 | [Campbell et al. (2026), operational D-MOSS evaluation](https://journals.plos.org/globalpublichealth/article?id=10.1371/journal.pgph.0005867) | Alert thresholds trade off missed episodes and false alarms by action/territory; Vietnamese operational results do not certify V2 or retrospective as-of availability. |
 
 
-### Delivery2 implementation proposal — 2026-10-21 (not an accepted decision)
+### Historical delivery2 two-procedure proposal — 2026-10-21 (superseded by DEC-130)
 
 The [assessment contract](stage-5/model_evaluation_contract_v1.json) records a
 concrete proposal under PLAN_028. It preserves DEC-123–129 and the 5pp/10pp/42
@@ -1696,3 +1700,122 @@ choice, not an already-approved champion. The proposed final calendar retains
 acceptance rules and calibration transfer require explicit human acceptance tied
 to the immutable proposal identity. No reserved results have informed this design.
 G4/G5 are not approved by implementation or by this registration.
+
+
+<a id="dec-130"></a>
+### DEC-130 Compare all six procedures and add complementary development AUROC
+
+- **Status:** ACCEPTED_IMPLEMENTATION_SCOPE on2026-10-21 by Mauricio's explicit
+  first-of-three Stage5 closure prompt. This is not G4/G5 or reserved-access approval.
+- **Decision:** Include XGBoost, LightGBM and GAM at both T+1/T+2, with persistence
+  on the same horizon cohorts. This replaces the prior proposed two-family screen;
+  development utility does not remove procedures. No winner is declared.
+- **Metrics:** Add complementary AUROC on continuous candidate scores and the
+  documented deterministic persistence score. Keep four-window equal weighting,
+  explicit single-class/missing non-evaluability and strict alignment/invalid-value
+  controls. Brier is still N/A for persistence. Do not add F1, change AP selection
+  or change DEC-125 utility/denominators. Existing scientific metrics remain intact.
+- **Preserved science:** Y, population, features, preparation, model families,
+  approved hyperparameters, per-family/horizon June2024 calibration/threshold
+  decisions and retrospective limitations are unchanged.
+- **Future proposal:** Six models and six train-only preparers; no new searches,
+  calibrator fits or threshold selections. T+1 training labels endDecember2024;
+  T+2 endNovember2024. Final targetsJanuary–December2025, origins target−h,
+  common76 municipalities, explicit missing evidence, no reserved-label updates.
+  None of those fits or reserved reads is authorized in this delivery.
+- **Recommendation boundary:** The [owning evaluation contract](stage-5/model_evaluation_contract_v1.json)
+  proposes complete/evaluable technical and existing utility/uncertainty eligibility,
+  then annual reserved-cohort AP separately by horizon; exact ties require human
+  choice and insufficient evidence permits no recommendation. AUROC is complementary.
+  This proposed recommendation/acceptance protocol still requires explicit human
+  acceptance before2025 access; the present instruction does not supply it.
+- **Uncertainty and consumption:** Retain the existing proposed temporal-block
+  method with common paired draws across families and marginal candidate-wise
+  intervals. No simultaneous/post-selection confidence claim or new correction.
+  Using2025 to compare and recommend consumes it for that decision; it cannot be
+  an additional independent test of the subsequently selected model.
+
+
+<a id="dec-131"></a>
+### DEC-131 Implement the frozen final route before scientific authorization
+
+- **Status:** ACCEPTED_IMPLEMENTATION_SCOPE by Mauricio's second-of-three closure
+  prompt. G4, exact protocol acceptance and reserved scientific execution remain
+  separate human decisions; no G5 or champion approval is inferred.
+- **Identity:** Retain proposal SHA256
+  `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`.
+  Preserve its scientific contract, component decisions and code; explicitly migrate
+  only notebook08 orchestration with separate original/new fingerprints.
+- **Implementation:** All six procedures, exact temporal cohorts and train-only
+  preparation, annual shared metrics, frozen common circular3-month/2000/42
+  uncertainty, immutable native inference and fail-closed reuse. Retain DEC-125 and
+  DEC-130 scientific rules without new searches, recalibration, threshold changes,
+  data/feature changes or reserved-driven tuning.
+- **Execution boundary:** Implement and validate with synthetic and development
+  evidence now. Do not load reserved values or fit final scientific components
+  until an actual human decision accepts G4, the exact protocol and execution.
+  Synthetic model fits do not consume or establish the scientific six-fit delivery.
+- **Pending:** Actual final coverage/performance, scientific execution and final
+  recommendation/Stage6 handoff remain unaccredited. Tests and implementation do
+  not satisfy those human/scientific gates.
+
+
+<a id="dec-132"></a>
+### DEC-132 Accept G4 and execute the exact frozen 2025 protocol
+
+- **Status:** ACCEPTED_AND_EXECUTED on 2026-10-21 by Mauricio's explicit decision.
+- **Authority:** Accept G4 and exact proposal SHA-256
+  `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`;
+  authorize exactly six final model fits and consultation/evaluation of the 2025
+  reserved block. Do not run new searches, calibration fits or threshold selections.
+  This authority does not approve G5 or automatically select a winner.
+- **Execution:** PLAN_028 executed six models and six train-only preparers, zero
+  hyperparameter searches, zero calibrator fits and zero threshold selections.
+  The final bundle identity is
+  `768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35`.
+  Each horizon has the complete 76-municipality × 12-target cohort (912 rows),
+  with no missing labels, predictors or onset context. T+2 training ends in
+  November 2024 and retains the November 2024 origin for January 2025.
+- **Scientific result:** All six family/horizon procedures are classified
+  `does_not_meet`. They improve onset sensitivity relative to persistence, but all
+  exceed the predeclared five-percentage-point maximum increase in false-alert
+  ratio. No rule was changed after observing the results.
+- **Boundary:** The 2025 block is consumed for this comparison and cannot be called
+  an independent post-selection test. Historical real-time availability remains
+  unproven. G5 is `NOT_APPROVED`; `champion` is `not_selected`. Final interpretation,
+  recommendation and the Stage 6 handoff belong to the third delivery.
+
+<a id="dec-133"></a>
+### DEC-133 Recommend G5 NOT_APPROVED after the frozen 2025 evaluation
+
+- **Status:** PROPOSED_FOR_HUMAN_G5_DECISION on 2026-10-21. This is a scientific
+  recommendation and technical handoff, not Mauricio's acceptance or rejection of G5.
+- **Evidence:** Proposal SHA-256
+  `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`,
+  final bundle
+  `768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35`
+  and fresh-kernel notebook receipt
+  `6eb390d18a7ce1300e7664da560694f1afd7f56511d31b3cbcf99510eb043564`.
+- **Recommendation:** Keep `G5 = NOT_APPROVED` and `champion = not_selected`.
+  Every model/horizon candidate improves AP, AUROC and onset sensitivity relative
+  to persistence, but all six exceed the frozen maximum five-percentage-point
+  increase in false-alert ratio. Do not select a family from discrimination,
+  Brier or sensitivity alone, and do not revise thresholds after seeing 2025.
+- **Technical/scientific distinction:** The final route, native model restoration,
+  complete 76-by-12 cohorts, manifest and metrics reproduce without a new fit.
+  That closes Stage 5 technical work with an unsatisfactory scientific outcome;
+  it does not demonstrate the required operational utility.
+- **Product boundary:** Stage 6 model integration remains blocked until a future
+  explicit G5 approval. Draft product/inference contracts may be prepared when
+  clearly marked pending G5; no champion may be connected to API or dashboard.
+- **Next proposed experiment:** Under a separate plan and protocol, change only
+  the alert-threshold policy. Use nested rolling temporal development to select a
+  more conservative shared threshold per family/horizon, require the false-alert
+  increase to remain within five points in each inner evaluation period, and then
+  maximize onset sensitivity among feasible thresholds. Preserve the three current
+  model families as historical evidence. Do not optimize on 2025; use a later
+  independent block or a predeclared nested outer assessment.
+- **Limits:** Consolidated retrospective data do not prove historical operational
+  availability. Calibration transfer remains uncertain. The 2025 block is consumed
+  for the completed comparison and cannot become an untouched test again. Period
+  and territory concentrations are descriptive and support no causal attribution.

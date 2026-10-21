@@ -123,11 +123,12 @@ Distinct configurations must create distinct bundle IDs and never overwrite prio
 
 ## Delivery 2 — development assessment and pending final protocol
 
-The separate [assessment contract](model_evaluation_contract_v1.json) and
+The owning [assessment contract](model_evaluation_contract_v1.json) and
 [notebook08](../../../notebooks/08_model_evaluation.ipynb) consume the corrected
 PLAN_027 input without changing its code identity or refitting components.
 Implementation lives in [model_assessment](../../../scripts/model_assessment).
-AP ranking, DEC-125 point utility and uncertainty remain separate. All four
+AP ranking, DEC-125 point utility and uncertainty remain separate. AUROC is
+complementary and never changes ranking, utility, thresholds or training. All four
 windows have equal weight within each horizon. Missing metrics invalidate their
 aggregate; persistence has no probabilistic Brier score. Period, department and
 municipality tables retain counts and non-evaluable groups without local tuning.
@@ -137,11 +138,11 @@ bootstrap draws. It preserves the full municipal panel in each window. Four
 clusters cannot establish a calibrated confidence interval or remove dependence
 across seasons; its percentile ranges are descriptive.
 
-The final protocol is a **proposal requiring explicit human acceptance**:
-choose the highest-AP candidate meeting point utility per horizon, retain its
-verified 2024-06 internal configuration/calibration/threshold decisions, and refit
-only the outer model/preparer through December2024 for T+1 or November2024 for
-T+2. This preserves November2024 → January2025 rather than using later labels.
+The current final protocol is a **six-procedure proposal requiring explicit human
+acceptance before reserved access**. Include XGBoost, LightGBM and GAM at both
+horizons, regardless of development utility qualification. Retain each verified
+2024-06 internal configuration/calibration/threshold decision and refit only its
+outer model/preparer through December2024 for T+1 or November2024 for T+2. This preserves November2024 → January2025 rather than using later labels.
 Retained calibration transfer remains a limitation. There are no reserved-label
 updates. The proposed final cohort is all 76 municipalities for targets
 January–December2025, with missing evidence explicit. The contract specifies
@@ -158,8 +159,8 @@ completion. Proposed dates are not evidence that final models have been fitted.
 Run from the repository root:
 
 ```bash
-.venv/bin/python -m scripts.model_assessment.execution --execute
-.venv/bin/python -m scripts.model_assessment.execution --verify
+.venv/bin/python -m scripts.final_evaluation.execution --execute
+.venv/bin/python -m scripts.final_evaluation.execution --verify
 ```
 
 Execution uses a fresh kernel, then verifies saved outputs against recomputed
@@ -187,24 +188,26 @@ remain separately recorded; they are not repaired by rewriting previous plans.
 
 These are equal-weight means of all four windows, separately by horizon; they
 are not pooled ratios. Candidate coverage is 1,824 T+1 and 1,520 T+2 examples,
-with 76 municipalities at each cutoff. Source: corrected Stage5 bundle
-`7a4f36dc93ed1aba69ac00c6f086bf822f46bb2bfb640cd91dfde0ea4eebb257`.
+with 76 municipalities at each cutoff. Source: current development assessment bundle
+`0f26a4eb97ad37075f3fba2d8da0afd55cf3450db945e8f9cb86d7dccac2f257`,
+using the live scientifically equivalent Stage5 input. The original audited anchor
+remains part of provenance; it is not the only permitted current input identity.
 
-| Horizon | Procedure | AP | Brier | Onset sensitivity | False/emitted alerts | DEC-125 point utility |
-|---|---|---:|---:|---:|---:|---|
-| T+1 | XGBoost | 0.7281 | 0.1500 | 17.08% | 36.43% | Meets |
-| T+1 | LightGBM | 0.7244 | 0.1491 | 29.19% | 39.46% | Does not meet FAR constraint |
-| T+1 | GAM | 0.7144 | 0.1579 | 17.47% | 37.06% | Meets |
-| T+1 | Persistence | 0.5813 | N/A | 0.00% | 32.45% | Reference |
-| T+2 | LightGBM | 0.6642 | 0.1927 | 40.64% | 41.05% | Meets |
-| T+2 | XGBoost | 0.6578 | 0.1935 | 35.12% | 40.26% | Meets |
-| T+2 | GAM | 0.6570 | 0.2013 | 43.17% | 40.33% | Meets |
-| T+2 | Persistence | 0.5463 | N/A | 20.52% | 36.36% | Reference |
+| Horizon | Procedure | AP | AUROC | Brier | Onset sensitivity | False/emitted alerts | DEC-125 point utility |
+|---|---|---:|---:|---:|---:|---:|---|
+| T+1 | XGBoost | 0.7281 | 0.7941 | 0.1500 | 17.08% | 36.43% | Meets |
+| T+1 | LightGBM | 0.7244 | 0.7966 | 0.1491 | 29.19% | 39.46% | Does not meet FAR constraint |
+| T+1 | GAM | 0.7144 | 0.7903 | 0.1579 | 17.47% | 37.06% | Meets |
+| T+1 | Persistence | 0.5813 | 0.7259 | N/A | 0.00% | 32.45% | Reference |
+| T+2 | LightGBM | 0.6642 | 0.7518 | 0.1927 | 40.64% | 41.05% | Meets |
+| T+2 | XGBoost | 0.6578 | 0.7447 | 0.1935 | 35.12% | 40.26% | Meets |
+| T+2 | GAM | 0.6570 | 0.7529 | 0.2013 | 43.17% | 40.33% | Meets |
+| T+2 | Persistence | 0.5463 | 0.6727 | N/A | 20.52% | 36.36% | Reference |
 
 All six candidate point decisions have complete global window metrics. Territorial
 and period metrics can be non-evaluable; their individual support is retained.
 `window_metrics.csv` records every numerator/denominator, and `comparison.csv`
-keeps count totals distinct from mean rates. For example, the proposed XGBoost
+keeps count totals distinct from mean rates. For example, XGBoost
 T+1 has 44 detected / 219 known onsets and 231 false / 820 emitted alerts across
 all windows; LightGBM T+2 has 87 / 179 and 253 / 782 respectively. Those pooled
 counts must not be substituted for the approved equal-window rates above.
@@ -212,6 +215,257 @@ counts must not be substituted for the approved equal-window rates above.
 The descriptive interval for XGBoost T+1 onset gain spans roughly 2.11–32.05pp,
 and FAR increase −0.66–6.91pp. For LightGBM T+2 the corresponding ranges are
 5.00–35.25pp and 2.14–6.83pp. Both cross required utility boundaries. Point utility
-and descriptive AP therefore support a proposal to evaluate, not established
-scientific acceptance. Final research conclusions remain unavailable until the
+and descriptive AP do not establish scientific acceptance; the current proposal
+includes all six combinations rather than filtering to these two. Final research conclusions remain unavailable until the
 separately authorized frozen evaluation is executed.
+
+### Reexecuting notebooks 03–08
+
+Notebook08 retains the audited Stage5 input as an anchor rather than requiring
+every upstream reexecution to retain the same bundle directory. The current
+input must first pass live Stage5 verification. Its scientific payloads, code,
+configuration, runtime and rules must then match the retained audited anchor
+exactly. Only upstream manifest references and matching summary paths may
+differ. `input_verification.json` records the actual input and anchor; a new
+assessment and proposal identity preserve this lineage. Missing anchors,
+changed scientific results and corruption stop execution without fitting.
+Historical bundles and proposals remain untouched; G4/G5 and reserved access
+remain pending and do not transfer through this compatibility check.
+
+
+## Stage5 closure delivery1 — six procedures and complementary AUROC
+
+The explicit October21 revision supersedes the former XGBoost T+1/LightGBM T+2
+proposal, not its historical evidence. All six procedures retain their own June2024
+internal decisions. The proposed future budget is six outer model fits and six
+train-only preparers, zero hyperparameter searches, zero calibrator fits and zero
+threshold selections. This delivery performs none of those fits or any reserved
+evaluation. Both G4 and final-protocol acceptance remain separate human decisions.
+
+The shared supplementary evaluator is
+[scripts/evaluation_metrics.py](../../../scripts/evaluation_metrics.py). It calls
+the existing four-metric implementation unchanged and adds sklearn binary AUROC
+on the same continuous model scores and aligned population. Persistence uses its
+documented deterministic score, not a calibrated probability; Brier remains N/A.
+Single-class, empty or missing populations are explicitly non-evaluable; invalid
+or misaligned inputs reject. AUROC positive/total support counts are not a formula
+for the area. No F1 is introduced.
+
+Development AUROC is the equal-weight mean of the four window AUROCs, never the
+area after pooling predictions. An unavailable window invalidates that mean. The
+new evaluator is included in assessment code identity; the immutable input-era
+four-metric contract and fitted-code identity remain intact. Live input verification
+plus exact audited scientific equivalence remain mandatory, including all405
+scientific payloads. This is not permission to accept an arbitrary new bundle.
+
+Before opening2025, the owning contract specifies a **proposed** recommendation
+rule per horizon: require complete common cohorts, valid availability/inference
+and the existing utility/uncertainty acceptance; compare annual reserved-cohort
+AP among qualified candidates. Do not average monthly AP or combine horizons.
+Exact AP ties remain unresolved for human choice; AUROC is not a tie-breaker.
+If none qualifies, do not force a recommendation: distinguish complete point
+failures from insufficient evidence. Numerical AP differences alone do not prove
+scientific superiority. Acceptance of this rule remains pending.
+
+The existing3-month whole-panel temporal-block uncertainty method is retained,
+with the same paired draws across all families/reference within a horizon.
+Intervals are candidate-wise and marginal: no simultaneous-family or post-selection
+coverage is asserted, and no new multiplicity correction is introduced. Comparing
+and recommending among candidates using2025 consumes that block for the decision;
+it cannot subsequently be described as an additional independent test of the
+selected procedure. Rules must be fixed before consulting outcomes.
+
+The proposal enumerates all76 municipality codes, twelve target months, exact
+component/preparer provenance and first consuming origins. Actual final components
+are explicitly not fitted. November2024 → January2025 T+2 is retained. Missing
+rows stay explicit and cannot be silently removed to obtain acceptance.
+
+Required gates and the shared-evaluator test mapping are recorded in the
+[testing guide](../../TESTING_GUIDE.md#stage5-closure-delivery1-six-procedures-and-auroc).
+
+## Closure delivery 2 — gated final route
+
+Implementation: [final_evaluation](../../../scripts/final_evaluation). The exact
+six-procedure proposal remains `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`
+in assessment bundle `0f26a4eb97ad37075f3fba2d8da0afd55cf3450db945e8f9cb86d7dccac2f257`.
+The scientific contract and original assessment modules remain byte-identical to
+that proposal. No replacement proposal is silently generated.
+
+Notebook08 has an explicit orchestration migration. Its original code is retained
+under `artifacts/model_final_protocol/<proposal_sha>/development_notebook_code.json`,
+checked against the original proposal code fingerprint. Every other frozen source
+and contract fingerprint is verified against live files. New notebook/final-route
+code fingerprints are recorded separately in readiness receipts and final identities.
+The migrated notebook displays the immutable development comparison and, only when
+requested and authorized, executes the final route. Historical assessment CLI
+receipts belong to the previous notebook orchestration; use the current commands below.
+
+Default execution performs readiness checks only, with zero reserved access or
+scientific fitting:
+
+```bash
+.venv/bin/python -m scripts.final_evaluation.execution --execute
+.venv/bin/python -m scripts.final_evaluation.execution --verify
+```
+
+After actual human acceptance of G4, this exact proposal/protocol, and final
+execution is recorded, the scientific command is:
+
+```bash
+.venv/bin/python -m scripts.final_evaluation.execution --execute --scientific
+.venv/bin/python -m scripts.final_evaluation.execution --verify --scientific
+```
+
+`--scientific` does not approve anything. The route requires a local
+`artifacts/model_final_protocol/<proposal_sha>/human_authorization.json` containing
+`authority: "Mauricio"`, the exact `proposal_sha256`, explicit true values for
+`accept_G4`, `accept_exact_protocol`, `authorize_final_execution`, and a
+`decision_source` with the repository-relative path and `{sha256, bytes}` fingerprint
+of the actual human decision text. The agent may record a decision only after the
+human actually supplies it, including the corresponding DWP authority signoff; the
+software does not manufacture approval or claim cryptographic proof of authorship.
+No such acceptance is supplied by a request to implement this route.
+
+Before the first final fit, both complete horizon cohorts and all six frozen
+configurations, preparation specifications, thresholds and calibration objects are
+checked. Training labels start January2012 and end December2024/T1 or November2024/T2.
+The unchanged deterministic preparation builds full prior history before selecting
+origins. Forecast rows remain the complete common76×12 calendar; unknown evaluation
+inputs/labels/context stay explicit and prevent acceptance. Incomplete training
+inputs or class support stop before fitting rather than imputing or dropping rows.
+S/S−1 stays in evaluation context, outside all predictor matrices.
+
+Final outputs use `artifacts/model_final_evaluation/<identity>/`: six native/numeric
+JSON models, six JSON preparers, retained-decision references, training provenance,
+full keyed predictions, annual comparison, period/department/municipality metrics,
+actual cohort preflight, original event contexts, common month-resampling indices,
+marginal utility intervals, fit accounting and a hashed manifest. Annual metrics
+use the full annual cohort, separately from development means. Uncertainty sums
+shared monthly event counts at sampled original months, preserving original onsets;
+any unavailable resample leaves bounds unavailable instead of dropping that draw.
+No champion or G5 acceptance is produced.
+
+Every saved model is restored and its probabilities reproduced before publication.
+Verification/reuse replays inference and recomputes metrics without fitting or repair.
+Missing/corrupt artifacts fail. A proposal-wide exclusive fit-attempt record prevents
+concurrent or silently repeated fitting after interruption or identity change;
+partial attempts require explicit investigation and human-authorized recovery.
+Successful current-run counters are separate from the six historical model/preparer
+fits recorded in the immutable result. Synthetic regression fits are test fixtures,
+never scientific evidence or final model packages.
+
+Mauricio accepted G4 and the exact proposal/protocol on October 21, 2026. The
+authorization is bound to the proposal hash above. The single scientific execution
+completed the declared six model fits and six train-only preparer fits, with zero
+searches, calibrator fits or threshold selections. The immutable owning contract
+remains the pre-authorization protocol snapshot; DEC-132 and the final execution
+receipt record the later human gate and observed outcome without rewriting it.
+
+The final bundle is
+`artifacts/model_final_evaluation/768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35`.
+Both horizons contain all 76 municipalities and all 12 targets in 2025: 912 rows,
+237 positive labels, 675 negative labels, no missing labels, no incomplete predictor
+rows and no unknown onset context per horizon. T+1 uses 11,856 training rows through
+December 2024; T+2 uses 11,780 through November 2024 and preserves the November 2024
+origin for January 2025.
+
+| Horizon | Procedure | AP | AUROC | Brier | Detected/real onsets | False/emitted alerts | Result |
+|---|---|---:|---:|---:|---:|---:|---|
+| T+1 | Persistence | 0.4746 | 0.7430 | N/A | 0/86 | 102/253 | Reference |
+| T+1 | XGBoost | 0.6757 | 0.8189 | 0.1433 | 22/86 | 177/350 | Does not meet |
+| T+1 | LightGBM | 0.6689 | 0.8192 | 0.1431 | 34/86 | 218/403 | Does not meet |
+| T+1 | GAM | 0.6448 | 0.8093 | 0.1477 | 20/86 | 151/321 | Does not meet |
+| T+2 | Persistence | 0.4299 | 0.7166 | N/A | 30/86 | 132/281 | Reference |
+| T+2 | XGBoost | 0.5611 | 0.7638 | 0.1672 | 48/86 | 289/469 | Does not meet |
+| T+2 | LightGBM | 0.5469 | 0.7585 | 0.1689 | 55/86 | 336/530 | Does not meet |
+| T+2 | GAM | 0.5210 | 0.7465 | 0.1767 | 62/86 | 406/611 | Does not meet |
+
+Every candidate increases onset sensitivity, but every candidate also exceeds the
+predeclared maximum five-point increase in false-alert ratio. The frozen research
+classification is therefore `does_not_meet` for all six procedures. This consumes
+the 2025 block for comparison; it is not an independent post-selection test.
+Verification restored all six packages and reproduced their probabilities with zero
+new fits. G5 remains unapproved and `champion` remains `not_selected`. The third
+delivery owns final interpretation, recommendation and the human Stage 6 handoff.
+
+## Final scientific review and Stage 6 handoff
+
+PLAN_028 is technically reproducible and scientifically unsuccessful under its
+frozen utility rule. The exact proposal, notebook receipt and 37-payload bundle
+manifest agree. Verification reloads all six saved models and preparers and
+reproduces predictions, metrics and identities without fitting, repair or artifact
+regeneration. This technical success does not establish operational usefulness.
+
+The candidates rank municipality-months better than persistence: every AP and AUROC
+is higher, and every candidate detects more of the 86 observed onsets. Their frozen
+alert thresholds also emit too many incorrect alerts. The required false-alert-ratio
+increase was at most five percentage points relative to the horizon-specific
+persistence reference. All six point estimates exceed that limit, so higher AP,
+AUROC, lower Brier or higher sensitivity cannot qualify any procedure by itself.
+
+| Horizon | Procedure | Onset gain vs persistence | Marginal interval | False-alert-ratio increase | Marginal interval | Frozen result |
+|---|---|---:|---:|---:|---:|---|
+| T+1 | XGBoost | +25.58 pp | [18.91, 32.04] pp | +10.26 pp | [6.80, 12.60] pp | Does not meet |
+| T+1 | LightGBM | +39.53 pp | [28.95, 48.96] pp | +13.78 pp | [10.14, 15.95] pp | Does not meet |
+| T+1 | GAM | +23.26 pp | [15.07, 29.76] pp | +6.72 pp | [2.15, 9.30] pp | Does not meet |
+| T+2 | XGBoost | +20.93 pp | [15.66, 25.93] pp | +14.65 pp | [12.85, 16.57] pp | Does not meet |
+| T+2 | LightGBM | +29.07 pp | [22.22, 35.44] pp | +16.42 pp | [13.91, 18.78] pp | Does not meet |
+| T+2 | GAM | +37.21 pp | [29.67, 45.45] pp | +19.47 pp | [16.50, 22.12] pp | Does not meet |
+
+These are candidate-wise marginal intervals from the frozen common 2,000-draw
+three-month temporal-block procedure. They describe uncertainty under that method;
+they are not simultaneous family-selection intervals or a new independent test.
+For five procedures, even the lower false-alert-ratio bound exceeds five points.
+T+1 GAM has a lower bound below five points, but its observed increase is 6.72
+points and the frozen rule is applied to the point estimate; uncertainty was never
+authorized to rescue a failing point result.
+
+Failure concentration is descriptive. June 2025 is a maximum false-alert month
+for every candidate/horizon; LightGBM T+2 ties June with July at 34. October 2025
+is a maximum missed-onset month for every candidate/horizon; XGBoost T+1 ties it
+with February at 7, GAM T+2 ties it with February at 4, and LightGBM T+2 ties it
+with February and June at 4. Tolima
+(department 73) contributes the largest false-alert count in each candidate result,
+with different emitted-alert denominators: XGBoost 101/161, LightGBM 125/192 and
+GAM 82/142 at T+1; XGBoost 169/237, LightGBM 204/278 and GAM 259/341 at T+2.
+Meta contributes 76/189, 93/211 and 69/179 at T+1, and 120/232, 132/252 and
+147/270 at T+2. The largest single-municipality counts vary by procedure. These
+counts do not establish a territorial or seasonal cause; support and denominators
+differ.
+
+| Horizon | Procedure | June false/emitted | October missed/real onsets | Municipality with most false/emitted | Municipality with most missed/real onsets |
+|---|---|---:|---:|---:|---:|
+| T+1 | XGBoost | 24/37 | 7/10 | 73168: 7/9 | 50350: 3/3 |
+| T+1 | LightGBM | 30/43 | 7/10 | 50318: 7/10 | 73043: 3/3 |
+| T+1 | GAM | 23/36 | 9/10 | 73671: 6/8 | 50318: 3/4 |
+| T+2 | XGBoost | 34/46 | 6/10 | 73168: 10/12 | 73043: 2/3 |
+| T+2 | LightGBM | 34/47 | 4/10 | 73168: 10/12 | 73043: 2/3 |
+| T+2 | GAM | 41/55 | 4/10 | 73483: 11/11 | 73043: 2/3 |
+
+Municipality codes are shown because the final artifact uses those stable keys.
+“Missed/real” is the complement of detected/real onset sensitivity for the named
+group; it is not a new metric or denominator.
+
+The evidence uses retrospectively consolidated data, and historical as-of
+availability has not been demonstrated. The June 2024 calibration and threshold
+decisions may not transfer to later operating conditions. The 2025 block has now
+been consumed for this comparison and cannot be tuned on and then described as a
+new independent test.
+
+The formal scientific recommendation is **G5 NOT_APPROVED**, pending Mauricio's
+explicit human disposition. `champion` remains `not_selected`; no XGBoost,
+LightGBM or GAM package is recommended for product integration. Stage 5 is
+technically closed with an unsatisfactory scientific result. Stage 6 may prepare
+draft input, output and inference contracts marked as pending G5, but it must not
+connect a champion to an API or dashboard.
+
+The one recommended next experiment changes only the alert-threshold decision
+family. Keep all three fitted model families, features, configurations and saved
+calibration choices as historical evidence. Within a new protocol, select a more
+conservative shared threshold per candidate/horizon using nested rolling temporal
+development only: require the false-alert-ratio increase to remain within five
+points in each inner evaluation period, then maximize onset sensitivity among
+feasible thresholds. Do not use 2025 for fitting or selection. Evaluate the locked
+policy in a genuinely later independent period, or use a predeclared nested temporal
+outer assessment when later data are unavailable. This experiment requires a new
+plan and protocol; PLAN_028 does not implement it.
