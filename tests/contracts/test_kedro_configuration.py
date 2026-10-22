@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tomllib
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any
 
 import pytest
@@ -27,7 +28,18 @@ from sat_dengue.datasets import ConfigurationInputsDataset, ImmutableConfigurati
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_resolved_snapshot_reads_the_single_scientific_authority(tmp_path: Path) -> None:
+def test_resolved_snapshot_reads_the_single_scientific_authority() -> None:
+    (ROOT / "tmp").mkdir(exist_ok=True)
+    with TemporaryDirectory(prefix="kedro-configuration-", dir=ROOT / "tmp") as directory:
+        _check_resolved_snapshot(Path(directory))
+
+
+def test_snapshot_storage_rejects_external_repository_path() -> None:
+    with pytest.raises(ValueError, match="Snapshot storage must remain inside the repository"):
+        ImmutableConfigurationDataset(str(ROOT.parent / "external-snapshot"))
+
+
+def _check_resolved_snapshot(tmp_path: Path) -> None:
     inputs = ConfigurationInputsDataset().load()
     loader = ValidatedConfigLoader(str(ROOT / "conf"), base_env="base", default_run_env="base")
     resolved = resolve_configuration(inputs, loader["parameters"])

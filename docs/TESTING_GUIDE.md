@@ -444,7 +444,11 @@ python -m ruff format --check src tests
 python -m mypy src tests
 ```
 
-Use the isolated foundation environment and repository-local pytest temporary paths.
+Use the isolated foundation environment. The snapshot contract test owns and cleans a unique
+temporary directory under ignored `tmp/`; its storage boundary remains repository-local.
+The contractual commands and CI selection require no `PYTEST_DEBUG_TEMPROOT`,
+`PYTEST_ADDOPTS`, `--basetemp` or global `TMPDIR` changes. A separate negative test
+verifies that external snapshot storage remains rejected.
 Bootstrap tests verify installed metadata, the actual nonempty graph and framework
 independence of existing domain modules. Configuration tests exercise merged YAML
 and CLI runtime overrides, unknown profiles, invalid/changed scientific JSON,
