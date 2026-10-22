@@ -2,23 +2,34 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import pandas as pd  # type: ignore[import-untyped]
 
 from scripts.model_evaluation.availability import availability_transition
+from scripts.model_evaluation.decision_policy import (
+    ChampionDecisionPolicy,
+    load_decision_policy,
+)
 
-MAX_FALSE_ALARM_INCREASE = 0.05
-MIN_ONSET_GAIN = 0.10
-SEED = 42
+
+def _default_decision_policy() -> ChampionDecisionPolicy:
+    """Load the repository-owned policy for direct utility calls."""
+    return load_decision_policy(Path(__file__).resolve().parents[2])
 
 
-def utility(onset_gain: float | None, false_alarm_increase: float | None) -> str:
+def utility(
+    onset_gain: float | None,
+    false_alarm_increase: float | None,
+    decision_policy: ChampionDecisionPolicy | None = None,
+) -> str:
     """Apply DEC-125 point criteria without converting missing evidence into success.
 
     Args:
         onset_gain: Equal-window sensitivity difference against persistence.
         false_alarm_increase: Equal-window false/emitted-alert ratio difference.
+        decision_policy: Validated policy; repository policy is loaded when omitted.
 
     Returns:
         Point utility status, separate from uncertainty and research acceptance.
@@ -27,9 +38,11 @@ def utility(onset_gain: float | None, false_alarm_increase: float | None) -> str
         return "insufficient_evidence"
     if pd.isna(onset_gain) or pd.isna(false_alarm_increase):
         return "insufficient_evidence"
+    policy = decision_policy or _default_decision_policy()
     return (
         "meets_point_criteria"
-        if onset_gain >= MIN_ONSET_GAIN and false_alarm_increase <= MAX_FALSE_ALARM_INCREASE
+        if onset_gain >= policy.knobs.min_onset_sensitivity_gain
+        and false_alarm_increase <= policy.knobs.max_false_alarm_increase
         else "does_not_meet_point_criteria"
     )
 

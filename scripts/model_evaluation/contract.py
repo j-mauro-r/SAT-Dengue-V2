@@ -10,6 +10,8 @@ from typing import Any
 
 from scripts.model_training.contract import ModelTrainingConfig
 
+from .decision_policy import ChampionDecisionPolicy, Stage5Knobs, load_decision_policy
+
 CONTRACT_PATH = Path("docs/product/stage-5/probability_calibration_thresholds_contract_v1.json")
 STAGE4_CONTRACT_PATH = Path("docs/product/stage-4/model_engineering_contract_v1.json")
 MONTH_RE = re.compile(r"^\d{4}-\d{2}$")
@@ -21,36 +23,12 @@ class ModelEvaluationError(ValueError):
 
 
 @dataclass(frozen=True)
-class Stage5Knobs:
-    """Utility tolerances expressed in percentage points.
-
-    Args:
-        max_false_alarm_increase_pp: Allowed false-alert-ratio increase versus persistence.
-        min_onset_sensitivity_gain_pp: Required onset-sensitivity gain versus persistence.
-        seed: Reproducibility seed for deterministic components.
-    """
-
-    max_false_alarm_increase_pp: float
-    min_onset_sensitivity_gain_pp: float
-    seed: int
-
-    @property
-    def max_false_alarm_increase(self) -> float:
-        """Return max false-alarm increase as proportion units."""
-        return self.max_false_alarm_increase_pp / 100.0
-
-    @property
-    def min_onset_sensitivity_gain(self) -> float:
-        """Return min onset-sensitivity gain as proportion units."""
-        return self.min_onset_sensitivity_gain_pp / 100.0
-
-
-@dataclass(frozen=True)
 class Stage5Contract:
     """Parsed Stage 5 contract fields used by the execution pipeline."""
 
     raw: dict[str, Any]
     knobs: Stage5Knobs
+    decision_policy: ChampionDecisionPolicy
 
 
 @dataclass(frozen=True)
@@ -241,23 +219,10 @@ def _validate_window_role_calendar(raw: dict[str, Any], reserved_start: str) -> 
 def load_contract(config: ModelEvaluationConfig) -> Stage5Contract:
     """Load and validate Stage 5 contract knobs and temporal partitions."""
     raw = read_json(config.resolve(config.contract_path))
-    knobs = raw.get("knobs")
-    if not isinstance(knobs, dict):
-        raise ModelEvaluationError("Stage5 contract requires a knobs object")
-
-    max_far = knobs.get("max_false_alarm_increase_pp")
-    min_onset = knobs.get("min_onset_sensitivity_gain_pp")
-    seed = knobs.get("seed")
-    if not isinstance(max_far, (int, float)):
-        raise ModelEvaluationError("max_false_alarm_increase_pp must be numeric")
-    if not isinstance(min_onset, (int, float)):
-        raise ModelEvaluationError("min_onset_sensitivity_gain_pp must be numeric")
-    if not isinstance(seed, int):
-        raise ModelEvaluationError("seed must be integer")
-    if not (0.0 <= float(max_far) <= 100.0):
-        raise ModelEvaluationError("max_false_alarm_increase_pp must be within [0, 100]")
-    if not (0.0 <= float(min_onset) <= 100.0):
-        raise ModelEvaluationError("min_onset_sensitivity_gain_pp must be within [0, 100]")
+    policy_path = raw.get("decision_policy_path")
+    if not isinstance(policy_path, str):
+        raise ModelEvaluationError("Stage5 contract requires decision_policy_path")
+    decision_policy = load_decision_policy(config.root, policy_path)
 
     reserved_start = raw.get("reserved_final_block_start")
     if not isinstance(reserved_start, str) or MONTH_RE.match(reserved_start) is None:
@@ -273,9 +238,6 @@ def load_contract(config: ModelEvaluationConfig) -> Stage5Contract:
 
     return Stage5Contract(
         raw=raw,
-        knobs=Stage5Knobs(
-            max_false_alarm_increase_pp=float(max_far),
-            min_onset_sensitivity_gain_pp=float(min_onset),
-            seed=seed,
-        ),
+        knobs=decision_policy.knobs,
+        decision_policy=decision_policy,
     )

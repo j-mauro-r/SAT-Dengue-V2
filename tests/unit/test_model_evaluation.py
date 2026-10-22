@@ -17,6 +17,11 @@ from scripts.model_evaluation.contract import (
     load_contract,
     resolve_root,
 )
+from scripts.model_evaluation.decision_policy import (
+    POLICY_PATH,
+    DecisionPolicyError,
+    load_decision_policy,
+)
 from scripts.model_evaluation.pipeline import (
     Stage4Inputs,
     _assert_selection_independence,
@@ -38,20 +43,53 @@ def _repo_root() -> Path:
 
 @pytest.fixture
 def contract() -> Stage5Contract:
+    policy = load_decision_policy(_repo_root())
     return Stage5Contract(
-        raw={
-            "knobs": {
-                "max_false_alarm_increase_pp": 5.0,
-                "min_onset_sensitivity_gain_pp": 10.0,
-                "seed": 42,
-            }
-        },
+        raw={"decision_policy_path": str(POLICY_PATH)},
         knobs=Stage5Knobs(
-            max_false_alarm_increase_pp=5.0,
-            min_onset_sensitivity_gain_pp=10.0,
-            seed=42,
+            max_false_alarm_increase_pp=policy.knobs.max_false_alarm_increase_pp,
+            min_onset_sensitivity_gain_pp=policy.knobs.min_onset_sensitivity_gain_pp,
+            seed=policy.knobs.seed,
         ),
+        decision_policy=policy,
     )
+
+
+def test_champion_decision_policy_is_the_single_human_editable_source() -> None:
+    root = _repo_root()
+    policy = load_decision_policy(root)
+    calibration = json.loads((root / CONTRACT_PATH).read_text(encoding="utf-8"))
+    assessment = json.loads(
+        (root / "docs/product/stage-5/model_evaluation_contract_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert calibration["decision_policy_path"] == str(POLICY_PATH)
+    assert assessment["decision_policy_path"] == str(POLICY_PATH)
+    assert "knobs" not in calibration
+    assert "knobs" not in assessment
+    assert policy.raw["human_disposition"] == {
+        "G5": "NOT_APPROVED",
+        "champion": "not_selected",
+        "authority": "Mauricio",
+        "decided_on": "2026-10-21",
+        "reason": (
+            "All six candidate/horizon procedures exceeded the approved false-alert "
+            "increase constraint on the consumed 2025 comparison."
+        ),
+    }
+
+
+def test_champion_decision_policy_rejects_invalid_manual_values(tmp_path: Path) -> None:
+    root = _repo_root()
+    raw = json.loads((root / POLICY_PATH).read_text(encoding="utf-8"))
+    raw["utility"]["max_false_alarm_increase_pp"] = 101
+    relative = Path("tmp/test_invalid_champion_policy.json")
+    path = root / relative
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    with pytest.raises(DecisionPolicyError, match="within"):
+        load_decision_policy(root, relative)
 
 
 def test_base_stage5_contract_loads() -> None:
@@ -410,6 +448,7 @@ def test_execute_reuses_existing_bundle_without_fitting(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
+    policy = load_decision_policy(_repo_root())
     contract = Stage5Contract(
         raw={
             "candidate_families": ["xgboost"],
@@ -433,6 +472,7 @@ def test_execute_reuses_existing_bundle_without_fitting(
             min_onset_sensitivity_gain_pp=10.0,
             seed=42,
         ),
+        decision_policy=policy,
     )
 
     suite_bundle = tmp_path / "artifacts/model_training/candidate_suite/dummy"

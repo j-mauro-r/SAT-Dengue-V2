@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +12,7 @@ import pytest
 from scripts.model_assessment.policy import proposed_calendar, require_development, utility
 from scripts.model_evaluation.availability import availability_transition
 from scripts.model_evaluation.contract import ModelEvaluationError
+from scripts.model_evaluation.decision_policy import load_decision_policy
 from scripts.model_training.metrics import false_alarm_ratio_metric, onset_sensitivity_metric
 
 
@@ -62,6 +64,17 @@ def test_utility_uses_onsets_and_emitted_alerts_with_fixed_knobs() -> None:
     assert utility(0.099, 0.05) == "does_not_meet_point_criteria"
     assert utility(0.10, 0.051) == "does_not_meet_point_criteria"
     assert utility(None, 0.0) == "insufficient_evidence"
+
+    policy = load_decision_policy(Path(__file__).resolve().parents[2])
+    adjusted = replace(
+        policy,
+        knobs=replace(
+            policy.knobs,
+            max_false_alarm_increase_pp=6.0,
+            min_onset_sensitivity_gain_pp=9.0,
+        ),
+    )
+    assert utility(0.09, 0.06, adjusted) == "meets_point_criteria"
 
 
 @pytest.mark.parametrize("change", ["none", "science", "code", "summary", "corrupt", "missing"])

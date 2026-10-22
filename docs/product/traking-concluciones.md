@@ -15,7 +15,7 @@ This is the active scientific decision register. The current summary below and t
 | Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; subsequent Stage 4/5 training evidence is recorded separately. |
 | Evaluation support | Preparation uses target eligibility 2012-01..2024-12, excludes reserved targets from 2025-01 and requires validation origins >= fit cutoff. Later validation origins represent successive predictions. These are implemented controls, not evidence of real-time data availability. |
 | Remaining evidence | Historical as-of availability is unproven. The earlier 5/7/9-year sensitivity has no completed evidence recorded here; its freeze disposition needs an explicit human decision. Provenance reconstruction limits remain in the dated records below. Do not invent completion or restart retired EDA by default. |
-| Gate decisions | No explicit G2/G3 approval is recorded. Mauricio accepted G4 and exact proposal/protocol `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09` on 2026-10-21 and authorized the frozen 2025 evaluation (DEC-132). The scientific recommendation is G5 `NOT_APPROVED`; no champion is selected, and the final human G5 disposition remains Mauricio's decision (DEC-133). |
+| Gate decisions | No explicit G2/G3 approval is recorded. Mauricio accepted G4 and exact proposal/protocol `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09` on 2026-10-21 and authorized the frozen 2025 evaluation (DEC-132). Mauricio subsequently accepted G5 `NOT_APPROVED`; Stage 5 is closed and no champion is selected (DEC-134). |
 
 ---
 
@@ -239,6 +239,7 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 | [DEC-131](#dec-131) | Implement the frozen final route before scientific authorization | ACCEPTED_IMPLEMENTATION_SCOPE | No aplica |
 | [DEC-132](#dec-132) | Accept G4 and execute the exact frozen 2025 protocol | ACCEPTED_AND_EXECUTED | No aplica |
 | [DEC-133](#dec-133) | Recommend G5 NOT_APPROVED after the frozen 2025 evaluation | PROPOSED_FOR_HUMAN_G5_DECISION | No aplica |
+| [DEC-134](#dec-134) | Accept G5 NOT_APPROVED and centralize champion-decision policy | ACCEPTED_AND_CLOSED | No aplica |
 
 ## Registros detallados
 
@@ -1819,3 +1820,24 @@ G4/G5 are not approved by implementation or by this registration.
   availability. Calibration transfer remains uncertain. The 2025 block is consumed
   for the completed comparison and cannot become an untouched test again. Period
   and territory concentrations are descriptive and support no causal attribution.
+
+<a id="dec-134"></a>
+### DEC-134 Accept G5 NOT_APPROVED and centralize champion-decision policy
+
+- **Status:** ACCEPTED_AND_CLOSED by Mauricio on 2026-10-21.
+- **Decision:** Accept `G5 = NOT_APPROVED`, keep `champion = not_selected`, and close
+  Stage 5 without relaxing scientific criteria or selecting a provisional winner.
+- **Single configuration owner:**
+  [`champion_decision_policy_v1.json`](stage-5/champion_decision_policy_v1.json)
+  owns the editable utility tolerances, ranking rule, retained alert-threshold
+  authority, human disposition and read-only MVP boundary. Stage 5 contracts point
+  to it instead of repeating those decision values.
+- **Interpretation:** Utility tolerances determine whether evidence meets the agreed
+  research rule. Retained probability thresholds determine whether a score emits an
+  alert. Neither setting retrains the fitted estimators, and changing either after
+  seeing 2025 cannot turn the consumed evaluation into new independent evidence.
+- **Product boundary:** The read-only MVP may present persisted historical/evaluation
+  results, probabilities, alerts and performance context with visible
+  `NOT_APPROVED` status. It may not claim operational approval or connect a champion.
+- **Future work:** Any renewed champion search or threshold experiment requires a
+  separate predeclared scientific protocol and evidence independent of consumed 2025.

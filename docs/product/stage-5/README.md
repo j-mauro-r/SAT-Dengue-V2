@@ -24,9 +24,9 @@ reserved targets from 2025-01 onward.
 
 ## Utility knobs (percentage points)
 
-- `max_false_alarm_increase_pp = 5.0`
-- `min_onset_sensitivity_gain_pp = 10.0`
-- `seed = 42`
+The active values live only in
+[`champion_decision_policy_v1.json`](champion_decision_policy_v1.json), under
+`utility`. This README explains their meaning without maintaining a second copy.
 
 Threshold feasibility rules use the exact contract formulas:
 
@@ -452,12 +452,21 @@ decisions may not transfer to later operating conditions. The 2025 block has now
 been consumed for this comparison and cannot be tuned on and then described as a
 new independent test.
 
-The formal scientific recommendation is **G5 NOT_APPROVED**, pending Mauricio's
-explicit human disposition. `champion` remains `not_selected`; no XGBoost,
-LightGBM or GAM package is recommended for product integration. Stage 5 is
-technically closed with an unsatisfactory scientific result. Stage 6 may prepare
-draft input, output and inference contracts marked as pending G5, but it must not
-connect a champion to an API or dashboard.
+Mauricio accepted the scientific disposition **G5 NOT_APPROVED** on 2026-10-21.
+`champion` remains `not_selected`; no XGBoost, LightGBM or GAM package is approved
+for product integration. Stage 5 is closed with an unsatisfactory scientific
+result. The read-only MVP may present persisted historical/evaluation results with
+their visible `NOT_APPROVED` status, but it must not connect a champion to an API
+or dashboard or present those results as operational forecasts.
+
+The single editable policy for utility tolerances, ranking, retained alert-threshold
+authority and the human disposition is
+[`champion_decision_policy_v1.json`](champion_decision_policy_v1.json). Stage 5
+contracts reference that file rather than duplicate its values. Editing its utility
+tolerances can recompute an evaluation classification; editing a retained alert
+threshold changes which probabilities emit alerts. Neither action retrains a model,
+rewrites the consumed 2025 evidence or creates scientific approval. A future
+scientific iteration requires a new protocol and independent evaluation evidence.
 
 The one recommended next experiment changes only the alert-threshold decision
 family. Keep all three fitted model families, features, configurations and saved

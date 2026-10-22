@@ -8,6 +8,7 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
+from scripts.model_evaluation.decision_policy import load_decision_policy
 from scripts.model_training.persistence import (
     bytes_record,
     json_bytes,
@@ -49,18 +50,17 @@ def build_assessment(root: Path, *, verify_only: bool = False) -> dict[str, Any]
         Bounded notebook summary with the exact pending proposal identity.
     """
     contract = json.loads((root / CONTRACT).read_text())
-    if contract["knobs"] != {
-        "max_false_alarm_increase_pp": 5.0,
-        "min_onset_sensitivity_gain_pp": 10.0,
-        "seed": 42,
-    }:
-        raise ValueError("Approved utility knobs must remain fixed")
+    policy_path = contract.get("decision_policy_path")
+    if not isinstance(policy_path, str):
+        raise ValueError("Assessment contract requires decision_policy_path")
+    decision_policy = load_decision_policy(root, policy_path)
     bundle, overall, breakdown, predictions, input_receipt = load_comparison(root)
-    summary, decisions, intervals = summarize(overall)
+    summary, decisions, intervals = summarize(overall, decision_policy)
     identity_record = {
         "input_bundle": str(bundle.relative_to(root)),
         "input_manifest": fingerprint(bundle / "manifest.json"),
         "contract": fingerprint(root / CONTRACT),
+        "decision_policy": fingerprint(decision_policy.path),
         "code": code_fingerprints(root),
         "versions": {
             name: version(name)
@@ -70,6 +70,7 @@ def build_assessment(root: Path, *, verify_only: bool = False) -> dict[str, Any]
     proposal = freeze_proposal(
         bundle, contract, sorted(predictions.municipality_code.unique().tolist())
     )
+    proposal["decision_policy"] = decision_policy.raw
     proposal["identity_inputs"] = identity_record
     proposal_bytes = json_bytes(proposal)
     proposal_id = hashlib.sha256(proposal_bytes).hexdigest()
@@ -84,7 +85,8 @@ def build_assessment(root: Path, *, verify_only: bool = False) -> dict[str, Any]
         "new_fits": 0,
         "reserved_results_read": False,
         "G4": "OPEN",
-        "G5": "NOT_APPROVED",
+        "G5": decision_policy.raw["human_disposition"]["G5"],
+        "champion": decision_policy.raw["human_disposition"]["champion"],
         "coverage": {
             "windows_per_horizon": 4,
             "municipalities": 76,

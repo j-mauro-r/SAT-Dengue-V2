@@ -2,11 +2,11 @@
 
 ## Status and Purpose
 
-**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
-**Human Gate: APPROVED.**  
-**Contract maturity: DRAFT PRODUCT/DATA CONTRACT — NOT FROZEN.**
+**Document status: CLOSED Stage 1 baseline; DEFERRED from the first read-only MVP by the approved 2026-10-21 refinement.**
+**Human Gate: APPROVED as a draft direction for the later write-enabled iteration.**
+**Contract maturity: DRAFT PRODUCT/DATA CONTRACT — NOT FROZEN and not required by the read-only MVP.**
 
-This document defines the initial product-facing input expectations for loading a new monthly departmental period. It intentionally does not freeze the final schema, exact variable list, file format, or detailed operational validation rules.
+This document defines initial product-facing input expectations for the later write-enabled monthly-period workflow. [PROD-04](PROD-04-dashboard-master-user-story.md) owns the approved delivery order; the first E2E MVP consumes persisted results and has no upload/input surface. It intentionally does not freeze the final schema, exact variable list, file format, or detailed operational validation rules.
 
 The final Input Contract will be frozen only after Stage 2 Data Understanding, target definition, operational availability analysis, and later product-contract reconciliation.
 

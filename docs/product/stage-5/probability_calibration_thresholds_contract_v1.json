@@ -8,11 +8,6 @@
     "gam"
   ],
   "reserved_final_block_start": "2025-01",
-  "knobs": {
-    "max_false_alarm_increase_pp": 5.0,
-    "min_onset_sensitivity_gain_pp": 10.0,
-    "seed": 42
-  },
   "rules": {
     "false_alarm_constraint": "false_alarm_ratio_candidate <= false_alarm_ratio_persistence + max_false_alarm_increase_pp / 100",
     "onset_constraint": "onset_sensitivity_candidate >= onset_sensitivity_persistence + min_onset_sensitivity_gain_pp / 100",
@@ -356,5 +351,6 @@
     "Corrected Stage5 refits one outer model per candidate/window/horizon using fixed family grid and seed.",
     "Sigmoid calibration and threshold optimization are deterministic under fixed seed and stable dependencies.",
     "Notebook execution receipts depend on kernel package versions."
-  ]
+  ],
+  "decision_policy_path": "docs/product/stage-5/champion_decision_policy_v1.json"
 }

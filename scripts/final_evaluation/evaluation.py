@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -9,6 +10,10 @@ import pandas as pd  # type: ignore[import-untyped]
 
 from scripts.evaluation_metrics import evaluate_comparison_metrics
 from scripts.model_assessment.policy import utility
+from scripts.model_evaluation.decision_policy import (
+    ChampionDecisionPolicy,
+    load_decision_policy,
+)
 
 from .cohorts import Cohort
 
@@ -74,7 +79,12 @@ def circular_draws(
 
 
 def research_result(
-    complete: bool, onset_gain: float, far_increase: float, lower_onset: float, upper_far: float
+    complete: bool,
+    onset_gain: float,
+    far_increase: float,
+    lower_onset: float,
+    upper_far: float,
+    decision_policy: ChampionDecisionPolicy | None = None,
 ) -> str:
     """Apply frozen three-way acceptance without treating absent support as success.
 
@@ -84,19 +94,22 @@ def research_result(
         far_increase: Annual false/emitted difference.
         lower_onset: Marginal lower sensitivity-gain bound.
         upper_far: Marginal upper false/emitted-increase bound.
+        decision_policy: Validated policy; repository policy is loaded when omitted.
 
     Returns:
         Frozen research classification, never a G5 or champion decision.
     """
     if not complete or not np.isfinite([onset_gain, far_increase]).all():
         return "insufficient_evidence"
-    if utility(onset_gain, far_increase) != "meets_point_criteria":
+    policy = decision_policy or load_decision_policy(Path(__file__).resolve().parents[2])
+    if utility(onset_gain, far_increase, policy) != "meets_point_criteria":
         return "does_not_meet"
     if not np.isfinite([lower_onset, upper_far]).all():
         return "insufficient_evidence"
     return (
         "meets_research_criteria"
-        if lower_onset >= 0.10 and upper_far <= 0.05
+        if lower_onset >= policy.knobs.min_onset_sensitivity_gain
+        and upper_far <= policy.knobs.max_false_alarm_increase
         else "insufficient_evidence"
     )
 

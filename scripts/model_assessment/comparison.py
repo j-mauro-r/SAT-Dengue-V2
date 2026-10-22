@@ -8,18 +8,29 @@ from typing import Any
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 
+from scripts.model_evaluation.decision_policy import ChampionDecisionPolicy
+
 from .policy import utility
 
 
-def summarize(metrics: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def summarize(
+    metrics: pd.DataFrame, decision_policy: ChampionDecisionPolicy | None = None
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Aggregate complete four-window populations without available-only averages.
 
     Args:
         metrics: One record per candidate, window and approved metric.
+        decision_policy: Validated human-owned utility and ranking policy.
 
     Returns:
         Metric means/support, separate utility/ranking, descriptive paired intervals.
     """
+    if decision_policy is None:
+        from .policy import _default_decision_policy
+
+        decision_policy = _default_decision_policy()
+    ranking_policy = decision_policy.raw["ranking"]
+    ranking_metric = str(ranking_policy["primary_metric"])
     records: list[dict[str, Any]] = []
     for (candidate, horizon, metric), group in metrics.groupby(["candidate", "horizon", "metric"]):
         if len(group) != 4 or group.window_id.nunique() != 4:
@@ -46,9 +57,7 @@ def summarize(metrics: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.Dat
         wide = summary[summary.horizon.eq(horizon)].pivot(
             index="candidate", columns="metric", values="value"
         )
-        ranking = wide.drop(index="persistence").average_precision.rank(
-            ascending=False, method="min"
-        )
+        ranking = wide.drop(index="persistence")[ranking_metric].rank(ascending=False, method="min")
         for candidate in sorted(set(metrics.candidate) - {"persistence"}):
             gain = (
                 wide.loc[candidate, "onset_sensitivity"]
@@ -65,7 +74,7 @@ def summarize(metrics: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.Dat
                     descriptive_ap_rank=ranking[candidate],
                     onset_gain_pp=100 * gain,
                     false_alarm_increase_pp=100 * increase,
-                    point_utility=utility(gain, increase),
+                    point_utility=utility(gain, increase, decision_policy),
                     research_acceptance="not_determined_by_development_point_estimates",
                 )
             )
