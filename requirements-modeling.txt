@@ -3,5 +3,5 @@ xgboost==3.0.5
 scipy==1.18.1
 
 lightgbm==4.7.0
-scikit-learn==1.7.2
+scikit-learn==1.9.1
 threadpoolctl==3.7.0
