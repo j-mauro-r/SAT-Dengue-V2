@@ -123,6 +123,26 @@ def test_authorization_precedes_scientific_reads_and_fits(
         require_authorization(tmp_path)
 
 
+def test_readiness_reports_post_freeze_dependency_drift_without_authorizing_execution(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Readiness remains usable after closure while scientific execution stays blocked."""
+
+    archived = pipeline.load_archived_proposal(ROOT)
+    monkeypatch.setattr(pipeline, "load_archived_proposal", lambda root: archived)
+
+    def changed(root: Path) -> dict[str, Any]:
+        raise ValueError("Frozen scientific contract changed")
+
+    monkeypatch.setattr(pipeline, "load_proposal", changed)
+    result = pipeline.readiness(ROOT)
+    assert result["status"] == "human_authorization_recorded"
+    assert result["live_frozen_dependencies"] == "changed_after_freeze"
+    assert result["live_dependency_error"] == "Frozen scientific contract changed"
+    assert result["scientific_execution_allowed"] is False
+    assert result["new_fits"] == 0
+
+
 def test_t2_calendar_all_cohorts_before_fit_and_future_invariance(
     synthetic: Any, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

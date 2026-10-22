@@ -32,6 +32,7 @@ from .protocol import (
     PROPOSAL_SHA,
     checked_manifest,
     code_fingerprints,
+    load_archived_proposal,
     load_proposal,
     require_authorization,
 )
@@ -345,15 +346,28 @@ def run_final(root: Path, *, verify_only: bool = False) -> dict[str, Any]:
 
 
 def readiness(root: Path) -> dict[str, Any]:
-    """Inspect only frozen development evidence and report authorization status.
+    """Inspect immutable evidence and report live dependency compatibility.
 
     Args:
         root: Repository root.
 
     Returns:
-        Bounded readiness and explicit old/new notebook migration identities.
+        Bounded status with archived identity and explicit live dependency drift.
+
+    Notes:
+        Post-evaluation refactors may change live development dependencies. Readiness
+        reports that drift without treating it as proposal corruption. Scientific
+        execution remains fail-closed because :func:`run_final` calls
+        :func:`load_proposal` directly.
     """
-    proposal = load_proposal(root)
+    proposal = load_archived_proposal(root)
+    try:
+        load_proposal(root)
+        dependency_status = "exact_frozen_match"
+        dependency_error = None
+    except ValueError as exc:
+        dependency_status = "changed_after_freeze"
+        dependency_error = str(exc)
     try:
         require_authorization(root)
         status = "human_authorization_recorded"
@@ -362,6 +376,9 @@ def readiness(root: Path) -> dict[str, Any]:
     return dict(
         status=status,
         proposal_sha256=PROPOSAL_SHA,
+        live_frozen_dependencies=dependency_status,
+        live_dependency_error=dependency_error,
+        scientific_execution_allowed=dependency_status == "exact_frozen_match",
         procedures=6,
         new_fits=0,
         reserved_results_read=False,

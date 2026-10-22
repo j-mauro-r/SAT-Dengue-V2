@@ -37,14 +37,17 @@ def checked_manifest(bundle: Path) -> dict[str, Any]:
     return manifest
 
 
-def load_proposal(root: Path) -> dict[str, Any]:
-    """Verify the fixed proposal and all its live scientific implementation dependencies.
+def load_archived_proposal(root: Path) -> dict[str, Any]:
+    """Verify the immutable proposal bundle without requiring unchanged live code.
 
     Args:
         root: Repository root.
 
     Returns:
         Original proposal, never a regenerated or substituted identity.
+
+    Raises:
+        ValueError: If the proposal or its assessment bundle is corrupt.
     """
     path = root / PROPOSAL_BUNDLE / "freeze_proposal.json"
     if fingerprint(path)["sha256"] != PROPOSAL_SHA:
@@ -54,6 +57,23 @@ def load_proposal(root: Path) -> dict[str, Any]:
     identity = proposal["identity_inputs"]
     if manifest["identity"] != identity:
         raise ValueError("Proposal and assessment identities disagree")
+    return proposal
+
+
+def load_proposal(root: Path) -> dict[str, Any]:
+    """Verify the fixed proposal and all its live scientific implementation dependencies.
+
+    Args:
+        root: Repository root.
+
+    Returns:
+        Original proposal when live dependencies still match its frozen identity.
+
+    Raises:
+        ValueError: If any frozen live dependency changed.
+    """
+    proposal = load_archived_proposal(root)
+    identity = proposal["identity_inputs"]
     if fingerprint(root / CONTRACT) != identity["contract"]:
         raise ValueError("Frozen scientific contract changed")
     for name, expected in identity["code"].items():

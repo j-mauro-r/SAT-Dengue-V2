@@ -308,6 +308,14 @@ scientific fitting:
 .venv/bin/python -m scripts.final_evaluation.execution --verify
 ```
 
+After final evaluation, later repository refactors may intentionally change live
+development contracts or assessment modules. Readiness still verifies the immutable
+proposal bundle and reports `live_frozen_dependencies=changed_after_freeze` plus the
+first mismatch; it does not silently declare the new code equivalent. In that state
+`scientific_execution_allowed=false`, and `run_final` remains fail-closed. Historical
+results must be read from the verified final bundle rather than regenerated with the
+new dependency identity.
+
 After actual human acceptance of G4, this exact proposal/protocol, and final
 execution is recorded, the scientific command is:
 
