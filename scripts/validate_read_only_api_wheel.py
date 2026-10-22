@@ -31,6 +31,7 @@ PROBE = r"""from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -82,8 +83,11 @@ async def request(params: dict[str, str]) -> tuple[int, dict[str, Any]]:
 
 
 package_root = Path(__import__("scripts.read_only_api", fromlist=["x"]).__file__).resolve().parent
+source_checkout = Path(os.environ["SAT_DENGUE_SOURCE_CHECKOUT"]).resolve()
 assert "site-packages" in package_root.parts, package_root
 assert Path.cwd() not in package_root.parents
+assert source_checkout not in package_root.parents
+assert source_checkout not in {Path(entry).resolve() for entry in sys.path if entry}
 
 before = {
     str(path): (path.stat().st_mtime_ns, hashlib.sha256(path.read_bytes()).hexdigest())
@@ -163,12 +167,8 @@ def _inspect_wheel(wheel: Path) -> list[str]:
     with ZipFile(wheel) as archive:
         names = sorted(archive.namelist())
 
-    assert EXPECTED_PACKAGE_FILES <= set(names)
-    assert not any(name.startswith(("tests/", "notebooks/", ".dwp/")) for name in names)
-    assert not any(
-        name.startswith("scripts/") and not name.startswith("scripts/read_only_api/")
-        for name in names
-    )
+    payload = {name for name in names if ".dist-info/" not in name}
+    assert payload == EXPECTED_PACKAGE_FILES
     return names
 
 
@@ -188,6 +188,7 @@ def validate_wheel(wheel: Path) -> dict[str, object]:
     """
     wheel = wheel.resolve(strict=True)
     members = _inspect_wheel(wheel)
+    source_checkout = Path(__file__).resolve().parents[1]
 
     with tempfile.TemporaryDirectory(prefix="sat-dengue-stage7-smoke-") as temporary:
         root = Path(temporary)
@@ -210,6 +211,7 @@ def validate_wheel(wheel: Path) -> dict[str, object]:
             cwd=workdir,
             capture_output=True,
             text=True,
+            env={"SAT_DENGUE_SOURCE_CHECKOUT": str(source_checkout)},
         )
 
     return {
