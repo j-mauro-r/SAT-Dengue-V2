@@ -4,7 +4,7 @@
     "reference_period": "2026-12",
     "generated_at": "2027-01-04T09:15:00-05:00",
     "data_updated_at": "2027-01-03T18:00:00-05:00",
-    "data_version": "demo-meta-2026-12-v1"
+    "data_version": "demo-meta-2026-12-v1.1"
   },
   "governance": {
     "governance_gate": "G5",
@@ -55,6 +55,852 @@
           "model_version": "demo-meta-lgbm-t2-v1",
           "procedure_id": "demo-meta-procedure-t2"
         }
+      ],
+      "endemic_channel_series": [
+        {
+          "period": "2026-01",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-02",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-03",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-04",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-05",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-06",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-07",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-08",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-09",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-10",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-11",
+          "cases": null,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        },
+        {
+          "period": "2026-12",
+          "cases": 37,
+          "p25": 18.0,
+          "median": 29.0,
+          "p75": 41.0
+        }
+      ]
+    },
+    {
+      "municipality_code": "50006",
+      "municipality_name": "Acacías",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "INSUFFICIENT_HISTORY",
+          "availability_reason": "El municipio no tiene historia suficiente para generar una predicción válida.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "INSUFFICIENT_HISTORY",
+          "availability_reason": "El municipio no tiene historia suficiente para generar una predicción válida.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50110",
+      "municipality_name": "Barranca de Upía",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "INELIGIBLE",
+          "availability_reason": "El municipio no cumple las reglas vigentes de elegibilidad para una predicción válida.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "INELIGIBLE",
+          "availability_reason": "El municipio no cumple las reglas vigentes de elegibilidad para una predicción válida.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50124",
+      "municipality_name": "Cabuyaro",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50150",
+      "municipality_name": "Castilla la Nueva",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50223",
+      "municipality_name": "Cubarral",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50226",
+      "municipality_name": "Cumaral",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50245",
+      "municipality_name": "El Calvario",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50251",
+      "municipality_name": "El Castillo",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50270",
+      "municipality_name": "El Dorado",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50287",
+      "municipality_name": "Fuentedeoro",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50313",
+      "municipality_name": "Granada",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50318",
+      "municipality_name": "Guamal",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50325",
+      "municipality_name": "Mapiripán",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50330",
+      "municipality_name": "Mesetas",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50350",
+      "municipality_name": "La Macarena",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50370",
+      "municipality_name": "Uribe",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50400",
+      "municipality_name": "Lejanías",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50450",
+      "municipality_name": "Puerto Concordia",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50568",
+      "municipality_name": "Puerto Gaitán",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
       ]
     },
     {
@@ -89,6 +935,412 @@
           "alert_status": "UNAVAILABLE",
           "availability_status": "NOT_CALCULATED",
           "availability_reason": "El resultado T2 todavía no ha sido calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ],
+      "endemic_channel_series": [
+        {
+          "period": "2026-01",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-02",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-03",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-04",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-05",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-06",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-07",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-08",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-09",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-10",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-11",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        },
+        {
+          "period": "2026-12",
+          "cases": null,
+          "p25": null,
+          "median": null,
+          "p75": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50577",
+      "municipality_name": "Puerto Lleras",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50590",
+      "municipality_name": "Puerto Rico",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50606",
+      "municipality_name": "Restrepo",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50680",
+      "municipality_name": "San Carlos de Guaroa",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50683",
+      "municipality_name": "San Juan de Arama",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50686",
+      "municipality_name": "San Juanito",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50689",
+      "municipality_name": "San Martín",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    },
+    {
+      "municipality_code": "50711",
+      "municipality_name": "Vistahermosa",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "endemic_channel_series": [],
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "No existe un resultado demostrativo calculado para este municipio y periodo.",
           "model_family": null,
           "model_role": null,
           "model_version": null,

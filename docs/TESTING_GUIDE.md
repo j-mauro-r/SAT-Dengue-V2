@@ -68,6 +68,13 @@ availability/alert coherence, G5 governance, result identity uniqueness, and T1/
 completeness. They do not start a server, access Kedro, train a model, execute inference,
 or select a Champion. Run the full foundation gate before merge.
 
+Product Contract v1.1 additionally requires exact DANE/DIVIPOLA inventories of
+47 Tolima and 29 Meta municipalities, the closed `INELIGIBLE` unavailable shape,
+and API-supplied `endemic_channel_series`. Focused tests reject duplicate or
+unordered series periods, observed cases after T, unordered percentiles,
+reference-point disagreement, and empty series paired with available observed
+context. They also prove that every municipality has exactly one T1 and one T2.
+
 ## Stage 7 read-only repository, service, and HTTP endpoint
 
 Map `scripts/read_only_api/repository.py`, `service.py`, `errors.py`, and `api.py`

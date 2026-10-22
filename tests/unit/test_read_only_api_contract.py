@@ -111,6 +111,7 @@ def test_closed_enums_match_the_product_contract() -> None:
     assert {item.value for item in AvailabilityStatus} == {
         "AVAILABLE",
         "INSUFFICIENT_HISTORY",
+        "INELIGIBLE",
         "MISSING_DATA",
         "NOT_CALCULATED",
     }
@@ -194,6 +195,13 @@ def test_november_reference_rolls_targets_into_december_and_january(
     for municipality in payload["municipalities"]:
         municipality["results"][0]["target_period"] = "2026-12"
         municipality["results"][1]["target_period"] = "2027-01"
+        if municipality["endemic_channel_series"]:
+            municipality["endemic_channel_series"][8]["cases"] = None
+            november = municipality["endemic_channel_series"][10]
+            november["cases"] = municipality["cases_t"]
+            november["p25"] = municipality["p25"]
+            november["median"] = municipality["median"]
+            november["p75"] = municipality["p75"]
 
     response = DashboardResponse.model_validate(payload)
 
@@ -217,6 +225,130 @@ def test_municipality_codes_are_unique(fixture_payload: dict[str, Any]) -> None:
     ]
 
     with pytest.raises(ValidationError, match="municipality_code values must be unique"):
+        DashboardResponse.model_validate(payload)
+
+
+def test_fixtures_match_the_versioned_dane_divipola_inventory() -> None:
+    source = json.loads(Path("data/sources/Divipola-municipios.md").read_text(encoding="utf-8"))
+    expected = {
+        department: {
+            row["CODIGO_DPTO_MPIO"]: row["NOMBRE_MUNICIPIO"]
+            for row in source["resultado"]
+            if row["CODIGO_DEPARTAMENTO"] == department
+        }
+        for department in ("50", "73")
+    }
+    responses = {department: load_demonstrative_fixture(department) for department in ("50", "73")}
+
+    assert {department: len(inventory) for department, inventory in expected.items()} == {
+        "50": 29,
+        "73": 47,
+    }
+    assert sum(len(response.municipalities) for response in responses.values()) == 76
+    for department, response in responses.items():
+        actual = {
+            municipality.municipality_code: municipality.municipality_name.upper()
+            for municipality in response.municipalities
+        }
+        assert actual == expected[department]
+        assert all(code.startswith(department) for code in actual)
+        assert all(
+            {result.horizon for result in municipality.results} == set(Horizon)
+            for municipality in response.municipalities
+        )
+
+
+def test_demonstrative_fixtures_cover_every_availability_state() -> None:
+    statuses = {
+        result.availability_status
+        for department in ("50", "73")
+        for municipality in load_demonstrative_fixture(department).municipalities
+        for result in municipality.results
+    }
+
+    assert statuses == set(AvailabilityStatus)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "expected"),
+    [
+        ("result_id", "a1111111-1111-4111-8111-111111111111", "requires result_id"),
+        ("probability", 0.2, "requires result_id, probability, and threshold null"),
+        ("threshold", 0.5, "requires result_id, probability, and threshold null"),
+        ("alert_status", "NO_ALERT", "requires alert_status UNAVAILABLE"),
+    ],
+)
+def test_ineligible_rejects_available_result_shape(
+    fixture_payload: dict[str, Any], field: str, value: object, expected: str
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    result = payload["municipalities"][2]["results"][0]
+    assert result["availability_status"] == "INELIGIBLE"
+    result[field] = value
+
+    with pytest.raises(ValidationError, match=expected):
+        DashboardResponse.model_validate(payload)
+
+
+def test_endemic_series_rejects_duplicate_periods(fixture_payload: dict[str, Any]) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    series = payload["municipalities"][0]["endemic_channel_series"]
+    series[1]["period"] = series[0]["period"]
+
+    with pytest.raises(ValidationError, match="periods must be unique"):
+        DashboardResponse.model_validate(payload)
+
+
+def test_endemic_series_rejects_unsorted_periods(fixture_payload: dict[str, Any]) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    series = payload["municipalities"][0]["endemic_channel_series"]
+    series[0], series[1] = series[1], series[0]
+
+    with pytest.raises(ValidationError, match="chronologically ordered"):
+        DashboardResponse.model_validate(payload)
+
+
+def test_endemic_series_rejects_observed_cases_after_t(
+    fixture_payload: dict[str, Any],
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][0]["endemic_channel_series"][9]["cases"] = 1
+
+    with pytest.raises(ValidationError, match="Observed cases after reference_period"):
+        DashboardResponse.model_validate(payload)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("p25", 36.0), ("median", 48.0)],
+)
+def test_endemic_series_rejects_unordered_percentiles(
+    fixture_payload: dict[str, Any], field: str, value: float
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][0]["endemic_channel_series"][0][field] = value
+
+    with pytest.raises(ValidationError, match="p25 <= median <= p75"):
+        DashboardResponse.model_validate(payload)
+
+
+def test_reference_endemic_point_must_match_summary(
+    fixture_payload: dict[str, Any],
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][0]["endemic_channel_series"][8]["cases"] = 49
+
+    with pytest.raises(ValidationError, match="must match municipal summary"):
+        DashboardResponse.model_validate(payload)
+
+
+def test_empty_endemic_series_requires_unavailable_observed_context(
+    fixture_payload: dict[str, Any],
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][0]["endemic_channel_series"] = []
+
+    with pytest.raises(ValidationError, match="requires unavailable observed context"):
         DashboardResponse.model_validate(payload)
 
 

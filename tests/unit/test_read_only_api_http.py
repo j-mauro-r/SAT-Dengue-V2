@@ -67,6 +67,24 @@ def test_dashboard_endpoint_returns_exact_validated_fixture(
 
 
 @pytest.mark.parametrize(
+    ("department_code", "period", "expected_count"),
+    [("73", "2026-09", 47), ("50", "2026-12", 29)],
+)
+def test_dashboard_endpoint_returns_complete_municipal_inventory(
+    department_code: str, period: str, expected_count: int
+) -> None:
+    response = _get(
+        create_app(),
+        {"department_code": department_code, "period": period},
+    )
+
+    assert response.status_code == 200
+    municipalities = response.json()["municipalities"]
+    assert len(municipalities) == expected_count
+    assert len({item["municipality_code"] for item in municipalities}) == expected_count
+
+
+@pytest.mark.parametrize(
     ("params", "status_code", "error_code", "message"),
     [
         (

@@ -33,6 +33,7 @@ import hashlib
 import json
 import os
 import sys
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
@@ -84,6 +85,7 @@ async def request(params: dict[str, str]) -> tuple[int, dict[str, Any]]:
 
 package_root = Path(__import__("scripts.read_only_api", fromlist=["x"]).__file__).resolve().parent
 source_checkout = Path(os.environ["SAT_DENGUE_SOURCE_CHECKOUT"]).resolve()
+assert version("sat-dengue-v2") == "0.2.0"
 assert "site-packages" in package_root.parts, package_root
 assert Path.cwd() not in package_root.parents
 assert source_checkout not in package_root.parents
@@ -105,6 +107,8 @@ assert missing_status == 404
 assert missing["error_code"] == "DASHBOARD_DATA_NOT_FOUND"
 assert invalid_status == 400
 assert invalid["error_code"] == "INVALID_DEPARTMENT_CODE"
+assert len(tolima["municipalities"]) == 47
+assert len(meta["municipalities"]) == 29
 
 for body in (tolima, meta):
     assert body["governance"]["governance_status"] == "NOT_APPROVED"
@@ -116,6 +120,18 @@ for body in (tolima, meta):
         if result["model_role"] is not None
     }
     assert roles == {"PROVISIONAL_CANDIDATE"}
+    statuses = {
+        result["availability_status"]
+        for municipality in body["municipalities"]
+        for result in municipality["results"]
+    }
+    assert statuses == {
+        "AVAILABLE",
+        "MISSING_DATA",
+        "INSUFFICIENT_HISTORY",
+        "NOT_CALCULATED",
+        "INELIGIBLE",
+    }
 
 after = {
     str(path): (path.stat().st_mtime_ns, hashlib.sha256(path.read_bytes()).hexdigest())
@@ -135,6 +151,7 @@ for forbidden in (
 
 print(json.dumps({
     "import_root": str(package_root),
+    "distribution_version": "0.2.0",
     "statuses": {
         "tolima": tolima_status,
         "meta": meta_status,
@@ -146,6 +163,7 @@ print(json.dumps({
         "Champion": "NOT_SELECTED",
         "model_role": "PROVISIONAL_CANDIDATE",
     },
+    "municipalities": {"tolima": 47, "meta": 29, "total": 76},
     "fixtures_unchanged": True,
     "scientific_runtime_imports": False,
 }, sort_keys=True))
@@ -187,6 +205,7 @@ def validate_wheel(wheel: Path) -> dict[str, object]:
             the isolated probe fails.
     """
     wheel = wheel.resolve(strict=True)
+    assert wheel.name.startswith("sat_dengue_v2-0.2.0-")
     members = _inspect_wheel(wheel)
     source_checkout = Path(__file__).resolve().parents[1]
 

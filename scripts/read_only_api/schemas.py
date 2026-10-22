@@ -71,6 +71,7 @@ class AvailabilityStatus(StrEnum):
     INSUFFICIENT_HISTORY = "INSUFFICIENT_HISTORY"
     MISSING_DATA = "MISSING_DATA"
     NOT_CALCULATED = "NOT_CALCULATED"
+    INELIGIBLE = "INELIGIBLE"
 
 
 class GovernanceStatus(StrEnum):
@@ -194,6 +195,28 @@ class Result(ContractModel):
         return self
 
 
+class EndemicChannelPoint(ContractModel):
+    """One API-supplied monthly point for the municipal endemic channel."""
+
+    period: Month
+    cases: NonNegativeCount | None
+    p25: NonNegativeMeasure | None
+    median: NonNegativeMeasure | None
+    p75: NonNegativeMeasure | None
+
+    @model_validator(mode="after")
+    def validate_percentile_order(self) -> Self:
+        """Require ordered percentiles whenever all three are available."""
+        if (
+            self.p25 is not None
+            and self.median is not None
+            and self.p75 is not None
+            and not self.p25 <= self.median <= self.p75
+        ):
+            raise ValueError("endemic channel percentiles must satisfy p25 <= median <= p75")
+        return self
+
+
 class Municipality(ContractModel):
     """Observed municipal context and exactly one result per horizon."""
 
@@ -204,14 +227,43 @@ class Municipality(ContractModel):
     p25: NonNegativeMeasure | None
     median: NonNegativeMeasure | None
     p75: NonNegativeMeasure | None
+    endemic_channel_series: list[EndemicChannelPoint]
     results: Annotated[list[Result], Field(min_length=2, max_length=2)]
 
     @model_validator(mode="after")
-    def validate_horizons(self) -> Self:
-        """Require T1 and T2 exactly once for every municipality."""
+    def validate_observed_context_and_horizons(self) -> Self:
+        """Validate observed context, monthly ordering, and both horizons."""
         horizons = [result.horizon for result in self.results]
         if len(set(horizons)) != 2 or set(horizons) != set(Horizon):
             raise ValueError("Municipality results must contain T1 and T2 exactly once")
+
+        periods = [point.period for point in self.endemic_channel_series]
+        if len(periods) != len(set(periods)):
+            raise ValueError("endemic_channel_series periods must be unique")
+        if periods != sorted(periods):
+            raise ValueError("endemic_channel_series must be chronologically ordered")
+
+        summary = (self.cases_t, self.p25, self.median, self.p75)
+        if not self.endemic_channel_series:
+            if self.endemic_zone_t is not EndemicZone.UNAVAILABLE or any(
+                value is not None for value in summary
+            ):
+                raise ValueError(
+                    "Empty endemic_channel_series requires unavailable observed context"
+                )
+            return self
+
+        if self.endemic_zone_t is EndemicZone.UNAVAILABLE and any(
+            value is not None for value in summary
+        ):
+            raise ValueError("UNAVAILABLE endemic context requires null summary values")
+        if (
+            self.p25 is not None
+            and self.median is not None
+            and self.p75 is not None
+            and not self.p25 <= self.median <= self.p75
+        ):
+            raise ValueError("summary percentiles must satisfy p25 <= median <= p75")
         return self
 
 
@@ -276,6 +328,41 @@ class DashboardResponse(ContractModel):
                     raise ValueError(
                         f"{result.horizon.value} target_period must be {expected_period} "
                         f"for reference_period {self.metadata.reference_period}"
+                    )
+
+            series = municipality.endemic_channel_series
+            if series:
+                reference_year = self.metadata.reference_period[:4]
+                if any(point.period[:4] != reference_year for point in series):
+                    raise ValueError(
+                        "endemic_channel_series must use the reference-period calendar year"
+                    )
+                if any(
+                    point.period > self.metadata.reference_period and point.cases is not None
+                    for point in series
+                ):
+                    raise ValueError("Observed cases after reference_period must be null")
+                reference_points = [
+                    point for point in series if point.period == self.metadata.reference_period
+                ]
+                if len(reference_points) != 1:
+                    raise ValueError(
+                        "Non-empty endemic_channel_series requires one reference-period point"
+                    )
+                reference_point = reference_points[0]
+                if (
+                    reference_point.cases,
+                    reference_point.p25,
+                    reference_point.median,
+                    reference_point.p75,
+                ) != (
+                    municipality.cases_t,
+                    municipality.p25,
+                    municipality.median,
+                    municipality.p75,
+                ):
+                    raise ValueError(
+                        "Reference-period endemic point must match municipal summary fields"
                     )
 
         available_ids = [
