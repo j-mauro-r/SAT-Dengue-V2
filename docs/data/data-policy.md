@@ -2,7 +2,7 @@
 
 ## Sources and Current Local Use
 
-Epidemiological and climate snapshots are supplied locally. Notebook 03 produces consolidated individual and monthly outputs; notebook 04 derives separate model-preparation bundles without rewriting those sources. January 2020 climate recovery is incorporated for the reviewed Tolima/Meta scope. Consult the [decision register](../product/traking-concluciones.md) for provenance limits and the [preparation workflow](../product/stage-3/README.md) for implemented identity/preservation controls.
+Epidemiological and climate snapshots are supplied locally. The Kedro `data` pipeline produces new isolated consolidated individual/monthly outputs and readiness evidence; notebook 03 and its original outputs remain historical evidence. Notebook 04 still derives separate model-preparation bundles without rewriting those sources. Current execution and engineering identities are owned by the [migration record](../operations/kedro-migration.md#stage-2-execution--session-3). January 2020 climate recovery is incorporated for the reviewed Tolima/Meta scope. Consult the [decision register](../product/traking-concluciones.md) for provenance limits and the [preparation workflow](../product/stage-3/README.md) for implemented identity/preservation controls.
 
 Exact original export lineage, universal upstream retrieval and historical operational snapshots are not established by the local pipelines. DANE reference provenance is recorded with local hashes; this does not certify historical boundary applicability or complete reporting.
 

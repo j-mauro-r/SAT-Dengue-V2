@@ -1,23 +1,15 @@
 from __future__ import annotations
 
-import importlib.util
 import json
-import sys
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
 import pandas as pd  # type: ignore[import-untyped]
 
+from sat_dengue.datasets import legacy_readiness as readiness
+
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location(
-    "stage2_training_readiness",
-    ROOT / "scripts/validate_stage2_training_readiness.py",
-)
-assert SPEC and SPEC.loader
-readiness = importlib.util.module_from_spec(SPEC)
-sys.modules[SPEC.name] = readiness
-SPEC.loader.exec_module(readiness)
 
 
 def test_build_model_eligibility_policy_uses_conservative_bounds() -> None:

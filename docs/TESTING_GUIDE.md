@@ -416,7 +416,6 @@ Run from the repository root with the existing `.venv` (no installation into it)
 ```bash
 export PATH="$PWD/.venv/bin:$PATH"
 export PYTHONDONTWRITEBYTECODE=1
-export PYTEST_DEBUG_TEMPROOT="$PWD/tmp/kedro-migration"
 python -m pytest tests/unit -q
 python -m pytest tests/integration/test_migration_parity.py -q
 python -m pytest tests/integration/test_migration_parity.py --require-migration-evidence -q
@@ -470,3 +469,43 @@ all-plan historical failures separately. CI now checks `src tests` for lint,
 format and typing and collects configuration contracts alongside existing synthetic
 tests. No model fitting with real data, notebook execution or scientific pipeline
 migration is authorized by these foundation gates.
+
+## Kedro Stage 2 data migration (Session 3)
+
+Use `tmp/kedro-migration/foundation`; commands require no `PYTEST_DEBUG_TEMPROOT`,
+`PYTEST_ADDOPTS`, `--basetemp` or changes to `TMPDIR`.
+
+| Maintained surface | Safeguards |
+| --- | --- |
+| `src/sat_dengue/data/consolidation.py` | Existing `test_consolidated_dataset_pipeline.py`: normalization, dates, aggregation, zeros/missingness, Y/P75 and channel boundaries |
+| `src/sat_dengue/data/readiness.py` | Existing `test_stage2_training_readiness.py`: independent channel, eligibility, temporal selectors and provenance |
+| `data/validation.py`, `data/workflow.py`, `pipelines/data/`, `datasets/stage2.py` | `test_kedro_data.py`: actual synthetic graph, explicit snapshot dependencies, wrong schema/keys/month coverage/source manifest, contradictory science, no overwrite and corrupted membership |
+| `datasets/legacy_*`, old script adapters | Original Stage 2 unit guards; Stage 3 unit consumers stay intact |
+| Catalog/registry/configuration | `test_repository_bootstrap.py`, `tests/contracts/test_kedro_configuration.py`, `test_kedro_data.py` |
+| Protected real Stage 2 inputs/outputs | `test_data_kedro_complete_stage2_parity` in `test_migration_parity.py`: actual CLI, complete cohorts, ordered frames/dtypes/schema/masks, byte-exact individual CSV, full targets/channel/readiness/provenance and before/after preservation |
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+python -m pytest tests/unit tests/contracts tests/integration/test_migration_parity.py -q
+python -m pytest tests/integration/test_migration_parity.py --require-migration-evidence -q
+python -m ruff check src tests
+python -m ruff format --check src tests
+python -m mypy src tests
+python -m pip check
+python scripts/check_markdown_links.py
+bash .agents/skills/deepworkplan/verify/conformance.sh --repo-only
+bash .agents/skills/deepworkplan/verify/conformance.sh --plan PLAN_030_kedro_architecture_migration
+git diff --check
+```
+
+Also run the exact AC-data compound command declared by PLAN_030 through the
+local official DWP gate runner. Its historical selector excludes filenames
+containing `training`, so the separate full affected unit/CI selection is required
+for all readiness guards. Default CI uses only synthetic tests; private evidence
+is mandatory locally and cannot pass through a missing-data skip.
+
+The two-script original/current mapping in `operations/kedro-data-identities.json`
+is verified separately from the unchanged foundation metadata mapping. The private
+suite preserves all 2,553 original identities, every native bundle, and the exact
+13 historical exceptions / 17 KEEP / UNVERIFIED dispositions. No historical
+notebook, model fitting, Stage 3 construction or tracking is required by this gate.

@@ -2,7 +2,7 @@
 
 ## Implemented Local Scientific Pipeline
 
-1. [Notebook 03](../../notebooks/03_consolidated_dataset_pipeline.ipynb) and `scripts/stage2_consolidated_dataset_pipeline.py` consume the epidemiological and climate sources. They publish the individual consolidated CSV, municipality-month panel, current endemic-channel state, future Y and construction/quality evidence.
+1. The Kedro `data` graph consumes verified epidemiological/climate sources and publishes new isolated individual/monthly outputs, current channel, future Y and readiness/provenance evidence. Pure rules live in `src/sat_dengue/data/`. [Notebook 03](../../notebooks/03_consolidated_dataset_pipeline.ipynb), its original outputs and import/CLI adapter remain preserved for historical and downstream consumers.
 2. [Notebook 04](../../notebooks/04_training_preparation_pipeline.ipynb) orchestrates `scripts/training_preparation/`. It reads notebook 03 products without rerunning EDA, creates deterministic antecedents, selects temporal X/Y, fits preparers on training only and persists immutable bundles with reusable JSON state.
 3. The [preparation workflow](../product/stage-3/README.md) owns interfaces and output roles. Stage 4 trained the candidate families and Stage 5 completed the frozen 2025 comparison. All six candidate/horizon procedures missed the approved false-alert constraint; Mauricio accepted G5 `NOT_APPROVED`, no champion is selected, and Stage 5 is closed. The [master plan](../roadmap/master-plan.md) owns the integration boundary.
 
@@ -13,28 +13,29 @@ Private source data, derived CSVs and runtime evidence stay outside Git under th
 [ADR-0002](../decisions/adr-0002-kedro-orchestration-boundary.md) owns the package,
 configuration and dependency decision. `src/sat_dengue/configuration.py` resolves
 operational settings without framework imports; `config_loader.py` validates
-merged YAML/runtime parameters; `pipeline_registry.py` assembles the one-node
-`foundation` graph; `datasets.py` reads the five approved scientific JSON documents
-and publishes a content-verified read-only execution snapshot. Settings register
-the loader. No scientific stage has moved into this package yet.
+merged YAML/runtime parameters; `pipeline_registry.py` registers the one-node
+`foundation` graph and the 11-node Stage 2 `data` graph; `datasets/` reads the
+approved scientific JSON documents and publishes verified execution snapshots and
+isolated Stage 2 engineering bundles. Settings register the loader.
 
 ```text
 conf/base + approved scientific JSON + execution provenance
     -> strict configuration resolution -> immutable per-run JSON snapshot
 ```
 
-Only `profile: foundation` and `tracking: disabled` are implemented. No scientific
+The implemented profiles are `foundation` and `data`, both with `tracking: disabled`. No scientific
 values can be supplied through YAML. Catalog replacement, unknown settings and
 changed authority identities fail closed. Existing physical data/artifact paths,
 scientific bundles and original hashes remain authoritative. MLflow is an optional
-pinned dependency; its adapter belongs to T-tracking. Future stage assembly must
-consume resolved configuration after snapshot publication, while domain functions
-remain independent of framework and persistence concerns.
+pinned dependency; its adapter belongs to T-tracking. The data graph consumes resolved configuration after snapshot publication.
+All future stage assembly must retain this boundary; domain calculations remain
+independent of framework and persistence concerns.
 
 The [migration record](../operations/kedro-migration.md) owns installation,
-metadata lineage and the session's exact dispositions. The original script and
-notebook workflow above remains the scientific implementation until later
-separately authorized parity gates pass.
+metadata lineage, the Stage 2 catalog and exact dispositions. Stage 2 parity
+compares complete protected cohorts and preserves original bytes/identities.
+Stage 3 and later implementations remain at their existing script/notebook
+entrypoints until their separately authorized migration tasks.
 
 ## Planned Runtime Product
 

@@ -1,12 +1,13 @@
-"""Assemble only the implemented configuration-validation pipeline."""
+"""Assemble the implemented foundation and Stage 2 data pipelines."""
 
 from kedro.pipeline import Pipeline, node
 
 from sat_dengue.configuration import resolve_configuration
+from sat_dengue.pipelines.data.pipeline import create_pipeline
 
 
 def register_pipelines() -> dict[str, Pipeline]:
-    """Expose a useful no-fit command; scientific pipelines follow in later tasks."""
+    """Expose foundation by default and explicit no-fit Stage 2 execution."""
     foundation = Pipeline(
         [
             node(
@@ -17,4 +18,4 @@ def register_pipelines() -> dict[str, Pipeline]:
             ),
         ]
     )
-    return {"__default__": foundation, "foundation": foundation}
+    return {"__default__": foundation, "foundation": foundation, "data": create_pipeline()}

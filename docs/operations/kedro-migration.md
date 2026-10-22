@@ -272,7 +272,7 @@ prerequisites explicitly require owning-stage integration tests before retiremen
 | `scripts/model_training/pipeline.py` | MIGRATE | Preserve existing domain logic and safeguards | `scripts/model_evaluation/pipeline.py`, `tests/unit/test_model_evaluation.py`, `tests/unit/test_model_metrics.py`, `tests/unit/test_model_training.py`; 1 more (local consumers.json) | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/model_training/pipeline.py` | Pending |
 | `scripts/model_training/references.py` | MIGRATE | Preserve existing domain logic and safeguards | `scripts/final_evaluation/pipeline.py`, `scripts/model_assessment/loading.py`, `scripts/model_evaluation/pipeline.py`, `tests/unit/test_final_evaluation.py`; 1 more (local consumers.json) | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/model_training/references.py` | Pending |
 | `scripts/model_training/xgboost_adapter.py` | MIGRATE | Preserve existing domain logic and safeguards | `tests/unit/test_candidate_families.py`, `tests/unit/test_xgboost_candidate.py` | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/model_training/xgboost_adapter.py` | Pending |
-| `scripts/stage2_consolidated_dataset_pipeline.py` | MIGRATE | Preserve existing domain logic and safeguards | `docs/architecture/system-overview.md`, `docs/product/stage-2/CH1-dataset-construction-candidate.md`, `scripts/validate_stage2_training_readiness.py`, `tests/unit/test_consolidated_dataset_pipeline.py`; 1 more (local consumers.json) | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/stage2_consolidated_dataset_pipeline.py` | Pending |
+| `scripts/stage2_consolidated_dataset_pipeline.py` | ADAPT | Preserve existing domain logic and safeguards | `docs/architecture/system-overview.md`, `docs/product/stage-2/CH1-dataset-construction-candidate.md`, `scripts/validate_stage2_training_readiness.py`, `tests/unit/test_consolidated_dataset_pipeline.py`; 1 more (local consumers.json) | `src/sat_dengue/data/; datasets/legacy_* compatibility helpers` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/stage2_consolidated_dataset_pipeline.py` | Migrated; thin adapter retained until T-cleanup |
 | `scripts/stage2_derived_recompute_reconciliation.py` | MIGRATE | Preserve existing domain logic and safeguards | `docs/archive/experimental-eda/README.md` | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/stage2_derived_recompute_reconciliation.py` | Pending |
 | `scripts/stage2_manifest_traceability.py` | MIGRATE | Preserve existing domain logic and safeguards | `docs/archive/experimental-eda/README.md`, `scripts/stage2_panel_review.py` | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/stage2_manifest_traceability.py` | Pending |
 | `scripts/stage2_monthly_sensitivity_analysis.py` | MIGRATE | Preserve existing domain logic and safeguards | `docs/archive/experimental-eda/README.md`, `docs/archive/experimental-eda/stage-2/DATA-02-monthly-sensitivity-associations.md` | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/stage2_monthly_sensitivity_analysis.py` | Pending |
@@ -290,7 +290,7 @@ prerequisites explicitly require owning-stage integration tests before retiremen
 | `scripts/training_preparation/preprocessing.py` | MIGRATE | Preserve existing domain logic and safeguards | `docs/product/stage-3/README.md`, `scripts/model_training/candidate_preparation.py`, `tests/unit/test_training_temporal.py` | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/training_preparation/preprocessing.py` | Pending |
 | `scripts/training_preparation/temporal.py` | MIGRATE | Preserve existing domain logic and safeguards | `docs/TESTING_GUIDE.md`, `docs/product/stage-3/README.md`, `scripts/model_training/candidate_selection.py`, `scripts/model_training/events.py`; 2 more (local consumers.json) | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/training_preparation/temporal.py` | Pending |
 | `scripts/training_preparation/validation.py` | MIGRATE | Preserve existing domain logic and safeguards | `tests/unit/test_training_preparation.py` | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/training_preparation/validation.py` | Pending |
-| `scripts/validate_stage2_training_readiness.py` | MIGRATE | Preserve existing domain logic and safeguards | `docs/product/stage-2/CH1-dataset-construction-candidate.md`, `scripts/training_preparation/development.py`, `scripts/training_preparation/eligibility.py`, `tests/unit/test_stage2_training_readiness.py`; 1 more (local consumers.json) | `src/sat_dengue equivalent module; then retire old entry` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/validate_stage2_training_readiness.py` | Pending |
+| `scripts/validate_stage2_training_readiness.py` | ADAPT | Preserve existing domain logic and safeguards | `docs/product/stage-2/CH1-dataset-construction-candidate.md`, `scripts/training_preparation/development.py`, `scripts/training_preparation/eligibility.py`, `tests/unit/test_stage2_training_readiness.py`; 1 more (local consumers.json) | `src/sat_dengue/data/; datasets/legacy_* compatibility helpers` | Per-stage parity and all import consumers moved | `89d538c93ff2:scripts/validate_stage2_training_readiness.py` | Migrated; thin adapter retained until T-cleanup |
 | `skills-lock.json` | KEEP | Unclassified or unaffected; retain until individually reviewed | `.github/pull_request_template.md`, `.github/workflows/ci.yml`, `AGENTS.md`, `docs/TESTING_GUIDE.md`; 1 more (local consumers.json) | `Same path` | Explicit review before any mutation | `89d538c93ff2:skills-lock.json` | Pending |
 | `tests/unit/test_candidate_families.py` | UPDATE | Retain regression coverage while adapting import ownership | Owning directory / no direct textual reference found; review before change | `Same tests plus mapped integration coverage` | Owning stage replacement passes equivalent safeguards | `89d538c93ff2:tests/unit/test_candidate_families.py` | Pending |
 | `tests/unit/test_consolidated_dataset_pipeline.py` | UPDATE | Retain regression coverage while adapting import ownership | `docs/product/stage-2/CH1-dataset-construction-candidate.md` | `Same tests plus mapped integration coverage` | Owning stage replacement passes equivalent safeguards | `89d538c93ff2:tests/unit/test_consolidated_dataset_pipeline.py` | Pending |
@@ -593,3 +593,96 @@ No file is deleted, moved, retired or archived. ADR-0001 and pinned skills are
 unchanged. Skills disposition: none; existing local DWP helpers suffice. Session 3
 still needs separately authorized Stage 2/preparation migration and parity; this
 foundation does not establish historical reproducibility or approve a champion.
+
+## Stage 2 execution — Session 3
+
+The `data` pipeline now owns Stage 2 construction. Run from the repository root
+with the preserved isolated foundation environment:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+kedro run --pipeline=data --params=profile=data
+```
+
+The default remains the foundation graph. Tracking stays disabled. The data graph
+publishes and reloads an explicit verified configuration snapshot before scientific
+computation. Its 11 nodes resolve configuration, scope, normalize daily climate,
+consolidate notifications, aggregate notification counts and climate, construct the
+panel, compute targets, compute the current channel, audit readiness and assemble
+provenance. Domain calculations live in `src/sat_dengue/data/`; the thin node
+exports and graph assembly live in `src/sat_dengue/pipelines/data/`.
+
+| Catalog entry | Adapter / explicit data |
+| --- | --- |
+| `configuration_inputs` | Existing read-only scientific JSON authorities and engineering provenance |
+| `resolved_configuration` | `PublishedConfigurationDataset`: atomic snapshot, then exact-instance reload |
+| `stage2_sources` | `Stage2SourcesDataset`: pinned construction contract, native execution manifest, DIVIPOLA and source identities |
+| `stage2_epi_raw` | `Stage2RawCsvDataset`: ordered, read-only general/severe notification chunks |
+| `stage2_climate_raw` | `Stage2RawCsvDataset`: read-only daily climate chunks |
+| `stage2_consolidated` | `Stage2ConsolidatedDataset`: atomic no-replace streaming CSV, then explicit verified reload |
+| `stage2_bundle` | `Stage2BundleDataset`: atomic isolated engineering bundle with verified payload membership and hashes |
+
+Only these entries require persistence or input adapters. Intermediate scope,
+frames, counts, traces, eligibility and diagnostics are explicit in-memory Kedro
+outputs. Operational source paths and chunk sizes are in the validated catalog;
+scientific YAML overrides remain rejected. The existing local construction JSON
+is pinned and included in the resolved snapshot; it is not copied into a second
+scientific authority. Missing private sources/contracts fail the data run.
+
+Each invocation creates `tmp/kedro-migration/data-runs/<run_id>/consolidated.csv`
+and a `bundle/` containing `panel.csv`, `y_history.csv`, `channel_history.csv`,
+`eligibility.csv`, `readiness.json`, `construction.json`, `summary.json` and
+`manifest.json`. Readiness audits development eligibility and exclusions; it does
+not build Stage 3 features, fit transformations or train models. The bundle links
+the original input/native-document hashes, consolidated bytes and resolved
+configuration hash; its new engineering identity never replaces a native identity.
+Existing bundles cannot be overwritten or selected through an implicit latest.
+Partial failed runs remain isolated without a completed bundle manifest.
+
+`data/consolidation.py` and `data/readiness.py` retain the existing calculations;
+`data/validation.py` checks contract/key/month coverage and `data/workflow.py`
+composes them without filesystem or framework imports. Legacy notebook audit,
+reuse-verification and I/O helpers are retained in `datasets/legacy_consolidation.py`
+and `datasets/legacy_readiness.py`. The old consolidation `run_pipeline` and CLI
+route to the single Kedro graph; custom chunk sizes are recorded as engineering
+I/O settings. `--dry-run` uses disposable isolated output storage. Historical
+`--reuse-existing` remains accepted but never reuses or overwrites an old bundle.
+
+The two original script paths are thin import/CLI adapters. Notebook 03 and
+Stage 3 eligibility/fingerprint consumers still reference them; their physical
+retirement belongs to T-cleanup after consumer migration. Readiness's legacy CLI
+continues its historical notebook audit and can report changed engineering-code
+fingerprints; it is not the new data-pipeline readiness entrypoint. No historical
+notebook is re-executed to refresh that evidence. The unchanged manifest-transition,
+derived-reconciliation and retired EDA scripts remain historical/test surfaces;
+the data pipeline verifies current identities and reconciles newly derived counts
+without replaying their old source-mutating orchestration.
+
+Mauricio's closed Session 3 preservation amendment is recorded by local DWP 7.8.1
+as revision 4, parent revision 3 `acb5cf72402b...`. Exactly
+`scripts/stage2_consolidated_dataset_pipeline.py` and
+`scripts/validate_stage2_training_readiness.py` have new engineering identities in
+[kedro-data-identities.json](kedro-data-identities.json). Their original bytes are
+verified against the immutable baseline at Git revision
+`f837c9fa27dd2244307786156895794fc3158434`. This adds to the existing two dependency
+metadata mappings; every other protected file and all native bundles stay intact.
+No baseline, scientific rule, tolerance or closed historical source exception was
+changed. The 13 exceptions and 17 KEEP / UNVERIFIED bundles remain excluded from
+equivalence; full historical reproducibility is not claimed.
+
+Validation ownership is in the [testing guide](../TESTING_GUIDE.md). Private parity
+runs the actual Kedro CLI and compares every consolidated row (including raw 2013
+dates), all panel/trace rows, schemas, masks, targets, current channel, source
+coverage, eligibility and provenance. It covers the complete January 2020 and
+cross-year cohorts. New manifests differ only as separately identified engineering
+provenance. Reports and execution logs are local under PLAN_030
+`analysis_results/session3/`; per-run complete comparisons are in `parity.json`.
+G5 remains NOT_APPROVED, champion not_selected, zero real fits; T-preparation and
+all later tasks are outside this session.
+
+The construction record CH1 and the canonical field matrix are themselves protected
+scientific baseline files. Their original bytes are retained; current engineering
+execution is documented here and in the testing guide/data policy. The session's
+preservation amendment authorizes no documentation exception. Existing chapter
+execution references describe their preserved construction evidence, while this
+section owns the new operational route. No source semantics were rewritten.

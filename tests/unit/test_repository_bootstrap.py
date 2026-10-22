@@ -16,14 +16,18 @@ def test_repository_bootstrap() -> None:
     metadata = bootstrap_project(ROOT)
     assert metadata.package_name == "sat_dengue"
     assert importlib.metadata.version("sat-dengue-v2") == sat_dengue.__version__
-    assert set(pipelines) == {"__default__", "foundation"}
+    assert set(pipelines) == {"__default__", "foundation", "data"}
     assert {node.name for node in pipelines["foundation"].nodes} == {"resolve_configuration"}
     assert pipelines["foundation"].inputs() == {"configuration_inputs", "parameters"}
     assert pipelines["foundation"].outputs() == {"resolved_configuration"}
 
 
 def test_domain_functions_have_no_orchestration_or_tracking_imports() -> None:
-    paths = [*ROOT.joinpath("scripts").rglob("*.py"), ROOT / "src/sat_dengue/configuration.py"]
+    paths = [
+        *ROOT.joinpath("scripts").rglob("*.py"),
+        ROOT / "src/sat_dengue/configuration.py",
+        *ROOT.joinpath("src/sat_dengue/data").glob("*.py"),
+    ]
     for path in paths:
         tree = ast.parse(path.read_text())
         for statement in ast.walk(tree):

@@ -51,6 +51,16 @@ scientific decisions. Installing a framework does not establish scientific parit
   other 2,551 protected files remain unchanged at their original paths. Do not
   modify the original baseline or broaden this mapping.
 
+## Bounded Session 3 extension
+
+Mauricio subsequently authorized only Stage 2 data migration and its closed
+two-script preservation mapping. The implemented `data` graph publishes and
+consumes the resolved snapshot; the [migration record](../operations/kedro-migration.md#stage-2-execution--session-3)
+owns its catalog, isolated outputs and exact original/current identities. The
+foundation-specific descriptions above retain the scope of the original decision.
+No scientific authority, tolerance or historical exception changes. Stage 3 and
+tracking remain separately gated.
+
 ## Consequences
 
 No scientific function, data location, cohort, metric, tolerance, target, feature

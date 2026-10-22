@@ -11,14 +11,34 @@ from sat_dengue.configuration import validate_parameters
 CATALOG = {
     "configuration_inputs": {"type": "sat_dengue.datasets.ConfigurationInputsDataset"},
     "resolved_configuration": {
-        "type": "sat_dengue.datasets.ImmutableConfigurationDataset",
+        "type": "sat_dengue.datasets.stage2.PublishedConfigurationDataset",
         "filepath": "tmp/kedro-migration/runs",
+    },
+    "stage2_sources": {"type": "sat_dengue.datasets.stage2.Stage2SourcesDataset"},
+    "stage2_epi_raw": {
+        "type": "sat_dengue.datasets.stage2.Stage2RawCsvDataset",
+        "filepaths": ["data/raw/dengue.csv", "data/raw/dengue_grave.csv"],
+        "chunksize": 200000,
+        "epidemiology": True,
+    },
+    "stage2_climate_raw": {
+        "type": "sat_dengue.datasets.stage2.Stage2RawCsvDataset",
+        "filepaths": ["data/raw/google_earth_engine.csv"],
+        "chunksize": 250000,
+    },
+    "stage2_consolidated": {
+        "type": "sat_dengue.datasets.stage2.Stage2ConsolidatedDataset",
+        "filepath": "tmp/kedro-migration/data-runs",
+    },
+    "stage2_bundle": {
+        "type": "sat_dengue.datasets.stage2.Stage2BundleDataset",
+        "filepath": "tmp/kedro-migration/data-runs",
     },
 }
 
 
 class ValidatedConfigLoader(OmegaConfigLoader):
-    """Allow only the configuration exercised by the foundation pipeline."""
+    """Allow only the operational catalog exercised by implemented pipelines."""
 
     def __getitem__(self, key: str) -> dict[str, Any]:
         value = super().__getitem__(key)

@@ -83,7 +83,56 @@ def verify_preservation_records(root: Path, records: dict[str, Any]) -> int:
             f"Engineering metadata fingerprint mismatch: {name}"
         )
     others = {name: value for name, value in records.items() if name not in METADATA_ORIGINALS}
-    return require_records(root, others) + len(METADATA_ORIGINALS)
+    return verify_data_preservation(root, others) + len(METADATA_ORIGINALS)
+
+
+DATA_REVISION = "f837c9fa27dd2244307786156895794fc3158434"
+DATA_ORIGINALS = {
+    "scripts/stage2_consolidated_dataset_pipeline.py": {
+        "bytes": 85188,
+        "sha256": "749074cca6b6a9c79953a13153265c4da894223d5b79f3af61d00c7327a9bbde",
+    },
+    "scripts/validate_stage2_training_readiness.py": {
+        "bytes": 96887,
+        "sha256": "5c6397b3999f1f26dd169659a73ae3fd36cd5a9bdb6b20a5419edf230e297ddd",
+    },
+}
+
+
+DATA_ENGINEERING = {
+    "scripts/stage2_consolidated_dataset_pipeline.py": {
+        "bytes": 332,
+        "sha256": "d1cadfebfdc593b06e6381f693b3289d2c42961059cc744795e031097c8385da",
+    },
+    "scripts/validate_stage2_training_readiness.py": {
+        "bytes": 328,
+        "sha256": "99595441e56190b11264722ed4908d1bbd080b3acd5f170afcc0844e42cf0b78",
+    },
+}
+
+
+def verify_data_preservation(root: Path, records: dict[str, Any]) -> int:
+    ledger_path = root / "docs/operations/kedro-data-identities.json"
+    if not set(DATA_ORIGINALS).issubset(records) or not ledger_path.exists():
+        return require_records(root, records)
+    assert not ledger_path.is_symlink()
+    ledger = json.loads(ledger_path.read_text())
+    assert set(ledger) == {"schema", "original_revision", "baseline_sha256", "files"}
+    assert ledger["schema"] == "kedro-data-migration-identities-v1"
+    assert ledger["original_revision"] == DATA_REVISION
+    assert ledger["baseline_sha256"] == BASELINE_SHA256
+    assert set(ledger["files"]) == set(DATA_ORIGINALS), "Expanded Stage 2 preservation mapping"
+    for name, original in DATA_ORIGINALS.items():
+        entry = ledger["files"][name]
+        assert set(entry) == {"original", "engineering"}
+        assert records[name] == entry["original"] == original
+        raw = subprocess.check_output(["git", "show", f"{DATA_REVISION}:{name}"], cwd=root)
+        assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == original
+        assert (
+            fingerprint(safe_path(root, name)) == entry["engineering"] == DATA_ENGINEERING[name]
+        ), "Stage 2 engineering identity mismatch"
+    remaining = {k: v for k, v in records.items() if k not in DATA_ORIGINALS}
+    return (require_records(root, remaining) if remaining else 0) + len(DATA_ORIGINALS)
 
 
 def verify_native_bundle(bundle: Path) -> dict[str, Any]:

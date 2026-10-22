@@ -50,7 +50,8 @@ class ConfigurationInputsDataset(AbstractDataset[dict[str, Any], dict[str, Any]]
         )
         code = {str(path.relative_to(root)): _sha256(path) for path in paths}
         loaded_code = {
-            path.name: _sha256(path) for path in sorted(Path(__file__).parent.glob("*.py"))
+            str(path.relative_to(Path(__file__).resolve().parents[1])): _sha256(path)
+            for path in sorted(Path(__file__).resolve().parents[1].rglob("*.py"))
         }
         packages: dict[str, str | None] = {}
         for name in ("sat-dengue-v2", "kedro", "kedro-datasets", "mlflow", "lightgbm"):

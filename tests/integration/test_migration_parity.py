@@ -504,3 +504,236 @@ def test_baseline_required_gate_rejects_zero_selected_evidence() -> None:
     )
     assert result.returncode == 4
     assert "zero eligible migration comparisons" in result.stderr
+
+
+@pytest.mark.migration_evidence
+def test_data_kedro_complete_stage2_parity(protected_baseline: dict) -> None:
+    """Run actual Kedro over all protected Stage 2 inputs; compare every output row."""
+    import sys
+
+    from migration_support import verify_data_preservation
+
+    assert (
+        verify_data_preservation(
+            ROOT,
+            {k: v for k, v in protected_baseline["protected"].items() if k.startswith("scripts/")},
+        )
+        > 0
+    )
+    before = verify_protected_inventory(ROOT, protected_baseline)
+    storage = EVIDENCE / "data-runs"
+    previous = set(storage.iterdir()) if storage.exists() else set()
+    env = dict(os.environ, KEDRO_DISABLE_TELEMETRY="yes")
+    for name in ("PYTEST_DEBUG_TEMPROOT", "PYTEST_ADDOPTS"):
+        env.pop(name, None)
+    try:
+        result = subprocess.run(
+            [sys.executable, "-m", "sat_dengue", "--pipeline=data", "--params=profile=data"],
+            cwd=ROOT,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=600,
+        )
+        assert result.returncode == 0, result.stdout[-8000:] + result.stderr[-8000:]
+        created = set(storage.iterdir()) - previous
+        assert len(created) == 1, "Expected a unique isolated execution"
+        run = created.pop()
+        bundle = run / "bundle"
+        manifest = json.loads((bundle / "manifest.json").read_text())
+        assert manifest["real_fits"] == 0
+        native_dir = ROOT / "data/interim/stage2_consolidated_dataset_pipeline"
+        native = json.loads((native_dir / "execution_manifest.json").read_text())
+        assert (
+            manifest["provenance"]["inputs"]
+            == native["input_fingerprints_before"]
+            == native["input_fingerprints_after"]
+        )
+        comparisons = {}
+        pairs = {
+            "panel.csv": ROOT / "data/processed/panel_mensual_dengue_clima.csv",
+            "y_history.csv": native_dir / "y_label_history_traceability.csv",
+            "channel_history.csv": native_dir / "current_endemic_channel_traceability.csv",
+        }
+        for name, old in pairs.items():
+            assert fingerprint(old) == fingerprint(bundle / name), f"Byte parity failed: {name}"
+            left = pd.read_csv(old, dtype={"municipality_code": str})
+            right = pd.read_csv(bundle / name, dtype={"municipality_code": str})
+            compare_frames(left, right, numeric=tuple(left.select_dtypes(include="number").columns))
+            comparisons[name] = {
+                "rows": len(left),
+                "columns": len(left.columns),
+                "missingness": "exact",
+                "keys_order_dtypes": "exact",
+                "values": "PASS",
+                "byte_exact": True,
+                "original": fingerprint(old),
+                "engineering": fingerprint(bundle / name),
+            }
+        original_contract = json.loads(
+            (native_dir / "candidate_construction_contract_v1.json").read_text()
+        )
+        migrated_contract = json.loads((bundle / "construction.json").read_text())
+        for key in original_contract:
+            if key != "generated_utc":
+                assert migrated_contract[key] == original_contract[key], key
+        # Full individual cohort, including original dates and assignment reasons. No sampling.
+        old_individual = ROOT / "data/processed/dengue_y_dengue_grave.csv"
+        new_individual = run / "consolidated.csv"
+        assert fingerprint(old_individual) == fingerprint(new_individual), (
+            "Consolidated CSV byte identity changed"
+        )
+        rows = 0
+        for left, right in zip(
+            pd.read_csv(old_individual, dtype=str, keep_default_na=False, chunksize=200_000),
+            pd.read_csv(new_individual, dtype=str, keep_default_na=False, chunksize=200_000),
+            strict=True,
+        ):
+            compare_frames(left, right)
+            rows += len(left)
+        assert rows == native["reconciliation"]["consolidated_rows"] == 1755705
+        panel = pd.read_csv(bundle / "panel.csv", dtype={"municipality_code": str})
+        jan = panel[panel["year_month"].eq("2020-01")]
+        assert len(jan) == 76 and jan["climate_days_observed"].eq(31).all()
+        assert panel["year_month"].str.startswith("2013-").sum() == 76 * 12
+        assert panel.loc[panel["year_month"].eq("2024-11"), "target_period_t2"].eq("2025-01").all()
+        import types
+
+        from migration_support import DATA_ORIGINALS, DATA_REVISION
+
+        original_readiness = types.ModuleType("stage2_parity_original_readiness")
+        sys.modules[original_readiness.__name__] = original_readiness
+        source_name = "scripts/validate_stage2_training_readiness.py"
+        source_bytes = subprocess.check_output(
+            ["git", "show", f"{DATA_REVISION}:{source_name}"], cwd=ROOT
+        )
+        assert hashlib.sha256(source_bytes).hexdigest() == DATA_ORIGINALS[source_name]["sha256"]
+        original_readiness.__file__ = str(ROOT / source_name)
+        exec(compile(source_bytes, str(ROOT / source_name), "exec"), original_readiness.__dict__)
+        readiness = original_readiness
+
+        consolidated_years = pd.read_csv(
+            old_individual, usecols=["ANO"], dtype=str, keep_default_na=False
+        )["ANO"]
+        years = pd.to_numeric(consolidated_years.str.strip(), errors="coerce").dropna().astype(int)
+        expected_policy = readiness.build_model_eligibility_policy(
+            int(years.min()), int(years.max())
+        )
+        audit = json.loads((bundle / "readiness.json").read_text())
+        assert audit["policy"] == expected_policy
+        eligibility = pd.read_csv(bundle / "eligibility.csv", dtype={"municipality_code": str})
+        bounds = expected_policy["development_target_eligibility"]
+        for h in (1, 2):
+            selected = readiness.independent_select_supervised_rows(
+                panel,
+                h,
+                target_min_period=bounds["target_min"],
+                target_max_period=bounds["target_max"],
+            )
+            actual = eligibility.loc[
+                eligibility[f"eligible_t{h}"], ["municipality_code", "year_month"]
+            ]
+            pd.testing.assert_frame_equal(
+                actual.reset_index(drop=True),
+                selected[["municipality_code", "year_month"]].reset_index(drop=True),
+            )
+            assert audit["eligible_rows"][f"t{h}"] == len(selected) > 0
+            target = panel[f"target_period_t{h}"]
+            reasons = panel[f"y_status_t{h}"].astype("string").copy()
+            allowed = target.between(bounds["target_min"], bounds["target_max"])
+            reasons.loc[allowed & panel[f"y_evaluable_t{h}"]] = "eligible"
+            reasons.loc[target < bounds["target_min"]] = "before_backed_history"
+            reasons.loc[target > bounds["target_max"]] = "outside_development_target"
+            pd.testing.assert_series_equal(
+                eligibility[f"exclusion_reason_t{h}"].astype("string"), reasons, check_names=False
+            )
+            for endpoint in readiness.TEMPORAL_WINDOW_TRAIN_ENDPOINTS:
+                cohort = readiness.independent_select_supervised_rows(
+                    panel,
+                    h,
+                    target_min_period=bounds["target_min"],
+                    target_max_period=min(bounds["target_max"], endpoint),
+                    reference_max_period=endpoint,
+                )
+                keys = eligibility.loc[
+                    eligibility[f"eligible_t{h}"]
+                    & panel["year_month"].le(endpoint)
+                    & target.le(endpoint),
+                    ["municipality_code", "year_month"],
+                ]
+                pd.testing.assert_frame_equal(
+                    keys.reset_index(drop=True),
+                    cohort[["municipality_code", "year_month"]].reset_index(drop=True),
+                )
+            assert (
+                eligibility.loc[~eligibility[f"eligible_t{h}"], f"exclusion_reason_t{h}"]
+                .notna()
+                .all()
+            )
+        summary = json.loads((bundle / "summary.json").read_text())
+        assert summary["source_rows"] == native["reconciliation"]["source_rows"]
+        assert summary["climate"] == native["climate_daily_summary"]
+        assert summary["targets"] == {
+            k: v for k, v in native["target_labeling"].items() if k != "retrospective_assumption"
+        }
+        assert summary["channel"] == {
+            k: v
+            for k, v in native["current_endemic_channel"].items()
+            if k != "retrospective_assumption"
+        }
+        for key, value in summary["reconciliation"].items():
+            assert native["reconciliation"][key] == value
+        for name, record in manifest["files"].items():
+            assert fingerprint(bundle / name) == record
+        comparisons["consolidated.csv"] = {
+            "rows": rows,
+            "columns": len(original_contract["datasets"]["dengue_y_dengue_grave"]["schema"]),
+            "comparison": "byte-exact and all ordered chunks",
+            "original": fingerprint(old_individual),
+            "engineering": fingerprint(new_individual),
+        }
+        del sys.modules[original_readiness.__name__]
+        report = {
+            "status": "PASS",
+            "run_id": run.name,
+            "bundle_id": manifest["bundle_id"],
+            "comparisons": comparisons,
+            "eligibility": audit,
+            "January_2020": "76 municipalities / 31 days",
+            "2013": "complete cohort and all original individual date bytes",
+            "cross_year": "complete November 2024 to January 2025 cohort",
+            "provenance": "exact original source identities; separate engineering outputs",
+            "real_fits": 0,
+        }
+        (run / "parity.json").write_text(json.dumps(report, indent=2) + "\n")
+    finally:
+        after = verify_protected_inventory(ROOT, protected_baseline)
+        assert before == after
+
+
+@pytest.mark.migration_evidence
+def test_data_extracted_scientific_functions_match_protected_originals() -> None:
+    """Source equivalence prevents a style rewrite hidden behind successful examples."""
+    import ast
+
+    from migration_support import DATA_ORIGINALS, DATA_REVISION
+
+    count = 0
+    for relative, destination in [
+        ("scripts/stage2_consolidated_dataset_pipeline.py", "src/sat_dengue/data/consolidation.py"),
+        ("scripts/validate_stage2_training_readiness.py", "src/sat_dengue/data/readiness.py"),
+    ]:
+        raw = subprocess.check_output(["git", "show", f"{DATA_REVISION}:{relative}"], cwd=ROOT)
+        assert hashlib.sha256(raw).hexdigest() == DATA_ORIGINALS[relative]["sha256"]
+        old = {
+            n.name: n for n in ast.parse(raw).body if isinstance(n, (ast.FunctionDef, ast.ClassDef))
+        }
+        new = {
+            n.name: n
+            for n in ast.parse((ROOT / destination).read_text()).body
+            if isinstance(n, (ast.FunctionDef, ast.ClassDef))
+        }
+        for name in set(old) & set(new) - {"compute_schema_contract"}:
+            assert ast.dump(old[name]) == ast.dump(new[name]), name
+            count += 1
+    assert count >= 35
