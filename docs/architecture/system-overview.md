@@ -3,7 +3,7 @@
 ## Implemented Local Scientific Pipeline
 
 1. The Kedro `data` graph consumes verified epidemiological/climate sources and publishes new isolated individual/monthly outputs, current channel, future Y and readiness/provenance evidence. Pure rules live in `src/sat_dengue/data/`. [Notebook 03](../../notebooks/03_consolidated_dataset_pipeline.ipynb), its original outputs and import/CLI adapter remain preserved for historical and downstream consumers.
-2. [Notebook 04](../../notebooks/04_training_preparation_pipeline.ipynb) orchestrates `scripts/training_preparation/`. It reads notebook 03 products without rerunning EDA, creates deterministic antecedents, selects temporal X/Y, fits preparers on training only and persists immutable bundles with reusable JSON state.
+2. The Kedro `preparation` graph reads explicitly verified Stage 2 products, creates deterministic antecedents, selects eight temporal X/Y cohorts and replays existing saved preparers without refitting. Pure rules live in `src/sat_dengue/training_preparation/`; dataset adapters persist separate X/Y/keys/controls/schema/state/provenance in new isolated immutable engineering bundles. [Notebook 04](../../notebooks/04_training_preparation_pipeline.ipynb), original bundles and legacy import paths remain preserved.
 3. The [preparation workflow](../product/stage-3/README.md) owns interfaces and output roles. Stage 4 trained the candidate families and Stage 5 completed the frozen 2025 comparison. All six candidate/horizon procedures missed the approved false-alert constraint; Mauricio accepted G5 `NOT_APPROVED`, no champion is selected, and Stage 5 is closed. The [master plan](../roadmap/master-plan.md) owns the integration boundary.
 
 Private source data, derived CSVs and runtime evidence stay outside Git under the [data policy](../data/data-policy.md). Tests use small synthetic fixtures; current contracts and code are versioned.
@@ -14,7 +14,7 @@ Private source data, derived CSVs and runtime evidence stay outside Git under th
 configuration and dependency decision. `src/sat_dengue/configuration.py` resolves
 operational settings without framework imports; `config_loader.py` validates
 merged YAML/runtime parameters; `pipeline_registry.py` registers the one-node
-`foundation` graph and the 11-node Stage 2 `data` graph; `datasets/` reads the
+`foundation` graph, the 11-node Stage 2 `data` graph and seven-node Stage 3 `preparation` graph; `datasets/` reads the
 approved scientific JSON documents and publishes verified execution snapshots and
 isolated Stage 2 engineering bundles. Settings register the loader.
 
@@ -23,7 +23,7 @@ conf/base + approved scientific JSON + execution provenance
     -> strict configuration resolution -> immutable per-run JSON snapshot
 ```
 
-The implemented profiles are `foundation` and `data`, both with `tracking: disabled`. No scientific
+The implemented profiles are `foundation`, `data` and `preparation`, all with `tracking: disabled`. No scientific
 values can be supplied through YAML. Catalog replacement, unknown settings and
 changed authority identities fail closed. Existing physical data/artifact paths,
 scientific bundles and original hashes remain authoritative. MLflow is an optional
@@ -34,8 +34,10 @@ independent of framework and persistence concerns.
 The [migration record](../operations/kedro-migration.md) owns installation,
 metadata lineage, the Stage 2 catalog and exact dispositions. Stage 2 parity
 compares complete protected cohorts and preserves original bytes/identities.
-Stage 3 and later implementations remain at their existing script/notebook
-entrypoints until their separately authorized migration tasks.
+Stage 3 consumes explicit producer/consumer cutoffs and saved-state identities at node
+boundaries. Its real run performs zero model fits and zero preparer refits. Stage 4
+and later implementations retain their existing entrypoints until separately authorized
+migration tasks; tracking remains disabled.
 
 ## Planned Runtime Product
 

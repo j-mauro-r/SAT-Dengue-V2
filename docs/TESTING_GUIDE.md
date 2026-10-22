@@ -93,82 +93,15 @@ root. Verify a new content-hashed read-only snapshot and no data writes. Keep
 private data outside CI. An installed wheel still uses the repository's external
 configuration and approved JSON authorities.
 
-## Training preparation inputs (milestone 1)
+## Historical preparation milestones
 
-The [preparation contract and workflow](product/stage-3/README.md) map
-`scripts/training_preparation/**`, notebook 04 and its preparation contract to
-`.venv/bin/python -m pytest tests/unit/test_training_preparation.py -q`.
-Synthetic tests reject schema/type/nullability errors, duplicate keys, missing
-months/municipalities, invalid categories/coverage, forbidden predictors and
-fingerprint tampering. No private input is needed for those tests.
-
-Run `.venv/bin/python -m scripts.training_preparation.audit` for read-only local
-validation of existing notebook 03 products, including manifest SHA-256 checks.
-This requires the private local products and never regenerates them. For a
-preservation audit, provide `--baseline <path>` with a pre-task fingerprint map.
-Execute notebook 04 cells sequentially with the repository environment; only
-aggregate evidence and contract roles are displayed. Run the full foundation
-gates, lint/format the new modules and check Markdown links for this surface.
-Use `--basetemp=tmp/pytest-training-preparation` when test artifacts must remain
-inside the repository. Report historical global DWP failures separately from
-`conformance.sh --plan .dwp/plans/PLAN_018_training_data_preparation`.
-
-## Deterministic development features (milestone 2)
-
-The same `tests/unit/test_training_preparation.py` also covers two-municipality
-isolation, row-order invariance, December/January boundaries, exact missing-month
-lookups, first observations, valid negative changes, complete T/T−1/T−2 means,
-January-phased cycles, future perturbation, reserved outcome masking, preservation
-of current climate signs, immutable atomic publication, corruption rejection and
-invalidation after data/config/code changes. Use repository-local `--basetemp`.
-
-Run the following to publish an immutable development bundle and then recompute
-all bytes, audit real horizon eligibility against the existing policy, and verify
-original scientific hashes:
-
-```bash
-.venv/bin/python -m scripts.training_preparation.development
-.venv/bin/python -m scripts.training_preparation.development --verify \
-  --baseline .dwp/plans/PLAN_018_training_data_preparation/analysis_results/input_baseline.json
-```
-
-No reserved reference features or model training is generated. Full foundation
-gates remain required. Check new modules with
-`.venv/bin/mypy --explicit-package-bases scripts/training_preparation`, plus
-required `mypy src tests`, Ruff lint/format and Markdown links. Notebook 04 must remain
-code-only and execute sequentially; its summaries are development aggregates only.
-
-## Temporal partitions, inference preparers and executed notebook (milestone 3)
-
-`tests/unit/test_training_temporal.py` maps the temporal/preprocessing/execution
-modules to eight synthetic window/horizon comparisons against the existing
-reference, causal target/origin boundaries, training-only parameters under
-validation perturbation, explicit missing/unknown categories, JSON/CSV inference
-roundtrips, rejected Y/controls and stable notebook code/output identities.
-Run alongside all earlier preparation regressions and the full foundation gate:
-
-```bash
-.venv/bin/python -m pytest tests/unit/test_training_preparation.py tests/unit/test_training_temporal.py -q
-.venv/bin/python -m scripts.training_preparation.temporal
-.venv/bin/python -m scripts.training_preparation.temporal --verify \
-  --baseline .dwp/plans/PLAN_018_training_data_preparation/analysis_results/input_baseline.json
-.venv/bin/python -m scripts.training_preparation.notebook_execution --execute
-.venv/bin/python -m scripts.training_preparation.notebook_execution --verify
-```
-
-The baseline flag uses local plan evidence and may be omitted on another checkout;
-manifest/hash verification still applies. Notebook commands require the optional
-`notebook` extra declared in pyproject; synthetic tests do not require private data
-or notebook runtime packages. Use repository-local `--basetemp` for pytest. Run
-Ruff and explicit-package-bases mypy for all preparation modules, required
-`mypy src tests`, Markdown links, policy scans and scoped DWP conformance. Saved
-notebook outputs must match the current artifacts and an actual new-kernel receipt.
-
-No final-block objective may enter adjustment or comparisons. All eight real
-partitions must agree with reference key sets; 456 T+1 and 380 T+2 validation
-examples per cutoff are expected for the current data, not forced sample limits.
-Configured six-month target intervals and actual horizon-specific origin/target
-support are reported separately. No predictor training is part of these checks.
+Milestones 1–3 and notebook 04 remain preserved dated evidence. Their original
+commands and receipts describe historical execution. Current preparation commands,
+source-to-test mapping and mandatory real parity are owned by
+[Kedro Stage 3 migration](#kedro-stage-3-preparation-migration-session-4).
+Existing feature, temporal, native-category and atomic-publication regression tests
+remain enabled. Do not execute notebooks or refit real preparers to refresh old
+identities. The original baseline and all native scientific bundles remain immutable.
 
 ## Stage 4 shared references (delivery 1)
 
@@ -509,3 +442,52 @@ is verified separately from the unchanged foundation metadata mapping. The priva
 suite preserves all 2,553 original identities, every native bundle, and the exact
 13 historical exceptions / 17 KEEP / UNVERIFIED dispositions. No historical
 notebook, model fitting, Stage 3 construction or tracking is required by this gate.
+
+## Kedro Stage 3 preparation migration (Session 4)
+
+Use the isolated `tmp/kedro-migration/foundation` environment. No
+`PYTEST_DEBUG_TEMPROOT`, `PYTEST_ADDOPTS`, `--basetemp` or global `TMPDIR` change
+is required. The catalog explicitly selects the protected Stage 2 manifest and
+native development/temporal identities; a missing source fails private acceptance.
+
+| Maintained surface | Owning checks |
+| --- | --- |
+| `training_preparation/features.py`, `validation.py`, `eligibility.py`, `contract.py` | `test_training_preparation.py`: all original scientific regressions, role/schema validation, full synthetic graph and X/Y/keys/control alignment |
+| `training_preparation/temporal.py`, `preprocessing.py`, `workflow.py` | `test_training_temporal.py`, `test_training_preparation.py`: eight windows, producer/consumer cutoff negatives, 2025/non-train fit refusal, saved schema/category/order/state, synthetic train-only fit and validation perturbation |
+| `datasets/preparation.py`, `datasets/legacy_preparation/`, `serialization.py` | Preparation unit suites: atomic no-overwrite publication, corrupt payload/manifest/membership, legacy import behavior; original atomic failure cleanup tests remain enabled |
+| `pipelines/preparation/`, catalog, registry and configuration | Actual synthetic Kedro graph, explicit cutoffs/saved states, `test_repository_bootstrap.py` and configuration contracts |
+| Protected real preparation | `test_preparation_kedro_complete_cohorts_and_saved_replay`: actual CLI with call-level fit denial, all 99 original payload bytes, full 16,948-row development cohort, eight temporal cohorts, native categories/dtypes, 29/114-column transforms and saved parameters |
+| Closed original/current mapping | `migration_support.py`: exact twelve-path Session 4 ledger, original Git blobs and current sizes/hashes, plus independent 2,553-file/45-bundle preservation |
+
+Run the exact contractual preparation gate through the official local DWP runner:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+python -m pytest tests/unit/test_training_preparation.py tests/unit/test_training_temporal.py \
+  tests/integration/test_migration_parity.py -k "preparation or temporal or baseline" \
+  --require-migration-evidence -q
+python -m ruff check src tests
+python -m ruff format --check src tests
+python -m mypy src tests
+```
+
+Also run the complete CI synthetic selection and full private suite:
+
+```bash
+python -m pytest tests/unit tests/contracts tests/integration/test_migration_parity.py -v
+python -m pytest tests/integration/test_migration_parity.py --require-migration-evidence -q
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=preparation --params=profile=preparation
+python -m pip check
+python scripts/check_markdown_links.py
+bash .agents/skills/deepworkplan/verify/conformance.sh --repo-only
+bash .agents/skills/deepworkplan/verify/conformance.sh --plan PLAN_030_kedro_architecture_migration
+git diff --check
+```
+
+Lint/format the touched legacy adapters too. Private CLI acceptance installs a fit
+call guard and verifies the protected inventory before and after; all new fits in
+unit tests use deterministic synthetic data. Saved preparers are loaded/replayed,
+never refitted. No model training or Stage 4 migration is part of this gate. Report
+all-plan conformance separately: the two recorded historical plan incidents do not
+become current code failures. The closed preparation mapping preserves the active
+README's original historical bytes while its current owner follows DEC-135.

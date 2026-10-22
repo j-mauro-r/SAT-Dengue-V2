@@ -4,6 +4,7 @@ from kedro.pipeline import Pipeline, node
 
 from sat_dengue.configuration import resolve_configuration
 from sat_dengue.pipelines.data.pipeline import create_pipeline
+from sat_dengue.pipelines.preparation.pipeline import create_pipeline as preparation_pipeline
 
 
 def register_pipelines() -> dict[str, Pipeline]:
@@ -18,4 +19,9 @@ def register_pipelines() -> dict[str, Pipeline]:
             ),
         ]
     )
-    return {"__default__": foundation, "foundation": foundation, "data": create_pipeline()}
+    return {
+        "__default__": foundation,
+        "foundation": foundation,
+        "data": create_pipeline(),
+        "preparation": preparation_pipeline(),
+    }

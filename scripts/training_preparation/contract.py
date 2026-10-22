@@ -1,81 +1,14 @@
-"""Preparation configuration and predictor boundary, separate from source definitions."""
+"""Compatibility import adapter; retire after consumers migrate in T-cleanup."""
 
-from __future__ import annotations
-
-import json
-from dataclasses import dataclass
-from pathlib import Path
+import importlib
+import sys
 from typing import Any
 
-CONTRACT_PATH = Path("docs/product/stage-3/training_preparation_contract_v1.json")
-UPSTREAM_DIR = Path("data/interim/stage2_consolidated_dataset_pipeline")
+_implementation = importlib.import_module("sat_dengue.datasets.legacy_preparation.contract")
 
 
-class PreparationError(ValueError):
-    """An input violates the preparation contract; no repair is attempted."""
+def __getattr__(name: str) -> Any:
+    return getattr(_implementation, name)
 
 
-@dataclass(frozen=True)
-class PreparationConfig:
-    """Configure read-only preparation.
-
-    Args:
-        root: Repository root containing existing notebook 03 products.
-        contract_path: Repository-relative preparation contract path.
-        manifest_path: Repository-relative construction manifest path.
-    """
-
-    root: Path
-    contract_path: Path = CONTRACT_PATH
-    manifest_path: Path = UPSTREAM_DIR / "execution_manifest.json"
-
-    def resolve(self, relative: str | Path) -> Path:
-        """Resolve an input within the repository, rejecting escapes.
-
-        Args:
-            relative: Repository-relative path.
-
-        Returns:
-            Resolved input path.
-
-        Raises:
-            PreparationError: If the path escapes the repository.
-        """
-        root = self.root.resolve()
-        path = (root / relative).resolve()
-        if not path.is_relative_to(root):
-            raise PreparationError(f"Input outside repository: {relative}")
-        return path
-
-
-def read_json(path: Path) -> dict[str, Any]:
-    """Read a JSON object without changing its file.
-
-    Args:
-        path: Existing JSON path.
-
-    Returns:
-        Parsed object.
-
-    Raises:
-        PreparationError: If the root is not an object.
-    """
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise PreparationError(f"Expected JSON object: {path}")
-    return value
-
-
-def validate_predictors(columns: list[str], contract: dict[str, Any]) -> None:
-    """Reject labels, controls and undeclared predictors using an allowlist.
-
-    Args:
-        columns: Proposed predictor names.
-        contract: Preparation contract.
-
-    Raises:
-        PreparationError: If a predictor is duplicated or not explicitly allowed.
-    """
-    forbidden = sorted(set(columns) - set(contract["roles"]["predictors"]))
-    if forbidden or len(columns) != len(set(columns)):
-        raise PreparationError(f"Forbidden or duplicate predictor columns: {forbidden}")
+sys.modules[__name__] = _implementation

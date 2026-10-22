@@ -737,3 +737,205 @@ def test_data_extracted_scientific_functions_match_protected_originals() -> None
             assert ast.dump(old[name]) == ast.dump(new[name]), name
             count += 1
     assert count >= 35
+
+
+@pytest.mark.migration_evidence
+def test_preparation_kedro_complete_cohorts_and_saved_replay(protected_baseline: dict) -> None:
+    """Compare every development row, eight cohorts and all saved state/matrix bytes."""
+    import ast
+    import inspect
+    import sys
+
+    from sat_dengue.datasets.legacy_preparation.pipeline import read_panel
+    from sat_dengue.datasets.preparation import DEVELOPMENT, TEMPORAL
+    from sat_dengue.training_preparation import eligibility as eligibility_domain
+    from sat_dengue.training_preparation import features as feature_domain
+    from sat_dengue.training_preparation import preprocessing as prep_domain
+    from sat_dengue.training_preparation import validation as validation_domain
+    from sat_dengue.training_preparation.features import derive_features
+
+    equivalent = []
+    for old_name, module, names in (
+        ("features", feature_domain, ["calendar_lookup", "derive_features"]),
+        (
+            "preprocessing",
+            prep_domain,
+            [
+                "PreparerSpec",
+                "runtime_versions",
+                "_check_numeric",
+                "_category_values",
+                "fit_preparer",
+            ],
+        ),
+        ("eligibility", eligibility_domain, ["build_controls", "policy_from_years"]),
+        (
+            "validation",
+            validation_domain,
+            [
+                "validate_roles",
+                "validate_schema",
+                "validate_panel",
+                "validate_monthly_support",
+                "validate_counts",
+                "validate_climate_coverage",
+                "validate_target_metadata",
+            ],
+        ),
+    ):
+        original_source = subprocess.check_output(
+            [
+                "git",
+                "show",
+                f"925a784eb20d082efd7e166ab1b6fa35c8505a57:scripts/training_preparation/{old_name}.py",
+            ],
+            cwd=ROOT,
+            text=True,
+        )
+        definitions = {
+            n.name: n
+            for n in ast.parse(original_source).body
+            if isinstance(n, (ast.FunctionDef, ast.ClassDef))
+        }
+        for name in names:
+            current = ast.parse(inspect.getsource(getattr(module, name))).body[0]
+            assert ast.dump(current, include_attributes=False) == ast.dump(
+                definitions[name], include_attributes=False
+            ), name
+            equivalent.append(f"{old_name}.{name}")
+    before = verify_protected_inventory(ROOT, protected_baseline)
+    storage = EVIDENCE / "preparation-runs"
+    previous = set(storage.iterdir()) if storage.exists() else set()
+    env = dict(os.environ, KEDRO_DISABLE_TELEMETRY="yes", PYTHONDONTWRITEBYTECODE="1")
+    for name in ("PYTEST_DEBUG_TEMPROOT", "PYTEST_ADDOPTS"):
+        env.pop(name, None)
+    result = subprocess.run(
+        [sys.executable, "tests/integration/preparation_cli.py"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session4"
+    evidence.mkdir(parents=True, exist_ok=True)
+    (evidence / "kedro-no-fit.log").write_text(result.stdout + result.stderr)
+    assert result.returncode == 0, result.stdout[-6000:] + result.stderr[-6000:]
+    created = set(storage.iterdir()) - previous
+    assert len(created) == 1
+    bundle = created.pop()
+    manifest = verify_native_bundle(bundle)
+    assert manifest["schema"] == "sat-dengue-preparation-engineering-v1"
+    assert manifest["real_model_fits"] == manifest["real_preparer_refits"] == 0
+    dev = verify_native_bundle(ROOT / DEVELOPMENT)
+    temporal = verify_native_bundle(ROOT / TEMPORAL)
+    compared = {}
+    # Byte equality covers every ordered value and missingness cell across the full cohorts.
+    for relative, original in ((DEVELOPMENT, dev), (TEMPORAL, temporal)):
+        for name, record in original["files"].items():
+            assert fingerprint(bundle / name) == record, name
+            assert (bundle / name).read_bytes() == (ROOT / relative / name).read_bytes(), name
+            compared[name] = record
+    schema = json.loads((bundle / "schema.json").read_text())
+    assert schema["features"] == dev["roles"]["features"]
+    assert schema["raw_X"] == temporal["raw_X_columns"]
+    assert len(schema["features"]) == 28 and len(schema["raw_X"]) == 29
+    provenance = json.loads((bundle / "provenance.json").read_text())
+    assert provenance["eligibility"] == dev["eligibility_audit"]
+    assert provenance["G5"] == "NOT_APPROVED" and provenance["champion"] == "not_selected"
+    assert provenance["windows"] == {
+        w: {k: v for k, v in entry.items() if k != "profiles"}
+        for w, entry in temporal["windows"].items()
+    }
+    contract = json.loads(
+        (ROOT / "docs/product/stage-3/training_preparation_contract_v1.json").read_text()
+    )
+    panel = read_panel(ROOT / contract["panel_path"], contract, reference_end="2024-12")
+    rebuilt = derive_features(panel, contract).drop(columns=["municipality_code", "year_month"])
+    assert {n: str(d) for n, d in rebuilt.dtypes.items()} == schema["dtypes"]
+    assert len(rebuilt) == 16948
+    windows = []
+    for window, entry in temporal["windows"].items():
+        for split in ("train", "validation"):
+            controls = pd.read_csv(bundle / f"{window}_{split}_controls.csv", dtype="string")
+            index = pd.read_csv(bundle / f"{window}_{split}_index.csv", dtype="string")
+            pd.testing.assert_frame_equal(controls[list(index)], index)
+            assert controls[f"target_period_t{entry['horizon']}"].lt("2025-01").all()
+        for profile in ("native", "onehot_standard"):
+            from sat_dengue.datasets.legacy_preparation.temporal import load_prepared_window
+
+            # Both loaders restore saved categorical order and compare complete matrices/Y/keys.
+            for split in ("train", "validation"):
+                new = load_prepared_window(ROOT / TEMPORAL, window, profile, split)
+                state = json.loads((bundle / f"{window}_{profile}_preparer.json").read_text())
+                assert state == new[3]
+                matrix = pd.read_csv(
+                    bundle / f"{window}_{profile}_{split}_matrix.csv", float_precision="round_trip"
+                )
+                if profile == "native":
+                    for name, categories in state["categories"].items():
+                        matrix[name] = pd.Categorical(
+                            matrix[name].astype("string"), categories=categories
+                        )
+                pd.testing.assert_frame_equal(matrix, new[0], check_exact=True)
+                assert len(matrix.columns) == (29 if profile == "native" else 114)
+        windows.append(
+            {
+                k: entry[k]
+                for k in (
+                    "cutoff",
+                    "horizon",
+                    "train_rows",
+                    "validation_rows",
+                    "train",
+                    "validation",
+                )
+            }
+        )
+    after = verify_protected_inventory(ROOT, protected_baseline)
+    assert before == after
+    (evidence / "complete-parity.json").write_text(
+        json.dumps(
+            {
+                "engineering_bundle": str(bundle.relative_to(ROOT)),
+                "manifest": fingerprint(bundle / "manifest.json"),
+                "original_development": DEVELOPMENT,
+                "original_temporal": TEMPORAL,
+                "complete_compared_payloads": compared,
+                "ast_identical_scientific_definitions": equivalent,
+                "windows": windows,
+                "development_rows": 16948,
+                "real_model_fits": 0,
+                "real_preparer_refits": 0,
+                "before": before,
+                "after": after,
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+
+
+@pytest.mark.parametrize("mutation", ["extra", "original", "engineering", "revision"])
+def test_preparation_baseline_closed_mapping_rejects_drift(mutation: str) -> None:
+    from copy import deepcopy
+    from tempfile import TemporaryDirectory
+
+    from migration_support import PREPARATION_MAPPING, verify_preparation_preservation
+
+    mapping = deepcopy(PREPARATION_MAPPING)
+    records = {n: e["original"] for n, e in mapping["files"].items()}
+    name = next(iter(mapping["files"]))
+    if mutation == "extra":
+        mapping["files"]["scripts/unapproved.py"] = mapping["files"][name]
+    elif mutation == "revision":
+        mapping["original_revision"] = "0" * 40
+    else:
+        mapping["files"][name][mutation]["sha256"] = "0" * 64
+    with TemporaryDirectory(dir=ROOT / "tmp", prefix="preparation-mapping-") as directory:
+        root = Path(directory)
+        path = root / "docs/operations/kedro-preparation-identities.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps(mapping))
+        with pytest.raises(AssertionError, match="Closed preparation mapping"):
+            verify_preparation_preservation(root, records)

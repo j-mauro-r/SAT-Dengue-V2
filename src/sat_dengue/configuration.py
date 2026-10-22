@@ -45,9 +45,12 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
     """Reject scientific overrides, unknown keys and unimplemented execution profiles."""
     if set(value) != {"profile", "tracking"}:
         raise ValueError("Only operational profile and tracking parameters are allowed")
-    if value["profile"] not in ("foundation", "data") or value["tracking"] != "disabled":
+    if (
+        value["profile"] not in ("foundation", "data", "preparation")
+        or value["tracking"] != "disabled"
+    ):
         raise ValueError(
-            "Unknown profile or tracking mode; use foundation or data with disabled tracking"
+            "Unknown profile/tracking: use foundation, data or preparation with disabled tracking"
         )
     return dict(value)
 

@@ -686,3 +686,85 @@ execution is documented here and in the testing guide/data policy. The session's
 preservation amendment authorizes no documentation exception. Existing chapter
 execution references describe their preserved construction evidence, while this
 section owns the new operational route. No source semantics were rewritten.
+
+## Stage 3 execution — Session 4
+
+Only T-preparation was authorized for this session, starting from clean
+`refactor/kedro-migration` at `925a784eb20d082efd7e166ab1b6fa35c8505a57`.
+The [Stage 3 owner](../product/stage-3/README.md) describes current scientific
+behavior and the eight unchanged temporal windows. DEC-135 owns current G2/G3
+approval; dated milestone reports and notebook bytes remain historical evidence.
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=preparation --params=profile=preparation
+```
+
+The actual seven-node graph resolves and publishes configuration, emits explicit
+producer/consumer cutoffs, derives complete antecedents, audits eligibility,
+selects temporal partitions, replays verified saved states and publishes the bundle.
+Domain modules `contract`, `features`, `validation`, `eligibility`, `temporal`,
+`preprocessing`, `serialization` and `workflow` contain no framework or filesystem
+imports. The existing migrated readiness functions own policy and row selection;
+independent pinned native/reference comparisons validate their complete cohorts.
+
+| Catalog entry | Role |
+| --- | --- |
+| `configuration_inputs`, `parameters` | Approved JSON documents and operational `preparation` / `disabled` profile |
+| `resolved_configuration` | Publish/reload this execution's verified immutable snapshot |
+| `preparation_sources` | Exact Stage 2 manifest/products, typed development panel and source-year policy |
+| `saved_preparers` | Explicit native development/temporal identities and all 16 saved states |
+| `preparation_bundle` | Atomic immutable output under `tmp/kedro-migration/preparation-runs/<bundle-id>/` |
+
+Native development `2ab12a21172a1cc49ff4fe713c1ff5199f1c7569354c300ed7cb2579ff0ffe24`
+and temporal `a41c1252e81090eec60db2b0bc0089aeee5c96bc645ea9766225eb45e7bc1d97`
+are explicitly identified in the adapter. There is no directory search or `latest`.
+Stage 2 manifest identity, all source fingerprints, exact native membership and
+saved-state hashes are checked before use and before publication. Code/config/Git/
+runtime and original identities are bound through the resolved snapshot. New run
+and bundle identities never rewrite native manifests.
+
+The 117 engineering payloads contain all 99 original development/temporal payloads
+byte for byte, plus 16 keyed split-control tables, schema and provenance. X, Y,
+keys, controls, schema, transformation state and provenance remain separate.
+The complete 16,948 development rows, 11,856 eligible examples per horizon, all
+eight windows, 29/114-column matrices, vocabularies, parameter values and training-X
+fingerprints are covered. The private CLI test denies fit calls throughout actual
+Kedro execution; no real model fit or real preparer refit occurs. New fits are
+exercised only by deterministic synthetic tests. Unavailable labels/origins,
+2025 fitting roles, changed windows/cutoffs/order/schema/alignment/state and changed
+manifest or bundle bytes are negative tests that must fail.
+
+### Session 4 dispositions and preserved originals
+
+The eleven modified `scripts/training_preparation/` modules remain thin import/CLI
+adapters. Features/validation/preprocessing resolve to the pure package; contract,
+input parsing, legacy review/execution and persistence resolve to
+`datasets/legacy_preparation/`. Legacy temporal loading verifies and returns the
+explicit saved native identity without fitting. Development/temporal CLIs run the
+Kedro graph. Notebook 04, Stage 4 loading/candidate-selection/preparation, Stage 5
+cohort/assessment/evaluation and regression tests still consume these import paths.
+Their retirement belongs to T-cleanup after consumer migration. No scientific
+file, notebook, saved preparer or bundle is retired here.
+
+Local DWP 7.8.1 `/dwp-refine` helpers retain revision 4 and record the closed Session 4
+preservation amendments. Revision 5 introduced the eleven script mappings; revision 6
+pins final adapter bytes and the explicitly requested active Stage 3 README update,
+which was also protected. The [exact mapping](kedro-preparation-identities.json)
+contains only these twelve changed protected paths, with original/current sizes and
+SHA-256. All originals are recoverable at initial Session 4 revision
+`925a784eb20d082efd7e166ab1b6fa35c8505a57` and match unchanged `baseline.json`.
+No scientific contract, acceptance criterion, tolerance, cohort, source exception or
+Stage 4 scope changes. The comparator verifies these originals from Git and current
+engineering identities separately; the 2,537 other physical originals and all
+45 native bundles stay unchanged. The earlier four preservation mappings remain.
+
+The [testing guide](../TESTING_GUIDE.md#kedro-stage-3-preparation-migration-session-4)
+owns executable validation. Detailed logs, exact engineering identities, complete
+parity receipts, actual file/consumer inventory and the Session 4 handoff remain
+local under PLAN_030 `analysis_results/session4/`. Initial failed checks remain as
+repair evidence. Skills disposition: no new skill or pinned skill modification.
+G5 remains `NOT_APPROVED`, champion `not_selected`; the 13 source exceptions and
+17 KEEP / UNVERIFIED bundles stay closed. Full historical reproducibility is not
+claimed. T-training, tracking, cleanup, push, merge, release and publication were
+not started by this session.

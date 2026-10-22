@@ -20,3 +20,10 @@ stage2_consolidated:
 stage2_bundle:
   type: sat_dengue.datasets.stage2.Stage2BundleDataset
   filepath: tmp/kedro-migration/data-runs
+preparation_sources:
+  type: sat_dengue.datasets.preparation.PreparationSourcesDataset
+saved_preparers:
+  type: sat_dengue.datasets.preparation.SavedPreparersDataset
+preparation_bundle:
+  type: sat_dengue.datasets.preparation.PreparationBundleDataset
+  filepath: tmp/kedro-migration/preparation-runs
