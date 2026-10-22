@@ -68,6 +68,25 @@ availability/alert coherence, G5 governance, result identity uniqueness, and T1/
 completeness. They do not start a server, access Kedro, train a model, execute inference,
 or select a Champion. Run the full foundation gate before merge.
 
+## Stage 7 read-only repository, service, and HTTP endpoint
+
+Map `scripts/read_only_api/repository.py`, `service.py`, `errors.py`, and `api.py`
+plus their focused tests to these gates:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py -q
+.venv/bin/ruff check scripts/read_only_api tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+.venv/bin/ruff format --check scripts/read_only_api tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+.venv/bin/mypy --explicit-package-bases scripts/read_only_api tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+```
+
+The tests protect exact department-period retrieval, no fallback to another persisted
+period, substitute repositories, read-only repeatability, both successful department
+responses, contracted 400/404/500 bodies, safe internal-error filtering, and OpenAPI
+without an uncontracted 422 response. They start no server and execute no Kedro,
+training, inference, model selection, or write flow. Run the full foundation gate before
+merge.
+
 ## Scoped Commands, Mapping, Fallback (Documentation Standard 3.4)
 
 Scoped commands:

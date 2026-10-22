@@ -1,5 +1,6 @@
 """Executable contracts for the future read-only Stage 7 API."""
 
+from .api import create_app
 from .errors import (
     DashboardDataNotFoundError,
     DashboardInternalError,
@@ -70,4 +71,5 @@ __all__ = [
     "load_demonstrative_fixture",
     "resolve_demonstrative_fixture_path",
     "create_demonstrative_repository",
+    "create_app",
 ]
