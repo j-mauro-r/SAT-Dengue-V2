@@ -1,4 +1,4 @@
-# Current scientific decision status — 2026-10-20
+# Current scientific decision status — 2026-10-21
 
 This is the active scientific decision register. The current summary below and the latest explicit decisions govern; dated snapshots and preserved source records that follow are historical, including superseded "pending" statements. [The master plan](../roadmap/master-plan.md) alone owns stage progress. This reconciliation records implemented facts without changing scientific rules or granting a freeze.
 
@@ -12,10 +12,10 @@ This is the active scientific decision register. The current summary below and t
 | Field definitions | [The canonical 69-field matrix](stage-2/DATA-01-Priority%20Field%20Matrix.md) is ACTIVE following Mauricio's restoration. Six insufficient operational definitions remain explicit; this does not mean 59 fields are undefined or that all 69 are model inputs. The archive copy is a pointer. |
 | Current outputs and analysis | Notebook 03 supplies the individual consolidated CSV, monthly climate panel, Y/current channel and bounded EDA. Only the older experimental notebooks 01/02 and their reports are retired. Candidate status does not negate their completed implementation or approve predictive utility. |
 | January 2020 | Incorporated for the reviewed 76 municipalities: 2,356 municipality-days, nine climate variables. Historical claims of that scoped gap are superseded; no national completeness claim. |
-| Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; no model has been trained. |
+| Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; subsequent Stage 4/5 training evidence is recorded separately. |
 | Evaluation support | Preparation uses target eligibility 2012-01..2024-12, excludes reserved targets from 2025-01 and requires validation origins >= fit cutoff. Later validation origins represent successive predictions. These are implemented controls, not evidence of real-time data availability. |
 | Remaining evidence | Historical as-of availability is unproven. The earlier 5/7/9-year sensitivity has no completed evidence recorded here; its freeze disposition needs an explicit human decision. Provenance reconstruction limits remain in the dated records below. Do not invent completion or restart retired EDA by default. |
-| Gate decisions | No explicit G2/G3 approval is recorded. Technical completion and human scientific acceptance remain separate; the master plan owns the next bounded handoff. |
+| Gate decisions | Mauricio approved G2 and G3 on 2026-10-21 using the existing notebook 03/04 evidence and retaining the documented limitations (DEC-135). Mauricio accepted G4 and exact proposal/protocol `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09` and authorized the frozen 2025 evaluation (DEC-132). Mauricio subsequently accepted G5 `NOT_APPROVED`; Stage 5 is closed and no champion is selected (DEC-134). |
 
 ---
 
@@ -229,6 +229,18 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 | [DEC-100](#dec-100) | Resolver ponderación y heterogeneidad del panel municipal | ABIERTA | No aplica |
 | [DEC-101](#dec-101) | Verificar que una coincidencia de fechas no se interprete como intercambio | ABIERTA | No aplica |
 | [DEC-102](#dec-102) | Comprobar duplicados climáticos sin confundirlos con repeticiones de casos | APLICADA_EN_DIAGNÓSTICO | No aplica |
+| [DEC-124](#dec-124) | Freeze Stage 5 research scope and alert meaning | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-125](#dec-125) | Set provisional research utility criteria | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-126](#dec-126) | Evaluate original and sigmoid-calibrated probabilities | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-127](#dec-127) | Select alert thresholds within temporal development | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-128](#dec-128) | Compare candidates with existing metrics and support | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-129](#dec-129) | Freeze the selected protocol before reserved evaluation | ACCEPTED_RESEARCH_PROTOCOL | No aplica |
+| [DEC-130](#dec-130) | Compare all six procedures and add complementary development AUROC | ACCEPTED_IMPLEMENTATION_SCOPE | No aplica |
+| [DEC-131](#dec-131) | Implement the frozen final route before scientific authorization | ACCEPTED_IMPLEMENTATION_SCOPE | No aplica |
+| [DEC-132](#dec-132) | Accept G4 and execute the exact frozen 2025 protocol | ACCEPTED_AND_EXECUTED | No aplica |
+| [DEC-133](#dec-133) | Recommend G5 NOT_APPROVED after the frozen 2025 evaluation | PROPOSED_FOR_HUMAN_G5_DECISION | No aplica |
+| [DEC-134](#dec-134) | Accept G5 NOT_APPROVED and centralize champion-decision policy | ACCEPTED_AND_CLOSED | No aplica |
+| [DEC-135](#dec-135) | Approve G2 data/target and G3 training preparation baselines | ACCEPTED_WITH_DOCUMENTED_LIMITS | No aplica |
 
 ## Registros detallados
 
@@ -772,6 +784,7 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 - **Motivo de deprecación o no adopción:** No aplica.
 - **Evidencia y autoridad:** SRC-P, sección 10; SRC-R, secciones 2.3 y 4; NOTE.
 - **Límites y validación pendiente:** La propuesta sugiere igualar la sensibilidad del canal, superar la persistencia y aumentar como máximo cinco puntos porcentuales las falsas alarmas; son criterios propuestos, no umbrales aprobados para V2.
+- **Current disposition (2026-10-20):** [DEC-125](#dec-125) now governs the accepted Stage 5 research utility criteria, with an explicit persistence reference and false-alert-ratio denominator. The source proposal and its broader metric list remain historical; no operational threshold is approved here.
 
 <a id="dec-062"></a>
 ### DEC-062 Seleccionar el modelo y calibrador de V2 únicamente con evidencia comparable
@@ -1602,3 +1615,250 @@ La evaluación retrospectiva de inicio en **T+2** requiere el estado observado d
 - **Selection:** Technical eligibility first; inner-training mean AP, then Brier, then predeclared within-family simplicity. Fixed external candidates use equally weighted mean AP across four windows, with separate horizon rankings and accompanying Brier/temporal/territorial evidence. No arbitrary event-metric composite, repeated external tuning or final-block use. Stage 4 ranking is not an approved champion.
 - **Owner:** Executable numerical tie tolerance, family-specific simplicity rules and boundary details live in `docs/product/stage-4/model_engineering_contract_v1.json` and its existing README; do not maintain a second implementation here.
 - **Scope:** Authorizes correction, reference regeneration, meaningful tests, independent review and same branch/PR #15 update. No candidate training, Y/channel/population/window/source changes, EDA, merge or automatic G2/G3/G4 approval. PLAN_020 approval and old metric artifacts remain historical; this correction supersedes affected evaluation results.
+
+
+---
+
+## Stage 5 research protocol — approved for implementation, 2026-10-20
+
+**Authority and execution state:** Mauricio explicitly requested creation of the Stage 5 branch and registration of DEC-124–129 on 2026-10-20. Those decisions record the research protocol; they are not assistant suggestions treated as approval by silence. PLAN_027 completed the corrected development pipeline at commit 85a315c. DEC-130/131 record the later six-procedure proposal and gated implementation. On 2026-10-21, DEC-132 records Mauricio's explicit G4, exact-protocol and final-execution authorization and the resulting reserved evaluation. The working branch is `Stage5/Model-Evaluation`, created from the clean `Stage4/Model-Engineering` HEAD `c8daf08f613340e86170f0fbbbbb6ce60a20c4b4`. G2/G3/G5 remain unapproved; no champion, deployment or merge is authorized.
+
+<a id="dec-124"></a>
+### DEC-124 Freeze Stage 5 research scope and alert meaning
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20 by the explicit registration instruction above.
+- **Decision:** Preserve approved Y/channel rules (DEC-118–122), features, three candidate families (XGBoost, LightGBM, GAM), references and scientific population from Stage 4. Evaluate T+1 and T+2 separately. Do not reopen EDA, add model families or change labels to improve scores.
+- **Alert meaning:** A thresholded prediction is a warning of excess in its exact target month, supporting review/preparedness. It is not an official outbreak declaration or an automatic intervention. Future excess may be a continuation; reporting a correct excess alert does not prove detection of a new onset.
+- **Onset boundary:** Keep the approved observed-state transition at target S and exactly S−1, separately from the excess label. Do not train an onset target or inject those future states into X.
+- **Limitation:** Consolidated retrospective data and correct calendar ordering do not establish historical real-time publication/revision availability. G4 acceptance remains separate from technical completion.
+
+<a id="dec-125"></a>
+### DEC-125 Set provisional research utility criteria
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; pilot research criteria, not deployment requirements.
+- **Decision:** For each horizon, require an absolute improvement of at least **0.10 (10 percentage points)** in onset sensitivity over persistence, while allowing at most **0.05 (5 percentage points)** additional false-alert ratio relative to persistence on the same evaluation cohorts. These are differences in proportions, not relative percentage increases. Preserve predeclared window weighting and evaluability rules; do not change aggregation after viewing results.
+- **Definitions:** Onset sensitivity is detected evaluable new onsets / all evaluable real new onsets, with DEC-123 missing-prediction safeguards. False-alert ratio is alerts whose target Y is 0 / all emitted alerts. A correctly predicted continuation is not a false excess alert, but is not a detected onset. Unknown outcomes are not negatives. No emitted alerts makes the false-alert ratio unavailable, not zero; such a policy cannot pass by avoiding all warnings. An absent onset denominator remains unavailable.
+- **Rationale and authority:** Ten percentage points is an explicitly proposed project-level minimum research gain, not a literature/INS standard or proof of health-service adequacy. The five-point allowance adapts SRC-P section 10's pending proposal, now explicitly using persistence and the false-alert-ratio denominator. It does not copy a false-positive-rate bound or promise the Colombian EWARS results.
+- **Relationship:** Supersedes DEC-061's pending utility-criterion wording only for this Stage 5 research protocol. It does not adopt every metric in DEC-061, silently substitute a separately defined channel forecast, or alter the Stage 4 selection policy. No independent channel comparator is presumed to exist merely because persistence uses the current channel state.
+- **Acceptance boundary:** A ten-point gain can still be operationally insufficient, particularly against a weak baseline. Report event counts and uncertainty. Insufficient evidence is an allowed conclusion; deployment needs separate agreement with the health-service user on missed events and unnecessary actions.
+
+<a id="dec-126"></a>
+### DEC-126 Evaluate original and sigmoid-calibrated probabilities
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; no calibrator fitted by this registration.
+- **Decision:** Compare unchanged probabilities against a sigmoid (Platt-style) correction by candidate/horizon. Use Brier and reliability curves with sample/event support; retain a correction only when independently evaluated development evidence supports it. No automatic calibration or flexible-method search is authorized.
+- **Interpretation:** Brier measures overall probabilistic error, not calibration alone. Curves compare predicted probabilities with observed excess frequencies; small municipal samples cannot establish precise calibration. Maintain original probabilities and provenance alongside any corrected version.
+- **Temporal control:** Calibrator fitting must use out-of-time predictions from models that did not fit those outcomes. Selection and evaluation of calibration remain separated under DEC-127. Do not reuse V1 thresholds or confuse EWARS configuration tuning with probability calibration.
+- **Relationship:** Resolves DEC-081's conceptual independence requirement for this protocol; the executable split schedule and calibration acceptance/tie details must be fixed in the future Stage 5 contract before execution. DEC-062's empirical model/calibrator choice remains open until evidence exists.
+
+<a id="dec-127"></a>
+### DEC-127 Select alert thresholds within temporal development
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; no numerical probability threshold selected.
+- **Decision:** Select one probability threshold per candidate/horizon, initially shared across municipalities. Maximize onset sensitivity subject to the DEC-125 false-alert constraint in permitted development data. Break equal-sensitivity choices by fewer false alerts; declare no feasible policy when none meets the constraint. Do not impose 0.5 or copy published EWARS/V1 thresholds.
+- **Chronology:** Predeclare temporal roles for base-model training, calibration fitting, threshold selection and subsequent evaluation. Labels used in any adjustment must be observable by its adjustment cutoff; prediction origins must not precede the fitted system's availability. Fit all learned preprocessing within the corresponding training subset. Do not use random folds.
+- **Evaluation boundary:** Existing Stage 4 external windows and their `evaluation_context.csv` remain evaluation-only and must not become threshold/calibrator fitting inputs. A future Stage 5 contract must explicitly define permitted historical development context for onset-based threshold selection, separate from external evaluation context and X. Do not reinterpret this decision as permission to tune on prior external results.
+- **Remaining implementation detail:** Specify exact split dates, threshold candidate/tie conventions and artifact identity/reuse before running the bounded DWP implementation. This is implementation preparation, not permission to alter existing scientific cohorts.
+
+<a id="dec-128"></a>
+### DEC-128 Compare candidates with existing metrics and support
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20.
+- **Decision:** Retain four core metrics: grouped-tie non-interpolated AP, Brier, onset sensitivity and false-alert ratio. Preserve DEC-123's separate-horizon, equal-window AP ranking, with utility qualification reported separately under DEC-125; the highest-AP candidate need not be operationally eligible. Do not create a weighted composite or an arbitrary cross-family complexity score.
+- **Evidence:** Report all declared periods, departments and municipalities with selected population, emitted alerts, evaluable outcomes and real/detected onset counts. Report unavailable metrics explicitly, including one-class AP and missing-context cases; never improve a ranking by silently dropping difficult windows or territories. Quantify uncertainty with dependence-aware methods specified before execution, rather than treating all municipality-month rows as independent.
+- **Stability:** Examine period and territorial variability without fitting 76 local thresholds/calibrators on small samples. Previously inspected Stage 4 development results are not a newly untouched test. This decision does not expand the scientific population or permit repeated external hyperparameter tuning.
+
+<a id="dec-129"></a>
+### DEC-129 Freeze the selected protocol before reserved evaluation
+
+- **Status:** ACCEPTED_RESEARCH_PROTOCOL on 2026-10-20; the separately authorized execution is recorded in DEC-132.
+- **Decision:** Freeze selected candidate, preparation, calibration, alert threshold, temporal evaluation/update policy and acceptance rules before opening the final target-period block starting **2025-01**. Maintain separation by target period for both horizons, including rows originating before 2025 whose targets fall in the reserved block.
+- **Outcome:** Evaluate the frozen procedure and classify the evidence as meets criteria, does not meet criteria, or insufficient evidence. Do not adjust/reselect on the reserved outcomes or call the same block untouched again after inspecting it. Research closure may conclude that no candidate qualifies; it need not produce a champion.
+- **Human boundary:** Research utility is distinct from operational authorization. Record unresolved real-time availability limitations and any required prospective pilot. Acceptance/approval of G4/G5, deployment and merge remain human decisions, not consequences of this branch or passing tests.
+
+### Evidence supporting DEC-124–129
+
+The sources below support the evaluation design and contextual limitations. None establishes our 10-point improvement or 5-point allowance as a universal standard; the numeric research criteria derive from the explicit project decision in DEC-125.
+
+| Source | Contribution and transfer limit |
+|---|---|
+| SRC-P, proposal section 10; historical DEC-061 | Temporal reserved evaluation, onset counts, probability calibration, and a proposed five-percentage-point false-alarm allowance. The reference and denominator are made explicit by DEC-125 rather than assumed interchangeable. |
+| [Schlesinger et al. (2024), Colombia EWARS-csd](https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2024.1323618/full) | Municipality-dependent sensitivity/PPV trade-offs; weekly hospitalization outcomes and optimal retrospective configurations are not directly transferable to our monthly onset assessment. |
+| [Hussain-Alkhateeb et al. (2018), EWARS including Brazil](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0196811) | Local alarm settings and joint sensitivity/PPV assessment; published probability cutoffs are not defaults for V2. |
+| [Infodengue-Mosqlimate 2025 protocol, Brazil](https://sprint.mosqlimate.org/sprint/2025/) | Explicit historical cutoffs, season-specific validation and a separate true forecast; case-curve forecasting differs from our binary target. |
+| [Van Calster et al. (2019), probability calibration](https://link.springer.com/article/10.1186/s12916-019-1466-7) | Reliability assessment, adequate sample support and limitations of apparent discrimination; clinical-model guidance is methodological evidence, not a dengue alert threshold. |
+| [scikit-learn 1.7 calibration documentation](https://scikit-learn.org/1.7/modules/calibration.html) | Disjoint calibration fitting, sigmoid/isotonic trade-offs, and distinction between Brier and calibration alone. |
+| [Campbell et al. (2026), operational D-MOSS evaluation](https://journals.plos.org/globalpublichealth/article?id=10.1371/journal.pgph.0005867) | Alert thresholds trade off missed episodes and false alarms by action/territory; Vietnamese operational results do not certify V2 or retrospective as-of availability. |
+
+
+### Historical delivery2 two-procedure proposal — 2026-10-21 (superseded by DEC-130)
+
+The [assessment contract](stage-5/model_evaluation_contract_v1.json) records a
+concrete proposal under PLAN_028. It preserves DEC-123–129 and the 5pp/10pp/42
+knobs. Highest AP among point-utility-qualified candidates is a proposed family
+choice, not an already-approved champion. The proposed final calendar retains
+2024-06 internal decisions, with outer training through 2024-12 for T+1 and
+2024-11 for T+2. Final targets January–December2025, temporal-block uncertainty,
+acceptance rules and calibration transfer require explicit human acceptance tied
+to the immutable proposal identity. No reserved results have informed this design.
+G4/G5 are not approved by implementation or by this registration.
+
+
+<a id="dec-130"></a>
+### DEC-130 Compare all six procedures and add complementary development AUROC
+
+- **Status:** ACCEPTED_IMPLEMENTATION_SCOPE on2026-10-21 by Mauricio's explicit
+  first-of-three Stage5 closure prompt. This is not G4/G5 or reserved-access approval.
+- **Decision:** Include XGBoost, LightGBM and GAM at both T+1/T+2, with persistence
+  on the same horizon cohorts. This replaces the prior proposed two-family screen;
+  development utility does not remove procedures. No winner is declared.
+- **Metrics:** Add complementary AUROC on continuous candidate scores and the
+  documented deterministic persistence score. Keep four-window equal weighting,
+  explicit single-class/missing non-evaluability and strict alignment/invalid-value
+  controls. Brier is still N/A for persistence. Do not add F1, change AP selection
+  or change DEC-125 utility/denominators. Existing scientific metrics remain intact.
+- **Preserved science:** Y, population, features, preparation, model families,
+  approved hyperparameters, per-family/horizon June2024 calibration/threshold
+  decisions and retrospective limitations are unchanged.
+- **Future proposal:** Six models and six train-only preparers; no new searches,
+  calibrator fits or threshold selections. T+1 training labels endDecember2024;
+  T+2 endNovember2024. Final targetsJanuary–December2025, origins target−h,
+  common76 municipalities, explicit missing evidence, no reserved-label updates.
+  None of those fits or reserved reads is authorized in this delivery.
+- **Recommendation boundary:** The [owning evaluation contract](stage-5/model_evaluation_contract_v1.json)
+  proposes complete/evaluable technical and existing utility/uncertainty eligibility,
+  then annual reserved-cohort AP separately by horizon; exact ties require human
+  choice and insufficient evidence permits no recommendation. AUROC is complementary.
+  This proposed recommendation/acceptance protocol still requires explicit human
+  acceptance before2025 access; the present instruction does not supply it.
+- **Uncertainty and consumption:** Retain the existing proposed temporal-block
+  method with common paired draws across families and marginal candidate-wise
+  intervals. No simultaneous/post-selection confidence claim or new correction.
+  Using2025 to compare and recommend consumes it for that decision; it cannot be
+  an additional independent test of the subsequently selected model.
+
+
+<a id="dec-131"></a>
+### DEC-131 Implement the frozen final route before scientific authorization
+
+- **Status:** ACCEPTED_IMPLEMENTATION_SCOPE by Mauricio's second-of-three closure
+  prompt. G4, exact protocol acceptance and reserved scientific execution remain
+  separate human decisions; no G5 or champion approval is inferred.
+- **Identity:** Retain proposal SHA256
+  `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`.
+  Preserve its scientific contract, component decisions and code; explicitly migrate
+  only notebook08 orchestration with separate original/new fingerprints.
+- **Implementation:** All six procedures, exact temporal cohorts and train-only
+  preparation, annual shared metrics, frozen common circular3-month/2000/42
+  uncertainty, immutable native inference and fail-closed reuse. Retain DEC-125 and
+  DEC-130 scientific rules without new searches, recalibration, threshold changes,
+  data/feature changes or reserved-driven tuning.
+- **Execution boundary:** Implement and validate with synthetic and development
+  evidence now. Do not load reserved values or fit final scientific components
+  until an actual human decision accepts G4, the exact protocol and execution.
+  Synthetic model fits do not consume or establish the scientific six-fit delivery.
+- **Pending:** Actual final coverage/performance, scientific execution and final
+  recommendation/Stage6 handoff remain unaccredited. Tests and implementation do
+  not satisfy those human/scientific gates.
+
+
+<a id="dec-132"></a>
+### DEC-132 Accept G4 and execute the exact frozen 2025 protocol
+
+- **Status:** ACCEPTED_AND_EXECUTED on 2026-10-21 by Mauricio's explicit decision.
+- **Authority:** Accept G4 and exact proposal SHA-256
+  `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`;
+  authorize exactly six final model fits and consultation/evaluation of the 2025
+  reserved block. Do not run new searches, calibration fits or threshold selections.
+  This authority does not approve G5 or automatically select a winner.
+- **Execution:** PLAN_028 executed six models and six train-only preparers, zero
+  hyperparameter searches, zero calibrator fits and zero threshold selections.
+  The final bundle identity is
+  `768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35`.
+  Each horizon has the complete 76-municipality × 12-target cohort (912 rows),
+  with no missing labels, predictors or onset context. T+2 training ends in
+  November 2024 and retains the November 2024 origin for January 2025.
+- **Scientific result:** All six family/horizon procedures are classified
+  `does_not_meet`. They improve onset sensitivity relative to persistence, but all
+  exceed the predeclared five-percentage-point maximum increase in false-alert
+  ratio. No rule was changed after observing the results.
+- **Boundary:** The 2025 block is consumed for this comparison and cannot be called
+  an independent post-selection test. Historical real-time availability remains
+  unproven. G5 is `NOT_APPROVED`; `champion` is `not_selected`. Final interpretation,
+  recommendation and the Stage 6 handoff belong to the third delivery.
+
+<a id="dec-133"></a>
+### DEC-133 Recommend G5 NOT_APPROVED after the frozen 2025 evaluation
+
+- **Status:** PROPOSED_FOR_HUMAN_G5_DECISION on 2026-10-21. This is a scientific
+  recommendation and technical handoff, not Mauricio's acceptance or rejection of G5.
+- **Evidence:** Proposal SHA-256
+  `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`,
+  final bundle
+  `768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35`
+  and fresh-kernel notebook receipt
+  `6eb390d18a7ce1300e7664da560694f1afd7f56511d31b3cbcf99510eb043564`.
+- **Recommendation:** Keep `G5 = NOT_APPROVED` and `champion = not_selected`.
+  Every model/horizon candidate improves AP, AUROC and onset sensitivity relative
+  to persistence, but all six exceed the frozen maximum five-percentage-point
+  increase in false-alert ratio. Do not select a family from discrimination,
+  Brier or sensitivity alone, and do not revise thresholds after seeing 2025.
+- **Technical/scientific distinction:** The final route, native model restoration,
+  complete 76-by-12 cohorts, manifest and metrics reproduce without a new fit.
+  That closes Stage 5 technical work with an unsatisfactory scientific outcome;
+  it does not demonstrate the required operational utility.
+- **Product boundary:** Stage 6 model integration remains blocked until a future
+  explicit G5 approval. Draft product/inference contracts may be prepared when
+  clearly marked pending G5; no champion may be connected to API or dashboard.
+- **Next proposed experiment:** Under a separate plan and protocol, change only
+  the alert-threshold policy. Use nested rolling temporal development to select a
+  more conservative shared threshold per family/horizon, require the false-alert
+  increase to remain within five points in each inner evaluation period, and then
+  maximize onset sensitivity among feasible thresholds. Preserve the three current
+  model families as historical evidence. Do not optimize on 2025; use a later
+  independent block or a predeclared nested outer assessment.
+- **Limits:** Consolidated retrospective data do not prove historical operational
+  availability. Calibration transfer remains uncertain. The 2025 block is consumed
+  for the completed comparison and cannot become an untouched test again. Period
+  and territory concentrations are descriptive and support no causal attribution.
+
+<a id="dec-134"></a>
+### DEC-134 Accept G5 NOT_APPROVED and centralize champion-decision policy
+
+- **Status:** ACCEPTED_AND_CLOSED by Mauricio on 2026-10-21.
+- **Decision:** Accept `G5 = NOT_APPROVED`, keep `champion = not_selected`, and close
+  Stage 5 without relaxing scientific criteria or selecting a provisional winner.
+- **Single configuration owner:**
+  [`champion_decision_policy_v1.json`](stage-5/champion_decision_policy_v1.json)
+  owns the editable utility tolerances, ranking rule, retained alert-threshold
+  authority, human disposition and read-only MVP boundary. Stage 5 contracts point
+  to it instead of repeating those decision values.
+- **Interpretation:** Utility tolerances determine whether evidence meets the agreed
+  research rule. Retained probability thresholds determine whether a score emits an
+  alert. Neither setting retrains the fitted estimators, and changing either after
+  seeing 2025 cannot turn the consumed evaluation into new independent evidence.
+- **Product boundary:** The read-only MVP may present persisted historical/evaluation
+  results, probabilities, alerts and performance context with visible
+  `NOT_APPROVED` status. It may not claim operational approval or connect a champion.
+- **Future work:** Any renewed champion search or threshold experiment requires a
+  separate predeclared scientific protocol and evidence independent of consumed 2025.
+
+<a id="dec-135"></a>
+### DEC-135 Approve G2 data/target and G3 training preparation baselines
+
+- **Status:** ACCEPTED_WITH_DOCUMENTED_LIMITS by Mauricio on 2026-10-21.
+- **G2 decision:** Approve the current Data & Target Freeze represented by notebook
+  03 and its owning contracts: 76 Tolima/Meta municipalities, residence geography,
+  symptom-onset time, general-dengue Y, separate severe-dengue count, five prior
+  same-month channel observations, current four-zone channel, and T+1/T+2 outcomes.
+- **G3 decision:** Approve the notebook 04 preparation baseline: monthly panel,
+  approved climate inputs, deterministic antecedents, `zona_canal_t`, temporal
+  partitions, train-only transformations, explicit X/Y separation and controls
+  against future information.
+- **Preserved limits:** Historical as-of operational availability remains unproven;
+  six source fields retain insufficient operational definitions; the 5/7/9-year
+  target sensitivity is unexecuted; retrospective data do not establish prospective
+  performance. These limits remain visible and do not invalidate the accepted MVP
+  baseline.
+- **Boundary:** This decision does not rerun EDA, change datasets or labels, approve
+  predictive performance, reverse G5 `NOT_APPROVED`, or authorize model integration.

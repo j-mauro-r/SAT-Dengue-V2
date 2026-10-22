@@ -1,0 +1,42 @@
+{
+  "schema": "stage5-champion-decision-policy-v1",
+  "version": "1.0.0",
+  "purpose": "Single human-editable source for Stage 5 utility, ranking and governance decisions. Editing this file does not retrain models or change immutable historical artifacts.",
+  "utility": {
+    "max_false_alarm_increase_pp": 5.0,
+    "min_onset_sensitivity_gain_pp": 10.0,
+    "seed": 42
+  },
+  "research_acceptance": {
+    "point_failure": "does_not_meet",
+    "incomplete_evidence": "insufficient_evidence",
+    "interval_rule": "lower_onset_gain_bound_must_meet_minimum_and_upper_false_alarm_increase_bound_must_meet_maximum"
+  },
+  "ranking": {
+    "scope": "separate_by_horizon",
+    "eligible_candidates_only": true,
+    "primary_metric": "average_precision",
+    "population": "full_declared_annual_reserved_cohort",
+    "tie_rule": "exact_ties_require_human_decision",
+    "auroc_role": "complementary_only",
+    "none_eligible": "no_champion"
+  },
+  "alert_thresholds": {
+    "source": "retained_procedure_artifacts",
+    "manual_override_changes_alert_behavior": true,
+    "manual_override_allowed_for_scientific_reclassification": false
+  },
+  "human_disposition": {
+    "G5": "NOT_APPROVED",
+    "champion": "not_selected",
+    "authority": "Mauricio",
+    "decided_on": "2026-10-21",
+    "reason": "All six candidate/horizon procedures exceeded the approved false-alert increase constraint on the consumed 2025 comparison."
+  },
+  "mvp_boundary": {
+    "champion_required_for_read_only_mvp": false,
+    "result_source": "persisted_historical_or_evaluation_results",
+    "required_display_status": "NOT_APPROVED",
+    "operational_model_integration_allowed": false
+  }
+}

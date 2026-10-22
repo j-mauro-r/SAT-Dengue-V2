@@ -27,6 +27,7 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Retired experimental EDA and lineage reports | [Historical archive — DEPRECATED](archive/experimental-eda/README.md) |
 | Implemented training preparation pipeline | [Preparation contract and technical validation](product/stage-3/README.md) |
 | Stage 4 shared references and XGBoost candidate | [Model engineering deliveries](product/stage-4/README.md) |
+| Stage 5 final evaluation, G5 recommendation and handoff limits | [Model evaluation evidence](product/stage-5/README.md) |
 | Data boundaries | [Data policy](data/data-policy.md) |
 | Security | [Security policy](SECURITY.md) |
 | Engineering and performance | [Engineering standards](standards/engineering-standards.md) |

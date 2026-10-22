@@ -10,20 +10,22 @@ This document is the single durable master plan for the project. It defines all 
 - Use DWP only when a concrete HU/task warrants an execution plan because of complexity, risk, dependencies, or work across sessions. Select the appropriate plan format for that bounded objective.
 - Record stage progress and gate evidence here; record HU/task acceptance and validation in its issue/PR. No separate DWP master-plan ID is a prerequisite for G0.
 
-## Current Status — 2026-10-20
+## Current Status — 2026-10-21
 
-Implementation and human gate approval are separate. Current bounded work is on `Stage4/Model-Engineering`, PR #15, following preparation implementation `2e1c919`. Stage 4 delivery 1 references were delivered at `57323fc`; PLAN_021 corrects their previously accredited AP and event evaluation. Implementation progress is not a scientific freeze or gate approval.
+Implementation and human gate approval are separate. Mauricio accepted G4 and exact freeze proposal `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`; PLAN_028 then executed the authorized frozen 2025 evaluation without retuning. On 2026-10-21 Mauricio accepted the scientific disposition G5 `NOT_APPROVED`: Stage 5 is closed, no champion is selected, and model integration remains blocked. The approved next product step is a prototype-first, read-only E2E MVP that presents traceable persisted evaluation results and their `NOT_APPROVED` status without claiming operational prediction.
 
 | Stage / gate | Implementation state | Gate / evidence state |
 |---|---|---|
 | Stage 0 foundation / G0 | Foundation delivered in PR #5 | Historical dedicated independent foundation review remains UNVERIFIED. Later reviews do not retroactively supply it. |
 | Stage 1 product definition / G1 | Delivered in PR #7 | CLOSED by Mauricio's explicit confirmation; final runtime schemas remain unfrozen. |
-| Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 OPEN: no explicit Data & Target Freeze recorded. Retired notebooks 01/02 are historical; notebook 03 is the current pipeline. |
-| Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 OPEN: PLAN_018 technical closure and tests are evidence, not human gate approval. |
-| Stage 4 model engineering / G4 | References corrected in PLAN_021; XGBoost in PLAN_022; three families and two controlled XGBoost ablations executed in PLAN_023 / draft PR #15 | G4 OPEN pending human scientific acceptance. Technical candidate/common-protocol evidence is available; calibration, operational thresholds and reserved evaluation belong to Stage5. |
-| Stages 5–10 / G5–G10 | NOT STARTED | Model comparison, champion, final product contracts, API/dashboard and deployment remain future work. |
+| Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 APPROVED by Mauricio on 2026-10-21. The accepted Data & Target Freeze retains the documented retrospective-availability, provenance, field-definition and unexecuted 5/7/9-year-sensitivity limitations. |
+| Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 APPROVED by Mauricio on 2026-10-21. The preparation is accepted for the current project baseline; this does not prove operational availability or approve a model. |
+| Stage 4 model engineering / G4 | References corrected in PLAN_021; XGBoost in PLAN_022; three families and two controlled XGBoost ablations executed in PLAN_023 / draft PR #15 | G4 ACCEPTED by Mauricio for the exact PLAN_028 proposal/protocol on 2026-10-21. This does not approve a champion or G5. |
+| Stage 5 / G5 | PLAN_027 corrected development calibration/threshold availability; PLAN_028 executed and reproduced six frozen final model/preparer procedures over the complete 2025 block. All six candidate/horizon procedures are `does_not_meet`. | CLOSED with Mauricio's accepted disposition G5 `NOT_APPROVED`; champion `not_selected`. The 2025 block is consumed for this comparison. |
+| Stage 6 / G6 | Prototype-first read-only product discovery is approved. The prototype and minimal contracts may use persisted historical/evaluation results with visible `NOT_APPROVED` governance status. Operational model integration remains BLOCKED. | G6 OPEN; no champion may be connected to API or dashboard. |
+| Stages 7–10 / G7–G10 | NOT STARTED | API/dashboard model integration, deployment and later gates remain future work. |
 
-Mauricio authorized the bounded preparation implementation before a formal G2 freeze was recorded. Record that actual progression without inventing a past approval. Stage dependencies below remain the acceptance order; branch names, plan completion and passing tests do not themselves close gates.
+Mauricio authorized the bounded preparation implementation before the formal G2/G3 decisions and subsequently approved both gates on 2026-10-21 using the existing notebook 03/04 evidence. This later approval does not retroactively change historical plan states. Stage dependencies below remain the acceptance order; branch names, plan completion and passing tests do not themselves close gates.
 
 The separate local `PLAN_019_notebook04_runtime_acceptance` completed actual fresh-kernel execution and real-artifact acceptance (3/3 criteria), preserving scientific sources. Stage 4 PLAN_020 then implemented simple references under explicit bounded authority. Its accredited AP/onset results require PLAN_021's correction; the historical approval is preserved rather than rewritten. The approved selection policy is owned by the Stage 4 contract/README and DEC-123. No candidate search, final-block comparison or champion is authorized by the corrective delivery.
 
@@ -41,12 +43,11 @@ The five-value channel rule is **five historical observations of the same calend
 
 January 2020 climate has been recovered/incorporated for the 76 reviewed municipalities (2,356 municipality-days). Monthly aggregation, numerical percentiles, evaluability, current zones and temporal selection are implemented; they are no longer blank implementation tasks. Source lineage and retrospective-availability limits remain explicit in their evidence owners.
 
-### Next bounded work — close the handoff, then model
+### Next bounded work
 
-1. Present the existing data/target and preparation evidence for an explicit G2/G3 disposition. Do not equate this documentation update with approval or restart completed EDA. The previously planned 5/7/9-year target sensitivity has no completed evidence here; Mauricio must decide its disposition for the freeze rather than an agent silently deleting it or declaring it completed.
-2. Use the corrected reference evaluation, approved selection policy and PLAN_022 XGBoost evidence for the next separately scoped candidate delivery; LightGBM/GAM and scientific gate dispositions remain pending. Reuse notebook 04 modules, saved preparation state and keyed X/Y; select the representation required by each estimator.
-3. Keep objectives from 2025-01 reserved. Compare candidates using the same development windows; evaluate calibration, false alarms and outbreak onsets as specified by the product/scientific decisions. No final-block tuning.
-4. Update this status table when a bounded milestone or human gate decision changes. Put scientific decisions in the register, executable schemas in contracts and command details in the testing guide; do not copy their inventories here.
+1. Build and review a read-only dashboard prototype using representative, traceable persisted evaluation data and the accepted G5 `NOT_APPROVED` governance status. The prototype validates comprehension and information hierarchy; it does not freeze contracts or approve a model.
+2. Use the reviewed prototype to freeze the minimal read-only Product, Prediction, and API Contracts in Stage 6. Then implement the persisted-result -> API -> dashboard vertical slice. Keep monthly input/inference and expert-feedback persistence as a later write-enabled iteration.
+3. If further scientific work is authorized, use a separate bounded plan and protocol for the single recommended experiment: conservative shared-threshold selection with nested rolling temporal development. Do not optimize on consumed 2025 results; require a later independent period or predeclared nested outer validation.
 
 Historical experiments, old PR reconciliation instructions and local plan failures are provenance, not a recurring analysis backlog. Reopen an analysis only for a concrete unresolved question that affects the next decision. No new EDA chapter is required by this documentation audit.
 
@@ -159,21 +160,26 @@ Gate G5 — Champion Approved:
 ### Stage 6 — Product Contract Freeze
 
 Deliverables:
-- Final Input Contract
+- Reviewed read-only dashboard prototype and resolved information hierarchy
+- Final Input Contract for the implemented product slice
 - Final Feature Contract
 - Final Prediction Contract
 - Final API Contract
+- Explicit boundary for the later write-enabled input/feedback iteration
 
 Dependency:
 - Stage 5 evidence and product constraints.
 
 Gate G6 — Product Contracts Frozen:
-- Product/model/API boundaries are versioned and approved for implementation.
+- The primary user has reviewed the read-only prototype.
+- Product/model/API boundaries for the first vertical slice are versioned and approved for implementation.
+- Model integration remains contingent on an approved G5 champion.
 
 ### Stage 7 — API
 
 Deliverables:
-- API implementation aligned to frozen contracts
+- Read-only API implementation aligned to frozen contracts
+- Persisted-result retrieval without training/inference side effects
 - Contract and integration tests
 
 Dependency:
@@ -185,9 +191,10 @@ Gate G7 — API Contract Pass:
 ### Stage 8 — Dashboard
 
 Deliverables:
-- Dashboard implementation aligned to product requirements and API contracts
-- New-period upload/inference workflow
-- Read-only refresh behavior
+- Read-only dashboard MVP aligned to product requirements and API contracts
+- Governance/performance context and explicit unavailable states
+- Read-only refresh, filtering, and navigation behavior
+- Write-enabled upload/inference and expert-feedback workflow only in a later approved iteration
 
 Dependency:
 - Stage 7 API readiness.
@@ -206,7 +213,8 @@ Dependency:
 - Stages 7 and 8 complete.
 
 Gate G9 — E2E / Deployment Pass:
-- New-period input -> validation -> inference -> persistence -> API -> dashboard flow passes end to end.
+- First milestone: persisted approved result -> read-only API -> dashboard flow passes end to end.
+- A later write-enabled milestone, when approved, validates input -> inference -> persistence and separate feedback capture end to end.
 
 ### Stage 10 — Monitoring, Maintenance, Final Review
 

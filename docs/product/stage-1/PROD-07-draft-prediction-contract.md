@@ -2,13 +2,13 @@
 
 ## Status and Purpose
 
-**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
-**Human Gate: APPROVED.**  
-**Contract maturity: DRAFT PRODUCT/MODEL CONTRACT — NOT FROZEN.**
+**Document status: CLOSED Stage 1 baseline, refined for read-only MVP discovery on 2026-10-21.**
+**Human Gate: APPROVED for conceptual product semantics.**
+**Contract maturity: DRAFT PRODUCT/MODEL CONTRACT — NOT FROZEN; PENDING G5 for model integration.**
 
 This document defines the initial business semantics of prediction output required by SAT-Dengue V2. It is intentionally incomplete and must not be treated as the final API, storage, or model schema.
 
-The final Prediction Contract will be frozen only in Stage 6, after Data & Target Freeze, model evaluation, calibration, threshold selection, and Champion approval.
+The read-only Stage 6 draft may be refined from the reviewed prototype and Stage 5 evidence. A contract that presents an operational model may be frozen only after the required scientific gates, including G5 champion approval. Until then, outputs are evaluation/historical and must say so explicitly.
 
 Related product sources:
 
@@ -40,10 +40,14 @@ The following is a conceptual information structure, not a frozen JSON schema:
 
 ```text
 PredictionResult
+├── prediction/result identity
 ├── department
 ├── reference period T
 ├── generation date/time
-├── model version
+├── model/procedure version
+├── governance status
+├── result purpose/origin
+├── evaluation context (when applicable)
 └── municipality results[]
     ├── municipality identity
     ├── current observed state/context
@@ -69,10 +73,14 @@ Names, nesting, data types, required/optional fields, enums, precision, serializ
 
 | Conceptual field | Business meaning | Maturity |
 |---|---|---|
+| `prediction_id` | Stable identity linking the complete displayed result and enabling later feedback without ambiguity. | Required concept; encoding not frozen. |
 | `department` | Tolima or Meta context to which the result belongs. | Approved geography; encoding not frozen. |
 | `reference_period` | Latest loaded/available period T used as the operational cutoff. | Approved concept; representation not frozen. |
 | `generated_at` | Date/time when the prediction was produced. | Approved visible traceability concept. |
 | `model_version` | Version/identifier of the model artifact. | Approved traceability need; representation not frozen. |
+| `governance_status` | Human-readable integration status such as `NOT_APPROVED` or a later approved state. | Required for the read-only MVP; value comes from governance, not model inference. |
+| `result_purpose` | Distinguishes evaluation/historical evidence from later approved operational use. | Required concept; enum not frozen. |
+| `performance_context` | Historically scoped false-alert and onset-detection evidence with counts, rates, period, geography, horizon, and procedure; optional secondary AP/AUROC/Brier. | Required information family for MVP interpretation; exact nesting not frozen. |
 | `municipality_id` | Stable municipality identity. | Required concept; exact identifier TO BE FROZEN. |
 | `municipality_name` | Human-readable municipality name. | Required UI concept. |
 | `current_state` | Observed epidemiological state at T under the later approved epidemiological definition. | TO BE FROZEN in Stage 2. |
@@ -152,7 +160,7 @@ A displayed prediction must be traceable at product level to at least:
 - model version;
 - generation date/time.
 
-Additional technical provenance belongs to later engineering contracts.
+Additional technical provenance belongs to later engineering contracts. Expert disposition/action and later observed outcome do not belong inside this immutable prediction result; the future write-enabled iteration will link separate records through `prediction_id`.
 
 ## Availability and Missing Results
 
@@ -173,6 +181,9 @@ When unavailable, the final contract must provide a user-understandable reason. 
 6. The UI must not invent or recalculate scientific values absent from the contract.
 7. T+1 and T+2 are independent outputs.
 8. No field in this draft implies autonomous intervention or guaranteed outbreak prevention.
+9. Governance status is supplied from an approved release/gate decision; it is never inferred from model probability.
+10. Performance context is historical and scoped; it cannot label an unresolved current prediction as a false alert.
+11. Future expert feedback and observed outcomes remain separate from the immutable prediction result.
 
 ## Open Decisions and Later Freeze
 
@@ -184,5 +195,7 @@ When unavailable, the final contract must provide a user-understandable reason. 
 - **TO BE FROZEN IN LATER STAGE:** detailed availability reasons.
 - **TO BE FROZEN IN LATER STAGE:** optional supporting information semantics.
 - **TO BE FROZEN IN LATER STAGE:** exact schema, types, endpoint representation, versioning, compatibility rules, and technical provenance.
+- **TO BE FROZEN IN LATER STAGE:** governance-status enum and performance-context representation.
+- **DEFERRED WRITE ITERATION:** feedback, intended-action, actor/time, and later outcome contracts linked by stable prediction identity.
 
 This document is explicitly a **DRAFT** and must not be used as a frozen implementation contract.

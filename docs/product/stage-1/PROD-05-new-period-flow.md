@@ -2,10 +2,10 @@
 
 ## Status and Purpose
 
-**Document status: CLOSED — Stage 1 product definition, confirmed by Mauricio after PR #7 merge.**
-**Human Gate: APPROVED.** 
+**Document status: CLOSED Stage 1 baseline; DEFERRED from the first read-only MVP by the approved 2026-10-21 refinement.**
+**Human Gate: APPROVED as the direction for a later write-enabled iteration; NOT AUTHORIZED for the first MVP.**
 
-This document defines the product workflow for processing a new monthly departmental period. It owns the user-visible sequence from file selection through validation, explicit predictive inference, result presentation, and persistence. It does not define implementation architecture, endpoint shapes, final schemas, model internals, retry/timeout behavior, cancellation, technical error taxonomies, or detailed partial-processing mechanics.
+This document defines the later product workflow for processing a new monthly departmental period. [PROD-04](PROD-04-dashboard-master-user-story.md) owns the approved delivery sequence: the first E2E MVP is read-only, and this workflow is revisited only after that MVP is accepted. It owns the user-visible sequence from file selection through validation, explicit predictive inference, result presentation, and persistence. It does not define implementation architecture, endpoint shapes, final schemas, model internals, retry/timeout behavior, cancellation, technical error taxonomies, or detailed partial-processing mechanics.
 
 Related sources of truth:
 
