@@ -58,7 +58,10 @@ def create_app(
     Returns:
         A configured FastAPI application with the single product endpoint.
     """
-    query_service = DashboardQueryService(repository or create_demonstrative_repository())
+    selected_repository = (
+        repository if repository is not None else create_demonstrative_repository()
+    )
+    query_service = DashboardQueryService(selected_repository)
     app = ContractFastAPI(
         title="SAT Dengue Read-Only API",
         version="0.1.0",

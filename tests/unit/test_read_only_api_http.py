@@ -28,6 +28,16 @@ class FailingRepository:
         raise RuntimeError("private persisted path: /tmp/secret-result.json")
 
 
+class EmptyRepository:
+    """Falsey repository substitute that contains no persisted results."""
+
+    def __bool__(self) -> bool:
+        return False
+
+    def get(self, department_code: str, period: str) -> DashboardResponse | None:
+        return None
+
+
 def _get(app: FastAPI, params: dict[str, str] | None = None) -> httpx.Response:
     async def request() -> httpx.Response:
         transport = httpx.ASGITransport(app=app)
@@ -112,6 +122,16 @@ def test_internal_failure_returns_safe_500_without_details() -> None:
     assert "/tmp" not in response.text
     assert "secret-result" not in response.text
     assert "RuntimeError" not in response.text
+
+
+def test_application_factory_preserves_a_falsey_repository_substitute() -> None:
+    response = _get(
+        create_app(EmptyRepository()),
+        {"department_code": "73", "period": "2026-09"},
+    )
+
+    assert response.status_code == 404
+    assert response.json()["error_code"] == "DASHBOARD_DATA_NOT_FOUND"
 
 
 def test_repeated_http_queries_are_identical_and_do_not_modify_files() -> None:
