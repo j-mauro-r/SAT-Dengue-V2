@@ -15,7 +15,7 @@ This is the active scientific decision register. The current summary below and t
 | Preparation | [Notebook 04 and its modules](stage-3/README.md) add 16 deterministic candidates, preserve scientific inputs, separate X/Y, select eight temporal windows and fit reusable preparers on training only. The preparation contract owns exact roles and boundaries; subsequent Stage 4/5 training evidence is recorded separately. |
 | Evaluation support | Preparation uses target eligibility 2012-01..2024-12, excludes reserved targets from 2025-01 and requires validation origins >= fit cutoff. Later validation origins represent successive predictions. These are implemented controls, not evidence of real-time data availability. |
 | Remaining evidence | Historical as-of availability is unproven. The earlier 5/7/9-year sensitivity has no completed evidence recorded here; its freeze disposition needs an explicit human decision. Provenance reconstruction limits remain in the dated records below. Do not invent completion or restart retired EDA by default. |
-| Gate decisions | No explicit G2/G3 approval is recorded. Mauricio accepted G4 and exact proposal/protocol `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09` on 2026-10-21 and authorized the frozen 2025 evaluation (DEC-132). Mauricio subsequently accepted G5 `NOT_APPROVED`; Stage 5 is closed and no champion is selected (DEC-134). |
+| Gate decisions | Mauricio approved G2 and G3 on 2026-10-21 using the existing notebook 03/04 evidence and retaining the documented limitations (DEC-135). Mauricio accepted G4 and exact proposal/protocol `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09` and authorized the frozen 2025 evaluation (DEC-132). Mauricio subsequently accepted G5 `NOT_APPROVED`; Stage 5 is closed and no champion is selected (DEC-134). |
 
 ---
 
@@ -240,6 +240,7 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 | [DEC-132](#dec-132) | Accept G4 and execute the exact frozen 2025 protocol | ACCEPTED_AND_EXECUTED | No aplica |
 | [DEC-133](#dec-133) | Recommend G5 NOT_APPROVED after the frozen 2025 evaluation | PROPOSED_FOR_HUMAN_G5_DECISION | No aplica |
 | [DEC-134](#dec-134) | Accept G5 NOT_APPROVED and centralize champion-decision policy | ACCEPTED_AND_CLOSED | No aplica |
+| [DEC-135](#dec-135) | Approve G2 data/target and G3 training preparation baselines | ACCEPTED_WITH_DOCUMENTED_LIMITS | No aplica |
 
 ## Registros detallados
 
@@ -1841,3 +1842,23 @@ G4/G5 are not approved by implementation or by this registration.
   `NOT_APPROVED` status. It may not claim operational approval or connect a champion.
 - **Future work:** Any renewed champion search or threshold experiment requires a
   separate predeclared scientific protocol and evidence independent of consumed 2025.
+
+<a id="dec-135"></a>
+### DEC-135 Approve G2 data/target and G3 training preparation baselines
+
+- **Status:** ACCEPTED_WITH_DOCUMENTED_LIMITS by Mauricio on 2026-10-21.
+- **G2 decision:** Approve the current Data & Target Freeze represented by notebook
+  03 and its owning contracts: 76 Tolima/Meta municipalities, residence geography,
+  symptom-onset time, general-dengue Y, separate severe-dengue count, five prior
+  same-month channel observations, current four-zone channel, and T+1/T+2 outcomes.
+- **G3 decision:** Approve the notebook 04 preparation baseline: monthly panel,
+  approved climate inputs, deterministic antecedents, `zona_canal_t`, temporal
+  partitions, train-only transformations, explicit X/Y separation and controls
+  against future information.
+- **Preserved limits:** Historical as-of operational availability remains unproven;
+  six source fields retain insufficient operational definitions; the 5/7/9-year
+  target sensitivity is unexecuted; retrospective data do not establish prospective
+  performance. These limits remain visible and do not invalidate the accepted MVP
+  baseline.
+- **Boundary:** This decision does not rerun EDA, change datasets or labels, approve
+  predictive performance, reverse G5 `NOT_APPROVED`, or authorize model integration.
