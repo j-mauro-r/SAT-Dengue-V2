@@ -41,36 +41,14 @@ class StubRepository:
         return self.response
 
 
-def _in_memory_response(
+def _fixture_response(
     department_code: str = "73", department_name: str = "Tolima", period: str = "2026-09"
 ) -> DashboardResponse:
-    return DashboardResponse.model_validate(
-        {
-            "metadata": {
-                "result_set_id": "d1111111-1111-4111-8111-111111111111",
-                "reference_period": period,
-                "generated_at": "2026-10-03T14:30:00-05:00",
-                "data_updated_at": None,
-                "data_version": "in-memory-test",
-            },
-            "governance": {
-                "governance_gate": "G5",
-                "governance_status": "NOT_APPROVED",
-                "champion_status": "NOT_SELECTED",
-                "limitation": "Respuesta sintética para probar el servicio sin archivos.",
-            },
-            "department": {
-                "department_code": department_code,
-                "department_name": department_name,
-                "requested_period": period,
-            },
-            "municipalities": [],
-            "evaluation_context": {
-                "demonstrative_values": True,
-                "evaluation_records": [],
-            },
-        }
-    )
+    path = TOLIMA_FIXTURE_PATH if department_code == "73" else META_FIXTURE_PATH
+    response = load_dashboard_fixture(path)
+    assert response.department.department_name == department_name
+    assert response.department.requested_period == period
+    return response
 
 
 @pytest.mark.parametrize(
@@ -126,8 +104,8 @@ def test_repository_distinguishes_an_invalid_persisted_file(tmp_path: Path) -> N
         DashboardQueryService(repository).get_dashboard("73", "2026-09")
 
 
-def test_service_uses_a_substitute_repository_without_file_access() -> None:
-    response = _in_memory_response()
+def test_service_uses_a_substitute_repository() -> None:
+    response = _fixture_response()
     repository = StubRepository(response=response)
 
     actual = DashboardQueryService(repository).get_dashboard("73", "2026-09")
@@ -137,7 +115,7 @@ def test_service_uses_a_substitute_repository_without_file_access() -> None:
 
 
 def test_service_rejects_a_repository_response_for_another_query() -> None:
-    repository = StubRepository(response=_in_memory_response("50", "Meta", "2026-12"))
+    repository = StubRepository(response=_fixture_response("50", "Meta", "2026-12"))
 
     with pytest.raises(DashboardInternalError):
         DashboardQueryService(repository).get_dashboard("73", "2026-09")

@@ -315,6 +315,12 @@ class DashboardResponse(ContractModel):
         municipality_codes = [
             municipality.municipality_code for municipality in self.municipalities
         ]
+        expected_municipality_count = {"50": 29, "73": 47}[self.department.department_code]
+        if len(municipality_codes) != expected_municipality_count:
+            raise ValueError(
+                f"Department {self.department.department_code} requires exactly "
+                f"{expected_municipality_count} municipalities"
+            )
         if len(municipality_codes) != len(set(municipality_codes)):
             raise ValueError("municipality_code values must be unique within a response")
 

@@ -144,6 +144,8 @@ for forbidden in (
     "scripts.training_preparation",
     "scripts.model_training",
     "scripts.model_evaluation",
+    "scripts.model_assessment",
+    "scripts.final_evaluation",
 ):
     assert not any(
         name == forbidden or name.startswith(f"{forbidden}.") for name in sys.modules

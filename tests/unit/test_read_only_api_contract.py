@@ -228,6 +228,16 @@ def test_municipality_codes_are_unique(fixture_payload: dict[str, Any]) -> None:
         DashboardResponse.model_validate(payload)
 
 
+def test_response_rejects_an_incomplete_department_inventory(
+    fixture_payload: dict[str, Any],
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"].pop()
+
+    with pytest.raises(ValidationError, match="requires exactly 47 municipalities"):
+        DashboardResponse.model_validate(payload)
+
+
 def test_fixtures_match_the_versioned_dane_divipola_inventory() -> None:
     source = json.loads(Path("data/sources/Divipola-municipios.md").read_text(encoding="utf-8"))
     expected = {
