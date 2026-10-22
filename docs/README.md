@@ -17,6 +17,7 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Harness audit and document consolidation (2026-10-20) | [Audit record](operations/harness-documentation-audit-2026-10-20.md) |
 | Historical Stage 2 PR preservation/recovery | [Dated reconciliation record](operations/stage2-pr-reconciliation.md) |
 | Source-linked historical outbreak context | [Outbreak event register](research/colombia-dengue-outbreak-events.md) |
+| Kedro migration baseline, compatibility and file dispositions | [Migration record](operations/kedro-migration.md) |
 | Validation commands | [Testing guide](TESTING_GUIDE.md) |
 | Product direction | [Product definition](product/product-definition.md) |
 | Stage 1 requirements | [Business question](product/stage-1/PROD-01-business-question.md), [users](product/stage-1/PROD-02-users.md), [supported decisions](product/stage-1/PROD-03-supported-decisions.md), [dashboard story](product/stage-1/PROD-04-dashboard-master-user-story.md) |

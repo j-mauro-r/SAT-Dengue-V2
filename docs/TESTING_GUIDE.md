@@ -372,3 +372,43 @@ bash .dwp/plans/PLAN_028_stage5_comparison_reserved_evaluation/final_checks.sh
 The command must not call fit, search, calibration or threshold-selection entry
 points. It does not approve G5 or select a champion. Global DWP incidents in older
 plans remain visible separately; PLAN_028 acceptance uses scoped conformance.
+
+
+## Kedro migration baseline (Session 1)
+
+Owner: [migration baseline, evidence and recovery](operations/kedro-migration.md).
+`tests/conftest.py` registers `--require-migration-evidence`; ordinary CI deselects
+private migration tests and runs the synthetic comparators. The existing CI test
+job selects `tests/unit tests/integration/test_migration_parity.py`; it never passes
+the private-evidence option. The explicit flag
+requires selected evidence tests and fails on absent inputs, runtime, source
+reconstruction, bundles or eligible comparisons. It never turns missing private
+evidence into a successful skip. No model fitting or notebook execution is needed.
+
+- `tests/integration/migration_support.py`: hash/path validation and strict ordered
+  frame comparisons; synthetic corruption, missingness and decision drift tests.
+- `tests/integration/migration_replay.py`: separate historical runtime process,
+  original native component loading and no-fit replay, with write/fit guards.
+- `tests/integration/test_migration_parity.py`: protected source/contract/input and
+  native-bundle identity, historical source recovery and 4.6/4.7 compatibility.
+
+Run from the repository root with the existing `.venv` (no installation into it):
+
+```bash
+export PATH="$PWD/.venv/bin:$PATH"
+export PYTHONDONTWRITEBYTECODE=1
+export PYTEST_DEBUG_TEMPROOT="$PWD/tmp/kedro-migration"
+python -m pytest tests/unit -q
+python -m pytest tests/integration/test_migration_parity.py -q
+python -m pytest tests/integration/test_migration_parity.py -k "baseline or compatibility" --require-migration-evidence -q
+python -m ruff check tests
+python -m ruff format --check tests
+python -m mypy tests
+```
+
+The private command requires the original local baseline inventory and artifacts,
+recovered source snapshots and two separately configured runtimes. A fresh clone
+without them must fail that gate. Stable selectors for later migration tasks are
+`baseline`, `compatibility`, `preparation`, `training` and `evaluation`; future
+selectors require actual stage tests before use. The current harness does not
+claim parity for Kedro code that has not been implemented.
