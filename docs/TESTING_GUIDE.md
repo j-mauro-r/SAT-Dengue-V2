@@ -51,7 +51,7 @@ If test mapping is ambiguous, run the full gate set.
 
 ## Stage 7 executable read-only API contract
 
-Map `scripts/read_only_api/**`, `tests/fixtures/stage7/dashboard_tolima.json`, and
+Map `scripts/read_only_api/**` (including its demonstrative fixtures) and
 `tests/unit/test_read_only_api_contract.py` to the focused executable-contract gate:
 
 ```bash
@@ -61,11 +61,12 @@ Map `scripts/read_only_api/**`, `tests/fixtures/stage7/dashboard_tolima.json`, a
 .venv/bin/mypy --explicit-package-bases scripts/read_only_api tests/unit/test_read_only_api_contract.py
 ```
 
-These tests validate the versioned demonstrative fixture, exact enums, territorial and
-monthly formats, UUID/nullability rules, availability/alert coherence, G5 governance,
-result identity uniqueness, and T1/T2 completeness. They do not start a server, access
-Kedro, train a model, execute inference, or select a Champion. Run the full foundation
-gate before merge.
+These tests validate the separate runtime-owned Tolima and Meta demonstrative fixtures,
+explicit department resolution, exact enums, territorial membership and uniqueness,
+reference-to-target month coherence including year rollover, UUID/nullability rules,
+availability/alert coherence, G5 governance, result identity uniqueness, and T1/T2
+completeness. They do not start a server, access Kedro, train a model, execute inference,
+or select a Champion. Run the full foundation gate before merge.
 
 ## Scoped Commands, Mapping, Fallback (Documentation Standard 3.4)
 

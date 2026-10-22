@@ -1,0 +1,137 @@
+{
+  "metadata": {
+    "result_set_id": "50e57d00-4b97-4b77-9f8d-222222222222",
+    "reference_period": "2026-12",
+    "generated_at": "2027-01-04T09:15:00-05:00",
+    "data_updated_at": "2027-01-03T18:00:00-05:00",
+    "data_version": "demo-meta-2026-12-v1"
+  },
+  "governance": {
+    "governance_gate": "G5",
+    "governance_status": "NOT_APPROVED",
+    "champion_status": "NOT_SELECTED",
+    "limitation": "Valores demostrativos de candidatos provisionales; no son resultados científicos reales ni alertas operativas autorizadas."
+  },
+  "department": {
+    "department_code": "50",
+    "department_name": "Meta",
+    "requested_period": "2026-12"
+  },
+  "municipalities": [
+    {
+      "municipality_code": "50001",
+      "municipality_name": "Villavicencio",
+      "cases_t": 37,
+      "endemic_zone_t": "ALERTA",
+      "p25": 18.0,
+      "median": 29.0,
+      "p75": 41.0,
+      "results": [
+        {
+          "result_id": "50111111-1111-4111-8111-111111111111",
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": 0.58,
+          "threshold": 0.55,
+          "alert_status": "ALERT",
+          "availability_status": "AVAILABLE",
+          "availability_reason": null,
+          "model_family": "xgboost",
+          "model_role": "PROVISIONAL_CANDIDATE",
+          "model_version": "demo-meta-xgb-t1-v1",
+          "procedure_id": "demo-meta-procedure-t1"
+        },
+        {
+          "result_id": "50222222-2222-4222-8222-222222222222",
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": 0.43,
+          "threshold": 0.5,
+          "alert_status": "NO_ALERT",
+          "availability_status": "AVAILABLE",
+          "availability_reason": null,
+          "model_family": "lightgbm",
+          "model_role": "PROVISIONAL_CANDIDATE",
+          "model_version": "demo-meta-lgbm-t2-v1",
+          "procedure_id": "demo-meta-procedure-t2"
+        }
+      ]
+    },
+    {
+      "municipality_code": "50573",
+      "municipality_name": "Puerto López",
+      "cases_t": null,
+      "endemic_zone_t": "UNAVAILABLE",
+      "p25": null,
+      "median": null,
+      "p75": null,
+      "results": [
+        {
+          "result_id": null,
+          "horizon": "T1",
+          "target_period": "2027-01",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "MISSING_DATA",
+          "availability_reason": "Falta el dato fuente requerido para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        },
+        {
+          "result_id": null,
+          "horizon": "T2",
+          "target_period": "2027-02",
+          "probability": null,
+          "threshold": null,
+          "alert_status": "UNAVAILABLE",
+          "availability_status": "NOT_CALCULATED",
+          "availability_reason": "El resultado T2 todavía no ha sido calculado para este municipio y periodo.",
+          "model_family": null,
+          "model_role": null,
+          "model_version": null,
+          "procedure_id": null
+        }
+      ]
+    }
+  ],
+  "evaluation_context": {
+    "demonstrative_values": true,
+    "evaluation_records": [
+      {
+        "horizon": "T1",
+        "procedure_id": "demo-meta-procedure-t1",
+        "evaluation_period_start": "2021-01",
+        "evaluation_period_end": "2024-12",
+        "evaluation_geography": "Meta; cifras demostrativas, no resultados científicos reales",
+        "auroc": 0.72,
+        "average_precision": 0.65,
+        "brier": 0.18,
+        "false_alerts": 17,
+        "alerts_emitted": 58,
+        "false_alert_ratio": 0.29,
+        "onsets_detected": 13,
+        "actual_onsets": 34,
+        "onset_sensitivity": 0.38
+      },
+      {
+        "horizon": "T2",
+        "procedure_id": "demo-meta-procedure-t2",
+        "evaluation_period_start": "2021-01",
+        "evaluation_period_end": "2024-12",
+        "evaluation_geography": "Meta; cifras demostrativas, no resultados científicos reales",
+        "auroc": 0.69,
+        "average_precision": 0.61,
+        "brier": 0.2,
+        "false_alerts": 20,
+        "alerts_emitted": 68,
+        "false_alert_ratio": 0.29,
+        "onsets_detected": 15,
+        "actual_onsets": 39,
+        "onset_sensitivity": 0.38
+      }
+    ]
+  }
+}

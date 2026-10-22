@@ -26,6 +26,7 @@ def _require_rfc3339_string(value: object) -> object:
 
 Month = Annotated[str, StringConstraints(pattern=r"^\d{4}-(0[1-9]|1[0-2])$", strict=True)]
 MunicipalityCode = Annotated[str, StringConstraints(pattern=r"^\d{5}$", strict=True)]
+DepartmentCode = Literal["50", "73"]
 Probability = Annotated[float, Field(strict=True, ge=0.0, le=1.0)]
 NonNegativeCount = Annotated[int, Field(strict=True, ge=0, le=2_147_483_647)]
 NonNegativeMeasure = Annotated[float, Field(strict=True, ge=0.0, le=2_147_483_647)]
@@ -135,7 +136,7 @@ class Governance(ContractModel):
 class Department(ContractModel):
     """Department selected by the dashboard request."""
 
-    department_code: Literal["50", "73"]
+    department_code: DepartmentCode
     department_name: Annotated[str, Field(min_length=1, max_length=100)]
     requested_period: Month
 
@@ -255,6 +256,28 @@ class DashboardResponse(ContractModel):
         if self.metadata.reference_period != self.department.requested_period:
             raise ValueError("reference_period must equal requested_period")
 
+        expected_target_periods = {
+            Horizon.T1: _shift_month(self.metadata.reference_period, 1),
+            Horizon.T2: _shift_month(self.metadata.reference_period, 2),
+        }
+        municipality_codes = [
+            municipality.municipality_code for municipality in self.municipalities
+        ]
+        if len(municipality_codes) != len(set(municipality_codes)):
+            raise ValueError("municipality_code values must be unique within a response")
+
+        department_code = self.department.department_code
+        for municipality in self.municipalities:
+            if not municipality.municipality_code.startswith(department_code):
+                raise ValueError("municipality_code must belong to the response department")
+            for result in municipality.results:
+                expected_period = expected_target_periods[result.horizon]
+                if result.target_period != expected_period:
+                    raise ValueError(
+                        f"{result.horizon.value} target_period must be {expected_period} "
+                        f"for reference_period {self.metadata.reference_period}"
+                    )
+
         available_ids = [
             result.result_id
             for municipality in self.municipalities
@@ -280,6 +303,14 @@ class DashboardResponse(ContractModel):
             if invalid_roles:
                 raise ValueError("G5 NOT_APPROVED only permits PROVISIONAL_CANDIDATE models")
         return self
+
+
+def _shift_month(period: str, months: int) -> str:
+    """Shift a validated ``YYYY-MM`` period by a non-negative month count."""
+    year_text, month_text = period.split("-")
+    month_index = int(year_text) * 12 + int(month_text) - 1 + months
+    year, zero_based_month = divmod(month_index, 12)
+    return f"{year:04d}-{zero_based_month + 1:02d}"
 
 
 class ErrorResponse(ContractModel):

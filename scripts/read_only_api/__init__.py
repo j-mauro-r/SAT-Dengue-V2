@@ -1,11 +1,21 @@
 """Executable contracts for the future read-only Stage 7 API."""
 
-from .loader import DEFAULT_FIXTURE_PATH, FixtureValidationError, load_dashboard_fixture
+from .loader import (
+    DEMONSTRATIVE_FIXTURE_PATHS,
+    FIXTURES_DIRECTORY,
+    META_FIXTURE_PATH,
+    TOLIMA_FIXTURE_PATH,
+    FixtureValidationError,
+    load_dashboard_fixture,
+    load_demonstrative_fixture,
+    resolve_demonstrative_fixture_path,
+)
 from .schemas import (
     AlertStatus,
     AvailabilityStatus,
     ChampionStatus,
     DashboardResponse,
+    DepartmentCode,
     EndemicZone,
     ErrorCode,
     ErrorResponse,
@@ -15,11 +25,15 @@ from .schemas import (
 )
 
 __all__ = [
-    "DEFAULT_FIXTURE_PATH",
+    "DEMONSTRATIVE_FIXTURE_PATHS",
+    "FIXTURES_DIRECTORY",
+    "META_FIXTURE_PATH",
+    "TOLIMA_FIXTURE_PATH",
     "AlertStatus",
     "AvailabilityStatus",
     "ChampionStatus",
     "DashboardResponse",
+    "DepartmentCode",
     "EndemicZone",
     "ErrorCode",
     "ErrorResponse",
@@ -28,4 +42,6 @@ __all__ = [
     "Horizon",
     "ModelRole",
     "load_dashboard_fixture",
+    "load_demonstrative_fixture",
+    "resolve_demonstrative_fixture_path",
 ]

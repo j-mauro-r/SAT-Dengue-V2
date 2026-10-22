@@ -11,7 +11,9 @@ import pytest
 from pydantic import ValidationError
 
 from scripts.read_only_api import (
-    DEFAULT_FIXTURE_PATH,
+    DEMONSTRATIVE_FIXTURE_PATHS,
+    META_FIXTURE_PATH,
+    TOLIMA_FIXTURE_PATH,
     AlertStatus,
     AvailabilityStatus,
     ChampionStatus,
@@ -24,20 +26,35 @@ from scripts.read_only_api import (
     Horizon,
     ModelRole,
     load_dashboard_fixture,
+    load_demonstrative_fixture,
+    resolve_demonstrative_fixture_path,
 )
 
 
 @pytest.fixture
 def fixture_payload() -> dict[str, Any]:
-    return json.loads(DEFAULT_FIXTURE_PATH.read_text(encoding="utf-8"))
+    return json.loads(TOLIMA_FIXTURE_PATH.read_text(encoding="utf-8"))
 
 
-def test_demonstrative_fixture_loads_and_round_trips() -> None:
-    raw = json.loads(DEFAULT_FIXTURE_PATH.read_text(encoding="utf-8"))
-    response = load_dashboard_fixture()
+@pytest.mark.parametrize(
+    ("department_code", "fixture_path", "department_name"),
+    [
+        ("50", META_FIXTURE_PATH, "Meta"),
+        ("73", TOLIMA_FIXTURE_PATH, "Tolima"),
+    ],
+)
+def test_demonstrative_fixtures_load_and_round_trip(
+    department_code: str, fixture_path: Path, department_name: str
+) -> None:
+    raw = json.loads(fixture_path.read_text(encoding="utf-8"))
+    response = load_demonstrative_fixture(department_code)
 
     assert response.model_dump(mode="json") == raw
     assert response.evaluation_context.demonstrative_values is True
+    assert response.department.department_name == department_name
+
+
+def test_error_response_round_trip() -> None:
     assert ErrorResponse(
         error_code=ErrorCode.INVALID_PERIOD_FORMAT,
         message="El periodo debe usar el formato YYYY-MM.",
@@ -45,6 +62,32 @@ def test_demonstrative_fixture_loads_and_round_trips() -> None:
         "error_code": "INVALID_PERIOD_FORMAT",
         "message": "El periodo debe usar el formato YYYY-MM.",
     }
+
+
+def test_runtime_fixture_paths_are_explicit_and_outside_tests() -> None:
+    assert DEMONSTRATIVE_FIXTURE_PATHS == {
+        "50": META_FIXTURE_PATH,
+        "73": TOLIMA_FIXTURE_PATH,
+    }
+    for path in DEMONSTRATIVE_FIXTURE_PATHS.values():
+        assert path.is_absolute()
+        assert "tests" not in path.parts
+        assert path.parent.name == "fixtures"
+
+
+@pytest.mark.parametrize(
+    ("department_code", "expected"),
+    [("50", META_FIXTURE_PATH), ("73", TOLIMA_FIXTURE_PATH)],
+)
+def test_fixture_resolution_by_department(department_code: str, expected: Path) -> None:
+    assert resolve_demonstrative_fixture_path(department_code) == expected
+
+
+def test_unsupported_fixture_department_fails_clearly() -> None:
+    with pytest.raises(
+        FixtureValidationError, match="Unsupported demonstrative department code: 76"
+    ):
+        resolve_demonstrative_fixture_path("76")
 
 
 def test_fixture_loader_reports_contract_failure_clearly(tmp_path: Path) -> None:
@@ -110,6 +153,70 @@ def test_available_result_ids_are_unique(fixture_payload: dict[str, Any]) -> Non
     results[1]["result_id"] = results[0]["result_id"]
 
     with pytest.raises(ValidationError, match="result_id values must be unique"):
+        DashboardResponse.model_validate(payload)
+
+
+@pytest.mark.parametrize(
+    ("horizon_index", "invalid_period", "expected"),
+    [
+        (0, "2026-11", "T1 target_period must be 2026-10"),
+        (1, "2026-12", "T2 target_period must be 2026-11"),
+    ],
+)
+def test_target_period_must_match_reference_and_horizon(
+    fixture_payload: dict[str, Any],
+    horizon_index: int,
+    invalid_period: str,
+    expected: str,
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][0]["results"][horizon_index]["target_period"] = invalid_period
+
+    with pytest.raises(ValidationError, match=expected):
+        DashboardResponse.model_validate(payload)
+
+
+def test_december_reference_rolls_targets_into_january_and_february() -> None:
+    response = load_demonstrative_fixture("50")
+
+    for municipality in response.municipalities:
+        targets = {result.horizon: result.target_period for result in municipality.results}
+        assert targets[Horizon.T1] == "2027-01"
+        assert targets[Horizon.T2] == "2027-02"
+
+
+def test_november_reference_rolls_targets_into_december_and_january(
+    fixture_payload: dict[str, Any],
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["metadata"]["reference_period"] = "2026-11"
+    payload["department"]["requested_period"] = "2026-11"
+    for municipality in payload["municipalities"]:
+        municipality["results"][0]["target_period"] = "2026-12"
+        municipality["results"][1]["target_period"] = "2027-01"
+
+    response = DashboardResponse.model_validate(payload)
+
+    assert response.metadata.reference_period == "2026-11"
+
+
+def test_municipality_must_belong_to_response_department(
+    fixture_payload: dict[str, Any],
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][0]["municipality_code"] = "50001"
+
+    with pytest.raises(ValidationError, match="must belong to the response department"):
+        DashboardResponse.model_validate(payload)
+
+
+def test_municipality_codes_are_unique(fixture_payload: dict[str, Any]) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][1]["municipality_code"] = payload["municipalities"][0][
+        "municipality_code"
+    ]
+
+    with pytest.raises(ValidationError, match="municipality_code values must be unique"):
         DashboardResponse.model_validate(payload)
 
 
