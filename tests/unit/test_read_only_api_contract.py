@@ -113,6 +113,16 @@ def test_available_result_ids_are_unique(fixture_payload: dict[str, Any]) -> Non
         DashboardResponse.model_validate(payload)
 
 
+def test_result_set_id_is_not_an_individual_result_id(
+    fixture_payload: dict[str, Any],
+) -> None:
+    payload = copy.deepcopy(fixture_payload)
+    payload["municipalities"][0]["results"][0]["result_id"] = payload["metadata"]["result_set_id"]
+
+    with pytest.raises(ValidationError, match="result_set_id must differ"):
+        DashboardResponse.model_validate(payload)
+
+
 def test_not_approved_g5_rejects_champion_role(fixture_payload: dict[str, Any]) -> None:
     payload = copy.deepcopy(fixture_payload)
     payload["municipalities"][0]["results"][0]["model_role"] = "CHAMPION"
@@ -125,6 +135,7 @@ def test_not_approved_g5_rejects_champion_role(fixture_payload: dict[str, Any]) 
     ("mutation", "expected"),
     [
         (("metadata", "reference_period", "2026-13"), "string_pattern_mismatch"),
+        (("metadata", "generated_at", "2026-10-03T14:30:00"), "timezone_aware"),
         (("department", "department_code", "76"), "literal_error"),
         (("municipalities", 0, "municipality_code", "7301"), "string_pattern_mismatch"),
     ],

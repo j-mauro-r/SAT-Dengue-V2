@@ -2,16 +2,34 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from enum import StrEnum
 from typing import Annotated, Literal, Self
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    Field,
+    StringConstraints,
+    model_validator,
+)
+
+
+def _require_rfc3339_string(value: object) -> object:
+    """Reject non-string timestamp inputs before Pydantic parses RFC 3339."""
+    if not isinstance(value, str) or len(value) > 35:
+        raise ValueError("Timestamp must be an RFC 3339 string of at most 35 characters")
+    return value
+
 
 Month = Annotated[str, StringConstraints(pattern=r"^\d{4}-(0[1-9]|1[0-2])$", strict=True)]
 MunicipalityCode = Annotated[str, StringConstraints(pattern=r"^\d{5}$", strict=True)]
-Probability = Annotated[float, Field(ge=0.0, le=1.0)]
+Probability = Annotated[float, Field(strict=True, ge=0.0, le=1.0)]
+NonNegativeCount = Annotated[int, Field(strict=True, ge=0, le=2_147_483_647)]
+NonNegativeMeasure = Annotated[float, Field(strict=True, ge=0.0, le=2_147_483_647)]
+RFC3339DateTime = Annotated[AwareDatetime, BeforeValidator(_require_rfc3339_string)]
 
 
 class ContractModel(BaseModel):
@@ -89,8 +107,8 @@ class Metadata(ContractModel):
 
     result_set_id: UUID
     reference_period: Month
-    generated_at: datetime
-    data_updated_at: datetime | None
+    generated_at: RFC3339DateTime
+    data_updated_at: RFC3339DateTime | None
     data_version: Annotated[str, Field(min_length=1, max_length=128)]
 
 
@@ -180,11 +198,11 @@ class Municipality(ContractModel):
 
     municipality_code: MunicipalityCode
     municipality_name: Annotated[str, Field(min_length=1, max_length=150)]
-    cases_t: Annotated[int, Field(ge=0)] | None
+    cases_t: NonNegativeCount | None
     endemic_zone_t: EndemicZone
-    p25: Annotated[float, Field(ge=0)] | None
-    median: Annotated[float, Field(ge=0)] | None
-    p75: Annotated[float, Field(ge=0)] | None
+    p25: NonNegativeMeasure | None
+    median: NonNegativeMeasure | None
+    p75: NonNegativeMeasure | None
     results: Annotated[list[Result], Field(min_length=2, max_length=2)]
 
     @model_validator(mode="after")
@@ -207,18 +225,18 @@ class EvaluationRecord(ContractModel):
     auroc: Probability | None
     average_precision: Probability | None
     brier: Probability | None
-    false_alerts: Annotated[int, Field(ge=0)] | None
-    alerts_emitted: Annotated[int, Field(ge=0)] | None
+    false_alerts: NonNegativeCount | None
+    alerts_emitted: NonNegativeCount | None
     false_alert_ratio: Probability | None
-    onsets_detected: Annotated[int, Field(ge=0)] | None
-    actual_onsets: Annotated[int, Field(ge=0)] | None
+    onsets_detected: NonNegativeCount | None
+    actual_onsets: NonNegativeCount | None
     onset_sensitivity: Probability | None
 
 
 class EvaluationContext(ContractModel):
     """Historically scoped context, separate from current results."""
 
-    demonstrative_values: bool
+    demonstrative_values: Annotated[bool, Field(strict=True)]
     evaluation_records: list[EvaluationRecord]
 
 
@@ -245,6 +263,8 @@ class DashboardResponse(ContractModel):
         ]
         if len(available_ids) != len(set(available_ids)):
             raise ValueError("Available result_id values must be unique within a result set")
+        if self.metadata.result_set_id in available_ids:
+            raise ValueError("result_set_id must differ from every individual result_id")
 
         if (
             self.governance.governance_gate == "G5"
