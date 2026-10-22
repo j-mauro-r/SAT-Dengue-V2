@@ -51,7 +51,7 @@ La respuesta JSON contiene exactamente cinco bloques de primer nivel:
 
 | Bloque | Responsabilidad |
 |---|---|
-| `metadata` | Identifica el resultado consultado, sus periodos y la frescura de datos y generación. |
+| `metadata` | Identifica el conjunto completo retornado para el departamento y periodo consultados, además de sus periodos y la frescura de datos y generación. |
 | `governance` | Expone el gate científico, la selección de Champion y la limitación obligatoria del candidato provisional. |
 | `department` | Describe el departamento y confirma el periodo pedido por el consumidor. |
 | `municipalities` | Contiene el contexto observado municipal y sus resultados T1/T2, incluidos los estados no disponibles. |
@@ -65,8 +65,8 @@ No se añaden bloques de conveniencia que dupliquen estas responsabilidades.
 
 | Campo | Bloque | Descripción | ¿Lo genera el modelo? | Fuente | Tipo y formato | Longitud máxima o rango | Obligatorio | Comportamiento cuando está ausente |
 |---|---|---|---|---|---|---|---|---|
-| `metadata` | Raíz | Metadatos del resultado persistido. | No | Persistencia | Objeto | 5 campos definidos | Sí | Error de contrato; no se fabrica el bloque. |
-| `result_id` | `metadata` | Identificador estable e inmutable del conjunto de resultados. | No | Persistencia | String UUID | 36 caracteres | Sí | Error de contrato. |
+| `metadata` | Raíz | Metadatos del conjunto completo retornado para una consulta de departamento y periodo. | No | Persistencia | Objeto | 5 campos definidos | Sí | Error de contrato; no se fabrica el bloque. |
+| `result_set_id` | `metadata` | Identificador estable e inmutable del conjunto completo retornado por una consulta de departamento y periodo; no identifica un resultado municipal individual. | No | Persistencia | String UUID | Exactamente 36 caracteres | Sí | Error de contrato. |
 | `reference_period` | `metadata` | Periodo mensual T usado como referencia. | No | Resultado persistido | String `YYYY-MM` | 7 caracteres | Sí | Error de contrato. |
 | `generated_at` | `metadata` | Instante en que se generó el resultado. | No | Registro de ejecución | String RFC 3339 con zona | 35 caracteres | Sí | Error de contrato; no se sustituye por la hora actual. |
 | `data_updated_at` | `metadata` | Instante de actualización del dato fuente asociado. | No | Registro de datos | String RFC 3339 o `null` | 35 caracteres | Sí | `null` cuando no existe una fecha acreditada. |
@@ -89,6 +89,7 @@ No se añaden bloques de conveniencia que dupliquen estas responsabilidades.
 | `median` | `municipalities[]` | Mediana (P50) del canal endémico para T. | No | Lógica epidemiológica persistida | Número no negativo o `null` | 0 a 2 147 483 647 | Sí | `null` si no está disponible. |
 | `p75` | `municipalities[]` | Percentil 75 del canal endémico para T. | No | Lógica epidemiológica persistida | Número no negativo o `null` | 0 a 2 147 483 647 | Sí | `null` si no está disponible. |
 | `results` | `municipalities[]` | Resultados T1 y T2 del municipio. | No | Composición del API | Array de objetos | Exactamente 2 elementos, uno por horizonte | Sí | Error de contrato. |
+| `result_id` | `results[]` | Identifica exactamente el resultado de un municipio, horizonte y periodo objetivo; el dashboard lo usa en “Detalle del resultado”. No identifica el modelo, el procedimiento ni el conjunto completo. | No | Persistencia | String UUID o `null` | Exactamente 36 caracteres cuando no es `null` | Sí | UUID válido y único cuando `availability_status = AVAILABLE`; `null` si el resultado no fue calculado o no está disponible. Nunca se reutiliza entre municipios u horizontes. |
 | `horizon` | `results[]` / `evaluation_records[]` | Horizonte mensual del resultado o métrica. | No | Configuración persistida | Enum cerrado | `T1` o `T2` | Sí | Error de contrato. |
 | `target_period` | `results[]` | Mes objetivo real del horizonte. | No | Resultado persistido | String `YYYY-MM` | 7 caracteres | Sí | Error de contrato. |
 | `probability` | `results[]` | Probabilidad persistida del evento objetivo. | Sí | Artefacto/modelo cargado | Decimal o `null` | 0 a 1 inclusive | Sí | `null` cuando `availability_status` no es `AVAILABLE`; nunca cero por defecto. |
@@ -117,6 +118,8 @@ No se añaden bloques de conveniencia que dupliquen estas responsabilidades.
 | `onset_sensitivity` | `evaluation_records[]` | Cociente histórico `onsets_detected / actual_onsets`. | No | Stage 5 | Decimal o `null` | 0 a 1 inclusive | Sí | `null` si el denominador es cero o desconocido. |
 
 El API entrega `probability` y `threshold` como decimales entre `0` y `1`. El dashboard puede convertir `0.61` en `61 %` para presentarlo, sin modificar el valor ni su significado.
+
+La trazabilidad tiene dos niveles distintos. `metadata.result_set_id` identifica la respuesta completa para el departamento y periodo consultados. Cada `municipalities[].results[].result_id` identifica solo la combinación concreta de municipio, horizonte y `target_period`; por ello, “Detalle del resultado” debe tomar el identificador del objeto seleccionado. Los identificadores no duplican `model_version` ni `procedure_id`, que conservan responsabilidades diferentes.
 
 ## 6. Catálogos cerrados
 
@@ -167,7 +170,7 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
 ```json
 {
   "metadata": {
-    "result_id": "7e57d004-2b97-4b77-9f8d-111111111111",
+    "result_set_id": "7e57d004-2b97-4b77-9f8d-111111111111",
     "reference_period": "2026-09",
     "generated_at": "2026-10-03T14:30:00-05:00",
     "data_updated_at": "2026-10-02T18:00:00-05:00",
@@ -195,6 +198,7 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
       "p75": 47.0,
       "results": [
         {
+          "result_id": "a1111111-1111-4111-8111-111111111111",
           "horizon": "T1",
           "target_period": "2026-10",
           "probability": 0.61,
@@ -208,6 +212,7 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
           "procedure_id": "demo-procedure-t1"
         },
         {
+          "result_id": "b2222222-2222-4222-8222-222222222222",
           "horizon": "T2",
           "target_period": "2026-11",
           "probability": 0.42,
@@ -232,6 +237,7 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
       "p75": 15.0,
       "results": [
         {
+          "result_id": "c3333333-3333-4333-8333-333333333333",
           "horizon": "T1",
           "target_period": "2026-10",
           "probability": 0.28,
@@ -245,6 +251,7 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
           "procedure_id": "demo-procedure-t1"
         },
         {
+          "result_id": null,
           "horizon": "T2",
           "target_period": "2026-11",
           "probability": null,
@@ -300,7 +307,7 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
 }
 ```
 
-El ejemplo muestra una probabilidad disponible por encima del umbral (`0.61 >= 0.55`, por tanto `ALERT`), otra por debajo y un resultado T2 no calculado con valores científicos en `null`. Las métricas incluyen numeradores y denominadores para evitar tasas sin soporte.
+El ejemplo muestra un `result_set_id` para el conjunto completo, tres `result_id` demostrativos, válidos y diferentes para resultados disponibles, y `result_id = null` para el resultado T2 no calculado. También muestra una probabilidad disponible por encima del umbral (`0.61 >= 0.55`, por tanto `ALERT`), otras por debajo y valores científicos en `null` para el resultado no disponible. Las métricas incluyen numeradores y denominadores para evitar tasas sin soporte.
 
 ## 10. Respuestas de error
 
@@ -326,10 +333,10 @@ Los mensajes no exponen trazas, rutas internas, consultas, nombres de servicios 
 
 | Situación | Representación contractual | Qué debe mostrar el dashboard |
 |---|---|---|
-| Resultado disponible | `availability_status = AVAILABLE`, probabilidad y umbral decimales, y alerta coherente. | Probabilidad formateada, umbral, alerta textual y trazabilidad; debe mantener visible la gobernanza. |
-| Historia insuficiente | `availability_status = INSUFFICIENT_HISTORY`, valores predictivos en `null` y razón explícita. | “Historia insuficiente” y la razón; no usar color de bajo riesgo ni cero. |
-| Dato fuente ausente | `availability_status = MISSING_DATA`, valores afectados en `null` y razón explícita. | “Dato fuente ausente” y la razón; distinguirlo de historia insuficiente. |
-| Resultado todavía no calculado | `availability_status = NOT_CALCULATED`, valores predictivos en `null` y razón explícita. | “Resultado todavía no calculado”; no iniciar cálculo desde la vista de solo lectura. |
+| Resultado disponible | `availability_status = AVAILABLE`, `result_id` con UUID válido y único, probabilidad y umbral decimales, y alerta coherente. | Probabilidad formateada, umbral, alerta textual y el `result_id` correcto en “Detalle del resultado”; debe mantener visible la gobernanza. |
+| Historia insuficiente | `availability_status = INSUFFICIENT_HISTORY`, `result_id = null`, valores predictivos en `null` y razón explícita. | “Historia insuficiente” y la razón; no usar color de bajo riesgo ni cero. |
+| Dato fuente ausente | `availability_status = MISSING_DATA`, `result_id = null`, valores afectados en `null` y razón explícita. | “Dato fuente ausente” y la razón; distinguirlo de historia insuficiente. |
+| Resultado todavía no calculado | `availability_status = NOT_CALCULATED`, `result_id = null`, valores predictivos en `null` y razón explícita. | “Resultado todavía no calculado”; no iniciar cálculo desde la vista de solo lectura. |
 | Error de consulta | Respuesta HTTP de la sección 10, fuera del cuerpo exitoso. | Mensaje exacto y comportamiento definidos para el error; nunca convertirlo en un municipio no disponible. |
 
 Los primeros cuatro estados pertenecen al dominio de una respuesta exitosa. El error de consulta pertenece al transporte y no sustituye un estado municipal.
@@ -344,9 +351,11 @@ El futuro MVP se considera exitoso cuando:
 4. Presenta probabilidad, umbral y alerta sin alterar su significado.
 5. Presenta canal endémico, casos observados y percentiles.
 6. Presenta gobernanza y selección científica.
-7. Permite consultar la trazabilidad del resultado.
+7. Permite consultar la trazabilidad del conjunto mediante `metadata.result_set_id` sin confundirla con la trazabilidad individual.
 8. Representa correctamente los estados no disponibles.
 9. El candidato provisional nunca aparece como Champion aprobado.
+10. Cada resultado disponible tiene un `result_id` UUID único entre municipios y horizontes; cada resultado no disponible tiene `result_id = null`.
+11. “Detalle del resultado” presenta el `result_id` del municipio y horizonte seleccionados, sin duplicar información del modelo o procedimiento.
 
 Estos criterios validan integración y comprensión del MVP; no aprueban G5 ni convierten resultados demostrativos o históricos en predicciones operativas.
 
