@@ -7,6 +7,9 @@ name = "sat-dengue-v2"
 version = "0.1.0"
 description = "Sistema de Alerta Temprana para Brotes de Dengue en Colombia"
 requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.10,<3",
+]
 
 [project.optional-dependencies]
 dev = [
