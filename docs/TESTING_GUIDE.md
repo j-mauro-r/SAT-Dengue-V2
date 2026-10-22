@@ -390,7 +390,15 @@ evidence into a successful skip. No model fitting or notebook execution is neede
 - `tests/integration/migration_replay.py`: separate historical runtime process,
   original native component loading and no-fit replay, with write/fit guards.
 - `tests/integration/test_migration_parity.py`: protected source/contract/input and
-  native-bundle identity, historical source recovery and 4.6/4.7 compatibility.
+  native-bundle identity, complete active-chain source recovery, the closed 13
+  historical exceptions and 4.6/4.7 compatibility. Its 4.7 test independently
+  rehashes all 2,553 protected files and checks exact bundle membership/identity
+  after replay, including failed replay attempts.
+- `docs/operations/kedro-baseline-scope.json`: pinned revision-2 approved scope
+  and KEEP / UNVERIFIED dispositions for the 17 affected historical bundles.
+  Synthetic mutations exercise active missing sources, extra historical missing
+  sources, exception path/hash drift, forbidden dispositions/equivalence claims,
+  full-history claims and scientific authorization boundaries.
 
 Run from the repository root with the existing `.venv` (no installation into it):
 
@@ -400,7 +408,7 @@ export PYTHONDONTWRITEBYTECODE=1
 export PYTEST_DEBUG_TEMPROOT="$PWD/tmp/kedro-migration"
 python -m pytest tests/unit -q
 python -m pytest tests/integration/test_migration_parity.py -q
-python -m pytest tests/integration/test_migration_parity.py -k "baseline or compatibility" --require-migration-evidence -q
+python -m pytest tests/integration/test_migration_parity.py --require-migration-evidence -q
 python -m ruff check tests
 python -m ruff format --check tests
 python -m mypy tests

@@ -13,8 +13,11 @@ from typing import Any
 from migration_support import (
     BASELINE_SHA256,
     FINAL_PATH,
+    active_chain,
+    approved_scope,
     fingerprint,
     require_records,
+    source_records,
     verify_native_bundle,
 )
 
@@ -88,37 +91,16 @@ def main() -> None:
             assert fingerprint(path)["sha256"] in historical_hashes.get(relative, set()), (
                 f"Imported source has no historical hash: {relative}"
             )
-    # Resolve the active native dependency chain by manifest content hashes.
-    manifest_index = {}
-    for name in baseline["bundles"]:
-        manifest_index[baseline["protected"][name]["sha256"]] = name
+    # Only approved active bundles may support equivalence; historical exceptions cannot.
+    scope = approved_scope(root)
+    visited = active_chain(root, baseline, str(FINAL_PATH / "manifest.json"))
+    assert sorted(visited) == scope["active_chain"]
+    assert not visited.intersection(scope["historical_bundles"])
     active_sources: dict[str, set[str]] = {}
-    visited: set[str] = set()
-
-    def visit(name: str) -> None:
-        if name in visited:
-            return
-        visited.add(name)
+    for name in visited:
         source = json.loads((root / name).read_text()).get("identity", {})
-        for group in ("code", "stage4_code"):
-            for path, value in source.get(group, {}).items():
-                if isinstance(value, dict) and "sha256" in value:
-                    active_sources.setdefault(path, set()).add(value["sha256"])
-
-        def dependencies(value: Any) -> None:
-            if isinstance(value, dict):
-                sha = value.get("sha256")
-                if isinstance(sha, str) and sha in manifest_index:
-                    visit(manifest_index[sha])
-                for child in value.values():
-                    dependencies(child)
-            elif isinstance(value, list):
-                for child in value:
-                    dependencies(child)
-
-        dependencies(source)
-
-    visit(str(FINAL_PATH / "manifest.json"))
+        for path, sha in source_records(source):
+            active_sources.setdefault(path, set()).add(sha)
     checked: set[str] = set()
     source_prefix = str(snapshot / "scripts") + os.sep
 
@@ -165,6 +147,11 @@ def main() -> None:
                 new_fits=0,
                 native_payloads=len(manifest["files"]),
                 dependency_bundles=len(visited),
+                equivalence_bundles=sorted(visited),
+                full_historical_reproducibility=False,
+                consumed_2025=True,
+                allow_2025_selection_tuning_training=False,
+                new_real_fits=result["new_model_fits"] + result["new_preparer_fits"],
                 executed_source_files=len(checked),
                 G5=summary["G5"],
                 champion=summary["champion"],

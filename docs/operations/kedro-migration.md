@@ -10,6 +10,60 @@ No Kedro installation, real fit, data replacement, file removal or Session 2 wor
 is authorized here. G2/G3/G4 retain their accepted states; G5 remains
 `NOT_APPROVED` and champion `not_selected`. Consumed 2025 is replay evidence only.
 
+## Approved T-baseline amendment — 2026-10-22
+
+Mauricio explicitly approved revision **2**, contract
+`3183d0df6b93ff606663c7fa93b5a3c69d4a2f3f9a8e7c74f26713bb5c9e4deb`,
+through the repository-local `/dwp-refine` flow. Its parent is revision 1,
+`eb451f9c295e908bfc087ca746834e8b2ec88cbd921b4d0db36f19f06475b609`.
+The official amendment and renewed approval preserve the original failed gate;
+only fresh revision-2 evidence can close T-baseline. The authorized work ends
+there. T-foundation, Session 2 and Kedro installation remain outside authorization.
+
+The [executable approved scope](kedro-baseline-scope.json) records all 12 active
+bundle manifest paths, the 13 exact historical source path/SHA-256 exceptions
+listed below, and the 17 affected historical bundle manifests and fingerprints.
+Its SHA-256 is `5f16db6458a771fd2ee32197247b3331ecd5f57b148319e7ba99ba806cc9165f`,
+pinned in the revised DWP contract and harness. This is an approved narrowing of
+the reconstruction obligation. It grants no new scientific decision.
+
+Complete source recovery remains mandatory for the active chain, derived from
+protected manifest dependency hashes: `active_missing=[]`. Historical recovery
+still examines every native manifest and every recovered source object. Its
+missing set must equal the closed 13-entry list exactly. An additional missing
+source, changed exception path/hash, or altered coverage receipt fails. The
+harness does not skip the historical reconstruction test.
+
+Every affected historical bundle remains **KEEP / UNVERIFIED**. Its source
+reproducibility is unverified even though its stored payload hashes are protected.
+Retirement, modification and use as equivalence evidence are forbidden. The
+executable dispositions reject changed status, mutation permission or equivalence
+permission; replay receipts must name exactly the approved active chain. Full
+historical reproducibility **cannot be claimed**. Neither complete historical
+replay nor source recovery for these exceptions is an achieved outcome.
+
+After the LightGBM 4.7 process exits (also on failure/timeout), the parent process
+independently reads all 2,553 protected files and compares their size and SHA-256
+with the pinned original `baseline.json`. It also enumerates all entries under
+each protected bundle and checks its original manifest and bundle identity.
+Replacement, removal, additional files/directories, symlinks and identity changes
+fail. The Python `open()` audit hook remains an additional guard, not the evidence
+for post-replay preservation. Synthetic tests cover same-size replacement through
+`os.replace`, deletion, extra/nested files, identity changes and symlinks.
+
+Observed receipts are local: `tmp/kedro-migration/source-coverage-observed.json`,
+`post-replay-4.7.0.json` and `compatibility-4.7.0.json`. The post-replay receipt
+records scan start/end timestamps, result, counts and method; a failure records
+its error and still fails pytest. The DWP runner owns acceptance evidence under
+`gates/T-baseline/`; the amendment handoff and evidence index are in
+`analysis_results/session1_amendment/`. These are separate from the original
+checkpoint evidence in `analysis_results/session1/`.
+
+G5 remains `NOT_APPROVED`, champion `not_selected`, and 2025 remains consumed;
+selection, tuning and training on 2025 are forbidden. The native replay guard
+blocks fit/selection/publication entrypoints and receipts require zero new real
+fits. Source recovery and inference use existing local environments only.
+
 ## Comparison contract declared before execution
 
 Keys, categories, feature order, labels, missingness masks, alerts, cohort order
@@ -267,7 +321,7 @@ Documentation decision: **update** this owner, the testing map and documentation
 index; add the synthetic harness to the existing CI test command. Preserve
 scientific contracts, decisions and historical results unchanged.
 
-## Observed Session 1 result — 2026-10-22
+## Historical Session 1 checkpoint — before amendment, 2026-10-22
 
 **Scientific artifact preservation PASS; final saved-component compatibility PASS;
 complete historical source reconstruction BLOCKED.** T-baseline is not accepted,
@@ -316,15 +370,16 @@ without changing historical files or scientific tolerances. The later run passed
 both runtimes (`compatibility-final.log`); the official DWP gate is the authoritative
 final acceptance attempt.
 
-### Explicit source-recovery blocker
+### Original source-recovery blocker and now-approved closed exceptions
 
 These 13 missing versions belong to older bundles outside the currently consumed
 final chain. Searches covered referenced Git history, all 1,450 retained Git objects,
 and available DWP/scratch source snapshots. Missing bytes were not reconstructed
 from prose, newer code or expected output. All affected bundles remain **KEEP**.
-Recover the exact bytes from a private backup, or obtain a separate explicit human
-decision/amendment before narrowing the reconstruction obligation. Never turn this
-failure into a skip or count unchanged payload hashes as proof of historical code.
+At the original checkpoint, exact recovery or a separate human amendment was
+required. Revision 2 now supplies that bounded amendment; these exact 13 entries
+remain unverified and may not be expanded. Never count unchanged payload hashes
+as proof of historical code.
 
 | Missing source path | Required SHA-256 |
 |---|---|
@@ -369,14 +424,16 @@ installed distribution and the unchanged user LightGBM 4.6.0. The test harness
 sets the candidate's overlay explicitly; a plain candidate interpreter without
 that setting still sees the copied 4.6 package.
 
-After recovering the missing source evidence, resume **only T-baseline**:
+Under the approved revision-2 amendment, resume **only T-baseline**:
 
 ```text
 /dwp-resume PLAN_030_kedro_architecture_migration
 ```
 
 Re-anchor with the official ledger/context helpers, verify the preserved inventory,
-reconcile the new recovery records, and rerun the required gate through `ledger.py`.
+verify active recovery and the closed exceptions, and run the live revision-2 gate
+through `ledger.py` (the original session1 runner targets revision 1 and must not
+be reused for this amendment).
 A passing synthetic suite does not authorize Session 2. Do not install Kedro or
 start T-foundation in this authorization. Future code moves must compare original
 code against preserved snapshots while keeping scientific inputs/bundles immutable;
