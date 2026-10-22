@@ -87,6 +87,49 @@ without an uncontracted 422 response. They start no server and execute no Kedro,
 training, inference, model selection, or write flow. Run the full foundation gate before
 merge.
 
+## Stage 7 installable distribution and local startup
+
+Install the API and the optional local server from a checkout with:
+
+```bash
+python -m pip install ".[server]"
+```
+
+Start the ASGI application through its factory; importing the package does not
+start a server:
+
+```bash
+uvicorn --factory scripts.read_only_api.api:create_app
+```
+
+With the default Uvicorn address, the two persisted demonstrative results are:
+
+- Tolima: <http://127.0.0.1:8000/api/dashboard?department_code=73&period=2026-09>
+- Meta: <http://127.0.0.1:8000/api/dashboard?department_code=50&period=2026-12>
+
+An exact key that is not persisted, such as
+<http://127.0.0.1:8000/api/dashboard?department_code=73&period=2026-12>, returns
+`404 DASHBOARD_DATA_NOT_FOUND`. These are demonstrative persisted results: G5 is
+`NOT_APPROVED`, Champion is `NOT_SELECTED`, and every associated model role is
+`PROVISIONAL_CANDIDATE`. Starting or querying the API performs no training,
+inference, Kedro execution, or result write.
+
+Packaging validation stays outside the normal unit suite because it builds and
+installs a wheel in a temporary virtual environment. Run it from the repository
+environment as follows:
+
+```bash
+rm -rf tmp/stage7-dist
+.venv/bin/python -m build --wheel --outdir tmp/stage7-dist .
+.venv/bin/python scripts/validate_read_only_api_wheel.py tmp/stage7-dist/*.whl
+```
+
+The validator inspects the archive, rejects unrelated repository Python
+packages, installs the wheel in a fresh virtual environment, changes to a
+directory outside the checkout, launches the application in-process through
+ASGI, checks the two `200` responses plus contracted `404` and `400` responses,
+and compares fixture hashes and modification times before and after all queries.
+
 ## Scoped Commands, Mapping, Fallback (Documentation Standard 3.4)
 
 Scoped commands:
