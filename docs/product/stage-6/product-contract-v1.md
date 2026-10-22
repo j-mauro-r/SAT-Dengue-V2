@@ -1,8 +1,14 @@
-# Stage 6 — Product Contract v1 para el MVP académico E2E de solo lectura
+# Stage 6 — Product Contract v1.1 para el MVP académico E2E de solo lectura
 
 ## Estado, autoridad y límites
 
-**Estado del documento:** contrato de producto v1 para decisión humana en Stage 6.
+**Estado del documento:** contrato de producto v1.1 para decisión humana en Stage 6.
+
+La revisión v1.1 corrige la compatibilidad con los criterios ya aprobados de
+PROD-04: hace descubribles los 47 municipios de Tolima y los 29 de Meta,
+incorpora el estado `INELIGIBLE` y transporta la serie mensual del canal
+endémico que el dashboard debe presentar sin recalcular. No añade
+`result_purpose` ni cambia G5, Champion, Y, modelos, métricas o umbrales.
 
 Este documento congela el alcance mínimo del MVP académico descrito en la [historia maestra del dashboard](../stage-1/PROD-04-dashboard-master-user-story.md), bajo la secuencia y los límites del [plan maestro](../../roadmap/master-plan.md). Conserva el cierre científico documentado en [Stage 5](../stage-5/README.md): G5 = `NOT_APPROVED` y champion_status = `NOT_SELECTED`.
 
@@ -80,7 +86,7 @@ No se añaden bloques de conveniencia que dupliquen estas responsabilidades.
 | `department_code` | `department` | Código DANE del departamento. | No | Referencia DANE | String de 2 dígitos | Exactamente 2 | Sí | Error de contrato. |
 | `department_name` | `department` | Nombre oficial del departamento. | No | Referencia DANE | String | 100 caracteres | Sí | Error de contrato. |
 | `requested_period` | `department` | Periodo recibido en el parámetro `period`. | No | Request | String `YYYY-MM` | 7 caracteres | Sí | Error de contrato. |
-| `municipalities` | Raíz | Municipios del departamento con contexto y resultados por horizonte. | No | Composición del API | Array de objetos | 0 a número oficial de municipios | Sí | Array vacío solo si el contrato futuro lo distingue de un 404; para este MVP, ninguna coincidencia produce 404. |
+| `municipalities` | Raíz | Inventario completo del departamento con contexto y resultados por horizonte: 47 municipios para Tolima o 29 para Meta. | No | DANE/DIVIPOLA y composición del API | Array de objetos | Exactamente 47 o 29 según el departamento | Sí | Error de contrato si falta o sobra un municipio; una consulta sin conjunto persistido produce 404. |
 | `municipality_code` | `municipalities[]` | Código DANE del municipio. | No | Referencia DANE | String de 5 dígitos | Exactamente 5 | Sí | Error de contrato. |
 | `municipality_name` | `municipalities[]` | Nombre oficial del municipio. | No | Referencia DANE | String | 150 caracteres | Sí | Error de contrato. |
 | `cases_t` | `municipalities[]` | Casos observados en T bajo la definición vigente. | No | Datos epidemiológicos | Entero no negativo o `null` | 0 a 2 147 483 647 | Sí | `null` si el dato fuente no está disponible; nunca `0` por defecto. |
@@ -88,6 +94,10 @@ No se añaden bloques de conveniencia que dupliquen estas responsabilidades.
 | `p25` | `municipalities[]` | Percentil 25 del canal endémico para T. | No | Lógica epidemiológica persistida | Número no negativo o `null` | 0 a 2 147 483 647 | Sí | `null` si no está disponible. |
 | `median` | `municipalities[]` | Mediana (P50) del canal endémico para T. | No | Lógica epidemiológica persistida | Número no negativo o `null` | 0 a 2 147 483 647 | Sí | `null` si no está disponible. |
 | `p75` | `municipalities[]` | Percentil 75 del canal endémico para T. | No | Lógica epidemiológica persistida | Número no negativo o `null` | 0 a 2 147 483 647 | Sí | `null` si no está disponible. |
+| `endemic_channel_series` | `municipalities[]` | Serie mensual persistida y transportada por el API para representar el canal endémico; el frontend no la calcula. | No | Resultado persistido | Array de puntos mensuales | Periodos únicos y cronológicos del año de T | Sí | Puede ser vacío únicamente cuando el contexto observado es `UNAVAILABLE` y `cases_t`, `p25`, `median` y `p75` son `null`. |
+| `period` | `endemic_channel_series[]` | Mes calendario del punto. | No | Resultado persistido | String `YYYY-MM` | 7 caracteres | Sí | Error de contrato; debe pertenecer al año calendario de `reference_period`. |
+| `cases` | `endemic_channel_series[]` | Casos observados del mes cuando están disponibles. | No | Datos epidemiológicos persistidos | Entero no negativo o `null` | 0 a 2 147 483 647 | Sí | `null` si no está disponible y siempre para meses posteriores a T. |
+| `p25` / `median` / `p75` | `endemic_channel_series[]` | Percentiles persistidos del canal para el mes. | No | Lógica epidemiológica persistida | Número no negativo o `null` | 0 a 2 147 483 647 | Sí | Cuando existen los tres, deben cumplir `p25 <= median <= p75`; no se fabrican valores ausentes. |
 | `results` | `municipalities[]` | Resultados T1 y T2 del municipio. | No | Composición del API | Array de objetos | Exactamente 2 elementos, uno por horizonte | Sí | Error de contrato. |
 | `result_id` | `results[]` | Identifica exactamente el resultado de un municipio, horizonte y periodo objetivo; el dashboard lo usa en “Detalle del resultado”. No identifica el modelo, el procedimiento ni el conjunto completo. | No | Persistencia | String UUID o `null` | Exactamente 36 caracteres cuando no es `null` | Sí | UUID válido y único cuando `availability_status = AVAILABLE`; `null` si el resultado no fue calculado o no está disponible. Nunca se reutiliza entre municipios u horizontes. |
 | `horizon` | `results[]` / `evaluation_records[]` | Horizonte mensual del resultado o métrica. | No | Configuración persistida | Enum cerrado | `T1` o `T2` | Sí | Error de contrato. |
@@ -95,7 +105,7 @@ No se añaden bloques de conveniencia que dupliquen estas responsabilidades.
 | `probability` | `results[]` | Probabilidad persistida del evento objetivo. | Sí | Artefacto/modelo cargado | Decimal o `null` | 0 a 1 inclusive | Sí | `null` cuando `availability_status` no es `AVAILABLE`; nunca cero por defecto. |
 | `threshold` | `results[]` | Umbral persistido aplicable al procedimiento y horizonte. | No; es posprocesamiento/decisión persistida | Artefacto de decisión | Decimal o `null` | 0 a 1 inclusive | Sí | `null` cuando no hay resultado calculado; nunca se selecciona en el dashboard. |
 | `alert_status` | `results[]` | Alerta derivada de comparar probabilidad y umbral. | No; es derivada | Resultado persistido / regla contractual | Enum cerrado | 3 valores | Sí | `UNAVAILABLE` si no se puede comparar. |
-| `availability_status` | `results[]` | Estado de disponibilidad del resultado. | No | Validación de datos y ejecución | Enum cerrado | 4 valores | Sí | Error de contrato. |
+| `availability_status` | `results[]` | Estado de disponibilidad del resultado. | No | Validación de datos y ejecución | Enum cerrado | 5 valores | Sí | Error de contrato. |
 | `availability_reason` | `results[]` | Explicación breve cuando el resultado no está disponible. | No | Validación de datos y ejecución | String o `null` | 300 caracteres | Sí | `null` solo para `AVAILABLE`; texto obligatorio en cualquier otro estado. |
 | `model_family` | `results[]` | Familia registrada del artefacto cargado; no seleccionada por el cliente. | No | Registro del artefacto | String o `null` | 32 caracteres | Sí | `null` si no se calculó un resultado. No es un enum contractual. |
 | `model_role` | `results[]` | Rol de gobernanza del modelo. | No | Gobernanza / registro | Enum cerrado o `null` | 2 valores | Sí | `null` si no existe artefacto asociado; con G5 no aprobado solo puede ser `PROVISIONAL_CANDIDATE`. |
@@ -119,6 +129,11 @@ No se añaden bloques de conveniencia que dupliquen estas responsabilidades.
 
 El API entrega `probability` y `threshold` como decimales entre `0` y `1`. El dashboard puede convertir `0.61` en `61 %` para presentarlo, sin modificar el valor ni su significado.
 
+Los periodos de `endemic_channel_series` no se repiten y aparecen en orden
+cronológico. Si la serie no está vacía contiene exactamente un punto para T,
+cuyos `cases`, `p25`, `median` y `p75` coinciden con los campos resumen del
+municipio. No puede transportar casos observados posteriores a T.
+
 La trazabilidad tiene dos niveles distintos. `metadata.result_set_id` identifica la respuesta completa para el departamento y periodo consultados. Cada `municipalities[].results[].result_id` identifica solo la combinación concreta de municipio, horizonte y `target_period`; por ello, “Detalle del resultado” debe tomar el identificador del objeto seleccionado. Los identificadores no duplican `model_version` ni `procedure_id`, que conservan responsabilidades diferentes.
 
 ## 6. Catálogos cerrados
@@ -128,12 +143,21 @@ La trazabilidad tiene dos niveles distintos. `metadata.result_set_id` identifica
 | `horizon` | `T1`, `T2` | Uno y dos meses después del periodo de referencia. |
 | `endemic_zone_t` | `EXITO`, `SEGURIDAD`, `ALERTA`, `EXCESO`, `UNAVAILABLE` | Estado observado del canal en T; no es la alerta predictiva. |
 | `alert_status` | `ALERT`, `NO_ALERT`, `UNAVAILABLE` | `ALERT` cuando `probability >= threshold`; `NO_ALERT` cuando es menor; `UNAVAILABLE` si no hay comparación válida. |
-| `availability_status` | `AVAILABLE`, `INSUFFICIENT_HISTORY`, `MISSING_DATA`, `NOT_CALCULATED` | Distingue resultado válido, historia insuficiente, dato ausente y cálculo pendiente. |
+| `availability_status` | `AVAILABLE`, `INSUFFICIENT_HISTORY`, `MISSING_DATA`, `NOT_CALCULATED`, `INELIGIBLE` | Distingue resultado válido, historia insuficiente, dato ausente, cálculo pendiente e inelegibilidad bajo las reglas vigentes. `INELIGIBLE` conserva el municipio en el inventario, exige `result_id`, probabilidad y umbral nulos, alerta `UNAVAILABLE` y una razón explícita. |
 | `governance_status` | `APPROVED`, `NOT_APPROVED` | Estado de la decisión científica vigente. |
 | `champion_status` | `SELECTED`, `NOT_SELECTED` | Existencia o ausencia de Champion seleccionado. |
 | `model_role` | `PROVISIONAL_CANDIDATE`, `CHAMPION` | Rol científico del artefacto. `CHAMPION` exige gobernanza compatible. |
 
 No se admiten sinónimos, valores adicionales ni estados implícitos en este MVP.
+
+### Procedencia territorial
+
+Los códigos y nombres de los 76 municipios proceden del snapshot versionado
+DANE/DIVIPOLA `data/sources/Divipola-municipios.md`, cuya procedencia registra el
+SHA-256 `72eabcea0ff26370d23b9688e8d8f2246946cc815c040ccf1a6966b37a1de9f3`.
+El inventario contractual contiene 47 códigos con prefijo `73` y 29 con prefijo
+`50`, sin duplicados. El GeoJSON del prototipo `dengue-signal-atlas` se usó solo
+para contrastar los conteos visuales y no como autoridad de códigos.
 
 ## 7. Información que no viene del API
 
@@ -163,7 +187,12 @@ Accept: application/json
 - `period=2026-09` solicita septiembre de 2026 como periodo de referencia T.
 - `Accept: application/json` declara el formato de respuesta esperado.
 
-## 9. Ejemplo completo de response
+## 9. Fragmento representativo de response
+
+El fragmento siguiente muestra las formas disponible y no disponible junto con
+la serie mensual. Los ejemplos ejecutables completos, con 47 municipios de
+Tolima y 29 de Meta, son `dashboard_tolima.json` y `dashboard_meta.json` dentro
+del paquete `scripts.read_only_api`.
 
 El siguiente JSON es válido respecto de este contrato, pero todos sus identificadores, versiones, métricas y valores son datos demostrativos. No representan resultados científicos reales ni una predicción operativa.
 
@@ -196,6 +225,15 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
       "p25": 22.0,
       "median": 35.0,
       "p75": 47.0,
+      "endemic_channel_series": [
+        {
+          "period": "2026-09",
+          "cases": 48,
+          "p25": 22.0,
+          "median": 35.0,
+          "p75": 47.0
+        }
+      ],
       "results": [
         {
           "result_id": "a1111111-1111-4111-8111-111111111111",
@@ -235,6 +273,15 @@ El siguiente JSON es válido respecto de este contrato, pero todos sus identific
       "p25": 6.0,
       "median": 10.0,
       "p75": 15.0,
+      "endemic_channel_series": [
+        {
+          "period": "2026-09",
+          "cases": 9,
+          "p25": 6.0,
+          "median": 10.0,
+          "p75": 15.0
+        }
+      ],
       "results": [
         {
           "result_id": "c3333333-3333-4333-8333-333333333333",
@@ -337,9 +384,10 @@ Los mensajes no exponen trazas, rutas internas, consultas, nombres de servicios 
 | Historia insuficiente | `availability_status = INSUFFICIENT_HISTORY`, `result_id = null`, valores predictivos en `null` y razón explícita. | “Historia insuficiente” y la razón; no usar color de bajo riesgo ni cero. |
 | Dato fuente ausente | `availability_status = MISSING_DATA`, `result_id = null`, valores afectados en `null` y razón explícita. | “Dato fuente ausente” y la razón; distinguirlo de historia insuficiente. |
 | Resultado todavía no calculado | `availability_status = NOT_CALCULATED`, `result_id = null`, valores predictivos en `null` y razón explícita. | “Resultado todavía no calculado”; no iniciar cálculo desde la vista de solo lectura. |
+| Municipio inelegible | `availability_status = INELIGIBLE`, `result_id`, probabilidad y umbral en `null`, `alert_status = UNAVAILABLE` y razón explícita. | “No elegible” y la razón; conservarlo en selector, mapa y tabla sin convertirlo en dato ausente, cálculo pendiente o riesgo cero. |
 | Error de consulta | Respuesta HTTP de la sección 10, fuera del cuerpo exitoso. | Mensaje exacto y comportamiento definidos para el error; nunca convertirlo en un municipio no disponible. |
 
-Los primeros cuatro estados pertenecen al dominio de una respuesta exitosa. El error de consulta pertenece al transporte y no sustituye un estado municipal.
+Los primeros cinco estados pertenecen al dominio de una respuesta exitosa. El error de consulta pertenece al transporte y no sustituye un estado municipal.
 
 ## 12. Criterios E2E de aceptación
 
@@ -352,10 +400,13 @@ El futuro MVP se considera exitoso cuando:
 5. Presenta canal endémico, casos observados y percentiles.
 6. Presenta gobernanza y selección científica.
 7. Permite consultar la trazabilidad del conjunto mediante `metadata.result_set_id` sin confundirla con la trazabilidad individual.
-8. Representa correctamente los estados no disponibles.
+8. Representa correctamente los cinco estados de disponibilidad, incluido `INELIGIBLE`, sin fabricar probabilidades ni casos.
 9. El candidato provisional nunca aparece como Champion aprobado.
 10. Cada resultado disponible tiene un `result_id` UUID único entre municipios y horizontes; cada resultado no disponible tiene `result_id = null`.
 11. “Detalle del resultado” presenta el `result_id` del municipio y horizonte seleccionados, sin duplicar información del modelo o procedimiento.
+12. Tolima entrega exactamente sus 47 municipios oficiales y Meta sus 29, todos con T1 y T2 una sola vez.
+13. El API transporta `endemic_channel_series` con periodos únicos y ordenados, sin casos posteriores a T, percentiles coherentes y un punto T idéntico al resumen municipal.
+14. El dashboard presenta la serie y `endemic_zone_t` recibidos; no recalcula el canal ni la zona.
 
 Estos criterios validan integración y comprensión del MVP; no aprueban G5 ni convierten resultados demostrativos o históricos en predicciones operativas.
 

@@ -49,6 +49,94 @@ Evidence states:
 
 If test mapping is ambiguous, run the full gate set.
 
+## Stage 7 executable read-only API contract
+
+Map `scripts/read_only_api/**` (including its demonstrative fixtures) and
+`tests/unit/test_read_only_api_contract.py` to the focused executable-contract gate:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_read_only_api_contract.py -q
+.venv/bin/ruff check scripts/read_only_api tests/unit/test_read_only_api_contract.py
+.venv/bin/ruff format --check scripts/read_only_api tests/unit/test_read_only_api_contract.py
+.venv/bin/mypy --explicit-package-bases scripts/read_only_api tests/unit/test_read_only_api_contract.py
+```
+
+These tests validate the separate runtime-owned Tolima and Meta demonstrative fixtures,
+explicit department resolution, exact enums, territorial membership and uniqueness,
+reference-to-target month coherence including year rollover, UUID/nullability rules,
+availability/alert coherence, G5 governance, result identity uniqueness, and T1/T2
+completeness. They do not start a server, access Kedro, train a model, execute inference,
+or select a Champion. Run the full foundation gate before merge.
+
+Product Contract v1.1 additionally requires exact DANE/DIVIPOLA inventories of
+47 Tolima and 29 Meta municipalities, the closed `INELIGIBLE` unavailable shape,
+and API-supplied `endemic_channel_series`. Focused tests reject duplicate or
+unordered series periods, observed cases after T, unordered percentiles,
+reference-point disagreement, and empty series paired with available observed
+context. They also prove that every municipality has exactly one T1 and one T2.
+
+## Stage 7 read-only repository, service, and HTTP endpoint
+
+Map `scripts/read_only_api/repository.py`, `service.py`, `errors.py`, and `api.py`
+plus their focused tests to these gates:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py -q
+.venv/bin/ruff check scripts/read_only_api tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+.venv/bin/ruff format --check scripts/read_only_api tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+.venv/bin/mypy --explicit-package-bases scripts/read_only_api tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+```
+
+The tests protect exact department-period retrieval, no fallback to another persisted
+period, substitute repositories, read-only repeatability, both successful department
+responses, contracted 400/404/500 bodies, safe internal-error filtering, and OpenAPI
+without an uncontracted 422 response. They start no server and execute no Kedro,
+training, inference, model selection, or write flow. Run the full foundation gate before
+merge.
+
+## Stage 7 installable distribution and local startup
+
+Install the API and the optional local server from a checkout with:
+
+```bash
+python -m pip install ".[server]"
+```
+
+Start the ASGI application through its factory; importing the package does not
+start a server:
+
+```bash
+uvicorn --factory scripts.read_only_api.api:create_app
+```
+
+With the default Uvicorn address, the two persisted demonstrative results are:
+
+- Tolima: <http://127.0.0.1:8000/api/dashboard?department_code=73&period=2026-09>
+- Meta: <http://127.0.0.1:8000/api/dashboard?department_code=50&period=2026-12>
+
+An exact key that is not persisted, such as
+<http://127.0.0.1:8000/api/dashboard?department_code=73&period=2026-12>, returns
+`404 DASHBOARD_DATA_NOT_FOUND`. These are demonstrative persisted results: G5 is
+`NOT_APPROVED`, Champion is `NOT_SELECTED`, and every associated model role is
+`PROVISIONAL_CANDIDATE`. Starting or querying the API performs no training,
+inference, Kedro execution, or result write.
+
+Packaging validation stays outside the normal unit suite because it builds and
+installs a wheel in a temporary virtual environment. Run it from the repository
+environment as follows:
+
+```bash
+rm -rf tmp/stage7-dist
+.venv/bin/python -m build --wheel --outdir tmp/stage7-dist .
+.venv/bin/python scripts/validate_read_only_api_wheel.py tmp/stage7-dist/*.whl
+```
+
+The validator inspects the archive, rejects unrelated repository Python
+packages, installs the wheel in a fresh virtual environment, changes to a
+directory outside the checkout, launches the application in-process through
+ASGI, checks the two `200` responses plus contracted `404` and `400` responses,
+and compares fixture hashes and modification times before and after all queries.
+
 ## Scoped Commands, Mapping, Fallback (Documentation Standard 3.4)
 
 Scoped commands:
