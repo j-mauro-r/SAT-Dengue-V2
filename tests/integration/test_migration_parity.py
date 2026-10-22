@@ -26,6 +26,7 @@ from migration_support import (
     safe_path,
     verify_equivalence_scope,
     verify_native_bundle,
+    verify_preservation_records,
     verify_protected_inventory,
     verify_source_scope,
 )
@@ -316,7 +317,7 @@ def protected_baseline() -> dict:
 
 @pytest.mark.migration_evidence
 def test_baseline_protected_inputs_and_scientific_contracts(protected_baseline: dict) -> None:
-    assert require_records(ROOT, protected_baseline["protected"]) == 2553
+    assert verify_preservation_records(ROOT, protected_baseline["protected"]) == 2553
     summary = json.loads((ROOT / FINAL_PATH / "run_summary.json").read_text())
     assert summary["G5"] == "NOT_APPROVED"
     assert summary["champion"] == "not_selected"

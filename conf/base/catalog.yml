@@ -1,0 +1,5 @@
+configuration_inputs:
+  type: sat_dengue.datasets.ConfigurationInputsDataset
+resolved_configuration:
+  type: sat_dengue.datasets.ImmutableConfigurationDataset
+  filepath: tmp/kedro-migration/runs

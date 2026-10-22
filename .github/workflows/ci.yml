@@ -96,13 +96,13 @@ jobs:
           pip install -r requirements-modeling.txt
 
       - name: Ruff lint
-        run: ruff check tests
+        run: ruff check src tests
 
       - name: Ruff format
-        run: ruff format --check tests
+        run: ruff format --check src tests
 
       - name: Type check
-        run: mypy tests
+        run: mypy src tests
 
 
   unit-tests:
@@ -112,6 +112,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -126,4 +128,4 @@ jobs:
           pip install -r requirements-modeling.txt
 
       - name: Run unit and synthetic migration tests
-        run: pytest tests/unit tests/integration/test_migration_parity.py -v
+        run: KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration/test_migration_parity.py -v

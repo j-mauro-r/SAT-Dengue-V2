@@ -35,3 +35,9 @@ artifacts/
 
 # Python package metadata
 *.egg-info/
+
+# Local Kedro configuration and packaging output
+conf/local/
+build/
+dist/
+.telemetry

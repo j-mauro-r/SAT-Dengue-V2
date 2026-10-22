@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -43,6 +44,46 @@ def require_records(root: Path, records: dict[str, Any]) -> int:
         if fingerprint(safe_path(root, relative)) != expected:
             raise AssertionError(f"Protected fingerprint mismatch: {relative}")
     return len(records)
+
+
+METADATA_REVISION = "32f96a69521c24b1f9dc2117c1a31b2851d45d72"
+METADATA_ORIGINALS = {
+    "pyproject.toml": {
+        "bytes": 1029,
+        "sha256": "7814ce9485a506dd691d86dd8b99b6e61d94f5695579833744bdc5c7e43d8a3f",
+    },
+    "requirements-modeling.txt": {
+        "bytes": 167,
+        "sha256": "fa26f3fc467c81c64b95d02856ff1e9f3bc06cafb1d0761e448f3b79cd46729d",
+    },
+}
+
+
+def verify_preservation_records(root: Path, records: dict[str, Any]) -> int:
+    """Verify originals plus the two explicitly approved engineering identities."""
+    if not set(METADATA_ORIGINALS).issubset(records):
+        return require_records(root, records)
+    ledger_path = root / "docs/operations/kedro-foundation-metadata.json"
+    if not ledger_path.exists():
+        return require_records(root, records)
+    assert not ledger_path.is_symlink(), "Metadata ledger cannot be symlinked"
+    ledger = json.loads(ledger_path.read_text())
+    assert set(ledger) == {"schema", "original_revision", "baseline_sha256", "files"}
+    assert ledger["schema"] == "kedro-foundation-metadata-v1"
+    assert ledger["original_revision"] == METADATA_REVISION
+    assert ledger["baseline_sha256"] == BASELINE_SHA256
+    assert set(ledger["files"]) == set(METADATA_ORIGINALS), "Expanded metadata exception"
+    for name, original in METADATA_ORIGINALS.items():
+        entry = ledger["files"][name]
+        assert set(entry) == {"original", "engineering"}
+        assert records[name] == entry["original"] == original, "Original metadata identity changed"
+        raw = subprocess.check_output(["git", "show", f"{METADATA_REVISION}:{name}"], cwd=root)
+        assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == original
+        assert fingerprint(safe_path(root, name)) == entry["engineering"], (
+            f"Engineering metadata fingerprint mismatch: {name}"
+        )
+    others = {name: value for name, value in records.items() if name not in METADATA_ORIGINALS}
+    return require_records(root, others) + len(METADATA_ORIGINALS)
 
 
 def verify_native_bundle(bundle: Path) -> dict[str, Any]:
@@ -163,7 +204,7 @@ def verify_equivalence_scope(scope: dict[str, Any], report: dict[str, Any]) -> N
 def verify_protected_inventory(root: Path, baseline: dict[str, Any]) -> dict[str, Any]:
     """Independent disk scan: catches rename/unlink/native writes beyond open hooks."""
     records = baseline["protected"]
-    count = require_records(root, records)
+    count = verify_preservation_records(root, records)
     for name, original in baseline["bundles"].items():
         bundle = safe_path(root, name).parent
         prefix = str(Path(name).parent) + "/"
@@ -187,7 +228,13 @@ def verify_protected_inventory(root: Path, baseline: dict[str, Any]) -> dict[str
         "protected_bytes": sum(r["bytes"] for r in records.values()),
         "bundles": len(baseline["bundles"]),
         "baseline_sha256": BASELINE_SHA256,
-        "method": "independent post-replay disk size/SHA-256 and bundle membership/identity scan",
+        "method": "independent file/Git-blob hashes and exact native bundle membership/identity",
+        "metadata_git_objects": (
+            len(METADATA_ORIGINALS)
+            if set(METADATA_ORIGINALS).issubset(records)
+            and (root / "docs/operations/kedro-foundation-metadata.json").exists()
+            else 0
+        ),
     }
 
 

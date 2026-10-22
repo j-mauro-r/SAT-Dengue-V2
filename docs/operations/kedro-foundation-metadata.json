@@ -1,0 +1,27 @@
+{
+  "schema": "kedro-foundation-metadata-v1",
+  "original_revision": "32f96a69521c24b1f9dc2117c1a31b2851d45d72",
+  "baseline_sha256": "d86338cd34dcde884e2be9d102271969d0f3b52f57b8ffdebd1829771977a5b3",
+  "files": {
+    "pyproject.toml": {
+      "original": {
+        "bytes": 1029,
+        "sha256": "7814ce9485a506dd691d86dd8b99b6e61d94f5695579833744bdc5c7e43d8a3f"
+      },
+      "engineering": {
+        "bytes": 1546,
+        "sha256": "6c4789849e63299e5de67ff5baab7f6f6d7b8ab3a44501d47e10781f1c011944"
+      }
+    },
+    "requirements-modeling.txt": {
+      "original": {
+        "bytes": 167,
+        "sha256": "fa26f3fc467c81c64b95d02856ff1e9f3bc06cafb1d0761e448f3b79cd46729d"
+      },
+      "engineering": {
+        "bytes": 94,
+        "sha256": "7fecd40d425c9cddf3dc7a5df571f1ba143e0f45cc139960bb6cfebe0051f83b"
+      }
+    }
+  }
+}

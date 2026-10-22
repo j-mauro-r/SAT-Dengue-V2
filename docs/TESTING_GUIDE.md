@@ -20,9 +20,9 @@ Evidence states:
 ### Full gate (required before merge)
 
 - `bash .agents/skills/deepworkplan/verify/conformance.sh`
-- `ruff check tests`
-- `ruff format --check tests`
-- `mypy tests`
+- `ruff check src tests`
+- `ruff format --check src tests`
+- `mypy src tests`
 - `pytest tests/unit -v`
 
 ### Security and policy scans (required)
@@ -72,15 +72,26 @@ The [experimental EDA](archive/experimental-eda/README.md) was retired on 2026-1
 
 Keep all existing tests enabled. Synthetic regressions (`.venv/bin/python -m pytest tests/unit/test_stage2_panel_review.py -q`) run without private snapshots and preserve independent-join, missingness, geography, non-swap and calendar-adjacent safeguards. The three tests against ignored historical monthly-association outputs remain artifact-consistency checks; their passing status does not make those results current analytical evidence. The historical analytical scripts stay at their import paths with deprecation docstrings and unchanged logic because tests and local historical validators depend on them.
 
-Active data-integrity safeguards: `.venv/bin/python -m pytest tests/unit/test_january_2020_climate_incorporation.py tests/unit/test_stage2_manifest_traceability.py -q`. These verify incorporation/traceability behavior on test fixtures; they do not download or reintegrate source data. Run the full unit suite, Ruff checks, `mypy tests` and `scripts/check_markdown_links.py` under the foundation gate policy above. Also lint/format any touched Python script.
+Active data-integrity safeguards: `.venv/bin/python -m pytest tests/unit/test_january_2020_climate_incorporation.py tests/unit/test_stage2_manifest_traceability.py -q`. These verify incorporation/traceability behavior on test fixtures; they do not download or reintegrate source data. Run the full unit suite, Ruff checks, `mypy src tests` and `scripts/check_markdown_links.py` under the foundation gate policy above. Also lint/format any touched Python script.
 
 For this archival migration, local PLAN_012 validates the path/hash manifest, byte-identical notebooks, restricted report transformations, unchanged script logic, original data/evidence hashes and preserved historical plan records. It is a one-time migration check, not a new recurring scientific gate. New DWP work must pass scoped conformance; report pre-existing legacy-plan global failures separately without rewriting their records or weakening validation.
 
 ## Clean-checkout CI installation
 
-The Stage 2 project distribution is metadata-only: setuptools has an explicit empty package list, so `data/` and `notebooks/` are never auto-discovered as installable packages. The `dev` extra declares NumPy and pandas because the synthetic panel tests import them. This changes neither data publication policy nor analysis-population rules.
+The project installs the used `sat_dengue` package from `src/` only. The wheel
+excludes data, notebooks and external configuration. Install with `.[dev,modeling]`
+for synthetic CI; the complete reproducible local environment uses
+`python -m pip install -r requirements-dev.txt`. The generated constraints derive
+from `pyproject.toml`; see the migration record for their regeneration recipe.
 
-Validate packaging changes from a fresh Git archive/checkout in a separate temporary environment: install `.[dev]`, run `pytest tests/unit -q`, `ruff check tests`, `ruff format --check tests` and `mypy tests`; build a wheel with `pip wheel --no-deps .` and inspect that it contains no source datasets/notebooks. The three tests backed by ignored private analytical outputs are expected to skip in a public checkout; synthetic regressions still run. Keep a separate local full-suite check when those outputs are available. Never copy private datasets into CI to make these checks pass.
+Validate packaging in a repository-local isolated environment: install the package,
+run the full unit suite plus configuration contracts, build a wheel with
+`pip wheel --no-deps .` into ignored scratch, inspect its members, install that
+wheel into another clean environment, run `pip check` and invoke
+`KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=foundation` from the repository
+root. Verify a new content-hashed read-only snapshot and no data writes. Keep
+private data outside CI. An installed wheel still uses the repository's external
+configuration and approved JSON authorities.
 
 ## Training preparation inputs (milestone 1)
 
@@ -124,7 +135,7 @@ original scientific hashes:
 No reserved reference features or model training is generated. Full foundation
 gates remain required. Check new modules with
 `.venv/bin/mypy --explicit-package-bases scripts/training_preparation`, plus
-required `mypy tests`, Ruff lint/format and Markdown links. Notebook 04 must remain
+required `mypy src tests`, Ruff lint/format and Markdown links. Notebook 04 must remain
 code-only and execute sequentially; its summaries are development aggregates only.
 
 ## Temporal partitions, inference preparers and executed notebook (milestone 3)
@@ -150,7 +161,7 @@ manifest/hash verification still applies. Notebook commands require the optional
 `notebook` extra declared in pyproject; synthetic tests do not require private data
 or notebook runtime packages. Use repository-local `--basetemp` for pytest. Run
 Ruff and explicit-package-bases mypy for all preparation modules, required
-`mypy tests`, Markdown links, policy scans and scoped DWP conformance. Saved
+`mypy src tests`, Markdown links, policy scans and scoped DWP conformance. Saved
 notebook outputs must match the current artifacts and an actual new-kernel receipt.
 
 No final-block objective may enter adjustment or comparisons. All eight real
@@ -420,3 +431,38 @@ without them must fail that gate. Stable selectors for later migration tasks are
 `baseline`, `compatibility`, `preparation`, `training` and `evaluation`; future
 selectors require actual stage tests before use. The current harness does not
 claim parity for Kedro code that has not been implemented.
+
+## Kedro foundation (Session 2)
+
+`src/sat_dengue/**`, `conf/base/**`, packaging/dependency changes and
+[ADR-0002](decisions/adr-0002-kedro-orchestration-boundary.md) map to:
+
+```bash
+python -m pytest tests/unit/test_repository_bootstrap.py tests/contracts/test_kedro_configuration.py -q
+python -m ruff check src tests
+python -m ruff format --check src tests
+python -m mypy src tests
+```
+
+Use the isolated foundation environment and repository-local pytest temporary paths.
+Bootstrap tests verify installed metadata, the actual nonempty graph and framework
+independence of existing domain modules. Configuration tests exercise merged YAML
+and CLI runtime overrides, unknown profiles, invalid/changed scientific JSON,
+catalog replacement, immutable atomic snapshots, unique execution identities,
+single-source dependency pins and the exact two-file metadata amendment.
+
+Run the full preexisting unit suite and synthetic migration suite after dependency
+changes. Run the protected migration suite with `--require-migration-evidence` to
+verify all original evidence, the unchanged 13 exceptions / 17 historical bundle
+dispositions and preserved 4.6/4.7 saved-component replay. The explicit approved
+metadata mapping verifies original `pyproject.toml` and `requirements-modeling.txt`
+Git blobs against baseline.json and current versions against
+`operations/kedro-foundation-metadata.json`; it does not relax native scientific
+hash verification or overwrite baseline.json. Mutated origins, current hashes,
+revision, additional exceptions and unrelated protected-file drift must fail.
+
+Run Markdown links, repository-only and scoped PLAN_030 conformance; report
+all-plan historical failures separately. CI now checks `src tests` for lint,
+format and typing and collects configuration contracts alongside existing synthetic
+tests. No model fitting with real data, notebook execution or scientific pipeline
+migration is authorized by these foundation gates.

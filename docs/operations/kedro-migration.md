@@ -1,4 +1,26 @@
-# Kedro migration — protected baseline and file dispositions
+# Kedro migration — foundation and protected baseline
+
+## Current Session 2 authority
+
+Mauricio authorized only T-foundation on 2026-10-22, starting from clean commit
+`32f96a69521c24b1f9dc2117c1a31b2851d45d72` on `refactor/kedro-migration`.
+The original revision-2 request was subsequently amended by explicit human reply
+“Autorizar la enmienda acotada” after the two dependency metadata files were found
+inside the protected inventory. The official local DWP helper recorded revision 3
+`acb5cf72402bbe261e5a3875fb3f25b25cad592bc4008efb0dec17baea62fbde`, amendment seq 31 and
+approval seq 32; T-foundation starts at seq 33. The amendment changes only its
+configuration/dependency acceptance and metadata preservation boundary. Earned
+T-baseline evidence remains historical fact, and no later task is authorized.
+
+[ADR-0002](../decisions/adr-0002-kedro-orchestration-boundary.md) owns the architecture
+and dated official compatibility sources. The five approved scientific JSON
+authorities, G5 NOT_APPROVED, champion not_selected and consumed-2025 prohibition
+remain unchanged. No Stage 2 migration or real-data fit occurs in this session.
+
+The following Session 1 sections preserve their original historical authorization
+and evidence. Their “no Session 2” restrictions describe those earlier sessions;
+the present explicit instruction authorizes the bounded foundation above.
+
 
 ## Session 1 authority and boundaries
 
@@ -466,3 +488,108 @@ exit codes are in `supplementary-results.json`. No retry can recover missing sou
 bytes; the failed criterion remains open. The CI-only selection change does not
 change the scientific comparison sources or evidence from gate 4, and it is not
 used to turn that failed gate into accepted evidence.
+
+## Session 2 foundation implementation and dependency authority
+
+The used modules are `sat_dengue.__init__`, `__main__`, `settings`, `config_loader`,
+`configuration`, `datasets` and `pipeline_registry`. The only implemented pipeline
+is `foundation` (also the safe default), containing one configuration resolution
+node. No empty scientific pipelines, starter data, generic interfaces or template
+folders are created. Existing scripts and notebooks remain in place.
+
+YAML supplies only the operational profile and tracking mode. Both merged
+environment YAML and runtime parameters must select `foundation` / `disabled`;
+extra keys, scientific overrides, unknown profiles and catalog replacement fail.
+The input dataset reads the five fixed JSON authorities using kedro-datasets,
+checks their approved byte hashes before and after loading, and collects execution
+provenance. The pure resolver contains no Kedro/MLflow imports or I/O. The output
+dataset publishes a content-hashed read-only snapshot atomically without replacing
+an existing run. Scientific values appear only as values read from their JSON
+source, never as YAML copies. Future graphs must consume resolved configuration
+after snapshot publication; their scientific behavior remains unimplemented here.
+
+`pyproject.toml` is the single declaration authority. `requirements-modeling.txt`
+selects `.[modeling]`; `requirements-dev.txt` selects all validation extras and the
+generated constraints. Direct pins include Python 3.12 support, Kedro 1.7.0,
+kedro-datasets 9.6.0, optional MLflow 3.17.2, NumPy 2.5.4, pandas 3.0.6,
+SciPy 1.18.1, scikit-learn 1.7.2, XGBoost 3.0.5, LightGBM 4.7.0,
+threadpoolctl 3.7.0 and Narwhals 2.27.1. The original user environment and both
+preserved 4.6/4.7 reference environments remain untouched.
+
+Resolved constraints are generated from an isolated pip installation and identify
+the source pyproject SHA-256. They are not independently edited version policy.
+The following commands operate only in a new repository-local environment;
+do not replace the historical environments:
+
+```bash
+python -m venv tmp/kedro-migration/foundation
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+export PIP_CACHE_DIR="$PWD/tmp/pip-cache"
+export KEDRO_DISABLE_TELEMETRY=yes
+export PYTEST_DEBUG_TEMPROOT="$PWD/tmp/kedro-migration"
+python -m pip install -r requirements-dev.txt
+python -m pip check
+kedro run --pipeline=foundation
+```
+
+For an intentional dependency update, edit the canonical pyproject, resolve all
+extras in a *new* isolated environment, run
+`python scripts/export_kedro_constraints.py`, then validate the regenerated
+constraints through a clean install. Update the engineering metadata ledger and
+re-run acceptance. Do not hand-maintain divergent requirements pins. The observed
+constraints target Python 3.12.11/macOS arm64; Linux CI resolves the canonical
+direct pins and still requires its own platform/native validation.
+
+The wheel contains the package only. Run from the repository root with external
+`conf/base` and scientific JSON files available; standalone wheel installation
+does not distribute data or claim scientific E2E execution. Snapshots are ignored
+at `tmp/kedro-migration/runs/<run_id>/resolved.json`; each records source/config/
+constraints hashes, Git revision/dirty state, package versions, authority documents
+and original hashes, resolved operational values, run identity and UTC time.
+No MLflow service, adapter or autologging is activated. Telemetry is explicitly
+disabled in the command above and the plugin is excluded in project settings.
+
+### Approved two-file metadata preservation
+
+The immutable original `baseline.json` still has SHA-256
+`d86338cd34dcde884e2be9d102271969d0f3b52f57b8ffdebd1829771977a5b3`.
+Its original metadata is preserved in Git at
+`32f96a69521c24b1f9dc2117c1a31b2851d45d72`:
+
+| Original path | Bytes | Original SHA-256 |
+| --- | ---: | --- |
+| `pyproject.toml` | 1029 | `7814ce9485a506dd691d86dd8b99b6e61d94f5695579833744bdc5c7e43d8a3f` |
+| `requirements-modeling.txt` | 167 | `fa26f3fc467c81c64b95d02856ff1e9f3bc06cafb1d0761e448f3b79cd46729d` |
+
+The [engineering identity ledger](kedro-foundation-metadata.json) records those
+originals and exact current fingerprints. The harness checks the fixed revision's
+Git blobs against the original inventory and then the two current files against
+the ledger. It rejects an expanded exception set, changed origin/revision, changed
+current bytes, or any drift among the other 2,551 protected files. Exact bundle
+membership and native identities remain checked. No scientific file is remapped,
+no baseline is rewritten and no historical bundle becomes equivalence evidence.
+
+### Session 2 actual dispositions
+
+These decisions supersede only the matching pending rows for this session.
+All other proposed migrations/retirements remain pending.
+
+| Surface | Action / owner | Consumers and validation | Recovery |
+| --- | --- | --- | --- |
+| `pyproject.toml`, `requirements-modeling.txt` | UPDATE / T-foundation | Package/pip consumers; separate engineering identities, bootstrap/dependency tests and original-blob verification | Original Git revision and metadata ledger above |
+| `requirements-dev.txt`, `docs/operations/kedro-foundation-constraints.txt`, `scripts/export_kedro_constraints.py` | CREATE / T-foundation | Full isolated environment, generated constraints and exact direct-pin agreement | Canonical pyproject; regenerate only in a validated clean environment |
+| `src/sat_dengue/**`, `conf/base/**` | CREATE / T-foundation | Used configuration graph, strict loader and I/O adapters; contract/startup/wheel checks | This foundation commit; no replaced scientific source |
+| `docs/operations/kedro-foundation-metadata.json` | CREATE / approved amendment | Exact original/current metadata mapping; bounded synthetic mutation tests | Original immutable baseline and pinned Git blobs |
+| `tests/unit/test_repository_bootstrap.py`, `tests/contracts/test_kedro_configuration.py` | UPDATE / CREATE, T-foundation | Installed package, merged config, authority rejection, atomic snapshots, dependency and metadata boundaries | Previous bootstrap in starting HEAD; new behavioral contracts in this commit |
+| `tests/integration/migration_support.py`, `tests/integration/test_migration_parity.py` | UPDATE / approved amendment | Original metadata verification plus unchanged original-file/native-bundle controls; full private and synthetic migration suites | Starting HEAD and original baseline; no scientific tolerance/exception change |
+| `.github/workflows/ci.yml` | UPDATE / T-foundation | Immediately include src in Ruff/format/mypy, collect configuration contracts and fetch history for original metadata Git blobs; no private CI evidence | Starting HEAD workflow |
+| `.gitignore` | UPDATE / T-foundation | Ignore used local configuration and packaging output | Starting HEAD |
+| `docs/decisions/adr-0002-kedro-orchestration-boundary.md` | CREATE / T-foundation | Accepted bounded architecture and dated official sources | Linked immutable ADR-0001 |
+| `docs/architecture/system-overview.md`, `docs/TESTING_GUIDE.md`, this migration record | UPDATE / respective document owner | Implemented boundaries, touched-surface gates, source/installation and preservation decisions | Starting HEAD; historical sections retained |
+| `.dwp/plans/PLAN_030_kedro_architecture_migration/**` | UPDATE local / DWP helpers | Revision 3 approval, observed gates, projections and Session 2 handoff | Original revision chain/journal and preserved Session 1 evidence |
+| `tmp/kedro-migration/foundation`, new run snapshots and wheel validation environments | CREATE ignored / T-foundation | New installation and startup evidence only | Session 2 receipts; preserve all original runtimes/snapshots |
+
+No file is deleted, moved, retired or archived. ADR-0001 and pinned skills are
+unchanged. Skills disposition: none; existing local DWP helpers suffice. Session 3
+still needs separately authorized Stage 2/preparation migration and parity; this
+foundation does not establish historical reproducibility or approve a champion.

@@ -8,6 +8,34 @@
 
 Private source data, derived CSVs and runtime evidence stay outside Git under the [data policy](../data/data-policy.md). Tests use small synthetic fixtures; current contracts and code are versioned.
 
+## Implemented Kedro Foundation
+
+[ADR-0002](../decisions/adr-0002-kedro-orchestration-boundary.md) owns the package,
+configuration and dependency decision. `src/sat_dengue/configuration.py` resolves
+operational settings without framework imports; `config_loader.py` validates
+merged YAML/runtime parameters; `pipeline_registry.py` assembles the one-node
+`foundation` graph; `datasets.py` reads the five approved scientific JSON documents
+and publishes a content-verified read-only execution snapshot. Settings register
+the loader. No scientific stage has moved into this package yet.
+
+```text
+conf/base + approved scientific JSON + execution provenance
+    -> strict configuration resolution -> immutable per-run JSON snapshot
+```
+
+Only `profile: foundation` and `tracking: disabled` are implemented. No scientific
+values can be supplied through YAML. Catalog replacement, unknown settings and
+changed authority identities fail closed. Existing physical data/artifact paths,
+scientific bundles and original hashes remain authoritative. MLflow is an optional
+pinned dependency; its adapter belongs to T-tracking. Future stage assembly must
+consume resolved configuration after snapshot publication, while domain functions
+remain independent of framework and persistence concerns.
+
+The [migration record](../operations/kedro-migration.md) owns installation,
+metadata lineage and the session's exact dispositions. The original script and
+notebook workflow above remains the scientific implementation until later
+separately authorized parity gates pass.
+
 ## Planned Runtime Product
 
 The approved first vertical slice is read-only:
