@@ -125,22 +125,29 @@ def test_authorization_precedes_scientific_reads_and_fits(
 
 def test_readiness_reports_post_freeze_dependency_drift_without_authorizing_execution(
     monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     """Readiness remains usable after closure while scientific execution stays blocked."""
 
-    archived = pipeline.load_archived_proposal(ROOT)
+    archived = {"identity_inputs": {"code": {str(pipeline.NOTEBOOK): {"fixture": "synthetic"}}}}
+    bundle = tmp_path / pipeline.PROPOSAL_BUNDLE
+    bundle.mkdir(parents=True)
+    (bundle / "run_summary.json").write_text(json.dumps({"fixture": "synthetic"}))
     monkeypatch.setattr(pipeline, "load_archived_proposal", lambda root: archived)
+    monkeypatch.setattr(pipeline, "require_authorization", lambda root: {"fixture": "synthetic"})
+    monkeypatch.setattr(pipeline, "code_fingerprints", lambda root: {"fixture": "synthetic"})
 
     def changed(root: Path) -> dict[str, Any]:
         raise ValueError("Frozen scientific contract changed")
 
     monkeypatch.setattr(pipeline, "load_proposal", changed)
-    result = pipeline.readiness(ROOT)
+    result = pipeline.readiness(tmp_path)
     assert result["status"] == "human_authorization_recorded"
     assert result["live_frozen_dependencies"] == "changed_after_freeze"
     assert result["live_dependency_error"] == "Frozen scientific contract changed"
     assert result["scientific_execution_allowed"] is False
     assert result["new_fits"] == 0
+    assert result["reserved_results_read"] is False
 
 
 def test_t2_calendar_all_cohorts_before_fit_and_future_invariance(

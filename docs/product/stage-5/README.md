@@ -486,3 +486,20 @@ feasible thresholds. Do not use 2025 for fitting or selection. Evaluate the lock
 policy in a genuinely later independent period, or use a predeclared nested temporal
 outer assessment when later data are unavailable. This experiment requires a new
 plan and protocol; PLAN_028 does not implement it.
+
+## PR #16 dependency reconciliation — 2026-10-22
+
+Mauricio explicitly chose to retain main's LightGBM 4.7.0 update from PR #19
+when resolving PR #16. The frozen Stage 5 evaluation used LightGBM 4.6.0.
+The recorded results, notebook outputs and scientific disposition remain
+historical evidence from that environment; they have not been regenerated.
+
+Compatibility and saved-artifact reproducibility under LightGBM 4.7.0 remain
+UNVERIFIED. Passing repository checks or synthetic tests does not establish
+equivalence of the frozen scientific results. The modeling requirements file
+participates in candidate identity fingerprints, so existing bundles must not
+be silently relabeled, repaired or overwritten to bypass a mismatch. Validate
+saved components and their predictions in a separate bounded follow-up before
+claiming reproduction with the new dependency. This conflict resolution does
+not authorize retraining, retuning, renewed use of 2025 for selection, a champion
+or a change to G5 NOT_APPROVED.
