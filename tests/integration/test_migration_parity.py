@@ -807,6 +807,7 @@ def test_preparation_kedro_complete_cohorts_and_saved_replay(protected_baseline:
     storage = EVIDENCE / "preparation-runs"
     previous = set(storage.iterdir()) if storage.exists() else set()
     env = dict(os.environ, KEDRO_DISABLE_TELEMETRY="yes", PYTHONDONTWRITEBYTECODE="1")
+    env["PYTHONPATH"] = os.pathsep.join([str(ROOT), str(ROOT / "src")])
     for name in ("PYTEST_DEBUG_TEMPROOT", "PYTEST_ADDOPTS"):
         env.pop(name, None)
     result = subprocess.run(
@@ -939,3 +940,292 @@ def test_preparation_baseline_closed_mapping_rejects_drift(mutation: str) -> Non
         path.write_text(json.dumps(mapping))
         with pytest.raises(AssertionError, match="Closed preparation mapping"):
             verify_preparation_preservation(root, records)
+
+
+@pytest.mark.parametrize("mutation", ["extra", "original", "engineering", "revision"])
+def test_training_baseline_closed_mapping_rejects_drift(mutation: str) -> None:
+    from copy import deepcopy
+    from tempfile import TemporaryDirectory
+
+    from migration_support import TRAINING_MAPPING, verify_training_preservation
+
+    mapping = deepcopy(TRAINING_MAPPING)
+    records = {n: e["original"] for n, e in mapping["files"].items()}
+    name = next(iter(mapping["files"]))
+    if mutation == "extra":
+        mapping["files"]["scripts/unapproved.py"] = mapping["files"][name]
+    elif mutation == "revision":
+        mapping["original_revision"] = "0" * 40
+    else:
+        mapping["files"][name][mutation]["sha256"] = "0" * 64
+    with TemporaryDirectory(dir=ROOT / "tmp", prefix="training-mapping-") as directory:
+        root = Path(directory)
+        path = root / "docs/operations/kedro-training-identities.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps(mapping))
+        with pytest.raises(AssertionError, match="Closed training mapping"):
+            verify_training_preservation(root, records)
+
+
+def compare_training_tables(expected: pd.DataFrame, actual: pd.DataFrame) -> None:
+    """Full ordered schema/missingness; contract floats only, no sampled rows."""
+    assert list(expected) == list(actual)
+    numeric = tuple(expected.select_dtypes(include="number").columns)
+    for name in expected:
+        if name not in numeric:
+            expected[name] = expected[name].astype("string")
+            actual[name] = actual[name].astype("string")
+    compare_frames(expected, actual, numeric=numeric)
+
+
+@pytest.mark.migration_evidence
+def test_training_kedro_all_saved_components_and_metrics(protected_baseline: dict) -> None:
+    """Real CLI + every development/reference metric + both current native runtimes."""
+    import sys
+
+    from sat_dengue.datasets.training_legacy import (
+        EXPERIMENTS,
+        FINAL,
+        SUITE,
+        LegacyTrainingLoader,
+        no_fitting,
+    )
+    from sat_dengue.training_preparation.serialization import serialize_table
+
+    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session5"
+    evidence.mkdir(parents=True, exist_ok=True)
+    before = verify_protected_inventory(ROOT, protected_baseline)
+    storage = EVIDENCE / "training-runs"
+    previous = set(storage.iterdir()) if storage.exists() else set()
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", KEDRO_DISABLE_TELEMETRY="yes")
+    env["PYTHONPATH"] = os.pathsep.join([str(ROOT), str(ROOT / "src"), str(Path(__file__).parent)])
+    for name in ("PYTEST_ADDOPTS", "PYTEST_DEBUG_TEMPROOT"):
+        env.pop(name, None)
+    result = subprocess.run(
+        [sys.executable, "tests/integration/training_cli.py"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    (evidence / "kedro-no-fit.log").write_text(result.stdout + result.stderr)
+    assert result.returncode == 0, result.stdout[-7000:] + result.stderr[-7000:]
+    created = set(storage.iterdir()) - previous
+    assert len(created) == 1
+    bundle = created.pop()
+    manifest = verify_native_bundle(bundle)
+    audit = json.loads((bundle / "audit.json").read_text())
+    assert manifest["real_model_fits"] == manifest["real_preparer_refits"] == 0
+    assert audit["components_replayed"] == 46 and audit["synthetic_model_fits"] == 0
+    assert audit["G5"] == "NOT_APPROVED" and audit["champion"] == "not_selected"
+    with no_fitting():
+        sources = LegacyTrainingLoader().load()
+
+    def read(name: str) -> pd.DataFrame:
+        return pd.read_csv(bundle / name, float_precision="round_trip")
+
+    predictions = read("development_predictions.csv")
+    metrics = read("development_metrics.csv")
+    for experiment, entry in sources["components"].items():
+        compare_training_tables(
+            entry["predictions"],
+            predictions.loc[predictions.reference.eq(experiment)].reset_index(drop=True),
+        )
+        compare_training_tables(
+            entry["metrics"], metrics.loc[metrics.reference.eq(experiment)].reset_index(drop=True)
+        )
+    for name in ("reference_predictions", "reference_metrics"):
+        compare_training_tables(sources[name], read(name + ".csv"))
+    means = pd.read_csv(ROOT / SUITE / "horizon_means.csv", float_precision="round_trip")
+    compare_training_tables(means, read("horizon_means.csv")[list(means)])
+    frozen = sources["frozen"]["predictions"]
+    persistence = frozen.loc[frozen.candidate.eq("persistence")].reset_index(drop=True)
+    actual_persistence = read("frozen_persistence.csv")
+    # Every persistence field is regenerated, except y/context which remain evaluation-owned.
+    compare_training_tables(persistence[list(actual_persistence)], actual_persistence)
+    raw = read("frozen_raw_predictions.csv")
+    for h in (1, 2):
+        case = sources["frozen"]["cohorts"][h]
+        for family in ("xgboost", "lightgbm", "gam"):
+            original = frozen.loc[frozen.candidate.eq(family) & frozen.horizon.eq(h)]
+            actual = raw.loc[raw.candidate.eq(family) & raw.horizon.eq(h)]
+            compare_training_tables(
+                original[list(actual)].reset_index(drop=True), actual.reset_index(drop=True)
+            )
+            assert (
+                case["keys"].municipality_code.astype(str).tolist()
+                == original.municipality_code.astype(str).tolist()
+            )
+            assert (
+                case["y"]
+                .reset_index(drop=True)
+                .equals(original.y_true.reset_index(drop=True).astype(case["y"].dtype))
+            )
+    assert len(raw) == 5472 and len(actual_persistence) == 1824
+    assert len(predictions) == 16720 and len(metrics) == 160
+    assert (
+        len(read("reference_predictions.csv")) == 6688 and len(read("reference_metrics.csv")) == 64
+    )
+    # In-memory source values are serialized losslessly for isolated 4.6/4.7 adapter probes.
+    inputs_dir = EVIDENCE / "training-runtime-inputs" / bundle.name
+    inputs_dir.mkdir(parents=True, exist_ok=False)
+    descriptor: dict = {
+        "files": {},
+        "cases": [],
+        "engineering_bundle": str(bundle.relative_to(ROOT)),
+    }
+    for window, entry in sources["development"].items():
+        path = inputs_dir / (window + "_X.csv")
+        path.write_bytes(serialize_table(entry["dataset"].validation_X))
+        for experiment, relative in EXPERIMENTS.items():
+            descriptor["cases"].append(
+                {
+                    "kind": "development",
+                    "family": sources["components"][experiment]["family"],
+                    "window": window,
+                    "X": str(path.relative_to(ROOT)),
+                    "model": relative + f"/{window}_model.json",
+                    "preparer": relative + f"/{window}_preparer.json",
+                    "predictions": relative + "/predictions.csv",
+                }
+            )
+    for h, case in sources["frozen"]["cohorts"].items():
+        path = inputs_dir / f"frozen_t{h}_X.csv"
+        path.write_bytes(serialize_table(case["X"]))
+        for family in ("xgboost", "lightgbm", "gam"):
+            descriptor["cases"].append(
+                {
+                    "kind": "frozen",
+                    "family": family,
+                    "horizon": h,
+                    "X": str(path.relative_to(ROOT)),
+                    "model": FINAL + f"/{family}_t{h}_model.json",
+                    "preparer": FINAL + f"/{family}_t{h}_preparer.json",
+                    "predictions": FINAL + "/predictions.csv",
+                }
+            )
+    for case in descriptor["cases"]:
+        for name in ("X", "model", "preparer", "predictions"):
+            descriptor["files"][case[name]] = fingerprint(ROOT / case[name])
+    descriptor_path = inputs_dir / "descriptor.json"
+    descriptor_path.write_text(json.dumps(descriptor, indent=2) + "\n")
+    runtimes = []
+    for runtime, version in (("historical46", "4.6.0"), ("candidate47", "4.7.0")):
+        runtime_env = dict(env)
+        if version == "4.7.0":
+            runtime_env["PYTHONPATH"] = (
+                str(EVIDENCE / "lightgbm47") + os.pathsep + env["PYTHONPATH"]
+            )
+        probe = subprocess.run(
+            [
+                str(EVIDENCE / runtime / "bin/python"),
+                "tests/integration/training_runtime_replay.py",
+                str(ROOT),
+                str(descriptor_path),
+                version,
+            ],
+            cwd=ROOT,
+            env=runtime_env,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        (evidence / ("current-adapters-" + version + ".log")).write_text(
+            probe.stdout + probe.stderr
+        )
+        assert probe.returncode == 0, probe.stdout + probe.stderr
+        runtimes.append(json.loads(probe.stdout.strip().splitlines()[-1]))
+    after = verify_protected_inventory(ROOT, protected_baseline)
+    assert before == after
+    report = {
+        "status": "PASS",
+        "engineering_bundle": str(bundle.relative_to(ROOT)),
+        "manifest": fingerprint(bundle / "manifest.json"),
+        "audit": audit,
+        "tables": {
+            p.name: {"rows": len(pd.read_csv(p)), "identity": fingerprint(p)}
+            for p in bundle.glob("*.csv")
+        },
+        "source_provenance": sources["provenance"],
+        "runtimes": runtimes,
+        "before": before,
+        "after": after,
+        "tolerances": {
+            "numeric_atol": 1e-10,
+            "numeric_rtol": 1e-8,
+            "predictions_in_domain": 0,
+            "model_roundtrip": 0,
+            "keys_order_missingness_categories": "exact",
+        },
+        "final_evaluation": "unchanged; independently verified by historical replay",
+    }
+    (evidence / "complete-parity.json").write_text(json.dumps(report, indent=2) + "\n")
+
+
+@pytest.mark.migration_evidence
+def test_training_extracted_scientific_definitions_match_originals() -> None:
+    import ast
+
+    from migration_support import TRAINING_MAPPING
+
+    equivalent = []
+    for name in (
+        "candidate_families",
+        "candidate_preparation",
+        "candidate_selection",
+        "references",
+        "xgboost_adapter",
+        "lightgbm_adapter",
+        "gam_adapter",
+        "loading",
+        "events",
+        "metrics",
+        "pipeline",
+        "candidates",
+        "supplementary_metrics",
+    ):
+        relative = (
+            "scripts/evaluation_metrics.py"
+            if name == "supplementary_metrics"
+            else f"scripts/model_training/{name}.py"
+        )
+        raw = subprocess.check_output(
+            ["git", "show", f"{TRAINING_MAPPING['original_revision']}:{relative}"], cwd=ROOT
+        )
+        assert (
+            hashlib.sha256(raw).hexdigest()
+            == TRAINING_MAPPING["files"][relative]["original"]["sha256"]
+        )
+        destination = (
+            ROOT / "src/sat_dengue/metrics.py"
+            if name in {"metrics", "supplementary_metrics"}
+            else ROOT / "src/sat_dengue/model_training/reference_workflow.py"
+            if name in {"pipeline", "candidates"}
+            else ROOT / f"src/sat_dengue/model_training/{name}.py"
+        )
+        old = {
+            n.name: n for n in ast.parse(raw).body if isinstance(n, (ast.FunctionDef, ast.ClassDef))
+        }
+        current = {
+            n.name: n
+            for n in ast.parse(destination.read_text()).body
+            if isinstance(n, (ast.FunctionDef, ast.ClassDef))
+        }
+        for function in old.keys() & current.keys() - {"restore_model"}:
+            assert ast.dump(old[function]) == ast.dump(current[function]), (name, function)
+            equivalent.append(f"{name}.{function}")
+    assert len(equivalent) == 44
+    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session5"
+    evidence.mkdir(parents=True, exist_ok=True)
+    (evidence / "scientific-source-parity.json").write_text(
+        json.dumps(
+            {
+                "status": "PASS",
+                "ast_identical_definitions": sorted(equivalent),
+                "restore_model_change": "Explicit rejection of unknown families before dispatch",
+            },
+            indent=2,
+        )
+        + "\n"
+    )

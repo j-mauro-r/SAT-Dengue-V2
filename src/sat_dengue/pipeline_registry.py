@@ -5,6 +5,7 @@ from kedro.pipeline import Pipeline, node
 from sat_dengue.configuration import resolve_configuration
 from sat_dengue.pipelines.data.pipeline import create_pipeline
 from sat_dengue.pipelines.preparation.pipeline import create_pipeline as preparation_pipeline
+from sat_dengue.pipelines.training.pipeline import create_replay_pipeline, create_synthetic_pipeline
 
 
 def register_pipelines() -> dict[str, Pipeline]:
@@ -24,4 +25,6 @@ def register_pipelines() -> dict[str, Pipeline]:
         "foundation": foundation,
         "data": create_pipeline(),
         "preparation": preparation_pipeline(),
+        "training_replay": create_replay_pipeline(),
+        "training_synthetic": create_synthetic_pipeline(),
     }

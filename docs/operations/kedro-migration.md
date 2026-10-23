@@ -768,3 +768,84 @@ G5 remains `NOT_APPROVED`, champion `not_selected`; the 13 source exceptions and
 17 KEEP / UNVERIFIED bundles stay closed. Full historical reproducibility is not
 claimed. T-training, tracking, cleanup, push, merge, release and publication were
 not started by this session.
+
+## Stage 4 execution — Session 5
+
+The maintained model rules now live in `src/sat_dengue/model_training/` and the
+shared metric owner is `src/sat_dengue/metrics.py`. Kedro orchestrates two distinct
+pipelines. The default pipeline remains the configuration-only foundation.
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=training_synthetic --params=profile=training_synthetic
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=training_replay --params=profile=training_replay
+```
+
+`training_synthetic` generates its fixture internally, checks every supplied value
+against that deterministic fixture, and runs the approved bounded selection for
+XGBoost, LightGBM and GAM (31 synthetic fits). It has no real source dataset input.
+Its four nodes resolve configuration, generate cases, fit synthetic models and
+assemble the engineering publication. Unknown profiles, families, grids and
+scientific authority identities fail closed.
+
+`training_replay` has three nodes: resolve configuration with verified native
+provenance, replay saved components, and assemble publication. The
+`training_sources` catalog entry loads only explicitly pinned inputs through
+`datasets/training_legacy.py`. That single compatibility loader verifies native
+manifest hashes, payloads and membership, loads eight development windows and
+uses the existing frozen cohort builder as an I/O compatibility consumer. It
+loads 40 development models (three full families and two saved XGBoost ablations)
+and six frozen components. Saved preparers are transformed without refitting.
+No module registry aliases or executable object snapshots are needed: XGBoost
+uses native JSON, LightGBM native text, and GAM numeric JSON plus saved spline
+state. Each model is serialized/restored and its complete predictions compared.
+
+Call-level guards surround the loader and replay node, rejecting fit, _fit,
+training/search and threshold-selection entrypoints even through aliases. The
+private CLI acceptance guards the whole process. Real fit/search/ablation counts
+are zero; the synthetic graph is the only new fitting route. The future default
+E2E route must retain this inference-only boundary. Calibration, threshold policy
+and final evaluation remain owned by their existing modules for T-evaluation.
+
+`training_bundle` publishes a new, atomic, non-overwriting engineering identity
+under `tmp/kedro-migration/training-runs/`. Its manifest records every payload,
+configuration identity and zero real-fit counts. Provenance retains original
+native manifests and payload identities, Stage 2 inputs, Stage 3 manifest and the
+accepted freeze proposal. Reads require an explicit publication, exact membership
+and hashes; there is no implicit latest artifact. Tracking stays disabled.
+
+Complete comparison covers 16,720 development candidate predictions, 6,688
+reference predictions, 160 candidate metric rows, 64 reference metric rows,
+56 equally weighted horizon summaries, 5,472 frozen raw candidate probabilities
+and 1,824 persistence predictions. Metrics retain non-interpolated AP with tied
+scores, Brier, onset denominators independent of missing predictions and FAR over
+issued alerts. Missing/zero support stays non-evaluable. Current domain adapters
+also run independently under frozen LightGBM 4.6 and current 4.7, with exact model
+roundtrips and prediction equality. Existing historical full final-output replay
+remains separate evidence, including decisions and final metrics; this session
+adds no final evaluation implementation or scientific selection.
+
+The closed [training identity mapping](kedro-training-identities.json) preserves
+21 original Git blobs from `4e9c47025c73297ca066a8f2874bb94046fc7e4b`, their sizes
+and SHA-256, exact current adapter/README identities, and implementation owners.
+The original baseline digest stays unchanged. Across Sessions 2–5, 37 original
+files are preserved as verified Git blobs and separately mapped engineering
+identities; the other 2,516 originals remain physically unchanged. All 2,553
+original identities and all 45 native bundle identities/memberships are checked.
+The 13 historical missing-source exceptions and 17 KEEP / UNVERIFIED bundles
+remain excluded from equivalence; full historical reproducibility is not claimed.
+
+The 19 `scripts/model_training/` modules and `scripts/evaluation_metrics.py`
+remain thin import/CLI adapters. Notebook 05 and the candidate notebooks, model
+assessment, final evaluation, their protocol/decision helpers, and existing
+regression tests still consume these interfaces. Retain them until T-cleanup
+verifies all consumers. Real legacy build entrypoints now return explicitly
+verified frozen results; synthetic regression fixtures retain their bounded
+orchestration. No notebooks, native components, evidence or scientific files are
+retired. See [the testing owner](../TESTING_GUIDE.md#kedro-stage-4-model-migration-session-5)
+for the exact gates. Skills disposition: none; pinned dependencies are unchanged.
+
+G2/G3 follow DEC-135; G4 follows DEC-132. G5 remains NOT_APPROVED, champion remains
+not_selected, and consumed 2025 is prohibited for training, search, tuning or
+selection. This bounded session does not authorize tracking, later E2E work,
+cleanup, push, merge, release or publication.

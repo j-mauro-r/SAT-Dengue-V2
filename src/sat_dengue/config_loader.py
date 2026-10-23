@@ -40,6 +40,11 @@ CATALOG = {
         "type": "sat_dengue.datasets.preparation.PreparationBundleDataset",
         "filepath": "tmp/kedro-migration/preparation-runs",
     },
+    "training_sources": {"type": "sat_dengue.datasets.training.TrainingSourcesDataset"},
+    "training_bundle": {
+        "type": "sat_dengue.datasets.training.TrainingBundleDataset",
+        "filepath": "tmp/kedro-migration/training-runs",
+    },
 }
 
 

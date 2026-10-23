@@ -246,3 +246,227 @@ def test_artifact_verification_detects_tampering(tmp_path: Path) -> None:
     (bundle / "predictions.csv").write_bytes(b"tampered\n")
     with pytest.raises(ValueError, match="stale|corrupted"):
         verify_artifacts(bundle, payloads)
+
+
+def test_training_pipeline_routes_are_separate_and_safe() -> None:
+    from sat_dengue.pipelines.training.pipeline import (
+        create_replay_pipeline,
+        create_synthetic_pipeline,
+    )
+
+    replay = create_replay_pipeline()
+    synthetic = create_synthetic_pipeline()
+    assert "training_sources" in replay.inputs()
+    assert synthetic.inputs() == {"configuration_inputs", "parameters"}
+    assert not any("fit" in n.name for n in replay.nodes)
+    assert any("fit" in n.name for n in synthetic.nodes)
+
+
+def test_training_domain_has_no_framework_or_filesystem_imports() -> None:
+    import ast
+
+    root = Path(__file__).resolve().parents[2]
+    for path in (root / "src/sat_dengue/model_training").glob("*.py"):
+        tree = ast.parse(path.read_text())
+        names = [n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+        names += [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
+        assert not {n.split(".")[0] for n in names} & {
+            "pathlib",
+            "os",
+            "tempfile",
+            "kedro",
+            "mlflow",
+        }, path
+
+
+@pytest.mark.parametrize("name", ["fit", "_fit", "select_and_fit", "train"])
+def test_training_replay_guard_rejects_fit_and_search_aliases(name: str) -> None:
+    from sat_dengue.datasets.training_legacy import no_fitting
+
+    namespace: dict = {}
+    exec("def " + name + "():\n    return None", namespace)
+    alias = namespace[name]
+    with pytest.raises(AssertionError, match="Forbidden"):
+        with no_fitting():
+            alias()
+
+
+def _synthetic_training_configuration() -> dict:
+    from sat_dengue.datasets import ConfigurationInputsDataset
+    from sat_dengue.model_training.workflow import resolve_synthetic_configuration
+
+    return resolve_synthetic_configuration(
+        ConfigurationInputsDataset().load(),
+        {"profile": "training_synthetic", "tracking": "disabled"},
+    )
+
+
+def test_training_synthetic_graph_fits_every_authorized_family() -> None:
+    import json
+
+    from kedro.io import DataCatalog, MemoryDataset
+    from kedro.runner import SequentialRunner
+
+    from sat_dengue.datasets import ConfigurationInputsDataset
+    from sat_dengue.pipelines.training.pipeline import create_synthetic_pipeline
+
+    catalog = DataCatalog(
+        {
+            "configuration_inputs": MemoryDataset(ConfigurationInputsDataset().load()),
+            "parameters": MemoryDataset({"profile": "training_synthetic", "tracking": "disabled"}),
+            "training_bundle": MemoryDataset(),
+        }
+    )
+    SequentialRunner().run(create_synthetic_pipeline(), catalog)
+    result = catalog.load("training_bundle")
+    audit = json.loads(result["payloads"]["audit.json"])
+    assert audit["synthetic_model_fits"] == 31
+    assert audit["real_model_fits"] == audit["real_preparer_refits"] == 0
+    assert audit["G5"] == "NOT_APPROVED" and audit["champion"] == "not_selected"
+    for family in ("xgboost", "lightgbm", "gam"):
+        model = result["payloads"][family + "_model.json"]
+        state = json.loads(result["payloads"][family + "_preparer.json"])
+        assert model and len(state["input_columns"]) == 29
+        search = json.loads(result["payloads"][family + "_search.json"])
+        assert len(search["folds"]) == search["fit_count"] - 1
+        assert all(f["boundaries"]["train"]["target_end"] < "2025-01" for f in search["folds"])
+
+    # A second independent bounded search must produce identical native state and predictions.
+    SequentialRunner().run(create_synthetic_pipeline(), catalog)
+    repeated = catalog.load("training_bundle")
+    for family in ("xgboost", "lightgbm", "gam"):
+        for suffix in ("_model.json", "_preparer.json", "_predictions.csv"):
+            assert result["payloads"][family + suffix] == repeated["payloads"][family + suffix]
+
+
+@pytest.mark.parametrize("mutation", ["label", "control", "future", "order", "alignment"])
+def test_training_rejects_predictor_or_temporal_leakage(mutation: str) -> None:
+    from sat_dengue.model_training.workflow import synthetic_cases, validate_window
+
+    cases = synthetic_cases(_synthetic_training_configuration())
+    columns = list(cases["train_X"])
+    for split in ("train", "validation"):
+        cases[split + "_y"] = cases[split + "_y"].to_frame("y_t1")
+        cases[split + "_keys"]["feature_row"] = range(len(cases[split + "_keys"]))
+    if mutation in {"label", "control"}:
+        cases["train_X"]["y_t1" if mutation == "label" else "y_evaluable_t1"] = 1
+    elif mutation == "future":
+        cases["train_keys"].loc[0, "target_period_t1"] = "2025-01"
+    elif mutation == "order":
+        cases["train_X"] = cases["train_X"][list(reversed(columns))]
+    else:
+        cases["validation_keys"].loc[0, "municipality_code"] = "99999"
+    dataset = WindowDataset(
+        "2018-12_t1",
+        "2018-12",
+        1,
+        "target_period_t1",
+        "y_t1",
+        cases["train_X"],
+        cases["train_y"],
+        cases["train_keys"],
+        cases["validation_X"],
+        cases["validation_y"],
+        cases["validation_keys"],
+    )
+    with pytest.raises(ValueError, match="schema|alignment|Future"):
+        validate_window(dataset, columns)
+
+
+def test_training_equal_window_weights_and_missing_support_are_explicit() -> None:
+    from sat_dengue.model_training.workflow import equal_window_means
+
+    windows = [f"{year}-12_t1" for year in (2018, 2020, 2022, 2023)]
+    rows = pd.DataFrame(
+        {
+            "horizon": 1,
+            "reference": "gam",
+            "metric": "ap",
+            "window_id": windows,
+            "value": [0.1, 0.2, 0.3, 0.8],
+            "rows": [10, 100, 1, 5],
+        }
+    )
+    complete = equal_window_means(rows, windows).iloc[0]
+    assert complete.value == pytest.approx(0.35) and complete.evaluable
+    for bad in (rows.iloc[:-1], rows.assign(value=[0.1, None, 0.3, 0.8])):
+        result = equal_window_means(bad, windows).iloc[0]
+        assert pd.isna(result.value) and not result.evaluable and result.windows == 3
+
+
+@pytest.mark.parametrize("mutation", ["payload", "manifest", "membership", "missing"])
+def test_training_publication_is_immutable_and_detects_corruption(mutation: str) -> None:
+    import json
+    from tempfile import TemporaryDirectory
+
+    from kedro.io import DatasetError
+
+    from sat_dengue.datasets.training import TrainingBundleDataset, assemble_training_payloads
+
+    resolved = _synthetic_training_configuration()
+    result = {
+        "mode": "synthetic",
+        "tables": {"predictions.csv": pd.DataFrame({"p": [0.5]})},
+        "payloads": {},
+        "real_model_fits": 0,
+        "real_preparer_refits": 0,
+    }
+    data = assemble_training_payloads(result, resolved)
+    root = Path.cwd()
+    with TemporaryDirectory(dir=root / "tmp", prefix="training-publication-") as directory:
+        dataset = TrainingBundleDataset(str(Path(directory).relative_to(root)))
+        with pytest.raises(DatasetError, match="explicit"):
+            dataset.load()
+        dataset.save(data)
+        saved = dataset.load()
+        bundle = root / saved["path"]
+        with pytest.raises(Exception, match="exists|Existing|already"):
+            dataset.save(data)
+        assert json.loads((bundle / "provenance.json").read_text()) == resolved
+        name = "manifest.json" if mutation == "manifest" else "predictions.csv"
+        path = bundle / name
+        path.chmod(0o644)
+        if mutation == "missing":
+            path.unlink()
+        elif mutation == "membership":
+            (bundle / "extra.json").write_text("{}")
+        else:
+            path.write_bytes(b"changed")
+        with pytest.raises(DatasetError, match="changed|missing|verified"):
+            dataset.load()
+
+
+@pytest.mark.parametrize("mutation", ["contract", "family", "selection", "root"])
+def test_training_legacy_rejects_unknown_configuration_before_reading_models(mutation: str) -> None:
+    from sat_dengue.datasets.legacy_training.contract import ModelTrainingConfig
+    from sat_dengue.datasets.training_legacy import LegacyTrainingLoader
+
+    config = ModelTrainingConfig(Path.cwd())
+    family, ablation = "xgboost", None
+    if mutation == "contract":
+        config = ModelTrainingConfig(Path.cwd(), contract_path=Path("tmp/unapproved.json"))
+    elif mutation == "root":
+        config = ModelTrainingConfig(Path.cwd() / "tmp")
+    elif mutation == "family":
+        family = "unknown"
+    else:
+        ablation = "unknown"
+    with pytest.raises(ValueError, match="Unknown legacy"):
+        LegacyTrainingLoader.legacy_result(config, family=family, ablation=ablation)
+
+
+def test_training_candidate_without_evaluable_windows_stays_non_evaluable() -> None:
+    from sat_dengue.model_training.workflow import equal_window_means
+
+    windows = [f"{year}-12_t1" for year in (2018, 2020, 2022, 2023)]
+    metrics = pd.DataFrame(
+        {
+            "horizon": 1,
+            "reference": "gam",
+            "metric": "average_precision",
+            "window_id": windows,
+            "value": [None] * 4,
+        }
+    )
+    result = equal_window_means(metrics, windows).iloc[0]
+    assert result.windows == 0 and pd.isna(result.value) and not result.evaluable

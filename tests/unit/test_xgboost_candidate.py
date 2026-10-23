@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from scripts.model_training import candidates
+from sat_dengue.datasets.legacy_training import candidates
 from scripts.model_training.candidate_selection import (
     choose_configuration,
     internal_folds,

@@ -491,3 +491,47 @@ never refitted. No model training or Stage 4 migration is part of this gate. Rep
 all-plan conformance separately: the two recorded historical plan incidents do not
 become current code failures. The closed preparation mapping preserves the active
 README's original historical bytes while its current owner follows DEC-135.
+
+## Kedro Stage 4 model migration (Session 5)
+
+Use the isolated foundation environment and unset special pytest variables as in
+Session 4. No basetemp or global TMPDIR override is required. Private acceptance
+requires the original baseline, all active native components and the two existing
+4.6/4.7 runtime environments; a missing input fails rather than becoming a skip.
+
+| Maintained surface | Owning checks |
+| --- | --- |
+| `model_training/` families, preparation, selection and references | `test_candidate_families.py`, `test_xgboost_candidate.py`, `test_model_training.py`: native roundtrips, approved grids/budgets, synthetic fits for all three families, ablation projection, train-only temporal selection and leakage negatives |
+| `metrics.py` | `test_model_metrics.py`, `test_model_training.py`: grouped ties/permutations, class/zero support, Brier, onset S/S−1 context, missing predictions, no-alert non-evaluability, FAR denominators and equal window weights |
+| `pipelines/training/`, catalog and configuration | Actual synthetic Kedro graph, separate real-source-free input set, unknown profile/config/family rejection, bootstrap and configuration contract suites |
+| `datasets/training.py`, `training_legacy.py`, retained adapters | Fit/search alias denial, explicit pinned inputs, atomic no-overwrite publication, corrupt manifest/payload/membership/missing artifact refusal; existing atomic failure cleanup and legacy consumer tests stay enabled |
+| Complete real replay | `test_training_kedro_all_saved_components_and_metrics`: whole-process guarded Kedro CLI, 40 development and six frozen models, 16,720/6,688 development/reference predictions, 160/64 metric rows, 56 horizon means, 5,472 frozen raw probabilities and 1,824 persistence rows; full cohorts and masks, no sampling |
+| Native compatibility and preservation | The same private test runs current adapters under both LightGBM 4.6 and 4.7 with zero-tolerance predictions/model roundtrips. Existing historical full final-output replay stays separate. `migration_support.py` verifies the closed 21-path original/current mapping and all 2,553 original identities / 45 bundles. |
+
+Run the exact AC-training compound gate through the official local DWP runner:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+bash -lc "python -m pytest tests/unit/test_model_training.py tests/unit/test_candidate_families.py tests/unit/test_model_metrics.py tests/unit/test_xgboost_candidate.py tests/integration/test_migration_parity.py -k 'training or candidate or metric or baseline' --require-migration-evidence -q && python -m ruff check src tests && python -m ruff format --check src tests && python -m mypy src tests"
+```
+
+Additional required checks:
+
+```bash
+python -m pytest tests/unit tests/contracts tests/integration/test_migration_parity.py -v
+python -m pytest tests/integration/test_migration_parity.py --require-migration-evidence -q
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=training_synthetic --params=profile=training_synthetic
+python -m pip check
+python scripts/check_markdown_links.py
+bash .agents/skills/deepworkplan/verify/conformance.sh --repo-only
+bash .agents/skills/deepworkplan/verify/conformance.sh --plan PLAN_030_kedro_architecture_migration
+git diff --check
+```
+
+Lint/format the retained training adapters separately too. Record exact floats for
+native prediction/model roundtrips, exact keys/order/schema/missingness and the
+pre-existing comparator tolerances for declared metric numeric columns. Do not
+relax tolerances or substitute sampled comparisons. Inspect secret and prohibited
+runtime patterns on the changed surface, then independently verify preservation
+after replay and after the commit. Report all-plan conformance separately from
+the repository and PLAN_030; the two inherited historical incidents remain.

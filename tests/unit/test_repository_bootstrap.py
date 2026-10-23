@@ -16,7 +16,14 @@ def test_repository_bootstrap() -> None:
     metadata = bootstrap_project(ROOT)
     assert metadata.package_name == "sat_dengue"
     assert importlib.metadata.version("sat-dengue-v2") == sat_dengue.__version__
-    assert set(pipelines) == {"__default__", "foundation", "data", "preparation"}
+    assert set(pipelines) == {
+        "__default__",
+        "foundation",
+        "data",
+        "preparation",
+        "training_replay",
+        "training_synthetic",
+    }
     assert {node.name for node in pipelines["foundation"].nodes} == {"resolve_configuration"}
     assert pipelines["foundation"].inputs() == {"configuration_inputs", "parameters"}
     assert pipelines["foundation"].outputs() == {"resolved_configuration"}

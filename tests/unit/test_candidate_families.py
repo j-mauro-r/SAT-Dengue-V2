@@ -156,7 +156,7 @@ def test_suite_budget_rejected_before_any_loading_or_fitting(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """A user-reduced global budget cannot be exceeded before reporting the error."""
-    from scripts.model_training import candidate_suite
+    from sat_dengue.datasets.legacy_training import candidate_suite
     from scripts.model_training.contract import ModelTrainingConfig
 
     contract = copy.deepcopy(CONTRACT)
@@ -171,3 +171,32 @@ def test_suite_budget_rejected_before_any_loading_or_fitting(
         candidate_suite.build_candidate_suite(
             ModelTrainingConfig(tmp_path, tmp_path / "contract.json")
         )
+
+
+@pytest.mark.parametrize("family", ["unknown", "Umaña", "v1"])
+def test_training_unknown_families_fail_closed(family: str) -> None:
+    from sat_dengue.model_training.candidate_families import restore_model, validate_grid
+    from sat_dengue.model_training.contract import ModelTrainingError
+
+    with pytest.raises(ModelTrainingError):
+        validate_grid(family, [{}])
+    with pytest.raises(ModelTrainingError):
+        restore_model(family, b"{}", {})
+
+
+def test_training_synthetic_route_rejects_changed_or_foreign_cases() -> None:
+    from sat_dengue.datasets import ConfigurationInputsDataset
+    from sat_dengue.model_training.workflow import (
+        fit_synthetic,
+        resolve_synthetic_configuration,
+        synthetic_cases,
+    )
+
+    resolved = resolve_synthetic_configuration(
+        ConfigurationInputsDataset().load(),
+        {"profile": "training_synthetic", "tracking": "disabled"},
+    )
+    cases = synthetic_cases(resolved)
+    cases["train_X"].iloc[0, 1] = 99999.0
+    with pytest.raises(ModelTrainingError, match="synthetic"):
+        fit_synthetic(cases, resolved)

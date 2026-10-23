@@ -455,7 +455,7 @@ def verify_preparation_preservation(root: Path, records: dict[str, Any]) -> int:
     files = PREPARATION_MAPPING["files"]
     mapped = set(files).intersection(records)
     if not mapped or not path.exists():
-        return require_records(root, records)
+        return verify_training_preservation(root, records)
     assert not path.is_symlink()
     assert json.loads(path.read_text()) == PREPARATION_MAPPING, "Closed preparation mapping changed"
     for name in sorted(mapped):
@@ -466,5 +466,269 @@ def verify_preparation_preservation(root: Path, records: dict[str, Any]) -> int:
         )
         assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == entry["original"]
         assert fingerprint(safe_path(root, name)) == entry["engineering"]
+    remaining = {n: r for n, r in records.items() if n not in files}
+    return (verify_training_preservation(root, remaining) if remaining else 0) + len(mapped)
+
+
+TRAINING_MAPPING: dict[str, Any] = {
+    "schema": "kedro-training-migration-identities-v1",
+    "original_revision": "4e9c47025c73297ca066a8f2874bb94046fc7e4b",
+    "baseline_sha256": "d86338cd34dcde884e2be9d102271969d0f3b52f57b8ffdebd1829771977a5b3",
+    "files": {
+        "scripts/model_training/__init__.py": {
+            "original": {
+                "bytes": 430,
+                "sha256": "fabdddfe02fe58d741d2915f4431399ae44f8f14f5675b346d81e7ba5c657b99",
+            },
+            "engineering": {
+                "bytes": 538,
+                "sha256": "e84acdbffc04664cd071a4b1aeee2d4362d9c7b41e16d53b47dd2870a906a0e2",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_training/contract.py",
+                "src/sat_dengue/datasets/legacy_training/pipeline.py",
+            ],
+        },
+        "scripts/model_training/candidate_families.py": {
+            "original": {
+                "bytes": 4451,
+                "sha256": "f7300e0b7b69cdeabbedfe515cc94d6b20afeaa7b3327b63f9974c84f3a48846",
+            },
+            "engineering": {
+                "bytes": 292,
+                "sha256": "7c5373f60b4889368300d24a0aa945a0f6a394dab4f3668dbb09bf4aa2f2fa0a",
+            },
+            "destination": ["src/sat_dengue/model_training/candidate_families.py"],
+        },
+        "scripts/model_training/candidate_notebook.py": {
+            "original": {
+                "bytes": 2839,
+                "sha256": "bfaa8a81649d802c5210710baca4f90e8edb905134cddeddeb2fa475cc687066",
+            },
+            "engineering": {
+                "bytes": 358,
+                "sha256": "92a9912b7f0da693dbf1a43a31759174303341dfe3ae3f89f4cda5a9982c181b",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/candidate_notebook.py"],
+        },
+        "scripts/model_training/candidate_preparation.py": {
+            "original": {
+                "bytes": 3142,
+                "sha256": "6b25b623432e1892666f16025dcf6661dc65103d1241bf2f43b8728cfbd22a16",
+            },
+            "engineering": {
+                "bytes": 295,
+                "sha256": "417b642c45f16c517c6c701ba24e8365f150bba703911a86e3c5fe75a77ab746",
+            },
+            "destination": ["src/sat_dengue/model_training/candidate_preparation.py"],
+        },
+        "scripts/model_training/candidate_selection.py": {
+            "original": {
+                "bytes": 8093,
+                "sha256": "7359055290595a18158f3f3c5cf73981eb9344e6f7bd7fdbf48764000464a1a8",
+            },
+            "engineering": {
+                "bytes": 293,
+                "sha256": "2554a307d8f6db09b2c332dedf981227dfcd486f2ccd1e571916125aec772d1e",
+            },
+            "destination": ["src/sat_dengue/model_training/candidate_selection.py"],
+        },
+        "scripts/model_training/candidate_suite.py": {
+            "original": {
+                "bytes": 8647,
+                "sha256": "613bd50bd6abfe5ba563e313bcd11f7e3eb53a9f63468db2ab69a4f96f6ba3e5",
+            },
+            "engineering": {
+                "bytes": 299,
+                "sha256": "b5fbaf2d38ef961ef3a1300f700353722e5456da1ca5a5013f8790ba71fc1430",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/candidate_suite.py"],
+        },
+        "scripts/model_training/candidates.py": {
+            "original": {
+                "bytes": 19310,
+                "sha256": "1f1621a9c9898377964aac304a031e86a2028c8c0720634600bcef21ea9aed18",
+            },
+            "engineering": {
+                "bytes": 294,
+                "sha256": "55ecd06fc2598633e51c1aba2843364acd1e43ff13b9906ebe84495a19b5b5ef",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/candidates.py"],
+        },
+        "scripts/model_training/contract.py": {
+            "original": {
+                "bytes": 2533,
+                "sha256": "effb123129401724da4268949869f36499bd12b925736a48317c3550de720d26",
+            },
+            "engineering": {
+                "bytes": 292,
+                "sha256": "80a9a148396c8c665e1d3e8e8c60fecab6f003d6c5ca4e0e5e2106f921b784bd",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/contract.py"],
+        },
+        "scripts/model_training/events.py": {
+            "original": {
+                "bytes": 5905,
+                "sha256": "e99fadf26df301a59f2d3b372fff333e3d66c0c03786edf492dc77082507535b",
+            },
+            "engineering": {
+                "bytes": 290,
+                "sha256": "a697f90c7bd7f040e5c3d9d427c353b50e35680462e7555dc56834de1ec20683",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/events.py"],
+        },
+        "scripts/model_training/execution.py": {
+            "original": {
+                "bytes": 955,
+                "sha256": "5652d9b0c64dbadc0f060a74b4703a6b2d676cfa5f3b946bbfccf41eb1f2e6f4",
+            },
+            "engineering": {
+                "bytes": 349,
+                "sha256": "232aaf2ddc95ea4b7ecbc304a61c0bd6fb8b2b3d2abac34d62ba736cd4833d33",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/execution.py"],
+        },
+        "scripts/model_training/gam_adapter.py": {
+            "original": {
+                "bytes": 6401,
+                "sha256": "9e77bffe0a81b3a9e25a7a216708ea4942700248eba7c83867d15a8bc7e51d26",
+            },
+            "engineering": {
+                "bytes": 285,
+                "sha256": "d6fdbc521c7a260a2c7f3a9bad0a465375ec8bdb9465861fda8d03bf9f8f31ea",
+            },
+            "destination": ["src/sat_dengue/model_training/gam_adapter.py"],
+        },
+        "scripts/model_training/lightgbm_adapter.py": {
+            "original": {
+                "bytes": 3108,
+                "sha256": "5668c13aaa72ffeabdf8e34be1cf6e54c10e4dd8fa5cf645d426bb548b5f501e",
+            },
+            "engineering": {
+                "bytes": 290,
+                "sha256": "38fb0c0ade443e0b75808448e71f16eaff400b41d2942de371d0a395eff95a19",
+            },
+            "destination": ["src/sat_dengue/model_training/lightgbm_adapter.py"],
+        },
+        "scripts/model_training/loading.py": {
+            "original": {
+                "bytes": 8737,
+                "sha256": "5554737ad0caea09709191c4958ee181430b2b60b2cada50dab0dc75217af5ff",
+            },
+            "engineering": {
+                "bytes": 291,
+                "sha256": "945cd9d9847e11874218f3301c8bb27ad88e7247fd98552c6bbfd45e46cdda4f",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/loading.py"],
+        },
+        "scripts/model_training/metrics.py": {
+            "original": {
+                "bytes": 10612,
+                "sha256": "589c73661fd0969662e08a5bdbb8fe0dd5ced87aaf8881a842f98f9fd9091e42",
+            },
+            "engineering": {
+                "bytes": 266,
+                "sha256": "2e100a412a8405417c0bcc66369c4babbb50b841b52b6f029f12e7912a06d2f7",
+            },
+            "destination": ["src/sat_dengue/metrics.py"],
+        },
+        "scripts/model_training/notebook_execution.py": {
+            "original": {
+                "bytes": 7427,
+                "sha256": "76be2f2e5ef673d49c59bb41bc6cbf5f3300ab0307a74e4b2f5ae98851c5c028",
+            },
+            "engineering": {
+                "bytes": 358,
+                "sha256": "6c1016a5e1eda35086f691f20ac93071d1537bbc506d8497ace735e05e9d9bbf",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/notebook_execution.py"],
+        },
+        "scripts/model_training/persistence.py": {
+            "original": {
+                "bytes": 1375,
+                "sha256": "c7c5742e6e6fe36afdc5cd31913d76aaeedc056d6be2587fd6e2b28c6094fec6",
+            },
+            "engineering": {
+                "bytes": 295,
+                "sha256": "496a16f59faefc2bd7818eeb26b01df52cd163dc4503bb85df7b3893c4563f83",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/persistence.py"],
+        },
+        "scripts/model_training/pipeline.py": {
+            "original": {
+                "bytes": 11325,
+                "sha256": "4d3fb73f2cc42185958b53ceb785700bc384a5a58cb61b8085645c7f35b38570",
+            },
+            "engineering": {
+                "bytes": 292,
+                "sha256": "899f946dfd12b91efc565d2c4ed1f391c11f647505128366ef6a8c4ef1dd427a",
+            },
+            "destination": ["src/sat_dengue/datasets/legacy_training/pipeline.py"],
+        },
+        "scripts/model_training/references.py": {
+            "original": {
+                "bytes": 3941,
+                "sha256": "e6434f0cdc069e1f22380a8d9176865e0dfc7b4cba750defe10f4a786baf4445",
+            },
+            "engineering": {
+                "bytes": 284,
+                "sha256": "ac5f54838d68c4b7909f9aca98fcbb529c33e5526e8bd13f68c7d405a238e5eb",
+            },
+            "destination": ["src/sat_dengue/model_training/references.py"],
+        },
+        "scripts/model_training/xgboost_adapter.py": {
+            "original": {
+                "bytes": 3643,
+                "sha256": "7c6973e5dbcad0531fa11da410c8b2962895670ef0d92d72b7820b19c8f29a91",
+            },
+            "engineering": {
+                "bytes": 289,
+                "sha256": "7b75a59e6f1b1444bdec8576da9b2969f4cd7f2add6124454523bd6b0fd874d4",
+            },
+            "destination": ["src/sat_dengue/model_training/xgboost_adapter.py"],
+        },
+        "scripts/evaluation_metrics.py": {
+            "original": {
+                "bytes": 3427,
+                "sha256": "b377152e72f24dd6a30f9400412b2c919c9365a6a630642fc5b02f716d2712f0",
+            },
+            "engineering": {
+                "bytes": 230,
+                "sha256": "66b8c608f5e1932455095610387ddaf6341619164a4fd7a395f2253464051049",
+            },
+            "destination": ["src/sat_dengue/metrics.py"],
+        },
+        "docs/product/stage-4/README.md": {
+            "original": {
+                "bytes": 29809,
+                "sha256": "36ea94b315847ac936e7debefe171046bc29676cf8cca82ef1ad2c2d3ecc936f",
+            },
+            "engineering": {
+                "bytes": 6664,
+                "sha256": "aba8bc153ada82f2b6ac05098e2656f61a1a948ed8c05d589e5dbcf26faec634",
+            },
+            "destination": ["docs/product/stage-4/README.md"],
+        },
+    },
+}
+
+
+def verify_training_preservation(root: Path, records: dict[str, Any]) -> int:
+    path = root / "docs/operations/kedro-training-identities.json"
+    files = TRAINING_MAPPING["files"]
+    mapped = set(files).intersection(records)
+    if not mapped or not path.exists():
+        return require_records(root, records)
+    assert not path.is_symlink()
+    assert json.loads(path.read_text()) == TRAINING_MAPPING, "Closed training mapping changed"
+    for name in sorted(mapped):
+        entry = files[name]
+        assert records[name] == entry["original"]
+        raw = subprocess.check_output(
+            ["git", "show", f"{TRAINING_MAPPING['original_revision']}:{name}"], cwd=root
+        )
+        assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == entry["original"]
+        assert fingerprint(safe_path(root, name)) == entry["engineering"]
+        assert all(safe_path(root, destination).is_file() for destination in entry["destination"])
     remaining = {n: r for n, r in records.items() if n not in files}
     return (require_records(root, remaining) if remaining else 0) + len(mapped)
