@@ -40,6 +40,23 @@ def _wait_for_tcp(port: int, process: subprocess.Popen[bytes], label: str) -> No
     raise RuntimeError(f"{label} did not become ready within {TIMEOUT_SECONDS:.0f} seconds")
 
 
+def _wait_for_dashboard(url: str, process: subprocess.Popen[bytes]) -> None:
+    deadline = time.monotonic() + TIMEOUT_SECONDS
+    while time.monotonic() < deadline:
+        if process.poll() is not None:
+            raise RuntimeError("dashboard exited before serving its initial page")
+        try:
+            with urllib.request.urlopen(url, timeout=2) as response:
+                if response.status == 200 and b"SAT-Dengue" in response.read():
+                    return
+        except (OSError, urllib.error.URLError):
+            pass
+        time.sleep(0.2)
+    raise RuntimeError(
+        f"dashboard did not serve its initial page within {TIMEOUT_SECONDS:.0f} seconds"
+    )
+
+
 def _request(url: str) -> tuple[int, Any]:
     request = urllib.request.Request(url, headers={"Accept": "application/json"})
     try:
@@ -71,7 +88,10 @@ def _assert_dashboard_payload(payload: dict[str, Any], expected_count: int) -> N
 def _stop(process: subprocess.Popen[bytes] | None) -> None:
     if process is None or process.poll() is not None:
         return
-    os.killpg(process.pid, signal.SIGTERM)
+    try:
+        os.killpg(process.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
     try:
         process.wait(timeout=5)
     except subprocess.TimeoutExpired:
@@ -138,6 +158,7 @@ def main() -> int:
                 _wait_for_tcp(dashboard_port, dashboard_process, "dashboard")
 
                 dashboard_origin = f"http://127.0.0.1:{dashboard_port}"
+                _wait_for_dashboard(dashboard_origin, dashboard_process)
                 for department, period, expected_count in (
                     ("73", "2026-09", 47),
                     ("50", "2026-12", 29),
