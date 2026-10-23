@@ -13,7 +13,7 @@ from sat_dengue.datasets.legacy_evaluation.model_evaluation.availability import 
     ROLES,
     availability_transition,
 )
-from scripts.training_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
 
 from .policy import proposed_calendar
 

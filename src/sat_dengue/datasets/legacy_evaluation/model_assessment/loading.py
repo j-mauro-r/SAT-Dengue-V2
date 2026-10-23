@@ -11,9 +11,9 @@ import pandas as pd  # type: ignore[import-untyped]
 
 from sat_dengue.datasets.legacy_evaluation.model_evaluation.contract import ModelEvaluationConfig
 from sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline import build_model_evaluation
-from scripts.model_training.contract import ModelTrainingConfig
-from scripts.model_training.events import load_event_context
-from scripts.model_training.loading import load_temporal_source, load_window_dataset
+from sat_dengue.datasets.legacy_training.contract import ModelTrainingConfig
+from sat_dengue.datasets.legacy_training.events import load_event_context
+from sat_dengue.datasets.legacy_training.loading import load_temporal_source, load_window_dataset
 
 from .input_validation import verify_equivalent_input
 from .policy import require_development

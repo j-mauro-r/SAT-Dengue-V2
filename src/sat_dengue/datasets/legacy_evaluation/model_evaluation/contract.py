@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from sat_dengue.datasets.legacy_training.contract import ModelTrainingConfig
 from sat_dengue.model_evaluation.contract import ModelEvaluationError as ModelEvaluationError
 from sat_dengue.model_evaluation.contract import Stage5Contract as Stage5Contract
 from sat_dengue.model_evaluation.contract import _as_month_list as _as_month_list
@@ -15,7 +16,6 @@ from sat_dengue.model_evaluation.contract import _as_month_range as _as_month_ra
 from sat_dengue.model_evaluation.contract import (
     _validate_window_role_calendar as _validate_window_role_calendar,
 )
-from scripts.model_training.contract import ModelTrainingConfig
 
 from .decision_policy import ChampionDecisionPolicy as ChampionDecisionPolicy
 from .decision_policy import Stage5Knobs as Stage5Knobs

@@ -10,7 +10,7 @@ This document is the single durable master plan for the project. It defines all 
 - Use DWP only when a concrete HU/task warrants an execution plan because of complexity, risk, dependencies, or work across sessions. Select the appropriate plan format for that bounded objective.
 - Record stage progress and gate evidence here; record HU/task acceptance and validation in its issue/PR. No separate DWP master-plan ID is a prerequisite for G0.
 
-## Current Status — 2026-10-21
+## Current Status — scientific decisions 2026-10-21; engineering migration 2026-10-23
 
 Implementation and human gate approval are separate. Mauricio accepted G4 and exact freeze proposal `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`; PLAN_028 then executed the authorized frozen 2025 evaluation without retuning. On 2026-10-21 Mauricio accepted the scientific disposition G5 `NOT_APPROVED`: Stage 5 is closed, no champion is selected, and model integration remains blocked. The approved next product step is a prototype-first, read-only E2E MVP that presents traceable persisted evaluation results and their `NOT_APPROVED` status without claiming operational prediction.
 
@@ -18,8 +18,8 @@ Implementation and human gate approval are separate. Mauricio accepted G4 and ex
 |---|---|---|
 | Stage 0 foundation / G0 | Foundation delivered in PR #5 | Historical dedicated independent foundation review remains UNVERIFIED. Later reviews do not retroactively supply it. |
 | Stage 1 product definition / G1 | Delivered in PR #7 | CLOSED by Mauricio's explicit confirmation; final runtime schemas remain unfrozen. |
-| Stage 2 data understanding / G2 | Notebook 03 consolidation, Y, current channel state and bounded EDA implemented and reviewed | G2 APPROVED by Mauricio on 2026-10-21. The accepted Data & Target Freeze retains the documented retrospective-availability, provenance, field-definition and unexecuted 5/7/9-year-sensitivity limitations. |
-| Stage 3 data engineering / G3 | Technical preparation completed: notebook 04, 16 derived features, temporal partitions and reusable train-only preparers | G3 APPROVED by Mauricio on 2026-10-21. The preparation is accepted for the current project baseline; this does not prove operational availability or approve a model. |
+| Stage 2 data understanding / G2 | Kedro data construction, Y and current channel; original notebook 03 and bounded EDA preserved as historical evidence | G2 APPROVED by Mauricio on 2026-10-21. The accepted Data & Target Freeze retains the documented retrospective-availability, provenance, field-definition and unexecuted 5/7/9-year-sensitivity limitations. |
+| Stage 3 data engineering / G3 | Kedro preparation: 16 derived features, temporal partitions and saved train-only preparer replay; notebook 04 historical | G3 APPROVED by Mauricio on 2026-10-21. The preparation is accepted for the current project baseline; this does not prove operational availability or approve a model. |
 | Stage 4 model engineering / G4 | References corrected in PLAN_021; XGBoost in PLAN_022; three families and two controlled XGBoost ablations executed in PLAN_023 / draft PR #15 | G4 ACCEPTED by Mauricio for the exact PLAN_028 proposal/protocol on 2026-10-21. This does not approve a champion or G5. |
 | Stage 5 / G5 | PLAN_027 corrected development calibration/threshold availability; PLAN_028 executed and reproduced six frozen final model/preparer procedures over the complete 2025 block. All six candidate/horizon procedures are `does_not_meet`. | CLOSED with Mauricio's accepted disposition G5 `NOT_APPROVED`; champion `not_selected`. The 2025 block is consumed for this comparison. |
 | Stage 6 / G6 | Prototype-first read-only product discovery is approved. The prototype and minimal contracts may use persisted historical/evaluation results with visible `NOT_APPROVED` governance status. Operational model integration remains BLOCKED. | G6 OPEN; no champion may be connected to API or dashboard. |
@@ -232,3 +232,15 @@ Gate G10 — Final Review Pass:
 ## Ordering Constraint (non-negotiable)
 
 Product Definition -> Dashboard requirements -> draft information contracts -> Data Understanding -> Data/Target Freeze -> Data Engineering -> modeling -> QA/Champion -> final contracts -> API -> Dashboard -> E2E/deployment -> monitoring/final review
+
+
+## Bounded Kedro engineering migration
+
+PLAN_030 supplies explicit `kedro run --pipeline=replay`, separate synthetic E2E,
+safe sequential restart, immutable publication and optional allowlisted MLflow.
+The migration owner and testing guide define execution and required private parity.
+Cleanup reconciles replaced facades, preserved original identities, documentation,
+CI and harness; the plan's independent Final Review remains a separate pending
+task. No Stage 6 implementation, G5 approval, champion selection, new real fitting
+or operational deployment follows. The next approved product direction remains
+the read-only prototype described above, subject to its own bounded authorization.

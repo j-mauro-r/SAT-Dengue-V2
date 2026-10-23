@@ -14,17 +14,17 @@ from sat_dengue.datasets.legacy_evaluation.model_evaluation.contract import Mode
 from sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline import (
     build_model_evaluation,
 )
-from sat_dengue.final_evaluation.prediction import predict_procedure as predict_procedure
-from scripts.model_training.candidate_families import fit_model, restore_model, validate_grid
-from scripts.model_training.persistence import (
+from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_training.persistence import (
     bytes_record,
     json_bytes,
     publish_artifacts,
     serialize_table,
     verify_artifacts,
 )
-from scripts.model_training.references import persistence_reference
-from scripts.training_preparation.pipeline import fingerprint
+from sat_dengue.final_evaluation.prediction import predict_procedure as predict_procedure
+from sat_dengue.model_training.candidate_families import fit_model, restore_model, validate_grid
+from sat_dengue.model_training.references import persistence_reference
 
 from .cohorts import Cohort, load_cohorts, validate_cohort
 from .evaluation import evaluate_horizon

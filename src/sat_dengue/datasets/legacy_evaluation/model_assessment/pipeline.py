@@ -11,14 +11,14 @@ from typing import Any
 from sat_dengue.datasets.legacy_evaluation.model_evaluation.decision_policy import (
     load_decision_policy,
 )
-from scripts.model_training.persistence import (
+from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_training.persistence import (
     bytes_record,
     json_bytes,
     publish_artifacts,
     serialize_table,
     verify_artifacts,
 )
-from scripts.training_preparation.pipeline import fingerprint
 
 from .comparison import summarize
 from .loading import load_comparison
@@ -30,8 +30,11 @@ CONTRACT = Path("docs/product/stage-5/model_evaluation_contract_v1.json")
 
 def code_fingerprints(root: Path) -> dict[str, Any]:
     """Identify assessment implementation and notebook code without saved outputs."""
-    paths = sorted((root / "scripts/model_assessment").glob("*.py"))
-    paths.append(root / "scripts/evaluation_metrics.py")
+    paths = sorted((root / "src/sat_dengue/model_assessment").glob("*.py"))
+    paths += sorted(
+        (root / "src/sat_dengue/datasets/legacy_evaluation/model_assessment").glob("*.py")
+    )
+    paths.append(root / "src/sat_dengue/metrics.py")
     records = {str(path.relative_to(root)): fingerprint(path) for path in paths}
     notebook = json.loads((root / NOTEBOOK).read_text())
     if any(c["cell_type"] != "code" for c in notebook["cells"]):

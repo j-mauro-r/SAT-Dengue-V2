@@ -8,18 +8,18 @@ from typing import cast
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from scripts.model_training.events import build_event_context
-from scripts.model_training.loading import WindowDataset, _validate_alignment
-from scripts.model_training.metrics import (
+from sat_dengue.datasets.legacy_training.events import build_event_context
+from sat_dengue.datasets.legacy_training.loading import WindowDataset, _validate_alignment
+from sat_dengue.datasets.legacy_training.persistence import publish_artifacts, verify_artifacts
+from sat_dengue.datasets.legacy_training.pipeline import _enforce_window_rules
+from sat_dengue.metrics import (
     average_precision_metric,
     brier_metric,
     evaluate_metrics,
     false_alarm_ratio_metric,
     onset_sensitivity_metric,
 )
-from scripts.model_training.persistence import publish_artifacts, verify_artifacts
-from scripts.model_training.pipeline import _enforce_window_rules
-from scripts.model_training.references import persistence_reference, train_prevalence_reference
+from sat_dengue.model_training.references import persistence_reference, train_prevalence_reference
 
 
 def _index(target_column: str, targets: list[str]) -> pd.DataFrame:

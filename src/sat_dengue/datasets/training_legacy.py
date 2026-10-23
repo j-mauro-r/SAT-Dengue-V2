@@ -13,14 +13,17 @@ import pandas as pd  # type: ignore[import-untyped]
 from kedro.io import DatasetError
 
 from sat_dengue.configuration import AUTHORITIES
+from sat_dengue.datasets.legacy_evaluation.final_evaluation.cohorts import load_cohorts
+from sat_dengue.datasets.legacy_evaluation.final_evaluation.protocol import (
+    PROPOSAL_BUNDLE,
+    PROPOSAL_SHA,
+)
 from sat_dengue.datasets.legacy_training.contract import ModelTrainingConfig
 from sat_dengue.datasets.legacy_training.events import load_event_context
 from sat_dengue.datasets.legacy_training.loading import load_temporal_source, load_window_dataset
 from sat_dengue.datasets.preparation import SavedPreparersDataset
 from sat_dengue.datasets.stage2 import identity, local_path, verified_json
 from sat_dengue.model_training.contract import ModelTrainingError
-from scripts.final_evaluation.cohorts import load_cohorts
-from scripts.final_evaluation.protocol import PROPOSAL_BUNDLE, PROPOSAL_SHA
 
 BUNDLES: dict[str, dict[str, Any]] = {
     (

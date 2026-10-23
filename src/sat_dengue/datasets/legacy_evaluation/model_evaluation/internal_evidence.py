@@ -9,9 +9,13 @@ from typing import Any
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 
-from scripts.model_training.candidate_families import fit_model, restore_model, simplicity
-from scripts.model_training.contract import read_json
-from scripts.model_training.persistence import bytes_record, json_bytes, serialize_table
+from sat_dengue.datasets.legacy_training.contract import read_json
+from sat_dengue.datasets.legacy_training.persistence import (
+    bytes_record,
+    json_bytes,
+    serialize_table,
+)
+from sat_dengue.model_training.candidate_families import fit_model, restore_model, simplicity
 
 from .availability import ROLES, preflight_window
 from .contract import ModelEvaluationError

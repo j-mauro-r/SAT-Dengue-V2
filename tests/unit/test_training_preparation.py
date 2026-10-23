@@ -11,25 +11,29 @@ import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
 # Milestone 2: exact calendar antecedents and publication boundaries.
-from scripts.training_preparation import development as development_module
-from scripts.training_preparation.contract import (
+from sat_dengue.datasets.legacy_preparation import development as development_module
+from sat_dengue.datasets.legacy_preparation.contract import (
     CONTRACT_PATH,
     PreparationConfig,
     PreparationError,
     read_json,
     validate_predictors,
 )
-from scripts.training_preparation.development import build_development, serialize_table
-from scripts.training_preparation.eligibility import build_controls, policy_from_years
-from scripts.training_preparation.features import DERIVED_COLUMNS, KEYS, derive_features
-from scripts.training_preparation.persistence import json_bytes, publish_bundle, verify_bundle
-from scripts.training_preparation.pipeline import (
+from sat_dengue.datasets.legacy_preparation.development import build_development, serialize_table
+from sat_dengue.datasets.legacy_preparation.eligibility import build_controls, policy_from_years
+from sat_dengue.datasets.legacy_preparation.persistence import (
+    json_bytes,
+    publish_bundle,
+    verify_bundle,
+)
+from sat_dengue.datasets.legacy_preparation.pipeline import (
     PreparationResult,
     fingerprint,
     prepare_inputs,
     read_panel,
 )
-from scripts.training_preparation.validation import validate_panel, validate_roles
+from sat_dengue.training_preparation.features import DERIVED_COLUMNS, KEYS, derive_features
+from sat_dengue.training_preparation.validation import validate_panel, validate_roles
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -423,7 +427,7 @@ def test_failed_staged_write_never_publishes_partial_bundle(
     def fail_rename(*args: Any) -> None:
         raise OSError("simulated publication failure")
 
-    monkeypatch.setattr("scripts.training_preparation.persistence.os.rename", fail_rename)
+    monkeypatch.setattr("sat_dengue.datasets.legacy_preparation.persistence.os.rename", fail_rename)
     with pytest.raises(OSError, match="publication failure"):
         publish_bundle(tmp_path, "b" * 64, {"features.csv": b"a\n1\n"})
     assert list(tmp_path.iterdir()) == []

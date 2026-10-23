@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
+from cleanup_support import previous_engineering, verify_cleanup, verify_cleanup_originals
 
 RTOL = 1e-8
 ATOL = 1e-10
@@ -17,6 +20,25 @@ BASELINE_SHA256 = "d86338cd34dcde884e2be9d102271969d0f3b52f57b8ffdebd1829771977a
 SCOPE_SHA256 = "5f16db6458a771fd2ee32197247b3331ecd5f57b148319e7ba99ba806cc9165f"
 FINAL_ID = "768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35"
 FINAL_PATH = Path("artifacts/model_final_evaluation") / FINAL_ID
+
+
+def new_evidence_directory(stage: str) -> Path:
+    """Allocate a fresh receipt directory; never overwrite another session's evidence."""
+    root = Path(__file__).resolve().parents[2]
+    relative = Path(
+        os.environ.get(
+            "SAT_DENGUE_VALIDATION_EVIDENCE_ROOT", "tmp/kedro-migration/validation-evidence"
+        )
+    )
+    allowed_plan = Path(".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results")
+    assert not relative.is_absolute() and ".." not in relative.parts
+    assert relative.is_relative_to("tmp") or relative.is_relative_to(allowed_plan)
+    assert stage and stage.replace("-", "").isalnum()
+    target = root / relative / stage / uuid4().hex
+    assert target.resolve().is_relative_to(root)
+    assert not any(p.is_symlink() for p in (target, *target.parents))
+    target.mkdir(parents=True, exist_ok=False)
+    return target
 
 
 def fingerprint(path: Path) -> dict[str, Any]:
@@ -60,7 +82,8 @@ METADATA_ORIGINALS = {
 
 
 def verify_preservation_records(root: Path, records: dict[str, Any]) -> int:
-    """Verify originals plus the two explicitly approved engineering identities."""
+    """Verify originals, every prior closed mapping and the separate cleanup overlay."""
+    verify_cleanup(root)
     if not set(METADATA_ORIGINALS).issubset(records):
         return verify_data_preservation(root, records)
     ledger_path = root / "docs/operations/kedro-foundation-metadata.json"
@@ -79,7 +102,7 @@ def verify_preservation_records(root: Path, records: dict[str, Any]) -> int:
         assert records[name] == entry["original"] == original, "Original metadata identity changed"
         raw = subprocess.check_output(["git", "show", f"{METADATA_REVISION}:{name}"], cwd=root)
         assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == original
-        assert fingerprint(safe_path(root, name)) == entry["engineering"], (
+        assert previous_engineering(root, name) == entry["engineering"], (
             f"Engineering metadata fingerprint mismatch: {name}"
         )
     others = {name: value for name, value in records.items() if name not in METADATA_ORIGINALS}
@@ -128,9 +151,9 @@ def verify_data_preservation(root: Path, records: dict[str, Any]) -> int:
         assert records[name] == entry["original"] == original
         raw = subprocess.check_output(["git", "show", f"{DATA_REVISION}:{name}"], cwd=root)
         assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == original
-        assert (
-            fingerprint(safe_path(root, name)) == entry["engineering"] == DATA_ENGINEERING[name]
-        ), "Stage 2 engineering identity mismatch"
+        assert previous_engineering(root, name) == entry["engineering"] == DATA_ENGINEERING[name], (
+            "Stage 2 engineering identity mismatch"
+        )
     remaining = {k: v for k, v in records.items() if k not in DATA_ORIGINALS}
     return (verify_preparation_preservation(root, remaining) if remaining else 0) + len(
         DATA_ORIGINALS
@@ -465,7 +488,7 @@ def verify_preparation_preservation(root: Path, records: dict[str, Any]) -> int:
             ["git", "show", f"{PREPARATION_MAPPING['original_revision']}:{name}"], cwd=root
         )
         assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == entry["original"]
-        assert fingerprint(safe_path(root, name)) == entry["engineering"]
+        assert previous_engineering(root, name) == entry["engineering"]
     remaining = {n: r for n, r in records.items() if n not in files}
     return (verify_training_preservation(root, remaining) if remaining else 0) + len(mapped)
 
@@ -728,7 +751,7 @@ def verify_training_preservation(root: Path, records: dict[str, Any]) -> int:
             ["git", "show", f"{TRAINING_MAPPING['original_revision']}:{name}"], cwd=root
         )
         assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == entry["original"]
-        assert fingerprint(safe_path(root, name)) == entry["engineering"]
+        assert previous_engineering(root, name) == entry["engineering"]
         assert all(safe_path(root, destination).is_file() for destination in entry["destination"])
     remaining = {n: r for n, r in records.items() if n not in files}
     return (verify_evaluation_preservation(root, remaining) if remaining else 0) + len(mapped)
@@ -1060,7 +1083,7 @@ def verify_evaluation_preservation(root: Path, records: dict[str, Any]) -> int:
     files = EVALUATION_MAPPING["files"]
     mapped = set(files).intersection(records)
     if not mapped or not path.exists():
-        return require_records(root, records)
+        return verify_cleanup_originals(root, records)
     assert not path.is_symlink()
     assert json.loads(path.read_text()) == EVALUATION_MAPPING, "Closed evaluation mapping changed"
     for name in sorted(mapped):
@@ -1070,7 +1093,7 @@ def verify_evaluation_preservation(root: Path, records: dict[str, Any]) -> int:
             ["git", "show", f"{EVALUATION_MAPPING['original_revision']}:{name}"], cwd=root
         )
         assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == entry["original"]
-        assert fingerprint(safe_path(root, name)) == entry["engineering"]
+        assert previous_engineering(root, name) == entry["engineering"]
         assert all(safe_path(root, destination).is_file() for destination in entry["destination"])
     remaining = {n: v for n, v in records.items() if n not in files}
-    return (require_records(root, remaining) if remaining else 0) + len(mapped)
+    return (verify_cleanup_originals(root, remaining) if remaining else 0) + len(mapped)

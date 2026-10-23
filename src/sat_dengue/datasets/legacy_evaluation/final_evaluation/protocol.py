@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Any
 
 from sat_dengue.datasets.legacy_evaluation.model_assessment.pipeline import CONTRACT, NOTEBOOK
-from scripts.model_training.persistence import bytes_record, json_bytes
-from scripts.training_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_training.persistence import bytes_record, json_bytes
 
 PROPOSAL_SHA = "66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09"
 PROPOSAL_BUNDLE = Path(
@@ -146,7 +146,8 @@ def code_fingerprints(root: Path) -> dict[str, Any]:
     """
     records = {
         str(p.relative_to(root)): fingerprint(p)
-        for p in sorted((root / "scripts/final_evaluation").glob("*.py"))
+        for p in sorted((root / "src/sat_dengue/final_evaluation").glob("*.py"))
+        + sorted((root / "src/sat_dengue/datasets/legacy_evaluation/final_evaluation").glob("*.py"))
     }
     notebook = json.loads((root / NOTEBOOK).read_text())
     if any(c["cell_type"] != "code" for c in notebook["cells"]):

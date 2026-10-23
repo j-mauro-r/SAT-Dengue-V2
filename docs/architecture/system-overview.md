@@ -87,3 +87,15 @@ synthetic graph connects bounded fixture training components to assessment. The
 [migration owner](../operations/kedro-migration.md#composed-replay-and-restart--session-7--t-e2e)
 owns sequential restart behavior and its failure boundaries; existing scientific
 status and historical reproducibility limitations remain unchanged.
+
+
+## Cleanup ownership and historical identity
+
+Stage 3–5 consumers import their actual package owners directly. Replaced script
+facades are retired only after consumer reconciliation; original/pre-cleanup Git
+identities and final absence are verified by the separate cleanup correspondence.
+The two Stage 2 facades still serve fixed source/readiness identity readers.
+Notebooks 03–08 are frozen provenance/regression inputs, never active production
+entrypoints. The executable disposition registry records each remaining adapter's
+owner, consumer and retirement condition. No scientific module, catalog schema,
+checkpoint identity rule or metric formula changes during this cleanup.

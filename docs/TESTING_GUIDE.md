@@ -79,7 +79,7 @@ For this archival migration, local PLAN_012 validates the path/hash manifest, by
 ## Clean-checkout CI installation
 
 The project installs the used `sat_dengue` package from `src/` only. The wheel
-excludes data, notebooks and external configuration. Install with `.[dev,modeling]`
+excludes data, notebooks and external configuration. Install with `.[dev,modeling,tracking]`
 for synthetic CI; the complete reproducible local environment uses
 `python -m pip install -r requirements-dev.txt`. The generated constraints derive
 from `pyproject.toml`; see the migration record for their regeneration recipe.
@@ -103,220 +103,15 @@ Existing feature, temporal, native-category and atomic-publication regression te
 remain enabled. Do not execute notebooks or refit real preparers to refresh old
 identities. The original baseline and all native scientific bundles remain immutable.
 
-## Stage 4 shared references (delivery 1)
+## Historical Stage 4–5 delivery validation
 
-Stage 4 delivery 1 maps `scripts/model_training/**`, notebook 05 and
-`docs/product/stage-4/model_engineering_contract_v1.json` to bounded reference
-execution only. This surface runs persistence and train-prevalence references
-over verified Stage 3 artifacts; it does not train XGBoost, LightGBM or GAM.
-
-Use at least the following checks:
-
-```bash
-.venv/bin/python -m pytest tests/unit/test_model_training.py -q
-.venv/bin/python -m ruff check scripts/model_training tests/unit/test_model_training.py
-.venv/bin/python -m mypy --explicit-package-bases scripts/model_training tests/unit/test_model_training.py
-.venv/bin/python -m scripts.model_training.execution --execute
-.venv/bin/python -m scripts.model_training.execution --verify
-.venv/bin/python -m scripts.model_training.notebook_execution --execute
-.venv/bin/python -m scripts.model_training.notebook_execution --verify
-.venv/bin/python scripts/check_markdown_links.py
-```
-
-Reference metrics must keep non-evaluable states explicit when denominators or
-class support are missing. Probabilistic references must not emit event alert
-metrics unless a threshold policy is declared by contract. Artifacts are local
-only under `artifacts/model_training/` and must use immutable identity reuse.
-
-
-### Stage 4 metric correction
-
-`tests/unit/test_model_metrics.py` supplies independent expected AP fractions for
-constant/partial/binary ties and permutations, perfect ranking, unavailable/invalid
-inputs, exact calendar predecessor lookup (including the first validation month),
-municipality isolation and T+1/T+2 differences. Its integration fixture verifies
-source hashes, keyed context, independent dictionary/calendar event counts and
-prediction invariance under changed retrospective evaluation context.
-
-Run it with `test_model_training.py`, the full foundation suite and Ruff/mypy on
-`scripts/model_training`. Execute notebook 05 in a fresh kernel and verify its
-receipt using the separate `--execute` and `--verify` commands above. Correction
-evidence must compare old/new metrics while preserving old artifacts, prediction
-bytes, Stage 3 cohort/manifests and original scientific source hashes. No numeric
-historical diagnostic may be imposed on the regenerated outputs. Evaluate
-context in `evaluation_context.csv` only; never feed it into X or fit/selection.
-
-PLAN_021 is a corrective audit of previously accredited PLAN_020 results; the
-latter's contract, journals and approval remain untouched historical evidence.
-
-
-## Stage 4 XGBoost candidate (delivery 2)
-
-`test_xgboost_candidate.py` maps adapter, nested selection, candidate persistence
-and notebook06 orchestration to synthetic temporal-key expectations, fresh
-inner-only vocabulary, forbidden target/event controls, explicit missing history,
-approved tie rules, bounded search, native inference roundtrip and a real
-orchestration perturbation test: changing external labels/features/categories
-cannot change the fitted model, preparation or selected configuration. Input,
-configuration and code changes invalidate reuse; payload corruption fails closed.
-
-Install `requirements-modeling.txt` alongside `.[dev]` in local/CI environments.
-The separate pinned file avoids invalidating Stage3's fingerprinted pyproject.
-Run all unit tests, Ruff/format on tests and model_training, mypy on tests and
-explicit-package-bases model_training, Markdown links and scoped DWP conformance.
-Run notebook06 with `python -m scripts.model_training.candidate_notebook --execute`
-from the repository environment, followed separately by `--verify`. The latter
-checks current identity and native inference without refitting. Refresh and
-verify notebook05 when shared code/config fingerprints change. All cells of
-both notebooks must be code. Preserve prior immutable artifacts and03/04 bytes.
-
-Real-data evidence checks all eight cohorts, declared inner cutoffs/observable
-labels,104fit budget, complete AP/Brier support, pending threshold metrics,
-preparation/model roundtrips and equal-weight horizon comparisons. Bounded
-runtime and resubstitution/calibration/territorial diagnostics do not approve a
-scientific gate or authorize external-validation tuning.
-
-
-## Stage4 families and ablations (delivery3)
-
-`test_candidate_families.py` covers LightGBM/GAM safe roundtrips, explicit
-missing/unknown categories, forbidden controls, internal-only vocabulary and
-GAM knots, binary non-evaluability, independent library spline agreement and
-removal invariance of all ablated values/encodings. The existing orchestration
-perturbation/reuse/corruption test now runs for all three families. Run both
-family and XGBoost tests plus the full foundation gates and lint/type checks
-for model_training. Fresh-kernel notebooks05 and06 must verify their current
-receipts. PLAN023 audits all40 fitted outer models, shared cohorts, inner
-boundaries,264-fit budget, unchanged scientific sources/prior artifacts,
-fixed-parameter ablations and all four metric records including territorial
-non-evaluability. Scientific acceptance, calibration and thresholds remain open.
-
-
-## Stage 5 calibration and temporal thresholds (delivery 1)
-
-Stage 5 delivery 1 maps `scripts/model_evaluation/**`, notebook 07,
-`tests/unit/test_model_evaluation.py`, and
-`docs/product/stage-5/probability_calibration_thresholds_contract_v1.json` to
-bounded calibration/threshold development over verified Stage 4 artifacts.
-
-Run at least:
-
-```bash
-.venv/bin/python -m pytest tests/unit/test_model_evaluation.py -q
-.venv/bin/python -m ruff check scripts/model_evaluation tests/unit/test_model_evaluation.py
-.venv/bin/python -m ruff format --check scripts/model_evaluation tests/unit/test_model_evaluation.py
-.venv/bin/python -m mypy --explicit-package-bases scripts/model_evaluation tests/unit/test_model_evaluation.py
-.venv/bin/python -m scripts.model_evaluation.execution --execute
-.venv/bin/python -m scripts.model_evaluation.execution --verify
-.venv/bin/python -m scripts.model_evaluation.notebook_execution --execute
-.venv/bin/python -m scripts.model_evaluation.notebook_execution --verify
-```
-
-Required checks for this surface:
-
-- Enforce per-window role chronology from `window_role_calendar`:
-  `hyperparameter_selection -> calibration_fit -> calibration_selection -> threshold_selection -> external evaluation`.
-- Reject selection leakage: calibration/threshold rows must come from folds disjoint
-  from the fold used for hyperparameter selection.
-- Reject late component availability: `component_available_by_origin` must be <=
-  external origin start for each window/horizon.
-- Do not use Stage 4 external `evaluation_context.csv` to fit calibrators or
-  select thresholds.
-- Keep all adjustment targets before the reserved block (`2025-01`).
-- Keep denominator-unavailable cases explicit; do not coerce them to zero.
-- Require `temporal_audit.csv` and `independent_checks.csv` with all checks passing.
-- Distinct Stage 5 knob values must produce distinct immutable identities under
-  `artifacts/model_evaluation/` without overwriting previous bundles.
-
-Critical regression tests are encoded in `tests/unit/test_model_evaluation.py`:
-
-- reject calibrator/threshold availability after external origin;
-- reject reuse of labels for configuration selection and later adjustment roles.
-
-
-## Stage5 closure delivery1: six procedures and AUROC
-
-Map `scripts/evaluation_metrics.py`, `scripts/model_assessment/**`, notebook08
-and the owning model_evaluation contract to `tests/unit/test_model_assessment.py`.
-Preserve all prior equivalence/temporal tests. Add only critical AUROC pairwise
-reference (including ties), single-class/missing/alignment, equal-window aggregation
-and six-procedure early-T+2 calendar regressions.
-
-```bash
-.venv/bin/python -m pytest tests/unit -q
-.venv/bin/ruff check tests scripts/model_assessment scripts/evaluation_metrics.py
-.venv/bin/ruff format --check tests scripts/model_assessment scripts/evaluation_metrics.py
-.venv/bin/mypy tests
-.venv/bin/mypy --explicit-package-bases scripts/model_assessment scripts/evaluation_metrics.py
-.venv/bin/python scripts/check_markdown_links.py
-.venv/bin/python -m scripts.model_assessment.execution --execute
-.venv/bin/python -m scripts.model_assessment.execution --verify
-```
-
-Execute notebook08 from a fresh kernel and verify its saved receipt. Independently
-check AUROC, unchanged original metric records and all six exact retained component
-lineages. Guard real verify/reuse against fitting and silent repair; compare all
-historical artifact hashes. Keep live input verification plus exact scientific
-equivalence, not a single-current-ID restriction or a relaxed science check. Do not
-execute earlier training pipelines: their code/contracts and fitted outputs are
-inputs to this delivery. No2025 label/result/statistic access or new training.
-DWP acceptance is bounded to the revised development delivery; G4/G5 and future
-reserved execution remain separately authorized.
-
-## Stage5 closure delivery2: gated final evaluation
-
-Map `scripts/final_evaluation/**`, migrated notebook08 and its owning Stage5README
-to `tests/unit/test_final_evaluation.py`. Preserve frozen assessment/metric code,
-contract and every historical bundle. The preceding assessment CLI applies to its
-historical notebook revision; current notebook08 uses the final-route CLI.
-
-```bash
-.venv/bin/python -m pytest tests/unit -q
-.venv/bin/ruff check tests scripts/final_evaluation
-.venv/bin/ruff format --check tests scripts/final_evaluation
-.venv/bin/mypy tests
-.venv/bin/mypy --explicit-package-bases scripts/final_evaluation
-.venv/bin/python scripts/check_markdown_links.py
-.venv/bin/python -m scripts.final_evaluation.execution --execute
-.venv/bin/python -m scripts.final_evaluation.execution --verify
-```
-
-The default notebook mode checks development-only readiness. Add `--scientific`
-only after explicit human authorization; its presence never supplies authorization.
-Critical synthetic regressions exercise T2 November→January availability, both
-complete cohorts before any fit, predictor controls/future invariance, original
-S/S−1 monthly-block accounting, unavailable acceptance and native six-adapter
-round-trip/reuse with fitting blocked. Verify current development dependencies
-through their existing native verify-only path with fit/selection entrypoints
-blocked; do not retrain or inspect2025 to prepare approval. Check all historical
-hashes and separate the new notebook migration identity from the fixed proposal.
-Independent review must examine actual source and execution evidence. Actual final
-coverage/results require separate scientific authorization. After Mauricio's exact
-authorization, the observed gate is:
-
-```bash
-bash .dwp/plans/PLAN_028_stage5_comparison_reserved_evaluation/reserved_checks.sh
-```
-
-It verifies the current immutable final bundle, six saved inference round trips,
-complete 2025 cohorts, fit accounting, metric denominators, common temporal-block
-draws, protected inputs, full unit suite and scoped DWP conformance. It performs
-zero new model or preparer fits. G5 remains outside this gate.
-
-## Stage5 final scientific review and technical closure
-
-The final review reuses the immutable scientific bundle and runs verification only.
-It checks the final interpretation, decision boundary, documentation, security and
-review evidence, then repeats the repository controls for the touched surfaces.
-
-```bash
-bash .dwp/plans/PLAN_028_stage5_comparison_reserved_evaluation/final_checks.sh
-```
-
-The command must not call fit, search, calibration or threshold-selection entry
-points. It does not approve G5 or select a champion. Global DWP incidents in older
-plans remain visible separately; PLAN_028 acceptance uses scoped conformance.
-
+Original notebook execution/training commands and recorded fit budgets belong to
+their dated delivery evidence. Recover the original guide at pre-cleanup Git
+revision `861b36966cec26d1d2b36edee4d6ada6d5bc0930`; do not execute those commands
+against consumed real evidence. Current contracts retain the same scientific roles,
+metrics, thresholds, cutoffs and decisions. The existing model-training, candidate,
+metric, assessment and final-evaluation unit suites stay enabled, now importing
+their single package owners. Current guarded replay and private parity are below.
 
 ## Kedro migration baseline (Session 1)
 
@@ -546,7 +341,7 @@ temporary-environment override or execution-order dependency is permitted.
 Validate the synthetic selection in a `git archive HEAD` checkout with no `tmp/`.
 
 `test_base_bootstrap_and_training_dependency_boundary` runs a fresh subprocess
-that denies all six optional modeling imports. All six pipeline names must still
+that denies all seven optional modeling/tracking imports. All registered pipeline names must still
 register, default must remain foundation, and foundation must execute successfully.
 Training nodes and native source loading must fail with an explicit instruction
 to install `sat-dengue-v2[modeling]`. The private replay and synthetic training
@@ -675,4 +470,50 @@ all 2,553 original identities/45 native bundles. Report repo-only, scoped PLAN_0
 all-plan conformance separately; inherited historical plan incidents are not current
 source failures. Run every validation and DWP writer sequentially. Record commands,
 wall times, zero real-adjustment counters, hashes and limitations under PLAN_030
-`analysis_results/session7/e2e/`. Stop before T-cleanup and T-final-review.
+`analysis_results/session7/e2e/`. T-cleanup reconciles these consumers; T-final-review remains a separate pending task.
+
+
+## Repository cleanup and disposition (Session 8)
+
+The official E2E command is `kedro run --pipeline=replay`. The exact AC-cleanup
+command remains unchanged in PLAN_030. `tests/contracts/test_repository_disposition.py`
+verifies the resolved executable registry, retired-path absence/import boundaries,
+required owners/entrypoints, retained adapter ownership, scaffold rejection,
+historical notebook role, exact67-path ceiling and separate preservation mapping.
+`tests/integration/cleanup_support.py` verifies both original and pre-cleanup Git
+blobs and final physical presence/absence. Existing preservation checks still
+verify every earlier closed mapping, all2553 original identities and exact45 native
+bundle memberships/payloads. Private data missing locally fails required acceptance.
+
+```bash
+python -m pytest tests/unit tests/contracts tests/integration/test_migration_parity.py tests/integration/test_mlflow_tracking.py tests/integration/test_kedro_e2e.py -q
+python -m pytest tests/integration -m migration_evidence --require-migration-evidence -q
+```
+
+Run all seven affected owning-stage contractual regressions (foundation through
+E2E) unchanged through the official sequential DWP runner, plus AC-cleanup. Run
+pip checks, base-only and modeling/tracking wheel installs, Markdown links, diff,
+secret/privacy/dependency controls and before/after protected preservation. Report
+repo-only, PLAN_030 and global conformance separately. Existing historical global
+failures are never silently waived or repaired. No real fit/search/selection or
+notebook execution is authorized by cleanup. Preserve original failure logs.
+
+Maintained script quality covers the Markdown checker, constraints exporter, two
+thin Stage2 source-identity facades, the visual/calendar compatibility helper and
+traceability validator. Historical EDA/reconciliation/January acquisition sources
+remain immutable regression/provenance evidence, not current execution commands.
+Their whole-directory lint/type diagnostics remain explicit debt; do not introduce
+broad ignores or edit protected paths outside the approved ceiling. CI checks the
+enumerated maintained scripts alongside src/tests. Module-root options for mypy
+must identify src, test helpers and script namespaces consistently; do not suppress
+missing annotations or install undeclared stub packages to conceal failures.
+
++
++Validation receipts allocate a unique directory per check, never a fixed earlier
++session destination. By default they go under ignored
++`tmp/kedro-migration/validation-evidence`. A session may set
++`SAT_DENGUE_VALIDATION_EVIDENCE_ROOT` to its repository-local PLAN_030 analysis
++directory; every test still creates a new UUID child. Inputs keep their pinned
++paths. Earlier session logs/receipts and prior runtime observations are not
++overwritten by a fresh regression. Unsafe/external output roots fail closed.
++

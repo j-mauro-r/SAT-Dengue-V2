@@ -293,17 +293,23 @@ def test_data_stream_failure_is_atomic_and_does_not_overwrite(repo_tmp_path: Pat
 
 @pytest.mark.parametrize("mutation", ["original", "engineering", "revision", "expanded"])
 def test_data_preservation_mapping_is_closed(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str
 ) -> None:
     import subprocess
 
+    from cleanup_support import PRE_CLEANUP
     from migration_support import DATA_ORIGINALS, verify_data_preservation
 
+    tmp_path = repo_tmp_path
     ledger = json.loads((ROOT / "docs/operations/kedro-data-identities.json").read_text())
     for relative in DATA_ORIGINALS:
         destination = tmp_path / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes((ROOT / relative).read_bytes())
+        # This fixture exercises the earlier CLOSED mapping, independently of
+        # the live cleanup overlay and its separately authorized current bytes.
+        destination.write_bytes(
+            subprocess.check_output(["git", "show", f"{PRE_CLEANUP}:{relative}"], cwd=ROOT)
+        )
     original = subprocess.check_output
 
     def git_blob(*args, **kwargs):

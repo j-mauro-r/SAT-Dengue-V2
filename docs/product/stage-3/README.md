@@ -95,17 +95,19 @@ own current execution evidence and validation commands. The private gate compare
 all 99 original development/temporal payloads byte for byte, complete cohorts,
 categories, dtypes and matrices, with fitting denied at call level.
 
-The eleven old Python modules are import/CLI adapters. Existing Stage 4/5 consumers,
-notebook 04 and regression tests retain those paths until T-cleanup migrates their
-consumers. Legacy temporal loading reads the explicitly verified native bundle
-without rebuilding or fitting; legacy development/temporal CLIs execute the Kedro
-preparation graph. Retirement is deferred, with exact original/current identities
-in the [closed preservation mapping](../../operations/kedro-preparation-identities.json).
+The eleven script facades are replaced by direct imports from their package owners.
+The single legacy I/O boundary loads verified native temporal evidence without
+rebuilding or fitting; scientific calculations stay in the pure preparation package.
+The [original mapping](../../operations/kedro-preparation-identities.json) stays
+closed; the [separate cleanup correspondence](../../operations/kedro-cleanup-identities.json)
+checks original/pre-cleanup bytes and final absence. Use `kedro run --pipeline=replay`
+for the composed workflow; old notebook/CLI commands are historical only.
 
 Notebook [04](../../../notebooks/04_training_preparation_pipeline.ipynb) and
 [milestone 1](milestone-1-validation.md), [milestone 2](milestone-2-validation.md),
 [milestone 3](milestone-3-validation.md) remain unchanged historical evidence.
+Notebook 04 is retained only as frozen source identity evidence, never as a production entrypoint.
 Their earlier G2/G3 wording and bundle identities describe their dated execution;
 DEC-135 owns present approval. Migration parity does not establish full historical
 reproducibility or resolve the 13 closed source exceptions and 17 KEEP / UNVERIFIED
-bundles. T-training and tracking remain outside this session.
+bundles. Current training, evaluation and optional tracking are documented in the migration owner; no new scientific adjustment is authorized.

@@ -9,7 +9,7 @@ from typing import Any
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from scripts.model_evaluation.contract import (
+from sat_dengue.datasets.legacy_evaluation.model_evaluation.contract import (
     CONTRACT_PATH,
     ModelEvaluationConfig,
     Stage5Contract,
@@ -17,12 +17,12 @@ from scripts.model_evaluation.contract import (
     load_contract,
     resolve_root,
 )
-from scripts.model_evaluation.decision_policy import (
+from sat_dengue.datasets.legacy_evaluation.model_evaluation.decision_policy import (
     POLICY_PATH,
     DecisionPolicyError,
     load_decision_policy,
 )
-from scripts.model_evaluation.pipeline import (
+from sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline import (
     Stage4Inputs,
     _assert_selection_independence,
     _assert_verify_allowed,
@@ -33,8 +33,8 @@ from scripts.model_evaluation.pipeline import (
     _threshold_limits,
     build_model_evaluation,
 )
-from scripts.model_training.loading import TemporalSource
-from scripts.model_training.pipeline import ModelTrainingResult
+from sat_dengue.datasets.legacy_training.loading import TemporalSource
+from sat_dengue.datasets.legacy_training.pipeline import ModelTrainingResult
 
 
 def _repo_root() -> Path:

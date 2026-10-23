@@ -52,7 +52,8 @@ def code_fingerprints(root: Path) -> dict[str, Any]:
     Returns:
         Relative paths and hashes, without machine-specific directories.
     """
-    paths = list((root / "scripts/training_preparation").glob("*.py"))
+    paths = list((root / "src/sat_dengue/training_preparation").glob("*.py"))
+    paths += list((root / "src/sat_dengue/datasets/legacy_preparation").glob("*.py"))
     paths += [
         root / p
         for p in (

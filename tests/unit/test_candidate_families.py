@@ -13,14 +13,14 @@ import pytest
 from sklearn.preprocessing import SplineTransformer  # type: ignore[import-untyped]
 from test_xgboost_candidate import CONTRACT, settings, window
 
-from scripts.model_training.candidate_families import fit_model, restore_model, simplicity
-from scripts.model_training.candidate_preparation import transform_representation
-from scripts.model_training.candidate_selection import select_and_fit
-from scripts.model_training.contract import ModelTrainingError
-from scripts.model_training.gam_adapter import spline_matrix
-from scripts.model_training.metrics import average_precision_metric
-from scripts.model_training.xgboost_adapter import fit_candidate
-from scripts.training_preparation.contract import PreparationError
+from sat_dengue.datasets.legacy_preparation.contract import PreparationError
+from sat_dengue.datasets.legacy_training.contract import ModelTrainingError
+from sat_dengue.metrics import average_precision_metric
+from sat_dengue.model_training.candidate_families import fit_model, restore_model, simplicity
+from sat_dengue.model_training.candidate_preparation import transform_representation
+from sat_dengue.model_training.candidate_selection import select_and_fit
+from sat_dengue.model_training.gam_adapter import spline_matrix
+from sat_dengue.model_training.xgboost_adapter import fit_candidate
 
 
 def family_settings(family: str) -> dict[str, Any]:
@@ -157,7 +157,7 @@ def test_suite_budget_rejected_before_any_loading_or_fitting(
 ) -> None:
     """A user-reduced global budget cannot be exceeded before reporting the error."""
     from sat_dengue.datasets.legacy_training import candidate_suite
-    from scripts.model_training.contract import ModelTrainingConfig
+    from sat_dengue.datasets.legacy_training.contract import ModelTrainingConfig
 
     contract = copy.deepcopy(CONTRACT)
     contract["candidate_suite"]["maximum_fits_per_run"] = 200

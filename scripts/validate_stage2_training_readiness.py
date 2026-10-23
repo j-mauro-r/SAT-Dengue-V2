@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from sat_dengue.datasets import legacy_readiness as _implementation
+import sat_dengue.datasets.legacy_readiness as _implementation
 
 
 def __getattr__(name: str) -> Any:

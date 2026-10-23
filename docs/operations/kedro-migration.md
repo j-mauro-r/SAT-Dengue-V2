@@ -1,4 +1,107 @@
-# Kedro migration — foundation and protected baseline
+# Kedro migration, execution and historical preservation
+
+## Current cleanup and execution — Session 8
+
+The active implementation is `src/sat_dengue`. Kedro owns orchestration; domain
+modules own calculations; datasets own verified I/O and atomic immutable publication;
+explicit optional MLflow hooks own allowlisted metadata. The executable
+[repository disposition registry](repository-disposition.json) owns the resolved
+inventory and retained adapters. The separate [cleanup correspondence](kedro-cleanup-identities.json)
+verifies original baseline blobs, pre-cleanup blobs at
+`861b36966cec26d1d2b36edee4d6ada6d5bc0930`, and final identity/absence. Earlier closed
+mappings remain byte-identical and are verified simultaneously, never rewritten.
+The 67 authorized paths are a ceiling, not a deletion list. Final validation and
+commit receipts remain local in PLAN_030 `analysis_results/session8/HANDOFF.md`.
+
+```bash
+python -m pip install .                         # base: configuration/bootstrap
+python -m pip install '.[dev,modeling,tracking]' # optional scientific/tracking tools
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=replay
+kedro run --pipeline=replay_synthetic --params=profile=replay_synthetic
+```
+
+Every dependency pin is declared in `pyproject.toml`; requirements files select
+extras and generated constraints derive from that authority. The `notebook` extra
+is historical compatibility tooling; no notebook kernel is required by replay or CI.
+Base imports/registers all graphs without importing modeling or tracking packages.
+The default remains foundation. The [testing guide](../TESTING_GUIDE.md) owns the
+complete synthetic selection, required fail-closed private acceptance, wheel checks
+and source/test mapping. Dataset names/catalog/checkpoint schemas are unchanged.
+
+Sequential restart verifies complete source/contract/code/environment/configuration,
+ordered ancestors and every immutable stage payload before reuse. A changed code
+identity starts a new execution; never copy or rename old checkpoints to obtain reuse.
+Failure before final publication cannot certify success. Missing/tampered ancestors
+fail closed; uncheckpointed publication conflicts require inspection. There is no
+concurrent writer/cache service or automatic scientific repair. Run DWP writers,
+gates, projections and renders sequentially too.
+
+Tracking is explicitly opt-in and requires its extra:
+
+```bash
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/mlflow \
+  kedro run --pipeline=replay --params=tracking=enabled
+```
+
+The [security owner](../SECURITY.md#bounded-local-mlflow-tracking) defines the allowlist.
+Only aggregate metrics, identities and safe pointers are stored; no raw rows, X/Y,
+private absolute paths, secrets, native components or duplicate scientific bundles.
+Success follows independent final publication verification; failures/aborts are
+FAILED/KILLED, duplicate verified publications are KILLED, and RUNNING after process
+death certifies nothing. Tracking-disabled execution requires no MLflow import.
+
+### Historical recovery and retained surfaces
+
+Use each registry entry's exact Git revision/path and both blob/SHA-256 identities.
+For example, inspect the pre-cleanup tree with
+`git show 861b36966cec26d1d2b36edee4d6ada6d5bc0930:<path>`; inspect original baseline
+bytes with `git show 89d538c93ff20824c96c7fe0929baaa9d900e999:<path>`. Write recovery
+copies only to ignored repository scratch and verify their identities. Native
+scientific bundles require the existing local evidence; Git alone cannot restore
+private payloads. Never overwrite live code, historical hashes or native manifests.
+
+Notebooks 03–08 remain physically frozen for source-code identity readers and
+historical regression checks. They have zero active production entrypoints; no
+notebook is executed by replay, CI or current commands, and no report notebook is
+generated. Their old script-import commands describe the recoverable historical
+tree only. The EDA03 report and January Earth Engine recipe have complete Git
+recovery pointers; no duplicate archive is needed. The January incorporation Python
+tool remains historical provenance/regression code, not an authorized acquisition
+command. Existing experimental-EDA archive bytes are unchanged.
+
+Two thin Stage 2 facades remain because legacy readiness/source fingerprints still
+read their fixed paths. Stage 2 visual/traceability helpers retain observed unique
+historical safeguards. Their actual consumers, owners and measurable retirement
+conditions are in the registry. Retained package legacy I/O engines serve fixed
+native component loading and synthetic historical regressions; current scientific
+equations have single domain owners. No historical fitting command is current.
+
+### Scientific status and remaining debt
+
+All 2,553 original identities and 45 physical native bundles remain protected.
+G5 `NOT_APPROVED`, champion `not_selected`, six real `does_not_meet` decisions,
+consumed-2025 restrictions, 13 source exceptions and 17 immutable KEEP/UNVERIFIED
+bundles are unchanged. Zero real fits/refits/calibration/search/selection. Existing
+outer-refit/calibrator/as-of/uncertainty limitations remain; no full historical
+reproducibility, operational approval or performance improvement is claimed.
+
+Kedro dotted dataset warnings are retained because renaming would change catalog,
+identity and checkpoint surfaces. Naming the partial node would modify pipeline
+assembly outside the 18 authorized consumers, so it remains bounded presentation
+debt. MLflow/SQLAlchemy `noload` deprecation is upstream debt; no dependency update.
+Whole-directory legacy-script diagnostics include historical EDA formatting/type
+debt; maintained-tool quality is enumerated separately from immutable historical
+regression sources. No lint suppression is introduced to hide it. Final Review's
+broader legacy-script gate remains a separate pending task and may require a new
+protected-path decision. Skills disposition: none; pinned tools and locks unchanged.
+
+## Historical migration records
+
+The session records and initial proposed ledger below describe their recorded
+checkpoints. Their Pending statuses and old notebook/CLI commands are historical;
+the executable registry above owns current dispositions and execution. Preserve
+the original failed gates and dated scientific evidence.
+
 
 ## Current Session 2 authority
 

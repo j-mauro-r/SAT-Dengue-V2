@@ -10,18 +10,22 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
+from sat_dengue.datasets.legacy_preparation.contract import PreparationError
 from sat_dengue.datasets.legacy_training import candidates
-from scripts.model_training.candidate_selection import (
+from sat_dengue.datasets.legacy_training.contract import (
+    ModelTrainingConfig,
+    ModelTrainingError,
+    read_json,
+)
+from sat_dengue.datasets.legacy_training.loading import TemporalSource, WindowDataset
+from sat_dengue.datasets.legacy_training.persistence import json_bytes
+from sat_dengue.datasets.legacy_training.pipeline import ModelTrainingResult
+from sat_dengue.model_training.candidate_selection import (
     choose_configuration,
     internal_folds,
     select_and_fit,
 )
-from scripts.model_training.contract import ModelTrainingConfig, ModelTrainingError, read_json
-from scripts.model_training.loading import TemporalSource, WindowDataset
-from scripts.model_training.persistence import json_bytes
-from scripts.model_training.pipeline import ModelTrainingResult
-from scripts.model_training.xgboost_adapter import fit_candidate, restore_candidate
-from scripts.training_preparation.contract import PreparationError
+from sat_dengue.model_training.xgboost_adapter import fit_candidate, restore_candidate
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = read_json(ROOT / "docs/product/stage-4/model_engineering_contract_v1.json")

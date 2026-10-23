@@ -54,7 +54,8 @@ def _runtime_versions() -> dict[str, str]:
 
 def code_fingerprints(root: Path) -> dict[str, Any]:
     """Fingerprint all Stage 4 load-bearing code and notebook sources."""
-    paths = sorted((root / "scripts/model_training").glob("*.py"))
+    paths = sorted((root / "src/sat_dengue/model_training").glob("*.py"))
+    paths += sorted((root / "src/sat_dengue/datasets/legacy_training").glob("*.py"))
     paths += [root / "pyproject.toml", root / NOTEBOOK_PATH]
     records = {str(path.relative_to(root)): fingerprint(path) for path in paths}
     notebook = read_json(root / NOTEBOOK_PATH)

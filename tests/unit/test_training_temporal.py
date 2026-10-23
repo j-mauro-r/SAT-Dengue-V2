@@ -11,23 +11,27 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from scripts.training_preparation.contract import CONTRACT_PATH, PreparationError, read_json
-from scripts.training_preparation.development import code_fingerprints, serialize_table
-from scripts.training_preparation.eligibility import policy_from_years
-from scripts.training_preparation.notebook_execution import extract_saved_summary
-from scripts.training_preparation.persistence import json_bytes
-from scripts.training_preparation.preprocessing import (
+from sat_dengue.datasets.legacy_preparation.contract import (
+    CONTRACT_PATH,
+    PreparationError,
+    read_json,
+)
+from sat_dengue.datasets.legacy_preparation.development import code_fingerprints, serialize_table
+from sat_dengue.datasets.legacy_preparation.eligibility import policy_from_years
+from sat_dengue.datasets.legacy_preparation.notebook_execution import extract_saved_summary
+from sat_dengue.datasets.legacy_preparation.persistence import json_bytes
+from sat_dengue.datasets.legacy_preparation.temporal import (
+    _window_payloads,
+    load_prepared_window,
+    reference,
+    select_window,
+)
+from sat_dengue.training_preparation.preprocessing import (
     MISSING,
     ZONES,
     PreparerSpec,
     fit_preparer,
     transform_predictors,
-)
-from scripts.training_preparation.temporal import (
-    _window_payloads,
-    load_prepared_window,
-    reference,
-    select_window,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -258,7 +262,7 @@ def test_window_payloads_and_model_loader_roundtrip(
     )
     profiles = {"native": {"encoding": "native"}, "onehot": {"encoding": "onehot"}}
     payloads, metadata = _window_payloads(X, selected, "2018-12_t1", profiles)
-    from scripts.training_preparation.persistence import bytes_record
+    from sat_dengue.datasets.legacy_preparation.persistence import bytes_record
 
     manifest = {
         "windows": {"2018-12_t1": metadata},

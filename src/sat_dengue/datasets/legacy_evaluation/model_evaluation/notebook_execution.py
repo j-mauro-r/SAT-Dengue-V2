@@ -7,8 +7,12 @@ from importlib.metadata import version
 from typing import Any
 
 from sat_dengue.datasets.evaluation_cli import main as main
-from scripts.model_training.persistence import json_bytes, publish_artifacts, verify_artifacts
-from scripts.training_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_training.persistence import (
+    json_bytes,
+    publish_artifacts,
+    verify_artifacts,
+)
 
 from .contract import (
     ModelEvaluationConfig,

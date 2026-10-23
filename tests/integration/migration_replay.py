@@ -6,6 +6,7 @@ import importlib.metadata
 import json
 import os
 import sys
+from importlib import import_module
 from pathlib import Path
 from types import FrameType
 from typing import Any
@@ -65,9 +66,12 @@ def main() -> None:
         if name.endswith(".py"):
             assert fingerprint(snapshot / name) == expected, f"Historical source changed: {name}"
 
-    from scripts.final_evaluation.cohorts import load_cohorts
-    from scripts.final_evaluation.pipeline import execute_bundle
-    from scripts.final_evaluation.protocol import PROPOSAL_BUNDLE, PROPOSAL_SHA
+    # These modules exist only in the independently verified historical snapshot,
+    # not in the live package. Every loaded source is hash-checked below before use.
+    load_cohorts = import_module("scripts.final_evaluation.cohorts").load_cohorts
+    execute_bundle = import_module("scripts.final_evaluation.pipeline").execute_bundle
+    protocol = import_module("scripts.final_evaluation.protocol")
+    PROPOSAL_BUNDLE, PROPOSAL_SHA = protocol.PROPOSAL_BUNDLE, protocol.PROPOSAL_SHA
 
     proposal_path = root / PROPOSAL_BUNDLE / "freeze_proposal.json"
     assert fingerprint(proposal_path)["sha256"] == PROPOSAL_SHA

@@ -1,4 +1,31 @@
-# Stage 5 — calibration, development assessment and final protocol
+# Stage 5 — frozen Kedro assessment and preserved scientific evidence
+
+## Current execution and governance
+
+Use `kedro run --pipeline=replay` for construction through frozen assessment,
+or `kedro run --pipeline=evaluation_replay --params=profile=evaluation_replay`
+for the explicit verified assessment boundary. `evaluation_synthetic` is disjoint
+and consumes no private source. Tracking is optional and disabled by default.
+G5 is `NOT_APPROVED`, champion `not_selected`; all six real decisions are
+`does_not_meet`. Consumed 2025 cannot train, adjust, calibrate, search or select.
+The migrated workflow applies saved components and thresholds, with zero real fits.
+
+The [migration owner](../../operations/kedro-migration.md#current-cleanup-and-execution--session-8)
+owns installation/restart/tracking/recovery and the [testing guide](../../TESTING_GUIDE.md)
+owns required synthetic/private controls. Replaced Stage 4/5 script facades have
+direct package consumers; the [cleanup correspondence](../../operations/kedro-cleanup-identities.json)
+checks originals, prior engineering bytes and final absence without changing older
+mappings. Notebooks 07/08 remain frozen source identity evidence, never production
+entrypoints. No new reporting notebooks or native scientific bundles are created.
+All prior scientific limitations and decision IDs remain. This is not complete
+historical reproducibility or operational model approval.
+
+## Historical scientific delivery records
+
+The following delivery protocols, recorded commands/results and earlier migration
+checkpoints are historical evidence. Their fitting/notebook commands apply only
+to their original recoverable Git tree, never to current production execution.
+
 
 Current execution is the guarded Kedro migration described in
 [Maintained frozen assessment](#maintained-frozen-assessment--kedro-session-6).
@@ -25,7 +52,7 @@ reserved targets from 2025-01 onward.
 
 - Contract/config: [probability_calibration_thresholds_contract_v1.json](probability_calibration_thresholds_contract_v1.json)
 - Notebook orchestrator (code-only): [07_probability_calibration_thresholds.ipynb](../../../notebooks/07_probability_calibration_thresholds.ipynb)
-- Reusable modules: [scripts/model_evaluation](../../../scripts/model_evaluation)
+- Reusable modules: [scripts/model_evaluation](../../../src/sat_dengue/datasets/legacy_evaluation/model_evaluation/__init__.py)
 
 ## Utility knobs (percentage points)
 
@@ -131,7 +158,7 @@ Distinct configurations must create distinct bundle IDs and never overwrite prio
 The owning [assessment contract](model_evaluation_contract_v1.json) and
 [notebook08](../../../notebooks/08_model_evaluation.ipynb) consume the corrected
 PLAN_027 input without changing its code identity or refitting components.
-Implementation lives in [model_assessment](../../../scripts/model_assessment).
+Implementation lives in [model_assessment](../../../src/sat_dengue/datasets/legacy_evaluation/model_assessment/__init__.py).
 AP ranking, DEC-125 point utility and uncertainty remain separate. AUROC is
 complementary and never changes ranking, utility, thresholds or training. All four
 windows have equal weight within each horizon. Missing metrics invalidate their
@@ -248,7 +275,7 @@ threshold selections. This delivery performs none of those fits or any reserved
 evaluation. Both G4 and final-protocol acceptance remain separate human decisions.
 
 The shared supplementary evaluator is
-[scripts/evaluation_metrics.py](../../../scripts/evaluation_metrics.py). It calls
+[scripts/evaluation_metrics.py](../../../src/sat_dengue/metrics.py). It calls
 the existing four-metric implementation unchanged and adds sklearn binary AUROC
 on the same continuous model scores and aligned population. Persistence uses its
 documented deterministic score, not a calibrated probability; Brier remains N/A.
@@ -290,7 +317,7 @@ Required gates and the shared-evaluator test mapping are recorded in the
 
 ## Closure delivery 2 — gated final route
 
-Implementation: [final_evaluation](../../../scripts/final_evaluation). The exact
+Implementation: [final_evaluation](../../../src/sat_dengue/datasets/legacy_evaluation/final_evaluation/__init__.py). The exact
 six-procedure proposal remains `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`
 in assessment bundle `0f26a4eb97ad37075f3fba2d8da0afd55cf3450db945e8f9cb86d7dccac2f257`.
 The scientific contract and original assessment modules remain byte-identical to

@@ -12,12 +12,19 @@ import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
 from sat_dengue.datasets.legacy_evaluation.final_evaluation import pipeline
-from scripts.final_evaluation.cohorts import build_cohorts, validate_cohort
-from scripts.final_evaluation.evaluation import circular_draws, evaluate_horizon, research_result
-from scripts.final_evaluation.protocol import require_authorization
-from scripts.model_assessment.policy import proposed_calendar
-from scripts.model_training.references import persistence_reference
-from scripts.training_preparation.features import DERIVED_COLUMNS
+from sat_dengue.datasets.legacy_evaluation.final_evaluation.cohorts import (
+    build_cohorts,
+    validate_cohort,
+)
+from sat_dengue.datasets.legacy_evaluation.final_evaluation.evaluation import (
+    circular_draws,
+    evaluate_horizon,
+    research_result,
+)
+from sat_dengue.datasets.legacy_evaluation.final_evaluation.protocol import require_authorization
+from sat_dengue.datasets.legacy_evaluation.model_assessment.policy import proposed_calendar
+from sat_dengue.model_training.references import persistence_reference
+from sat_dengue.training_preparation.features import DERIVED_COLUMNS
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -255,7 +262,7 @@ def test_native_roundtrip_reuse_verify_no_fallback_and_budget(
         pytest.fail("Replay attempted fitting")
 
     monkeypatch.setattr(pipeline, "fit_model", forbidden)
-    from scripts.model_training.candidate_families import ADAPTERS
+    from sat_dengue.model_training.candidate_families import ADAPTERS
 
     for adapter in ADAPTERS.values():
         monkeypatch.setattr(adapter, "fit_candidate", forbidden)

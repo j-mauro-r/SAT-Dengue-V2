@@ -26,7 +26,7 @@ The routes are disjoint. `training_replay` loads explicitly identified native
 components and predicts without fitting or searching. Its loader and computation
 execute under a guard rejecting `fit`, `_fit`, native `train` and search calls.
 It never falls back to fitting when an artifact is missing, stale or corrupt.
-The foundation default remains unchanged; future default E2E must compose replay.
+The default remains foundation; `kedro run --pipeline=replay` is the explicit composed E2E.
 
 `training_synthetic` accepts only configuration inputs. It generates the entire
 small deterministic fixture internally and rejects changed/foreign fixture data.
@@ -92,9 +92,10 @@ including its 2026-10-20 corrective tables, is recoverable from Git revision
 `4e9c47025c73297ca066a8f2874bb94046fc7e4b` through the closed preservation mapping.
 Those earlier statements do not override later DEC-132/134/135 decisions.
 
-Old `scripts/model_training/**` and `scripts/evaluation_metrics.py` paths remain
-thin adapters for Stage 5 consumers, notebooks and regression tests. Their physical
-retirement belongs to T-cleanup after consumers migrate. Real legacy bundle APIs
+The replaced model-training and metric script facades have direct package consumers.
+Their final absence and exact Git recovery identities are verified by the
+[cleanup correspondence](../../operations/kedro-cleanup-identities.json).
+Notebooks 05/06 remain frozen historical identity evidence, never production entrypoints. Real legacy bundle APIs
 load pinned saved artifacts without rebuilding or fitting; synthetic fixture
 orchestration remains for existing tests. The single native loader documents format
 compatibility and verifies identities without modifying global module bindings.
@@ -102,5 +103,5 @@ compatibility and verifies identities without modifying global module bindings.
 The [migration owner](../../operations/kedro-migration.md#stage-4-execution--session-5)
 records original/current identities and dispositions. The
 [testing guide](../../TESTING_GUIDE.md#kedro-stage-4-model-migration-session-5)
-owns commands, source-to-test mapping and mandatory full private parity. No notebook
-execution, new real fits, tracking, publication or T-evaluation is part of Session 5.
+owns commands, source-to-test mapping and mandatory full private parity. Session 5 remains historical evidence. Current execution uses Kedro; no notebook
+execution, new real fits, scientific selection or publication is authorized.

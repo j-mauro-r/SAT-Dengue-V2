@@ -226,12 +226,11 @@ def test_one_command_full_guarded_replay_and_complete_preservation() -> None:
     from migration_support import (
         BASELINE_SHA256,
         fingerprint,
+        new_evidence_directory,
         verify_protected_inventory,
     )
 
-    evidence = (
-        ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session7/e2e"
-    )
+    evidence = new_evidence_directory("e2e")
     evidence.mkdir(parents=True, exist_ok=True)
     baseline_path = ROOT / "tmp/kedro-migration/baseline.json"
     assert fingerprint(baseline_path)["sha256"] == BASELINE_SHA256

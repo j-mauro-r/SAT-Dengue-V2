@@ -11,6 +11,30 @@ from typing import Any
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 
+from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
+from sat_dengue.datasets.legacy_training.candidate_suite import build_candidate_suite
+from sat_dengue.datasets.legacy_training.contract import read_json as read_stage4_json
+from sat_dengue.datasets.legacy_training.events import load_event_context
+from sat_dengue.datasets.legacy_training.loading import (
+    TemporalSource,
+    load_temporal_source,
+    load_window_dataset,
+    parse_window_id,
+)
+from sat_dengue.datasets.legacy_training.persistence import (
+    bytes_record,
+    json_bytes,
+    publish_artifacts,
+    serialize_table,
+)
+from sat_dengue.datasets.legacy_training.pipeline import ModelTrainingResult
+from sat_dengue.datasets.legacy_training.pipeline import (
+    code_fingerprints as stage4_code_fingerprints,
+)
+from sat_dengue.metrics import (
+    brier_metric,
+    evaluate_metrics,
+)
 from sat_dengue.model_evaluation.calibration import (
     ROLE_CALENDAR_TO_SPLIT as ROLE_CALENDAR_TO_SPLIT,
 )
@@ -60,30 +84,8 @@ from sat_dengue.model_evaluation.calibration import (
 from sat_dengue.model_evaluation.calibration import (
     _window_index_with_labels as _window_index_with_labels,
 )
-from scripts.model_training.candidate_families import fit_model, restore_model
-from scripts.model_training.candidate_suite import build_candidate_suite
-from scripts.model_training.contract import read_json as read_stage4_json
-from scripts.model_training.events import load_event_context
-from scripts.model_training.loading import (
-    TemporalSource,
-    load_temporal_source,
-    load_window_dataset,
-    parse_window_id,
-)
-from scripts.model_training.metrics import (
-    brier_metric,
-    evaluate_metrics,
-)
-from scripts.model_training.persistence import (
-    bytes_record,
-    json_bytes,
-    publish_artifacts,
-    serialize_table,
-)
-from scripts.model_training.pipeline import ModelTrainingResult
-from scripts.model_training.pipeline import code_fingerprints as stage4_code_fingerprints
-from scripts.model_training.references import persistence_reference
-from scripts.training_preparation.pipeline import fingerprint
+from sat_dengue.model_training.candidate_families import fit_model, restore_model
+from sat_dengue.model_training.references import persistence_reference
 
 from .availability import preflight_window, transition_records
 from .contract import ModelEvaluationConfig, ModelEvaluationError, Stage5Contract, load_contract
@@ -123,7 +125,10 @@ def _runtime_versions() -> dict[str, str]:
 
 def code_fingerprints(root: Path) -> dict[str, Any]:
     """Fingerprint all Stage 5 load-bearing code and notebook07 sources."""
-    paths = sorted((root / "scripts/model_evaluation").glob("*.py"))
+    paths = sorted((root / "src/sat_dengue/model_evaluation").glob("*.py"))
+    paths += sorted(
+        (root / "src/sat_dengue/datasets/legacy_evaluation/model_evaluation").glob("*.py")
+    )
     paths += [root / "pyproject.toml", root / NOTEBOOK_PATH]
     records = {str(path.relative_to(root)): fingerprint(path) for path in paths}
     notebook = read_stage4_json(root / NOTEBOOK_PATH)

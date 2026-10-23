@@ -31,3 +31,14 @@ The [master plan](../roadmap/master-plan.md) owns current progress; this documen
 Use `conformance.sh --repo-only` to check the harness, `--plan <path>` for the bounded plan, and the default invocation for the repository plus all local plans. Run the full required gate before merge and disclose legacy failures separately; never rewrite historical journals to turn them green. No new plan is needed merely to refresh a status paragraph or merge duplicate prose.
 
 No historical plan contract, journal or terminal result was rewritten to make these controls pass.
+
+
+## Sequential migration writers
+
+PLAN_030 uses the local contract/journal helpers. A bounded human-approved cleanup
+correspondence preserves original and pre-cleanup Git blobs separately from final
+engineering identities; earlier mappings and scientific/native evidence stay fixed.
+Use one DWP writer at a time for gates, observations, amendments, projections and
+renders. Do not manually repair journals/state/views or treat a cached result as a
+fresh gate after an evidence-sensitive change. The accepted Session 7 incident and
+minimal recovery remain preserved historical evidence; no further repair is implied.

@@ -22,6 +22,7 @@ from migration_support import (
     approved_scope,
     compare_frames,
     fingerprint,
+    new_evidence_directory,
     require_records,
     safe_path,
     verify_equivalence_scope,
@@ -369,7 +370,9 @@ def test_baseline_historical_source_reconstruction(protected_baseline: dict) -> 
     assert len(observed["active_chain"]) == 12
     assert len(observed["historical_only_missing"]) == 13
     assert len(scope["historical_bundles"]) == 17
-    (EVIDENCE / "source-coverage-observed.json").write_text(json.dumps(observed, indent=2) + "\n")
+    (new_evidence_directory("source-coverage") / "source-coverage-observed.json").write_text(
+        json.dumps(observed, indent=2) + "\n"
+    )
 
 
 @pytest.mark.migration_evidence
@@ -394,6 +397,7 @@ def test_compatibility_saved_components_without_fitting(
         paths.insert(0, str(EVIDENCE / "lightgbm47"))
     env["PYTHONPATH"] = os.pathsep.join(paths)
     postcheck = None
+    evidence = new_evidence_directory("compatibility-" + runtime)
     replay_started_at = datetime.now(UTC).isoformat()
     try:
         result = subprocess.run(
@@ -414,7 +418,7 @@ def test_compatibility_saved_components_without_fitting(
         # Always run after the candidate process, even on replay failure or timeout.
         # This independent scan also catches writes that bypass Python's open audit hook.
         if version == "4.7.0":
-            receipt = EVIDENCE / "post-replay-4.7.0.json"
+            receipt = evidence / "post-replay-4.7.0.json"
             postcheck = {
                 "status": "FAIL",
                 "replay_started_at": replay_started_at,
@@ -440,7 +444,7 @@ def test_compatibility_saved_components_without_fitting(
     if version == "4.7.0":
         assert postcheck is not None and postcheck["status"] == "PASS"
         report["post_replay_verification"] = postcheck
-    (EVIDENCE / f"compatibility-{version}.json").write_text(json.dumps(report, indent=2) + "\n")
+    (evidence / f"compatibility-{version}.json").write_text(json.dumps(report, indent=2) + "\n")
 
 
 def test_compatibility_guard_rejects_fit_and_preserves_artifacts(tmp_path: Path) -> None:
@@ -818,7 +822,7 @@ def test_preparation_kedro_complete_cohorts_and_saved_replay(protected_baseline:
         text=True,
         timeout=300,
     )
-    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session4"
+    evidence = new_evidence_directory("preparation")
     evidence.mkdir(parents=True, exist_ok=True)
     (evidence / "kedro-no-fit.log").write_text(result.stdout + result.stderr)
     assert result.returncode == 0, result.stdout[-6000:] + result.stderr[-6000:]
@@ -992,7 +996,7 @@ def test_training_kedro_all_saved_components_and_metrics(protected_baseline: dic
     )
     from sat_dengue.training_preparation.serialization import serialize_table
 
-    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session5"
+    evidence = new_evidence_directory("training")
     evidence.mkdir(parents=True, exist_ok=True)
     before = verify_protected_inventory(ROOT, protected_baseline)
     storage = EVIDENCE / "training-runs"
@@ -1216,7 +1220,7 @@ def test_training_extracted_scientific_definitions_match_originals() -> None:
             assert ast.dump(old[function]) == ast.dump(current[function]), (name, function)
             equivalent.append(f"{name}.{function}")
     assert len(equivalent) == 44
-    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session5"
+    evidence = new_evidence_directory("training")
     evidence.mkdir(parents=True, exist_ok=True)
     (evidence / "scientific-source-parity.json").write_text(
         json.dumps(
@@ -1243,7 +1247,7 @@ def test_evaluation_kedro_all_frozen_decisions_probabilities_and_metrics(
     from sat_dengue.datasets.evaluation_legacy import FrozenEvaluationLoader, no_adjustment
     from sat_dengue.final_evaluation.workflow import resolve_replay_configuration, validate_sources
 
-    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session6"
+    evidence = new_evidence_directory("evaluation")
     evidence.mkdir(parents=True, exist_ok=True)
     before = verify_protected_inventory(ROOT, protected_baseline)
     sources = FrozenEvaluationLoader().load()

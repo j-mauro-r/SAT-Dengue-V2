@@ -4,7 +4,7 @@ SAT-Dengue V2 is an AI-first, scientific-engineering repository for building an 
 
 ## Current Stage
 
-See the [master plan](docs/roadmap/master-plan.md) for the dated implementation status, outstanding human gates and next bounded task. Notebook 03 builds the consolidated datasets and bounded EDA; notebook 04 prepares temporal model inputs. Their code, contracts and evidence are available locally; model training and runtime product components are subsequent work.
+See the [master plan](docs/roadmap/master-plan.md) for the dated implementation status, outstanding human gates and next bounded task. Kedro runs construction, preparation, saved-model replay and frozen evaluation. G5 is `NOT_APPROVED`, champion `not_selected`, and all six real decisions remain `does_not_meet`. The 2025 block is consumed evidence and cannot be used to train, adjust or select. Historical reproducibility is incomplete; this engineering migration grants no operational approval.
 
 ## Product Direction
 
@@ -56,7 +56,36 @@ Primary entry points:
 
 ## What Is Not Implemented Yet
 
-- Trained/selected predictors and operational inference pipelines
+- An approved champion and operational inference pipelines
 - Final API contracts and runtime implementation
 - Dashboard runtime implementation
 - End-to-end deployment workflows
+
+
+## Local Kedro workflow
+
+Use Python 3.12 and an isolated environment. `pyproject.toml` is the dependency
+authority; every declared dependency is pinned. Base installation needs no modeling,
+tracking or notebook extra:
+
+```bash
+python -m pip install .
+kedro run --pipeline=foundation
+# Scientific replay needs the optional modeling extra and local verified evidence:
+python -m pip install '.[dev,modeling,tracking]'
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=replay
+```
+
+`replay` is the official one-command E2E. It performs zero real fits/refits,
+calibration fits, searches or selection. The default remains `foundation`.
+Available explicit graphs: `foundation`, `data`, `preparation`, `training_replay`,
+`training_synthetic`, `evaluation_replay`, `evaluation_synthetic`, `replay`,
+`replay_synthetic`; `__default__` aliases foundation. Synthetic graphs create their
+own inputs and need no private data. Tracking is disabled unless explicitly enabled.
+
+[Migration/restart/tracking and recovery](docs/operations/kedro-migration.md#current-cleanup-and-execution--session-8)
+owns operating procedures and [the testing guide](docs/TESTING_GUIDE.md) owns CI,
+mandatory local private parity and packaging checks. Retained notebooks are frozen
+historical identity evidence, never production entrypoints. Replaced script facades
+are recoverable through the disposition ledger and Git; do not execute old notebooks
+or acquisition scripts to refresh scientific evidence.
