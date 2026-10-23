@@ -117,10 +117,10 @@ function AlertBadge({ f }: { f: Forecast }) {
     return (
       <span
         className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground"
-        title={f.availabilityReason ?? f.availabilityStatus}
+        title={f.availabilityReason ?? f.availabilityLabel}
       >
         <CircleSlash className="h-3.5 w-3.5" />
-        No disponible · {f.availabilityStatus}
+        {f.availabilityLabel}
       </span>
     );
   return f.alertStatus === "ALERT" ? (
@@ -509,13 +509,13 @@ function ForecastCard({ f }: { f: Forecast }) {
                 />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                Umbral aplicado: <b className="text-foreground">{pct(f.threshold)}</b> · Estado:
-                disponible
+                Umbral aplicado: <b className="text-foreground">{pct(f.threshold)}</b>{" "}
+                <span>· Estado: {f.availabilityLabel}</span>
               </p>
             </>
           ) : (
             <p className="mt-4 text-sm text-muted-foreground">
-              No disponible — {f.availabilityStatus}. {f.availabilityReason}
+              {f.availabilityLabel}. {f.availabilityReason}
             </p>
           )}
           <p className="mt-3 flex gap-1.5 rounded-md bg-muted/60 p-2 text-xs text-muted-foreground">
@@ -532,15 +532,11 @@ function ForecastCard({ f }: { f: Forecast }) {
           <dl className="space-y-3 text-sm">
             <div>
               <dt className="text-xs text-muted-foreground">Modelo utilizado</dt>
-              <dd className="font-semibold">{f.model ?? "No disponible"}</dd>
+              <dd className="font-semibold">{f.modelLabel ?? "No disponible"}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted-foreground">Horizonte</dt>
               <dd className="font-mono text-xs">{f.horizon}</dd>
-            </div>
-            <div>
-              <dt className="text-xs text-muted-foreground">Rol del modelo</dt>
-              <dd className="font-mono text-xs">{f.modelRole ?? "No disponible"}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted-foreground">Versión del modelo</dt>

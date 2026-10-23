@@ -23,8 +23,10 @@ export interface Forecast {
   available: boolean;
   alertStatus: "ALERT" | "NO_ALERT" | "UNAVAILABLE";
   availabilityStatus: AvailabilityStatus;
+  availabilityLabel: string;
   availabilityReason: string | null;
   model: string | null;
+  modelLabel: string | null;
   modelRole: string | null;
   modelVersion: string | null;
   procedureId: string | null;
@@ -125,6 +127,25 @@ const ZONES = {
   UNAVAILABLE: "No disponible",
 } as const;
 
+export const AVAILABILITY_LABELS: Record<AvailabilityStatus, string> = {
+  AVAILABLE: "Disponible",
+  INELIGIBLE: "No elegible",
+  INSUFFICIENT_HISTORY: "Historia insuficiente",
+  MISSING_DATA: "Datos faltantes",
+  NOT_CALCULATED: "No calculado",
+};
+
+const MODEL_LABELS: Record<string, string> = {
+  xgboost: "XGBoost",
+  lightgbm: "LightGBM",
+  gam: "GAM",
+};
+
+function formatModelName(model: string | null): string | null {
+  if (model === null) return null;
+  return MODEL_LABELS[model.toLowerCase()] ?? model;
+}
+
 function normalizedName(value: string): string {
   return value
     .normalize("NFD")
@@ -164,8 +185,10 @@ export function adaptDashboardResponse(response: DashboardResponse): DashboardVi
       available: result.availability_status === "AVAILABLE",
       alertStatus: result.alert_status,
       availabilityStatus: result.availability_status,
+      availabilityLabel: AVAILABILITY_LABELS[result.availability_status],
       availabilityReason: result.availability_reason,
       model: result.model_family,
+      modelLabel: formatModelName(result.model_family),
       modelRole: result.model_role,
       modelVersion: result.model_version,
       procedureId: result.procedure_id,

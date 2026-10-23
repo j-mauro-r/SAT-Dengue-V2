@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -81,6 +81,28 @@ describe("Stage 7 dashboard contract and adapter", () => {
         "NOT_CALCULATED",
       ]),
     );
+    const labels = new Map(
+      views.flatMap(({ municipalities }) =>
+        municipalities
+          .flatMap(({ t1, t2 }) => [t1, t2])
+          .map((result) => [result.availabilityStatus, result.availabilityLabel]),
+      ),
+    );
+    expect(labels).toEqual(
+      new Map([
+        ["AVAILABLE", "Disponible"],
+        ["INELIGIBLE", "No elegible"],
+        ["INSUFFICIENT_HISTORY", "Historia insuficiente"],
+        ["MISSING_DATA", "Datos faltantes"],
+        ["NOT_CALCULATED", "No calculado"],
+      ]),
+    );
+  });
+
+  it("formats known model names without replacing the contracted family", () => {
+    const view = adaptDashboardResponse(dashboardResponseSchema.parse(fixture("tolima")));
+    expect(view.municipalities[0]!.t1).toMatchObject({ model: "xgboost", modelLabel: "XGBoost" });
+    expect(view.municipalities[0]!.t2).toMatchObject({ model: "lightgbm", modelLabel: "LightGBM" });
   });
 
   it("does not convert an unavailable probability to zero", () => {
@@ -155,12 +177,50 @@ describe("dashboard query integration", () => {
     renderDashboard();
 
     expect(await screen.findByText("Ibagué, Tolima", { exact: false })).toBeInTheDocument();
+    const municipalitySelector = screen.getByLabelText("Municipio") as HTMLSelectElement;
+    expect(municipalitySelector.options).toHaveLength(47);
+    expect(screen.getAllByText("Disponible", { exact: false }).length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("region", { name: "Estado de gobernanza del modelo" }),
+    ).toHaveTextContent("G5: NOT_APPROVED");
+    expect(screen.getByRole("img", { name: /Canal endémico Ibagué/ })).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: /Tabla equivalente al mapa/ })).toBeInTheDocument();
+
     fireEvent.change(screen.getByLabelText("Municipio"), { target: { value: "73024" } });
     expect(await screen.findByText("Alpujarra, Tolima", { exact: false })).toBeInTheDocument();
+    expect(screen.getAllByText("Historia insuficiente", { exact: false }).length).toBeGreaterThan(
+      0,
+    );
+    fireEvent.change(screen.getByLabelText("Municipio"), { target: { value: "73026" } });
+    expect(screen.getAllByText("No elegible", { exact: false }).length).toBeGreaterThan(0);
+    fireEvent.change(screen.getByLabelText("Municipio"), { target: { value: "73349" } });
+    expect(screen.getAllByText("Datos faltantes", { exact: false }).length).toBeGreaterThan(0);
+    fireEvent.change(screen.getByLabelText("Municipio"), { target: { value: "73030" } });
+    expect(screen.getAllByText("No calculado", { exact: false }).length).toBeGreaterThan(0);
+
     fireEvent.click(screen.getByRole("tab", { name: "Meta" }));
     expect(await screen.findByText("Villavicencio, Meta", { exact: false })).toBeInTheDocument();
+    expect((screen.getByLabelText("Municipio") as HTMLSelectElement).options).toHaveLength(29);
     fireEvent.click(screen.getByRole("button", { name: "T+2" }));
     expect(screen.getByLabelText("Mapa municipal de Meta, T+2")).toBeInTheDocument();
+  });
+
+  it("keeps the result reverse limited to the five authorized fields", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => response(fixture("tolima"))),
+    );
+    renderDashboard();
+
+    expect(await screen.findByText("Ibagué, Tolima", { exact: false })).toBeInTheDocument();
+    const detailButton = screen.getAllByRole("button", { name: "Detalle del resultado" })[0]!;
+    fireEvent.click(detailButton);
+    const card = detailButton.closest("section")!;
+    expect(within(card).getByText("XGBoost")).toBeInTheDocument();
+    expect(within(card).getByText("Versión del modelo")).toBeInTheDocument();
+    expect(within(card).getByText("Versión de los datos")).toBeInTheDocument();
+    expect(within(card).getByText("Identificador del resultado generado")).toBeInTheDocument();
+    expect(within(card).queryByText("Rol del modelo")).not.toBeInTheDocument();
   });
 
   it.each([

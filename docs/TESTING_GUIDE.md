@@ -173,12 +173,19 @@ The Stage 8 integration tests read the canonical Stage 7 fixtures directly from
 `scripts/read_only_api/fixtures`; they validate both departments, all 76
 municipalities, all five availability states, URL/error handling, response
 validation, direct alert/channel/result traceability, coherent navigation, and
-manual retry without maintaining a second fixture copy. For the local smoke,
-start the API and dashboard with `API_PROXY_TARGET=http://127.0.0.1:8000`,
-then query Tolima `73/2026-09` and Meta `50/2026-12` and inspect one available
-and one unavailable municipal result. Verify generated dependency/build paths
-remain ignored. Run the full foundation gate before merge because CI and the
-dashboard integration surface changed.
+manual retry without maintaining a second fixture copy. Run the real local
+two-service smoke with one command:
+
+```bash
+.venv/bin/python scripts/dashboard_e2e_smoke.py
+```
+
+It starts the ASGI factory and dashboard on free loopback ports, waits for both,
+and queries Tolima `73/2026-09`, Meta `50/2026-12`, and a contracted 404 through
+the dashboard origin and configurable proxy. It terminates both process groups
+on success or failure. Verify generated dependency/build paths remain ignored.
+Run the full foundation gate before merge because CI and the dashboard
+integration surface changed.
 
 ## Stage 2 data integrity and retired experimental EDA
 
