@@ -73,7 +73,17 @@ const endemicPointSchema = z
     median: nullableMeasure,
     p75: nullableMeasure,
   })
-  .strict();
+  .strict()
+  .superRefine((point, context) => {
+    if (
+      point.p25 !== null &&
+      point.median !== null &&
+      point.p75 !== null &&
+      !(point.p25 <= point.median && point.median <= point.p75)
+    ) {
+      context.addIssue({ code: "custom", message: "Endemic percentiles are not ordered" });
+    }
+  });
 
 const municipalitySchema = z
   .object({
@@ -92,7 +102,35 @@ const municipalitySchema = z
     if (new Set(municipality.results.map(({ horizon }) => horizon)).size !== 2) {
       context.addIssue({ code: "custom", message: "Municipality must contain T1 and T2" });
     }
+    const periods = municipality.endemic_channel_series.map(({ period }) => period);
+    if (
+      new Set(periods).size !== periods.length ||
+      periods.some((period, index) => period !== [...periods].sort()[index])
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "Endemic series must have unique ordered periods",
+      });
+    }
+    const summary = [municipality.cases_t, municipality.p25, municipality.median, municipality.p75];
+    if (
+      municipality.endemic_channel_series.length === 0 &&
+      (municipality.endemic_zone_t !== "UNAVAILABLE" || summary.some((value) => value !== null))
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "Empty endemic series requires unavailable context",
+      });
+    }
   });
+
+function shiftMonth(period: string, increment: number): string {
+  const [year, month] = period.split("-").map(Number);
+  const index = year! * 12 + month! - 1 + increment;
+  return `${Math.floor(index / 12)
+    .toString()
+    .padStart(4, "0")}-${((index % 12) + 1).toString().padStart(2, "0")}`;
+}
 
 const evaluationRecordSchema = z
   .object({
@@ -166,6 +204,80 @@ export const dashboardResponseSchema = z
       )
     ) {
       context.addIssue({ code: "custom", message: "Municipality does not belong to department" });
+    }
+    const municipalityCodes = response.municipalities.map(
+      ({ municipality_code }) => municipality_code,
+    );
+    if (new Set(municipalityCodes).size !== municipalityCodes.length) {
+      context.addIssue({ code: "custom", message: "Municipality codes must be unique" });
+    }
+    const resultIds: string[] = [];
+    for (const municipality of response.municipalities) {
+      for (const result of municipality.results) {
+        const expected = shiftMonth(
+          response.metadata.reference_period,
+          result.horizon === "T1" ? 1 : 2,
+        );
+        if (result.target_period !== expected) {
+          context.addIssue({
+            code: "custom",
+            message: `${result.horizon} target period is incompatible`,
+          });
+        }
+        if (result.result_id) resultIds.push(result.result_id);
+      }
+      const series = municipality.endemic_channel_series;
+      if (
+        series.some(
+          (point) => point.period > response.metadata.reference_period && point.cases !== null,
+        )
+      ) {
+        context.addIssue({
+          code: "custom",
+          message: "Future endemic observations are not allowed",
+        });
+      }
+      if (series.length) {
+        const reference = series.filter(
+          ({ period }) => period === response.metadata.reference_period,
+        );
+        if (
+          reference.length !== 1 ||
+          reference[0]!.cases !== municipality.cases_t ||
+          reference[0]!.p25 !== municipality.p25 ||
+          reference[0]!.median !== municipality.median ||
+          reference[0]!.p75 !== municipality.p75
+        ) {
+          context.addIssue({
+            code: "custom",
+            message: "Reference endemic point does not match summary",
+          });
+        }
+      }
+    }
+    if (
+      new Set(resultIds).size !== resultIds.length ||
+      resultIds.includes(response.metadata.result_set_id)
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "Result traceability identifiers are not unique",
+      });
+    }
+    if (
+      response.governance.governance_gate === "G5" &&
+      response.governance.governance_status === "NOT_APPROVED" &&
+      (response.governance.champion_status !== "NOT_SELECTED" ||
+        response.municipalities.some(({ results }) =>
+          results.some(
+            ({ model_role }) => model_role !== null && model_role !== "PROVISIONAL_CANDIDATE",
+          ),
+        ))
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "G5 governance and model roles are incompatible",
+      });
     }
   });
 
