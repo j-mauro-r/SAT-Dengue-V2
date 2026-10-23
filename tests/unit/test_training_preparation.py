@@ -663,9 +663,10 @@ def test_preparation_replay_rejects_misalignment_and_boundaries(
 
 
 def test_preparation_atomic_persistence_and_identity_refusal(
-    synthetic_preparation_graph: tuple[Any, ...], monkeypatch: pytest.MonkeyPatch
+    synthetic_preparation_graph: tuple[Any, ...],
+    monkeypatch: pytest.MonkeyPatch,
+    repo_tmp_path: Path,
 ) -> None:
-    from tempfile import TemporaryDirectory
 
     from kedro.io import DatasetError
 
@@ -684,46 +685,45 @@ def test_preparation_atomic_persistence_and_identity_refusal(
         keys, features, controls, audit, transformed, resolved, producer, consumer
     )
     monkeypatch.setattr(adapter, "NATIVE_PREPARATION", {})  # synthetic sources only
-    with TemporaryDirectory(dir=ROOT / "tmp", prefix="preparation-atomic-") as directory:
-        dataset = adapter.PreparationBundleDataset(directory)
-        with pytest.raises(DatasetError):
-            dataset.load()
+    directory = str(repo_tmp_path)
+    dataset = adapter.PreparationBundleDataset(directory)
+    with pytest.raises(DatasetError):
+        dataset.load()
+    dataset.save(payload)
+    result = dataset.load()
+    bundle = ROOT / result["path"]
+    assert not list(Path(directory).glob(".staging-*"))
+    with pytest.raises(DatasetError, match="already exists"):
         dataset.save(payload)
-        result = dataset.load()
-        bundle = ROOT / result["path"]
-        assert not list(Path(directory).glob(".staging-*"))
-        with pytest.raises(DatasetError, match="already exists"):
-            dataset.save(payload)
-        path = bundle / "features.csv"
-        path.chmod(0o600)
-        path.write_bytes(path.read_bytes() + b"corrupt")
-        with pytest.raises(DatasetError, match="payload identity"):
-            dataset.load()
+    path = bundle / "features.csv"
+    path.chmod(0o600)
+    path.write_bytes(path.read_bytes() + b"corrupt")
+    with pytest.raises(DatasetError, match="payload identity"):
+        dataset.load()
 
 
 @pytest.mark.parametrize("fault", ["manifest", "payload", "membership"])
-def test_preparation_native_bundle_rejects_identity_drift(fault: str) -> None:
-    from tempfile import TemporaryDirectory
+def test_preparation_native_bundle_rejects_identity_drift(fault: str, repo_tmp_path: Path) -> None:
 
     from kedro.io import DatasetError
 
     from sat_dengue.datasets import preparation as adapter
     from sat_dengue.training_preparation.serialization import bytes_record
 
-    with TemporaryDirectory(dir=ROOT / "tmp", prefix="preparation-native-") as directory:
-        bundle = Path(directory) / "explicit-identity"
-        bundle.mkdir()
-        relative = str(bundle.relative_to(ROOT))
-        (bundle / "state.json").write_bytes(b"{}")
-        manifest = {"bundle_id": bundle.name, "files": {"state.json": bytes_record(b"{}")}}
-        data = json_bytes(manifest)
-        (bundle / "manifest.json").write_bytes(data)
-        assert adapter.verified_native_bundle(relative, bytes_record(data)) == manifest
-        if fault == "manifest":
-            (bundle / "manifest.json").write_bytes(data + b" ")
-        elif fault == "payload":
-            (bundle / "state.json").write_bytes(b"changed")
-        else:
-            (bundle / "extra").write_bytes(b"extra")
-        with pytest.raises(DatasetError):
-            adapter.verified_native_bundle(relative, bytes_record(data))
+    directory = str(repo_tmp_path)
+    bundle = Path(directory) / "explicit-identity"
+    bundle.mkdir()
+    relative = str(bundle.relative_to(ROOT))
+    (bundle / "state.json").write_bytes(b"{}")
+    manifest = {"bundle_id": bundle.name, "files": {"state.json": bytes_record(b"{}")}}
+    data = json_bytes(manifest)
+    (bundle / "manifest.json").write_bytes(data)
+    assert adapter.verified_native_bundle(relative, bytes_record(data)) == manifest
+    if fault == "manifest":
+        (bundle / "manifest.json").write_bytes(data + b" ")
+    elif fault == "payload":
+        (bundle / "state.json").write_bytes(b"changed")
+    else:
+        (bundle / "extra").write_bytes(b"extra")
+    with pytest.raises(DatasetError):
+        adapter.verified_native_bundle(relative, bytes_record(data))

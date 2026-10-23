@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 from typing import Any
@@ -11,18 +12,32 @@ from kedro.io import AbstractDataset, DatasetError
 from sat_dengue.configuration import canonical_bytes
 from sat_dengue.datasets.legacy_preparation.persistence import publish_bundle
 from sat_dengue.datasets.stage2 import identity, local_path
-from sat_dengue.datasets.training_legacy import (
-    BUNDLES,
-    LegacyTrainingLoader,
-    checked_bundle,
-    no_fitting,
-)
-from sat_dengue.model_training.workflow import training_contract
 from sat_dengue.training_preparation.serialization import bytes_record, json_bytes, serialize_table
+
+
+def require_modeling() -> None:
+    """Fail at the training boundary, leaving base-only graphs usable."""
+    missing = []
+    for name in ("xgboost", "scipy", "lightgbm", "sklearn", "threadpoolctl", "narwhals"):
+        try:
+            found = importlib.util.find_spec(name)
+        except ModuleNotFoundError:
+            found = None
+        if found is None:
+            missing.append(name)
+    if missing:
+        raise RuntimeError(
+            "Training requires optional modeling dependencies: "
+            + ", ".join(missing)
+            + ". Install sat-dengue-v2[modeling]."
+        )
 
 
 class TrainingSourcesDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
     def load(self) -> dict[str, Any]:
+        require_modeling()
+        from sat_dengue.datasets.training_legacy import LegacyTrainingLoader
+
         if not hasattr(self, "_cached"):
             self._cached = LegacyTrainingLoader().load()
         return self._cached
@@ -31,10 +46,13 @@ class TrainingSourcesDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
         raise DatasetError("Native training sources are read-only")
 
     def _describe(self) -> dict[str, Any]:
-        return {"explicit_native_manifests": BUNDLES, "mode": "replay only"}
+        return {"loader": "training_legacy.LegacyTrainingLoader", "mode": "replay only"}
 
 
 def assemble_training_payloads(result: dict[str, Any], resolved: dict[str, Any]) -> dict[str, Any]:
+    require_modeling()
+    from sat_dengue.model_training.workflow import training_contract
+
     training_contract(resolved, result["mode"])
     payloads = {n: serialize_table(frame) for n, frame in result["tables"].items()}
     payloads.update(result["payloads"])
@@ -52,10 +70,15 @@ class TrainingBundleDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
         self._storage = local_path(filepath)
 
     def save(self, data: dict[str, Any]) -> None:
+        require_modeling()
+        from sat_dengue.model_training.workflow import training_contract
+
         resolved = data["resolved"]
         mode = data["mode"]
         training_contract(resolved, mode)
         if mode == "replay":
+            from sat_dengue.datasets.training_legacy import BUNDLES, checked_bundle, no_fitting
+
             with no_fitting():
                 for relative in BUNDLES:
                     checked_bundle(relative)

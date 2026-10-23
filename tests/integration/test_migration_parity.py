@@ -918,9 +918,10 @@ def test_preparation_kedro_complete_cohorts_and_saved_replay(protected_baseline:
 
 
 @pytest.mark.parametrize("mutation", ["extra", "original", "engineering", "revision"])
-def test_preparation_baseline_closed_mapping_rejects_drift(mutation: str) -> None:
+def test_preparation_baseline_closed_mapping_rejects_drift(
+    mutation: str, repo_tmp_path: Path
+) -> None:
     from copy import deepcopy
-    from tempfile import TemporaryDirectory
 
     from migration_support import PREPARATION_MAPPING, verify_preparation_preservation
 
@@ -933,19 +934,18 @@ def test_preparation_baseline_closed_mapping_rejects_drift(mutation: str) -> Non
         mapping["original_revision"] = "0" * 40
     else:
         mapping["files"][name][mutation]["sha256"] = "0" * 64
-    with TemporaryDirectory(dir=ROOT / "tmp", prefix="preparation-mapping-") as directory:
-        root = Path(directory)
-        path = root / "docs/operations/kedro-preparation-identities.json"
-        path.parent.mkdir(parents=True)
-        path.write_text(json.dumps(mapping))
-        with pytest.raises(AssertionError, match="Closed preparation mapping"):
-            verify_preparation_preservation(root, records)
+    directory = str(repo_tmp_path)
+    root = Path(directory)
+    path = root / "docs/operations/kedro-preparation-identities.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(mapping))
+    with pytest.raises(AssertionError, match="Closed preparation mapping"):
+        verify_preparation_preservation(root, records)
 
 
 @pytest.mark.parametrize("mutation", ["extra", "original", "engineering", "revision"])
-def test_training_baseline_closed_mapping_rejects_drift(mutation: str) -> None:
+def test_training_baseline_closed_mapping_rejects_drift(mutation: str, repo_tmp_path: Path) -> None:
     from copy import deepcopy
-    from tempfile import TemporaryDirectory
 
     from migration_support import TRAINING_MAPPING, verify_training_preservation
 
@@ -958,13 +958,13 @@ def test_training_baseline_closed_mapping_rejects_drift(mutation: str) -> None:
         mapping["original_revision"] = "0" * 40
     else:
         mapping["files"][name][mutation]["sha256"] = "0" * 64
-    with TemporaryDirectory(dir=ROOT / "tmp", prefix="training-mapping-") as directory:
-        root = Path(directory)
-        path = root / "docs/operations/kedro-training-identities.json"
-        path.parent.mkdir(parents=True)
-        path.write_text(json.dumps(mapping))
-        with pytest.raises(AssertionError, match="Closed training mapping"):
-            verify_training_preservation(root, records)
+    directory = str(repo_tmp_path)
+    root = Path(directory)
+    path = root / "docs/operations/kedro-training-identities.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(mapping))
+    with pytest.raises(AssertionError, match="Closed training mapping"):
+        verify_training_preservation(root, records)
 
 
 def compare_training_tables(expected: pd.DataFrame, actual: pd.DataFrame) -> None:

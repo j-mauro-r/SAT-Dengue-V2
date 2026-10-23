@@ -535,3 +535,21 @@ relax tolerances or substitute sampled comparisons. Inspect secret and prohibite
 runtime patterns on the changed surface, then independently verify preservation
 after replay and after the commit. Report all-plan conformance separately from
 the repository and PLAN_030; the two inherited historical incidents remain.
+
+## Base installation and checkout-independent test storage
+
+`tests/conftest.py::repo_tmp_path` owns repository-local temporary test storage.
+It creates the ignored parent when absent, yields a unique workspace per test,
+and cleans only its own files. Tests must request this fixture instead of creating
+`TemporaryDirectory(dir=ROOT / "tmp")` directly. No precreated directory, global
+temporary-environment override or execution-order dependency is permitted.
+Validate the synthetic selection in a `git archive HEAD` checkout with no `tmp/`.
+
+`test_base_bootstrap_and_training_dependency_boundary` runs a fresh subprocess
+that denies all six optional modeling imports. All six pipeline names must still
+register, default must remain foundation, and foundation must execute successfully.
+Training nodes and native source loading must fail with an explicit instruction
+to install `sat-dengue-v2[modeling]`. The private replay and synthetic training
+checks above validate the same deferred boundaries with modeling installed.
+Validate an actual base-only wheel installation and `pip check` too; never move
+modeling libraries into base dependencies to satisfy bootstrap.

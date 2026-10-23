@@ -9,7 +9,6 @@ import shutil
 import subprocess
 import tomllib
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from typing import Any
 
 import pytest
@@ -28,10 +27,9 @@ from sat_dengue.datasets import ConfigurationInputsDataset, ImmutableConfigurati
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_resolved_snapshot_reads_the_single_scientific_authority() -> None:
-    (ROOT / "tmp").mkdir(exist_ok=True)
-    with TemporaryDirectory(prefix="kedro-configuration-", dir=ROOT / "tmp") as directory:
-        _check_resolved_snapshot(Path(directory))
+def test_resolved_snapshot_reads_the_single_scientific_authority(repo_tmp_path: Path) -> None:
+    directory = str(repo_tmp_path)
+    _check_resolved_snapshot(Path(directory))
 
 
 def test_snapshot_storage_rejects_external_repository_path() -> None:

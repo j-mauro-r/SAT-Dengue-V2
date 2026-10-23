@@ -395,9 +395,10 @@ def test_training_equal_window_weights_and_missing_support_are_explicit() -> Non
 
 
 @pytest.mark.parametrize("mutation", ["payload", "manifest", "membership", "missing"])
-def test_training_publication_is_immutable_and_detects_corruption(mutation: str) -> None:
+def test_training_publication_is_immutable_and_detects_corruption(
+    mutation: str, repo_tmp_path: Path
+) -> None:
     import json
-    from tempfile import TemporaryDirectory
 
     from kedro.io import DatasetError
 
@@ -413,27 +414,27 @@ def test_training_publication_is_immutable_and_detects_corruption(mutation: str)
     }
     data = assemble_training_payloads(result, resolved)
     root = Path.cwd()
-    with TemporaryDirectory(dir=root / "tmp", prefix="training-publication-") as directory:
-        dataset = TrainingBundleDataset(str(Path(directory).relative_to(root)))
-        with pytest.raises(DatasetError, match="explicit"):
-            dataset.load()
+    directory = str(repo_tmp_path)
+    dataset = TrainingBundleDataset(str(Path(directory).relative_to(root)))
+    with pytest.raises(DatasetError, match="explicit"):
+        dataset.load()
+    dataset.save(data)
+    saved = dataset.load()
+    bundle = root / saved["path"]
+    with pytest.raises(Exception, match="exists|Existing|already"):
         dataset.save(data)
-        saved = dataset.load()
-        bundle = root / saved["path"]
-        with pytest.raises(Exception, match="exists|Existing|already"):
-            dataset.save(data)
-        assert json.loads((bundle / "provenance.json").read_text()) == resolved
-        name = "manifest.json" if mutation == "manifest" else "predictions.csv"
-        path = bundle / name
-        path.chmod(0o644)
-        if mutation == "missing":
-            path.unlink()
-        elif mutation == "membership":
-            (bundle / "extra.json").write_text("{}")
-        else:
-            path.write_bytes(b"changed")
-        with pytest.raises(DatasetError, match="changed|missing|verified"):
-            dataset.load()
+    assert json.loads((bundle / "provenance.json").read_text()) == resolved
+    name = "manifest.json" if mutation == "manifest" else "predictions.csv"
+    path = bundle / name
+    path.chmod(0o644)
+    if mutation == "missing":
+        path.unlink()
+    elif mutation == "membership":
+        (bundle / "extra.json").write_text("{}")
+    else:
+        path.write_bytes(b"changed")
+    with pytest.raises(DatasetError, match="changed|missing|verified"):
+        dataset.load()
 
 
 @pytest.mark.parametrize("mutation", ["contract", "family", "selection", "root"])

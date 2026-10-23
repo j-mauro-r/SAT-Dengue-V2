@@ -6,7 +6,6 @@ import ast
 import copy
 import json
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
@@ -99,17 +98,17 @@ def test_data_rejects_contradictory_scientific_configuration() -> None:
         validate_stage2_configuration(altered)
 
 
-def test_data_bundle_refuses_existing_publication() -> None:
-    with TemporaryDirectory(dir=ROOT / "tmp", prefix="kedro-data-test-") as directory:
-        dataset = Stage2BundleDataset(directory)
+def test_data_bundle_refuses_existing_publication(repo_tmp_path: Path) -> None:
+    directory = str(repo_tmp_path)
+    dataset = Stage2BundleDataset(directory)
 
-        resolved = synthetic_resolved()
-        folder = Path(directory) / resolved["execution"]["run_id"] / "bundle"
-        folder.mkdir(parents=True)
-        (folder / "manifest.json").write_text("{}")
-        with pytest.raises(DatasetError, match="exists"):
-            dataset.save({"resolved": resolved})
-        assert json.loads((folder / "manifest.json").read_text()) == {}
+    resolved = synthetic_resolved()
+    folder = Path(directory) / resolved["execution"]["run_id"] / "bundle"
+    folder.mkdir(parents=True)
+    (folder / "manifest.json").write_text("{}")
+    with pytest.raises(DatasetError, match="exists"):
+        dataset.save({"resolved": resolved})
+    assert json.loads((folder / "manifest.json").read_text()) == {}
 
 
 def synthetic_resolved() -> dict:
@@ -124,7 +123,7 @@ def synthetic_resolved() -> dict:
     )
 
 
-def test_data_synthetic_graph_publishes_counts_labels_and_exclusions() -> None:
+def test_data_synthetic_graph_publishes_counts_labels_and_exclusions(repo_tmp_path: Path) -> None:
     from kedro.io import DataCatalog, MemoryDataset
     from kedro.runner import SequentialRunner
 
@@ -179,40 +178,38 @@ def test_data_synthetic_graph_publishes_counts_labels_and_exclusions() -> None:
         "divipola": {"resultado": catalog_rows},
         "provenance": {"inputs": {}, "native_documents": {}},
     }
-    with TemporaryDirectory(dir=ROOT / "tmp", prefix="kedro-data-synthetic-") as directory:
-        storage = str(Path(directory) / "runs")
-        datasets = {
-            "configuration_inputs": MemoryDataset(ConfigurationInputsDataset().load()),
-            "parameters": MemoryDataset({"profile": "data", "tracking": "disabled"}),
-            "stage2_sources": MemoryDataset(sources),
-            "stage2_epi_raw": MemoryDataset(iter(raw), copy_mode="assign"),
-            "stage2_climate_raw": MemoryDataset(iter([climate]), copy_mode="assign"),
-            "resolved_configuration": PublishedConfigurationDataset(
-                str(Path(directory) / "config")
-            ),
-            "stage2_consolidated": Stage2ConsolidatedDataset(storage),
-            "stage2_bundle": Stage2BundleDataset(storage),
-        }
-        SequentialRunner().run(register_pipelines()["data"], DataCatalog(datasets))
-        manifest = datasets["stage2_bundle"].load()
-        folder = Path(storage) / manifest["run_id"] / "bundle"
-        panel = pd.read_csv(folder / "panel.csv", dtype={"municipality_code": str})
-        jan = panel[
-            (panel["municipality_code"] == "50001") & (panel["year_month"] == "2012-01")
-        ].iloc[0]
-        assert jan["dengue_notifications_count"] == 7
-        assert jan["p75_canal_t"] == 5
-        assert jan["zona_canal_t"] == "EXCESO"
-        absent = panel[panel["municipality_code"] == "50002"]
-        assert absent["dengue_notifications_count"].eq(0).all()
-        assert absent["rain_mm_month_sum"].isna().all()
-        readiness = json.loads((folder / "readiness.json").read_text())
-        assert readiness["eligible_rows"] == {"t1": 76, "t2": 76}
-        assert readiness["real_fits"] == 0
-        # Any payload corruption or added file invalidates the adapter's read.
-        (folder / "extra").write_text("invalid")
-        with pytest.raises(DatasetError, match="membership"):
-            datasets["stage2_bundle"].load()
+    directory = str(repo_tmp_path)
+    storage = str(Path(directory) / "runs")
+    datasets = {
+        "configuration_inputs": MemoryDataset(ConfigurationInputsDataset().load()),
+        "parameters": MemoryDataset({"profile": "data", "tracking": "disabled"}),
+        "stage2_sources": MemoryDataset(sources),
+        "stage2_epi_raw": MemoryDataset(iter(raw), copy_mode="assign"),
+        "stage2_climate_raw": MemoryDataset(iter([climate]), copy_mode="assign"),
+        "resolved_configuration": PublishedConfigurationDataset(str(Path(directory) / "config")),
+        "stage2_consolidated": Stage2ConsolidatedDataset(storage),
+        "stage2_bundle": Stage2BundleDataset(storage),
+    }
+    SequentialRunner().run(register_pipelines()["data"], DataCatalog(datasets))
+    manifest = datasets["stage2_bundle"].load()
+    folder = Path(storage) / manifest["run_id"] / "bundle"
+    panel = pd.read_csv(folder / "panel.csv", dtype={"municipality_code": str})
+    jan = panel[(panel["municipality_code"] == "50001") & (panel["year_month"] == "2012-01")].iloc[
+        0
+    ]
+    assert jan["dengue_notifications_count"] == 7
+    assert jan["p75_canal_t"] == 5
+    assert jan["zona_canal_t"] == "EXCESO"
+    absent = panel[panel["municipality_code"] == "50002"]
+    assert absent["dengue_notifications_count"].eq(0).all()
+    assert absent["rain_mm_month_sum"].isna().all()
+    readiness = json.loads((folder / "readiness.json").read_text())
+    assert readiness["eligible_rows"] == {"t1": 76, "t2": 76}
+    assert readiness["real_fits"] == 0
+    # Any payload corruption or added file invalidates the adapter's read.
+    (folder / "extra").write_text("invalid")
+    with pytest.raises(DatasetError, match="membership"):
+        datasets["stage2_bundle"].load()
 
 
 def test_data_rejects_wrong_source_manifest(
@@ -271,7 +268,7 @@ def test_data_source_drift_fails_before_streaming(
         list(Stage2RawCsvDataset(["data/raw/dengue.csv"], 10, epidemiology=True).load())
 
 
-def test_data_stream_failure_is_atomic_and_does_not_overwrite() -> None:
+def test_data_stream_failure_is_atomic_and_does_not_overwrite(repo_tmp_path: Path) -> None:
     from sat_dengue.datasets.stage2 import Stage2ConsolidatedDataset
 
     resolved = synthetic_resolved()
@@ -280,18 +277,18 @@ def test_data_stream_failure_is_atomic_and_does_not_overwrite() -> None:
         yield pd.DataFrame({"a": [1]})
         raise ValueError("source contract failed")
 
-    with TemporaryDirectory(dir=ROOT / "tmp", prefix="kedro-data-stream-") as directory:
-        dataset = Stage2ConsolidatedDataset(directory)
-        folder = Path(directory) / resolved["execution"]["run_id"]
-        with pytest.raises(DatasetError, match="contract failed"):
-            dataset.save({"resolved": resolved, "chunks": failing()})
-        assert not (folder / "consolidated.csv").exists()
-        assert not list(folder.glob(".consolidated-*"))
-        dataset.save({"resolved": resolved, "chunks": iter([pd.DataFrame({"a": [1]})])})
-        before = (folder / "consolidated.csv").read_bytes()
-        with pytest.raises(DatasetError, match="exists"):
-            dataset.save({"resolved": resolved, "chunks": iter([pd.DataFrame({"a": [2]})])})
-        assert (folder / "consolidated.csv").read_bytes() == before
+    directory = str(repo_tmp_path)
+    dataset = Stage2ConsolidatedDataset(directory)
+    folder = Path(directory) / resolved["execution"]["run_id"]
+    with pytest.raises(DatasetError, match="contract failed"):
+        dataset.save({"resolved": resolved, "chunks": failing()})
+    assert not (folder / "consolidated.csv").exists()
+    assert not list(folder.glob(".consolidated-*"))
+    dataset.save({"resolved": resolved, "chunks": iter([pd.DataFrame({"a": [1]})])})
+    before = (folder / "consolidated.csv").read_bytes()
+    with pytest.raises(DatasetError, match="exists"):
+        dataset.save({"resolved": resolved, "chunks": iter([pd.DataFrame({"a": [2]})])})
+    assert (folder / "consolidated.csv").read_bytes() == before
 
 
 @pytest.mark.parametrize("mutation", ["original", "engineering", "revision", "expanded"])

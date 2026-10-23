@@ -849,3 +849,19 @@ G2/G3 follow DEC-135; G4 follows DEC-132. G5 remains NOT_APPROVED, champion rema
 not_selected, and consumed 2025 is prohibited for training, search, tuning or
 selection. This bounded session does not authorize tracking, later E2E work,
 cleanup, push, merge, release or publication.
+
+## Session 5 correction — base bootstrap and independent tests
+
+The registry constructs all six graphs without importing model implementations.
+Training node functions and dataset load/save operations defer scientific imports
+until the selected training route executes. Missing modeling dependencies produce
+a localized `sat-dengue-v2[modeling]` requirement; foundation, data and preparation
+registration do not require that extra. Dependency declarations remain unchanged.
+The single native loader and inference-only guard remain the replay boundary.
+
+Repository-local test workspaces now use `repo_tmp_path`, which creates the ignored
+parent explicitly and cleans only each test's own isolated directory. Clean archive
+validation starts without `tmp/`, and base-only wheel validation executes foundation
+without modeling installed. Evidence belongs to PLAN_030's local
+`analysis_results/session5_correction/`. This correction refreshes engineering
+validation only, retains 5/10 completed tasks and does not start T-evaluation.

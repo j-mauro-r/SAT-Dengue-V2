@@ -44,3 +44,26 @@ def test_domain_functions_have_no_orchestration_or_tracking_imports() -> None:
             elif isinstance(statement, ast.ImportFrom) and statement.module:
                 modules = [statement.module]
             assert not {name.split(".")[0] for name in modules} & {"kedro", "mlflow"}, path
+
+
+def test_base_bootstrap_and_training_dependency_boundary() -> None:
+    import os
+    import subprocess
+    import sys
+
+    env = dict(
+        os.environ,
+        PYTHONPATH=os.pathsep.join([str(ROOT), str(ROOT / "src")]),
+        PYTHONDONTWRITEBYTECODE="1",
+        KEDRO_DISABLE_TELEMETRY="yes",
+    )
+    result = subprocess.run(
+        [sys.executable, "tests/integration/base_bootstrap.py"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert '"optional_modules_imported": []' in result.stdout

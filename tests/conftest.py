@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 import pytest
 
 
@@ -30,3 +34,24 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     elif private:
         items[:] = [item for item in items if item not in private]
         config.hook.pytest_deselected(items=private)
+
+
+@pytest.fixture
+def repo_tmp_path() -> Iterator[Path]:
+    """Own one isolated repository-local workspace, independently of checkout state."""
+    parent = Path(__file__).resolve().parents[1] / "tmp"
+    created = False
+    try:
+        parent.mkdir()
+        created = True
+    except FileExistsError:
+        pass
+    try:
+        with TemporaryDirectory(dir=parent, prefix="pytest-workspace-") as directory:
+            yield Path(directory)
+    finally:
+        if created:
+            try:
+                parent.rmdir()  # Never remove another test/process's content.
+            except OSError:
+                pass

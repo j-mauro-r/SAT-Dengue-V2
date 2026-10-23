@@ -80,13 +80,12 @@ def test_champion_decision_policy_is_the_single_human_editable_source() -> None:
     }
 
 
-def test_champion_decision_policy_rejects_invalid_manual_values(tmp_path: Path) -> None:
+def test_champion_decision_policy_rejects_invalid_manual_values(repo_tmp_path: Path) -> None:
     root = _repo_root()
     raw = json.loads((root / POLICY_PATH).read_text(encoding="utf-8"))
     raw["utility"]["max_false_alarm_increase_pp"] = 101
-    relative = Path("tmp/test_invalid_champion_policy.json")
+    relative = (repo_tmp_path / "invalid_champion_policy.json").relative_to(root)
     path = root / relative
-    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(raw), encoding="utf-8")
     with pytest.raises(DecisionPolicyError, match="within"):
         load_decision_policy(root, relative)
@@ -119,6 +118,7 @@ def test_reject_late_component_availability(
     mutation_key: str,
     mutation_value: object,
     expected_message: str,
+    repo_tmp_path: Path,
 ) -> None:
     root = _repo_root()
     base = json.loads((root / CONTRACT_PATH).read_text(encoding="utf-8"))
@@ -126,9 +126,8 @@ def test_reject_late_component_availability(
     if mutation_key == "threshold_selection_targets":
         base["window_role_calendar"]["2018-12_t1"]["component_available_by_origin"] = "2019-01"
 
-    variant_rel = Path("tmp/test_stage5_invalid_calendar.json")
+    variant_rel = (repo_tmp_path / "invalid_calendar.json").relative_to(root)
     variant_path = root / variant_rel
-    variant_path.parent.mkdir(parents=True, exist_ok=True)
     variant_path.write_text(json.dumps(base, indent=2) + "\n", encoding="utf-8")
 
     with pytest.raises(ValueError, match=expected_message):
