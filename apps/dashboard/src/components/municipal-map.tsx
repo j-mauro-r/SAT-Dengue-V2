@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Dept, Muni } from "@/lib/demo-data";
+import type { Dept, Muni } from "@/lib/dashboard-view-model";
 import boundaries from "@/lib/municipal-boundaries.json";
 import { mapResult } from "@/lib/map-result";
 
@@ -17,15 +17,14 @@ export function MunicipalMap({
   onSelect: (id: string) => void;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
-  const areas = boundaries[dept].map((area) =>
-    area.name === "San Sebastián De Mariquita"
-      ? { ...area, id: "mariquita", name: "Mariquita" }
-      : area,
-  );
+  const areas = boundaries[dept];
   const active =
-    areas.find((area) => area.id === hovered) ?? areas.find((area) => area.id === selected);
+    areas.find((area) => area.id === hovered) ??
+    areas.find(
+      (area) => munis.find((municipality) => municipality.id === selected)?.geometryId === area.id,
+    );
   const info = mapResult(
-    munis.find((m) => m.id === active?.id),
+    munis.find((m) => m.geometryId === active?.id),
     horizon,
   );
   return (
@@ -40,7 +39,7 @@ export function MunicipalMap({
           aria-label={`Mapa municipal de ${dept === "tolima" ? "Tolima" : "Meta"}, ${horizon === "t1" ? "T+1" : "T+2"}`}
         >
           {areas.map((area) => {
-            const municipality = munis.find((m) => m.id === area.id);
+            const municipality = munis.find((m) => m.geometryId === area.id);
             const result = mapResult(municipality, horizon);
             const label = `${area.name}: ${result.probability}, ${result.label}`;
             return (
@@ -50,22 +49,22 @@ export function MunicipalMap({
                 fillRule="evenodd"
                 className={`municipal-area ${municipality ? "cursor-pointer" : ""}`}
                 data-state={result.state}
-                data-selected={area.id === selected}
+                data-selected={municipality?.id === selected}
                 role={municipality ? "button" : "img"}
                 tabIndex={0}
                 aria-label={label}
-                aria-pressed={municipality ? area.id === selected : undefined}
+                aria-pressed={municipality ? municipality.id === selected : undefined}
                 onMouseEnter={() => setHovered(area.id)}
                 onFocus={() => setHovered(area.id)}
                 onBlur={() => setHovered(null)}
                 onClick={() => {
                   setHovered(area.id);
-                  if (municipality) onSelect(area.id);
+                  if (municipality) onSelect(municipality.id);
                 }}
                 onKeyDown={(e) => {
                   if (municipality && (e.key === "Enter" || e.key === " ")) {
                     e.preventDefault();
-                    onSelect(area.id);
+                    onSelect(municipality.id);
                   }
                 }}
               >

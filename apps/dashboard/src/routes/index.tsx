@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Area,
   Bar,
@@ -31,24 +31,24 @@ import {
   Copy,
   Check,
   ArrowLeft,
+  RefreshCw,
 } from "lucide-react";
 import {
   DEPTS,
-  MUNIS,
-  META_INFO,
   MONTHS,
   MONTHS_FULL,
-  HISTORY,
-  HISTORY_SCOPE,
-  THRESHOLDS,
+  DEFAULT_PERIODS,
+  DEPARTMENT_CODES,
   type Dept,
   type Zone,
   type Forecast,
   type Muni,
-} from "@/lib/demo-data";
+  type DashboardViewModel,
+} from "@/lib/dashboard-view-model";
 import { Button } from "@/components/ui/button";
-import { resultDetails } from "@/lib/result-details";
 import { MunicipalMap } from "@/components/municipal-map";
+import { useDashboard } from "@/lib/use-dashboard";
+import { DashboardClientError } from "@/lib/dashboard-client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -93,6 +93,11 @@ const ZONE_STYLE: Record<Zone, { cls: string; var: string; icon: string }> = {
     var: "var(--zone-exceso)",
     icon: "◆",
   },
+  "No disponible": {
+    cls: "text-muted-foreground border-border bg-muted",
+    var: "var(--map-unavailable)",
+    icon: "–",
+  },
 };
 const pct = (v: number | null) => (v === null ? "—" : `${Math.round(v * 100)} %`);
 
@@ -110,12 +115,15 @@ function ZoneBadge({ zone }: { zone: Zone }) {
 function AlertBadge({ f }: { f: Forecast }) {
   if (!f.available)
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+      <span
+        className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground"
+        title={f.availabilityReason ?? f.availabilityStatus}
+      >
         <CircleSlash className="h-3.5 w-3.5" />
-        No disponible
+        No disponible · {f.availabilityStatus}
       </span>
     );
-  return f.alert ? (
+  return f.alertStatus === "ALERT" ? (
     <span className="inline-flex items-center gap-1.5 rounded-md border border-zone-exceso/40 bg-zone-exceso/10 px-2 py-0.5 text-xs font-semibold text-zone-exceso">
       <Bell className="h-3.5 w-3.5" />
       Alerta emitida
@@ -173,29 +181,43 @@ function useBogotaNow() {
   return now;
 }
 
-function Dashboard() {
+export function Dashboard() {
   const [dept, setDept] = useState<Dept>("tolima");
-  const [muniId, setMuniId] = useState(MUNIS.tolima[0]!.id);
-  const munis = MUNIS[dept];
-  const muni = munis.find((m) => m.id === muniId) ?? munis[0]!;
+  const [period, setPeriod] = useState(DEFAULT_PERIODS.tolima);
+  const [muniId, setMuniId] = useState("");
+  const dashboard = useDashboard(DEPARTMENT_CODES[dept], period);
   const now = useBogotaNow();
-  const T = META_INFO.periodT;
-  const periodLabel = `${MONTHS_FULL[T.month]} ${T.year}`;
 
   const switchDept = (d: Dept) => {
     setDept(d);
-    setMuniId(MUNIS[d][0]!.id);
+    setPeriod(DEFAULT_PERIODS[d]);
+    setMuniId("");
   };
+
+  if (dashboard.isPending) {
+    return (
+      <DashboardState title="Cargando resultados" message="Consultando el API de solo lectura…" />
+    );
+  }
+  if (dashboard.isError) {
+    return <DashboardError error={dashboard.error} onRetry={() => void dashboard.refetch()} />;
+  }
+
+  const view = dashboard.data;
+  const munis = view.municipalities;
+  const muni = munis.find((item) => item.id === muniId) ?? munis[0]!;
 
   return (
     <div className="min-h-screen bg-background">
-      <div
-        role="alert"
-        className="sticky top-0 z-50 flex items-center justify-center gap-2 bg-warn px-4 py-2 text-center text-xs font-bold tracking-wider text-warn-foreground sm:text-sm"
-      >
-        <AlertTriangle className="h-4 w-4 shrink-0" />
-        DATOS DEMOSTRATIVOS — NO USAR PARA DECISIONES OPERATIVAS
-      </div>
+      {view.demonstrativeValues && (
+        <div
+          role="alert"
+          className="sticky top-0 z-50 flex items-center justify-center gap-2 bg-warn px-4 py-2 text-center text-xs font-bold tracking-wider text-warn-foreground sm:text-sm"
+        >
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          DATOS DEMOSTRATIVOS — NO USAR PARA DECISIONES OPERATIVAS
+        </div>
+      )}
 
       <header className="border-b border-border bg-card/60">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 lg:flex-row lg:items-end lg:justify-between">
@@ -223,17 +245,17 @@ function Dashboard() {
               [
                 <Database key="b" className="h-3.5 w-3.5" />,
                 "Última actualización de datos",
-                META_INFO.dataUpdatedAt,
+                view.dataUpdatedAt,
               ],
               [
                 <CalendarClock key="c" className="h-3.5 w-3.5" />,
                 "Generación del resultado",
-                META_INFO.generatedAt,
+                view.generatedAt,
               ],
               [
                 <FileCode2 key="d" className="h-3.5 w-3.5" />,
                 "Procedimiento evaluado",
-                META_INFO.procedure,
+                `${muni.t1.procedureId ?? "No disponible"} / ${muni.t2.procedureId ?? "No disponible"}`,
               ],
             ].map(([ic, k, v]) => (
               <div key={k as string}>
@@ -275,9 +297,19 @@ function Dashboard() {
                 ))}
               </select>
             </label>
-            <span className="rounded-md border border-border bg-secondary px-3 py-1.5 font-mono text-xs">
-              Periodo T: <b>{periodLabel}</b>
-            </span>
+            <label className="flex items-center gap-2 rounded-md border border-border bg-secondary px-3 py-1 text-xs">
+              <span>Periodo T</span>
+              <input
+                type="month"
+                value={period}
+                onChange={(event) => {
+                  setPeriod(event.target.value);
+                  setMuniId("");
+                }}
+                className="bg-transparent font-mono font-semibold text-foreground"
+                aria-label="Periodo de referencia"
+              />
+            </label>
           </div>
         </div>
       </header>
@@ -295,21 +327,21 @@ function Dashboard() {
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">
                   Estado de gobernanza (no es nivel de riesgo)
                 </p>
-                <p className="text-lg font-bold">MODELO NO APROBADO</p>
+                <p className="text-lg font-bold">
+                  MODELO {view.governanceStatus === "APPROVED" ? "APROBADO" : "NO APROBADO"}
+                </p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 font-mono text-xs">
               <span className="rounded border border-border bg-background px-2 py-1">
-                G5: NOT_APPROVED
+                {view.governanceGate}: {view.governanceStatus}
               </span>
               <span className="rounded border border-border bg-background px-2 py-1">
-                Champion: no seleccionado
+                Champion: {view.championStatus === "SELECTED" ? "seleccionado" : "no seleccionado"}
               </span>
             </div>
             <p className="text-sm text-muted-foreground md:ml-auto md:max-w-xl">
-              Estos resultados corresponden a una evaluación retrospectiva. Ningún modelo está
-              aprobado todavía para uso operativo. La información sirve para revisar el diseño del
-              producto y comprender el comportamiento histórico.
+              {view.limitation}
             </p>
           </div>
         </section>
@@ -318,25 +350,27 @@ function Dashboard() {
         <div className="grid gap-5 lg:grid-cols-3">
           <Card title="Situación observada actual" icon={<Eye className="h-4 w-4" />}>
             <p className="text-sm text-muted-foreground">
-              {muni.name}, {DEPTS[dept]} · Mes T: {periodLabel}
+              {muni.name}, {view.departmentName} · Mes T: {view.periodLabel}
             </p>
-            <p className="mt-3 text-5xl font-bold tabular-nums">{muni.observedT}</p>
+            <p className="mt-3 text-5xl font-bold tabular-nums">
+              {muni.observedT ?? "No disponible"}
+            </p>
             <p className="text-sm text-muted-foreground">casos observados</p>
             <div className="mt-4 flex items-center gap-2 text-sm">
               Canal endémico: <ZoneBadge zone={muni.zoneT} />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Referencia del mes: P25 {muni.channel[T.month]!.p25} · Mediana{" "}
-              {muni.channel[T.month]!.median} · P75 {muni.channel[T.month]!.p75}
+              Referencia del mes: P25 {muni.p25 ?? "No disponible"} · Mediana{" "}
+              {muni.median ?? "No disponible"} · P75 {muni.p75 ?? "No disponible"}
             </p>
           </Card>
           {[muni.t1, muni.t2].map((f) => (
-            <ForecastCard key={`${muni.id}-${f.horizon}`} f={f} municipalityId={muni.id} />
+            <ForecastCard key={`${muni.id}-${f.horizon}`} f={f} />
           ))}
         </div>
 
         {/* 4 */}
-        <ChannelChart muni={muni} />
+        <ChannelChart muni={muni} view={view} />
 
         {/* 5 + 6 */}
         <div className="grid gap-5 lg:grid-cols-5">
@@ -345,7 +379,7 @@ function Dashboard() {
         </div>
 
         {/* 7 */}
-        <HistoryCard dept={dept} />
+        <HistoryCard view={view} />
 
         <footer className="pb-6 pt-2 text-center text-xs text-muted-foreground">
           Prototipo de validación de presentación (PROD-04). No reemplaza el criterio del experto ni
@@ -356,13 +390,59 @@ function Dashboard() {
   );
 }
 
-function ForecastCard({ f, municipalityId }: { f: Forecast; municipalityId: string }) {
+function DashboardState({ title, message }: { title: string; message: string }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-4">
+      <section
+        className="max-w-lg rounded-xl border border-border bg-card p-8 text-center shadow-sm"
+        role="status"
+      >
+        <RefreshCw className="mx-auto h-8 w-8 animate-spin text-primary" />
+        <h1 className="mt-4 text-xl font-semibold">{title}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{message}</p>
+      </section>
+    </main>
+  );
+}
+
+function DashboardError({ error, onRetry }: { error: Error; onRetry: () => void }) {
+  const clientError = error instanceof DashboardClientError ? error : null;
+  const title =
+    clientError?.status === 400
+      ? "Parámetros inválidos"
+      : clientError?.status === 404
+        ? "No hay resultados para este departamento y periodo"
+        : clientError?.status === 500
+          ? "Error interno del API"
+          : clientError?.kind === "contract"
+            ? "Respuesta incompatible"
+            : clientError?.kind === "config"
+              ? "Configuración inválida"
+              : "Error de red";
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-4">
+      <section
+        className="max-w-lg rounded-xl border border-border bg-card p-8 text-center shadow-sm"
+        role="alert"
+      >
+        <AlertTriangle className="mx-auto h-8 w-8 text-zone-alerta" />
+        <h1 className="mt-4 text-xl font-semibold">{title}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+        <Button className="mt-5" onClick={onRetry}>
+          <RefreshCw /> Reintentar
+        </Button>
+      </section>
+    </main>
+  );
+}
+
+function ForecastCard({ f }: { f: Forecast }) {
   const [detail, setDetail] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
-  const technical = resultDetails(municipalityId, f.horizon);
   const copyIdentifier = async () => {
+    if (!f.resultId) return;
     try {
-      await navigator.clipboard.writeText(technical.resultId);
+      await navigator.clipboard.writeText(f.resultId);
       setCopyMessage("Identificador copiado");
     } catch {
       setCopyMessage("No se pudo copiar el identificador");
@@ -403,7 +483,7 @@ function ForecastCard({ f, municipalityId }: { f: Forecast; municipalityId: stri
                 />
                 <div
                   className="relative -mt-3 h-4 w-0.5 bg-foreground"
-                  style={{ marginLeft: `${f.threshold * 100}%` }}
+                  style={{ marginLeft: `${(f.threshold ?? 0) * 100}%` }}
                 />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
@@ -413,8 +493,7 @@ function ForecastCard({ f, municipalityId }: { f: Forecast; municipalityId: stri
             </>
           ) : (
             <p className="mt-4 text-sm text-muted-foreground">
-              Resultado no disponible para este municipio y horizonte (cobertura insuficiente en el
-              resultado persistido). Umbral aplicado: {pct(f.threshold)}.
+              No disponible — {f.availabilityStatus}. {f.availabilityReason}
             </p>
           )}
           <p className="mt-3 flex gap-1.5 rounded-md bg-muted/60 p-2 text-xs text-muted-foreground">
@@ -431,32 +510,44 @@ function ForecastCard({ f, municipalityId }: { f: Forecast; municipalityId: stri
           <dl className="space-y-3 text-sm">
             <div>
               <dt className="text-xs text-muted-foreground">Modelo utilizado</dt>
-              <dd className="font-semibold">{technical.model}</dd>
+              <dd className="font-semibold">{f.model ?? "No disponible"}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-muted-foreground">Horizonte</dt>
+              <dd className="font-mono text-xs">{f.horizon}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-muted-foreground">Rol del modelo</dt>
+              <dd className="font-mono text-xs">{f.modelRole ?? "No disponible"}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted-foreground">Versión del modelo</dt>
-              <dd className="font-mono text-xs">{technical.modelVersion}</dd>
+              <dd className="font-mono text-xs">{f.modelVersion ?? "No disponible"}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted-foreground">Versión de los datos</dt>
-              <dd className="font-mono text-xs">{technical.dataVersion}</dd>
+              <dd className="font-mono text-xs">{f.dataVersion}</dd>
             </div>
             <div>
               <dt className="text-xs text-muted-foreground">
                 Identificador del resultado generado
               </dt>
               <dd className="flex min-w-0 items-center gap-2">
-                <span className="min-w-0 break-all font-mono text-xs">{technical.resultId}</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="min-h-11 min-w-11 shrink-0"
-                  aria-label="Copiar identificador del resultado"
-                  title="Copiar identificador del resultado"
-                  onClick={copyIdentifier}
-                >
-                  {copyMessage === "Identificador copiado" ? <Check /> : <Copy />}
-                </Button>
+                <span className="min-w-0 break-all font-mono text-xs">
+                  {f.resultId ?? "No disponible"}
+                </span>
+                {f.resultId && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="min-h-11 min-w-11 shrink-0"
+                    aria-label="Copiar identificador del resultado"
+                    title="Copiar identificador del resultado"
+                    onClick={copyIdentifier}
+                  >
+                    {copyMessage === "Identificador copiado" ? <Check /> : <Copy />}
+                  </Button>
+                )}
               </dd>
             </div>
           </dl>
@@ -478,14 +569,13 @@ function ForecastCard({ f, municipalityId }: { f: Forecast; municipalityId: stri
   );
 }
 
-function ChannelChart({ muni }: { muni: Muni }) {
-  const T = META_INFO.periodT.month;
+function ChannelChart({ muni, view }: { muni: Muni; view: DashboardViewModel }) {
+  const T = view.periodMonthIndex;
   const data = muni.channel.map((p) => ({
     ...p,
     b1: p.p25,
-    b2: p.median - p.p25,
-    b3: p.p75 - p.median,
-    b4: p.max - p.p75,
+    b2: p.median !== null && p.p25 !== null ? p.median - p.p25 : null,
+    b3: p.p75 !== null && p.median !== null ? p.p75 - p.median : null,
   }));
   return (
     <Card
@@ -493,15 +583,17 @@ function ChannelChart({ muni }: { muni: Muni }) {
       icon={<Activity className="h-4 w-4" />}
       aside={
         <ul className="flex flex-wrap gap-3 text-xs" aria-label="Leyenda">
-          {(Object.keys(ZONE_STYLE) as Zone[]).map((z) => (
-            <li key={z} className="flex items-center gap-1">
-              <span
-                className="h-3 w-3 rounded-sm"
-                style={{ background: ZONE_STYLE[z].var, opacity: 0.6 }}
-              />
-              {z}
-            </li>
-          ))}
+          {(Object.keys(ZONE_STYLE) as Zone[])
+            .filter((z) => z !== "No disponible")
+            .map((z) => (
+              <li key={z} className="flex items-center gap-1">
+                <span
+                  className="h-3 w-3 rounded-sm"
+                  style={{ background: ZONE_STYLE[z].var, opacity: 0.6 }}
+                />
+                {z}
+              </li>
+            ))}
           <li className="flex items-center gap-1">
             <span className="h-0.5 w-4 bg-foreground" />
             Casos observados
@@ -512,7 +604,7 @@ function ChannelChart({ muni }: { muni: Muni }) {
       <div
         className="h-80"
         role="img"
-        aria-label={`Canal endémico ${muni.name} ${META_INFO.periodT.year}. Mes T ${MONTHS_FULL[T]}: ${muni.observedT} casos, zona ${muni.zoneT}.`}
+        aria-label={`Canal endémico ${muni.name} ${view.periodYear}. Mes T ${MONTHS_FULL[T]}: ${muni.observedT ?? "sin dato"} casos, zona ${muni.zoneT}.`}
       >
         <ResponsiveContainer>
           <ComposedChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
@@ -553,14 +645,6 @@ function ChannelChart({ muni }: { muni: Muni }) {
               name="Alerta (Mediana–P75)"
               fill="var(--zone-alerta)"
               fillOpacity={0.3}
-              stroke="none"
-            />
-            <Area
-              stackId="z"
-              dataKey="b4"
-              name="Exceso (>P75)"
-              fill="var(--zone-exceso)"
-              fillOpacity={0.25}
               stroke="none"
             />
             <Line
@@ -679,7 +763,7 @@ function TerritoryMap({
                     {m.name}
                   </button>
                 </td>
-                <td className="pr-2 tabular-nums">{m.observedT}</td>
+                <td className="pr-2 tabular-nums">{m.observedT ?? "No disponible"}</td>
                 <td className="pr-2">
                   <ZoneBadge zone={m.zoneT} />
                 </td>
@@ -742,25 +826,27 @@ function HorizonChart({ muni }: { muni: Muni }) {
                   fill={
                     !d.f.available
                       ? "var(--muted)"
-                      : d.f.alert
+                      : d.f.alertStatus === "ALERT"
                         ? "var(--zone-exceso)"
                         : "var(--primary)"
                   }
                 />
               ))}
             </Bar>
-            <ReferenceLine
-              x={muni.t1.threshold}
-              stroke="var(--foreground)"
-              strokeDasharray="4 3"
-              label={{
-                value: `U T+1 ${pct(muni.t1.threshold)}`,
-                fill: "var(--muted-foreground)",
-                fontSize: 10,
-                position: "top",
-              }}
-            />
-            {muni.t2.threshold !== muni.t1.threshold && (
+            {muni.t1.threshold !== null && (
+              <ReferenceLine
+                x={muni.t1.threshold}
+                stroke="var(--foreground)"
+                strokeDasharray="4 3"
+                label={{
+                  value: `U T+1 ${pct(muni.t1.threshold)}`,
+                  fill: "var(--muted-foreground)",
+                  fontSize: 10,
+                  position: "top",
+                }}
+              />
+            )}
+            {muni.t2.threshold !== null && muni.t2.threshold !== muni.t1.threshold && (
               <ReferenceLine
                 x={muni.t2.threshold}
                 stroke="var(--muted-foreground)"
@@ -790,14 +876,15 @@ function HorizonChart({ muni }: { muni: Muni }) {
   );
 }
 
-function HistoryCard({ dept }: { dept: Dept }) {
-  const rows = useMemo(() => HISTORY[dept], [dept]);
+function HistoryCard({ view }: { view: DashboardViewModel }) {
+  const rows = view.history;
   const [open, setOpen] = useState(false);
   return (
     <Card title="Contexto histórico del modelo" icon={<Database className="h-4 w-4" />}>
       <p className="mb-4 text-xs text-muted-foreground">
-        {HISTORY_SCOPE} · Territorio: {DEPTS[dept]} · Modelo: {META_INFO.modelName} · Umbrales T+1{" "}
-        {pct(THRESHOLDS[dept].t1)} / T+2 {pct(THRESHOLDS[dept].t2)}
+        {rows[0]
+          ? `Evaluación ${rows[0].periodStart} a ${rows[0].periodEnd} · ${rows[0].geography}`
+          : "No evaluado"}
       </p>
       <div className="grid gap-4 md:grid-cols-2">
         {rows.map((r) => (
@@ -807,26 +894,24 @@ function HistoryCard({ dept }: { dept: Dept }) {
               <div>
                 <dt className="text-xs text-muted-foreground">Falsas alertas / alertas emitidas</dt>
                 <dd className="font-mono text-lg">
-                  {r.falseAlerts} / {r.alerts}
+                  {r.falseAlerts ?? "No evaluado"} / {r.alerts ?? "No evaluado"}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">% falsas alertas</dt>
-                <dd className="font-mono text-lg">
-                  {Math.round((r.falseAlerts / r.alerts) * 100)} %
-                </dd>
+                <dd className="font-mono text-lg">{pct(r.falseAlertRatio)}</dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">
                   Inicios detectados / inicios reales
                 </dt>
                 <dd className="font-mono text-lg">
-                  {r.detected} / {r.onsets}
+                  {r.detected ?? "No evaluado"} / {r.onsets ?? "No evaluado"}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Sensibilidad de detección</dt>
-                <dd className="font-mono text-lg">{Math.round((r.detected / r.onsets) * 100)} %</dd>
+                <dd className="font-mono text-lg">{pct(r.onsetSensitivity)}</dd>
               </div>
             </dl>
           </div>
@@ -860,9 +945,9 @@ function HistoryCard({ dept }: { dept: Dept }) {
               {rows.map((r) => (
                 <tr key={r.horizon} className="border-t border-border/60">
                   <td className="px-4 py-2">{r.horizon}</td>
-                  <td>{r.auroc.toFixed(2)}</td>
-                  <td>{r.ap.toFixed(2)}</td>
-                  <td>{r.brier.toFixed(2)}</td>
+                  <td>{r.auroc?.toFixed(2) ?? "No evaluado"}</td>
+                  <td>{r.ap?.toFixed(2) ?? "No evaluado"}</td>
+                  <td>{r.brier?.toFixed(2) ?? "No evaluado"}</td>
                 </tr>
               ))}
             </tbody>

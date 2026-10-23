@@ -32,11 +32,22 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+The dashboard now reads all dynamic content from the Stage 7 read-only API. Copy
+`.env.example` to `.env.local`. Leave `VITE_API_BASE_URL` empty to use the same
+origin; during local development, set `VITE_API_PROXY_TARGET` to the API origin
+and Vite will proxy `/api`. An absolute `VITE_API_BASE_URL` is also supported
+when an explicitly allowed cross-origin deployment is configured by the API.
+
+Start the Stage 7 API from the monorepo root, then run the dashboard independently:
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+uvicorn --factory scripts.read_only_api.api:create_app
+cd apps/dashboard
+bun install --frozen-lockfile
+bun run dev
 ```
+
+The browser requests `GET /api/dashboard?department_code={code}&period={YYYY-MM}`.
+The response is validated with Zod before a single adapter creates the visual
+view model. Failed or incompatible requests clear the visible result and require
+an explicit retry; no local demonstration-data fallback exists.

@@ -169,10 +169,16 @@ bun run build
 bun audit --audit-level=high
 ```
 
-Also smoke the existing `dev` command over local HTTP and verify that generated
-dependency/build paths remain ignored. The DWP delivery validator performs these
-checks without changing dashboard source behavior. Run the full foundation gate
-before merge because the operations and testing documentation changed.
+The Stage 8 integration tests read the canonical Stage 7 fixtures directly from
+`scripts/read_only_api/fixtures`; they validate both departments, all 76
+municipalities, all five availability states, URL/error handling, response
+validation, direct alert/channel/result traceability, coherent navigation, and
+manual retry without maintaining a second fixture copy. For the local smoke,
+start the API and dashboard with `VITE_API_PROXY_TARGET=http://127.0.0.1:8000`,
+then query Tolima `73/2026-09` and Meta `50/2026-12` and inspect one available
+and one unavailable municipal result. Verify generated dependency/build paths
+remain ignored. Run the full foundation gate before merge because CI and the
+dashboard integration surface changed.
 
 ## Stage 2 data integrity and retired experimental EDA
 
