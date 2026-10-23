@@ -34,7 +34,7 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 
 The dashboard now reads all dynamic content from the Stage 7 read-only API. Copy
 `.env.example` to `.env.local`. Leave `VITE_API_BASE_URL` empty to use the same
-origin; during local development, set `VITE_API_PROXY_TARGET` to the API origin
+origin; during local development, set `API_PROXY_TARGET` to the API origin
 and Vite will proxy `/api`. An absolute `VITE_API_BASE_URL` is also supported
 when an explicitly allowed cross-origin deployment is configured by the API.
 

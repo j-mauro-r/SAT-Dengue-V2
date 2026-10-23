@@ -174,7 +174,7 @@ The Stage 8 integration tests read the canonical Stage 7 fixtures directly from
 municipalities, all five availability states, URL/error handling, response
 validation, direct alert/channel/result traceability, coherent navigation, and
 manual retry without maintaining a second fixture copy. For the local smoke,
-start the API and dashboard with `VITE_API_PROXY_TARGET=http://127.0.0.1:8000`,
+start the API and dashboard with `API_PROXY_TARGET=http://127.0.0.1:8000`,
 then query Tolima `73/2026-09` and Meta `50/2026-12` and inspect one available
 and one unavailable municipal result. Verify generated dependency/build paths
 remain ignored. Run the full foundation gate before merge because CI and the

@@ -8,8 +8,8 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { loadEnv } from "vite";
 
 const apiProxyTarget =
-  process.env["VITE_API_PROXY_TARGET"] ??
-  loadEnv("development", process.cwd(), "")["VITE_API_PROXY_TARGET"];
+  process.env["API_PROXY_TARGET"] ??
+  loadEnv("development", process.cwd(), "")["API_PROXY_TARGET"];
 
 export default defineConfig({
   vite: {
