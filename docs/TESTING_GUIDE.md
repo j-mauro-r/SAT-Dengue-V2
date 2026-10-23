@@ -154,6 +154,39 @@ Fallback rule:
 
 - When command mapping is uncertain, default to the full gate set.
 
+## Stage 8 standalone dashboard subtree
+
+`apps/dashboard/**`, `scripts/dashboard_subtree_sync.sh`, and the canonical
+[subtree synchronization guide](operations/dashboard-subtree-sync.md) map to the
+dashboard's Bun lockfile and existing package scripts:
+
+```bash
+cd apps/dashboard
+bun install --frozen-lockfile
+bun run lint
+bun run test
+bun run build
+bun audit --audit-level=high
+```
+
+The Stage 8 integration tests read the canonical Stage 7 fixtures directly from
+`scripts/read_only_api/fixtures`; they validate both departments, all 76
+municipalities, all five availability states, URL/error handling, response
+validation, direct alert/channel/result traceability, coherent navigation, and
+manual retry without maintaining a second fixture copy. Run the real local
+two-service smoke with one command:
+
+```bash
+.venv/bin/python scripts/dashboard_e2e_smoke.py
+```
+
+It starts the ASGI factory and dashboard on free loopback ports, waits for both,
+and queries Tolima `73/2026-09`, Meta `50/2026-12`, and a contracted 404 through
+the dashboard origin and configurable proxy. It terminates both process groups
+on success or failure. Verify generated dependency/build paths remain ignored.
+Run the full foundation gate before merge because CI and the dashboard
+integration surface changed.
+
 ## Stage 2 data integrity and retired experimental EDA
 
 The [experimental EDA](archive/experimental-eda/README.md) was retired on 2026-10-19. Its notebooks, reports and pending rerun instructions are historical. Do not run the old panel/analysis/rules phases as the default Stage 2 workflow. New analysis requires a new bounded task and current acceptance criteria; retirement does not approve scientific outputs or close G2.

@@ -14,6 +14,7 @@ venv/
 # Environment
 .env
 .env.*
+!apps/dashboard/.env.example
 
 # IDE / OS
 .DS_Store
