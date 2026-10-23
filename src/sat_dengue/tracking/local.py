@@ -26,6 +26,7 @@ PARAMETERS = {
     "configuration_sha256",
     "bundle_id",
     "manifest_sha256",
+    "pipeline_identity_sha256",
     "profile",
     "kind",
     "metric_definition_sha256",

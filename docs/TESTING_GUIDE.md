@@ -630,3 +630,49 @@ fails local parity; the synthetic tracking comparison cannot substitute for it.
 Inspect ignored SQLite/artifact locations with `git check-ignore` one path at a time.
 Report inherited global plan incidents separately. Failure/development logs remain
 under PLAN_030 `analysis_results/session7/tracking/`. No notebook or real fit is needed.
+
+## Composed replay E2E (Session 7)
+
+`pipelines/replay`, `datasets/replay{,_identity,_sources,_parity,_synthetic}.py`,
+registry/catalog/configuration, tracking hooks/identity projection and base graph
+registration map to `tests/integration/test_kedro_e2e.py`, existing bootstrap/config
+unit tests and `test_mlflow_tracking.py`. The E2E test runs two isolated source-free
+synthetic graphs, compares every stage CSV, observes tracking on/off, injects failure
+after computation/before final publication, denies all subsequent fixture refits on
+restart, verifies single publication/success and rejects tampering, missing ancestry,
+stale context and changed contract/configuration identities. Changed code/environment
+creates a new context without reuse. The code identity includes every retained
+Python script adapter; injected adapter identity changes cannot reuse old stages.
+CI explicitly selects this synthetic seam.
+
+Run the exact contractual gate through the official sequential DWP gate runner:
+
+```bash
+bash -lc "python -m pytest tests/integration/test_kedro_e2e.py tests/integration/test_migration_parity.py --require-migration-evidence -q && python -m ruff check src tests && python -m ruff format --check src tests && python -m mypy src tests"
+```
+
+The private E2E test invokes the public replay CLI under a whole-process real
+adjustment denial guard. Full construction/preparation/training/evaluation comparisons
+use the unchanged baseline tolerances and complete cohorts. It independently checks
+protected evidence before/after. Existing private comparisons remain selected.
+Missing evidence is a failure, not a skip or synthetic replacement. The
+[migration owner](operations/kedro-migration.md#composed-replay-and-restart--session-7--t-e2e)
+owns CLI configuration, identity storage and failure boundaries.
+
+Also run the public `kedro run --pipeline=replay`, exact tracking regression,
+complete CI selection and full private suite:
+
+```bash
+python -m pytest tests/unit tests/contracts tests/integration/test_migration_parity.py tests/integration/test_mlflow_tracking.py tests/integration/test_kedro_e2e.py -q
+python -m pytest tests/integration -m migration_evidence --require-migration-evidence -q
+```
+
+Build the actual wheel and exercise a base-only installation with modeling/tracking
+imports absent, plus a wheel installation with the approved modeling/tracking extras;
+verify packaged source bytes and run `pip check` in each. Run Markdown links,
+`git diff --check`, privacy/secret/dependency scans and independent preservation of
+all 2,553 original identities/45 native bundles. Report repo-only, scoped PLAN_030 and
+all-plan conformance separately; inherited historical plan incidents are not current
+source failures. Run every validation and DWP writer sequentially. Record commands,
+wall times, zero real-adjustment counters, hashes and limitations under PLAN_030
+`analysis_results/session7/e2e/`. Stop before T-cleanup and T-final-review.

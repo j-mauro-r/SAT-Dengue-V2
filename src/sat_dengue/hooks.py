@@ -21,8 +21,14 @@ class TrackingHooks:
             raise ValueError("Tracking must be explicitly enabled or disabled")
         from sat_dengue.tracking.local import LocalTracking
 
+        selected = run_params.get("pipeline_names") or [run_params.get("pipeline_name")]
+        pipeline = selected[0] if len(selected) == 1 else None
         profile = parameters["profile"]
+        if pipeline in {"replay", "replay_synthetic"}:
+            profile = pipeline
         if profile not in {
+            "replay",
+            "replay_synthetic",
             "training_replay",
             "training_synthetic",
             "evaluation_replay",
@@ -30,7 +36,9 @@ class TrackingHooks:
         }:
             raise ValueError("Enabled tracking requires a training/evaluation publication profile")
         self.output = "training_bundle" if profile.startswith("training_") else "evaluation_bundle"
-        pipeline = run_params.get("pipeline_name") or profile
+        if profile in {"replay", "replay_synthetic"}:
+            self.output = "replay_bundle"
+        pipeline = pipeline or profile
         self.tracker = LocalTracking(
             pipeline, run_params.get("session_id", run_params.get("run_id", "execution"))
         )
@@ -40,7 +48,10 @@ class TrackingHooks:
         if self.tracker is None:
             return
         try:
-            self.tracker.finish(catalog.load(self.output))
+            published = catalog.load(self.output)
+            if self.output == "replay_bundle":
+                published = published["stages"]["evaluation"]
+            self.tracker.finish(published)
         except BaseException:
             self.tracker.fail()
             raise

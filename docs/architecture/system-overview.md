@@ -48,7 +48,8 @@ calibration and thresholds, recomputes full development/final metrics and preser
 the six frozen decisions. Its pure domain functions are independent of persistence;
 its datasets lazily load modeling dependencies and atomically publish isolated
 engineering evidence. Retained script entrypoints are thin adapters; tracking remains explicitly disabled by default. The default
-remains foundation, and future default E2E must compose inference-only replay.
+remains foundation. Explicit `replay` composes verified construction/preparation,
+saved-component training and frozen assessment with zero real adjustments.
 
 ## Planned Runtime Product
 
@@ -75,3 +76,14 @@ model duplication or domain dependency on tracking is introduced. The
 [security owner](../SECURITY.md#bounded-local-mlflow-tracking) defines exclusions;
 the [migration owner](../operations/kedro-migration.md#optional-local-tracking--session-7--t-tracking)
 owns the exact local recipe and sequential recovery limitations.
+
+
+The composed replay has four namespaced stage graphs and explicit producer/consumer
+bridges. Complete native parity precedes reuse; checkpoints bind source, contract,
+code, environment, configuration and ancestor identities. The final atomic immutable
+receipt contains audit/configuration/lineage only. Optional tracking can finish only
+after that receipt and all stage payloads are verified. A separate source-free
+synthetic graph connects bounded fixture training components to assessment. The
+[migration owner](../operations/kedro-migration.md#composed-replay-and-restart--session-7--t-e2e)
+owns sequential restart behavior and its failure boundaries; existing scientific
+status and historical reproducibility limitations remain unchanged.

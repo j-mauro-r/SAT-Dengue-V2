@@ -8,7 +8,7 @@ from kedro.config import OmegaConfigLoader
 
 from sat_dengue.configuration import validate_parameters
 
-CATALOG = {
+CATALOG: dict[str, dict[str, Any]] = {
     "configuration_inputs": {"type": "sat_dengue.datasets.ConfigurationInputsDataset"},
     "resolved_configuration": {
         "type": "sat_dengue.datasets.stage2.PublishedConfigurationDataset",
@@ -51,6 +51,29 @@ CATALOG = {
         "filepath": "tmp/kedro-migration/evaluation-runs",
     },
 }
+
+
+# Composed replay retains the existing stage interfaces under explicit namespaces.
+for _stage in ("data", "preparation", "training", "evaluation"):
+    CATALOG[_stage + ".resolved_configuration"] = {
+        "type": "sat_dengue.datasets.replay.ReplayConfigurationDataset"
+    }
+    _output = {
+        "data": "stage2_bundle",
+        "preparation": "preparation_bundle",
+        "training": "training_bundle",
+        "evaluation": "evaluation_bundle",
+    }[_stage]
+    CATALOG[_stage + "." + _output] = {
+        "type": "sat_dengue.datasets.replay.ReplayStageDataset",
+        "stage": _stage,
+    }
+CATALOG["data.stage2_consolidated"] = {
+    "type": "sat_dengue.datasets.replay.ReplayConsolidatedDataset"
+}
+CATALOG["data.stage2_epi_raw"] = {"type": "MemoryDataset", "copy_mode": "assign"}
+CATALOG["data.stage2_climate_raw"] = {"type": "MemoryDataset", "copy_mode": "assign"}
+CATALOG["replay_bundle"] = {"type": "sat_dengue.datasets.replay.ReplayBundleDataset"}
 
 
 class ValidatedConfigLoader(OmegaConfigLoader):

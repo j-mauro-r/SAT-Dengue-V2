@@ -103,6 +103,8 @@ def verified_lineage(record: dict[str, Any]) -> tuple[dict[str, Any], list[dict[
         "G5": "NOT_APPROVED",
         "champion": "not_selected",
     }
+    if "e2e" in execution:
+        params["pipeline_identity_sha256"] = execution["e2e"]["identity"]
     for key, value in resolved["authorities"].items():
         params["contract_" + key] = value["sha256"]
         params["version_" + key] = value["document"].get("version", value["document"]["schema"])

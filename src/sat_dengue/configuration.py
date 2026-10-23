@@ -53,6 +53,8 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "training_synthetic",
         "evaluation_replay",
         "evaluation_synthetic",
+        "replay",
+        "replay_synthetic",
     ) or value["tracking"] not in ("disabled", "enabled"):
         raise ValueError(
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"

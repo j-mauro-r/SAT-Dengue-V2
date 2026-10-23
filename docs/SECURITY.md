@@ -49,3 +49,11 @@ enabled tracking never falls back silently. An interrupted process can leave RUN
 metadata, which cannot certify success. Exact verified duplicate publication logging
 is marked KILLED and references the prior successful parent. Concurrent writers to
 the same logical replay require a single orchestrator; this adapter is sequential.
+
+
+Composed replay retains these exclusions. Only its additional pipeline identity hash
+is projected to MLflow, after the atomic final receipt and complete stage lineage
+are verified. Replay/checkpoint storage must be ignored relative repository-local
+`tmp/`, without traversal or symlinks. Missing ancestry or changed source, contract,
+configuration, manifest, membership or payload identity cannot certify reuse. Final
+receipts point to immutable stage outputs; they do not duplicate private bundles.

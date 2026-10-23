@@ -981,3 +981,88 @@ no dependency declaration or scientific source identity is changed. Source/test
 ownership is in the [testing guide](../TESTING_GUIDE.md#bounded-mlflow-tracking-session-7).
 Official API references: [MLflow client](https://mlflow.org/docs/latest/api_reference/python_api/mlflow.client.html)
 and [tracking concepts](https://mlflow.org/docs/latest/ml/tracking/).
+
+## Composed replay and restart — Session 7 / T-e2e
+
+The public command composes 37 nodes, including existing stages and explicit bridges:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+export PYTHONPATH="$PWD:$PWD/src"
+export KEDRO_DISABLE_TELEMETRY=yes
+kedro run --pipeline=replay
+```
+
+The default remains the small foundation graph. Selecting `replay` explicitly
+binds the replay profile even with the default `profile: foundation`. No notebook
+execution, copied intermediates or optional tracking service is required. Modeling
+extras and the already verified local source/native inventory are required. Missing
+private evidence fails closed. Complete current construction feeds preparation;
+complete preparation parity precedes saved-component training replay; complete
+training parity precedes frozen evaluation; complete evaluation parity precedes the
+final commit. Where the existing native loaders require original preparation or
+components, the bridge first verifies equality of the newly produced full cohort.
+This permits their read-only reuse without introducing another scientific path.
+All real stages execute under fit/refit/calibration/search/selection denial.
+
+`pipelines/replay` expands the existing scientific graphs under four namespaces.
+`datasets/replay_sources` owns stage bridges; `replay_identity` owns explicit
+execution/checkpoint identities; `replay_parity` compares complete real outputs;
+`replay` delegates immutable stage publication and writes the final lineage receipt.
+These modules are orchestration/persistence adapters. The existing domain functions
+remain independent of Kedro and MLflow. Catalog registrations are explicit and
+validated; raw iterators use assign semantics instead of deep-copying generators.
+
+The ignored `SAT_DENGUE_REPLAY_ROOT` defaults to
+`tmp/kedro-migration/replay-runs`. Each execution identity binds mode, validated
+operational configuration, approved contracts, every original source/native payload,
+source and loaded package code, every retained Python script adapter, environment
+and Git revision. A changed legitimate
+code/environment/configuration identity creates a fresh execution directory and
+cannot reuse old checkpoints. Changed pinned scientific contracts/inputs are
+rejected. Each ordered checkpoint binds all preceding manifests, its configuration
+snapshot, complete manifest/schema/membership and every payload size/SHA-256. No
+implicit latest, timestamp-only matching or automatic Kedro cache is used.
+
+Repeating the command with unchanged identities verifies and reuses completed
+stages. Consolidated streaming output also has an explicit verified checkpoint.
+Final publication uses atomic no-replace publication with identical-byte reuse;
+all published files are immutable. Its only payloads are audit, lineage and resolved
+configuration, pointing to the four verified stage publications. No native models,
+CSVs or whole stage bundles are copied into this final receipt or MLflow.
+
+A failure after computation but before final publication leaves complete stage
+checkpoints and no partial final bundle. Restart verifies the full lineage and
+commits once, without recomputation or synthetic refits. A missing ancestor,
+altered intermediate/configuration or conflicting publication fails closed.
+Uncheckpointed stage-publication failures require explicit inspection, rather than
+scanning for a latest bundle. One orchestrator must run these writers sequentially;
+this is not a concurrent distributed cache or a general garbage collector.
+
+Synthetic execution is separate and consumes no private sources or native bundles:
+
+```bash
+kedro run --pipeline=replay_synthetic --params=profile=replay_synthetic
+# Optional local tracking requires explicit opt-in and its optional extra:
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow \
+  kedro run --pipeline=replay --params=tracking=enabled
+```
+
+The synthetic construction/preparation fixture supplies complete daily coverage and
+fits only sixteen train-role fixture preparers. Training uses the existing strict
+internal fixture and bounded three-family procedure. Its actual saved models and
+preparers feed both horizons of the existing evaluation fixture. The T+1 fixture
+models are feature-compatible interface probes for T+2, not scientific candidates.
+The preparation/training/evaluation fixtures retain their deliberately separate
+scientific calendars; the real path supplies full historical cohort equality.
+Synthetic deterministic equality cannot substitute for the real parity gate.
+
+Tracking hooks verify the final receipt before handing its evaluation publication
+to the existing allowlisted local tracker. The parent includes only the additional
+pipeline identity hash, and six candidate/horizon children. A failed final publication
+cannot produce success; a verified retry cannot produce a second successful run.
+Process death can still leave RUNNING metadata, which certifies nothing. Native
+publications remain authoritative. Scientific limitations, consumed 2025, G5
+NOT_APPROVED, champion not_selected, the 13 historical exceptions and 17 immutable
+KEEP / UNVERIFIED bundles remain unchanged. Session 7 stops before cleanup or Final
+Review; no runtime model approval, deployment or release follows from this replay.

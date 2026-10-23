@@ -37,6 +37,8 @@ def main() -> None:
         "training_synthetic",
         "evaluation_replay",
         "evaluation_synthetic",
+        "replay",
+        "replay_synthetic",
     }
     assert pipelines["__default__"] is pipelines["foundation"]
     assert not OPTIONAL.intersection(sys.modules)
@@ -54,10 +56,14 @@ def main() -> None:
         "training_replay",
         "evaluation_synthetic",
         "evaluation_replay",
+        "replay",
+        "replay_synthetic",
     ):
         # Node boundary and real-source dataset both fail before importing a scientific module.
         first = pipelines[name].nodes[0]
-        args: list[dict[str, Any]] = [{}, {}] if name.endswith("synthetic") else [{}, {}, {}]
+        args: list[dict[str, Any]] = (
+            [{}, {}] if (name.endswith("synthetic") or name == "replay") else [{}, {}, {}]
+        )
         try:
             first.func(*args)
         except RuntimeError as error:
