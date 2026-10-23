@@ -470,7 +470,7 @@ function ForecastCard({ f }: { f: Forecast }) {
           <p className="text-sm text-muted-foreground">
             Mes objetivo: <b className="text-foreground">{f.targetMonth}</b>
           </p>
-          {f.available ? (
+          {f.available && f.prob !== null && f.threshold !== null ? (
             <>
               <div className="mt-3 flex items-baseline gap-2">
                 <span className="text-5xl font-bold tabular-nums">{pct(f.prob)}</span>
@@ -479,11 +479,11 @@ function ForecastCard({ f }: { f: Forecast }) {
               <div className="mt-4 h-2 w-full rounded-full bg-muted" aria-hidden>
                 <div
                   className="relative h-2 rounded-full bg-primary"
-                  style={{ width: `${(f.prob ?? 0) * 100}%` }}
+                  style={{ width: `${f.prob * 100}%` }}
                 />
                 <div
                   className="relative -mt-3 h-4 w-0.5 bg-foreground"
-                  style={{ marginLeft: `${(f.threshold ?? 0) * 100}%` }}
+                  style={{ marginLeft: `${f.threshold * 100}%` }}
                 />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
@@ -787,7 +787,7 @@ function TerritoryMap({
 function HorizonChart({ muni }: { muni: Muni }) {
   const data = [muni.t1, muni.t2].map((f) => ({
     name: `${f.horizon} · ${f.targetMonth.split(" ")[0]}`,
-    prob: f.prob ?? 0,
+    prob: f.prob,
     th: f.threshold,
     f,
   }));

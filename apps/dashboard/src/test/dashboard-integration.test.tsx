@@ -81,6 +81,12 @@ describe("Stage 7 dashboard contract and adapter", () => {
       ]),
     );
   });
+
+  it("does not convert an unavailable probability to zero", () => {
+    const view = adaptDashboardResponse(dashboardResponseSchema.parse(fixture("tolima")));
+    const unavailable = view.municipalities.find(({ t1 }) => !t1.available)!;
+    expect(unavailable.t1.prob).toBeNull();
+  });
 });
 
 describe("typed dashboard client", () => {
