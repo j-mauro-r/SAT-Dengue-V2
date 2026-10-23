@@ -1879,6 +1879,85 @@
     "starting_head": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
     "status": "PROPOSED ONLY; no permission until explicit human amendment approval"
   },
+  "documentation_corrections": [
+    {
+      "authority": "Mauricio",
+      "contract_id": "0728ec8f749474aa41510ffff0a70c68ba15ff2bf454fdd58fe929bb7297d29f",
+      "contract_revision": 17,
+      "files": {
+        "docs/product/stage-5/README.md": {
+          "disposition": "ADAPT",
+          "final": {
+            "bytes": 38766,
+            "present": true,
+            "sha256": "a5042f29b8000de3c283ea7d510019fafa0149472aa9906ea304ceffc0d69d3e"
+          },
+          "original": {
+            "bytes": 30192,
+            "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+          },
+          "original_git": {
+            "blob": "fd5a6a2f747e8ca506102aafa1777c3501f51d15",
+            "bytes": 30192,
+            "path": "docs/product/stage-5/README.md",
+            "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+            "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+          },
+          "owner": "Stage5 and scientific-standards documentation maintainer; scientific decisions remain owned by Mauricio",
+          "pre_cleanup_git": {
+            "blob": "c5ee9140df95e88b48f63d5a55f384f5de4538cc",
+            "bytes": 35157,
+            "path": "docs/product/stage-5/README.md",
+            "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+            "sha256": "fad1d18765c7d02d7eb145681fb022c14f6ffb0aefc25096dbc1cac4c6db9b52"
+          },
+          "pre_correction_git": {
+            "blob": "c8e9b29269af590481d9348d848b16172e2a6641",
+            "bytes": 36937,
+            "path": "docs/product/stage-5/README.md",
+            "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+            "sha256": "c3fd943236382f842366997d04079e4d6ad8cc0c128a2bfdf7e475793855c3d0"
+          },
+          "reason": "Replace retired operational commands and obsolete implementation policy with current Kedro/package guidance; preserve scientific rules, decisions, tables and limitations.",
+          "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/product/stage-5/README.md",
+          "scientific_semantics": "unchanged"
+        },
+        "docs/standards/ml-scientific-standards.md": {
+          "disposition": "ADAPT",
+          "final": {
+            "bytes": 3205,
+            "present": true,
+            "sha256": "712d19a6ce7b7f7fc7e5869127e8e6c13ede5aa994585b7db66f96fbb33446a4"
+          },
+          "original": {
+            "bytes": 2533,
+            "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+          },
+          "original_git": {
+            "blob": "8860bba743682235bbc3c0771eaab1a61312feb9",
+            "bytes": 2533,
+            "path": "docs/standards/ml-scientific-standards.md",
+            "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+            "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+          },
+          "owner": "Stage5 and scientific-standards documentation maintainer; scientific decisions remain owned by Mauricio",
+          "pre_cleanup_git": null,
+          "pre_correction_git": {
+            "blob": "8860bba743682235bbc3c0771eaab1a61312feb9",
+            "bytes": 2533,
+            "path": "docs/standards/ml-scientific-standards.md",
+            "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+            "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+          },
+          "reason": "Replace retired operational commands and obsolete implementation policy with current Kedro/package guidance; preserve scientific rules, decisions, tables and limitations.",
+          "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/standards/ml-scientific-standards.md",
+          "scientific_semantics": "unchanged"
+        }
+      },
+      "pre_correction_revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+      "schema": "kedro-documentation-correction-v1"
+    }
+  ],
   "files": {
     "docs/product/stage-2/Informe_EDA_03_vista_revisada.ipynb": {
       "disposition": "RETIRE",
@@ -1976,10 +2055,21 @@
     },
     "docs/product/stage-5/README.md": {
       "disposition": "ADAPT",
+      "engineering_history": [
+        {
+          "commit": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+          "contract_revision": 16,
+          "final": {
+            "bytes": 36937,
+            "present": true,
+            "sha256": "c3fd943236382f842366997d04079e4d6ad8cc0c128a2bfdf7e475793855c3d0"
+          }
+        }
+      ],
       "final": {
-        "bytes": 36937,
+        "bytes": 38766,
         "present": true,
-        "sha256": "c3fd943236382f842366997d04079e4d6ad8cc0c128a2bfdf7e475793855c3d0"
+        "sha256": "a5042f29b8000de3c283ea7d510019fafa0149472aa9906ea304ceffc0d69d3e"
       },
       "original": {
         "bytes": 30192,

@@ -2,10 +2,43 @@
 
 ## Current execution and governance
 
-Use `kedro run --pipeline=replay` for construction through frozen assessment,
-or `kedro run --pipeline=evaluation_replay --params=profile=evaluation_replay`
-for the explicit verified assessment boundary. `evaluation_synthetic` is disjoint
-and consumes no private source. Tracking is optional and disabled by default.
+From the repository root, activate the existing isolated migration environment
+and its pinned modeling dependencies as described by the migration/testing owners.
+The official E2E command is:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=replay
+```
+
+For the explicit frozen assessment boundary, `evaluation_replay` requires the
+local private native bundles, approved contracts and complete source identities.
+Missing, stale or corrupt evidence fails closed; there is no fallback fitting.
+The separate synthetic route creates its own fixture and needs no private source:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=evaluation_replay --params=profile=evaluation_replay
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=evaluation_synthetic --params=profile=evaluation_synthetic
+```
+
+Current scientific modules live under `src/sat_dengue/model_evaluation/`,
+`src/sat_dengue/model_assessment/` and `src/sat_dengue/final_evaluation/`.
+Current Stage 5 regression and quality commands are:
+
+```bash
+python -m pytest tests/unit/test_model_evaluation.py tests/unit/test_model_assessment.py tests/unit/test_final_evaluation.py -q
+python -m ruff check src tests
+python -m ruff format --check src tests
+python -m mypy src tests
+```
+
+Private preservation/parity is a separate mandatory local check; it cannot pass
+on missing evidence. See the testing guide for runtime and input requirements:
+
+```bash
+python -m pytest tests/integration -m migration_evidence --require-migration-evidence -q
+```
+
+Tracking is optional and disabled by default.
 G5 is `NOT_APPROVED`, champion `not_selected`; all six real decisions are
 `does_not_meet`. Consumed 2025 cannot train, adjust, calibrate, search or select.
 The migrated workflow applies saved components and thresholds, with zero real fits.
@@ -23,8 +56,13 @@ historical reproducibility or operational model approval.
 ## Historical scientific delivery records
 
 The following delivery protocols, recorded commands/results and earlier migration
-checkpoints are historical evidence. Their fitting/notebook commands apply only
+checkpoints are historical evidence. Their fitting/notebook procedures apply only
 to their original recoverable Git tree, never to current production execution.
+Original commands are recoverable with `git show
+3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/product/stage-5/README.md`.
+The historical region ends at Maintained frozen assessment below.
+
+<!-- command-context: historical begin -->
 
 
 Current execution is the guarded Kedro migration described in
@@ -136,12 +174,9 @@ external recalibration or threshold correction is performed.
 
 ## Commands
 
-```bash
-.venv/bin/python -m scripts.model_evaluation.execution --execute
-.venv/bin/python -m scripts.model_evaluation.execution --verify
-.venv/bin/python -m scripts.model_evaluation.notebook_execution --execute
-.venv/bin/python -m scripts.model_evaluation.notebook_execution --verify
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 Artifacts are written under `artifacts/model_evaluation/` with immutable identities.
 Distinct configurations must create distinct bundle IDs and never overwrite prior runs.
@@ -188,12 +223,11 @@ approved. A subsequent authorized task must implement and audit the accepted
 final procedure, including actual row-derived availability, before claiming final
 completion. Proposed dates are not evidence that final models have been fitted.
 
-Run from the repository root:
+The original delivery used a notebook/script route; its invocation is historical:
 
-```bash
-.venv/bin/python -m scripts.final_evaluation.execution --execute
-.venv/bin/python -m scripts.final_evaluation.execution --verify
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 Execution uses a fresh kernel, then verifies saved outputs against recomputed
 artifacts. Verification uses native input inference, never fallback training.
@@ -204,12 +238,9 @@ under `artifacts/model_assessment_notebook_executions/`; they are not Git delive
 
 Validation for this surface (in addition to the repository foundation checks):
 
-```bash
-.venv/bin/python -m pytest tests/unit/test_model_assessment.py -q
-.venv/bin/ruff check scripts/model_assessment tests/unit/test_model_assessment.py
-.venv/bin/ruff format --check scripts/model_assessment tests/unit/test_model_assessment.py
-.venv/bin/mypy --explicit-package-bases scripts/model_assessment tests/unit/test_model_assessment.py
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 The critical regressions cover early T+2 availability, reserved-target rejection
 and the approved onset/false-alert denominators and utility knobs. PLAN_028 owns
@@ -332,13 +363,12 @@ The migrated notebook displays the immutable development comparison and, only wh
 requested and authorized, executes the final route. Historical assessment CLI
 receipts belong to the previous notebook orchestration; use the current commands below.
 
-Default execution performs readiness checks only, with zero reserved access or
-scientific fitting:
+The historical delivery's default route performed readiness checks only, with
+zero reserved access or scientific fitting. It is not a current entrypoint:
 
-```bash
-.venv/bin/python -m scripts.final_evaluation.execution --execute
-.venv/bin/python -m scripts.final_evaluation.execution --verify
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 After final evaluation, later repository refactors may intentionally change live
 development contracts or assessment modules. Readiness still verifies the immutable
@@ -348,15 +378,14 @@ first mismatch; it does not silently declare the new code equivalent. In that st
 results must be read from the verified final bundle rather than regenerated with the
 new dependency identity.
 
-After actual human acceptance of G4, this exact proposal/protocol, and final
-execution is recorded, the scientific command is:
+The historical final route required actual human acceptance of G4 and this exact
+proposal/protocol before its one authorized execution. Its retired invocation was:
 
-```bash
-.venv/bin/python -m scripts.final_evaluation.execution --execute --scientific
-.venv/bin/python -m scripts.final_evaluation.execution --verify --scientific
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
-`--scientific` does not approve anything. The route requires a local
+The historical `--scientific` flag did not approve anything. That route required a local
 `artifacts/model_final_protocol/<proposal_sha>/human_authorization.json` containing
 `authority: "Mauricio"`, the exact `proposal_sha256`, explicit true values for
 `accept_G4`, `accept_exact_protocol`, `authorize_final_execution`, and a
@@ -537,6 +566,8 @@ not authorize retraining, retuning, renewed use of 2025 for selection, a champio
 or a change to G5 NOT_APPROVED.
 
 
+<!-- command-context: historical end -->
+
 ## Maintained frozen assessment — Kedro Session 6
 
 Use the existing isolated foundation environment, with modeling installed:
@@ -597,13 +628,16 @@ remain. 2025 cannot fit, refit, calibrate, tune, select alternatives or select a
 champion. The 13 historical source exceptions and 17 KEEP / UNVERIFIED bundles
 remain excluded from equivalence; full historical reproducibility is not claimed.
 
-Twenty-two old modules stay as thin import/CLI adapters because notebooks,
-protocol/cohort helpers and regression tests still consume them. Their CLI routes
-now invoke guarded Kedro replay; `--scientific` rejects renewed execution.
+The twenty-two former Stage 5 script facades were retired by T-cleanup after
+their consumers moved directly to the package owners and complete parity passed.
 Synthetic library regressions retain their isolated fake-repository engine.
-No script or notebook is retired; retirement belongs to T-cleanup. Exact original
-and current engineering identities and destinations are recorded in the
-[migration identity mapping](../../operations/kedro-evaluation-identities.json).
-Observed validation and consumer details live in local PLAN_030
-`analysis_results/session6/HANDOFF.md`; the [testing guide](../../TESTING_GUIDE.md)
-owns recurring commands. Tracking, E2E composition and later tasks remain separate.
+Notebooks 03–08 are retained exclusively as frozen historical identity evidence,
+never production entrypoints. There is no active scientific-execution flag or
+authorization to repeat historical fitting.
+The [original migration mapping](../../operations/kedro-evaluation-identities.json)
+remains unchanged; the separate
+[cleanup correspondence](../../operations/kedro-cleanup-identities.json) verifies
+original/pre-cleanup Git blobs, retired absence and subsequent documentary identities.
+Session 6 receipts remain historical; current validation is owned by the
+[testing guide](../../TESTING_GUIDE.md). The composed E2E and optional bounded
+tracking are described by the current migration owner.

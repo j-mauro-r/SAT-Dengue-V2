@@ -1309,7 +1309,7 @@
       "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
       "parity": "Identical facade/package object exports and preserved complete owning-stage/E2E parity; fresh cleanup regressions recorded in the session handoff.",
       "purpose": "Active technical README owner",
-      "reason": "Synchronize the active technical execution owner; retain scientific decisions/tables and exact prior Git identities.",
+      "reason": "Active technical owner corrected to registered Kedro commands; original/pre-cleanup and revision16 final identities remain recoverable and scientific records unchanged.",
       "recovery": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:docs/product/stage-5/README.md",
       "writers": "No source/report mutation authorized; current Kedro publications are separate immutable bundles."
     },
@@ -3086,6 +3086,69 @@
     "tests/integration",
     "tests/unit"
   ],
+  "documentation_correction": {
+    "authority": "Mauricio",
+    "contract_id": "0728ec8f749474aa41510ffff0a70c68ba15ff2bf454fdd58fe929bb7297d29f",
+    "contract_revision": 17,
+    "files": {
+      "docs/product/stage-5/README.md": {
+        "final": {
+          "bytes": 38766,
+          "present": true,
+          "sha256": "a5042f29b8000de3c283ea7d510019fafa0149472aa9906ea304ceffc0d69d3e"
+        },
+        "owner": "Documentation and repository-contract validation maintainer",
+        "pre_correction_git": {
+          "blob": "c8e9b29269af590481d9348d848b16172e2a6641",
+          "bytes": 36937,
+          "path": "docs/product/stage-5/README.md",
+          "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+          "sha256": "c3fd943236382f842366997d04079e4d6ad8cc0c128a2bfdf7e475793855c3d0"
+        },
+        "reason": "Authorized Session8 correction only; no productive source or scientific semantics changed.",
+        "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/product/stage-5/README.md"
+      },
+      "docs/standards/ml-scientific-standards.md": {
+        "final": {
+          "bytes": 3205,
+          "present": true,
+          "sha256": "712d19a6ce7b7f7fc7e5869127e8e6c13ede5aa994585b7db66f96fbb33446a4"
+        },
+        "owner": "Documentation and repository-contract validation maintainer",
+        "pre_correction_git": {
+          "blob": "8860bba743682235bbc3c0771eaab1a61312feb9",
+          "bytes": 2533,
+          "path": "docs/standards/ml-scientific-standards.md",
+          "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+          "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+        },
+        "reason": "Authorized Session8 correction only; no productive source or scientific semantics changed.",
+        "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/standards/ml-scientific-standards.md"
+      },
+      "tests/contracts/test_repository_disposition.py": {
+        "final": {
+          "bytes": 18210,
+          "present": true,
+          "sha256": "c78eee14c5dbb2145db6e9ab7a1ac3023c45a06118d75c54ba6afc04409747be"
+        },
+        "owner": "Documentation and repository-contract validation maintainer",
+        "pre_correction_git": {
+          "blob": "68952113bd375e653aaab21764f1e1149180369c",
+          "bytes": 7244,
+          "path": "tests/contracts/test_repository_disposition.py",
+          "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+          "sha256": "e17017430aa5ba7dec5b5e9db1394527420932916b6137c74d07a0994d4c03dc"
+        },
+        "reason": "Authorized Session8 correction only; no productive source or scientific semantics changed.",
+        "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:tests/contracts/test_repository_disposition.py"
+      }
+    },
+    "historical_67_path_ceiling": "unchanged",
+    "map_and_registry_file_hashes": "Local PLAN_030/analysis_results/session8_correction/actual-surface.json records all five validated final file hashes without self-referential hashing.",
+    "mapping": "docs/operations/kedro-cleanup-identities.json",
+    "pre_correction_revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+    "scientific_semantics": "unchanged"
+  },
   "historical_exceptions": 13,
   "immutable_unverified_bundles": 17,
   "maintained_scripts": [
@@ -4577,8 +4640,21 @@
     },
     "docs/product/stage-5/README.md": {
       "disposition": "ADAPT",
+      "engineering_identity": {
+        "bytes": 38766,
+        "present": true,
+        "sha256": "a5042f29b8000de3c283ea7d510019fafa0149472aa9906ea304ceffc0d69d3e"
+      },
       "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
-      "reason": "Synchronize the active technical execution owner; retain scientific decisions/tables and exact prior Git identities."
+      "pre_correction_git": {
+        "blob": "c8e9b29269af590481d9348d848b16172e2a6641",
+        "bytes": 36937,
+        "path": "docs/product/stage-5/README.md",
+        "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+        "sha256": "c3fd943236382f842366997d04079e4d6ad8cc0c128a2bfdf7e475793855c3d0"
+      },
+      "reason": "Authorized Session8 correction only; no productive source or scientific semantics changed.",
+      "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/product/stage-5/README.md"
     },
     "docs/product/stage-5/champion_decision_policy_v1.json": {
       "disposition": "KEEP",
@@ -4616,9 +4692,22 @@
       "reason": "Current technical owner or unchanged historical/governance evidence; scientific decisions and dates retained."
     },
     "docs/standards/ml-scientific-standards.md": {
-      "disposition": "KEEP",
+      "disposition": "ADAPT",
+      "engineering_identity": {
+        "bytes": 3205,
+        "present": true,
+        "sha256": "712d19a6ce7b7f7fc7e5869127e8e6c13ede5aa994585b7db66f96fbb33446a4"
+      },
       "owner": "Owning documentation, harness or CI maintainer",
-      "reason": "Current technical owner or unchanged historical/governance evidence; scientific decisions and dates retained."
+      "pre_correction_git": {
+        "blob": "8860bba743682235bbc3c0771eaab1a61312feb9",
+        "bytes": 2533,
+        "path": "docs/standards/ml-scientific-standards.md",
+        "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+        "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+      },
+      "reason": "Authorized Session8 correction only; no productive source or scientific semantics changed.",
+      "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/standards/ml-scientific-standards.md"
     },
     "notebooks/03_consolidated_dataset_pipeline.ipynb": {
       "disposition": "KEEP",
@@ -6266,9 +6355,22 @@
       "reason": "Active synthetic/contract or explicit protected local acceptance control; no safeguard removed."
     },
     "tests/contracts/test_repository_disposition.py": {
-      "disposition": "KEEP",
+      "disposition": "ADAPT",
+      "engineering_identity": {
+        "bytes": 18210,
+        "present": true,
+        "sha256": "c78eee14c5dbb2145db6e9ab7a1ac3023c45a06118d75c54ba6afc04409747be"
+      },
       "owner": "Validation maintainer",
-      "reason": "Active synthetic/contract or explicit protected local acceptance control; no safeguard removed."
+      "pre_correction_git": {
+        "blob": "68952113bd375e653aaab21764f1e1149180369c",
+        "bytes": 7244,
+        "path": "tests/contracts/test_repository_disposition.py",
+        "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+        "sha256": "e17017430aa5ba7dec5b5e9db1394527420932916b6137c74d07a0994d4c03dc"
+      },
+      "reason": "Authorized Session8 correction only; no productive source or scientific semantics changed.",
+      "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:tests/contracts/test_repository_disposition.py"
     },
     "tests/integration/base_bootstrap.py": {
       "disposition": "KEEP",
@@ -6440,7 +6542,8 @@
     "docs/operations/kedro-cleanup-identities.json",
     "src/sat_dengue/pipeline_registry.py",
     "scripts/check_markdown_links.py",
-    ".github/workflows/ci.yml"
+    ".github/workflows/ci.yml",
+    "docs/standards/ml-scientific-standards.md"
   ],
   "schema": "sat-dengue-repository-disposition-v1",
   "scientific_status": {
