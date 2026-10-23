@@ -1,5 +1,10 @@
 # Stage 5 — calibration, development assessment and final protocol
 
+Current execution is the guarded Kedro migration described in
+[Maintained frozen assessment](#maintained-frozen-assessment--kedro-session-6).
+Earlier delivery sections below preserve scientific decisions and dated evidence;
+their fitting/notebook commands are historical, not authorization to execute them.
+
 Delivery 1 implements bounded Stage 5 development work over verified Stage 4 artifacts.
 It does not reopen EDA, change labels/features/population, select a champion, or use
 reserved targets from 2025-01 onward.
@@ -503,3 +508,75 @@ saved components and their predictions in a separate bounded follow-up before
 claiming reproduction with the new dependency. This conflict resolution does
 not authorize retraining, retuning, renewed use of 2025 for selection, a champion
 or a change to G5 NOT_APPROVED.
+
+
+## Maintained frozen assessment — Kedro Session 6
+
+Use the existing isolated foundation environment, with modeling installed:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=evaluation_replay --params=profile=evaluation_replay
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=evaluation_synthetic --params=profile=evaluation_synthetic
+```
+
+`evaluation_replay` has ten nodes and uses only the fixed saved development,
+proposal and final bundles. It resolves the approved contracts, verifies the
+exact proposal and source/component identities, constructs complete cohorts and
+validates availability, replays saved raw probabilities, applies retained
+calibration, emits alerts from retained thresholds, computes final metrics and
+paired uncertainty, independently rebuilds development assessment, applies the
+existing decision policy and assembles verified atomic publication. There is no
+fit, calibration-fit, hyperparameter, calibrator-choice or threshold-search node.
+The already consumed 2025 block cannot become a new selection or training route.
+
+`evaluation_synthetic` has eleven nodes. Its extra node creates its entire toy
+fixture internally in memory; it has no frozen-source dataset input. Toy scores
+exercise the same calibration, alert, cohort, metric, policy and publication
+interfaces with zero fits. Synthetic results are interface tests, not evidence
+of equivalence with real results. Existing deterministic native-model synthetic
+roundtrip tests remain enabled separately.
+
+Pure scientific owners are `src/sat_dengue/model_evaluation/`,
+`model_assessment/` and `final_evaluation/`; metrics remain shared in `metrics.py`.
+`datasets/evaluation_legacy.py` owns narrow native input reading and call guards;
+`datasets/evaluation.py` owns lazy loading and atomic immutable output. Optional
+modeling imports occur only when an evaluation node/dataset executes. Registration
+and foundation remain usable with the base package alone. YAML selects only the
+operational profile and disabled tracking; scientific overrides are rejected.
+
+Each run publishes a distinct engineering bundle below ignored
+`tmp/kedro-migration/evaluation-runs/`. Payloads retain full final predictions,
+comparison, metrics, uncertainty, cohort keys/context and common draw indices;
+complete development replay/assessment tables; and aggregate audit/provenance.
+Every payload has a size/SHA-256 record. Publication rejects partial payload sets,
+corruption, missing input identities and overwrites. Scientific native bundles,
+proposal, policy, notebooks and historical hashes are never repaired or replaced.
+
+The replay checks all 160 saved development models and six final models. It
+reproduces all 72,048 internal/outer development inference rows, the 21,888 selected
+development and 10,032 posterior rows, and the complete assessment outputs. Final
+comparison uses 7,296 prediction rows (5,472 candidates and 1,824 persistence),
+3,640 metric rows, eight comparison rows, sixteen uncertainty rows, two complete
+912-row cohorts and two shared 2,000-by-12 resampling matrices. Original probability
+roundtrips remain exact; development sigmoid replay retains its existing 1e-12
+absolute bound. Other metric comparisons retain the migration's predeclared
+1e-8 relative / 1e-10 absolute tolerances. No new tolerance is introduced.
+
+All six research decisions remain `does_not_meet`. G5 remains `NOT_APPROVED` and
+champion remains `not_selected`, read from the single decision policy. The
+outer-refit/calibrator transfer and retrospective as-of-availability limitations
+remain. 2025 cannot fit, refit, calibrate, tune, select alternatives or select a
+champion. The 13 historical source exceptions and 17 KEEP / UNVERIFIED bundles
+remain excluded from equivalence; full historical reproducibility is not claimed.
+
+Twenty-two old modules stay as thin import/CLI adapters because notebooks,
+protocol/cohort helpers and regression tests still consume them. Their CLI routes
+now invoke guarded Kedro replay; `--scientific` rejects renewed execution.
+Synthetic library regressions retain their isolated fake-repository engine.
+No script or notebook is retired; retirement belongs to T-cleanup. Exact original
+and current engineering identities and destinations are recorded in the
+[migration identity mapping](../../operations/kedro-evaluation-identities.json).
+Observed validation and consumer details live in local PLAN_030
+`analysis_results/session6/HANDOFF.md`; the [testing guide](../../TESTING_GUIDE.md)
+owns recurring commands. Tracking, E2E composition and later tasks remain separate.

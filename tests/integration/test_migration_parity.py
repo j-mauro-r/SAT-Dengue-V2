@@ -1229,3 +1229,285 @@ def test_training_extracted_scientific_definitions_match_originals() -> None:
         )
         + "\n"
     )
+
+
+@pytest.mark.migration_evidence
+def test_evaluation_kedro_all_frozen_decisions_probabilities_and_metrics(
+    protected_baseline: dict,
+) -> None:
+    """Whole guarded CLI, full development/final parity and independent preservation."""
+    import copy
+    import sys
+
+    from sat_dengue.datasets import ConfigurationInputsDataset
+    from sat_dengue.datasets.evaluation_legacy import FrozenEvaluationLoader, no_adjustment
+    from sat_dengue.final_evaluation.workflow import resolve_replay_configuration, validate_sources
+
+    evidence = ROOT / ".dwp/plans/PLAN_030_kedro_architecture_migration/analysis_results/session6"
+    evidence.mkdir(parents=True, exist_ok=True)
+    before = verify_protected_inventory(ROOT, protected_baseline)
+    sources = FrozenEvaluationLoader().load()
+    resolved = resolve_replay_configuration(
+        ConfigurationInputsDataset().load(),
+        {"profile": "evaluation_replay", "tracking": "disabled"},
+        sources,
+    )
+    for defect in (
+        "proposal",
+        "source",
+        "component",
+        "missing_component",
+        "manifest",
+        "future_labels",
+    ):
+        broken = dict(sources)
+        if defect == "proposal":
+            broken["proposal"] = copy.deepcopy(sources["proposal"])
+            broken["proposal"]["procedures"][0]["retained_threshold"]["selected_threshold"] = 0.99
+        elif defect == "source":
+            broken["panel"] = sources["panel"].copy()
+            broken["panel"].loc[0, "rain_mm_month_sum"] = 99999
+        elif defect in ("component", "missing_component"):
+            broken["components"] = dict(sources["components"])
+            key = next(iter(broken["components"]))
+            if defect == "missing_component":
+                del broken["components"][key]
+            else:
+                broken["components"][key] = {**broken["components"][key], "model": b"corrupt"}
+        elif defect == "manifest":
+            broken["provenance"] = copy.deepcopy(sources["provenance"])
+            key = next(iter(broken["provenance"]["native_manifest_documents"]))
+            broken["provenance"]["native_manifest_documents"][key]["bundle_id"] = "0" * 64
+        else:
+            broken["proposal"] = copy.deepcopy(sources["proposal"])
+            broken["proposal"]["procedures"][0]["retained_component_availability_checks"][0][
+                "effective_availability"
+            ] = "2025-01"
+        with pytest.raises((ValueError, AssertionError)), no_adjustment():
+            validate_sources(broken, resolved)
+    storage = EVIDENCE / "evaluation-runs"
+    previous = set(storage.iterdir()) if storage.exists() else set()
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", KEDRO_DISABLE_TELEMETRY="yes")
+    env["PYTHONPATH"] = os.pathsep.join([str(ROOT), str(ROOT / "src"), str(Path(__file__).parent)])
+    for name in ("PYTEST_ADDOPTS", "PYTEST_DEBUG_TEMPROOT"):
+        env.pop(name, None)
+    result = subprocess.run(
+        [sys.executable, "tests/integration/evaluation_cli.py"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=600,
+    )
+    (evidence / "kedro-no-adjustment.log").write_text(result.stdout + result.stderr)
+    assert result.returncode == 0, result.stdout[-3500:] + result.stderr[-3500:]
+    created = set(storage.iterdir()) - previous
+    assert len(created) == 1
+    bundle = created.pop()
+    manifest = verify_native_bundle(bundle)
+    audit = json.loads((bundle / "audit.json").read_text())
+    assert manifest["real_model_fits"] == manifest["real_preparer_refits"] == 0
+    assert all(
+        audit[n] == 0
+        for n in (
+            "real_model_fits",
+            "real_preparer_refits",
+            "calibrator_fits",
+            "threshold_selection",
+            "hyperparameter_search",
+        )
+    )
+    assert len(audit["decisions"]) == 6 and {r["result"] for r in audit["decisions"]} == {
+        "does_not_meet"
+    }
+    assert audit["G5"] == "NOT_APPROVED" and audit["champion"] == "not_selected"
+    from sat_dengue.final_evaluation.identities import ASSESSMENT, FINAL, STAGE5
+
+    counts = {}
+    for name in sources["reference"]:
+        expected = pd.read_csv(
+            ROOT / FINAL / name,
+            float_precision="round_trip",
+            dtype={"municipality_code": "string"}
+            if "municipality_code" in sources["reference"][name]
+            else None,
+        )
+        actual = pd.read_csv(
+            bundle / name,
+            float_precision="round_trip",
+            dtype={"municipality_code": "string"} if "municipality_code" in expected else None,
+        )
+        compare_frames(
+            expected,
+            actual,
+            numeric=tuple(expected.select_dtypes(include="number").columns),
+            exact_numeric=name == "predictions.csv",
+        )
+        counts[name] = {
+            "rows": len(actual),
+            "columns": len(actual.columns),
+            "identity": fingerprint(bundle / name),
+        }
+    for origin, names in [
+        (STAGE5, ["development_predictions.csv", "posterior_predictions.csv"]),
+        (ASSESSMENT, list(sources["development"]["assessment"])),
+    ]:
+        for name in names:
+            expected = pd.read_csv(ROOT / origin / name, float_precision="round_trip")
+            actual = pd.read_csv(bundle / ("development_" + name), float_precision="round_trip")
+            compare_frames(
+                expected, actual, numeric=tuple(expected.select_dtypes(include="number").columns)
+            )
+            counts["development_" + name] = {
+                "rows": len(actual),
+                "columns": len(actual.columns),
+                "identity": fingerprint(bundle / ("development_" + name)),
+            }
+    import ast
+    import importlib
+    import inspect
+
+    groups = {
+        "scripts/model_evaluation/contract.py": (
+            "sat_dengue.model_evaluation.contract",
+            [
+                "ModelEvaluationError",
+                "Stage5Contract",
+                "_as_month_list",
+                "_as_month_range",
+                "_validate_window_role_calendar",
+            ],
+        ),
+        "scripts/model_evaluation/availability.py": (
+            "sat_dengue.model_evaluation.availability",
+            ["availability_transition", "transition_records", "preflight_window"],
+        ),
+        "scripts/model_evaluation/decision_policy.py": (
+            "sat_dengue.model_evaluation.decision_policy",
+            ["Stage5Knobs", "ChampionDecisionPolicy", "DecisionPolicyError"],
+        ),
+        "scripts/model_evaluation/pipeline.py": (
+            "sat_dengue.model_evaluation.calibration",
+            [
+                "_window_index_with_labels",
+                "_read_window_calendar",
+                "_validate_role_calendar_against_dataset",
+                "_merge_internal_with_truth",
+                "_assign_internal_role",
+                "_month_ordinal",
+                "_month_gap",
+                "_month_lag_series",
+                "_role_boundaries",
+                "_build_temporal_audit_row",
+                "_assert_verify_allowed",
+                "_calibrator_provenance",
+                "_apply_saved_calibrator",
+                "_extract_fold_months",
+                "_assert_selection_independence",
+                "_fit_sigmoid",
+                "_apply_sigmoid",
+                "_calibration_curve_table",
+                "_choose_calibration",
+                "_threshold_limits",
+                "_build_threshold_grid",
+                "_select_threshold_from_grid",
+                "_oracle_event_counts",
+                "_select_configuration_from_hyperparameter_role",
+                "_to_bool",
+            ],
+        ),
+        "scripts/model_assessment/policy.py": (
+            "sat_dengue.model_assessment.policy",
+            ["require_development", "proposed_calendar"],
+        ),
+        "scripts/final_evaluation/cohorts.py": (
+            "sat_dengue.final_evaluation.cohorts",
+            ["Cohort", "expected_index", "build_cohorts", "validate_cohort"],
+        ),
+        "scripts/final_evaluation/evaluation.py": (
+            "sat_dengue.final_evaluation.evaluation",
+            ["metric_records", "circular_draws"],
+        ),
+    }
+    identical = []
+    for path, (module, names) in groups.items():
+        raw_source = subprocess.check_output(
+            ["git", "show", "5e16166d17ed8c8db935756ac269d69de28de376:" + path], cwd=ROOT, text=True
+        )
+        definitions = {
+            n.name: n
+            for n in ast.parse(raw_source).body
+            if isinstance(n, (ast.FunctionDef, ast.ClassDef))
+        }
+        owner = importlib.import_module(module)
+        for name in names:
+            current = ast.parse(inspect.getsource(getattr(owner, name))).body[0]
+            assert ast.dump(current, include_attributes=False) == ast.dump(
+                definitions[name], include_attributes=False
+            ), (path, name)
+            identical.append(module + "." + name)
+    (evidence / "scientific-source-parity.json").write_text(
+        json.dumps(
+            {
+                "status": "PASS",
+                "ast_identical_definitions": identical,
+                "boundary_refactors": {
+                    "decision_policy": "I/O split from validation",
+                    "utility_and_summary": (
+                        "Explicit policy injection; legacy defaults remain in I/O adapter"
+                    ),
+                    "research_result_and_evaluate_horizon": (
+                        "Explicit policy dependency; unchanged formulas verified by "
+                        "full native metrics and decisions"
+                    ),
+                    "predict_procedure": (
+                        "Separate pure raw/calibration/alert steps; "
+                        "exact full saved probabilities and alerts"
+                    ),
+                },
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+    after = verify_protected_inventory(ROOT, protected_baseline)
+    (evidence / "complete-parity.json").write_text(
+        json.dumps(
+            {
+                "status": "PASS",
+                "engineering_bundle": str(bundle.relative_to(ROOT)),
+                "manifest": fingerprint(bundle / "manifest.json"),
+                "audit": audit,
+                "tables": counts,
+                "source_provenance": sources["provenance"],
+                "preservation_before": before,
+                "preservation_after": after,
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+
+
+@pytest.mark.parametrize("mutation", ["extra", "original", "engineering", "revision"])
+def test_evaluation_baseline_closed_mapping_rejects_drift(
+    mutation: str, repo_tmp_path: Path
+) -> None:
+    from copy import deepcopy
+
+    from migration_support import EVALUATION_MAPPING, verify_evaluation_preservation
+
+    mapping = deepcopy(EVALUATION_MAPPING)
+    records = {n: v["original"] for n, v in mapping["files"].items()}
+    name = next(iter(mapping["files"]))
+    if mutation == "extra":
+        mapping["files"]["scripts/unapproved_evaluation.py"] = mapping["files"][name]
+    elif mutation == "revision":
+        mapping["original_revision"] = "0" * 40
+    else:
+        mapping["files"][name][mutation]["sha256"] = "0" * 64
+    path = repo_tmp_path / "docs/operations/kedro-evaluation-identities.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(mapping))
+    with pytest.raises(AssertionError, match="Closed evaluation mapping"):
+        verify_evaluation_preservation(repo_tmp_path, records)

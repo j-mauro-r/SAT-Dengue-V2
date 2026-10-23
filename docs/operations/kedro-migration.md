@@ -865,3 +865,54 @@ validation starts without `tmp/`, and base-only wheel validation executes founda
 without modeling installed. Evidence belongs to PLAN_030's local
 `analysis_results/session5_correction/`. This correction refreshes engineering
 validation only, retains 5/10 completed tasks and does not start T-evaluation.
+
+
+## Stage 5 execution — Session 6
+
+Only T-evaluation is authorized, starting at clean commit
+`5e16166d17ed8c8db935756ac269d69de28de376` after fresh clean-archive and actual
+base-only foundation guarantees passed. The [Stage 5 owner](../product/stage-5/README.md)
+now documents the ten-node `evaluation_replay` and eleven-node `evaluation_synthetic`
+graphs. Foundation remains default; no MLflow/tracking, E2E composition or cleanup.
+
+The fixed final bundle `768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35`,
+proposal `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`,
+assessment `0f26a4eb97ad37075f3fba2d8da0afd55cf3450db945e8f9cb86d7dccac2f257`
+and calibration/development bundle
+`dcab7855d25e6982d9afb21cc4bf50831cb48095fa2d7181afe3b5661b910cfd` remain
+read-only native inputs. The loader checks exact manifest/payload membership,
+retained proposal/components, actual source inputs and original authorization.
+New configuration/source/code identities belong only to engineering publications.
+
+| Dataset / dependency | Owner |
+| --- | --- |
+| `configuration_inputs`, `parameters`, `resolved_configuration` | Existing authority input and immutable snapshot adapters |
+| `evaluation_sources` | Lazy read-only `FrozenEvaluationSourcesDataset`; three explicit pinned native manifests |
+| `evaluation_synthetic_sources` | Internally generated in-memory fixture; no real-source input |
+| Verified proposal → cohorts/availability → raw inference → retained calibration → alerts | Pure `model_evaluation`, `model_assessment`, `final_evaluation` functions composed by `pipelines/evaluation` |
+| Final metrics/uncertainty and independent development replay/assessment → frozen policy | Pure domain functions; no real fitting/search/selection or champion ranking |
+| `evaluation_bundle` | Atomic immutable `EvaluationBundleDataset`, ignored `tmp/kedro-migration/evaluation-runs/` |
+
+Shared metric equations remain in `metrics.py`. Pure functions receive their
+policy explicitly; retained legacy adapters supply old default-policy I/O for
+active callers. Old library real-fit routes reject consumed-evidence execution;
+retained CLI adapters invoke guarded replay. Synthetic legacy regression engines
+operate only in isolated fixture repositories. No global module aliases, generic
+plugin framework or universal base class is introduced.
+
+Twenty-two script paths and the active Stage 5 README receive separate engineering
+identities under the [closed evaluation mapping](kedro-evaluation-identities.json).
+Their original Git bytes at the initial revision remain verified against the
+unchanged baseline; every earlier mapping remains closed. Current code locations
+and consumers are recorded before mutation in local session6/originals-consumers.json,
+and the final surface is reconciled from Git. No path is retired or notebook run.
+
+Complete comparisons include every internal/outer development inference row,
+selected calibration representation, retained threshold/alert and all final
+probabilities, cohort rows, denominators, metrics, paired draws and six decisions.
+The original development sigmoid bound and migration metric tolerances are
+retained; no sampling or tolerance expansion. G5 NOT_APPROVED, champion not_selected,
+consumed-2025 restrictions, the outer-refit/calibrator limitation, all 13 exceptions
+and 17 KEEP / UNVERIFIED dispositions remain. Exact counts, hashes, observed gates,
+independent preservation and limitations belong to session6/HANDOFF.md. The
+[testing guide](../TESTING_GUIDE.md) owns commands. Stop before T-tracking.

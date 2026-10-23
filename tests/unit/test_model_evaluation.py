@@ -503,22 +503,28 @@ def test_execute_reuses_existing_bundle_without_fitting(
             "files": {},
         }
 
-    monkeypatch.setattr("scripts.model_evaluation.pipeline.load_contract", lambda _cfg: contract)
     monkeypatch.setattr(
-        "scripts.model_evaluation.pipeline._load_stage4_inputs",
+        "sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline.load_contract",
+        lambda _cfg: contract,
+    )
+    monkeypatch.setattr(
+        "sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline._load_stage4_inputs",
         lambda _cfg, _contract: stage4_inputs,
     )
-    monkeypatch.setattr("scripts.model_evaluation.pipeline._identity_payload", lambda **_kwargs: {})
     monkeypatch.setattr(
-        "scripts.model_evaluation.pipeline._bundle_identity",
+        "sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline._identity_payload",
+        lambda **_kwargs: {},
+    )
+    monkeypatch.setattr(
+        "sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline._bundle_identity",
         lambda _identity: "dummy-bundle",
     )
     monkeypatch.setattr(
-        "scripts.model_evaluation.pipeline._verify_existing_bundle",
+        "sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline._verify_existing_bundle",
         _mock_verify_existing_bundle,
     )
     monkeypatch.setattr(
-        "scripts.model_evaluation.pipeline.fit_model",
+        "sat_dengue.datasets.legacy_evaluation.model_evaluation.pipeline.fit_model",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("fit_model called")),
     )
 

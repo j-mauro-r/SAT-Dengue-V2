@@ -47,7 +47,15 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("Only operational profile and tracking parameters are allowed")
     if (
         value["profile"]
-        not in ("foundation", "data", "preparation", "training_replay", "training_synthetic")
+        not in (
+            "foundation",
+            "data",
+            "preparation",
+            "training_replay",
+            "training_synthetic",
+            "evaluation_replay",
+            "evaluation_synthetic",
+        )
         or value["tracking"] != "disabled"
     ):
         raise ValueError(

@@ -718,7 +718,7 @@ def verify_training_preservation(root: Path, records: dict[str, Any]) -> int:
     files = TRAINING_MAPPING["files"]
     mapped = set(files).intersection(records)
     if not mapped or not path.exists():
-        return require_records(root, records)
+        return verify_evaluation_preservation(root, records)
     assert not path.is_symlink()
     assert json.loads(path.read_text()) == TRAINING_MAPPING, "Closed training mapping changed"
     for name in sorted(mapped):
@@ -731,4 +731,346 @@ def verify_training_preservation(root: Path, records: dict[str, Any]) -> int:
         assert fingerprint(safe_path(root, name)) == entry["engineering"]
         assert all(safe_path(root, destination).is_file() for destination in entry["destination"])
     remaining = {n: r for n, r in records.items() if n not in files}
+    return (verify_evaluation_preservation(root, remaining) if remaining else 0) + len(mapped)
+
+
+EVALUATION_MAPPING: dict[str, Any] = {
+    "schema": "kedro-evaluation-migration-identities-v1",
+    "original_revision": "5e16166d17ed8c8db935756ac269d69de28de376",
+    "baseline_sha256": "d86338cd34dcde884e2be9d102271969d0f3b52f57b8ffdebd1829771977a5b3",
+    "files": {
+        "docs/product/stage-5/README.md": {
+            "original": {
+                "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a",
+                "bytes": 30192,
+            },
+            "engineering": {
+                "bytes": 35157,
+                "sha256": "fad1d18765c7d02d7eb145681fb022c14f6ffb0aefc25096dbc1cac4c6db9b52",
+            },
+            "destination": ["docs/product/stage-5/README.md"],
+        },
+        "scripts/final_evaluation/__init__.py": {
+            "original": {
+                "sha256": "f1695c497c10eec50d32d991b771290bc87a48a54e425b2029f7c8dc5c8c9238",
+                "bytes": 72,
+            },
+            "engineering": {
+                "bytes": 300,
+                "sha256": "a3bf54be98cafdaeb93e6714de6dd9cc0fde6cf9fbafc31caa5c094468284aa4",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/__init__.py"
+            ],
+        },
+        "scripts/final_evaluation/cohorts.py": {
+            "original": {
+                "sha256": "3630f1e8cdf6766c277a836aeb903e66d9e429975be870892527c6419a4b9ccf",
+                "bytes": 9975,
+            },
+            "engineering": {
+                "bytes": 314,
+                "sha256": "606a131511a52600042137fe830c57453bbb8b628058a3893d07a5f811135f39",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/cohorts.py",
+                "src/sat_dengue/final_evaluation/cohorts.py",
+            ],
+        },
+        "scripts/final_evaluation/evaluation.py": {
+            "original": {
+                "sha256": "c6228d971a0e5ba0b04f6c82bbcdd64563d9127ae951d11b97a5026cf37e2780",
+                "bytes": 10637,
+            },
+            "engineering": {
+                "bytes": 317,
+                "sha256": "6f12536c138589cbbd82c210e779620af0621e78d14d6d1e4a6462987a0095d6",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/evaluation.py",
+                "src/sat_dengue/final_evaluation/evaluation.py",
+            ],
+        },
+        "scripts/final_evaluation/execution.py": {
+            "original": {
+                "sha256": "2f585d8aa20d93846264086c6aaa120e81c78b092ecb89603e3c69328b1f2a41",
+                "bytes": 4117,
+            },
+            "engineering": {
+                "bytes": 372,
+                "sha256": "58f575183b7ac5713266456a6c728d39105fd1dbc2d5848bd134b3b44ef58b89",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/execution.py",
+                "src/sat_dengue/datasets/evaluation_cli.py",
+            ],
+        },
+        "scripts/final_evaluation/pipeline.py": {
+            "original": {
+                "sha256": "e57435682733ddb0665e0093ccfee4fb31941f328f9fbd032329c9e176e2da01",
+                "bytes": 16254,
+            },
+            "engineering": {
+                "bytes": 315,
+                "sha256": "7dc8559b04be4e3d82535bcb43985e128af8742e57e269add323095a53197bb7",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/pipeline.py",
+                "src/sat_dengue/final_evaluation/prediction.py",
+            ],
+        },
+        "scripts/final_evaluation/protocol.py": {
+            "original": {
+                "sha256": "27aa4736f3d11e96b182043ceded8abedebae829404dff940dbccbb3b7dc29e2",
+                "bytes": 6001,
+            },
+            "engineering": {
+                "bytes": 315,
+                "sha256": "183b8dcb6c15fc1b3b0451b6a2a849ec6d7f9232a66e05ce8f171bb054209c7e",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/protocol.py"
+            ],
+        },
+        "scripts/model_assessment/__init__.py": {
+            "original": {
+                "sha256": "536c51c7e4f21ca8c0b19c2a2106db36a85de9d7235462e2bfa2d4829f7313e8",
+                "bytes": 80,
+            },
+            "engineering": {
+                "bytes": 300,
+                "sha256": "cb3809ced0fd1d6e815d9d3ec84defbcced01fabb4f86d6a61e755ae9d448d0d",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/__init__.py"
+            ],
+        },
+        "scripts/model_assessment/comparison.py": {
+            "original": {
+                "sha256": "635b115501b8fa091b4f356309ad5dcc76c5d3fdd84a711f57eb168036479c4a",
+                "bytes": 4877,
+            },
+            "engineering": {
+                "bytes": 317,
+                "sha256": "0f10214f5d6a8f9d81d23917a07b5cc8e52c1d138737c757c82c92ae05de52e0",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/comparison.py",
+                "src/sat_dengue/model_assessment/comparison.py",
+            ],
+        },
+        "scripts/model_assessment/execution.py": {
+            "original": {
+                "sha256": "77f98936b48ace75f235026c3fc362ea75f284cb776332273d526ef7332eb6f7",
+                "bytes": 3379,
+            },
+            "engineering": {
+                "bytes": 372,
+                "sha256": "c5fdaf63dbe6990b2a5a3702bd2c1c55148e03143e2c303d05183abee31b7fdf",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/execution.py",
+                "src/sat_dengue/datasets/evaluation_cli.py",
+            ],
+        },
+        "scripts/model_assessment/input_validation.py": {
+            "original": {
+                "sha256": "27c8c3d2ca3ade77d2022974b3733957e15f200135b1e0e86d81d55b6025c8f5",
+                "bytes": 3847,
+            },
+            "engineering": {
+                "bytes": 323,
+                "sha256": "313c02e71841d47f401fe81d2d6885316ee9878dc92dfc19a4581c5c2f0d42a2",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/input_validation.py"
+            ],
+        },
+        "scripts/model_assessment/loading.py": {
+            "original": {
+                "sha256": "45143718a2ccade0dddc3c52a7324ec31b270a42eb5b5b70b9a2abb080957154",
+                "bytes": 6945,
+            },
+            "engineering": {
+                "bytes": 314,
+                "sha256": "60f12d6d537ceb6b1fccedea50fd8adaefa3d4fc1e97054f58daf3d1f3206934",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/loading.py",
+                "src/sat_dengue/model_assessment/workflow.py",
+            ],
+        },
+        "scripts/model_assessment/pipeline.py": {
+            "original": {
+                "sha256": "5edc04cd1077a7ba80ecd0179168d1c70ee4a04e9f2f368b3ed27b42daf56f2e",
+                "bytes": 5845,
+            },
+            "engineering": {
+                "bytes": 315,
+                "sha256": "eabf1f40355258228c69ab5f884a42165c27db7bbfa09d84bafb9ea0e181f34b",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/pipeline.py"
+            ],
+        },
+        "scripts/model_assessment/policy.py": {
+            "original": {
+                "sha256": "79ea9220fa79551d96428ad84434fe8d5abaa1fe61552f07db7c61489d0c597d",
+                "bytes": 4207,
+            },
+            "engineering": {
+                "bytes": 313,
+                "sha256": "1667ca01e6dfe131886896e471fe15090f3ff61f3f026c30662f5812a0586bc0",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/policy.py",
+                "src/sat_dengue/model_assessment/policy.py",
+            ],
+        },
+        "scripts/model_assessment/proposal.py": {
+            "original": {
+                "sha256": "2e4cc21ed0fceb0e8654e4f4dabb852cef35cd8a82905bf95f0c58cf021b9cc5",
+                "bytes": 6475,
+            },
+            "engineering": {
+                "bytes": 315,
+                "sha256": "1ce7ba589a683d3af877d3eae9a33f03c431df7abfa07fdd75bc9c048da96d74",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_assessment/proposal.py"
+            ],
+        },
+        "scripts/model_evaluation/__init__.py": {
+            "original": {
+                "sha256": "1df83b4efd4c17e812c067cd60cbe0ac38de8d7658b8d7c256f75a7ba6261515",
+                "bytes": 476,
+            },
+            "engineering": {
+                "bytes": 300,
+                "sha256": "2f0a812a1aec0be3a3979dfb2cc729e2c6a44467a31d43c32eb2f55310944988",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/__init__.py"
+            ],
+        },
+        "scripts/model_evaluation/availability.py": {
+            "original": {
+                "sha256": "bf5761effaf0ec8b881523a1590fe681f5137d5285798ecbf71c2a8f26cf6a71",
+                "bytes": 7058,
+            },
+            "engineering": {
+                "bytes": 319,
+                "sha256": "a890d87605f390a98c760e4b3da1b5b0f35de96ae6b2b8aa3d9d4740907da01e",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/availability.py",
+                "src/sat_dengue/model_evaluation/availability.py",
+            ],
+        },
+        "scripts/model_evaluation/contract.py": {
+            "original": {
+                "sha256": "5eba463708c096618186c991e0f2a7882d7d7f6bb857fe30d13b9a203d1c1f3e",
+                "bytes": 10324,
+            },
+            "engineering": {
+                "bytes": 315,
+                "sha256": "437a1c18fe5e4ad960ad56fd343f74c266bd6c422dbbd0fb2caea5c61ad3a826",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/contract.py",
+                "src/sat_dengue/model_evaluation/contract.py",
+            ],
+        },
+        "scripts/model_evaluation/decision_policy.py": {
+            "original": {
+                "sha256": "69e42d78efd4f3952d1419ef188d3456d1657dfc4e4de1ee60c2d3269957a1fe",
+                "bytes": 5852,
+            },
+            "engineering": {
+                "bytes": 322,
+                "sha256": "7512a083234e256da7852e63e4b118ed9d400b6deb1476fccd1cd13a97dbc0c1",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/decision_policy.py",
+                "src/sat_dengue/model_evaluation/decision_policy.py",
+            ],
+        },
+        "scripts/model_evaluation/execution.py": {
+            "original": {
+                "sha256": "37816fbb6d1d57116d87802764b9f87f0967cb64ebef1204fada9f362593e2d5",
+                "bytes": 1130,
+            },
+            "engineering": {
+                "bytes": 372,
+                "sha256": "488957af2c356fee57ef52678ac3e2b543710261d28493164b86771882b34008",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/execution.py",
+                "src/sat_dengue/datasets/evaluation_cli.py",
+            ],
+        },
+        "scripts/model_evaluation/internal_evidence.py": {
+            "original": {
+                "sha256": "83a2aa7cf4d0579f46e85e2c1590601177610b8475d0748cd1d71f72e5524d85",
+                "bytes": 8039,
+            },
+            "engineering": {
+                "bytes": 324,
+                "sha256": "c4188cc7011a65ea8de9acf461120bcce6676eb08eaf815e55721e6a206c4b76",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/internal_evidence.py"
+            ],
+        },
+        "scripts/model_evaluation/notebook_execution.py": {
+            "original": {
+                "sha256": "59bc268286ae126dd7894879d6cfcabaaa9ba76e12a4eded68cec7442d6d6b4d",
+                "bytes": 5197,
+            },
+            "engineering": {
+                "bytes": 381,
+                "sha256": "23baa4171b8cef85c2e7b1776ca213e5a54e7098b0c0c1b00c24f6bd26941393",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/notebook_execution.py",
+                "src/sat_dengue/datasets/evaluation_cli.py",
+            ],
+        },
+        "scripts/model_evaluation/pipeline.py": {
+            "original": {
+                "sha256": "42900de97a6023af5ff797bb11c917c25471b336fd231b6cd97f27abd5446b1f",
+                "bytes": 94121,
+            },
+            "engineering": {
+                "bytes": 315,
+                "sha256": "0b06e6555db481cb37f77bf94f9a2295976f65f36b1094dfda9fb4349c8099d4",
+            },
+            "destination": [
+                "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/pipeline.py",
+                "src/sat_dengue/model_evaluation/calibration.py",
+            ],
+        },
+    },
+}
+
+
+def verify_evaluation_preservation(root: Path, records: dict[str, Any]) -> int:
+    """Verify the closed evaluation originals and their separate engineering identities."""
+    path = root / "docs/operations/kedro-evaluation-identities.json"
+    files = EVALUATION_MAPPING["files"]
+    mapped = set(files).intersection(records)
+    if not mapped or not path.exists():
+        return require_records(root, records)
+    assert not path.is_symlink()
+    assert json.loads(path.read_text()) == EVALUATION_MAPPING, "Closed evaluation mapping changed"
+    for name in sorted(mapped):
+        entry = files[name]
+        assert records[name] == entry["original"]
+        raw = subprocess.check_output(
+            ["git", "show", f"{EVALUATION_MAPPING['original_revision']}:{name}"], cwd=root
+        )
+        assert {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()} == entry["original"]
+        assert fingerprint(safe_path(root, name)) == entry["engineering"]
+        assert all(safe_path(root, destination).is_file() for destination in entry["destination"])
+    remaining = {n: v for n, v in records.items() if n not in files}
     return (require_records(root, remaining) if remaining else 0) + len(mapped)

@@ -35,6 +35,8 @@ def main() -> None:
         "preparation",
         "training_replay",
         "training_synthetic",
+        "evaluation_replay",
+        "evaluation_synthetic",
     }
     assert pipelines["__default__"] is pipelines["foundation"]
     assert not OPTIONAL.intersection(sys.modules)
@@ -47,7 +49,12 @@ def main() -> None:
     )
     SequentialRunner().run(pipelines["foundation"], catalog)
     assert catalog.load("resolved_configuration")["operational"]["profile"] == "foundation"
-    for name in ("training_synthetic", "training_replay"):
+    for name in (
+        "training_synthetic",
+        "training_replay",
+        "evaluation_synthetic",
+        "evaluation_replay",
+    ):
         # Node boundary and real-source dataset both fail before importing a scientific module.
         first = pipelines[name].nodes[0]
         args: list[dict[str, Any]] = [{}, {}] if name.endswith("synthetic") else [{}, {}, {}]
@@ -57,6 +64,7 @@ def main() -> None:
             assert "sat-dengue-v2[modeling]" in str(error) and "sklearn" in str(error)
         else:
             raise AssertionError("Training unexpectedly ran without modeling dependencies")
+    from sat_dengue.datasets.evaluation import FrozenEvaluationSourcesDataset
     from sat_dengue.datasets.training import TrainingSourcesDataset
 
     try:
@@ -65,6 +73,12 @@ def main() -> None:
         assert "sat-dengue-v2[modeling]" in str(error)
     else:
         raise AssertionError("Native loader did not require modeling")
+    try:
+        FrozenEvaluationSourcesDataset().load()
+    except DatasetError as error:
+        assert "sat-dengue-v2[modeling]" in str(error)
+    else:
+        raise AssertionError("Frozen evaluation did not require modeling")
     assert not OPTIONAL.intersection(sys.modules)
     print(
         json.dumps(

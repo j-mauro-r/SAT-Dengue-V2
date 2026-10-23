@@ -23,6 +23,8 @@ def test_repository_bootstrap() -> None:
         "preparation",
         "training_replay",
         "training_synthetic",
+        "evaluation_replay",
+        "evaluation_synthetic",
     }
     assert {node.name for node in pipelines["foundation"].nodes} == {"resolve_configuration"}
     assert pipelines["foundation"].inputs() == {"configuration_inputs", "parameters"}

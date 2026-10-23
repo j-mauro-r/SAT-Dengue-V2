@@ -553,3 +553,54 @@ to install `sat-dengue-v2[modeling]`. The private replay and synthetic training
 checks above validate the same deferred boundaries with modeling installed.
 Validate an actual base-only wheel installation and `pip check` too; never move
 modeling libraries into base dependencies to satisfy bootstrap.
+
+
+## Kedro Stage 5 frozen assessment (Session 6)
+
+The existing `test_model_evaluation.py`, `test_model_assessment.py` and
+`test_final_evaluation.py` own pure calendar/availability, calibration, threshold,
+utility, cohort and event/uncertainty rules. Their original regressions stay enabled.
+New final-evaluation tests exercise the actual source-free synthetic graph,
+deterministic publication, runtime scientific override rejection, call/alias fit
+and selection denial, consumed real-route rejection, and atomic failure/no-overwrite.
+They use the shared repository-local temporary-workspace fixture.
+
+`test_evaluation_kedro_all_frozen_decisions_probabilities_and_metrics` owns the
+complete real guarded CLI, saved development/final probability replay, full cohorts,
+metrics and decisions, closed source/component/proposal negatives and independent
+before/after preservation. Missing private evidence fails; it is never a skip.
+`migration_support.py` verifies the new closed 23-path evaluation correspondence
+alongside all prior mappings and the original 2,553-file/45-bundle inventory.
+
+Run the exact contractual gate through the official local DWP runner:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+bash -lc "python -m pytest tests/unit/test_model_evaluation.py tests/unit/test_model_assessment.py tests/unit/test_final_evaluation.py tests/integration/test_migration_parity.py -k 'evaluation or assessment or baseline' --require-migration-evidence -q && python -m ruff check src tests && python -m ruff format --check src tests && python -m mypy src tests"
+```
+
+Also run the complete synthetic CI and private suite, prior exact AC-training and
+AC-foundation gates, both new evaluation CLIs (real replay under the call guard),
+all retained-adapter lint/format, pip check, Markdown links, diff and boundary scans:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes python -m pytest tests/unit tests/contracts tests/integration/test_migration_parity.py -q
+python -m pytest tests/integration/test_migration_parity.py --require-migration-evidence -q
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=evaluation_synthetic --params=profile=evaluation_synthetic
+PYTHONPATH=.:src KEDRO_DISABLE_TELEMETRY=yes python tests/integration/evaluation_cli.py
+python -m pip check
+python scripts/check_markdown_links.py
+bash .agents/skills/deepworkplan/verify/conformance.sh --repo-only
+bash .agents/skills/deepworkplan/verify/conformance.sh --plan PLAN_030_kedro_architecture_migration
+git diff --check
+```
+
+The direct guarded probe needs repository root and src on PYTHONPATH, as supplied
+by its private test. Validate a fresh git archive with no manually created tmp and
+an actual new base-only wheel: all eight graphs register and foundation executes
+without modeling. Preserve the three existing absent historical-report skips in
+an archive as a separate limitation; no corrected test is skipped. No special
+pytest environment override or basetemp is permitted. Report global conformance
+separately from current repo/scoped-plan conformance, retaining inherited incidents.
+All real fits/refits/calibration/selection/search counts must be zero. Synthetic
+fixtures never replace real parity; no 2025 selection or scientific approval follows.

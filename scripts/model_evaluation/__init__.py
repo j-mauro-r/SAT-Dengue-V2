@@ -1,23 +1,10 @@
-"""Stage 5 probability calibration and temporal-threshold helpers."""
+"""Compatibility import adapter; retain observed consumers until T-cleanup."""
 
-from .contract import (
-    CONTRACT_PATH,
-    ModelEvaluationConfig,
-    ModelEvaluationError,
-    resolve_root,
-)
-from .pipeline import (
-    ModelEvaluationResult,
-    build_model_evaluation,
-    run_summary,
-)
+import importlib
+from typing import Any
 
-__all__ = [
-    "CONTRACT_PATH",
-    "ModelEvaluationConfig",
-    "ModelEvaluationError",
-    "ModelEvaluationResult",
-    "build_model_evaluation",
-    "resolve_root",
-    "run_summary",
-]
+_implementation = importlib.import_module("sat_dengue.datasets.legacy_evaluation.model_evaluation")
+
+
+def __getattr__(name: str) -> Any:
+    return getattr(_implementation, name)

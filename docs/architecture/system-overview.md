@@ -16,7 +16,8 @@ configuration and dependency decision. `src/sat_dengue/configuration.py` resolve
 operational settings without framework imports; `config_loader.py` validates
 merged YAML/runtime parameters; `pipeline_registry.py` registers the one-node
 `foundation` graph, the 11-node Stage 2 `data` graph, seven-node Stage 3 `preparation` graph,
-three-node `training_replay` graph and four-node `training_synthetic` graph; `datasets/` reads the
+three-node `training_replay` graph, four-node `training_synthetic` graph, ten-node
+`evaluation_replay` and eleven-node `evaluation_synthetic` graphs; `datasets/` reads the
 approved scientific JSON documents and publishes verified execution snapshots and
 isolated Stage 2 engineering bundles. Settings register the loader.
 
@@ -25,8 +26,8 @@ conf/base + approved scientific JSON + execution provenance
     -> strict configuration resolution -> immutable per-run JSON snapshot
 ```
 
-The implemented profiles are `foundation`, `data`, `preparation`, `training_replay`
-and `training_synthetic`, all with `tracking: disabled`. No scientific
+The implemented profiles are `foundation`, `data`, `preparation`, `training_replay`,
+`training_synthetic`, `evaluation_replay` and `evaluation_synthetic`, all with `tracking: disabled`. No scientific
 values can be supplied through YAML. Catalog replacement, unknown settings and
 changed authority identities fail closed. Existing physical data/artifact paths,
 scientific bundles and original hashes remain authoritative. MLflow is an optional
@@ -41,8 +42,12 @@ Stage 3 consumes explicit producer/consumer cutoffs and saved-state identities a
 boundaries. Its real run performs zero model fits and zero preparer refits. Stage 4
 replay preserves that boundary, verifies complete saved outputs and native roundtrips
 under both LightGBM 4.6 and 4.7, and rejects unknown families/configurations. The
-synthetic graph has no real-source input. Calibration, thresholds and final assessment
-retain existing entrypoints until T-evaluation; tracking remains disabled. The default
+synthetic graphs have no real-source input. The evaluation graph verifies the fixed
+proposal and source/component provenance, validates cohorts/availability, applies saved
+calibration and thresholds, recomputes full development/final metrics and preserves
+the six frozen decisions. Its pure domain functions are independent of persistence;
+its datasets lazily load modeling dependencies and atomically publish isolated
+engineering evidence. Retained script entrypoints are thin adapters; tracking remains disabled. The default
 remains foundation, and future default E2E must compose inference-only replay.
 
 ## Planned Runtime Product
