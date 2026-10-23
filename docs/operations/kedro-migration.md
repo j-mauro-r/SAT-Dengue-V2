@@ -916,3 +916,68 @@ consumed-2025 restrictions, the outer-refit/calibrator limitation, all 13 except
 and 17 KEEP / UNVERIFIED dispositions remain. Exact counts, hashes, observed gates,
 independent preservation and limitations belong to session6/HANDOFF.md. The
 [testing guide](../TESTING_GUIDE.md) owns commands. Stop before T-tracking.
+
+## Optional local tracking — Session 7 / T-tracking
+
+`settings.HOOKS` registers `TrackingHooks`. Disabled execution returns before any
+MLflow import. Enabled evaluation/training runs use a narrow `LocalTracking` adapter;
+scientific guards accept the explicit operational enabled/disabled switch without
+changing scientific JSONs, metrics, thresholds, cohorts or decisions. The hook's
+completion boundary reloads the published bundle; `tracking/lineage.py` independently
+checks identity, complete membership, every payload and configuration before emitting
+approved metadata and candidate/horizon aggregates. Native bundles remain authority.
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+# Install the existing pinned optional extra in an isolated environment if absent:
+python -m pip install -e '.[dev,modeling,tracking]'
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/mlflow \
+  KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=evaluation_synthetic \
+  --params=profile=evaluation_synthetic,tracking=enabled
+# A second permitted observability profile changes logging metadata only:
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/mlflow-diagnostic \
+  SAT_DENGUE_TRACKING_PROFILE=diagnostic KEDRO_DISABLE_TELEMETRY=yes \
+  kedro run --pipeline=evaluation_synthetic \
+  --params=profile=evaluation_synthetic,tracking=enabled
+# Explicit no-tracking requires no MLflow installation or store:
+kedro run --pipeline=evaluation_synthetic \
+  --params=profile=evaluation_synthetic,tracking=disabled
+```
+
+`standard` and `diagnostic` are the only observability profiles; neither changes
+science. The store contains `tracking.sqlite`, `artifacts/` and generated `receipts/`.
+SQLite uses an explicit local URI; no ambient remote tracking URI is used. The local
+artifact repository extension stores `satlocal:/tmp/...` logical URIs, preventing
+MLflow 3.17.2 from normalizing them into private absolute paths. It delegates file
+persistence to MLflow's local repository, accepts only typed lineage receipts,
+rejects directory uploads and requires explicit local scratch download destinations.
+This single extension exists because native file-URI normalization violates the
+privacy boundary; it is pinned to the installed MLflow API and has actual consumers.
+
+Each pipeline execution has a deterministically named parent; evaluation creates six
+candidate/horizon children only after independent publication verification. Runs
+record code revision/dirty status, Python/environment identities, approved contract
+and policy hashes, metric-definition hash, input/configuration/bundle identities,
+seed, cohort/window, mode and safe native pointer. Children add family/horizon,
+classification and allowlisted aggregate AP/AUROC/Brier/FAR/onset/count metrics.
+Real-adjustment counters remain zero. Arbitrary fields, artifact bytes and private
+paths are rejected; [security policy](../SECURITY.md#bounded-local-mlflow-tracking)
+owns exclusions. Comparison of synthetic runs proves interface equivalence only.
+
+Logging failure is explicit and retains the verified native output for recovery.
+Prepublication errors and aborts cannot produce FINISHED runs. A repeated logging
+request for the same verified bundle does not create another successful parent or
+copy native payloads. Sequential orchestration is required; this is not a concurrent
+run-locking service. Foundation remains the default with tracking disabled. Enabled
+tracking currently certifies training/evaluation scientific publications; other
+standalone graphs require the later complete replay publication boundary.
+
+Consumers/dispositions: retain all existing scripts/notebooks/adapters and closed
+preservation mappings. New tracking modules serve only settings/hooks and integration
+tests. Current operational validators gain enabled/disabled support; configuration
+negatives retain rejection of unknown tracking modes. Base bootstrap also denies
+MLflow. CI installs the existing tracking extra and includes its synthetic tests;
+no dependency declaration or scientific source identity is changed. Source/test
+ownership is in the [testing guide](../TESTING_GUIDE.md#bounded-mlflow-tracking-session-7).
+Official API references: [MLflow client](https://mlflow.org/docs/latest/api_reference/python_api/mlflow.client.html)
+and [tracking concepts](https://mlflow.org/docs/latest/ml/tracking/).

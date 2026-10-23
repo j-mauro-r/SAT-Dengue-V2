@@ -72,7 +72,7 @@ def _check_resolved_snapshot(tmp_path: Path) -> None:
     [
         {"profile": "training"},
         {"profile": 1},
-        {"tracking": "enabled"},
+        {"tracking": "autolog"},
         {"seed": 0},
         {"scientific": {"utility": {"seed": 0}}},
         {"utility": {"max_false_alarm_increase_pp": 99}},

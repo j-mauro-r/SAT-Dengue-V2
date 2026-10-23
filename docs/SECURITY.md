@@ -24,3 +24,28 @@ Authoritative source: `docs/data/data-policy.md`
 
 - Record material security decisions in versioned docs/ADRs.
 - Escalate suspected vulnerabilities through private channels before disclosure.
+
+## Bounded local MLflow tracking
+
+Tracking is explicitly disabled by default. Enabled execution requires the optional
+`tracking` extra and `SAT_DENGUE_TRACKING_ROOT=tmp/<store>`; remote, absolute,
+traversing, symlinked or non-ignored stores fail closed. SQLite metadata and the
+local artifact store stay ignored. No server, registry, promotion or autologging
+is enabled. Domain functions import neither MLflow nor Kedro.
+
+Only approved aggregate metrics, zero real-adjustment counters, contract/input/code/
+environment hashes, version tokens, operational profiles and verified relative
+engineering pointers may be logged. Raw rows, X/Y, epidemiological records, personal
+identifiers, credentials, full environment variables, absolute private paths, native
+model/preparer bytes and full bundles are excluded. The optional `satlocal:` artifact
+repository accepts only generated schema-validated JSON lineage receipts and rejects
+directory uploads. Its logical URI prevents MLflow's normal file-URI expansion from
+persisting private checkout paths, including in its automatic Default experiment.
+
+Native scientific publications remain authoritative. Tracking rehashes full bundle
+membership and payloads after publication, checks configuration and scientific
+status, then records success. Errors/aborts are explicit FAILED/KILLED states;
+enabled tracking never falls back silently. An interrupted process can leave RUNNING
+metadata, which cannot certify success. Exact verified duplicate publication logging
+is marked KILLED and references the prior successful parent. Concurrent writers to
+the same logical replay require a single orchestrator; this adapter is sequential.

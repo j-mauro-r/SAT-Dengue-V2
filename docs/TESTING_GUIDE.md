@@ -604,3 +604,29 @@ pytest environment override or basetemp is permitted. Report global conformance
 separately from current repo/scoped-plan conformance, retaining inherited incidents.
 All real fits/refits/calibration/selection/search counts must be zero. Synthetic
 fixtures never replace real parity; no 2025 selection or scientific approval follows.
+
+## Bounded MLflow tracking (Session 7)
+
+`tracking/{local,lineage,artifacts}.py`, `hooks.py`, settings and operational tracking
+switches map to `tests/integration/test_mlflow_tracking.py`: actual SQLite-backed
+MLflow, complete synthetic Kedro publications, standard/diagnostic profile comparison,
+identical science with tracking disabled, parent/child relationships, full publication
+verification, compute/publication failures, aborts, duplicate-success prevention,
+allowlist rejection, missing extra and invalid storage. Database dumps, run metadata
+and approved artifacts must exclude private absolute paths and raw records.
+
+Run the exact AC-tracking command through the official local DWP runner:
+
+```bash
+bash -lc "python -m pytest tests/integration/test_mlflow_tracking.py -q && python -m ruff check src tests && python -m ruff format --check src tests && python -m mypy src tests"
+```
+
+Also run the complete CI selection including the new tracking test, exact foundation
+and evaluation regressions, base-only wheel/bootstrap without MLflow or modeling,
+`pip check`, Markdown links, diff and bounded secret/privacy/dependency scans,
+repo-only and PLAN_030 conformance, and independent protected inventory verification.
+The existing CI extra remains optional for base installation. Missing private evidence
+fails local parity; the synthetic tracking comparison cannot substitute for it.
+Inspect ignored SQLite/artifact locations with `git check-ignore` one path at a time.
+Report inherited global plan incidents separately. Failure/development logs remain
+under PLAN_030 `analysis_results/session7/tracking/`. No notebook or real fit is needed.

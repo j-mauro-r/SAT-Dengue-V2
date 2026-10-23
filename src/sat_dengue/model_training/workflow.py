@@ -45,7 +45,8 @@ def training_contract(resolved: dict[str, Any], mode: str) -> dict[str, Any]:
     if (
         hashlib.sha256(canonical_bytes(body)).hexdigest() != resolved["configuration_sha256"]
         or hashlib.sha256(canonical_bytes(contract)).hexdigest() != CONTRACT_SEMANTIC_SHA
-        or resolved["operational"] != {"profile": "training_" + mode, "tracking": "disabled"}
+        or resolved["operational"]["profile"] != "training_" + mode
+        or resolved["operational"]["tracking"] not in ("disabled", "enabled")
     ):
         raise ModelTrainingError("Unapproved training configuration/profile or scientific identity")
     return contract

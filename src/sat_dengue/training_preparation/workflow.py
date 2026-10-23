@@ -33,7 +33,8 @@ def preparation_contract(resolved: dict[str, Any]) -> dict[str, Any]:
         raise PreparationError("Resolved configuration identity changed")
     entry = resolved["authorities"]["training_preparation_contract_v1"]
     if (
-        resolved["operational"] != {"profile": "preparation", "tracking": "disabled"}
+        resolved["operational"]["profile"] != "preparation"
+        or resolved["operational"]["tracking"] not in ("disabled", "enabled")
         or entry["sha256"] != AUTHORITIES["training_preparation_contract_v1"]["sha256"]
     ):
         raise PreparationError("Unapproved preparation configuration")

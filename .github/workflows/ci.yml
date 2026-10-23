@@ -92,7 +92,7 @@ jobs:
       - name: Install development dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+          pip install -e ".[dev,tracking]"
           pip install -r requirements-modeling.txt
 
       - name: Ruff lint
@@ -124,8 +124,8 @@ jobs:
       - name: Install development dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+          pip install -e ".[dev,tracking]"
           pip install -r requirements-modeling.txt
 
       - name: Run unit and synthetic migration tests
-        run: KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration/test_migration_parity.py -v
+        run: KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration/test_migration_parity.py tests/integration/test_mlflow_tracking.py -v

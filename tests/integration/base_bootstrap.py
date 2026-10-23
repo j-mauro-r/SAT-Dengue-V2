@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-OPTIONAL = {"sklearn", "lightgbm", "xgboost", "scipy", "threadpoolctl", "narwhals"}
+OPTIONAL = {"sklearn", "lightgbm", "xgboost", "scipy", "threadpoolctl", "narwhals", "mlflow"}
 
 
 class NoModeling(importlib.abc.MetaPathFinder):

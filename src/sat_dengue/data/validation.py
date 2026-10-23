@@ -38,7 +38,10 @@ def validate_stage2_configuration(resolved: dict[str, Any]) -> dict[str, Any]:
     body = {k: v for k, v in resolved.items() if k != "configuration_sha256"}
     if hashlib.sha256(canonical_bytes(body)).hexdigest() != resolved.get("configuration_sha256"):
         raise ValueError("Resolved configuration fingerprint mismatch")
-    if resolved["operational"] != {"profile": "data", "tracking": "disabled"}:
+    if resolved["operational"]["profile"] != "data" or resolved["operational"]["tracking"] not in (
+        "disabled",
+        "enabled",
+    ):
         raise ValueError("Stage 2 requires the validated data/disabled profile")
     contract = resolved["stage2"]["construction"]
     approved = compute_schema_contract([], pd.DataFrame(), version="candidate-construction-v1")

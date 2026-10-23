@@ -27,11 +27,11 @@ conf/base + approved scientific JSON + execution provenance
 ```
 
 The implemented profiles are `foundation`, `data`, `preparation`, `training_replay`,
-`training_synthetic`, `evaluation_replay` and `evaluation_synthetic`, all with `tracking: disabled`. No scientific
+`training_synthetic`, `evaluation_replay` and `evaluation_synthetic`, with explicit `tracking: disabled` by default. No scientific
 values can be supplied through YAML. Catalog replacement, unknown settings and
 changed authority identities fail closed. Existing physical data/artifact paths,
 scientific bundles and original hashes remain authoritative. MLflow is an optional
-pinned dependency; its adapter belongs to T-tracking. The data graph consumes resolved configuration after snapshot publication.
+pinned dependency; its local adapter is registered through lifecycle hooks. The data graph consumes resolved configuration after snapshot publication.
 All future stage assembly must retain this boundary; domain calculations remain
 independent of framework and persistence concerns.
 
@@ -47,7 +47,7 @@ proposal and source/component provenance, validates cohorts/availability, applie
 calibration and thresholds, recomputes full development/final metrics and preserves
 the six frozen decisions. Its pure domain functions are independent of persistence;
 its datasets lazily load modeling dependencies and atomically publish isolated
-engineering evidence. Retained script entrypoints are thin adapters; tracking remains disabled. The default
+engineering evidence. Retained script entrypoints are thin adapters; tracking remains explicitly disabled by default. The default
 remains foundation, and future default E2E must compose inference-only replay.
 
 ## Planned Runtime Product
@@ -61,3 +61,17 @@ persisted, traceable result -> read-only API -> dashboard
 The dashboard may filter and present API-supplied values but cannot write data, trigger inference, recompute scientific values, or present an evaluation procedure as operationally approved. A prototype precedes Stage 6 contract freeze. Model integration remains blocked while G5 has no approved champion.
 
 A later write-enabled iteration may add explicit monthly input -> validation -> inference -> persistence and separate expert-feedback persistence. Feedback links to an immutable prediction identity and remains separate from the later observed epidemiological outcome. The [dashboard story](../product/stage-1/PROD-04-dashboard-master-user-story.md) owns behavior; final runtime schemas remain unfrozen. Do not introduce services, orchestration platforms, or deployment infrastructure solely to mirror the target architecture.
+
+## Optional tracking boundary
+
+Kedro lifecycle hooks invoke a lazily imported local MLflow client only when
+`tracking: enabled` is requested. Current training/evaluation native publications
+are independently verified before a parent and candidate/horizon children can finish.
+The adapter stores only approved aggregate metrics, zero real-adjustment counters,
+version/identity metadata and safe relative pointers. SQLite and schema-validated
+lineage receipts stay in ignored local storage; logical `satlocal:` artifact URIs
+avoid private absolute checkout paths. No autologging, remote service, registry,
+model duplication or domain dependency on tracking is introduced. The
+[security owner](../SECURITY.md#bounded-local-mlflow-tracking) defines exclusions;
+the [migration owner](../operations/kedro-migration.md#optional-local-tracking--session-7--t-tracking)
+owns the exact local recipe and sequential recovery limitations.

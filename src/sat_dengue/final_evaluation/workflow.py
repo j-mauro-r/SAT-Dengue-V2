@@ -44,9 +44,11 @@ FAMILIES = ("xgboost", "lightgbm", "gam")
 
 def evaluation_contract(resolved: dict[str, Any], mode: str) -> None:
     body = {k: v for k, v in resolved.items() if k != "configuration_sha256"}
-    if hashlib.sha256(canonical_bytes(body)).hexdigest() != resolved[
-        "configuration_sha256"
-    ] or resolved["operational"] != {"profile": "evaluation_" + mode, "tracking": "disabled"}:
+    if (
+        hashlib.sha256(canonical_bytes(body)).hexdigest() != resolved["configuration_sha256"]
+        or resolved["operational"]["profile"] != "evaluation_" + mode
+        or resolved["operational"]["tracking"] not in ("disabled", "enabled")
+    ):
         raise ValueError("Unapproved frozen evaluation configuration/profile")
     for name, entry in resolved["authorities"].items():
         if (
