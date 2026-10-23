@@ -68,6 +68,41 @@ publish_branch() {
   git push "${SOURCE_URL}" "${split_commit}:refs/heads/${destination_branch}"
 }
 
+update_branch() {
+  local destination_branch="${1:-}"
+  if [[ -z "${destination_branch}" ]]; then
+    printf '%s\n' "Usage: $0 update <existing-dashboard-branch>" >&2
+    return 2
+  fi
+  if [[ "${destination_branch}" == "main" || "${destination_branch}" == "master" ]]; then
+    printf '%s\n' "Refusing to update dashboard changes on ${destination_branch}." >&2
+    return 2
+  fi
+  git check-ref-format --branch "${destination_branch}" >/dev/null
+
+  # Every outbound update starts from the current source main.
+  pull_source
+
+  local remote_commit
+  remote_commit="$(git ls-remote --exit-code --heads "${SOURCE_URL}" "refs/heads/${destination_branch}" | cut -f1)" || {
+    printf '%s\n' "Remote branch ${destination_branch} does not exist; use publish first." >&2
+    return 2
+  }
+  git fetch --no-tags "${SOURCE_URL}" "${destination_branch}"
+  if [[ "$(git rev-parse FETCH_HEAD)" != "${remote_commit}" ]]; then
+    printf '%s\n' "Remote branch ${destination_branch} moved while it was being checked." >&2
+    return 1
+  fi
+
+  local split_commit
+  split_commit="$(subtree split --prefix="${PREFIX}")"
+  if ! git merge-base --is-ancestor "${remote_commit}" "${split_commit}"; then
+    printf '%s\n' "Refusing divergent update of ${destination_branch}; reconcile it explicitly." >&2
+    return 1
+  fi
+  git push "${SOURCE_URL}" "${split_commit}:refs/heads/${destination_branch}"
+}
+
 case "${1:-}" in
   pull)
     [[ $# -eq 1 ]] || { printf '%s\n' "Usage: $0 pull" >&2; exit 2; }
@@ -77,8 +112,12 @@ case "${1:-}" in
     [[ $# -eq 2 ]] || { printf '%s\n' "Usage: $0 publish <new-dashboard-branch>" >&2; exit 2; }
     publish_branch "$2"
     ;;
+  update)
+    [[ $# -eq 2 ]] || { printf '%s\n' "Usage: $0 update <existing-dashboard-branch>" >&2; exit 2; }
+    update_branch "$2"
+    ;;
   *)
-    printf '%s\n' "Usage: $0 {pull|publish <new-dashboard-branch>}" >&2
+    printf '%s\n' "Usage: $0 {pull|publish <new-dashboard-branch>|update <existing-dashboard-branch>}" >&2
     exit 2
     ;;
 esac

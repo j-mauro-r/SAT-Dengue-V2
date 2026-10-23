@@ -44,6 +44,20 @@ destination branch does not already exist, splits `apps/dashboard`, and pushes
 that split only to the named new branch. It rejects `main` and `master`; review
 and merge the new branch in the dashboard repository through its normal process.
 
+## Update an existing integration branch
+
+Use the explicit update command only for an existing non-main integration
+branch:
+
+```bash
+bash scripts/dashboard_subtree_sync.sh update stage8/api-integration
+```
+
+The helper first pulls `dengue-signal-atlas/main`, resolves the current remote
+integration tip, and accepts the split only when that tip is an ancestor of the
+new split. A missing or divergent branch is rejected. The push is a normal
+fast-forward push; `main` and `master` remain forbidden.
+
 ## Standalone validation
 
 The committed `bun.lock` selects Bun. Its imported Lovable-cache URLs were
