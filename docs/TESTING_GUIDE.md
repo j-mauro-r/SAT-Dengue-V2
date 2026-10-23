@@ -154,6 +154,25 @@ Fallback rule:
 
 - When command mapping is uncertain, default to the full gate set.
 
+## Stage 8 standalone dashboard subtree
+
+`apps/dashboard/**`, `scripts/dashboard_subtree_sync.sh`, and the canonical
+[subtree synchronization guide](operations/dashboard-subtree-sync.md) map to the
+dashboard's Bun lockfile and existing package scripts:
+
+```bash
+cd apps/dashboard
+bun install --frozen-lockfile
+bun run lint
+bun run test
+bun run build
+```
+
+Also smoke the existing `dev` command over local HTTP and verify that generated
+dependency/build paths remain ignored. The DWP delivery validator performs these
+checks without changing dashboard source behavior. Run the full foundation gate
+before merge because the operations and testing documentation changed.
+
 ## Stage 2 data integrity and retired experimental EDA
 
 The [experimental EDA](archive/experimental-eda/README.md) was retired on 2026-10-19. Its notebooks, reports and pending rerun instructions are historical. Do not run the old panel/analysis/rules phases as the default Stage 2 workflow. New analysis requires a new bounded task and current acceptance criteria; retirement does not approve scientific outputs or close G2.
