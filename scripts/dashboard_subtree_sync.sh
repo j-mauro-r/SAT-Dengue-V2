@@ -12,9 +12,9 @@ subtree() {
   local primary
   primary="$(git --exec-path)/git-subtree"
   if [[ -x "${primary}" ]]; then
-    "${primary}" "$@"
+    git subtree "$@"
   elif [[ -x /usr/lib/git-core/git-subtree ]]; then
-    /usr/lib/git-core/git-subtree "$@"
+    git --exec-path=/usr/lib/git-core subtree "$@"
   else
     printf '%s\n' "git-subtree is required but was not found." >&2
     return 127
