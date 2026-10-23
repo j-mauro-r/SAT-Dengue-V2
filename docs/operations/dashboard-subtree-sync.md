@@ -46,7 +46,11 @@ and merge the new branch in the dashboard repository through its normal process.
 
 ## Standalone validation
 
-The committed `bun.lock` selects Bun. From the imported project directory:
+The committed `bun.lock` selects Bun. Its imported Lovable-cache URLs were
+normalized to the public npm registry so a clean environment can install it.
+The import review also applied compatible security patches, including Vite
+8.1.5 to 8.1.6, without changing the application stack. From the imported
+project directory:
 
 ```bash
 cd apps/dashboard
@@ -54,6 +58,7 @@ bun install --frozen-lockfile
 bun run lint
 bun run test
 bun run build
+bun audit --audit-level=high
 bun run dev
 ```
 

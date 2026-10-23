@@ -5,6 +5,7 @@ Construye un prototipo navegable del dashboard SAT-Dengue V2, tomando como fuent
 Debe seguir el diseño de esta página como referencia visual: https://dengue-watch-pro.lovable.app (tema oscuro profesional, paleta de colores oklch, tarjetas refinadas, tipografía y distribución visual limpia), sin copiar datos ni reglas científicas de esa versión.
 
 Requisitos clave:
+
 1. MVP de solo lectura con banner permanente: "DATOS DEMOSTRATIVOS — NO USAR PARA DECISIONES OPERATIVAS".
 2. Navegación con pestañas independientes para Tolima y Meta, selector de municipios (Ibagué, Espinal, Melgar, Chaparral, Mariquita para Tolima; Villavicencio, Acacías, Granada, Puerto López para Meta), periodo de referencia T, fecha actual en Bogotá, fecha de generación y versión del procedimiento.
 3. Vista principal en este orden:

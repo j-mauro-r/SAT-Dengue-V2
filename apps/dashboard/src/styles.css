@@ -169,17 +169,30 @@
   stroke: var(--map-boundary);
   stroke-width: 0.6;
   vector-effect: non-scaling-stroke;
-  transition: fill 150ms ease, stroke-width 150ms ease;
+  transition:
+    fill 150ms ease,
+    stroke-width 150ms ease;
 }
-.municipal-area[data-state="alert"] { fill: var(--zone-exceso); }
-.municipal-area[data-state="clear"] { fill: var(--zone-exito); }
-.municipal-area[data-state="unavailable"] { fill: var(--map-unavailable); }
-.municipal-area[data-selected="true"], .municipal-area:focus-visible {
+.municipal-area[data-state="alert"] {
+  fill: var(--zone-exceso);
+}
+.municipal-area[data-state="clear"] {
+  fill: var(--zone-exito);
+}
+.municipal-area[data-state="unavailable"] {
+  fill: var(--map-unavailable);
+}
+.municipal-area[data-selected="true"],
+.municipal-area:focus-visible {
   stroke: var(--map-selected);
   stroke-width: 2;
   outline: none;
 }
-.municipal-area:hover { stroke-width: 1.5; }
+.municipal-area:hover {
+  stroke-width: 1.5;
+}
 @media (prefers-reduced-motion: reduce) {
-  .municipal-area { transition: none; }
+  .municipal-area {
+    transition: none;
+  }
 }

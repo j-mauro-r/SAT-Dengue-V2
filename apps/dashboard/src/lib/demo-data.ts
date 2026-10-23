@@ -2,8 +2,34 @@
 export type Dept = "tolima" | "meta";
 export type Zone = "Éxito" | "Seguridad" | "Alerta" | "Exceso";
 
-export const MONTHS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-export const MONTHS_FULL = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+export const MONTHS = [
+  "Ene",
+  "Feb",
+  "Mar",
+  "Abr",
+  "May",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dic",
+];
+export const MONTHS_FULL = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
 
 export const META_INFO = {
   periodT: { year: 2026, month: 8 }, // Septiembre 2026 (0-index)
@@ -15,7 +41,7 @@ export const META_INFO = {
 
 export const THRESHOLDS: Record<Dept, { t1: number; t2: number }> = {
   tolima: { t1: 0.42, t2: 0.38 },
-  meta: { t1: 0.45, t2: 0.40 },
+  meta: { t1: 0.45, t2: 0.4 },
 };
 
 interface MuniSeed {
@@ -32,17 +58,107 @@ interface MuniSeed {
 
 const SEEDS: Record<Dept, MuniSeed[]> = {
   tolima: [
-    { id: "ibague", name: "Ibagué", scale: 120, phase: 4, ratioT: 1.55, p1: 0.61, p2: 0.47, x: 48, y: 42 },
-    { id: "espinal", name: "Espinal", scale: 45, phase: 5, ratioT: 1.18, p1: 0.44, p2: 0.33, x: 62, y: 60 },
-    { id: "melgar", name: "Melgar", scale: 30, phase: 3, ratioT: 2.1, p1: 0.72, p2: 0.66, x: 78, y: 58 },
-    { id: "chaparral", name: "Chaparral", scale: 22, phase: 6, ratioT: 0.62, p1: 0.18, p2: 0.22, x: 34, y: 78 },
-    { id: "mariquita", name: "Mariquita", scale: 18, phase: 5, ratioT: 0.92, p1: 0.29, p2: 0.41, x: 56, y: 16 },
+    {
+      id: "ibague",
+      name: "Ibagué",
+      scale: 120,
+      phase: 4,
+      ratioT: 1.55,
+      p1: 0.61,
+      p2: 0.47,
+      x: 48,
+      y: 42,
+    },
+    {
+      id: "espinal",
+      name: "Espinal",
+      scale: 45,
+      phase: 5,
+      ratioT: 1.18,
+      p1: 0.44,
+      p2: 0.33,
+      x: 62,
+      y: 60,
+    },
+    {
+      id: "melgar",
+      name: "Melgar",
+      scale: 30,
+      phase: 3,
+      ratioT: 2.1,
+      p1: 0.72,
+      p2: 0.66,
+      x: 78,
+      y: 58,
+    },
+    {
+      id: "chaparral",
+      name: "Chaparral",
+      scale: 22,
+      phase: 6,
+      ratioT: 0.62,
+      p1: 0.18,
+      p2: 0.22,
+      x: 34,
+      y: 78,
+    },
+    {
+      id: "mariquita",
+      name: "Mariquita",
+      scale: 18,
+      phase: 5,
+      ratioT: 0.92,
+      p1: 0.29,
+      p2: 0.41,
+      x: 56,
+      y: 16,
+    },
   ],
   meta: [
-    { id: "villavicencio", name: "Villavicencio", scale: 160, phase: 5, ratioT: 1.4, p1: 0.58, p2: 0.52, x: 30, y: 22 },
-    { id: "acacias", name: "Acacías", scale: 40, phase: 6, ratioT: 0.85, p1: 0.31, p2: 0.27, x: 26, y: 40 },
-    { id: "granada", name: "Granada", scale: 28, phase: 7, ratioT: 1.05, p1: 0.47, p2: 0.36, x: 34, y: 66 },
-    { id: "puerto-lopez", name: "Puerto López", scale: 20, phase: 6, ratioT: 2.3, p1: 0.69, p2: null, x: 66, y: 30 },
+    {
+      id: "villavicencio",
+      name: "Villavicencio",
+      scale: 160,
+      phase: 5,
+      ratioT: 1.4,
+      p1: 0.58,
+      p2: 0.52,
+      x: 30,
+      y: 22,
+    },
+    {
+      id: "acacias",
+      name: "Acacías",
+      scale: 40,
+      phase: 6,
+      ratioT: 0.85,
+      p1: 0.31,
+      p2: 0.27,
+      x: 26,
+      y: 40,
+    },
+    {
+      id: "granada",
+      name: "Granada",
+      scale: 28,
+      phase: 7,
+      ratioT: 1.05,
+      p1: 0.47,
+      p2: 0.36,
+      x: 34,
+      y: 66,
+    },
+    {
+      id: "puerto-lopez",
+      name: "Puerto López",
+      scale: 20,
+      phase: 6,
+      ratioT: 2.3,
+      p1: 0.69,
+      p2: null,
+      x: 66,
+      y: 30,
+    },
   ],
 };
 
@@ -136,14 +252,63 @@ export const MUNIS: Record<Dept, Muni[]> = {
 };
 
 // Contexto histórico (evaluación retrospectiva 2018–2024)
-export const HISTORY: Record<Dept, { horizon: string; alerts: number; falseAlerts: number; onsets: number; detected: number; auroc: number; ap: number; brier: number }[]> = {
+export const HISTORY: Record<
+  Dept,
+  {
+    horizon: string;
+    alerts: number;
+    falseAlerts: number;
+    onsets: number;
+    detected: number;
+    auroc: number;
+    ap: number;
+    brier: number;
+  }[]
+> = {
   tolima: [
-    { horizon: "T+1", alerts: 58, falseAlerts: 21, onsets: 34, detected: 26, auroc: 0.78, ap: 0.61, brier: 0.17 },
-    { horizon: "T+2", alerts: 52, falseAlerts: 24, onsets: 34, detected: 22, auroc: 0.71, ap: 0.52, brier: 0.2 },
+    {
+      horizon: "T+1",
+      alerts: 58,
+      falseAlerts: 21,
+      onsets: 34,
+      detected: 26,
+      auroc: 0.78,
+      ap: 0.61,
+      brier: 0.17,
+    },
+    {
+      horizon: "T+2",
+      alerts: 52,
+      falseAlerts: 24,
+      onsets: 34,
+      detected: 22,
+      auroc: 0.71,
+      ap: 0.52,
+      brier: 0.2,
+    },
   ],
   meta: [
-    { horizon: "T+1", alerts: 44, falseAlerts: 15, onsets: 27, detected: 21, auroc: 0.8, ap: 0.64, brier: 0.16 },
-    { horizon: "T+2", alerts: 40, falseAlerts: 18, onsets: 27, detected: 17, auroc: 0.73, ap: 0.55, brier: 0.19 },
+    {
+      horizon: "T+1",
+      alerts: 44,
+      falseAlerts: 15,
+      onsets: 27,
+      detected: 21,
+      auroc: 0.8,
+      ap: 0.64,
+      brier: 0.16,
+    },
+    {
+      horizon: "T+2",
+      alerts: 40,
+      falseAlerts: 18,
+      onsets: 27,
+      detected: 17,
+      auroc: 0.73,
+      ap: 0.55,
+      brier: 0.19,
+    },
   ],
 };
-export const HISTORY_SCOPE = "Evaluación retrospectiva ene-2018 a dic-2024 · municipios-mes del departamento";
+export const HISTORY_SCOPE =
+  "Evaluación retrospectiva ene-2018 a dic-2024 · municipios-mes del departamento";

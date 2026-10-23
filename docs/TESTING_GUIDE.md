@@ -166,6 +166,7 @@ bun install --frozen-lockfile
 bun run lint
 bun run test
 bun run build
+bun audit --audit-level=high
 ```
 
 Also smoke the existing `dev` command over local HTTP and verify that generated
