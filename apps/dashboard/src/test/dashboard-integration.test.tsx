@@ -7,6 +7,7 @@ import { Dashboard } from "@/routes/index";
 import { buildDashboardUrl, fetchDashboard } from "@/lib/dashboard-client";
 import { dashboardResponseSchema, type DashboardResponse } from "@/lib/dashboard-contract";
 import { adaptDashboardResponse } from "@/lib/dashboard-view-model";
+import { parseApiBaseUrl } from "@/lib/dashboard-config";
 
 const repoRoot = resolve(import.meta.dirname, "../../../..");
 const fixture = (name: "tolima" | "meta"): unknown =>
@@ -90,6 +91,13 @@ describe("Stage 7 dashboard contract and adapter", () => {
 });
 
 describe("typed dashboard client", () => {
+  it("accepts same-origin configuration and rejects unsafe base URLs", () => {
+    expect(parseApiBaseUrl("")).toBe("");
+    expect(parseApiBaseUrl("https://api.example.test/")).toBe("https://api.example.test");
+    expect(() => parseApiBaseUrl("javascript:alert(1)")).toThrow(/HTTP y HTTPS/);
+    expect(() => parseApiBaseUrl("https://user:secret@api.example.test")).toThrow(/credenciales/);
+  });
+
   it("builds and encodes the exact endpoint query", () => {
     expect(
       buildDashboardUrl({ apiBaseUrl: "https://api.example.test/base" }, "73 &", "2026-09"),

@@ -27,6 +27,9 @@ export function parseApiBaseUrl(value: string | undefined): string {
   if (parsed.search || parsed.hash) {
     throw new DashboardConfigError("VITE_API_BASE_URL no puede contener parámetros ni fragmentos.");
   }
+  if (parsed.username || parsed.password) {
+    throw new DashboardConfigError("VITE_API_BASE_URL no puede contener credenciales.");
+  }
   return candidate.replace(/\/$/, "");
 }
 

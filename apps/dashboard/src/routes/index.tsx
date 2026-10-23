@@ -200,7 +200,16 @@ export function Dashboard() {
     );
   }
   if (dashboard.isError) {
-    return <DashboardError error={dashboard.error} onRetry={() => void dashboard.refetch()} />;
+    return (
+      <DashboardError
+        error={dashboard.error}
+        onRetry={() => void dashboard.refetch()}
+        onReset={() => {
+          setPeriod(DEFAULT_PERIODS[dept]);
+          setMuniId("");
+        }}
+      />
+    );
   }
 
   const view = dashboard.data;
@@ -405,7 +414,15 @@ function DashboardState({ title, message }: { title: string; message: string }) 
   );
 }
 
-function DashboardError({ error, onRetry }: { error: Error; onRetry: () => void }) {
+function DashboardError({
+  error,
+  onRetry,
+  onReset,
+}: {
+  error: Error;
+  onRetry: () => void;
+  onReset: () => void;
+}) {
   const clientError = error instanceof DashboardClientError ? error : null;
   const title =
     clientError?.status === 400
@@ -428,9 +445,14 @@ function DashboardError({ error, onRetry }: { error: Error; onRetry: () => void 
         <AlertTriangle className="mx-auto h-8 w-8 text-zone-alerta" />
         <h1 className="mt-4 text-xl font-semibold">{title}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
-        <Button className="mt-5" onClick={onRetry}>
-          <RefreshCw /> Reintentar
-        </Button>
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <Button onClick={onRetry}>
+            <RefreshCw /> Reintentar
+          </Button>
+          <Button variant="secondary" onClick={onReset}>
+            Volver al periodo disponible
+          </Button>
+        </div>
       </section>
     </main>
   );
