@@ -26,6 +26,26 @@ from sat_dengue.pipeline_registry import register_pipelines
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def test_installed_console_runs_without_repository_pythonpath() -> None:
+    """Use the actual console entrypoint without the guarded harness's import setup."""
+    env = dict(os.environ, KEDRO_DISABLE_TELEMETRY="yes", PYTHONDONTWRITEBYTECODE="1")
+    env.pop("PYTHONPATH", None)
+    result = subprocess.run(
+        [
+            str(Path(sys.executable).with_name("kedro")),
+            "run",
+            "--pipeline=evaluation_synthetic",
+            "--params=profile=evaluation_synthetic",
+        ],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=90,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
 def execute(
     folder: Path,
     monkeypatch: pytest.MonkeyPatch,

@@ -23,7 +23,6 @@ from sat_dengue.datasets.legacy_preparation.persistence import json_bytes
 from sat_dengue.datasets.legacy_preparation.temporal import (
     _window_payloads,
     load_prepared_window,
-    reference,
     select_window,
 )
 from sat_dengue.training_preparation.preprocessing import (
@@ -33,6 +32,7 @@ from sat_dengue.training_preparation.preprocessing import (
     fit_preparer,
     transform_predictors,
 )
+from scripts import stage2_notebook_visual_assets as reference
 
 ROOT = Path(__file__).resolve().parents[2]
 

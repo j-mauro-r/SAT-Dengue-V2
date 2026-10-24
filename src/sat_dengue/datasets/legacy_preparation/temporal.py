@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import dataclass
-from importlib import import_module
 from pathlib import Path
 from typing import Any
 
@@ -29,8 +28,6 @@ from .development import (
 )
 from .persistence import json_bytes
 from .pipeline import fingerprint
-
-reference = import_module("scripts.stage2_notebook_visual_assets")
 
 
 def read_artifact(bundle: Path, name: str, manifest: dict[str, Any], **kwargs: Any) -> pd.DataFrame:

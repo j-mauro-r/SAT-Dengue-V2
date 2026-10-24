@@ -19,9 +19,9 @@
     },
     "scripts/stage2_notebook_visual_assets.py": {
       "consumers": [
-        "src/sat_dengue/datasets/legacy_preparation/temporal.py",
         "src/sat_dengue/datasets/legacy_readiness.py",
-        "tests/unit/test_stage2_notebook_visual_assets.py"
+        "tests/unit/test_stage2_notebook_visual_assets.py",
+        "tests/unit/test_training_temporal.py"
       ],
       "owner": "Stage2 data/native I/O maintainer",
       "reason": "Observed source-identity or calendar/provenance compatibility consumer; formulas remain in their existing single owner.",
@@ -6273,6 +6273,11 @@
       "disposition": "KEEP",
       "owner": "Package domain or native I/O maintainer",
       "reason": "Single active package implementation; approved engineering consumer changes only, no scientific calculation changes."
+    },
+    "src/sat_dengue/py.typed": {
+      "disposition": "KEEP",
+      "owner": "Package maintainer",
+      "reason": "PEP 561 marker for the maintained inline type annotations; required by installed-package type checking."
     },
     "src/sat_dengue/settings.py": {
       "disposition": "KEEP",
