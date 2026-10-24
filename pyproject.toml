@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sat-dengue-v2"
-version = "0.1.0"
+version = "0.2.0"
 description = "Sistema de Alerta Temprana para Brotes de Dengue en Colombia"
 requires-python = ">=3.12,<3.13"
 dependencies = [
@@ -16,6 +16,10 @@ dependencies = [
 
 
 [project.optional-dependencies]
+server = [
+    "uvicorn>=0.32,<1",
+]
+
 dev = [
     "pytest==9.1.1",
     "pytest-cov==7.1.0",
@@ -48,6 +52,9 @@ package_name = "sat_dengue"
 project_name = "SAT-Dengue-V2"
 kedro_init_version = "1.7.0"
 source_dir = "src"
+
+[tool.setuptools.package-data]
+"scripts.read_only_api" = ["fixtures/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
