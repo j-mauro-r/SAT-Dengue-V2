@@ -130,17 +130,17 @@ jobs:
 
       - name: Ruff lint
         run: |
-          python -m ruff check src tests scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py
+          python -m ruff check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
       - name: Ruff format
         run: |
-          python -m ruff format --check src tests scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py
+          python -m ruff format --check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
       - name: Type check
         env:
           MYPYPATH: src:tests/unit:tests/integration
         run: |
-          python -m mypy --explicit-package-bases src tests scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py
+          python -m mypy --explicit-package-bases src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
 
   unit-tests:
@@ -186,3 +186,5 @@ jobs:
         run: |
           python -c "import importlib.util; assert all(importlib.util.find_spec(n) is None for n in ('sklearn','lightgbm','xgboost','scipy','threadpoolctl','narwhals','mlflow'))"
           python tests/integration/base_bootstrap.py
+      - name: Verify installed read-only API wheel
+        run: python scripts/validate_read_only_api_wheel.py tmp/ci-wheels/*.whl

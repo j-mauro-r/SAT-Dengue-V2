@@ -8,19 +8,23 @@ version = "0.2.0"
 description = "Sistema de Alerta Temprana para Brotes de Dengue en Colombia"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "fastapi==0.161.0",
     "kedro==1.7.0",
     "kedro-datasets==9.6.0",
     "numpy==2.5.4",
     "pandas==3.0.6",
+    "pydantic==2.14.1",
 ]
 
 
 [project.optional-dependencies]
 server = [
-    "uvicorn>=0.32,<1",
+    "uvicorn==0.54.0",
 ]
 
 dev = [
+    "build==1.6.1",
+    "httpx==0.28.1",
     "pytest==9.1.1",
     "pytest-cov==7.1.0",
     "ruff==0.17.0",
@@ -43,9 +47,9 @@ notebook = [
 tracking = ["mlflow==3.17.2"]
 
 [tool.setuptools.packages.find]
-where = ["src"]
-include = ["sat_dengue*"]
-namespaces = false
+where = ["src", "."]
+include = ["sat_dengue*", "scripts.read_only_api*"]
+namespaces = true
 
 [tool.kedro]
 package_name = "sat_dengue"
