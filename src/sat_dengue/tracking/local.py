@@ -98,6 +98,9 @@ class LocalTracking:
             for child in ("tracking.sqlite", "artifacts/probe")
         ):
             raise ValueError("Tracking metadata and artifacts must be ignored by Git")
+        # Local tracking must not initialize or emit the SDK's separate usage
+        # telemetry. Keep this opt-out active for the lifetime of the process.
+        os.environ["MLFLOW_DISABLE_TELEMETRY"] = "true"
         try:
             client_module = importlib.import_module("mlflow.tracking")
         except ModuleNotFoundError as error:

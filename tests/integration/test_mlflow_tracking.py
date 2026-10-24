@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import subprocess
 import sys
@@ -24,6 +25,68 @@ from sat_dengue.tracking.lineage import verified_lineage
 from sat_dengue.tracking.local import LocalTracking, allowed_parameters
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+@pytest.mark.parametrize("preimport", [False, True])
+def test_local_tracking_disables_sdk_telemetry_outside_pytest(
+    repo_tmp_path: Path, preimport: bool
+) -> None:
+    """CI's implicit SDK opt-out must not conceal telemetry in an ordinary process."""
+    config = repo_tmp_path / "sdk-config"
+    store = repo_tmp_path / "tracking"
+    script = """
+import json
+import socket
+import sys
+from pathlib import Path
+
+attempts = []
+def audit(event, args):
+    if event in {"socket.getaddrinfo", "socket.connect"}:
+        attempts.append(event)
+        raise RuntimeError("Network egress is forbidden in this local tracking test")
+sys.addaudithook(audit)
+preimport = sys.argv[1] == "True"
+if preimport:
+    import mlflow
+from sat_dengue.tracking.local import LocalTracking
+tracker = LocalTracking("foundation", "telemetry-regression", root=sys.argv[2])
+tracker.fail(aborted=True)
+from mlflow.telemetry.client import get_telemetry_client
+from mlflow.telemetry.utils import is_telemetry_disabled
+assert is_telemetry_disabled()
+assert not attempts, attempts
+client = get_telemetry_client()
+if preimport:
+    assert client is not None and not client._is_config_fetched
+    assert client._queue.empty() and not client._pending_records
+else:
+    assert client is None
+    assert not (Path(sys.argv[3]) / "mlflow" / "telemetry.json").exists()
+assert tracker.client.get_run(tracker.parent).info.status == "KILLED"
+print(json.dumps({"telemetry_disabled": True, "network_attempts": attempts}))
+"""
+    # A deliberately minimal child environment excludes pytest/CI opt-outs and
+    # confines any pre-import SDK installation identifier to the repository.
+    env = {
+        "PATH": os.environ["PATH"],
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "XDG_CONFIG_HOME": str(config),
+        "MLFLOW_DISABLE_TELEMETRY": "false",
+    }
+    result = subprocess.run(
+        [sys.executable, "-c", script, str(preimport), str(store.relative_to(ROOT)), str(config)],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert json.loads(result.stdout.splitlines()[-1]) == {
+        "telemetry_disabled": True,
+        "network_attempts": [],
+    }
 
 
 def execute(
