@@ -21,10 +21,69 @@ from sat_dengue.datasets.evaluation import EvaluationBundleDataset
 from sat_dengue.datasets.stage2 import PublishedConfigurationDataset
 from sat_dengue.hooks import TrackingHooks
 from sat_dengue.pipeline_registry import register_pipelines
+from sat_dengue.tracking.artifacts import register_local_artifacts
 from sat_dengue.tracking.lineage import verified_lineage
 from sat_dengue.tracking.local import LocalTracking, allowed_parameters
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+@pytest.mark.parametrize(
+    "name", ["literal space", "encoded%2Fstore", "query?ignored=1", "fragment#tag", "unicode-ñ"]
+)
+def test_tracking_uri_preserves_literal_store_and_receipt_paths(
+    repo_tmp_path: Path, name: str
+) -> None:
+    store = repo_tmp_path / name
+    # Keep the pre-fix decoded alias writable so a misplaced database fails
+    # promptly instead of invoking the SDK's lengthy connection retries.
+    if name == "encoded%2Fstore":
+        (repo_tmp_path / "encoded" / "store").mkdir(parents=True)
+    tracker = LocalTracking("foundation", "literal-path", str(store.relative_to(ROOT)))
+    receipt = repo_tmp_path / (uuid4().hex + ".json")
+    payload = {
+        "schema": "bounded-mlflow-lineage-v1",
+        "parameters": {"observability_profile": "standard"},
+        "real_adjustments": 0,
+    }
+    receipt.write_text(json.dumps(payload))
+    tracker.client.log_artifact(tracker.parent, str(receipt))
+    tracker.fail(aborted=True)
+
+    assert (store / "tracking.sqlite").is_file()
+    copies = list((store / "artifacts").rglob(receipt.name))
+    assert len(copies) == 1 and copies[0].read_bytes() == receipt.read_bytes()
+    assert tracker.client.get_run(tracker.parent).info.status == "KILLED"
+    assert all(
+        path == receipt or path.is_relative_to(store)
+        for path in repo_tmp_path.rglob("*")
+        if path.is_file()
+    )
+
+
+@pytest.mark.parametrize(
+    "relative", ["tmp/%2e%2e/.dwp/uri-escape", "tmp/nested%2F..%2F../.dwp/uri-escape"]
+)
+def test_artifact_uri_rejects_decoded_parent_traversal(relative: str) -> None:
+    from mlflow.store.artifact.artifact_repository_registry import get_artifact_repository
+
+    register_local_artifacts()
+    with pytest.raises(ValueError, match="Artifact URI"):
+        get_artifact_repository("satlocal:/" + relative)
+
+
+def test_artifact_uri_rejects_encoded_symlink(repo_tmp_path: Path) -> None:
+    from mlflow.store.artifact.artifact_repository_registry import get_artifact_repository
+
+    target = repo_tmp_path / "outside-store"
+    target.mkdir()
+    link = repo_tmp_path / "linked store"
+    link.symlink_to(target, target_is_directory=True)
+    encoded = str(link.relative_to(ROOT)).replace(" ", "%20")
+    register_local_artifacts()
+    with pytest.raises(ValueError, match="Artifact URI"):
+        get_artifact_repository("satlocal:/" + encoded)
+    assert list(target.iterdir()) == []
 
 
 @pytest.mark.parametrize("preimport", [False, True])

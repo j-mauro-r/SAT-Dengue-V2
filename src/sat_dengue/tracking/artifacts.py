@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
+from urllib.parse import quote, unquote, urlsplit
 
 
 def register_local_artifacts() -> None:
@@ -25,16 +26,23 @@ def register_local_artifacts() -> None:
             tracking_uri: str | None = None,
             registry_uri: str | None = None,
         ) -> None:
-            relative = artifact_uri.removeprefix("satlocal:").lstrip("/")
+            parsed = urlsplit(artifact_uri)
+            relative = unquote(parsed.path).lstrip("/")
             folder = Path(relative)
             if (
-                not relative.startswith("tmp/")
+                parsed.scheme != "satlocal"
+                or parsed.netloc
+                or parsed.query
+                or parsed.fragment
+                or not relative.startswith("tmp/")
                 or ".." in folder.parts
                 or any(p.is_symlink() for p in (folder, *folder.parents))
                 or not folder.resolve().is_relative_to(Path.cwd().resolve() / "tmp")
             ):
                 raise ValueError("Artifact URI must identify ignored repository-local storage")
-            super().__init__(relative, tracking_uri, registry_uri)
+            # MLflow decodes once more; give it an encoded form of the exact
+            # filesystem path checked above, including any literal percent signs.
+            super().__init__(quote(relative, safe="/"), tracking_uri, registry_uri)
 
         def log_artifact(self, local_file: str, artifact_path: str | None = None) -> None:
             source = Path(local_file)

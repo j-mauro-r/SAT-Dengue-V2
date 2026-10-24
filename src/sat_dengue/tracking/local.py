@@ -9,6 +9,7 @@ import re
 import subprocess
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 from sat_dengue.configuration import AUTHORITIES, canonical_bytes
 
@@ -112,12 +113,12 @@ class LocalTracking:
         register_local_artifacts()
         self.root.mkdir(parents=True, exist_ok=True)
         # Keep even MLflow's automatic Default experiment free of private paths.
-        artifact_location = "satlocal:/" + str(self.root / "artifacts")
+        artifact_location = "satlocal:/" + quote(str(self.root / "artifacts"), safe="/")
         previous_root = os.environ.get("_MLFLOW_SERVER_ARTIFACT_ROOT")
         os.environ["_MLFLOW_SERVER_ARTIFACT_ROOT"] = artifact_location
         try:
             self.client: Any = client_module.MlflowClient(
-                tracking_uri="sqlite:///" + str(self.root / "tracking.sqlite")
+                tracking_uri="sqlite:///" + quote(str(self.root / "tracking.sqlite"), safe="/")
             )
         finally:
             if previous_root is None:

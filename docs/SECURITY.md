@@ -33,6 +33,11 @@ traversing, symlinked or non-ignored stores fail closed. SQLite metadata and the
 local artifact store stay ignored. No server, registry, promotion or autologging
 is enabled. Domain functions import neither MLflow nor Kedro.
 
+Filesystem paths are encoded when constructing SQLite and artifact URIs, preserving
+literal spaces, Unicode and reserved URI characters. Artifact validation checks the
+decoded path before MLflow uses it, so encoded traversal or symlinks cannot bypass
+the same repository-local storage boundary.
+
 The tracker disables MLflow SDK usage telemetry before importing the optional
 dependency and keeps that opt-out active for the process. This also prevents
 project tracking calls from emitting SDK events when MLflow was already imported.
