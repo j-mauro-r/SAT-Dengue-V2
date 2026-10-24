@@ -91,10 +91,7 @@ class LocalTracking:
         ):
             raise ValueError("Enabled tracking requires SAT_DENGUE_TRACKING_ROOT=tmp/<local-store>")
         self.root = Path(root)
-        if not self.root.resolve().is_relative_to(Path.cwd().resolve() / "tmp") or any(
-            p.is_symlink() for p in [self.root, *self.root.parents]
-        ):
-            raise ValueError("Tracking storage escapes the local repository")
+        self._validate_storage()
         if any(
             subprocess.run(["git", "check-ignore", "-q", "--", str(self.root / child)]).returncode
             != 0
@@ -154,6 +151,15 @@ class LocalTracking:
         self.children: list[str] = []
         self.params(self.parent, {"observability_profile": profile})
 
+    def _validate_storage(self) -> None:
+        if not self.root.resolve().is_relative_to(Path.cwd().resolve() / "tmp") or any(
+            p.is_symlink() for p in [self.root, *self.root.parents]
+        ):
+            raise ValueError("Tracking storage escapes the local repository")
+        # A safe root alone does not constrain SQLite sidecars or receipt destinations.
+        if any(path.is_symlink() for path in self.root.rglob("*")):
+            raise ValueError("Tracking storage must not contain symlinks")
+
     def params(self, run: str, values: dict[str, Any]) -> None:
         for key, value in allowed_parameters(values).items():
             self.client.log_param(run, key, value)
@@ -170,6 +176,7 @@ class LocalTracking:
         if self.terminal:
             raise RuntimeError("Tracking run is already terminal")
         try:
+            self._validate_storage()
             params, candidates = verified_lineage(publication)
             self.params(self.parent, params)
             self.metrics(self.parent, dict.fromkeys(COUNTERS, 0.0))

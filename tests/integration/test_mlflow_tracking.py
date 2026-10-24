@@ -238,6 +238,58 @@ def test_enabled_requires_valid_ignored_local_configuration(root: str) -> None:
         LocalTracking("evaluation_synthetic", "invalid", root)
 
 
+@pytest.mark.parametrize(
+    "child",
+    [
+        "tracking.sqlite",
+        "tracking.sqlite-wal",
+        "tracking.sqlite-shm",
+        "receipts",
+        "artifacts",
+        "artifacts/nested/receipt.json",
+    ],
+)
+def test_tracking_rejects_symlinked_store_children_before_writing(
+    repo_tmp_path: Path, child: str
+) -> None:
+    store = repo_tmp_path / "tracking"
+    link = store / child
+    link.parent.mkdir(parents=True)
+    target = repo_tmp_path / "outside-store"
+    directory = child in {"receipts", "artifacts"}
+    if directory:
+        target.mkdir()
+    else:
+        target.touch()
+    link.symlink_to(target, target_is_directory=directory)
+
+    with pytest.raises(ValueError, match="symlinks"):
+        LocalTracking("evaluation_synthetic", "unsafe-child", str(store.relative_to(ROOT)))
+
+    assert list(target.iterdir()) == [] if directory else target.read_bytes() == b""
+    assert link.is_symlink()
+
+
+def test_tracking_rechecks_receipt_storage_before_finishing(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _, publication = execute(repo_tmp_path / "publication", monkeypatch, enabled=False)
+    store = repo_tmp_path / "tracking"
+    tracker = LocalTracking(
+        "evaluation_synthetic", "redirected-receipt", str(store.relative_to(ROOT))
+    )
+    target = repo_tmp_path / "outside-store"
+    target.mkdir()
+    (store / "receipts").symlink_to(target, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="symlinks"):
+        tracker.finish(publication)
+
+    assert list(target.iterdir()) == []
+    assert tracker.client.get_run(tracker.parent).info.status == "FAILED"
+    assert not tracker.children
+
+
 def test_disabled_does_not_import_mlflow_and_missing_extra_is_actionable(
     repo_tmp_path: Path,
 ) -> None:
