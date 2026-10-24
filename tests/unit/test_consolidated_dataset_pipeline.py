@@ -1,22 +1,15 @@
 from __future__ import annotations
 
-import importlib.util
 import json
-import sys
 from pathlib import Path
 from typing import Any
 
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
+from sat_dengue.datasets import legacy_consolidation as pipeline
+
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location(
-    "consolidated_pipeline", ROOT / "scripts/stage2_consolidated_dataset_pipeline.py"
-)
-assert SPEC and SPEC.loader
-pipeline = importlib.util.module_from_spec(SPEC)
-sys.modules[SPEC.name] = pipeline
-SPEC.loader.exec_module(pipeline)
 
 
 def _prepare_reuse_manifest_fixture(
@@ -83,7 +76,7 @@ def _prepare_reuse_manifest_fixture(
         perform_safe_write=True,
     )
     paths = pipeline.build_paths(root)
-    manifest = {
+    manifest: dict[str, object] = {
         "pipeline": pipeline.build_pipeline_signature(paths, cfg),
         "input_fingerprints_before": pipeline.fingerprint_inputs(paths),
         "input_fingerprints_after": pipeline.fingerprint_inputs(paths),

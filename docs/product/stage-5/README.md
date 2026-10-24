@@ -1,4 +1,74 @@
-# Stage 5 — calibration, development assessment and final protocol
+# Stage 5 — frozen Kedro assessment and preserved scientific evidence
+
+## Current execution and governance
+
+From the repository root, activate the existing isolated migration environment
+and its pinned modeling dependencies as described by the migration/testing owners.
+The official E2E command is:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=replay
+```
+
+For the explicit frozen assessment boundary, `evaluation_replay` requires the
+local private native bundles, approved contracts and complete source identities.
+Missing, stale or corrupt evidence fails closed; there is no fallback fitting.
+The separate synthetic route creates its own fixture and needs no private source:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=evaluation_replay --params=profile=evaluation_replay
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=evaluation_synthetic --params=profile=evaluation_synthetic
+```
+
+Current scientific modules live under `src/sat_dengue/model_evaluation/`,
+`src/sat_dengue/model_assessment/` and `src/sat_dengue/final_evaluation/`.
+Current Stage 5 regression and quality commands are:
+
+```bash
+python -m pytest tests/unit/test_model_evaluation.py tests/unit/test_model_assessment.py tests/unit/test_final_evaluation.py -q
+python -m ruff check src tests
+python -m ruff format --check src tests
+python -m mypy src tests
+```
+
+Private preservation/parity is a separate mandatory local check; it cannot pass
+on missing evidence. See the testing guide for runtime and input requirements:
+
+```bash
+python -m pytest tests/integration -m migration_evidence --require-migration-evidence -q
+```
+
+Tracking is optional and disabled by default.
+G5 is `NOT_APPROVED`, champion `not_selected`; all six real decisions are
+`does_not_meet`. Consumed 2025 cannot train, adjust, calibrate, search or select.
+The migrated workflow applies saved components and thresholds, with zero real fits.
+
+The [migration owner](../../operations/kedro-migration.md#current-cleanup-and-execution--session-8)
+owns installation/restart/tracking/recovery and the [testing guide](../../TESTING_GUIDE.md)
+owns required synthetic/private controls. Replaced Stage 4/5 script facades have
+direct package consumers; the [cleanup correspondence](../../operations/kedro-cleanup-identities.json)
+checks originals, prior engineering bytes and final absence without changing older
+mappings. Notebooks 07/08 remain frozen source identity evidence, never production
+entrypoints. No new reporting notebooks or native scientific bundles are created.
+All prior scientific limitations and decision IDs remain. This is not complete
+historical reproducibility or operational model approval.
+
+## Historical scientific delivery records
+
+The following delivery protocols, recorded commands/results and earlier migration
+checkpoints are historical evidence. Their fitting/notebook procedures apply only
+to their original recoverable Git tree, never to current production execution.
+Original commands are recoverable with `git show
+3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/product/stage-5/README.md`.
+The historical region ends at Maintained frozen assessment below.
+
+<!-- command-context: historical begin -->
+
+
+Current execution is the guarded Kedro migration described in
+[Maintained frozen assessment](#maintained-frozen-assessment--kedro-session-6).
+Earlier delivery sections below preserve scientific decisions and dated evidence;
+their fitting/notebook commands are historical, not authorization to execute them.
 
 Delivery 1 implements bounded Stage 5 development work over verified Stage 4 artifacts.
 It does not reopen EDA, change labels/features/population, select a champion, or use
@@ -20,7 +90,7 @@ reserved targets from 2025-01 onward.
 
 - Contract/config: [probability_calibration_thresholds_contract_v1.json](probability_calibration_thresholds_contract_v1.json)
 - Notebook orchestrator (code-only): [07_probability_calibration_thresholds.ipynb](../../../notebooks/07_probability_calibration_thresholds.ipynb)
-- Reusable modules: [scripts/model_evaluation](../../../scripts/model_evaluation)
+- Reusable modules: [scripts/model_evaluation](../../../src/sat_dengue/datasets/legacy_evaluation/model_evaluation/__init__.py)
 
 ## Utility knobs (percentage points)
 
@@ -104,12 +174,9 @@ external recalibration or threshold correction is performed.
 
 ## Commands
 
-```bash
-.venv/bin/python -m scripts.model_evaluation.execution --execute
-.venv/bin/python -m scripts.model_evaluation.execution --verify
-.venv/bin/python -m scripts.model_evaluation.notebook_execution --execute
-.venv/bin/python -m scripts.model_evaluation.notebook_execution --verify
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 Artifacts are written under `artifacts/model_evaluation/` with immutable identities.
 Distinct configurations must create distinct bundle IDs and never overwrite prior runs.
@@ -126,7 +193,7 @@ Distinct configurations must create distinct bundle IDs and never overwrite prio
 The owning [assessment contract](model_evaluation_contract_v1.json) and
 [notebook08](../../../notebooks/08_model_evaluation.ipynb) consume the corrected
 PLAN_027 input without changing its code identity or refitting components.
-Implementation lives in [model_assessment](../../../scripts/model_assessment).
+Implementation lives in [model_assessment](../../../src/sat_dengue/datasets/legacy_evaluation/model_assessment/__init__.py).
 AP ranking, DEC-125 point utility and uncertainty remain separate. AUROC is
 complementary and never changes ranking, utility, thresholds or training. All four
 windows have equal weight within each horizon. Missing metrics invalidate their
@@ -156,12 +223,11 @@ approved. A subsequent authorized task must implement and audit the accepted
 final procedure, including actual row-derived availability, before claiming final
 completion. Proposed dates are not evidence that final models have been fitted.
 
-Run from the repository root:
+The original delivery used a notebook/script route; its invocation is historical:
 
-```bash
-.venv/bin/python -m scripts.final_evaluation.execution --execute
-.venv/bin/python -m scripts.final_evaluation.execution --verify
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 Execution uses a fresh kernel, then verifies saved outputs against recomputed
 artifacts. Verification uses native input inference, never fallback training.
@@ -172,12 +238,9 @@ under `artifacts/model_assessment_notebook_executions/`; they are not Git delive
 
 Validation for this surface (in addition to the repository foundation checks):
 
-```bash
-.venv/bin/python -m pytest tests/unit/test_model_assessment.py -q
-.venv/bin/ruff check scripts/model_assessment tests/unit/test_model_assessment.py
-.venv/bin/ruff format --check scripts/model_assessment tests/unit/test_model_assessment.py
-.venv/bin/mypy --explicit-package-bases scripts/model_assessment tests/unit/test_model_assessment.py
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 The critical regressions cover early T+2 availability, reserved-target rejection
 and the approved onset/false-alert denominators and utility knobs. PLAN_028 owns
@@ -243,7 +306,7 @@ threshold selections. This delivery performs none of those fits or any reserved
 evaluation. Both G4 and final-protocol acceptance remain separate human decisions.
 
 The shared supplementary evaluator is
-[scripts/evaluation_metrics.py](../../../scripts/evaluation_metrics.py). It calls
+[scripts/evaluation_metrics.py](../../../src/sat_dengue/metrics.py). It calls
 the existing four-metric implementation unchanged and adds sklearn binary AUROC
 on the same continuous model scores and aligned population. Persistence uses its
 documented deterministic score, not a calibrated probability; Brier remains N/A.
@@ -285,7 +348,7 @@ Required gates and the shared-evaluator test mapping are recorded in the
 
 ## Closure delivery 2 — gated final route
 
-Implementation: [final_evaluation](../../../scripts/final_evaluation). The exact
+Implementation: [final_evaluation](../../../src/sat_dengue/datasets/legacy_evaluation/final_evaluation/__init__.py). The exact
 six-procedure proposal remains `66d7208066476b027721182d185770d2522dfe5d891caf4b3b2759177dcc5e09`
 in assessment bundle `0f26a4eb97ad37075f3fba2d8da0afd55cf3450db945e8f9cb86d7dccac2f257`.
 The scientific contract and original assessment modules remain byte-identical to
@@ -300,13 +363,12 @@ The migrated notebook displays the immutable development comparison and, only wh
 requested and authorized, executes the final route. Historical assessment CLI
 receipts belong to the previous notebook orchestration; use the current commands below.
 
-Default execution performs readiness checks only, with zero reserved access or
-scientific fitting:
+The historical delivery's default route performed readiness checks only, with
+zero reserved access or scientific fitting. It is not a current entrypoint:
 
-```bash
-.venv/bin/python -m scripts.final_evaluation.execution --execute
-.venv/bin/python -m scripts.final_evaluation.execution --verify
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
 After final evaluation, later repository refactors may intentionally change live
 development contracts or assessment modules. Readiness still verifies the immutable
@@ -316,15 +378,14 @@ first mismatch; it does not silently declare the new code equivalent. In that st
 results must be read from the verified final bundle rather than regenerated with the
 new dependency identity.
 
-After actual human acceptance of G4, this exact proposal/protocol, and final
-execution is recorded, the scientific command is:
+The historical final route required actual human acceptance of G4 and this exact
+proposal/protocol before its one authorized execution. Its retired invocation was:
 
-```bash
-.venv/bin/python -m scripts.final_evaluation.execution --execute --scientific
-.venv/bin/python -m scripts.final_evaluation.execution --verify --scientific
-```
+Historical command block retired with its script facades. The original
+invocation is recoverable from the Git revision above; use only the
+[current Kedro and package-test commands](#current-execution-and-governance).
 
-`--scientific` does not approve anything. The route requires a local
+The historical `--scientific` flag did not approve anything. That route required a local
 `artifacts/model_final_protocol/<proposal_sha>/human_authorization.json` containing
 `authority: "Mauricio"`, the exact `proposal_sha256`, explicit true values for
 `accept_G4`, `accept_exact_protocol`, `authorize_final_execution`, and a
@@ -503,3 +564,80 @@ saved components and their predictions in a separate bounded follow-up before
 claiming reproduction with the new dependency. This conflict resolution does
 not authorize retraining, retuning, renewed use of 2025 for selection, a champion
 or a change to G5 NOT_APPROVED.
+
+
+<!-- command-context: historical end -->
+
+## Maintained frozen assessment — Kedro Session 6
+
+Use the existing isolated foundation environment, with modeling installed:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=evaluation_replay --params=profile=evaluation_replay
+KEDRO_DISABLE_TELEMETRY=yes python -m kedro run --pipeline=evaluation_synthetic --params=profile=evaluation_synthetic
+```
+
+`evaluation_replay` has ten nodes and uses only the fixed saved development,
+proposal and final bundles. It resolves the approved contracts, verifies the
+exact proposal and source/component identities, constructs complete cohorts and
+validates availability, replays saved raw probabilities, applies retained
+calibration, emits alerts from retained thresholds, computes final metrics and
+paired uncertainty, independently rebuilds development assessment, applies the
+existing decision policy and assembles verified atomic publication. There is no
+fit, calibration-fit, hyperparameter, calibrator-choice or threshold-search node.
+The already consumed 2025 block cannot become a new selection or training route.
+
+`evaluation_synthetic` has eleven nodes. Its extra node creates its entire toy
+fixture internally in memory; it has no frozen-source dataset input. Toy scores
+exercise the same calibration, alert, cohort, metric, policy and publication
+interfaces with zero fits. Synthetic results are interface tests, not evidence
+of equivalence with real results. Existing deterministic native-model synthetic
+roundtrip tests remain enabled separately.
+
+Pure scientific owners are `src/sat_dengue/model_evaluation/`,
+`model_assessment/` and `final_evaluation/`; metrics remain shared in `metrics.py`.
+`datasets/evaluation_legacy.py` owns narrow native input reading and call guards;
+`datasets/evaluation.py` owns lazy loading and atomic immutable output. Optional
+modeling imports occur only when an evaluation node/dataset executes. Registration
+and foundation remain usable with the base package alone. YAML selects only the
+operational profile and disabled tracking; scientific overrides are rejected.
+
+Each run publishes a distinct engineering bundle below ignored
+`tmp/kedro-migration/evaluation-runs/`. Payloads retain full final predictions,
+comparison, metrics, uncertainty, cohort keys/context and common draw indices;
+complete development replay/assessment tables; and aggregate audit/provenance.
+Every payload has a size/SHA-256 record. Publication rejects partial payload sets,
+corruption, missing input identities and overwrites. Scientific native bundles,
+proposal, policy, notebooks and historical hashes are never repaired or replaced.
+
+The replay checks all 160 saved development models and six final models. It
+reproduces all 72,048 internal/outer development inference rows, the 21,888 selected
+development and 10,032 posterior rows, and the complete assessment outputs. Final
+comparison uses 7,296 prediction rows (5,472 candidates and 1,824 persistence),
+3,640 metric rows, eight comparison rows, sixteen uncertainty rows, two complete
+912-row cohorts and two shared 2,000-by-12 resampling matrices. Original probability
+roundtrips remain exact; development sigmoid replay retains its existing 1e-12
+absolute bound. Other metric comparisons retain the migration's predeclared
+1e-8 relative / 1e-10 absolute tolerances. No new tolerance is introduced.
+
+All six research decisions remain `does_not_meet`. G5 remains `NOT_APPROVED` and
+champion remains `not_selected`, read from the single decision policy. The
+outer-refit/calibrator transfer and retrospective as-of-availability limitations
+remain. 2025 cannot fit, refit, calibrate, tune, select alternatives or select a
+champion. The 13 historical source exceptions and 17 KEEP / UNVERIFIED bundles
+remain excluded from equivalence; full historical reproducibility is not claimed.
+
+The twenty-two former Stage 5 script facades were retired by T-cleanup after
+their consumers moved directly to the package owners and complete parity passed.
+Synthetic library regressions retain their isolated fake-repository engine.
+Notebooks 03–08 are retained exclusively as frozen historical identity evidence,
+never production entrypoints. There is no active scientific-execution flag or
+authorization to repeat historical fitting.
+The [original migration mapping](../../operations/kedro-evaluation-identities.json)
+remains unchanged; the separate
+[cleanup correspondence](../../operations/kedro-cleanup-identities.json) verifies
+original/pre-cleanup Git blobs, retired absence and subsequent documentary identities.
+Session 6 receipts remain historical; current validation is owned by the
+[testing guide](../../TESTING_GUIDE.md). The composed E2E and optional bounded
+tracking are described by the current migration owner.

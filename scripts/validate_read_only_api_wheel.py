@@ -14,7 +14,7 @@ import tempfile
 from pathlib import Path
 from zipfile import ZipFile
 
-EXPECTED_PACKAGE_FILES = {
+EXPECTED_API_PACKAGE_FILES = {
     "scripts/read_only_api/__init__.py",
     "scripts/read_only_api/api.py",
     "scripts/read_only_api/errors.py",
@@ -188,7 +188,10 @@ def _inspect_wheel(wheel: Path) -> list[str]:
         names = sorted(archive.namelist())
 
     payload = {name for name in names if ".dist-info/" not in name}
-    assert payload == EXPECTED_PACKAGE_FILES
+    assert EXPECTED_API_PACKAGE_FILES <= payload
+    assert all(name.startswith(("sat_dengue/", "scripts/read_only_api/")) for name in payload), (
+        "Wheel contains an unexpected package surface"
+    )
     return names
 
 

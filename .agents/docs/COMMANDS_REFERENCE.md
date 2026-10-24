@@ -35,3 +35,11 @@ Invocation forms:
 - `ai-diff-reviewer-setup` (optional CI flow)
 - `ai-diff-reviewer-apply-review`
 - `ai-diff-reviewer-address-review`
+
+
+Project execution: `kedro run --pipeline=replay` is the guarded scientific E2E;
+`replay_synthetic` is separate. Read docs/operations/kedro-migration.md and
+docs/TESTING_GUIDE.md for dependencies, restart, tracking and exact gates. Notebooks
+are historical identity evidence. Verify retirement consumers and the separate
+cleanup preservation correspondence; do not modify older mappings or scientific
+evidence. Keep DWP writers sequential and scientific approval separate from tests.

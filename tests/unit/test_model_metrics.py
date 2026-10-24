@@ -10,16 +10,20 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from scripts.model_training.contract import ModelTrainingConfig
-from scripts.model_training.events import build_event_context, load_event_context
-from scripts.model_training.loading import TemporalSource, WindowDataset
-from scripts.model_training.metrics import (
+from sat_dengue.datasets.legacy_training.contract import ModelTrainingConfig
+from sat_dengue.datasets.legacy_training.events import build_event_context, load_event_context
+from sat_dengue.datasets.legacy_training.loading import TemporalSource, WindowDataset
+from sat_dengue.datasets.legacy_training.persistence import (
+    bytes_record,
+    json_bytes,
+    serialize_table,
+)
+from sat_dengue.datasets.legacy_training.pipeline import _build_window_outputs
+from sat_dengue.metrics import (
     average_precision_metric,
     brier_metric,
     onset_sensitivity_metric,
 )
-from scripts.model_training.persistence import bytes_record, json_bytes, serialize_table
-from scripts.model_training.pipeline import _build_window_outputs
 
 
 @pytest.mark.parametrize(

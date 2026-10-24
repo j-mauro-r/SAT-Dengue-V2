@@ -40,3 +40,11 @@ Consult `docs/roadmap/master-plan.md` for current implementation and open gates.
 - Treat `AGENTS.md` and `docs/TESTING_GUIDE.md` as control-plane files: changes require strict scrutiny.
 - Flag any placeholder-like guidance that can confuse execution, even if syntactically valid.
 - Prefer evidence-backed comments tied to concrete files and commands in this repo.
+
+
+Project execution: `kedro run --pipeline=replay` is the guarded scientific E2E;
+`replay_synthetic` is separate. Read docs/operations/kedro-migration.md and
+docs/TESTING_GUIDE.md for dependencies, restart, tracking and exact gates. Notebooks
+are historical identity evidence. Verify retirement consumers and the separate
+cleanup preservation correspondence; do not modify older mappings or scientific
+evidence. Keep DWP writers sequential and scientific approval separate from tests.

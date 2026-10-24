@@ -1,0 +1,4048 @@
+{
+  "authorization": {
+    "authority": "Mauricio",
+    "ceiling_sha256": "a1ee1c0a09507957bb884ab0e0a0da98dc7266c4efa76f15cad4bb2fd9c82037",
+    "contract_id": "df477980438853c144d372aa400eeaead1ac9e7f375db2864382df1a11e1b63c",
+    "contract_revision": 16,
+    "scope": "Separate cleanup correspondence only; original ceiling snapshot retained byte-equivalently; no scientific or earlier-mapping changes."
+  },
+  "ceiling": {
+    "paths": [
+      {
+        "baseline_original": {
+          "bytes": 598181,
+          "sha256": "553d0f703128abca55b53596620d6a0a376a0b57ea5c36652c8fc4b087c1ed05"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 598181,
+          "sha256": "553d0f703128abca55b53596620d6a0a376a0b57ea5c36652c8fc4b087c1ed05"
+        },
+        "path": "docs/product/stage-2/Informe_EDA_03_vista_revisada.ipynb",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:docs/product/stage-2/Informe_EDA_03_vista_revisada.ipynb",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:docs/product/stage-2/Informe_EDA_03_vista_revisada.ipynb"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 13046,
+          "sha256": "2bfefaed8ba0437e12548ec25049820e7a0e665dd79e63182d3954db15792f12"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 6905,
+            "sha256": "f62247001f959779b46573878dea81d433e93929d3305e27960f795c78562d00"
+          },
+          "original": {
+            "bytes": 13046,
+            "sha256": "2bfefaed8ba0437e12548ec25049820e7a0e665dd79e63182d3954db15792f12"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 6905,
+          "sha256": "f62247001f959779b46573878dea81d433e93929d3305e27960f795c78562d00"
+        },
+        "path": "docs/product/stage-3/README.md",
+        "proposed_disposition": "ADAPT",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:docs/product/stage-3/README.md",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:docs/product/stage-3/README.md"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 29809,
+          "sha256": "36ea94b315847ac936e7debefe171046bc29676cf8cca82ef1ad2c2d3ecc936f"
+        },
+        "closed_mapping": {
+          "destination": [
+            "docs/product/stage-4/README.md"
+          ],
+          "engineering": {
+            "bytes": 6664,
+            "sha256": "aba8bc153ada82f2b6ac05098e2656f61a1a948ed8c05d589e5dbcf26faec634"
+          },
+          "original": {
+            "bytes": 29809,
+            "sha256": "36ea94b315847ac936e7debefe171046bc29676cf8cca82ef1ad2c2d3ecc936f"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 6664,
+          "sha256": "aba8bc153ada82f2b6ac05098e2656f61a1a948ed8c05d589e5dbcf26faec634"
+        },
+        "path": "docs/product/stage-4/README.md",
+        "proposed_disposition": "ADAPT",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:docs/product/stage-4/README.md",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:docs/product/stage-4/README.md"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 30192,
+          "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+        },
+        "closed_mapping": {
+          "destination": [
+            "docs/product/stage-5/README.md"
+          ],
+          "engineering": {
+            "bytes": 35157,
+            "sha256": "fad1d18765c7d02d7eb145681fb022c14f6ffb0aefc25096dbc1cac4c6db9b52"
+          },
+          "original": {
+            "bytes": 30192,
+            "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 35157,
+          "sha256": "fad1d18765c7d02d7eb145681fb022c14f6ffb0aefc25096dbc1cac4c6db9b52"
+        },
+        "path": "docs/product/stage-5/README.md",
+        "proposed_disposition": "ADAPT",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:docs/product/stage-5/README.md",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:docs/product/stage-5/README.md"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 628822,
+          "sha256": "da46dd244f3c4003b4f25df85e43dd361b52a360182e137a9835d24011e32572"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 628822,
+          "sha256": "da46dd244f3c4003b4f25df85e43dd361b52a360182e137a9835d24011e32572"
+        },
+        "path": "notebooks/03_consolidated_dataset_pipeline.ipynb",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:notebooks/03_consolidated_dataset_pipeline.ipynb",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:notebooks/03_consolidated_dataset_pipeline.ipynb"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 11798,
+          "sha256": "c1a70057bc45fcd06379fe2d96bd86ce77e2fcd99d2adbdf034c960642e3d404"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 11798,
+          "sha256": "c1a70057bc45fcd06379fe2d96bd86ce77e2fcd99d2adbdf034c960642e3d404"
+        },
+        "path": "notebooks/04_training_preparation_pipeline.ipynb",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:notebooks/04_training_preparation_pipeline.ipynb",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:notebooks/04_training_preparation_pipeline.ipynb"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3678,
+          "sha256": "1b8513e3d009eff35f13aa9016c347f0e21aa5476740cd065f9f4bd01235e511"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 3678,
+          "sha256": "1b8513e3d009eff35f13aa9016c347f0e21aa5476740cd065f9f4bd01235e511"
+        },
+        "path": "notebooks/05_baseline_models.ipynb",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:notebooks/05_baseline_models.ipynb",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:notebooks/05_baseline_models.ipynb"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 37019,
+          "sha256": "988ebede384bd9d7a253d0d36180c74feb3980635b138511331a5fa96dd424cb"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 37019,
+          "sha256": "988ebede384bd9d7a253d0d36180c74feb3980635b138511331a5fa96dd424cb"
+        },
+        "path": "notebooks/06_candidate_models.ipynb",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:notebooks/06_candidate_models.ipynb",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:notebooks/06_candidate_models.ipynb"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 110231,
+          "sha256": "a85c62c8d00482076aadd5bd6f257f05b704e4a17328e9c5b2f5543188df45a9"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 110231,
+          "sha256": "a85c62c8d00482076aadd5bd6f257f05b704e4a17328e9c5b2f5543188df45a9"
+        },
+        "path": "notebooks/07_probability_calibration_thresholds.ipynb",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:notebooks/07_probability_calibration_thresholds.ipynb",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:notebooks/07_probability_calibration_thresholds.ipynb"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 14478,
+          "sha256": "b3640b8e761a5053f4358f757be1f265297c80ef7f0b4d6ee6f443cad9109b2f"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 14478,
+          "sha256": "b3640b8e761a5053f4358f757be1f265297c80ef7f0b4d6ee6f443cad9109b2f"
+        },
+        "path": "notebooks/08_model_evaluation.ipynb",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:notebooks/08_model_evaluation.ipynb",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:notebooks/08_model_evaluation.ipynb"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3592,
+          "sha256": "09daa0d97bd118ff42476190c9719cd31783c435afe889c8fd7fd5e5ecbdd4bc"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 3592,
+          "sha256": "09daa0d97bd118ff42476190c9719cd31783c435afe889c8fd7fd5e5ecbdd4bc"
+        },
+        "path": "notebooks/gee_recover_january_2020.js",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:notebooks/gee_recover_january_2020.js",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:notebooks/gee_recover_january_2020.js"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3427,
+          "sha256": "b377152e72f24dd6a30f9400412b2c919c9365a6a630642fc5b02f716d2712f0"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/metrics.py"
+          ],
+          "engineering": {
+            "bytes": 230,
+            "sha256": "66b8c608f5e1932455095610387ddaf6341619164a4fd7a395f2253464051049"
+          },
+          "original": {
+            "bytes": 3427,
+            "sha256": "b377152e72f24dd6a30f9400412b2c919c9365a6a630642fc5b02f716d2712f0"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 230,
+          "sha256": "66b8c608f5e1932455095610387ddaf6341619164a4fd7a395f2253464051049"
+        },
+        "path": "scripts/evaluation_metrics.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/evaluation_metrics.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/evaluation_metrics.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 72,
+          "sha256": "f1695c497c10eec50d32d991b771290bc87a48a54e425b2029f7c8dc5c8c9238"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/__init__.py"
+          ],
+          "engineering": {
+            "bytes": 300,
+            "sha256": "a3bf54be98cafdaeb93e6714de6dd9cc0fde6cf9fbafc31caa5c094468284aa4"
+          },
+          "original": {
+            "bytes": 72,
+            "sha256": "f1695c497c10eec50d32d991b771290bc87a48a54e425b2029f7c8dc5c8c9238"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 300,
+          "sha256": "a3bf54be98cafdaeb93e6714de6dd9cc0fde6cf9fbafc31caa5c094468284aa4"
+        },
+        "path": "scripts/final_evaluation/__init__.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/final_evaluation/__init__.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/final_evaluation/__init__.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 9975,
+          "sha256": "3630f1e8cdf6766c277a836aeb903e66d9e429975be870892527c6419a4b9ccf"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/cohorts.py",
+            "src/sat_dengue/final_evaluation/cohorts.py"
+          ],
+          "engineering": {
+            "bytes": 314,
+            "sha256": "606a131511a52600042137fe830c57453bbb8b628058a3893d07a5f811135f39"
+          },
+          "original": {
+            "bytes": 9975,
+            "sha256": "3630f1e8cdf6766c277a836aeb903e66d9e429975be870892527c6419a4b9ccf"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 314,
+          "sha256": "606a131511a52600042137fe830c57453bbb8b628058a3893d07a5f811135f39"
+        },
+        "path": "scripts/final_evaluation/cohorts.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/final_evaluation/cohorts.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/final_evaluation/cohorts.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 10637,
+          "sha256": "c6228d971a0e5ba0b04f6c82bbcdd64563d9127ae951d11b97a5026cf37e2780"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/evaluation.py",
+            "src/sat_dengue/final_evaluation/evaluation.py"
+          ],
+          "engineering": {
+            "bytes": 317,
+            "sha256": "6f12536c138589cbbd82c210e779620af0621e78d14d6d1e4a6462987a0095d6"
+          },
+          "original": {
+            "bytes": 10637,
+            "sha256": "c6228d971a0e5ba0b04f6c82bbcdd64563d9127ae951d11b97a5026cf37e2780"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 317,
+          "sha256": "6f12536c138589cbbd82c210e779620af0621e78d14d6d1e4a6462987a0095d6"
+        },
+        "path": "scripts/final_evaluation/evaluation.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/final_evaluation/evaluation.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/final_evaluation/evaluation.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 4117,
+          "sha256": "2f585d8aa20d93846264086c6aaa120e81c78b092ecb89603e3c69328b1f2a41"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/execution.py",
+            "src/sat_dengue/datasets/evaluation_cli.py"
+          ],
+          "engineering": {
+            "bytes": 372,
+            "sha256": "58f575183b7ac5713266456a6c728d39105fd1dbc2d5848bd134b3b44ef58b89"
+          },
+          "original": {
+            "bytes": 4117,
+            "sha256": "2f585d8aa20d93846264086c6aaa120e81c78b092ecb89603e3c69328b1f2a41"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 372,
+          "sha256": "58f575183b7ac5713266456a6c728d39105fd1dbc2d5848bd134b3b44ef58b89"
+        },
+        "path": "scripts/final_evaluation/execution.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/final_evaluation/execution.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/final_evaluation/execution.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 16254,
+          "sha256": "e57435682733ddb0665e0093ccfee4fb31941f328f9fbd032329c9e176e2da01"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/pipeline.py",
+            "src/sat_dengue/final_evaluation/prediction.py"
+          ],
+          "engineering": {
+            "bytes": 315,
+            "sha256": "7dc8559b04be4e3d82535bcb43985e128af8742e57e269add323095a53197bb7"
+          },
+          "original": {
+            "bytes": 16254,
+            "sha256": "e57435682733ddb0665e0093ccfee4fb31941f328f9fbd032329c9e176e2da01"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 315,
+          "sha256": "7dc8559b04be4e3d82535bcb43985e128af8742e57e269add323095a53197bb7"
+        },
+        "path": "scripts/final_evaluation/pipeline.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/final_evaluation/pipeline.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/final_evaluation/pipeline.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 6001,
+          "sha256": "27aa4736f3d11e96b182043ceded8abedebae829404dff940dbccbb3b7dc29e2"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/protocol.py"
+          ],
+          "engineering": {
+            "bytes": 315,
+            "sha256": "183b8dcb6c15fc1b3b0451b6a2a849ec6d7f9232a66e05ce8f171bb054209c7e"
+          },
+          "original": {
+            "bytes": 6001,
+            "sha256": "27aa4736f3d11e96b182043ceded8abedebae829404dff940dbccbb3b7dc29e2"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 315,
+          "sha256": "183b8dcb6c15fc1b3b0451b6a2a849ec6d7f9232a66e05ce8f171bb054209c7e"
+        },
+        "path": "scripts/final_evaluation/protocol.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/final_evaluation/protocol.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/final_evaluation/protocol.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 26765,
+          "sha256": "66ce424cb1798a68b13d020497f5c1aa6e504c3668ff2ae5dd8a563a2b59d290"
+        },
+        "closed_mapping": null,
+        "current": {
+          "bytes": 26765,
+          "sha256": "66ce424cb1798a68b13d020497f5c1aa6e504c3668ff2ae5dd8a563a2b59d290"
+        },
+        "path": "scripts/january_2020_climate_incorporation.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/january_2020_climate_incorporation.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/january_2020_climate_incorporation.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 80,
+          "sha256": "536c51c7e4f21ca8c0b19c2a2106db36a85de9d7235462e2bfa2d4829f7313e8"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/__init__.py"
+          ],
+          "engineering": {
+            "bytes": 300,
+            "sha256": "cb3809ced0fd1d6e815d9d3ec84defbcced01fabb4f86d6a61e755ae9d448d0d"
+          },
+          "original": {
+            "bytes": 80,
+            "sha256": "536c51c7e4f21ca8c0b19c2a2106db36a85de9d7235462e2bfa2d4829f7313e8"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 300,
+          "sha256": "cb3809ced0fd1d6e815d9d3ec84defbcced01fabb4f86d6a61e755ae9d448d0d"
+        },
+        "path": "scripts/model_assessment/__init__.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/__init__.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/__init__.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 4877,
+          "sha256": "635b115501b8fa091b4f356309ad5dcc76c5d3fdd84a711f57eb168036479c4a"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/comparison.py",
+            "src/sat_dengue/model_assessment/comparison.py"
+          ],
+          "engineering": {
+            "bytes": 317,
+            "sha256": "0f10214f5d6a8f9d81d23917a07b5cc8e52c1d138737c757c82c92ae05de52e0"
+          },
+          "original": {
+            "bytes": 4877,
+            "sha256": "635b115501b8fa091b4f356309ad5dcc76c5d3fdd84a711f57eb168036479c4a"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 317,
+          "sha256": "0f10214f5d6a8f9d81d23917a07b5cc8e52c1d138737c757c82c92ae05de52e0"
+        },
+        "path": "scripts/model_assessment/comparison.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/comparison.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/comparison.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3379,
+          "sha256": "77f98936b48ace75f235026c3fc362ea75f284cb776332273d526ef7332eb6f7"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/execution.py",
+            "src/sat_dengue/datasets/evaluation_cli.py"
+          ],
+          "engineering": {
+            "bytes": 372,
+            "sha256": "c5fdaf63dbe6990b2a5a3702bd2c1c55148e03143e2c303d05183abee31b7fdf"
+          },
+          "original": {
+            "bytes": 3379,
+            "sha256": "77f98936b48ace75f235026c3fc362ea75f284cb776332273d526ef7332eb6f7"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 372,
+          "sha256": "c5fdaf63dbe6990b2a5a3702bd2c1c55148e03143e2c303d05183abee31b7fdf"
+        },
+        "path": "scripts/model_assessment/execution.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/execution.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/execution.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3847,
+          "sha256": "27c8c3d2ca3ade77d2022974b3733957e15f200135b1e0e86d81d55b6025c8f5"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/input_validation.py"
+          ],
+          "engineering": {
+            "bytes": 323,
+            "sha256": "313c02e71841d47f401fe81d2d6885316ee9878dc92dfc19a4581c5c2f0d42a2"
+          },
+          "original": {
+            "bytes": 3847,
+            "sha256": "27c8c3d2ca3ade77d2022974b3733957e15f200135b1e0e86d81d55b6025c8f5"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 323,
+          "sha256": "313c02e71841d47f401fe81d2d6885316ee9878dc92dfc19a4581c5c2f0d42a2"
+        },
+        "path": "scripts/model_assessment/input_validation.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/input_validation.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/input_validation.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 6945,
+          "sha256": "45143718a2ccade0dddc3c52a7324ec31b270a42eb5b5b70b9a2abb080957154"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/loading.py",
+            "src/sat_dengue/model_assessment/workflow.py"
+          ],
+          "engineering": {
+            "bytes": 314,
+            "sha256": "60f12d6d537ceb6b1fccedea50fd8adaefa3d4fc1e97054f58daf3d1f3206934"
+          },
+          "original": {
+            "bytes": 6945,
+            "sha256": "45143718a2ccade0dddc3c52a7324ec31b270a42eb5b5b70b9a2abb080957154"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 314,
+          "sha256": "60f12d6d537ceb6b1fccedea50fd8adaefa3d4fc1e97054f58daf3d1f3206934"
+        },
+        "path": "scripts/model_assessment/loading.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/loading.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/loading.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 5845,
+          "sha256": "5edc04cd1077a7ba80ecd0179168d1c70ee4a04e9f2f368b3ed27b42daf56f2e"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/pipeline.py"
+          ],
+          "engineering": {
+            "bytes": 315,
+            "sha256": "eabf1f40355258228c69ab5f884a42165c27db7bbfa09d84bafb9ea0e181f34b"
+          },
+          "original": {
+            "bytes": 5845,
+            "sha256": "5edc04cd1077a7ba80ecd0179168d1c70ee4a04e9f2f368b3ed27b42daf56f2e"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 315,
+          "sha256": "eabf1f40355258228c69ab5f884a42165c27db7bbfa09d84bafb9ea0e181f34b"
+        },
+        "path": "scripts/model_assessment/pipeline.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/pipeline.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/pipeline.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 4207,
+          "sha256": "79ea9220fa79551d96428ad84434fe8d5abaa1fe61552f07db7c61489d0c597d"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/policy.py",
+            "src/sat_dengue/model_assessment/policy.py"
+          ],
+          "engineering": {
+            "bytes": 313,
+            "sha256": "1667ca01e6dfe131886896e471fe15090f3ff61f3f026c30662f5812a0586bc0"
+          },
+          "original": {
+            "bytes": 4207,
+            "sha256": "79ea9220fa79551d96428ad84434fe8d5abaa1fe61552f07db7c61489d0c597d"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 313,
+          "sha256": "1667ca01e6dfe131886896e471fe15090f3ff61f3f026c30662f5812a0586bc0"
+        },
+        "path": "scripts/model_assessment/policy.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/policy.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/policy.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 6475,
+          "sha256": "2e4cc21ed0fceb0e8654e4f4dabb852cef35cd8a82905bf95f0c58cf021b9cc5"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_assessment/proposal.py"
+          ],
+          "engineering": {
+            "bytes": 315,
+            "sha256": "1ce7ba589a683d3af877d3eae9a33f03c431df7abfa07fdd75bc9c048da96d74"
+          },
+          "original": {
+            "bytes": 6475,
+            "sha256": "2e4cc21ed0fceb0e8654e4f4dabb852cef35cd8a82905bf95f0c58cf021b9cc5"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 315,
+          "sha256": "1ce7ba589a683d3af877d3eae9a33f03c431df7abfa07fdd75bc9c048da96d74"
+        },
+        "path": "scripts/model_assessment/proposal.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_assessment/proposal.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_assessment/proposal.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 476,
+          "sha256": "1df83b4efd4c17e812c067cd60cbe0ac38de8d7658b8d7c256f75a7ba6261515"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/__init__.py"
+          ],
+          "engineering": {
+            "bytes": 300,
+            "sha256": "2f0a812a1aec0be3a3979dfb2cc729e2c6a44467a31d43c32eb2f55310944988"
+          },
+          "original": {
+            "bytes": 476,
+            "sha256": "1df83b4efd4c17e812c067cd60cbe0ac38de8d7658b8d7c256f75a7ba6261515"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 300,
+          "sha256": "2f0a812a1aec0be3a3979dfb2cc729e2c6a44467a31d43c32eb2f55310944988"
+        },
+        "path": "scripts/model_evaluation/__init__.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/__init__.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/__init__.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 7058,
+          "sha256": "bf5761effaf0ec8b881523a1590fe681f5137d5285798ecbf71c2a8f26cf6a71"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/availability.py",
+            "src/sat_dengue/model_evaluation/availability.py"
+          ],
+          "engineering": {
+            "bytes": 319,
+            "sha256": "a890d87605f390a98c760e4b3da1b5b0f35de96ae6b2b8aa3d9d4740907da01e"
+          },
+          "original": {
+            "bytes": 7058,
+            "sha256": "bf5761effaf0ec8b881523a1590fe681f5137d5285798ecbf71c2a8f26cf6a71"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 319,
+          "sha256": "a890d87605f390a98c760e4b3da1b5b0f35de96ae6b2b8aa3d9d4740907da01e"
+        },
+        "path": "scripts/model_evaluation/availability.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/availability.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/availability.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 10324,
+          "sha256": "5eba463708c096618186c991e0f2a7882d7d7f6bb857fe30d13b9a203d1c1f3e"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/contract.py",
+            "src/sat_dengue/model_evaluation/contract.py"
+          ],
+          "engineering": {
+            "bytes": 315,
+            "sha256": "437a1c18fe5e4ad960ad56fd343f74c266bd6c422dbbd0fb2caea5c61ad3a826"
+          },
+          "original": {
+            "bytes": 10324,
+            "sha256": "5eba463708c096618186c991e0f2a7882d7d7f6bb857fe30d13b9a203d1c1f3e"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 315,
+          "sha256": "437a1c18fe5e4ad960ad56fd343f74c266bd6c422dbbd0fb2caea5c61ad3a826"
+        },
+        "path": "scripts/model_evaluation/contract.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/contract.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/contract.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 5852,
+          "sha256": "69e42d78efd4f3952d1419ef188d3456d1657dfc4e4de1ee60c2d3269957a1fe"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/decision_policy.py",
+            "src/sat_dengue/model_evaluation/decision_policy.py"
+          ],
+          "engineering": {
+            "bytes": 322,
+            "sha256": "7512a083234e256da7852e63e4b118ed9d400b6deb1476fccd1cd13a97dbc0c1"
+          },
+          "original": {
+            "bytes": 5852,
+            "sha256": "69e42d78efd4f3952d1419ef188d3456d1657dfc4e4de1ee60c2d3269957a1fe"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 322,
+          "sha256": "7512a083234e256da7852e63e4b118ed9d400b6deb1476fccd1cd13a97dbc0c1"
+        },
+        "path": "scripts/model_evaluation/decision_policy.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/decision_policy.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/decision_policy.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 1130,
+          "sha256": "37816fbb6d1d57116d87802764b9f87f0967cb64ebef1204fada9f362593e2d5"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/execution.py",
+            "src/sat_dengue/datasets/evaluation_cli.py"
+          ],
+          "engineering": {
+            "bytes": 372,
+            "sha256": "488957af2c356fee57ef52678ac3e2b543710261d28493164b86771882b34008"
+          },
+          "original": {
+            "bytes": 1130,
+            "sha256": "37816fbb6d1d57116d87802764b9f87f0967cb64ebef1204fada9f362593e2d5"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 372,
+          "sha256": "488957af2c356fee57ef52678ac3e2b543710261d28493164b86771882b34008"
+        },
+        "path": "scripts/model_evaluation/execution.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/execution.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/execution.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 8039,
+          "sha256": "83a2aa7cf4d0579f46e85e2c1590601177610b8475d0748cd1d71f72e5524d85"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/internal_evidence.py"
+          ],
+          "engineering": {
+            "bytes": 324,
+            "sha256": "c4188cc7011a65ea8de9acf461120bcce6676eb08eaf815e55721e6a206c4b76"
+          },
+          "original": {
+            "bytes": 8039,
+            "sha256": "83a2aa7cf4d0579f46e85e2c1590601177610b8475d0748cd1d71f72e5524d85"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 324,
+          "sha256": "c4188cc7011a65ea8de9acf461120bcce6676eb08eaf815e55721e6a206c4b76"
+        },
+        "path": "scripts/model_evaluation/internal_evidence.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/internal_evidence.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/internal_evidence.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 5197,
+          "sha256": "59bc268286ae126dd7894879d6cfcabaaa9ba76e12a4eded68cec7442d6d6b4d"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/notebook_execution.py",
+            "src/sat_dengue/datasets/evaluation_cli.py"
+          ],
+          "engineering": {
+            "bytes": 381,
+            "sha256": "23baa4171b8cef85c2e7b1776ca213e5a54e7098b0c0c1b00c24f6bd26941393"
+          },
+          "original": {
+            "bytes": 5197,
+            "sha256": "59bc268286ae126dd7894879d6cfcabaaa9ba76e12a4eded68cec7442d6d6b4d"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 381,
+          "sha256": "23baa4171b8cef85c2e7b1776ca213e5a54e7098b0c0c1b00c24f6bd26941393"
+        },
+        "path": "scripts/model_evaluation/notebook_execution.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/notebook_execution.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/notebook_execution.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 94121,
+          "sha256": "42900de97a6023af5ff797bb11c917c25471b336fd231b6cd97f27abd5446b1f"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/pipeline.py",
+            "src/sat_dengue/model_evaluation/calibration.py"
+          ],
+          "engineering": {
+            "bytes": 315,
+            "sha256": "0b06e6555db481cb37f77bf94f9a2295976f65f36b1094dfda9fb4349c8099d4"
+          },
+          "original": {
+            "bytes": 94121,
+            "sha256": "42900de97a6023af5ff797bb11c917c25471b336fd231b6cd97f27abd5446b1f"
+          },
+          "owner": "docs/operations/kedro-evaluation-identities.json"
+        },
+        "current": {
+          "bytes": 315,
+          "sha256": "0b06e6555db481cb37f77bf94f9a2295976f65f36b1094dfda9fb4349c8099d4"
+        },
+        "path": "scripts/model_evaluation/pipeline.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_evaluation/pipeline.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_evaluation/pipeline.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 430,
+          "sha256": "fabdddfe02fe58d741d2915f4431399ae44f8f14f5675b346d81e7ba5c657b99"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/contract.py",
+            "src/sat_dengue/datasets/legacy_training/pipeline.py"
+          ],
+          "engineering": {
+            "bytes": 538,
+            "sha256": "e84acdbffc04664cd071a4b1aeee2d4362d9c7b41e16d53b47dd2870a906a0e2"
+          },
+          "original": {
+            "bytes": 430,
+            "sha256": "fabdddfe02fe58d741d2915f4431399ae44f8f14f5675b346d81e7ba5c657b99"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 538,
+          "sha256": "e84acdbffc04664cd071a4b1aeee2d4362d9c7b41e16d53b47dd2870a906a0e2"
+        },
+        "path": "scripts/model_training/__init__.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/__init__.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/__init__.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 4451,
+          "sha256": "f7300e0b7b69cdeabbedfe515cc94d6b20afeaa7b3327b63f9974c84f3a48846"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/model_training/candidate_families.py"
+          ],
+          "engineering": {
+            "bytes": 292,
+            "sha256": "7c5373f60b4889368300d24a0aa945a0f6a394dab4f3668dbb09bf4aa2f2fa0a"
+          },
+          "original": {
+            "bytes": 4451,
+            "sha256": "f7300e0b7b69cdeabbedfe515cc94d6b20afeaa7b3327b63f9974c84f3a48846"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 292,
+          "sha256": "7c5373f60b4889368300d24a0aa945a0f6a394dab4f3668dbb09bf4aa2f2fa0a"
+        },
+        "path": "scripts/model_training/candidate_families.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/candidate_families.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/candidate_families.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 2839,
+          "sha256": "bfaa8a81649d802c5210710baca4f90e8edb905134cddeddeb2fa475cc687066"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/candidate_notebook.py"
+          ],
+          "engineering": {
+            "bytes": 358,
+            "sha256": "92a9912b7f0da693dbf1a43a31759174303341dfe3ae3f89f4cda5a9982c181b"
+          },
+          "original": {
+            "bytes": 2839,
+            "sha256": "bfaa8a81649d802c5210710baca4f90e8edb905134cddeddeb2fa475cc687066"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 358,
+          "sha256": "92a9912b7f0da693dbf1a43a31759174303341dfe3ae3f89f4cda5a9982c181b"
+        },
+        "path": "scripts/model_training/candidate_notebook.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/candidate_notebook.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/candidate_notebook.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3142,
+          "sha256": "6b25b623432e1892666f16025dcf6661dc65103d1241bf2f43b8728cfbd22a16"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/model_training/candidate_preparation.py"
+          ],
+          "engineering": {
+            "bytes": 295,
+            "sha256": "417b642c45f16c517c6c701ba24e8365f150bba703911a86e3c5fe75a77ab746"
+          },
+          "original": {
+            "bytes": 3142,
+            "sha256": "6b25b623432e1892666f16025dcf6661dc65103d1241bf2f43b8728cfbd22a16"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 295,
+          "sha256": "417b642c45f16c517c6c701ba24e8365f150bba703911a86e3c5fe75a77ab746"
+        },
+        "path": "scripts/model_training/candidate_preparation.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/candidate_preparation.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/candidate_preparation.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 8093,
+          "sha256": "7359055290595a18158f3f3c5cf73981eb9344e6f7bd7fdbf48764000464a1a8"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/model_training/candidate_selection.py"
+          ],
+          "engineering": {
+            "bytes": 293,
+            "sha256": "2554a307d8f6db09b2c332dedf981227dfcd486f2ccd1e571916125aec772d1e"
+          },
+          "original": {
+            "bytes": 8093,
+            "sha256": "7359055290595a18158f3f3c5cf73981eb9344e6f7bd7fdbf48764000464a1a8"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 293,
+          "sha256": "2554a307d8f6db09b2c332dedf981227dfcd486f2ccd1e571916125aec772d1e"
+        },
+        "path": "scripts/model_training/candidate_selection.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/candidate_selection.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/candidate_selection.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 8647,
+          "sha256": "613bd50bd6abfe5ba563e313bcd11f7e3eb53a9f63468db2ab69a4f96f6ba3e5"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/candidate_suite.py"
+          ],
+          "engineering": {
+            "bytes": 299,
+            "sha256": "b5fbaf2d38ef961ef3a1300f700353722e5456da1ca5a5013f8790ba71fc1430"
+          },
+          "original": {
+            "bytes": 8647,
+            "sha256": "613bd50bd6abfe5ba563e313bcd11f7e3eb53a9f63468db2ab69a4f96f6ba3e5"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 299,
+          "sha256": "b5fbaf2d38ef961ef3a1300f700353722e5456da1ca5a5013f8790ba71fc1430"
+        },
+        "path": "scripts/model_training/candidate_suite.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/candidate_suite.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/candidate_suite.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 19310,
+          "sha256": "1f1621a9c9898377964aac304a031e86a2028c8c0720634600bcef21ea9aed18"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/candidates.py"
+          ],
+          "engineering": {
+            "bytes": 294,
+            "sha256": "55ecd06fc2598633e51c1aba2843364acd1e43ff13b9906ebe84495a19b5b5ef"
+          },
+          "original": {
+            "bytes": 19310,
+            "sha256": "1f1621a9c9898377964aac304a031e86a2028c8c0720634600bcef21ea9aed18"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 294,
+          "sha256": "55ecd06fc2598633e51c1aba2843364acd1e43ff13b9906ebe84495a19b5b5ef"
+        },
+        "path": "scripts/model_training/candidates.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/candidates.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/candidates.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 2533,
+          "sha256": "effb123129401724da4268949869f36499bd12b925736a48317c3550de720d26"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/contract.py"
+          ],
+          "engineering": {
+            "bytes": 292,
+            "sha256": "80a9a148396c8c665e1d3e8e8c60fecab6f003d6c5ca4e0e5e2106f921b784bd"
+          },
+          "original": {
+            "bytes": 2533,
+            "sha256": "effb123129401724da4268949869f36499bd12b925736a48317c3550de720d26"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 292,
+          "sha256": "80a9a148396c8c665e1d3e8e8c60fecab6f003d6c5ca4e0e5e2106f921b784bd"
+        },
+        "path": "scripts/model_training/contract.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/contract.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/contract.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 5905,
+          "sha256": "e99fadf26df301a59f2d3b372fff333e3d66c0c03786edf492dc77082507535b"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/events.py"
+          ],
+          "engineering": {
+            "bytes": 290,
+            "sha256": "a697f90c7bd7f040e5c3d9d427c353b50e35680462e7555dc56834de1ec20683"
+          },
+          "original": {
+            "bytes": 5905,
+            "sha256": "e99fadf26df301a59f2d3b372fff333e3d66c0c03786edf492dc77082507535b"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 290,
+          "sha256": "a697f90c7bd7f040e5c3d9d427c353b50e35680462e7555dc56834de1ec20683"
+        },
+        "path": "scripts/model_training/events.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/events.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/events.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 955,
+          "sha256": "5652d9b0c64dbadc0f060a74b4703a6b2d676cfa5f3b946bbfccf41eb1f2e6f4"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/execution.py"
+          ],
+          "engineering": {
+            "bytes": 349,
+            "sha256": "232aaf2ddc95ea4b7ecbc304a61c0bd6fb8b2b3d2abac34d62ba736cd4833d33"
+          },
+          "original": {
+            "bytes": 955,
+            "sha256": "5652d9b0c64dbadc0f060a74b4703a6b2d676cfa5f3b946bbfccf41eb1f2e6f4"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 349,
+          "sha256": "232aaf2ddc95ea4b7ecbc304a61c0bd6fb8b2b3d2abac34d62ba736cd4833d33"
+        },
+        "path": "scripts/model_training/execution.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/execution.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/execution.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 6401,
+          "sha256": "9e77bffe0a81b3a9e25a7a216708ea4942700248eba7c83867d15a8bc7e51d26"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/model_training/gam_adapter.py"
+          ],
+          "engineering": {
+            "bytes": 285,
+            "sha256": "d6fdbc521c7a260a2c7f3a9bad0a465375ec8bdb9465861fda8d03bf9f8f31ea"
+          },
+          "original": {
+            "bytes": 6401,
+            "sha256": "9e77bffe0a81b3a9e25a7a216708ea4942700248eba7c83867d15a8bc7e51d26"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 285,
+          "sha256": "d6fdbc521c7a260a2c7f3a9bad0a465375ec8bdb9465861fda8d03bf9f8f31ea"
+        },
+        "path": "scripts/model_training/gam_adapter.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/gam_adapter.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/gam_adapter.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3108,
+          "sha256": "5668c13aaa72ffeabdf8e34be1cf6e54c10e4dd8fa5cf645d426bb548b5f501e"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/model_training/lightgbm_adapter.py"
+          ],
+          "engineering": {
+            "bytes": 290,
+            "sha256": "38fb0c0ade443e0b75808448e71f16eaff400b41d2942de371d0a395eff95a19"
+          },
+          "original": {
+            "bytes": 3108,
+            "sha256": "5668c13aaa72ffeabdf8e34be1cf6e54c10e4dd8fa5cf645d426bb548b5f501e"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 290,
+          "sha256": "38fb0c0ade443e0b75808448e71f16eaff400b41d2942de371d0a395eff95a19"
+        },
+        "path": "scripts/model_training/lightgbm_adapter.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/lightgbm_adapter.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/lightgbm_adapter.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 8737,
+          "sha256": "5554737ad0caea09709191c4958ee181430b2b60b2cada50dab0dc75217af5ff"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/loading.py"
+          ],
+          "engineering": {
+            "bytes": 291,
+            "sha256": "945cd9d9847e11874218f3301c8bb27ad88e7247fd98552c6bbfd45e46cdda4f"
+          },
+          "original": {
+            "bytes": 8737,
+            "sha256": "5554737ad0caea09709191c4958ee181430b2b60b2cada50dab0dc75217af5ff"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 291,
+          "sha256": "945cd9d9847e11874218f3301c8bb27ad88e7247fd98552c6bbfd45e46cdda4f"
+        },
+        "path": "scripts/model_training/loading.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/loading.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/loading.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 10612,
+          "sha256": "589c73661fd0969662e08a5bdbb8fe0dd5ced87aaf8881a842f98f9fd9091e42"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/metrics.py"
+          ],
+          "engineering": {
+            "bytes": 266,
+            "sha256": "2e100a412a8405417c0bcc66369c4babbb50b841b52b6f029f12e7912a06d2f7"
+          },
+          "original": {
+            "bytes": 10612,
+            "sha256": "589c73661fd0969662e08a5bdbb8fe0dd5ced87aaf8881a842f98f9fd9091e42"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 266,
+          "sha256": "2e100a412a8405417c0bcc66369c4babbb50b841b52b6f029f12e7912a06d2f7"
+        },
+        "path": "scripts/model_training/metrics.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/metrics.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/metrics.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 7427,
+          "sha256": "76be2f2e5ef673d49c59bb41bc6cbf5f3300ab0307a74e4b2f5ae98851c5c028"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/notebook_execution.py"
+          ],
+          "engineering": {
+            "bytes": 358,
+            "sha256": "6c1016a5e1eda35086f691f20ac93071d1537bbc506d8497ace735e05e9d9bbf"
+          },
+          "original": {
+            "bytes": 7427,
+            "sha256": "76be2f2e5ef673d49c59bb41bc6cbf5f3300ab0307a74e4b2f5ae98851c5c028"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 358,
+          "sha256": "6c1016a5e1eda35086f691f20ac93071d1537bbc506d8497ace735e05e9d9bbf"
+        },
+        "path": "scripts/model_training/notebook_execution.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/notebook_execution.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/notebook_execution.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 1375,
+          "sha256": "c7c5742e6e6fe36afdc5cd31913d76aaeedc056d6be2587fd6e2b28c6094fec6"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/persistence.py"
+          ],
+          "engineering": {
+            "bytes": 295,
+            "sha256": "496a16f59faefc2bd7818eeb26b01df52cd163dc4503bb85df7b3893c4563f83"
+          },
+          "original": {
+            "bytes": 1375,
+            "sha256": "c7c5742e6e6fe36afdc5cd31913d76aaeedc056d6be2587fd6e2b28c6094fec6"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 295,
+          "sha256": "496a16f59faefc2bd7818eeb26b01df52cd163dc4503bb85df7b3893c4563f83"
+        },
+        "path": "scripts/model_training/persistence.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/persistence.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/persistence.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 11325,
+          "sha256": "4d3fb73f2cc42185958b53ceb785700bc384a5a58cb61b8085645c7f35b38570"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/datasets/legacy_training/pipeline.py"
+          ],
+          "engineering": {
+            "bytes": 292,
+            "sha256": "899f946dfd12b91efc565d2c4ed1f391c11f647505128366ef6a8c4ef1dd427a"
+          },
+          "original": {
+            "bytes": 11325,
+            "sha256": "4d3fb73f2cc42185958b53ceb785700bc384a5a58cb61b8085645c7f35b38570"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 292,
+          "sha256": "899f946dfd12b91efc565d2c4ed1f391c11f647505128366ef6a8c4ef1dd427a"
+        },
+        "path": "scripts/model_training/pipeline.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/pipeline.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/pipeline.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3941,
+          "sha256": "e6434f0cdc069e1f22380a8d9176865e0dfc7b4cba750defe10f4a786baf4445"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/model_training/references.py"
+          ],
+          "engineering": {
+            "bytes": 284,
+            "sha256": "ac5f54838d68c4b7909f9aca98fcbb529c33e5526e8bd13f68c7d405a238e5eb"
+          },
+          "original": {
+            "bytes": 3941,
+            "sha256": "e6434f0cdc069e1f22380a8d9176865e0dfc7b4cba750defe10f4a786baf4445"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 284,
+          "sha256": "ac5f54838d68c4b7909f9aca98fcbb529c33e5526e8bd13f68c7d405a238e5eb"
+        },
+        "path": "scripts/model_training/references.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/references.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/references.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3643,
+          "sha256": "7c6973e5dbcad0531fa11da410c8b2962895670ef0d92d72b7820b19c8f29a91"
+        },
+        "closed_mapping": {
+          "destination": [
+            "src/sat_dengue/model_training/xgboost_adapter.py"
+          ],
+          "engineering": {
+            "bytes": 289,
+            "sha256": "7b75a59e6f1b1444bdec8576da9b2969f4cd7f2add6124454523bd6b0fd874d4"
+          },
+          "original": {
+            "bytes": 3643,
+            "sha256": "7c6973e5dbcad0531fa11da410c8b2962895670ef0d92d72b7820b19c8f29a91"
+          },
+          "owner": "docs/operations/kedro-training-identities.json"
+        },
+        "current": {
+          "bytes": 289,
+          "sha256": "7b75a59e6f1b1444bdec8576da9b2969f4cd7f2add6124454523bd6b0fd874d4"
+        },
+        "path": "scripts/model_training/xgboost_adapter.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/model_training/xgboost_adapter.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/model_training/xgboost_adapter.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 85188,
+          "sha256": "749074cca6b6a9c79953a13153265c4da894223d5b79f3af61d00c7327a9bbde"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 332,
+            "sha256": "d1cadfebfdc593b06e6381f693b3289d2c42961059cc744795e031097c8385da"
+          },
+          "original": {
+            "bytes": 85188,
+            "sha256": "749074cca6b6a9c79953a13153265c4da894223d5b79f3af61d00c7327a9bbde"
+          },
+          "owner": "docs/operations/kedro-data-identities.json"
+        },
+        "current": {
+          "bytes": 332,
+          "sha256": "d1cadfebfdc593b06e6381f693b3289d2c42961059cc744795e031097c8385da"
+        },
+        "path": "scripts/stage2_consolidated_dataset_pipeline.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/stage2_consolidated_dataset_pipeline.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/stage2_consolidated_dataset_pipeline.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 1132,
+          "sha256": "0d6636db2d5805e1a0f41f799aaad17bfc58571b66941f565cf9e147fcaa8630"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 409,
+            "sha256": "1007c9493052d659a6add36eac5e7826409f71928ea2b0ad4bf3892e52371c71"
+          },
+          "original": {
+            "bytes": 1132,
+            "sha256": "0d6636db2d5805e1a0f41f799aaad17bfc58571b66941f565cf9e147fcaa8630"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 409,
+          "sha256": "1007c9493052d659a6add36eac5e7826409f71928ea2b0ad4bf3892e52371c71"
+        },
+        "path": "scripts/training_preparation/audit.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/audit.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/audit.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 2497,
+          "sha256": "0c06b08533f19d35226081212e1c692e939255a0ca410e70dc3a908582e72c69"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 348,
+            "sha256": "f058595ce782a3fdf1856d178ebb716751c231896e7fe3ab8cb70cdf60066271"
+          },
+          "original": {
+            "bytes": 2497,
+            "sha256": "0c06b08533f19d35226081212e1c692e939255a0ca410e70dc3a908582e72c69"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 348,
+          "sha256": "f058595ce782a3fdf1856d178ebb716751c231896e7fe3ab8cb70cdf60066271"
+        },
+        "path": "scripts/training_preparation/contract.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/contract.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/contract.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 9137,
+          "sha256": "3a811d9e1e8c3b17bcfca5e31ca4260ce40ca3ce0ba5f33908f896e2f09333d0"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 481,
+            "sha256": "93d32a255623975c5bab6bed97a3ab3d0e7e3e37e6dc7c4719d8dbde69ce5067"
+          },
+          "original": {
+            "bytes": 9137,
+            "sha256": "3a811d9e1e8c3b17bcfca5e31ca4260ce40ca3ce0ba5f33908f896e2f09333d0"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 481,
+          "sha256": "93d32a255623975c5bab6bed97a3ab3d0e7e3e37e6dc7c4719d8dbde69ce5067"
+        },
+        "path": "scripts/training_preparation/development.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/development.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/development.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 4521,
+          "sha256": "84057f911069f7d3d2184f6c49d64fd1eba61b614c0bfeaaa8ea82dfdb568f80"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 351,
+            "sha256": "853cca564f5749c38706914bee1edca87247ecaef19c3fd3ee4b0f7698b5eb9e"
+          },
+          "original": {
+            "bytes": 4521,
+            "sha256": "84057f911069f7d3d2184f6c49d64fd1eba61b614c0bfeaaa8ea82dfdb568f80"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 351,
+          "sha256": "853cca564f5749c38706914bee1edca87247ecaef19c3fd3ee4b0f7698b5eb9e"
+        },
+        "path": "scripts/training_preparation/eligibility.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/eligibility.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/eligibility.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3809,
+          "sha256": "b3f711dde9ea81f2bddd700bc9f202eefda21003b494be796a23d0ef216913a3"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 341,
+            "sha256": "97d097173dee769cf375ec9b0281743bc25b8b326089b2f6297cd3627ef19b1a"
+          },
+          "original": {
+            "bytes": 3809,
+            "sha256": "b3f711dde9ea81f2bddd700bc9f202eefda21003b494be796a23d0ef216913a3"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 341,
+          "sha256": "97d097173dee769cf375ec9b0281743bc25b8b326089b2f6297cd3627ef19b1a"
+        },
+        "path": "scripts/training_preparation/features.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/features.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/features.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 7489,
+          "sha256": "b4c9a73552a3f99c5881e279529d1b95563d4577a5850fa96552b37a3ebb2e3f"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 428,
+            "sha256": "85e360b7528de93b40c0564a5cbc0a5d1ac88e5aefaf32bc69a45e7aad2325c0"
+          },
+          "original": {
+            "bytes": 7489,
+            "sha256": "b4c9a73552a3f99c5881e279529d1b95563d4577a5850fa96552b37a3ebb2e3f"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 428,
+          "sha256": "85e360b7528de93b40c0564a5cbc0a5d1ac88e5aefaf32bc69a45e7aad2325c0"
+        },
+        "path": "scripts/training_preparation/notebook_execution.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/notebook_execution.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/notebook_execution.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 3815,
+          "sha256": "4afb06c775463017816fdfdbe5bcdc7a7bf16d4d96571301a1c292d05a98a78d"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 351,
+            "sha256": "82e7eb635c374cfa17b0716687d407f450b8803ce67e63e4a658a2de40f4090a"
+          },
+          "original": {
+            "bytes": 3815,
+            "sha256": "4afb06c775463017816fdfdbe5bcdc7a7bf16d4d96571301a1c292d05a98a78d"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 351,
+          "sha256": "82e7eb635c374cfa17b0716687d407f450b8803ce67e63e4a658a2de40f4090a"
+        },
+        "path": "scripts/training_preparation/persistence.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/persistence.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/persistence.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 7089,
+          "sha256": "820fe8ac7a0e3273262118280096fea5fbe89ae4a6b5bd192bd7b6f2c4bbd2af"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 348,
+            "sha256": "fb608a70e39a185862e0395047cf11e656cf5a7f87d6de6784c063f838d58e90"
+          },
+          "original": {
+            "bytes": 7089,
+            "sha256": "820fe8ac7a0e3273262118280096fea5fbe89ae4a6b5bd192bd7b6f2c4bbd2af"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 348,
+          "sha256": "fb608a70e39a185862e0395047cf11e656cf5a7f87d6de6784c063f838d58e90"
+        },
+        "path": "scripts/training_preparation/pipeline.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/pipeline.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/pipeline.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 8842,
+          "sha256": "e1dcb70370cb16718ee048a47092558b3ad992830c23e5ae26cc4bd0eabcd011"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 346,
+            "sha256": "0d2f14b823b6e204db72c9d420fea8e74e00d8e754b61cbdf95d65e429bd31a9"
+          },
+          "original": {
+            "bytes": 8842,
+            "sha256": "e1dcb70370cb16718ee048a47092558b3ad992830c23e5ae26cc4bd0eabcd011"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 346,
+          "sha256": "0d2f14b823b6e204db72c9d420fea8e74e00d8e754b61cbdf95d65e429bd31a9"
+        },
+        "path": "scripts/training_preparation/preprocessing.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/preprocessing.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/preprocessing.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 18994,
+          "sha256": "0d417e1ee2da487f4953b5d5b19cfc6b60dbf5b305c534098d7cd9c793448279"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 478,
+            "sha256": "9bc63fc3cb57aa715ad46e0f89431e0fcbf63a32ca96b3d946d9187438a5d9cd"
+          },
+          "original": {
+            "bytes": 18994,
+            "sha256": "0d417e1ee2da487f4953b5d5b19cfc6b60dbf5b305c534098d7cd9c793448279"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 478,
+          "sha256": "9bc63fc3cb57aa715ad46e0f89431e0fcbf63a32ca96b3d946d9187438a5d9cd"
+        },
+        "path": "scripts/training_preparation/temporal.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/temporal.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/temporal.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 10451,
+          "sha256": "623b88797eed4352d70640c07a91bd81d44972438209f164afad5d0142901963"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 343,
+            "sha256": "711c61ebbe414d12aca65e1270f35dfc4b166b043cbf663ef8e5a5a32857e84f"
+          },
+          "original": {
+            "bytes": 10451,
+            "sha256": "623b88797eed4352d70640c07a91bd81d44972438209f164afad5d0142901963"
+          },
+          "owner": "docs/operations/kedro-preparation-identities.json"
+        },
+        "current": {
+          "bytes": 343,
+          "sha256": "711c61ebbe414d12aca65e1270f35dfc4b166b043cbf663ef8e5a5a32857e84f"
+        },
+        "path": "scripts/training_preparation/validation.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/training_preparation/validation.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/training_preparation/validation.py"
+        }
+      },
+      {
+        "baseline_original": {
+          "bytes": 96887,
+          "sha256": "5c6397b3999f1f26dd169659a73ae3fd36cd5a9bdb6b20a5419edf230e297ddd"
+        },
+        "closed_mapping": {
+          "engineering": {
+            "bytes": 328,
+            "sha256": "99595441e56190b11264722ed4908d1bbd080b3acd5f170afcc0844e42cf0b78"
+          },
+          "original": {
+            "bytes": 96887,
+            "sha256": "5c6397b3999f1f26dd169659a73ae3fd36cd5a9bdb6b20a5419edf230e297ddd"
+          },
+          "owner": "docs/operations/kedro-data-identities.json"
+        },
+        "current": {
+          "bytes": 328,
+          "sha256": "99595441e56190b11264722ed4908d1bbd080b3acd5f170afcc0844e42cf0b78"
+        },
+        "path": "scripts/validate_stage2_training_readiness.py",
+        "proposed_disposition": "RETIRE only after complete consumer migration and fresh affected parity; otherwise KEEP with observed compatibility ownership",
+        "recovery": {
+          "current_git": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/validate_stage2_training_readiness.py",
+          "original_git": "89d538c93ff20824c96c7fe0929baaa9d900e999:scripts/validate_stage2_training_readiness.py"
+        }
+      }
+    ],
+    "schema": "proposed-cleanup-preservation-paths-v1",
+    "starting_head": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+    "status": "PROPOSED ONLY; no permission until explicit human amendment approval"
+  },
+  "documentation_corrections": [
+    {
+      "authority": "Mauricio",
+      "contract_id": "0728ec8f749474aa41510ffff0a70c68ba15ff2bf454fdd58fe929bb7297d29f",
+      "contract_revision": 17,
+      "files": {
+        "docs/product/stage-5/README.md": {
+          "disposition": "ADAPT",
+          "final": {
+            "bytes": 38766,
+            "present": true,
+            "sha256": "a5042f29b8000de3c283ea7d510019fafa0149472aa9906ea304ceffc0d69d3e"
+          },
+          "original": {
+            "bytes": 30192,
+            "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+          },
+          "original_git": {
+            "blob": "fd5a6a2f747e8ca506102aafa1777c3501f51d15",
+            "bytes": 30192,
+            "path": "docs/product/stage-5/README.md",
+            "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+            "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+          },
+          "owner": "Stage5 and scientific-standards documentation maintainer; scientific decisions remain owned by Mauricio",
+          "pre_cleanup_git": {
+            "blob": "c5ee9140df95e88b48f63d5a55f384f5de4538cc",
+            "bytes": 35157,
+            "path": "docs/product/stage-5/README.md",
+            "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+            "sha256": "fad1d18765c7d02d7eb145681fb022c14f6ffb0aefc25096dbc1cac4c6db9b52"
+          },
+          "pre_correction_git": {
+            "blob": "c8e9b29269af590481d9348d848b16172e2a6641",
+            "bytes": 36937,
+            "path": "docs/product/stage-5/README.md",
+            "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+            "sha256": "c3fd943236382f842366997d04079e4d6ad8cc0c128a2bfdf7e475793855c3d0"
+          },
+          "reason": "Replace retired operational commands and obsolete implementation policy with current Kedro/package guidance; preserve scientific rules, decisions, tables and limitations.",
+          "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/product/stage-5/README.md",
+          "scientific_semantics": "unchanged"
+        },
+        "docs/standards/ml-scientific-standards.md": {
+          "disposition": "ADAPT",
+          "final": {
+            "bytes": 3205,
+            "present": true,
+            "sha256": "712d19a6ce7b7f7fc7e5869127e8e6c13ede5aa994585b7db66f96fbb33446a4"
+          },
+          "original": {
+            "bytes": 2533,
+            "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+          },
+          "original_git": {
+            "blob": "8860bba743682235bbc3c0771eaab1a61312feb9",
+            "bytes": 2533,
+            "path": "docs/standards/ml-scientific-standards.md",
+            "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+            "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+          },
+          "owner": "Stage5 and scientific-standards documentation maintainer; scientific decisions remain owned by Mauricio",
+          "pre_cleanup_git": null,
+          "pre_correction_git": {
+            "blob": "8860bba743682235bbc3c0771eaab1a61312feb9",
+            "bytes": 2533,
+            "path": "docs/standards/ml-scientific-standards.md",
+            "revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+            "sha256": "98142d7af3f79b18f2576426ebefd9432d9dfddfeea6b243451dd7a0269ee94b"
+          },
+          "reason": "Replace retired operational commands and obsolete implementation policy with current Kedro/package guidance; preserve scientific rules, decisions, tables and limitations.",
+          "recovery": "3deafa32c070d4c085e4197ec88489bc98aa57fb:docs/standards/ml-scientific-standards.md",
+          "scientific_semantics": "unchanged"
+        }
+      },
+      "pre_correction_revision": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+      "schema": "kedro-documentation-correction-v1"
+    }
+  ],
+  "files": {
+    "docs/product/stage-2/Informe_EDA_03_vista_revisada.ipynb": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 598181,
+        "sha256": "553d0f703128abca55b53596620d6a0a376a0b57ea5c36652c8fc4b087c1ed05"
+      },
+      "original_git": {
+        "blob": "32bca858f2a40bd3c2fcfcfbbdaeb418936ba333",
+        "bytes": 598181,
+        "path": "docs/product/stage-2/Informe_EDA_03_vista_revisada.ipynb",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "553d0f703128abca55b53596620d6a0a376a0b57ea5c36652c8fc4b087c1ed05"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "32bca858f2a40bd3c2fcfcfbbdaeb418936ba333",
+        "bytes": 598181,
+        "path": "docs/product/stage-2/Informe_EDA_03_vista_revisada.ipynb",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "553d0f703128abca55b53596620d6a0a376a0b57ea5c36652c8fc4b087c1ed05"
+      },
+      "reason": "No active execution consumer; exact complete Git bytes preserve historical report/recipe. No unique unrecoverable evidence, no duplicate archive.",
+      "replacement": [
+        "docs/operations/kedro-migration.md"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "docs/product/stage-3/README.md": {
+      "disposition": "ADAPT",
+      "final": {
+        "bytes": 7168,
+        "present": true,
+        "sha256": "b6bdc87a045df2c39c9d8556f7a0dc7b1292ac4602e98223378392e1ce64cc77"
+      },
+      "original": {
+        "bytes": 13046,
+        "sha256": "2bfefaed8ba0437e12548ec25049820e7a0e665dd79e63182d3954db15792f12"
+      },
+      "original_git": {
+        "blob": "5a1831c2695244b73116bce0a596c7c013d9b7ce",
+        "bytes": 13046,
+        "path": "docs/product/stage-3/README.md",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "2bfefaed8ba0437e12548ec25049820e7a0e665dd79e63182d3954db15792f12"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "93100004790c79198965dc1ba10d910a40e68687",
+        "bytes": 6905,
+        "path": "docs/product/stage-3/README.md",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "f62247001f959779b46573878dea81d433e93929d3305e27960f795c78562d00"
+      },
+      "reason": "Synchronize the active technical execution owner; retain scientific decisions/tables and exact prior Git identities.",
+      "replacement": [
+        "docs/product/stage-3/README.md"
+      ],
+      "retirement_condition": "Fresh owning-stage parity and complete consumer migration; protected native evidence never retires."
+    },
+    "docs/product/stage-4/README.md": {
+      "disposition": "ADAPT",
+      "final": {
+        "bytes": 6835,
+        "present": true,
+        "sha256": "96c4930d3c9c6af2134411a82d48054c14c745d7044b3023ebdadd385f58ce85"
+      },
+      "original": {
+        "bytes": 29809,
+        "sha256": "36ea94b315847ac936e7debefe171046bc29676cf8cca82ef1ad2c2d3ecc936f"
+      },
+      "original_git": {
+        "blob": "64721d739c9ef4bb12e876b060daeb6c07814a65",
+        "bytes": 29809,
+        "path": "docs/product/stage-4/README.md",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "36ea94b315847ac936e7debefe171046bc29676cf8cca82ef1ad2c2d3ecc936f"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "006bf39547eb63b6a39c92756d850a73cbdcf82c",
+        "bytes": 6664,
+        "path": "docs/product/stage-4/README.md",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "aba8bc153ada82f2b6ac05098e2656f61a1a948ed8c05d589e5dbcf26faec634"
+      },
+      "reason": "Synchronize the active technical execution owner; retain scientific decisions/tables and exact prior Git identities.",
+      "replacement": [
+        "docs/product/stage-4/README.md"
+      ],
+      "retirement_condition": "Fresh owning-stage parity and complete consumer migration; protected native evidence never retires."
+    },
+    "docs/product/stage-5/README.md": {
+      "disposition": "ADAPT",
+      "engineering_history": [
+        {
+          "commit": "3deafa32c070d4c085e4197ec88489bc98aa57fb",
+          "contract_revision": 16,
+          "final": {
+            "bytes": 36937,
+            "present": true,
+            "sha256": "c3fd943236382f842366997d04079e4d6ad8cc0c128a2bfdf7e475793855c3d0"
+          }
+        }
+      ],
+      "final": {
+        "bytes": 38766,
+        "present": true,
+        "sha256": "a5042f29b8000de3c283ea7d510019fafa0149472aa9906ea304ceffc0d69d3e"
+      },
+      "original": {
+        "bytes": 30192,
+        "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+      },
+      "original_git": {
+        "blob": "fd5a6a2f747e8ca506102aafa1777c3501f51d15",
+        "bytes": 30192,
+        "path": "docs/product/stage-5/README.md",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "e34b6a99f43969e9180907ee5d86b7973522c8f3a3f487bb88616d3b298fe85a"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "c5ee9140df95e88b48f63d5a55f384f5de4538cc",
+        "bytes": 35157,
+        "path": "docs/product/stage-5/README.md",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "fad1d18765c7d02d7eb145681fb022c14f6ffb0aefc25096dbc1cac4c6db9b52"
+      },
+      "reason": "Synchronize the active technical execution owner; retain scientific decisions/tables and exact prior Git identities.",
+      "replacement": [
+        "docs/product/stage-5/README.md"
+      ],
+      "retirement_condition": "Fresh owning-stage parity and complete consumer migration; protected native evidence never retires."
+    },
+    "notebooks/03_consolidated_dataset_pipeline.ipynb": {
+      "consumers": [
+        "src/sat_dengue/datasets/legacy_readiness.py"
+      ],
+      "disposition": "KEEP",
+      "final": {
+        "bytes": 628822,
+        "present": true,
+        "sha256": "da46dd244f3c4003b4f25df85e43dd361b52a360182e137a9835d24011e32572"
+      },
+      "original": {
+        "bytes": 628822,
+        "sha256": "da46dd244f3c4003b4f25df85e43dd361b52a360182e137a9835d24011e32572"
+      },
+      "original_git": {
+        "blob": "dae79b95ea8584f13392fc6c7c6910b5e6bd4021",
+        "bytes": 628822,
+        "path": "notebooks/03_consolidated_dataset_pipeline.ipynb",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "da46dd244f3c4003b4f25df85e43dd361b52a360182e137a9835d24011e32572"
+      },
+      "owner": "Scientific provenance and native I/O maintainer, Stage 2",
+      "pre_cleanup_git": {
+        "blob": "dae79b95ea8584f13392fc6c7c6910b5e6bd4021",
+        "bytes": 628822,
+        "path": "notebooks/03_consolidated_dataset_pipeline.ipynb",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "da46dd244f3c4003b4f25df85e43dd361b52a360182e137a9835d24011e32572"
+      },
+      "reason": "Final KEEP as frozen source identity evidence read by src/sat_dengue/datasets/legacy_readiness.py. No production notebook execution or report generation; original physical bytes remain required by current verified identity readers.",
+      "replacement": [
+        "notebooks/03_consolidated_dataset_pipeline.ipynb"
+      ],
+      "retirement_condition": "Migrate every frozen source-code identity reader, including package callers outside the current18-path scope, under explicit new authorization and unchanged full native parity; then permit physical retirement. Production entrypoint already retired."
+    },
+    "notebooks/04_training_preparation_pipeline.ipynb": {
+      "consumers": [
+        "src/sat_dengue/datasets/legacy_preparation/development.py"
+      ],
+      "disposition": "KEEP",
+      "final": {
+        "bytes": 11798,
+        "present": true,
+        "sha256": "c1a70057bc45fcd06379fe2d96bd86ce77e2fcd99d2adbdf034c960642e3d404"
+      },
+      "original": {
+        "bytes": 11798,
+        "sha256": "c1a70057bc45fcd06379fe2d96bd86ce77e2fcd99d2adbdf034c960642e3d404"
+      },
+      "original_git": {
+        "blob": "f30e2e0b1b5b45b3bb4bf4704b5e146a467c064d",
+        "bytes": 11798,
+        "path": "notebooks/04_training_preparation_pipeline.ipynb",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "c1a70057bc45fcd06379fe2d96bd86ce77e2fcd99d2adbdf034c960642e3d404"
+      },
+      "owner": "Scientific provenance and native I/O maintainer, Stage 3",
+      "pre_cleanup_git": {
+        "blob": "f30e2e0b1b5b45b3bb4bf4704b5e146a467c064d",
+        "bytes": 11798,
+        "path": "notebooks/04_training_preparation_pipeline.ipynb",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "c1a70057bc45fcd06379fe2d96bd86ce77e2fcd99d2adbdf034c960642e3d404"
+      },
+      "reason": "Final KEEP as frozen source identity evidence read by src/sat_dengue/datasets/legacy_preparation/development.py. No production notebook execution or report generation; original physical bytes remain required by current verified identity readers.",
+      "replacement": [
+        "notebooks/04_training_preparation_pipeline.ipynb"
+      ],
+      "retirement_condition": "Migrate every frozen source-code identity reader, including package callers outside the current18-path scope, under explicit new authorization and unchanged full native parity; then permit physical retirement. Production entrypoint already retired."
+    },
+    "notebooks/05_baseline_models.ipynb": {
+      "consumers": [
+        "src/sat_dengue/datasets/legacy_training/pipeline.py"
+      ],
+      "disposition": "KEEP",
+      "final": {
+        "bytes": 3678,
+        "present": true,
+        "sha256": "1b8513e3d009eff35f13aa9016c347f0e21aa5476740cd065f9f4bd01235e511"
+      },
+      "original": {
+        "bytes": 3678,
+        "sha256": "1b8513e3d009eff35f13aa9016c347f0e21aa5476740cd065f9f4bd01235e511"
+      },
+      "original_git": {
+        "blob": "1f92af0d89f923da84f6bf8ed2c19aaa81ea035a",
+        "bytes": 3678,
+        "path": "notebooks/05_baseline_models.ipynb",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "1b8513e3d009eff35f13aa9016c347f0e21aa5476740cd065f9f4bd01235e511"
+      },
+      "owner": "Scientific provenance and native I/O maintainer, Stage 4",
+      "pre_cleanup_git": {
+        "blob": "1f92af0d89f923da84f6bf8ed2c19aaa81ea035a",
+        "bytes": 3678,
+        "path": "notebooks/05_baseline_models.ipynb",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "1b8513e3d009eff35f13aa9016c347f0e21aa5476740cd065f9f4bd01235e511"
+      },
+      "reason": "Final KEEP as frozen source identity evidence read by src/sat_dengue/datasets/legacy_training/pipeline.py. No production notebook execution or report generation; original physical bytes remain required by current verified identity readers.",
+      "replacement": [
+        "notebooks/05_baseline_models.ipynb"
+      ],
+      "retirement_condition": "Migrate every frozen source-code identity reader, including package callers outside the current18-path scope, under explicit new authorization and unchanged full native parity; then permit physical retirement. Production entrypoint already retired."
+    },
+    "notebooks/06_candidate_models.ipynb": {
+      "consumers": [
+        "src/sat_dengue/datasets/legacy_training/candidates.py"
+      ],
+      "disposition": "KEEP",
+      "final": {
+        "bytes": 37019,
+        "present": true,
+        "sha256": "988ebede384bd9d7a253d0d36180c74feb3980635b138511331a5fa96dd424cb"
+      },
+      "original": {
+        "bytes": 37019,
+        "sha256": "988ebede384bd9d7a253d0d36180c74feb3980635b138511331a5fa96dd424cb"
+      },
+      "original_git": {
+        "blob": "a5176637bff189db24f9fa791064208dea8c222b",
+        "bytes": 37019,
+        "path": "notebooks/06_candidate_models.ipynb",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "988ebede384bd9d7a253d0d36180c74feb3980635b138511331a5fa96dd424cb"
+      },
+      "owner": "Scientific provenance and native I/O maintainer, Stage 4",
+      "pre_cleanup_git": {
+        "blob": "a5176637bff189db24f9fa791064208dea8c222b",
+        "bytes": 37019,
+        "path": "notebooks/06_candidate_models.ipynb",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "988ebede384bd9d7a253d0d36180c74feb3980635b138511331a5fa96dd424cb"
+      },
+      "reason": "Final KEEP as frozen source identity evidence read by src/sat_dengue/datasets/legacy_training/candidates.py. No production notebook execution or report generation; original physical bytes remain required by current verified identity readers.",
+      "replacement": [
+        "notebooks/06_candidate_models.ipynb"
+      ],
+      "retirement_condition": "Migrate every frozen source-code identity reader, including package callers outside the current18-path scope, under explicit new authorization and unchanged full native parity; then permit physical retirement. Production entrypoint already retired."
+    },
+    "notebooks/07_probability_calibration_thresholds.ipynb": {
+      "consumers": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/pipeline.py"
+      ],
+      "disposition": "KEEP",
+      "final": {
+        "bytes": 110231,
+        "present": true,
+        "sha256": "a85c62c8d00482076aadd5bd6f257f05b704e4a17328e9c5b2f5543188df45a9"
+      },
+      "original": {
+        "bytes": 110231,
+        "sha256": "a85c62c8d00482076aadd5bd6f257f05b704e4a17328e9c5b2f5543188df45a9"
+      },
+      "original_git": {
+        "blob": "1c5abcc35082a688c809fed1beb47c945c4d300d",
+        "bytes": 110231,
+        "path": "notebooks/07_probability_calibration_thresholds.ipynb",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "a85c62c8d00482076aadd5bd6f257f05b704e4a17328e9c5b2f5543188df45a9"
+      },
+      "owner": "Scientific provenance and native I/O maintainer, Stage 5",
+      "pre_cleanup_git": {
+        "blob": "1c5abcc35082a688c809fed1beb47c945c4d300d",
+        "bytes": 110231,
+        "path": "notebooks/07_probability_calibration_thresholds.ipynb",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "a85c62c8d00482076aadd5bd6f257f05b704e4a17328e9c5b2f5543188df45a9"
+      },
+      "reason": "Final KEEP as frozen source identity evidence read by src/sat_dengue/datasets/legacy_evaluation/model_evaluation/pipeline.py. No production notebook execution or report generation; original physical bytes remain required by current verified identity readers.",
+      "replacement": [
+        "notebooks/07_probability_calibration_thresholds.ipynb"
+      ],
+      "retirement_condition": "Migrate every frozen source-code identity reader, including package callers outside the current18-path scope, under explicit new authorization and unchanged full native parity; then permit physical retirement. Production entrypoint already retired."
+    },
+    "notebooks/08_model_evaluation.ipynb": {
+      "consumers": [
+        "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/protocol.py"
+      ],
+      "disposition": "KEEP",
+      "final": {
+        "bytes": 14478,
+        "present": true,
+        "sha256": "b3640b8e761a5053f4358f757be1f265297c80ef7f0b4d6ee6f443cad9109b2f"
+      },
+      "original": {
+        "bytes": 14478,
+        "sha256": "b3640b8e761a5053f4358f757be1f265297c80ef7f0b4d6ee6f443cad9109b2f"
+      },
+      "original_git": {
+        "blob": "23e4da7d74d257ab04da787f550440748d5ddfe4",
+        "bytes": 14478,
+        "path": "notebooks/08_model_evaluation.ipynb",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "b3640b8e761a5053f4358f757be1f265297c80ef7f0b4d6ee6f443cad9109b2f"
+      },
+      "owner": "Scientific provenance and native I/O maintainer, Stage 5",
+      "pre_cleanup_git": {
+        "blob": "23e4da7d74d257ab04da787f550440748d5ddfe4",
+        "bytes": 14478,
+        "path": "notebooks/08_model_evaluation.ipynb",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "b3640b8e761a5053f4358f757be1f265297c80ef7f0b4d6ee6f443cad9109b2f"
+      },
+      "reason": "Final KEEP as frozen source identity evidence read by src/sat_dengue/datasets/legacy_evaluation/final_evaluation/protocol.py. No production notebook execution or report generation; original physical bytes remain required by current verified identity readers.",
+      "replacement": [
+        "notebooks/08_model_evaluation.ipynb"
+      ],
+      "retirement_condition": "Migrate every frozen source-code identity reader, including package callers outside the current18-path scope, under explicit new authorization and unchanged full native parity; then permit physical retirement. Production entrypoint already retired."
+    },
+    "notebooks/gee_recover_january_2020.js": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3592,
+        "sha256": "09daa0d97bd118ff42476190c9719cd31783c435afe889c8fd7fd5e5ecbdd4bc"
+      },
+      "original_git": {
+        "blob": "b54f83e147c04254f11b358c44c6404a20228d53",
+        "bytes": 3592,
+        "path": "notebooks/gee_recover_january_2020.js",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "09daa0d97bd118ff42476190c9719cd31783c435afe889c8fd7fd5e5ecbdd4bc"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "b54f83e147c04254f11b358c44c6404a20228d53",
+        "bytes": 3592,
+        "path": "notebooks/gee_recover_january_2020.js",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "09daa0d97bd118ff42476190c9719cd31783c435afe889c8fd7fd5e5ecbdd4bc"
+      },
+      "reason": "No active execution consumer; exact complete Git bytes preserve historical report/recipe. No unique unrecoverable evidence, no duplicate archive.",
+      "replacement": [
+        "scripts/january_2020_climate_incorporation.py",
+        "docs/operations/kedro-migration.md"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/evaluation_metrics.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3427,
+        "sha256": "b377152e72f24dd6a30f9400412b2c919c9365a6a630642fc5b02f716d2712f0"
+      },
+      "original_git": {
+        "blob": "f6cf3d876f27b6a78443c0486691f783f841d98f",
+        "bytes": 3427,
+        "path": "scripts/evaluation_metrics.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "b377152e72f24dd6a30f9400412b2c919c9365a6a630642fc5b02f716d2712f0"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "dce0395676a3884d47895c862bac3622e1c816e7",
+        "bytes": 230,
+        "path": "scripts/evaluation_metrics.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "66b8c608f5e1932455095610387ddaf6341619164a4fd7a395f2253464051049"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/metrics.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/final_evaluation/__init__.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 72,
+        "sha256": "f1695c497c10eec50d32d991b771290bc87a48a54e425b2029f7c8dc5c8c9238"
+      },
+      "original_git": {
+        "blob": "cf71e2c89b7edcb232424dbf24bf5e1c1a76e757",
+        "bytes": 72,
+        "path": "scripts/final_evaluation/__init__.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "f1695c497c10eec50d32d991b771290bc87a48a54e425b2029f7c8dc5c8c9238"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "27da66437b05851c0ee4da27902eef37e0341cef",
+        "bytes": 300,
+        "path": "scripts/final_evaluation/__init__.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "a3bf54be98cafdaeb93e6714de6dd9cc0fde6cf9fbafc31caa5c094468284aa4"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/__init__.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/final_evaluation/cohorts.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 9975,
+        "sha256": "3630f1e8cdf6766c277a836aeb903e66d9e429975be870892527c6419a4b9ccf"
+      },
+      "original_git": {
+        "blob": "fc5f5a44bf5e4905d51cbc6c2939a5bc1a90d034",
+        "bytes": 9975,
+        "path": "scripts/final_evaluation/cohorts.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "3630f1e8cdf6766c277a836aeb903e66d9e429975be870892527c6419a4b9ccf"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "e8dae3797c580fcaed976a293db5528f51f10e56",
+        "bytes": 314,
+        "path": "scripts/final_evaluation/cohorts.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "606a131511a52600042137fe830c57453bbb8b628058a3893d07a5f811135f39"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/cohorts.py",
+        "src/sat_dengue/final_evaluation/cohorts.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/final_evaluation/evaluation.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 10637,
+        "sha256": "c6228d971a0e5ba0b04f6c82bbcdd64563d9127ae951d11b97a5026cf37e2780"
+      },
+      "original_git": {
+        "blob": "1264fd19b8fee9472afd1aea29f25fbe061b4610",
+        "bytes": 10637,
+        "path": "scripts/final_evaluation/evaluation.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "c6228d971a0e5ba0b04f6c82bbcdd64563d9127ae951d11b97a5026cf37e2780"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "c6e292ca492349f9caeab1fe3fda007704856358",
+        "bytes": 317,
+        "path": "scripts/final_evaluation/evaluation.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "6f12536c138589cbbd82c210e779620af0621e78d14d6d1e4a6462987a0095d6"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/evaluation.py",
+        "src/sat_dengue/final_evaluation/evaluation.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/final_evaluation/execution.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 4117,
+        "sha256": "2f585d8aa20d93846264086c6aaa120e81c78b092ecb89603e3c69328b1f2a41"
+      },
+      "original_git": {
+        "blob": "b4ec52caa3b94a898cbb79dac365a272caff3d01",
+        "bytes": 4117,
+        "path": "scripts/final_evaluation/execution.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "2f585d8aa20d93846264086c6aaa120e81c78b092ecb89603e3c69328b1f2a41"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "5abc59e4dc2248f9acf769ee420811e2e2941350",
+        "bytes": 372,
+        "path": "scripts/final_evaluation/execution.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "58f575183b7ac5713266456a6c728d39105fd1dbc2d5848bd134b3b44ef58b89"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/execution.py",
+        "src/sat_dengue/datasets/evaluation_cli.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/final_evaluation/pipeline.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 16254,
+        "sha256": "e57435682733ddb0665e0093ccfee4fb31941f328f9fbd032329c9e176e2da01"
+      },
+      "original_git": {
+        "blob": "3794155a5bb6be0aa05c4db3f2d8ef288d956551",
+        "bytes": 16254,
+        "path": "scripts/final_evaluation/pipeline.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "e57435682733ddb0665e0093ccfee4fb31941f328f9fbd032329c9e176e2da01"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "63aec6211c4094a4fb6eb23f884e3115cdaf0eb0",
+        "bytes": 315,
+        "path": "scripts/final_evaluation/pipeline.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "7dc8559b04be4e3d82535bcb43985e128af8742e57e269add323095a53197bb7"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/pipeline.py",
+        "src/sat_dengue/final_evaluation/prediction.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/final_evaluation/protocol.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 6001,
+        "sha256": "27aa4736f3d11e96b182043ceded8abedebae829404dff940dbccbb3b7dc29e2"
+      },
+      "original_git": {
+        "blob": "a16a3d010bbcc048b18b442e17b730fd7e9f9ad5",
+        "bytes": 6001,
+        "path": "scripts/final_evaluation/protocol.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "27aa4736f3d11e96b182043ceded8abedebae829404dff940dbccbb3b7dc29e2"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "f945a85ce0200d923eb2dcebdcb2fa640bb6f088",
+        "bytes": 315,
+        "path": "scripts/final_evaluation/protocol.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "183b8dcb6c15fc1b3b0451b6a2a849ec6d7f9232a66e05ce8f171bb054209c7e"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/final_evaluation/protocol.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/january_2020_climate_incorporation.py": {
+      "consumers": [
+        "tests/unit/test_january_2020_climate_incorporation.py"
+      ],
+      "disposition": "KEEP",
+      "final": {
+        "bytes": 26765,
+        "present": true,
+        "sha256": "66ce424cb1798a68b13d020497f5c1aa6e504c3668ff2ae5dd8a563a2b59d290"
+      },
+      "original": {
+        "bytes": 26765,
+        "sha256": "66ce424cb1798a68b13d020497f5c1aa6e504c3668ff2ae5dd8a563a2b59d290"
+      },
+      "original_git": {
+        "blob": "893268369ba937a9fb98faa7a060b3267f63b6f0",
+        "bytes": 26765,
+        "path": "scripts/january_2020_climate_incorporation.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "66ce424cb1798a68b13d020497f5c1aa6e504c3668ff2ae5dd8a563a2b59d290"
+      },
+      "owner": "Stage2 acquisition provenance and data-integrity maintainer",
+      "pre_cleanup_git": {
+        "blob": "893268369ba937a9fb98faa7a060b3267f63b6f0",
+        "bytes": 26765,
+        "path": "scripts/january_2020_climate_incorporation.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "66ce424cb1798a68b13d020497f5c1aa6e504c3668ff2ae5dd8a563a2b59d290"
+      },
+      "reason": "Final KEEP: unique original incorporation/precheck safeguards are exercised by tests/unit/test_january_2020_climate_incorporation.py. Kedro consumes the already-incorporated source; no acquisition/apply command is authorized.",
+      "replacement": [
+        "scripts/january_2020_climate_incorporation.py"
+      ],
+      "retirement_condition": "Provide an equivalent provenance/safeguard owner, migrate the named regression consumer and obtain a bounded retrieval decision before any acquisition behavior changes."
+    },
+    "scripts/model_assessment/__init__.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 80,
+        "sha256": "536c51c7e4f21ca8c0b19c2a2106db36a85de9d7235462e2bfa2d4829f7313e8"
+      },
+      "original_git": {
+        "blob": "05a69cafdd32917de602ec7720cc27051b243741",
+        "bytes": 80,
+        "path": "scripts/model_assessment/__init__.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "536c51c7e4f21ca8c0b19c2a2106db36a85de9d7235462e2bfa2d4829f7313e8"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "59f2f1c9759876bbe33de143a5a815f01bef71e7",
+        "bytes": 300,
+        "path": "scripts/model_assessment/__init__.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "cb3809ced0fd1d6e815d9d3ec84defbcced01fabb4f86d6a61e755ae9d448d0d"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/__init__.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_assessment/comparison.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 4877,
+        "sha256": "635b115501b8fa091b4f356309ad5dcc76c5d3fdd84a711f57eb168036479c4a"
+      },
+      "original_git": {
+        "blob": "4b8b138c1d7badcf0fab84a4684e60d96f3f11ea",
+        "bytes": 4877,
+        "path": "scripts/model_assessment/comparison.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "635b115501b8fa091b4f356309ad5dcc76c5d3fdd84a711f57eb168036479c4a"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "d52d591d294449a743a8de1536a048d07ac09c67",
+        "bytes": 317,
+        "path": "scripts/model_assessment/comparison.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "0f10214f5d6a8f9d81d23917a07b5cc8e52c1d138737c757c82c92ae05de52e0"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/comparison.py",
+        "src/sat_dengue/model_assessment/comparison.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_assessment/execution.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3379,
+        "sha256": "77f98936b48ace75f235026c3fc362ea75f284cb776332273d526ef7332eb6f7"
+      },
+      "original_git": {
+        "blob": "97ddd8c1feea7f17a0eb6c3def8bb1af9c91ece9",
+        "bytes": 3379,
+        "path": "scripts/model_assessment/execution.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "77f98936b48ace75f235026c3fc362ea75f284cb776332273d526ef7332eb6f7"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "503b7091f68bdeec70983c88dd4fffd9f827083b",
+        "bytes": 372,
+        "path": "scripts/model_assessment/execution.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "c5fdaf63dbe6990b2a5a3702bd2c1c55148e03143e2c303d05183abee31b7fdf"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/execution.py",
+        "src/sat_dengue/datasets/evaluation_cli.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_assessment/input_validation.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3847,
+        "sha256": "27c8c3d2ca3ade77d2022974b3733957e15f200135b1e0e86d81d55b6025c8f5"
+      },
+      "original_git": {
+        "blob": "542c1c6430a1d15ae3a1607051b89a6f8b7ae5ef",
+        "bytes": 3847,
+        "path": "scripts/model_assessment/input_validation.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "27c8c3d2ca3ade77d2022974b3733957e15f200135b1e0e86d81d55b6025c8f5"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "c17479cf3286f99fb70143a9f3826f47027da3aa",
+        "bytes": 323,
+        "path": "scripts/model_assessment/input_validation.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "313c02e71841d47f401fe81d2d6885316ee9878dc92dfc19a4581c5c2f0d42a2"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/input_validation.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_assessment/loading.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 6945,
+        "sha256": "45143718a2ccade0dddc3c52a7324ec31b270a42eb5b5b70b9a2abb080957154"
+      },
+      "original_git": {
+        "blob": "e6db3f52654bbd11fcbfbd0c3e517a741fbc2e41",
+        "bytes": 6945,
+        "path": "scripts/model_assessment/loading.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "45143718a2ccade0dddc3c52a7324ec31b270a42eb5b5b70b9a2abb080957154"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "f1e202ab7e7d1a4e14669a92e0bc6a2f4d333cb2",
+        "bytes": 314,
+        "path": "scripts/model_assessment/loading.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "60f12d6d537ceb6b1fccedea50fd8adaefa3d4fc1e97054f58daf3d1f3206934"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/loading.py",
+        "src/sat_dengue/model_assessment/workflow.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_assessment/pipeline.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 5845,
+        "sha256": "5edc04cd1077a7ba80ecd0179168d1c70ee4a04e9f2f368b3ed27b42daf56f2e"
+      },
+      "original_git": {
+        "blob": "a5bec789e1a5f2fb79a7f8d4679446d0a1ecf656",
+        "bytes": 5845,
+        "path": "scripts/model_assessment/pipeline.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "5edc04cd1077a7ba80ecd0179168d1c70ee4a04e9f2f368b3ed27b42daf56f2e"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "79d3f4bfafc460d2d3f81cbe08f445207b49cd06",
+        "bytes": 315,
+        "path": "scripts/model_assessment/pipeline.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "eabf1f40355258228c69ab5f884a42165c27db7bbfa09d84bafb9ea0e181f34b"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/pipeline.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_assessment/policy.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 4207,
+        "sha256": "79ea9220fa79551d96428ad84434fe8d5abaa1fe61552f07db7c61489d0c597d"
+      },
+      "original_git": {
+        "blob": "8a85c0fbff958579497dcca43b5ac1b189e3d4c5",
+        "bytes": 4207,
+        "path": "scripts/model_assessment/policy.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "79ea9220fa79551d96428ad84434fe8d5abaa1fe61552f07db7c61489d0c597d"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "ec78fd5f94b1b46c95ce062fef60272d5175468b",
+        "bytes": 313,
+        "path": "scripts/model_assessment/policy.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "1667ca01e6dfe131886896e471fe15090f3ff61f3f026c30662f5812a0586bc0"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/policy.py",
+        "src/sat_dengue/model_assessment/policy.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_assessment/proposal.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 6475,
+        "sha256": "2e4cc21ed0fceb0e8654e4f4dabb852cef35cd8a82905bf95f0c58cf021b9cc5"
+      },
+      "original_git": {
+        "blob": "ed30c27cd6fdc678d4ef427d36d184189e9364a4",
+        "bytes": 6475,
+        "path": "scripts/model_assessment/proposal.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "2e4cc21ed0fceb0e8654e4f4dabb852cef35cd8a82905bf95f0c58cf021b9cc5"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "55d82ca131441a5f0b46851177243ce3608eb6fb",
+        "bytes": 315,
+        "path": "scripts/model_assessment/proposal.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "1ce7ba589a683d3af877d3eae9a33f03c431df7abfa07fdd75bc9c048da96d74"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_assessment/proposal.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/__init__.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 476,
+        "sha256": "1df83b4efd4c17e812c067cd60cbe0ac38de8d7658b8d7c256f75a7ba6261515"
+      },
+      "original_git": {
+        "blob": "887a398c06c8d9192b0ab7e050b852314f008d9c",
+        "bytes": 476,
+        "path": "scripts/model_evaluation/__init__.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "1df83b4efd4c17e812c067cd60cbe0ac38de8d7658b8d7c256f75a7ba6261515"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "89c35707a9f063d4db0610c0175bbea55caa89a9",
+        "bytes": 300,
+        "path": "scripts/model_evaluation/__init__.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "2f0a812a1aec0be3a3979dfb2cc729e2c6a44467a31d43c32eb2f55310944988"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/__init__.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/availability.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 7058,
+        "sha256": "bf5761effaf0ec8b881523a1590fe681f5137d5285798ecbf71c2a8f26cf6a71"
+      },
+      "original_git": {
+        "blob": "bf9f5413070d866acd508ad6a93c1611bdf051a9",
+        "bytes": 7058,
+        "path": "scripts/model_evaluation/availability.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "bf5761effaf0ec8b881523a1590fe681f5137d5285798ecbf71c2a8f26cf6a71"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "257b86e3e6fe57eef839acf976b5be5bb462f9fe",
+        "bytes": 319,
+        "path": "scripts/model_evaluation/availability.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "a890d87605f390a98c760e4b3da1b5b0f35de96ae6b2b8aa3d9d4740907da01e"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/availability.py",
+        "src/sat_dengue/model_evaluation/availability.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/contract.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 10324,
+        "sha256": "5eba463708c096618186c991e0f2a7882d7d7f6bb857fe30d13b9a203d1c1f3e"
+      },
+      "original_git": {
+        "blob": "5226a60b83f7491fd4054e093a9447a7891ccefe",
+        "bytes": 10324,
+        "path": "scripts/model_evaluation/contract.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "5eba463708c096618186c991e0f2a7882d7d7f6bb857fe30d13b9a203d1c1f3e"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "2446da707382ef98864d54b09c9ca63f8c3dae76",
+        "bytes": 315,
+        "path": "scripts/model_evaluation/contract.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "437a1c18fe5e4ad960ad56fd343f74c266bd6c422dbbd0fb2caea5c61ad3a826"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/contract.py",
+        "src/sat_dengue/model_evaluation/contract.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/decision_policy.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 5852,
+        "sha256": "69e42d78efd4f3952d1419ef188d3456d1657dfc4e4de1ee60c2d3269957a1fe"
+      },
+      "original_git": {
+        "blob": "a0e81170833f0b60e822fc24de83181b00c9ffb8",
+        "bytes": 5852,
+        "path": "scripts/model_evaluation/decision_policy.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "69e42d78efd4f3952d1419ef188d3456d1657dfc4e4de1ee60c2d3269957a1fe"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "399db306522fc82a47e03435ba2ccd8924209c3e",
+        "bytes": 322,
+        "path": "scripts/model_evaluation/decision_policy.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "7512a083234e256da7852e63e4b118ed9d400b6deb1476fccd1cd13a97dbc0c1"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/decision_policy.py",
+        "src/sat_dengue/model_evaluation/decision_policy.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/execution.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 1130,
+        "sha256": "37816fbb6d1d57116d87802764b9f87f0967cb64ebef1204fada9f362593e2d5"
+      },
+      "original_git": {
+        "blob": "d0678334ee3cfb6d02c1085bcbf690b2a0f4e9c4",
+        "bytes": 1130,
+        "path": "scripts/model_evaluation/execution.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "37816fbb6d1d57116d87802764b9f87f0967cb64ebef1204fada9f362593e2d5"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "e49b8ee390a7d20f9c769f63c9631089e5444073",
+        "bytes": 372,
+        "path": "scripts/model_evaluation/execution.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "488957af2c356fee57ef52678ac3e2b543710261d28493164b86771882b34008"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/execution.py",
+        "src/sat_dengue/datasets/evaluation_cli.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/internal_evidence.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 8039,
+        "sha256": "83a2aa7cf4d0579f46e85e2c1590601177610b8475d0748cd1d71f72e5524d85"
+      },
+      "original_git": {
+        "blob": "e73d6dcb2ded6f1a7b0722537945ca74ee77ee09",
+        "bytes": 8039,
+        "path": "scripts/model_evaluation/internal_evidence.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "83a2aa7cf4d0579f46e85e2c1590601177610b8475d0748cd1d71f72e5524d85"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "b35db259def74780ac12b38f33a3ad0ac27b6a9a",
+        "bytes": 324,
+        "path": "scripts/model_evaluation/internal_evidence.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "c4188cc7011a65ea8de9acf461120bcce6676eb08eaf815e55721e6a206c4b76"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/internal_evidence.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/notebook_execution.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 5197,
+        "sha256": "59bc268286ae126dd7894879d6cfcabaaa9ba76e12a4eded68cec7442d6d6b4d"
+      },
+      "original_git": {
+        "blob": "b30b3324285cdc0b429a1878acfebc6450934150",
+        "bytes": 5197,
+        "path": "scripts/model_evaluation/notebook_execution.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "59bc268286ae126dd7894879d6cfcabaaa9ba76e12a4eded68cec7442d6d6b4d"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "d7622198224d4f8e90f3932e3ea40b04d554ac00",
+        "bytes": 381,
+        "path": "scripts/model_evaluation/notebook_execution.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "23baa4171b8cef85c2e7b1776ca213e5a54e7098b0c0c1b00c24f6bd26941393"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/notebook_execution.py",
+        "src/sat_dengue/datasets/evaluation_cli.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_evaluation/pipeline.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 94121,
+        "sha256": "42900de97a6023af5ff797bb11c917c25471b336fd231b6cd97f27abd5446b1f"
+      },
+      "original_git": {
+        "blob": "fd324e9e718db846c117c5b14ca94868fe9c41bd",
+        "bytes": 94121,
+        "path": "scripts/model_evaluation/pipeline.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "42900de97a6023af5ff797bb11c917c25471b336fd231b6cd97f27abd5446b1f"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "4f00f652f4688fa8410db7042b5ea71e75a743f0",
+        "bytes": 315,
+        "path": "scripts/model_evaluation/pipeline.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "0b06e6555db481cb37f77bf94f9a2295976f65f36b1094dfda9fb4349c8099d4"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_evaluation/model_evaluation/pipeline.py",
+        "src/sat_dengue/model_evaluation/calibration.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/__init__.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 430,
+        "sha256": "fabdddfe02fe58d741d2915f4431399ae44f8f14f5675b346d81e7ba5c657b99"
+      },
+      "original_git": {
+        "blob": "0d7256e043bd05f42e4e844eb1f07acb71cf209b",
+        "bytes": 430,
+        "path": "scripts/model_training/__init__.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "fabdddfe02fe58d741d2915f4431399ae44f8f14f5675b346d81e7ba5c657b99"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "dc2aa27ab541a5214702855356759699d6f070ad",
+        "bytes": 538,
+        "path": "scripts/model_training/__init__.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "e84acdbffc04664cd071a4b1aeee2d4362d9c7b41e16d53b47dd2870a906a0e2"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/contract.py",
+        "src/sat_dengue/datasets/legacy_training/pipeline.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/candidate_families.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 4451,
+        "sha256": "f7300e0b7b69cdeabbedfe515cc94d6b20afeaa7b3327b63f9974c84f3a48846"
+      },
+      "original_git": {
+        "blob": "0ac85b6ab21b5ae458f8835a94fa7897730d84af",
+        "bytes": 4451,
+        "path": "scripts/model_training/candidate_families.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "f7300e0b7b69cdeabbedfe515cc94d6b20afeaa7b3327b63f9974c84f3a48846"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "6925cc377301b98f76fdf1dee182f01b77403fbd",
+        "bytes": 292,
+        "path": "scripts/model_training/candidate_families.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "7c5373f60b4889368300d24a0aa945a0f6a394dab4f3668dbb09bf4aa2f2fa0a"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/model_training/candidate_families.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/candidate_notebook.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 2839,
+        "sha256": "bfaa8a81649d802c5210710baca4f90e8edb905134cddeddeb2fa475cc687066"
+      },
+      "original_git": {
+        "blob": "32a3fac4fa3f80b22b70c6bed15733db15b5ef29",
+        "bytes": 2839,
+        "path": "scripts/model_training/candidate_notebook.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "bfaa8a81649d802c5210710baca4f90e8edb905134cddeddeb2fa475cc687066"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "2042c7e907e5f5b87ecfd243f7cad95677c4545b",
+        "bytes": 358,
+        "path": "scripts/model_training/candidate_notebook.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "92a9912b7f0da693dbf1a43a31759174303341dfe3ae3f89f4cda5a9982c181b"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/candidate_notebook.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/candidate_preparation.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3142,
+        "sha256": "6b25b623432e1892666f16025dcf6661dc65103d1241bf2f43b8728cfbd22a16"
+      },
+      "original_git": {
+        "blob": "f140daa37c2627c94c0b87b58cea928f18165e3e",
+        "bytes": 3142,
+        "path": "scripts/model_training/candidate_preparation.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "6b25b623432e1892666f16025dcf6661dc65103d1241bf2f43b8728cfbd22a16"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "a1dcdd3f0a0f46dc8698d1381bca0c69e4166f1b",
+        "bytes": 295,
+        "path": "scripts/model_training/candidate_preparation.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "417b642c45f16c517c6c701ba24e8365f150bba703911a86e3c5fe75a77ab746"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/model_training/candidate_preparation.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/candidate_selection.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 8093,
+        "sha256": "7359055290595a18158f3f3c5cf73981eb9344e6f7bd7fdbf48764000464a1a8"
+      },
+      "original_git": {
+        "blob": "9832f487a715ed81846e29ef1254545b04d78184",
+        "bytes": 8093,
+        "path": "scripts/model_training/candidate_selection.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "7359055290595a18158f3f3c5cf73981eb9344e6f7bd7fdbf48764000464a1a8"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "3be2e6917d027abb40c82a2b002f04f645b1a7a1",
+        "bytes": 293,
+        "path": "scripts/model_training/candidate_selection.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "2554a307d8f6db09b2c332dedf981227dfcd486f2ccd1e571916125aec772d1e"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/model_training/candidate_selection.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/candidate_suite.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 8647,
+        "sha256": "613bd50bd6abfe5ba563e313bcd11f7e3eb53a9f63468db2ab69a4f96f6ba3e5"
+      },
+      "original_git": {
+        "blob": "56b9fef0b8effa4083169c508c3f081ed7477679",
+        "bytes": 8647,
+        "path": "scripts/model_training/candidate_suite.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "613bd50bd6abfe5ba563e313bcd11f7e3eb53a9f63468db2ab69a4f96f6ba3e5"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "a14a6e9dffde9dc44a293ce952bcd325fc924c7e",
+        "bytes": 299,
+        "path": "scripts/model_training/candidate_suite.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "b5fbaf2d38ef961ef3a1300f700353722e5456da1ca5a5013f8790ba71fc1430"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/candidate_suite.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/candidates.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 19310,
+        "sha256": "1f1621a9c9898377964aac304a031e86a2028c8c0720634600bcef21ea9aed18"
+      },
+      "original_git": {
+        "blob": "2c58f4dcc0b4295af5f697bc538835ff9c9c146e",
+        "bytes": 19310,
+        "path": "scripts/model_training/candidates.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "1f1621a9c9898377964aac304a031e86a2028c8c0720634600bcef21ea9aed18"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "20ceb586c5423cc4aed82fd18765f3adede1d48b",
+        "bytes": 294,
+        "path": "scripts/model_training/candidates.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "55ecd06fc2598633e51c1aba2843364acd1e43ff13b9906ebe84495a19b5b5ef"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/candidates.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/contract.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 2533,
+        "sha256": "effb123129401724da4268949869f36499bd12b925736a48317c3550de720d26"
+      },
+      "original_git": {
+        "blob": "6d7f452a0aa4525b88689516ddf724090fd88c4e",
+        "bytes": 2533,
+        "path": "scripts/model_training/contract.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "effb123129401724da4268949869f36499bd12b925736a48317c3550de720d26"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "1f7df3679b70e40943ef868985d747ee88bb54dc",
+        "bytes": 292,
+        "path": "scripts/model_training/contract.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "80a9a148396c8c665e1d3e8e8c60fecab6f003d6c5ca4e0e5e2106f921b784bd"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/contract.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/events.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 5905,
+        "sha256": "e99fadf26df301a59f2d3b372fff333e3d66c0c03786edf492dc77082507535b"
+      },
+      "original_git": {
+        "blob": "3f1e471af672aff3b7edfd76258a9d9db00644ad",
+        "bytes": 5905,
+        "path": "scripts/model_training/events.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "e99fadf26df301a59f2d3b372fff333e3d66c0c03786edf492dc77082507535b"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "0f796bd68a919056ef19b83036468aaf844d84df",
+        "bytes": 290,
+        "path": "scripts/model_training/events.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "a697f90c7bd7f040e5c3d9d427c353b50e35680462e7555dc56834de1ec20683"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/events.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/execution.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 955,
+        "sha256": "5652d9b0c64dbadc0f060a74b4703a6b2d676cfa5f3b946bbfccf41eb1f2e6f4"
+      },
+      "original_git": {
+        "blob": "bf535af47112e8ef3462ae1fd5d3c19a6266bf39",
+        "bytes": 955,
+        "path": "scripts/model_training/execution.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "5652d9b0c64dbadc0f060a74b4703a6b2d676cfa5f3b946bbfccf41eb1f2e6f4"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "3ecad825584fff83d10c4356d906cd110eb25537",
+        "bytes": 349,
+        "path": "scripts/model_training/execution.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "232aaf2ddc95ea4b7ecbc304a61c0bd6fb8b2b3d2abac34d62ba736cd4833d33"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/execution.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/gam_adapter.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 6401,
+        "sha256": "9e77bffe0a81b3a9e25a7a216708ea4942700248eba7c83867d15a8bc7e51d26"
+      },
+      "original_git": {
+        "blob": "ebde5e852e34cd8fdc541dfa00d813c1398eafe4",
+        "bytes": 6401,
+        "path": "scripts/model_training/gam_adapter.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "9e77bffe0a81b3a9e25a7a216708ea4942700248eba7c83867d15a8bc7e51d26"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "72e33ad36a72682fb9089e1baba668706fc84564",
+        "bytes": 285,
+        "path": "scripts/model_training/gam_adapter.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "d6fdbc521c7a260a2c7f3a9bad0a465375ec8bdb9465861fda8d03bf9f8f31ea"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/model_training/gam_adapter.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/lightgbm_adapter.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3108,
+        "sha256": "5668c13aaa72ffeabdf8e34be1cf6e54c10e4dd8fa5cf645d426bb548b5f501e"
+      },
+      "original_git": {
+        "blob": "84ba968049fc6a828b5adbad827ad3bd65f91e06",
+        "bytes": 3108,
+        "path": "scripts/model_training/lightgbm_adapter.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "5668c13aaa72ffeabdf8e34be1cf6e54c10e4dd8fa5cf645d426bb548b5f501e"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "f943edb59cf3979cf193a1252e20eb4f54e3e617",
+        "bytes": 290,
+        "path": "scripts/model_training/lightgbm_adapter.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "38fb0c0ade443e0b75808448e71f16eaff400b41d2942de371d0a395eff95a19"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/model_training/lightgbm_adapter.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/loading.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 8737,
+        "sha256": "5554737ad0caea09709191c4958ee181430b2b60b2cada50dab0dc75217af5ff"
+      },
+      "original_git": {
+        "blob": "78184e53024da26ea377e9e55603206e42fbae69",
+        "bytes": 8737,
+        "path": "scripts/model_training/loading.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "5554737ad0caea09709191c4958ee181430b2b60b2cada50dab0dc75217af5ff"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "9c0608dba792ee9ca8173cbb7fd0c2c705a696d4",
+        "bytes": 291,
+        "path": "scripts/model_training/loading.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "945cd9d9847e11874218f3301c8bb27ad88e7247fd98552c6bbfd45e46cdda4f"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/loading.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/metrics.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 10612,
+        "sha256": "589c73661fd0969662e08a5bdbb8fe0dd5ced87aaf8881a842f98f9fd9091e42"
+      },
+      "original_git": {
+        "blob": "22f212a22f672ca5eb4d887ec28cbd1cf95ff754",
+        "bytes": 10612,
+        "path": "scripts/model_training/metrics.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "589c73661fd0969662e08a5bdbb8fe0dd5ced87aaf8881a842f98f9fd9091e42"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "bfd9a5d036140eb934f6eac1f0fa27b4dbdc9431",
+        "bytes": 266,
+        "path": "scripts/model_training/metrics.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "2e100a412a8405417c0bcc66369c4babbb50b841b52b6f029f12e7912a06d2f7"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/metrics.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/notebook_execution.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 7427,
+        "sha256": "76be2f2e5ef673d49c59bb41bc6cbf5f3300ab0307a74e4b2f5ae98851c5c028"
+      },
+      "original_git": {
+        "blob": "d1fb33031f3e673916a81eff72de608155827a6f",
+        "bytes": 7427,
+        "path": "scripts/model_training/notebook_execution.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "76be2f2e5ef673d49c59bb41bc6cbf5f3300ab0307a74e4b2f5ae98851c5c028"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "f5df15722a8ecdc35a5e4375a7929568d783a429",
+        "bytes": 358,
+        "path": "scripts/model_training/notebook_execution.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "6c1016a5e1eda35086f691f20ac93071d1537bbc506d8497ace735e05e9d9bbf"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/notebook_execution.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/persistence.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 1375,
+        "sha256": "c7c5742e6e6fe36afdc5cd31913d76aaeedc056d6be2587fd6e2b28c6094fec6"
+      },
+      "original_git": {
+        "blob": "ea3780d0afd252e34a4d976ab2f478a020400182",
+        "bytes": 1375,
+        "path": "scripts/model_training/persistence.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "c7c5742e6e6fe36afdc5cd31913d76aaeedc056d6be2587fd6e2b28c6094fec6"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "bf4b22894e91643e2080cac409f8546c7aaece1c",
+        "bytes": 295,
+        "path": "scripts/model_training/persistence.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "496a16f59faefc2bd7818eeb26b01df52cd163dc4503bb85df7b3893c4563f83"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/persistence.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/pipeline.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 11325,
+        "sha256": "4d3fb73f2cc42185958b53ceb785700bc384a5a58cb61b8085645c7f35b38570"
+      },
+      "original_git": {
+        "blob": "12538d278fe871b6f82d2828e42d4879d8395418",
+        "bytes": 11325,
+        "path": "scripts/model_training/pipeline.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "4d3fb73f2cc42185958b53ceb785700bc384a5a58cb61b8085645c7f35b38570"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "4426ff022e823ff9e1bad245fa81199be6d7756f",
+        "bytes": 292,
+        "path": "scripts/model_training/pipeline.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "899f946dfd12b91efc565d2c4ed1f391c11f647505128366ef6a8c4ef1dd427a"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_training/pipeline.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/references.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3941,
+        "sha256": "e6434f0cdc069e1f22380a8d9176865e0dfc7b4cba750defe10f4a786baf4445"
+      },
+      "original_git": {
+        "blob": "2d6b6aa965994e311fe90e110800cf3abfdfc36e",
+        "bytes": 3941,
+        "path": "scripts/model_training/references.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "e6434f0cdc069e1f22380a8d9176865e0dfc7b4cba750defe10f4a786baf4445"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "a9a92e3e0df2b059d9931529fa7ad8e2e62ca26e",
+        "bytes": 284,
+        "path": "scripts/model_training/references.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "ac5f54838d68c4b7909f9aca98fcbb529c33e5526e8bd13f68c7d405a238e5eb"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/model_training/references.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/model_training/xgboost_adapter.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3643,
+        "sha256": "7c6973e5dbcad0531fa11da410c8b2962895670ef0d92d72b7820b19c8f29a91"
+      },
+      "original_git": {
+        "blob": "e5d095486553da10f56c6d58e2e01f47760de827",
+        "bytes": 3643,
+        "path": "scripts/model_training/xgboost_adapter.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "7c6973e5dbcad0531fa11da410c8b2962895670ef0d92d72b7820b19c8f29a91"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "f4b201623a5b69623f23df849cc672c2508e1655",
+        "bytes": 289,
+        "path": "scripts/model_training/xgboost_adapter.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "7b75a59e6f1b1444bdec8576da9b2969f4cd7f2add6124454523bd6b0fd874d4"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/model_training/xgboost_adapter.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/stage2_consolidated_dataset_pipeline.py": {
+      "disposition": "ADAPT",
+      "final": {
+        "bytes": 327,
+        "present": true,
+        "sha256": "06691b7e76afb2f54011bafb3394f7fb1980fcddf28b5ce4989158216078561d"
+      },
+      "original": {
+        "bytes": 85188,
+        "sha256": "749074cca6b6a9c79953a13153265c4da894223d5b79f3af61d00c7327a9bbde"
+      },
+      "original_git": {
+        "blob": "051804054a9ae4af520cfb394ada17a61cbcf949",
+        "bytes": 85188,
+        "path": "scripts/stage2_consolidated_dataset_pipeline.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "749074cca6b6a9c79953a13153265c4da894223d5b79f3af61d00c7327a9bbde"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "3702334c7cfe1282040a34ac48130920d0d672cf",
+        "bytes": 332,
+        "path": "scripts/stage2_consolidated_dataset_pipeline.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "d1cadfebfdc593b06e6381f693b3289d2c42961059cc744795e031097c8385da"
+      },
+      "reason": "Keep the required thin source-identity facade; explicit submodule import has identical runtime behavior and is statically typed.",
+      "replacement": [
+        "scripts/stage2_consolidated_dataset_pipeline.py"
+      ],
+      "retirement_condition": "Fresh owning-stage parity and complete consumer migration; protected native evidence never retires."
+    },
+    "scripts/training_preparation/audit.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 1132,
+        "sha256": "0d6636db2d5805e1a0f41f799aaad17bfc58571b66941f565cf9e147fcaa8630"
+      },
+      "original_git": {
+        "blob": "023bafe0c3a28e8d960bbc20322adf488a8cb75c",
+        "bytes": 1132,
+        "path": "scripts/training_preparation/audit.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "0d6636db2d5805e1a0f41f799aaad17bfc58571b66941f565cf9e147fcaa8630"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "c09acbd69663d75a444526ebbf1aed9e68eebd63",
+        "bytes": 409,
+        "path": "scripts/training_preparation/audit.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "1007c9493052d659a6add36eac5e7826409f71928ea2b0ad4bf3892e52371c71"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/audit.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/contract.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 2497,
+        "sha256": "0c06b08533f19d35226081212e1c692e939255a0ca410e70dc3a908582e72c69"
+      },
+      "original_git": {
+        "blob": "49160738ff2d7bdacd0fdb48e5e7dcf1dee89b21",
+        "bytes": 2497,
+        "path": "scripts/training_preparation/contract.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "0c06b08533f19d35226081212e1c692e939255a0ca410e70dc3a908582e72c69"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "ec8fa566b23acb41e4d4c0879872e3070eb2e010",
+        "bytes": 348,
+        "path": "scripts/training_preparation/contract.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "f058595ce782a3fdf1856d178ebb716751c231896e7fe3ab8cb70cdf60066271"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/contract.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/development.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 9137,
+        "sha256": "3a811d9e1e8c3b17bcfca5e31ca4260ce40ca3ce0ba5f33908f896e2f09333d0"
+      },
+      "original_git": {
+        "blob": "cfb74e9cea0c2fdcd16a420560b3de05ab0f992a",
+        "bytes": 9137,
+        "path": "scripts/training_preparation/development.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "3a811d9e1e8c3b17bcfca5e31ca4260ce40ca3ce0ba5f33908f896e2f09333d0"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "4e120efe84e1b42699d2832582c27cc330914734",
+        "bytes": 481,
+        "path": "scripts/training_preparation/development.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "93d32a255623975c5bab6bed97a3ab3d0e7e3e37e6dc7c4719d8dbde69ce5067"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/development.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/eligibility.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 4521,
+        "sha256": "84057f911069f7d3d2184f6c49d64fd1eba61b614c0bfeaaa8ea82dfdb568f80"
+      },
+      "original_git": {
+        "blob": "1055cad4687fd52c0012646c30dc01069ae268d2",
+        "bytes": 4521,
+        "path": "scripts/training_preparation/eligibility.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "84057f911069f7d3d2184f6c49d64fd1eba61b614c0bfeaaa8ea82dfdb568f80"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "5d27f4081754d1c215626f419550312ce66a3a73",
+        "bytes": 351,
+        "path": "scripts/training_preparation/eligibility.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "853cca564f5749c38706914bee1edca87247ecaef19c3fd3ee4b0f7698b5eb9e"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/eligibility.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/features.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3809,
+        "sha256": "b3f711dde9ea81f2bddd700bc9f202eefda21003b494be796a23d0ef216913a3"
+      },
+      "original_git": {
+        "blob": "8264fd893f0a0b71bec2d2718b91563636501188",
+        "bytes": 3809,
+        "path": "scripts/training_preparation/features.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "b3f711dde9ea81f2bddd700bc9f202eefda21003b494be796a23d0ef216913a3"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "5b40a70b1e4b497b0497838074822727c0b69a25",
+        "bytes": 341,
+        "path": "scripts/training_preparation/features.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "97d097173dee769cf375ec9b0281743bc25b8b326089b2f6297cd3627ef19b1a"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/training_preparation/features.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/notebook_execution.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 7489,
+        "sha256": "b4c9a73552a3f99c5881e279529d1b95563d4577a5850fa96552b37a3ebb2e3f"
+      },
+      "original_git": {
+        "blob": "bc62d796783fdeec4cd8030feb8fe4b6fa84f528",
+        "bytes": 7489,
+        "path": "scripts/training_preparation/notebook_execution.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "b4c9a73552a3f99c5881e279529d1b95563d4577a5850fa96552b37a3ebb2e3f"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "966a8d0208ca6b07742c8091ad1634e416faa449",
+        "bytes": 428,
+        "path": "scripts/training_preparation/notebook_execution.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "85e360b7528de93b40c0564a5cbc0a5d1ac88e5aefaf32bc69a45e7aad2325c0"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/notebook_execution.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/persistence.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 3815,
+        "sha256": "4afb06c775463017816fdfdbe5bcdc7a7bf16d4d96571301a1c292d05a98a78d"
+      },
+      "original_git": {
+        "blob": "0618ba795dfa591c02387e571ba2d1ca34ce78a6",
+        "bytes": 3815,
+        "path": "scripts/training_preparation/persistence.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "4afb06c775463017816fdfdbe5bcdc7a7bf16d4d96571301a1c292d05a98a78d"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "f2f6c12831fa222d018e53b70098f106eb5cf438",
+        "bytes": 351,
+        "path": "scripts/training_preparation/persistence.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "82e7eb635c374cfa17b0716687d407f450b8803ce67e63e4a658a2de40f4090a"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/persistence.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/pipeline.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 7089,
+        "sha256": "820fe8ac7a0e3273262118280096fea5fbe89ae4a6b5bd192bd7b6f2c4bbd2af"
+      },
+      "original_git": {
+        "blob": "862aaf503df58f8d3e1ce18ed0feaaf438885db4",
+        "bytes": 7089,
+        "path": "scripts/training_preparation/pipeline.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "820fe8ac7a0e3273262118280096fea5fbe89ae4a6b5bd192bd7b6f2c4bbd2af"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "2fa5d5d7722c580f102bc71b9cf5460bdd3cdf75",
+        "bytes": 348,
+        "path": "scripts/training_preparation/pipeline.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "fb608a70e39a185862e0395047cf11e656cf5a7f87d6de6784c063f838d58e90"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/pipeline.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/preprocessing.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 8842,
+        "sha256": "e1dcb70370cb16718ee048a47092558b3ad992830c23e5ae26cc4bd0eabcd011"
+      },
+      "original_git": {
+        "blob": "5ef83d7d7419a3f65dc3eae774561c828f44377e",
+        "bytes": 8842,
+        "path": "scripts/training_preparation/preprocessing.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "e1dcb70370cb16718ee048a47092558b3ad992830c23e5ae26cc4bd0eabcd011"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "766e9f118538cc3b55e9683b299a9106d97e3b2f",
+        "bytes": 346,
+        "path": "scripts/training_preparation/preprocessing.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "0d2f14b823b6e204db72c9d420fea8e74e00d8e754b61cbdf95d65e429bd31a9"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/training_preparation/preprocessing.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/temporal.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 18994,
+        "sha256": "0d417e1ee2da487f4953b5d5b19cfc6b60dbf5b305c534098d7cd9c793448279"
+      },
+      "original_git": {
+        "blob": "ca2cfa7bfce07e6ebe5d261e85356af3103ef52e",
+        "bytes": 18994,
+        "path": "scripts/training_preparation/temporal.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "0d417e1ee2da487f4953b5d5b19cfc6b60dbf5b305c534098d7cd9c793448279"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "fefe0df48259e56d22e6c489150ced8e9676227c",
+        "bytes": 478,
+        "path": "scripts/training_preparation/temporal.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "9bc63fc3cb57aa715ad46e0f89431e0fcbf63a32ca96b3d946d9187438a5d9cd"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/datasets/legacy_preparation/temporal.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/training_preparation/validation.py": {
+      "disposition": "RETIRE",
+      "final": {
+        "present": false
+      },
+      "original": {
+        "bytes": 10451,
+        "sha256": "623b88797eed4352d70640c07a91bd81d44972438209f164afad5d0142901963"
+      },
+      "original_git": {
+        "blob": "223b6e2108c57abad699db9a360a190d56eca81b",
+        "bytes": 10451,
+        "path": "scripts/training_preparation/validation.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "623b88797eed4352d70640c07a91bd81d44972438209f164afad5d0142901963"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "55839ce50929219ccbbc16157301e91d87c478a1",
+        "bytes": 343,
+        "path": "scripts/training_preparation/validation.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "711c61ebbe414d12aca65e1270f35dfc4b166b043cbf663ef8e5a5a32857e84f"
+      },
+      "reason": "Replaced import/CLI facade: consumers now use the identical package objects; no scientific calculation removed.",
+      "replacement": [
+        "src/sat_dengue/training_preparation/validation.py"
+      ],
+      "retirement_condition": "Retired after direct-consumer/object equivalence and Git recovery verification; restoration requires a new bounded decision."
+    },
+    "scripts/validate_stage2_training_readiness.py": {
+      "disposition": "ADAPT",
+      "final": {
+        "bytes": 323,
+        "present": true,
+        "sha256": "120b3e7d807a3088fe653fd8c6df859ba4098e50200f53b57bafb0f00ff7ee10"
+      },
+      "original": {
+        "bytes": 96887,
+        "sha256": "5c6397b3999f1f26dd169659a73ae3fd36cd5a9bdb6b20a5419edf230e297ddd"
+      },
+      "original_git": {
+        "blob": "0284cb78d6d5f5d3ac0c23c1f1c432f16f79ae28",
+        "bytes": 96887,
+        "path": "scripts/validate_stage2_training_readiness.py",
+        "revision": "89d538c93ff20824c96c7fe0929baaa9d900e999",
+        "sha256": "5c6397b3999f1f26dd169659a73ae3fd36cd5a9bdb6b20a5419edf230e297ddd"
+      },
+      "owner": "Maintainer of the owning stage; scientific governance remains Mauricio",
+      "pre_cleanup_git": {
+        "blob": "cd688bd68862630b4b15bbd9a816887bb25cd2d3",
+        "bytes": 328,
+        "path": "scripts/validate_stage2_training_readiness.py",
+        "revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+        "sha256": "99595441e56190b11264722ed4908d1bbd080b3acd5f170afcc0844e42cf0b78"
+      },
+      "reason": "Keep the required thin source-identity facade; explicit submodule import has identical runtime behavior and is statically typed.",
+      "replacement": [
+        "scripts/validate_stage2_training_readiness.py"
+      ],
+      "retirement_condition": "Fresh owning-stage parity and complete consumer migration; protected native evidence never retires."
+    }
+  },
+  "pre_cleanup_revision": "861b36966cec26d1d2b36edee4d6ada6d5bc0930",
+  "schema": "kedro-cleanup-preservation-v1",
+  "task_id": "T-cleanup"
+}

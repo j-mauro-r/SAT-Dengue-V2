@@ -1,0 +1,3 @@
+# Dependency authority: pyproject.toml; full reproducible validation environment.
+-c docs/operations/kedro-foundation-constraints.txt
+.[dev,modeling,notebook,tracking]

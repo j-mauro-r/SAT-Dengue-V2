@@ -13,14 +13,14 @@ import pytest
 from sklearn.preprocessing import SplineTransformer  # type: ignore[import-untyped]
 from test_xgboost_candidate import CONTRACT, settings, window
 
-from scripts.model_training.candidate_families import fit_model, restore_model, simplicity
-from scripts.model_training.candidate_preparation import transform_representation
-from scripts.model_training.candidate_selection import select_and_fit
-from scripts.model_training.contract import ModelTrainingError
-from scripts.model_training.gam_adapter import spline_matrix
-from scripts.model_training.metrics import average_precision_metric
-from scripts.model_training.xgboost_adapter import fit_candidate
-from scripts.training_preparation.contract import PreparationError
+from sat_dengue.datasets.legacy_preparation.contract import PreparationError
+from sat_dengue.datasets.legacy_training.contract import ModelTrainingError
+from sat_dengue.metrics import average_precision_metric
+from sat_dengue.model_training.candidate_families import fit_model, restore_model, simplicity
+from sat_dengue.model_training.candidate_preparation import transform_representation
+from sat_dengue.model_training.candidate_selection import select_and_fit
+from sat_dengue.model_training.gam_adapter import spline_matrix
+from sat_dengue.model_training.xgboost_adapter import fit_candidate
 
 
 def family_settings(family: str) -> dict[str, Any]:
@@ -156,8 +156,8 @@ def test_suite_budget_rejected_before_any_loading_or_fitting(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """A user-reduced global budget cannot be exceeded before reporting the error."""
-    from scripts.model_training import candidate_suite
-    from scripts.model_training.contract import ModelTrainingConfig
+    from sat_dengue.datasets.legacy_training import candidate_suite
+    from sat_dengue.datasets.legacy_training.contract import ModelTrainingConfig
 
     contract = copy.deepcopy(CONTRACT)
     contract["candidate_suite"]["maximum_fits_per_run"] = 200
@@ -171,3 +171,32 @@ def test_suite_budget_rejected_before_any_loading_or_fitting(
         candidate_suite.build_candidate_suite(
             ModelTrainingConfig(tmp_path, tmp_path / "contract.json")
         )
+
+
+@pytest.mark.parametrize("family", ["unknown", "Umaña", "v1"])
+def test_training_unknown_families_fail_closed(family: str) -> None:
+    from sat_dengue.model_training.candidate_families import restore_model, validate_grid
+    from sat_dengue.model_training.contract import ModelTrainingError
+
+    with pytest.raises(ModelTrainingError):
+        validate_grid(family, [{}])
+    with pytest.raises(ModelTrainingError):
+        restore_model(family, b"{}", {})
+
+
+def test_training_synthetic_route_rejects_changed_or_foreign_cases() -> None:
+    from sat_dengue.datasets import ConfigurationInputsDataset
+    from sat_dengue.model_training.workflow import (
+        fit_synthetic,
+        resolve_synthetic_configuration,
+        synthetic_cases,
+    )
+
+    resolved = resolve_synthetic_configuration(
+        ConfigurationInputsDataset().load(),
+        {"profile": "training_synthetic", "tracking": "disabled"},
+    )
+    cases = synthetic_cases(resolved)
+    cases["train_X"].iloc[0, 1] = 99999.0
+    with pytest.raises(ModelTrainingError, match="synthetic"):
+        fit_synthetic(cases, resolved)

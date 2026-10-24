@@ -17,11 +17,12 @@ CRISP-ML(Q) governs business/data understanding, data preparation, modeling, eva
 - Bind data, configuration, transforming code and runtime identities to artifacts and experiment evidence.
 - Current deterministic/temporal preparation is documented in [the implemented workflow](../product/stage-3/README.md). Scientific definitions remain in the [decision register](../product/traking-concluciones.md) and owning contracts.
 - A passing test, completed DWP or successful notebook execution is not a human scientific gate approval.
-- MLflow is a planned experiment-tracking option, not an installed prerequisite for preparation or the first baseline. Establish the run record needed by the modeling task before adding infrastructure.
+- MLflow is optional, explicitly enabled local metadata tracking under the existing allowlist. It is not a prerequisite for preparation or tracking-disabled replay; native scientific artifacts remain authoritative.
 
 ## Notebook and Module Policy
 
-- Notebooks configure, execute and expose bounded review outputs. Maintained transformation logic belongs in reusable, tested Python modules.
-- The current implementation uses `scripts/training_preparation/`; no `src/` migration is required just to satisfy a directory convention. Package runtime components when their deployment needs justify it.
-- Notebooks 03/04 remain code-only under the current human instruction. Do not add Markdown cells until requested.
-- Reuse preparation for model fitting and inference instead of copying it into a new training notebook. Validate saved outputs against current code/data identities.
+- The maintained implementation lives under `src/sat_dengue`. Reusable scientific logic belongs in the tested package; Kedro is the active orchestrator and dataset adapters own verified I/O.
+- Official execution uses registered Kedro pipelines, including `kedro run --pipeline=replay`. The [migration owner](../operations/kedro-migration.md#current-cleanup-and-execution--session-8) and [testing guide](../TESTING_GUIDE.md) own runtime, input and validation requirements.
+- Notebooks 03–08 are retained exclusively as frozen historical identity evidence where required by provenance readers. They are not production entrypoints and do not orchestrate current preparation, fitting, calibration or evaluation. Do not execute or rewrite their cells; the original code-only restriction for notebooks 03/04 remains.
+- Retained scripts are explicit tools or compatibility adapters with a current consumer, owner and verifiable retirement condition in the [disposition registry](../operations/repository-disposition.json). They do not create a second scientific implementation or a notebook execution route.
+- Reuse the same preparation implementation for model fitting and inference across pipelines instead of duplicating logic. Validate saved outputs against current code/data identities.

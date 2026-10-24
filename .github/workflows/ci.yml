@@ -126,17 +126,21 @@ jobs:
       - name: Install development dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-          pip install -r requirements-modeling.txt
+          python -m pip install -e ".[dev,modeling,tracking]"
 
       - name: Ruff lint
-        run: ruff check tests
+        run: |
+          python -m ruff check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
       - name: Ruff format
-        run: ruff format --check tests
+        run: |
+          python -m ruff format --check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
       - name: Type check
-        run: mypy tests
+        env:
+          MYPYPATH: src:tests/unit:tests/integration
+        run: |
+          python -m mypy --explicit-package-bases src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
 
   unit-tests:
@@ -146,6 +150,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -156,8 +162,29 @@ jobs:
       - name: Install development dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-          pip install -r requirements-modeling.txt
+          python -m pip install -e ".[dev,modeling,tracking]"
 
-      - name: Run unit tests
-        run: pytest tests/unit -v
+      - name: Run units, contracts including test_repository_disposition.py, and synthetic E2E
+        run: KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration/test_migration_parity.py tests/integration/test_mlflow_tracking.py tests/integration/test_kedro_e2e.py -v
+
+  base-package:
+    name: Base wheel without optional dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Build and install base wheel
+        run: |
+          python -m pip wheel --no-deps . -w tmp/ci-wheels
+          python -m pip install tmp/ci-wheels/*.whl
+          python -m pip check
+      - name: Verify optional roots absent and run base bootstrap
+        env:
+          KEDRO_DISABLE_TELEMETRY: "yes"
+        run: |
+          python -c "import importlib.util; assert all(importlib.util.find_spec(n) is None for n in ('sklearn','lightgbm','xgboost','scipy','threadpoolctl','narwhals','mlflow'))"
+          python tests/integration/base_bootstrap.py
+      - name: Verify installed read-only API wheel
+        run: python scripts/validate_read_only_api_wheel.py tmp/ci-wheels/*.whl

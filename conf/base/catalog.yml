@@ -1,0 +1,72 @@
+configuration_inputs:
+  type: sat_dengue.datasets.ConfigurationInputsDataset
+resolved_configuration:
+  type: sat_dengue.datasets.stage2.PublishedConfigurationDataset
+  filepath: tmp/kedro-migration/runs
+stage2_sources:
+  type: sat_dengue.datasets.stage2.Stage2SourcesDataset
+stage2_epi_raw:
+  type: sat_dengue.datasets.stage2.Stage2RawCsvDataset
+  filepaths:
+  - data/raw/dengue.csv
+  - data/raw/dengue_grave.csv
+  chunksize: 200000
+  epidemiology: true
+stage2_climate_raw:
+  type: sat_dengue.datasets.stage2.Stage2RawCsvDataset
+  filepaths:
+  - data/raw/google_earth_engine.csv
+  chunksize: 250000
+stage2_consolidated:
+  type: sat_dengue.datasets.stage2.Stage2ConsolidatedDataset
+  filepath: tmp/kedro-migration/data-runs
+stage2_bundle:
+  type: sat_dengue.datasets.stage2.Stage2BundleDataset
+  filepath: tmp/kedro-migration/data-runs
+preparation_sources:
+  type: sat_dengue.datasets.preparation.PreparationSourcesDataset
+saved_preparers:
+  type: sat_dengue.datasets.preparation.SavedPreparersDataset
+preparation_bundle:
+  type: sat_dengue.datasets.preparation.PreparationBundleDataset
+  filepath: tmp/kedro-migration/preparation-runs
+training_sources:
+  type: sat_dengue.datasets.training.TrainingSourcesDataset
+training_bundle:
+  type: sat_dengue.datasets.training.TrainingBundleDataset
+  filepath: tmp/kedro-migration/training-runs
+evaluation_sources:
+  type: sat_dengue.datasets.evaluation.FrozenEvaluationSourcesDataset
+evaluation_bundle:
+  type: sat_dengue.datasets.evaluation.EvaluationBundleDataset
+  filepath: tmp/kedro-migration/evaluation-runs
+data.resolved_configuration:
+  type: sat_dengue.datasets.replay.ReplayConfigurationDataset
+data.stage2_bundle:
+  type: sat_dengue.datasets.replay.ReplayStageDataset
+  stage: data
+preparation.resolved_configuration:
+  type: sat_dengue.datasets.replay.ReplayConfigurationDataset
+preparation.preparation_bundle:
+  type: sat_dengue.datasets.replay.ReplayStageDataset
+  stage: preparation
+training.resolved_configuration:
+  type: sat_dengue.datasets.replay.ReplayConfigurationDataset
+training.training_bundle:
+  type: sat_dengue.datasets.replay.ReplayStageDataset
+  stage: training
+evaluation.resolved_configuration:
+  type: sat_dengue.datasets.replay.ReplayConfigurationDataset
+evaluation.evaluation_bundle:
+  type: sat_dengue.datasets.replay.ReplayStageDataset
+  stage: evaluation
+data.stage2_consolidated:
+  type: sat_dengue.datasets.replay.ReplayConsolidatedDataset
+data.stage2_epi_raw:
+  type: MemoryDataset
+  copy_mode: assign
+data.stage2_climate_raw:
+  type: MemoryDataset
+  copy_mode: assign
+replay_bundle:
+  type: sat_dengue.datasets.replay.ReplayBundleDataset

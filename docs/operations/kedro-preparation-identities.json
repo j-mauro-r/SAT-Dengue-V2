@@ -1,0 +1,127 @@
+{
+  "schema": "kedro-preparation-migration-identities-v1",
+  "original_revision": "925a784eb20d082efd7e166ab1b6fa35c8505a57",
+  "baseline_sha256": "d86338cd34dcde884e2be9d102271969d0f3b52f57b8ffdebd1829771977a5b3",
+  "files": {
+    "scripts/training_preparation/audit.py": {
+      "original": {
+        "bytes": 1132,
+        "sha256": "0d6636db2d5805e1a0f41f799aaad17bfc58571b66941f565cf9e147fcaa8630"
+      },
+      "engineering": {
+        "bytes": 409,
+        "sha256": "1007c9493052d659a6add36eac5e7826409f71928ea2b0ad4bf3892e52371c71"
+      }
+    },
+    "scripts/training_preparation/contract.py": {
+      "original": {
+        "bytes": 2497,
+        "sha256": "0c06b08533f19d35226081212e1c692e939255a0ca410e70dc3a908582e72c69"
+      },
+      "engineering": {
+        "bytes": 348,
+        "sha256": "f058595ce782a3fdf1856d178ebb716751c231896e7fe3ab8cb70cdf60066271"
+      }
+    },
+    "scripts/training_preparation/development.py": {
+      "original": {
+        "bytes": 9137,
+        "sha256": "3a811d9e1e8c3b17bcfca5e31ca4260ce40ca3ce0ba5f33908f896e2f09333d0"
+      },
+      "engineering": {
+        "bytes": 481,
+        "sha256": "93d32a255623975c5bab6bed97a3ab3d0e7e3e37e6dc7c4719d8dbde69ce5067"
+      }
+    },
+    "scripts/training_preparation/eligibility.py": {
+      "original": {
+        "bytes": 4521,
+        "sha256": "84057f911069f7d3d2184f6c49d64fd1eba61b614c0bfeaaa8ea82dfdb568f80"
+      },
+      "engineering": {
+        "bytes": 351,
+        "sha256": "853cca564f5749c38706914bee1edca87247ecaef19c3fd3ee4b0f7698b5eb9e"
+      }
+    },
+    "scripts/training_preparation/features.py": {
+      "original": {
+        "bytes": 3809,
+        "sha256": "b3f711dde9ea81f2bddd700bc9f202eefda21003b494be796a23d0ef216913a3"
+      },
+      "engineering": {
+        "bytes": 341,
+        "sha256": "97d097173dee769cf375ec9b0281743bc25b8b326089b2f6297cd3627ef19b1a"
+      }
+    },
+    "scripts/training_preparation/notebook_execution.py": {
+      "original": {
+        "bytes": 7489,
+        "sha256": "b4c9a73552a3f99c5881e279529d1b95563d4577a5850fa96552b37a3ebb2e3f"
+      },
+      "engineering": {
+        "bytes": 428,
+        "sha256": "85e360b7528de93b40c0564a5cbc0a5d1ac88e5aefaf32bc69a45e7aad2325c0"
+      }
+    },
+    "scripts/training_preparation/persistence.py": {
+      "original": {
+        "bytes": 3815,
+        "sha256": "4afb06c775463017816fdfdbe5bcdc7a7bf16d4d96571301a1c292d05a98a78d"
+      },
+      "engineering": {
+        "bytes": 351,
+        "sha256": "82e7eb635c374cfa17b0716687d407f450b8803ce67e63e4a658a2de40f4090a"
+      }
+    },
+    "scripts/training_preparation/pipeline.py": {
+      "original": {
+        "bytes": 7089,
+        "sha256": "820fe8ac7a0e3273262118280096fea5fbe89ae4a6b5bd192bd7b6f2c4bbd2af"
+      },
+      "engineering": {
+        "bytes": 348,
+        "sha256": "fb608a70e39a185862e0395047cf11e656cf5a7f87d6de6784c063f838d58e90"
+      }
+    },
+    "scripts/training_preparation/preprocessing.py": {
+      "original": {
+        "bytes": 8842,
+        "sha256": "e1dcb70370cb16718ee048a47092558b3ad992830c23e5ae26cc4bd0eabcd011"
+      },
+      "engineering": {
+        "bytes": 346,
+        "sha256": "0d2f14b823b6e204db72c9d420fea8e74e00d8e754b61cbdf95d65e429bd31a9"
+      }
+    },
+    "scripts/training_preparation/temporal.py": {
+      "original": {
+        "bytes": 18994,
+        "sha256": "0d417e1ee2da487f4953b5d5b19cfc6b60dbf5b305c534098d7cd9c793448279"
+      },
+      "engineering": {
+        "bytes": 478,
+        "sha256": "9bc63fc3cb57aa715ad46e0f89431e0fcbf63a32ca96b3d946d9187438a5d9cd"
+      }
+    },
+    "scripts/training_preparation/validation.py": {
+      "original": {
+        "bytes": 10451,
+        "sha256": "623b88797eed4352d70640c07a91bd81d44972438209f164afad5d0142901963"
+      },
+      "engineering": {
+        "bytes": 343,
+        "sha256": "711c61ebbe414d12aca65e1270f35dfc4b166b043cbf663ef8e5a5a32857e84f"
+      }
+    },
+    "docs/product/stage-3/README.md": {
+      "original": {
+        "bytes": 13046,
+        "sha256": "2bfefaed8ba0437e12548ec25049820e7a0e665dd79e63182d3954db15792f12"
+      },
+      "engineering": {
+        "bytes": 6905,
+        "sha256": "f62247001f959779b46573878dea81d433e93929d3305e27960f795c78562d00"
+      }
+    }
+  }
+}

@@ -9,11 +9,19 @@ from typing import Any
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from scripts.model_assessment.policy import proposed_calendar, require_development, utility
-from scripts.model_evaluation.availability import availability_transition
-from scripts.model_evaluation.contract import ModelEvaluationError
-from scripts.model_evaluation.decision_policy import load_decision_policy
-from scripts.model_training.metrics import false_alarm_ratio_metric, onset_sensitivity_metric
+from sat_dengue.datasets.legacy_evaluation.model_assessment.policy import (
+    proposed_calendar,
+    require_development,
+    utility,
+)
+from sat_dengue.datasets.legacy_evaluation.model_evaluation.availability import (
+    availability_transition,
+)
+from sat_dengue.datasets.legacy_evaluation.model_evaluation.contract import ModelEvaluationError
+from sat_dengue.datasets.legacy_evaluation.model_evaluation.decision_policy import (
+    load_decision_policy,
+)
+from sat_dengue.metrics import false_alarm_ratio_metric, onset_sensitivity_metric
 
 
 def test_early_t2_origin_rejects_december_component() -> None:
@@ -80,7 +88,9 @@ def test_utility_uses_onsets_and_emitted_alerts_with_fixed_knobs() -> None:
 @pytest.mark.parametrize("change", ["none", "science", "code", "summary", "corrupt", "missing"])
 def test_reexecution_requires_exact_audited_science(tmp_path: Path, change: str) -> None:
     """Accept new provenance only; do not bless altered science or missing anchors."""
-    from scripts.model_assessment.input_validation import verify_equivalent_input
+    from sat_dengue.datasets.legacy_evaluation.model_assessment.input_validation import (
+        verify_equivalent_input,
+    )
 
     def write_bundle(name: str, *, updated: bool) -> Path:
         bundle = tmp_path / name
@@ -136,7 +146,7 @@ def test_reexecution_requires_exact_audited_science(tmp_path: Path, change: str)
 @pytest.mark.parametrize("scores", [[0.1, 0.4, 0.4, 0.8], [0.9, 0.3, 0.2, 0.7]])
 def test_auroc_matches_independent_pairwise_reference(scores: list[float]) -> None:
     """Positive/negative pairs give ties half-credit, independently of sklearn."""
-    from scripts.evaluation_metrics import auroc_metric
+    from sat_dengue.metrics import auroc_metric
 
     y = pd.Series([0, 1, 0, 1], dtype="Int64")
     score = pd.Series(scores)
@@ -150,7 +160,7 @@ def test_auroc_matches_independent_pairwise_reference(scores: list[float]) -> No
 
 def test_auroc_preserves_population_and_alignment_policy() -> None:
     """Single-class/missing populations stay unavailable; invalid alignment rejects."""
-    from scripts.evaluation_metrics import auroc_metric
+    from sat_dengue.metrics import auroc_metric
 
     score = pd.Series([0.1, 0.9])
     result = auroc_metric(pd.Series([1, 1]), score)
@@ -166,7 +176,7 @@ def test_auroc_preserves_population_and_alignment_policy() -> None:
 
 def test_auroc_equal_window_mean_never_discards_unavailable_window() -> None:
     """Window means require all four windows and cannot silently shrink coverage."""
-    from scripts.model_assessment.comparison import summarize
+    from sat_dengue.datasets.legacy_evaluation.model_assessment.comparison import summarize
 
     records = [
         dict(
@@ -203,8 +213,11 @@ def test_auroc_equal_window_mean_never_discards_unavailable_window() -> None:
 
 def test_six_proposals_retain_every_family_and_early_t2_origin(tmp_path: Path) -> None:
     """Six combinations survive without utility screening or final training."""
-    from scripts.model_assessment.proposal import FAMILIES, freeze_proposal
-    from scripts.model_evaluation.availability import ROLES
+    from sat_dengue.datasets.legacy_evaluation.model_assessment.proposal import (
+        FAMILIES,
+        freeze_proposal,
+    )
+    from sat_dengue.datasets.legacy_evaluation.model_evaluation.availability import ROLES
 
     calibrators: list[dict[str, Any]] = []
     thresholds: list[dict[str, Any]] = []

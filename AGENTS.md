@@ -47,9 +47,10 @@ Authoritative references:
 |---|---|
 | Branch status | `git status --short --branch` |
 | DWP conformance | `bash .agents/skills/deepworkplan/verify/conformance.sh` |
-| Ruff lint (tests) | `ruff check tests` |
-| Ruff format check (tests) | `ruff format --check tests` |
-| mypy (tests) | `mypy tests` |
+| Official scientific E2E | `kedro run --pipeline=replay` |
+| Ruff lint | `python -m ruff check src tests` |
+| Ruff format | `python -m ruff format --check src tests` |
+| Types | `python -m mypy src tests` |
 | pytest unit tests | `pytest tests/unit -v` |
 | PITAGORAS runtime/config scan | `grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp --exclude-dir=.github --include='*.py' --include='*.json' --include='*.toml' --include='*.sh' || true` |
 | Secret pattern scan | `grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . --exclude-dir=.git --exclude=skills-lock.json || true` |
@@ -92,3 +93,11 @@ Escalate for human decision when:
 
 - Runtime plan state is local in `.dwp/` (except tracked `.dwp/config.json`).
 - Disposable artifacts belong in `tmp/`.
+
+
+Current scientific execution is Kedro; notebooks are frozen historical identity
+evidence. Use the migration/testing owners for restart, optional tracking, base
+versus modeling/tracking extras, maintained-script checks and required private parity.
+Run DWP writers/gates/projections/renders sequentially. No real adjustment or new
+scientific approval follows from replay. Retire a path only through its resolved
+disposition and verified original/current correspondence; preserve all pinned tools.

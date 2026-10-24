@@ -13,7 +13,7 @@ Independent review records severity, concrete references and resolution notes. H
 
 ## Current evidence navigation
 
-Use the [master plan](../roadmap/master-plan.md) for progress and human gate status, the [preparation validation report](../product/stage-3/milestone-3-validation.md) for implemented pipeline evidence, and the [2026-10-20 harness audit](harness-documentation-audit-2026-10-20.md) for documentation changes and checks. Revalidate affected surfaces after edits; an earlier PASS is not a current test result.
+Current execution uses `kedro run --pipeline=replay`; notebooks are frozen historical evidence. The [migration owner](kedro-migration.md#current-cleanup-and-execution--session-8) owns exact recovery identities, restart and separate original/current preservation. Use the [master plan](../roadmap/master-plan.md) for progress and human gate status, the [preparation validation report](../product/stage-3/milestone-3-validation.md) for implemented pipeline evidence, and the [2026-10-20 harness audit](harness-documentation-audit-2026-10-20.md) for documentation changes and checks. Revalidate affected surfaces after edits; an earlier PASS is not a current test result.
 
 The record below is historical. Its references to a current notebook, recognition report, open PR or then-active Stage describe 2026-10-16 and must not be used to resurrect the retired EDA or overwrite later decisions. Its original limitations are preserved.
 

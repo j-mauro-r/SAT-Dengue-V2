@@ -1,0 +1,27 @@
+{
+  "schema": "kedro-data-migration-identities-v1",
+  "original_revision": "f837c9fa27dd2244307786156895794fc3158434",
+  "baseline_sha256": "d86338cd34dcde884e2be9d102271969d0f3b52f57b8ffdebd1829771977a5b3",
+  "files": {
+    "scripts/stage2_consolidated_dataset_pipeline.py": {
+      "original": {
+        "bytes": 85188,
+        "sha256": "749074cca6b6a9c79953a13153265c4da894223d5b79f3af61d00c7327a9bbde"
+      },
+      "engineering": {
+        "bytes": 332,
+        "sha256": "d1cadfebfdc593b06e6381f693b3289d2c42961059cc744795e031097c8385da"
+      }
+    },
+    "scripts/validate_stage2_training_readiness.py": {
+      "original": {
+        "bytes": 96887,
+        "sha256": "5c6397b3999f1f26dd169659a73ae3fd36cd5a9bdb6b20a5419edf230e297ddd"
+      },
+      "engineering": {
+        "bytes": 328,
+        "sha256": "99595441e56190b11264722ed4908d1bbd080b3acd5f170afcc0844e42cf0b78"
+      }
+    }
+  }
+}

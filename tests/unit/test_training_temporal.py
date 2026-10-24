@@ -11,24 +11,28 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from scripts.training_preparation.contract import CONTRACT_PATH, PreparationError, read_json
-from scripts.training_preparation.development import code_fingerprints, serialize_table
-from scripts.training_preparation.eligibility import policy_from_years
-from scripts.training_preparation.notebook_execution import extract_saved_summary
-from scripts.training_preparation.persistence import json_bytes
-from scripts.training_preparation.preprocessing import (
+from sat_dengue.datasets.legacy_preparation.contract import (
+    CONTRACT_PATH,
+    PreparationError,
+    read_json,
+)
+from sat_dengue.datasets.legacy_preparation.development import code_fingerprints, serialize_table
+from sat_dengue.datasets.legacy_preparation.eligibility import policy_from_years
+from sat_dengue.datasets.legacy_preparation.notebook_execution import extract_saved_summary
+from sat_dengue.datasets.legacy_preparation.persistence import json_bytes
+from sat_dengue.datasets.legacy_preparation.temporal import (
+    _window_payloads,
+    load_prepared_window,
+    select_window,
+)
+from sat_dengue.training_preparation.preprocessing import (
     MISSING,
     ZONES,
     PreparerSpec,
     fit_preparer,
     transform_predictors,
 )
-from scripts.training_preparation.temporal import (
-    _window_payloads,
-    load_prepared_window,
-    reference,
-    select_window,
-)
+from scripts import stage2_notebook_visual_assets as reference
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -258,7 +262,7 @@ def test_window_payloads_and_model_loader_roundtrip(
     )
     profiles = {"native": {"encoding": "native"}, "onehot": {"encoding": "onehot"}}
     payloads, metadata = _window_payloads(X, selected, "2018-12_t1", profiles)
-    from scripts.training_preparation.persistence import bytes_record
+    from sat_dengue.datasets.legacy_preparation.persistence import bytes_record
 
     manifest = {
         "windows": {"2018-12_t1": metadata},
@@ -371,3 +375,90 @@ def test_window_fitting_parameters_are_unchanged_when_validation_values_change(
         before["2018-12_t2_scaled_validation_matrix.csv"]
         != after["2018-12_t2_scaled_validation_matrix.csv"]
     )
+
+
+@pytest.mark.parametrize("fault", ["label", "origin", "reserved", "alignment", "order"])
+def test_preparation_partition_rejects_temporal_and_schema_drift(
+    temporal_history: pd.DataFrame, policy: dict[str, Any], fault: str
+) -> None:
+    from sat_dengue.training_preparation.workflow import validate_partition
+
+    selected = select_window(temporal_history, policy, "2018-12", 1).train.reset_index(drop=True)
+    X = pd.DataFrame({"municipality_code": selected.municipality_code, "value": 1.0})
+    columns = list(X)
+    if fault == "label":
+        selected.loc[0, "target_period_t1"] = "2019-01"
+    elif fault == "origin":
+        selected.loc[0, "year_month"] = "2019-01"
+    elif fault == "reserved":
+        selected.loc[0, "year_month"] = "2025-01"
+    elif fault == "alignment":
+        X = X.iloc[:-1]
+    else:
+        X = X[columns[::-1]]
+    with pytest.raises(PreparationError):
+        validate_partition(X, selected, columns, 1, "2018-12", "2018-12", "train")
+
+
+@pytest.mark.parametrize("split", ["validation", "test", "2025"])
+def test_preparation_fit_refuses_nontraining_roles(X_train: pd.DataFrame, split: str) -> None:
+    from sat_dengue.training_preparation.workflow import fit_training_partition
+
+    keys = pd.DataFrame(
+        {
+            "municipality_code": X_train.municipality_code,
+            "year_month": ["2018-10"] * len(X_train),
+            "target_period_t1": ["2018-11"] * len(X_train),
+        }
+    )
+    with pytest.raises(PreparationError):
+        fit_training_partition(X_train, keys, PreparerSpec(), list(X_train), 1, "2018-12", split)
+
+
+def test_preparation_saved_state_rejects_incompatible_category_schema(
+    X_train: pd.DataFrame,
+) -> None:
+    from sat_dengue.training_preparation.workflow import validate_saved_state
+
+    state = fit_preparer(X_train, PreparerSpec())
+    validate_saved_state(X_train, state, list(X_train))
+    state["categories"]["zona_canal_t"] = list(reversed(state["categories"]["zona_canal_t"]))
+    with pytest.raises(PreparationError, match="categor"):
+        validate_saved_state(X_train, state, list(X_train))
+
+
+def test_preparation_synthetic_fit_transform_train_only(X_train: pd.DataFrame) -> None:
+    from sat_dengue.training_preparation.workflow import fit_training_partition
+
+    keys = pd.DataFrame(
+        {
+            "municipality_code": X_train.municipality_code,
+            "year_month": ["2018-08", "2018-08", "2018-09", "2018-09"],
+            "target_period_t1": ["2018-09", "2018-09", "2018-10", "2018-10"],
+        }
+    )
+    state = fit_training_partition(
+        X_train,
+        keys,
+        PreparerSpec(numeric_scaling="standard"),
+        list(X_train),
+        1,
+        "2018-12",
+        "train",
+    )
+    before = copy.deepcopy(state)
+    validation = X_train.copy()
+    validation["dengue_notifications_count"] = 1000000
+    transform_predictors(validation, state)
+    assert state == before
+    assert state["statistics"]["dengue_notifications_count"]["mean"] == 3.0
+
+
+def test_preparation_transform_rejects_categorical_dtype_schema(X_train: pd.DataFrame) -> None:
+    state = fit_preparer(X_train, PreparerSpec())
+    categorical = transform_predictors(X_train, state)
+    categorical["zona_canal_t"] = categorical.zona_canal_t.cat.reorder_categories(
+        list(reversed(state["categories"]["zona_canal_t"]))
+    )
+    with pytest.raises(PreparationError, match="categorical schema"):
+        transform_predictors(categorical, state)
