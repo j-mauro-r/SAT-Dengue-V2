@@ -17,7 +17,7 @@ from urllib.parse import quote
 
 from sat_dengue.configuration import AUTHORITIES, canonical_bytes
 
-from .experiments import resolve_experiment
+from .experiments import MLFLOW_EXPERIMENT_NAME, resolve_experiment
 from .lineage import AGGREGATES, COUNTERS, verified_lineage
 
 PARAMETERS = {
@@ -144,12 +144,12 @@ class LocalTracking:
                 os.environ.pop("_MLFLOW_SERVER_ARTIFACT_ROOT", None)
             else:
                 os.environ["_MLFLOW_SERVER_ARTIFACT_ROOT"] = previous_root
-        experiment = self.client.get_experiment_by_name("sat-dengue-bounded-v1")
+        experiment = self.client.get_experiment_by_name(MLFLOW_EXPERIMENT_NAME)
         self.experiment = (
             experiment.experiment_id
             if experiment
             else self.client.create_experiment(
-                "sat-dengue-bounded-v1", artifact_location=artifact_location
+                MLFLOW_EXPERIMENT_NAME, artifact_location=artifact_location
             )
         )
         expected_location = artifact_location

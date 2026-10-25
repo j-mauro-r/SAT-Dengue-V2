@@ -8,9 +8,9 @@ conclusions.
 ## Rules
 
 1. Register the experiment before its first scientific execution.
-2. Freeze `protocol.json` before fitting, calibration, threshold selection or
-   evaluation. Later changes require a new protocol version and an explicit
-   reason; never rewrite the protocol that produced an existing run.
+2. Freeze `protocol.json` before the first formal execution. It is immutable
+   afterward. Later changes require a new registered experiment/protocol version
+   and an explicit reason; never rewrite a protocol that produced a formal run.
 3. Use the same `experiment_id`, `experiment_slug` and `hypothesis_id` in the
    registry, protocol, Kedro configuration, MLflow and conclusions.
 4. Store only aggregate, allowlisted metadata in MLflow. Native scientific
@@ -37,7 +37,21 @@ paths, parent traversal and symlinks are rejected. Register the matching pipelin
 experiment slug, hypothesis and experiment type. Add each new directory to the live
 `directories` list in `docs/operations/repository-disposition.json`, preserving all
 historical file mappings and identities. Protocol identity fields and
-`mlflow.required_conceptual_tags` must agree with the registry.
+`mlflow.required_conceptual_tags` must agree with the registry. The `mlflow`
+object has exactly two fields: `experiment_name` and `required_conceptual_tags`.
+The name must equal the shared technical constant `MLFLOW_EXPERIMENT_NAME`
+(`sat-dengue-bounded-v1`) used by the resolver and tracker; CLI cannot override it.
+Unknown fields, missing fields and other container names are rejected.
+
+Mutable registration state belongs only in `experiment-registry.yml` under
+`mlflow_registration`. The actual run ID, registration date, evidence and conclusion
+belong in `CONCLUSIONS.md`. Never modify the protocol to mark execution complete;
+registration status and implementation notes are not protocol fields.
+
+Before EXP00's first formal execution, the user authorized removal of its mutable
+registration status and obsolete implementation note in PLAN_032. The expected
+hash was recalculated with `sat_dengue.configuration.canonical_bytes`; scientific
+content and all conceptual tags are unchanged. Formal registration remains pending.
 
 Compute `protocol_sha256` from UTF-8 JSON with sorted keys, compact separators,
 Unicode preserved, finite numbers only and one trailing newline. Store that SHA-256

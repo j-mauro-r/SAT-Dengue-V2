@@ -50,5 +50,9 @@ has been assigned. `mlflow_registration: pending` remains the registry state.
 2. Verify the returned parent/children, protocol hash, bundle and zero real-adjustment counters.
 3. Record the actual MLflow run ID, bundle ID, commit and registration date here.
 
-The historical protocol's implementation note records the pre-implementation state;
-its bytes remain frozen. This status update does not change the historical evidence.
+Before the first formal registration, PLAN_032 removes the mutable registration
+status and obsolete implementation note from the protocol, as explicitly authorized
+by the user. The registry contains the updated canonical hash and remains pending.
+After first formal execution, the protocol is immutable: add the actual run ID,
+date and conclusion here, and update `mlflow_registration` in the registry only.
+Scientific content, conceptual tags and historical results are unchanged.

@@ -23,6 +23,7 @@ from sat_dengue.datasets.stage2 import PublishedConfigurationDataset
 from sat_dengue.hooks import TrackingHooks
 from sat_dengue.pipeline_registry import register_pipelines
 from sat_dengue.tracking.artifacts import register_local_artifacts
+from sat_dengue.tracking.experiments import MLFLOW_EXPERIMENT_NAME
 from sat_dengue.tracking.lineage import verified_lineage
 from sat_dengue.tracking.local import LocalTracking, allowed_parameters
 
@@ -519,6 +520,7 @@ def test_registered_parent_children_names_counters_and_duplicate_isolation(
     store = str((repo_tmp_path / "registered").relative_to(ROOT))
     first = LocalTracking("evaluation_synthetic", "first", store, experiment_id="EXP91")
     first.finish(publication)
+    assert first.client.get_experiment(first.experiment).name == MLFLOW_EXPERIMENT_NAME
     tags = resolve_experiment("EXP91")
     runs = first.client.search_runs([first.experiment])
     assert len(runs) == 7

@@ -146,3 +146,84 @@ def test_duplicate_document_keys(registry: dict[str, Any]) -> None:
     REGISTRY.write_text(REGISTRY.read_text() + '\nversion: "1.0.0"\n')
     with pytest.raises(ValueError, match="Duplicate"):
         resolve_experiment("EXP00")
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "different_name",
+        "missing_name",
+        "missing_tags",
+        "extra_key",
+        "registration_status",
+        "implementation_note",
+    ],
+)
+def test_protocol_mlflow_schema_and_container_are_closed(
+    registry: dict[str, Any], mutation: str
+) -> None:
+    entry = registry["experiments"][0]
+    path = Path(entry["protocol"])
+    protocol = json.loads(path.read_text())
+    mlflow = protocol["mlflow"]
+    if mutation == "different_name":
+        mlflow["experiment_name"] = "another-container"
+    elif mutation == "missing_name":
+        del mlflow["experiment_name"]
+    elif mutation == "missing_tags":
+        del mlflow["required_conceptual_tags"]
+    else:
+        mlflow[mutation] = "unapproved"
+    path.write_bytes(canonical_bytes(protocol))
+    entry["protocol_sha256"] = hashlib.sha256(canonical_bytes(protocol)).hexdigest()
+    save(registry)
+    with pytest.raises(ValueError, match="MLflow"):
+        resolve_experiment("EXP00")
+
+
+def test_baseline_protocol_keeps_only_stable_mlflow_fields_and_tags() -> None:
+    from sat_dengue.tracking.experiments import MLFLOW_EXPERIMENT_NAME
+
+    registry = yaml.safe_load(REGISTRY.read_text())
+    entry = registry["experiments"][0]
+    protocol = json.loads(Path(entry["protocol"]).read_text())
+    assert set(protocol["mlflow"]) == {"experiment_name", "required_conceptual_tags"}
+    assert protocol["mlflow"]["experiment_name"] == MLFLOW_EXPERIMENT_NAME
+    assert entry["mlflow_registration"] == "pending"
+    expected = {
+        "experiment_id": "EXP00",
+        "experiment_slug": "historical_pre_kedro_baseline",
+        "hypothesis_id": "EXP00-H0",
+        "objective_slug": "register_pre_kedro_baseline",
+        "experiment_type": "baseline_replay",
+        "target_definition": "excess_with_onset_evaluation",
+    }
+    assert protocol["mlflow"]["required_conceptual_tags"] == expected
+    assert resolve_experiment("EXP00") == {
+        **expected,
+        "pipeline": "replay",
+        "protocol_sha256": entry["protocol_sha256"],
+    }
+    with pytest.raises(ValueError, match="Only operational"):
+        validate_parameters(
+            {
+                "profile": "foundation",
+                "tracking": "disabled",
+                "experiment_name": MLFLOW_EXPERIMENT_NAME,
+            }
+        )
+
+
+def test_yaml_is_a_direct_pinned_base_dependency() -> None:
+    import importlib.metadata
+    import tomllib
+
+    from packaging.requirements import Requirement
+
+    dependencies = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["dependencies"]
+    yaml_requirements = [
+        Requirement(value) for value in dependencies if Requirement(value).name.lower() == "pyyaml"
+    ]
+    assert len(yaml_requirements) == 1
+    assert str(yaml_requirements[0].specifier) == "==6.0.3"
+    assert importlib.metadata.version("PyYAML") == "6.0.3"

@@ -614,7 +614,7 @@ after snapshot publication; their scientific behavior remains unimplemented here
 `pyproject.toml` is the single declaration authority. `requirements-modeling.txt`
 selects `.[modeling]`; `requirements-dev.txt` selects all validation extras and the
 generated constraints. Direct pins include Python 3.12 support, Kedro 1.7.0,
-kedro-datasets 9.6.0, optional MLflow 3.17.2, NumPy 2.5.4, pandas 3.0.6,
+kedro-datasets 9.6.0, PyYAML 6.0.3, optional MLflow 3.17.2, NumPy 2.5.4, pandas 3.0.6,
 SciPy 1.18.1, scikit-learn 1.7.2, XGBoost 3.0.5, LightGBM 4.7.0,
 threadpoolctl 3.7.0 and Narwhals 2.27.1. The original user environment and both
 preserved 4.6/4.7 reference environments remain untouched.
@@ -642,6 +642,13 @@ constraints through a clean install. Update the engineering metadata ledger and
 re-run acceptance. Do not hand-maintain divergent requirements pins. The observed
 constraints target Python 3.12.11/macOS arm64; Linux CI resolves the canonical
 direct pins and still requires its own platform/native validation.
+
+PyYAML is a direct base dependency because the experiment registry resolver imports
+`yaml`. PLAN_032 promotes the already-resolved 6.0.3 version to a direct pin without
+changing its version or any other resolved version. The official exporter updates
+the pyproject authority hash; the requirements entrypoints continue deriving all
+pins from pyproject and generated constraints. The current engineering fingerprint
+is updated separately from immutable original metadata.
 
 The wheel contains the package only. Run from the repository root with external
 `conf/base` and scientific JSON files available; standalone wheel installation

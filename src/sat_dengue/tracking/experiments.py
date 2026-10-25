@@ -12,6 +12,8 @@ import yaml  # type: ignore[import-untyped]
 
 from sat_dengue.configuration import canonical_bytes
 
+MLFLOW_EXPERIMENT_NAME = "sat-dengue-bounded-v1"
+
 REGISTRY = Path("docs/product/experiments/experiment-registry.yml")
 TAG_PATTERNS = {
     "experiment_id": r"EXP[0-9]{2,6}",
@@ -144,7 +146,12 @@ def resolve_experiment(experiment_id: str) -> dict[str, str]:
             protocol.get("execution"), dict
         ):
             raise ValueError("Invalid protocol tracking/execution schema")
-        tags = conceptual_tags(protocol["mlflow"].get("required_conceptual_tags"))
+        mlflow = protocol["mlflow"]
+        if set(mlflow) != {"experiment_name", "required_conceptual_tags"}:
+            raise ValueError("Invalid protocol MLflow schema")
+        if mlflow["experiment_name"] != MLFLOW_EXPERIMENT_NAME:
+            raise ValueError("Unapproved MLflow experiment container")
+        tags = conceptual_tags(mlflow["required_conceptual_tags"])
         if (
             any(
                 tags[k] != entry[k] or protocol.get(k) != entry[k]

@@ -53,7 +53,6 @@
   },
   "mlflow": {
     "experiment_name": "sat-dengue-bounded-v1",
-    "registration_status": "pending",
     "required_conceptual_tags": {
       "experiment_id": "EXP00",
       "experiment_slug": "historical_pre_kedro_baseline",
@@ -61,8 +60,7 @@
       "objective_slug": "register_pre_kedro_baseline",
       "experiment_type": "baseline_replay",
       "target_definition": "excess_with_onset_evaluation"
-    },
-    "implementation_note": "The current tracker does not yet allowlist all conceptual tags. Add and test them only after explicit approval."
+    }
   },
   "interpretation_boundary": "Formal replay registration preserves the historical negative scientific result. It does not create a champion, approve G5 or make 2025 reusable for scientific adjustment."
 }

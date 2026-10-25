@@ -9,7 +9,7 @@ experiments:
     experiment_type: baseline_replay
     pipeline: replay
     protocol: docs/product/experiments/EXP00_historical_baseline/protocol.json
-    protocol_sha256: b52fb9da15b8a20405e7a23fd7a0989c95ecac2186c179d8571cf2744738cee2
+    protocol_sha256: 4f8e32d8c70ba1661b84efca3cb1cc25288335bbceb2508cec970231756b920b
     conclusions: docs/product/experiments/EXP00_historical_baseline/CONCLUSIONS.md
     scientific_result: does_not_meet
     scientific_gate: NOT_APPROVED

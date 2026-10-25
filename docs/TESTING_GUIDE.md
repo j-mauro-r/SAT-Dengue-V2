@@ -665,3 +665,24 @@ The formal EXP00 replay is a pending manual final check, not a claimed pass.
 Report global historical DWP failures separately. Runtime setup remains owned by
 [the migration guide](operations/kedro-migration.md); experiment registration and
 the later manual command are owned by [the registry guide](product/experiments/README.md).
+
+
+## EXP00 tracking audit corrections
+
+The protocol MLflow object must contain exactly `experiment_name` and
+`required_conceptual_tags`. The registry resolver and local tracker share the fixed
+container constant; mutable registration status and implementation notes are
+rejected. `test_experiment_registry.py` covers correct/missing/different names,
+extra fields, unchanged conceptual tags and the direct PyYAML base pin.
+`test_mlflow_tracking.py` checks that the actual MLflow container uses the constant.
+
+For PLAN_032, run the focused registry/tracking suites, then the complete
+unit/contracts/tracking selection and standard Python/documentation gates above.
+Use the official constraints exporter after a clean full-extras install. Build a
+wheel with `python -m pip wheel --no-deps .`, then install that wheel with its base
+dependencies in a fresh repository-local virtual environment using the generated
+constraints. Run `pip check` and, outside source import paths (`python -I`), verify
+`import sat_dengue.tracking.experiments`, its installed module location, PyYAML's
+pinned version and its direct `Requires-Dist` metadata. Confirm optional MLflow and
+modeling packages remain absent. Run only `foundation` for a Kedro startup smoke.
+Do not execute real replay, its excluded E2E test or replay-dependent private suites.
