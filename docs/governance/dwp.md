@@ -28,7 +28,17 @@ Pinned installation references (historical, not instructions to reinstall):
 
 The [master plan](../roadmap/master-plan.md) owns current progress; this document owns the planning policy and installation baseline. Installation PASS does not imply current all-plan conformity or G0 approval. [Validation operations](../operations/validation-and-evidence.md) separates current checks from historical audit outcomes.
 
-Use `conformance.sh --repo-only` to check the harness, `--plan <path>` for the bounded plan, and the default invocation for the repository plus all local plans. Run the full required gate before merge and disclose legacy failures separately; never rewrite historical journals to turn them green. No new plan is needed merely to refresh a status paragraph or merge duplicate prose.
+Use `conformance.sh --repo-only` to check the harness, `--plan <path>` for the bounded plan, and the default invocation for the repository plus all local plans. Run the proportional gate selected by [the testing guide](../TESTING_GUIDE.md) before merge and disclose legacy failures separately; never rewrite historical journals to turn them green. No new plan is needed merely to refresh a status paragraph or merge duplicate prose.
+
+## Gate evidence reuse
+
+Plan task gates must be ordered from focused and cheap to broad and expensive. After a broad
+gate passes at a specific commit and environment, do not rerun a narrower subset already
+subsumed by that evidence. Reuse the recorded result unless relevant code, configuration or
+the environment changed; the prior run failed or was interrupted; or the narrower command
+exercises a genuinely different boundary. Record the reason before any exception. This rule
+prevents post-suite repetition without allowing cached evidence to survive an
+evidence-sensitive change.
 
 No historical plan contract, journal or terminal result was rewritten to make these controls pass.
 

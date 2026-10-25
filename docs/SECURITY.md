@@ -68,3 +68,21 @@ are verified. Replay/checkpoint storage must be ignored relative repository-loca
 `tmp/`, without traversal or symlinks. Missing ancestry or changed source, contract,
 configuration, manifest, membership or payload identity cannot certify reuse. Final
 receipts point to immutable stage outputs; they do not duplicate private bundles.
+
+Registered scientific tracking additionally resolves `experiment_id` only through
+`docs/product/experiments/experiment-registry.yml`. It validates the closed registry,
+rejects duplicate keys/IDs, traversing/absolute/symlinked document paths, verifies
+the canonical protocol SHA-256, and projects only bounded conceptual identifiers
+and slugs. Protocol narrative and private source paths never become tracking tags.
+Real scientific tracking requires an ID and cannot accept synthetic publications.
+The selected identity is preserved across composed replay stage configurations.
+
+Each local store pins the protocol hash per scientific ID before creating its
+first run. Changing both protocol and registry cannot silently replace that pin;
+versioned experiments require a new registered ID. This protects a persistent
+store, not erased stores or edits by an administrator with direct database access.
+Reviewed Git history remains the cross-store record. Final duplicate lookup and
+success publication use an advisory local file lock; this does not authorize
+concurrent scientific replay writers. Retried registrations verify existing parent
+and child lineage and return the existing parent rather than publishing a second
+success. The lock requires POSIX `fcntl` (the supported local macOS/Linux runtimes).

@@ -52,6 +52,7 @@ def execute(
     *,
     enabled: bool = False,
     fail: bool = False,
+    experiment_id: str | None = None,
 ) -> tuple[Any, dict[str, Any], dict[str, Any]]:
     bootstrap_project(ROOT)
     monkeypatch.setenv("SAT_DENGUE_REPLAY_ROOT", str(folder.relative_to(ROOT)))
@@ -60,7 +61,11 @@ def execute(
     catalog = DataCatalog.from_config(CATALOG)
     catalog["configuration_inputs"] = MemoryDataset(inputs)
     catalog["parameters"] = MemoryDataset(
-        {"profile": "replay_synthetic", "tracking": "enabled" if enabled else "disabled"}
+        {
+            "profile": "replay_synthetic",
+            "tracking": "enabled" if enabled else "disabled",
+            **({"experiment_id": experiment_id} if experiment_id else {}),
+        }
     )
     hooks = TrackingHooks()
     hooks.before_pipeline_run(
@@ -96,7 +101,9 @@ def scientific_payloads(record: dict[str, Any]) -> dict[str, bytes]:
 
 
 def test_two_source_free_deterministic_runs_and_tracking(
-    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    repo_tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    synthetic_experiments: None,
 ) -> None:
     from sat_dengue.datasets import replay_identity
     from sat_dengue.datasets.stage2 import Stage2SourcesDataset
@@ -108,11 +115,25 @@ def test_two_source_free_deterministic_runs_and_tracking(
     monkeypatch.setattr(Stage2SourcesDataset, "load", forbidden)
     runs = []
     for label, enabled in (("off", False), ("on", True)):
-        tracker, record, _ = execute(repo_tmp_path / label, monkeypatch, enabled=enabled)
+        tracker, record, _ = execute(
+            repo_tmp_path / label,
+            monkeypatch,
+            enabled=enabled,
+            experiment_id="EXP93" if enabled else None,
+        )
         runs.append(scientific_payloads(record))
         assert set(record["stages"]) == set(STAGES)
         audit = json.loads((ROOT / record["path"] / "audit.json").read_text())
-        assert audit["synthetic_only"] and audit["real_model_fits"] == 0
+        assert audit["synthetic_only"]
+        assert all(
+            audit.get(counter, 0) == 0
+            for counter in (
+                "real_model_fits",
+                "real_preparer_refits",
+                "calibrator_fits",
+                "threshold_selection",
+            )
+        )
         assert audit["G5"] == "NOT_APPROVED" and audit["champion"] == "not_selected"
         # The final commit is lineage only; no duplicate native payload bundle.
         assert set(record["manifest"]["files"]) == {"audit.json", "lineage.json", "provenance.json"}
@@ -120,11 +141,17 @@ def test_two_source_free_deterministic_runs_and_tracking(
             observed = tracker.client.search_runs([tracker.experiment])
             assert len(observed) == 7 and all(r.info.status == "FINISHED" for r in observed)
             parent = tracker.client.get_run(tracker.parent)
+            assert parent.data.tags["experiment_id"] == "EXP93"
             assert (
                 parent.data.params["pipeline_identity_sha256"]
                 == record["manifest"]["context_sha256"]
             )
             assert "/Users/" not in json.dumps([r.data.params for r in observed])
+            snapshots = list((repo_tmp_path / label).glob("*/configuration/*/*/resolved.json"))
+            assert len(snapshots) >= 4
+            for snapshot in snapshots:
+                provenance = json.loads(snapshot.read_text())
+                assert provenance["operational"]["experiment_id"] == "EXP93"
         else:
             assert tracker is None and not (repo_tmp_path / label / "tracking").exists()
     assert runs[0] and runs[0] == runs[1]

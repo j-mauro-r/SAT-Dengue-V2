@@ -1,0 +1,18 @@
+schema: sat-dengue-experiment-registry-v1
+version: 1.0.0
+experiments:
+  - experiment_id: EXP00
+    experiment_slug: historical_pre_kedro_baseline
+    hypothesis_id: EXP00-H0
+    title: Historical pre-Kedro scientific baseline
+    objective: Register the last pre-Kedro training and evaluation result as the comparison baseline
+    experiment_type: baseline_replay
+    pipeline: replay
+    protocol: docs/product/experiments/EXP00_historical_baseline/protocol.json
+    protocol_sha256: 4f8e32d8c70ba1661b84efca3cb1cc25288335bbceb2508cec970231756b920b
+    conclusions: docs/product/experiments/EXP00_historical_baseline/CONCLUSIONS.md
+    scientific_result: does_not_meet
+    scientific_gate: NOT_APPROVED
+    champion: not_selected
+    mlflow_registration: pending
+    lifecycle_status: documented_pending_formal_tracking

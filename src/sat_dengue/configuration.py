@@ -1,4 +1,4 @@
-"""Pure configuration resolution; no framework, filesystem or scientific calculation."""
+"""Controlled configuration resolution; no framework or scientific calculation."""
 
 from __future__ import annotations
 
@@ -43,8 +43,14 @@ def canonical_bytes(value: Any) -> bytes:
 
 def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
     """Reject scientific overrides, unknown keys and unimplemented execution profiles."""
-    if set(value) != {"profile", "tracking"}:
-        raise ValueError("Only operational profile and tracking parameters are allowed")
+    if not {"profile", "tracking"} <= set(value) or set(value) - {
+        "profile",
+        "tracking",
+        "experiment_id",
+    }:
+        raise ValueError(
+            "Only operational profile, tracking and experiment_id parameters are allowed"
+        )
     if value["profile"] not in (
         "foundation",
         "data",
@@ -59,7 +65,18 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         raise ValueError(
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"
         )
-    return dict(value)
+    experiment_id = value.get("experiment_id")
+    if experiment_id is not None:
+        from sat_dengue.tracking.experiments import resolve_experiment
+
+        resolve_experiment(experiment_id)
+    elif value["tracking"] == "enabled" and value["profile"] in {
+        "replay",
+        "training_replay",
+        "evaluation_replay",
+    }:
+        raise ValueError("Real scientific tracking requires experiment_id")
+    return {k: v for k, v in value.items() if v is not None}
 
 
 def resolve_configuration(inputs: dict[str, Any], parameters: dict[str, Any]) -> dict[str, Any]:
