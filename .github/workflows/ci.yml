@@ -2,11 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: read
@@ -16,14 +14,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   repository-quality:
     name: Repository Quality
     runs-on: ubuntu-latest
-
+    outputs:
+      run_docs: ${{ steps.validation.outputs.run_docs }}
+      run_dwp: ${{ steps.validation.outputs.run_dwp }}
+      run_dashboard: ${{ steps.validation.outputs.run_dashboard }}
+      run_python_quality: ${{ steps.validation.outputs.run_python_quality }}
+      pytest_scope: ${{ steps.validation.outputs.pytest_scope }}
+      run_base_package: ${{ steps.validation.outputs.run_base_package }}
+      run_integration_smoke: ${{ steps.validation.outputs.run_integration_smoke }}
+      full_gate: ${{ steps.validation.outputs.full_gate }}
+      reason: ${{ steps.validation.outputs.reason }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Classify validation surface
+        id: validation
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          FORCE_FULL: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        run: |
+          arguments=(--base "$BASE_SHA" --head "$HEAD_SHA" --github-output "$GITHUB_OUTPUT")
+          if [[ "$FORCE_FULL" == "true" ]]; then
+            arguments+=(--force-full)
+          fi
+          python3 scripts/classify_validation_surface.py "${arguments[@]}"
+
+      - name: Report validation selection
+        env:
+          REASON: ${{ steps.validation.outputs.reason }}
+        run: echo "Validation selection — $REASON"
 
       - name: Verify repository structure
         run: |
@@ -36,13 +62,15 @@ jobs:
           test -f docs/roadmap/master-plan.md
 
       - name: DWP conformance
+        if: steps.validation.outputs.run_dwp == 'true'
         run: mkdir -p .dwp/plans && bash .agents/skills/deepworkplan/verify/conformance.sh
 
       - name: Documentation consistency inventory
+        if: steps.validation.outputs.run_docs == 'true'
         run: |
           find docs -type f -name '*.md' | sort
           python3 scripts/check_markdown_links.py
-          git diff --name-only -- docs AGENTS.md README.md .github || true
+          git diff --name-only -- docs AGENTS.md README.md .github
 
       - name: Check forbidden committed files
         run: |
@@ -76,21 +104,28 @@ jobs:
 
   dashboard:
     name: Dashboard
+    needs: repository-quality
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: apps/dashboard
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Explain skipped dashboard validation
+        if: needs.repository-quality.outputs.run_dashboard != 'true'
+        working-directory: .
+        run: echo "Dashboard validation skipped — ${{ needs.repository-quality.outputs.reason }}"
+
       - name: Setup Bun
+        if: needs.repository-quality.outputs.run_dashboard == 'true'
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.4"
 
       - name: Cache Bun downloads
+        if: needs.repository-quality.outputs.run_dashboard == 'true'
         uses: actions/cache@v4
         with:
           path: ~/.bun/install/cache
@@ -98,93 +133,170 @@ jobs:
           restore-keys: bun-${{ runner.os }}-
 
       - name: Install dependencies
+        if: needs.repository-quality.outputs.run_dashboard == 'true'
         run: bun install --frozen-lockfile
 
       - name: Lint
+        if: needs.repository-quality.outputs.run_dashboard == 'true'
         run: bun run lint
 
       - name: Test
+        if: needs.repository-quality.outputs.run_dashboard == 'true'
         run: bun run test
 
       - name: Build
+        if: needs.repository-quality.outputs.run_dashboard == 'true'
         run: bun run build
 
-  python-quality:
-    name: Python Quality
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Setup Python
+      - name: Setup Python for API-dashboard smoke
+        if: needs.repository-quality.outputs.run_integration_smoke == 'true'
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
 
-      - name: Install development dependencies
+      - name: Install API server dependencies
+        if: needs.repository-quality.outputs.run_integration_smoke == 'true'
+        working-directory: .
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[server]"
+
+      - name: Run real API-dashboard smoke
+        if: needs.repository-quality.outputs.run_integration_smoke == 'true'
+        working-directory: .
+        run: python scripts/dashboard_e2e_smoke.py
+
+  python-quality:
+    name: Python Quality
+    needs: repository-quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Explain skipped Python quality
+        if: needs.repository-quality.outputs.run_python_quality != 'true'
+        run: echo "Python quality skipped — ${{ needs.repository-quality.outputs.reason }}"
+
+      - name: Setup Python
+        if: needs.repository-quality.outputs.run_python_quality == 'true'
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install full development dependencies
+        if: needs.repository-quality.outputs.pytest_scope == 'full'
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev,modeling,tracking]"
 
-      - name: Ruff lint
+      - name: Install scoped API development dependencies
+        if: needs.repository-quality.outputs.pytest_scope == 'api'
         run: |
-          python -m ruff check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,server]"
 
-      - name: Ruff format
+      - name: Full Ruff lint
+        if: needs.repository-quality.outputs.pytest_scope == 'full'
         run: |
-          python -m ruff format --check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
+          python -m ruff check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/classify_validation_surface.py scripts/dashboard_e2e_smoke.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
-      - name: Type check
+      - name: Full Ruff format
+        if: needs.repository-quality.outputs.pytest_scope == 'full'
+        run: |
+          python -m ruff format --check src tests scripts/read_only_api scripts/check_markdown_links.py scripts/classify_validation_surface.py scripts/dashboard_e2e_smoke.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
+
+      - name: Full type check
+        if: needs.repository-quality.outputs.pytest_scope == 'full'
         env:
           MYPYPATH: src:tests/unit:tests/integration
         run: |
-          python -m mypy --explicit-package-bases src tests scripts/read_only_api scripts/check_markdown_links.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
+          python -m mypy --explicit-package-bases src tests scripts/read_only_api scripts/check_markdown_links.py scripts/classify_validation_surface.py scripts/dashboard_e2e_smoke.py scripts/export_kedro_constraints.py scripts/stage2_consolidated_dataset_pipeline.py scripts/validate_stage2_training_readiness.py scripts/stage2_notebook_visual_assets.py scripts/stage2_manifest_traceability.py scripts/validate_read_only_api_wheel.py
 
+      - name: Scoped API quality
+        if: needs.repository-quality.outputs.pytest_scope == 'api'
+        env:
+          MYPYPATH: src:tests/unit
+        run: |
+          python -m ruff check scripts/read_only_api scripts/dashboard_e2e_smoke.py tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+          python -m ruff format --check scripts/read_only_api scripts/dashboard_e2e_smoke.py tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
+          python -m mypy --explicit-package-bases scripts/read_only_api scripts/dashboard_e2e_smoke.py tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py
 
   unit-tests:
     name: Unit Tests
+    needs: repository-quality
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
+      - name: Explain skipped Python tests
+        if: needs.repository-quality.outputs.pytest_scope == 'none'
+        run: echo "Python tests skipped — ${{ needs.repository-quality.outputs.reason }}"
+
       - name: Setup Python
+        if: needs.repository-quality.outputs.pytest_scope != 'none'
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
 
-      - name: Install development dependencies
+      - name: Install full test dependencies
+        if: needs.repository-quality.outputs.pytest_scope == 'full'
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev,modeling,tracking]"
 
+      - name: Install scoped API test dependencies
+        if: needs.repository-quality.outputs.pytest_scope == 'api'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev,server]"
+
       - name: Run units, contracts including test_repository_disposition.py, and synthetic E2E
+        if: needs.repository-quality.outputs.pytest_scope == 'full'
         run: KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration/test_migration_parity.py tests/integration/test_mlflow_tracking.py tests/integration/test_kedro_e2e.py -v
+
+      - name: Run Stage 7 API contract tests
+        if: needs.repository-quality.outputs.pytest_scope == 'api'
+        run: pytest tests/unit/test_dashboard_query_service.py tests/unit/test_read_only_api_http.py tests/unit/test_read_only_api_contract.py -q
 
   base-package:
     name: Base wheel without optional dependencies
+    needs: repository-quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+
+      - name: Explain skipped base package validation
+        if: needs.repository-quality.outputs.run_base_package != 'true'
+        run: echo "Base package validation skipped — ${{ needs.repository-quality.outputs.reason }}"
+
+      - name: Setup Python
+        if: needs.repository-quality.outputs.run_base_package == 'true'
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+
       - name: Build and install base wheel
+        if: needs.repository-quality.outputs.run_base_package == 'true'
         run: |
           python -m pip wheel --no-deps . -w tmp/ci-wheels
           python -m pip install tmp/ci-wheels/*.whl
           python -m pip check
+
       - name: Verify optional roots absent and run base bootstrap
+        if: needs.repository-quality.outputs.run_base_package == 'true'
         env:
           KEDRO_DISABLE_TELEMETRY: "yes"
         run: |
           python -c "import importlib.util; assert all(importlib.util.find_spec(n) is None for n in ('sklearn','lightgbm','xgboost','scipy','threadpoolctl','narwhals','mlflow'))"
           python tests/integration/base_bootstrap.py
+
       - name: Verify installed read-only API wheel
+        if: needs.repository-quality.outputs.run_base_package == 'true'
         run: python scripts/validate_read_only_api_wheel.py tmp/ci-wheels/*.whl

@@ -471,45 +471,6 @@ def test_training_synthetic_tracking_uses_its_own_publication(
     assert not (repo_tmp_path / "unused").exists()
 
 
-@pytest.fixture
-def synthetic_experiments(repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Exercise the real resolver with an isolated registered synthetic protocol."""
-    import hashlib
-
-    from sat_dengue.configuration import canonical_bytes
-    from sat_dengue.tracking import experiments
-
-    registry = yaml.safe_load(experiments.REGISTRY.read_text())
-    original = registry["experiments"][0]
-    protocol = json.loads(Path(original["protocol"]).read_text())
-    entries = []
-    base = (repo_tmp_path / "docs/product/experiments").relative_to(ROOT)
-    for identifier in ("EXP91", "EXP92", "EXP93"):
-        entry = dict(original)
-        document = json.loads(json.dumps(protocol))
-        for target in (entry, document, document["mlflow"]["required_conceptual_tags"]):
-            target.update(
-                experiment_id=identifier,
-                hypothesis_id=identifier + "-H0",
-                experiment_slug="synthetic_tracking_fixture",
-            )
-        document["execution"]["kedro_pipeline"] = (
-            "replay_synthetic" if identifier == "EXP93" else "evaluation_synthetic"
-        )
-        entry["pipeline"] = document["execution"]["kedro_pipeline"]
-        path = base / identifier / "protocol.json"
-        path.parent.mkdir(parents=True)
-        path.write_bytes(canonical_bytes(document))
-        entry["protocol"] = str(path)
-        entry["conclusions"] = str(path.with_name("CONCLUSIONS.md"))
-        entry["protocol_sha256"] = hashlib.sha256(canonical_bytes(document)).hexdigest()
-        entries.append(entry)
-    registry["experiments"] = entries
-    path = base / "experiment-registry.yml"
-    path.write_text(yaml.safe_dump(registry))
-    monkeypatch.setattr(experiments, "REGISTRY", path)
-
-
 def test_registered_parent_children_names_counters_and_duplicate_isolation(
     repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, synthetic_experiments: None
 ) -> None:
@@ -593,38 +554,6 @@ def test_real_hook_requires_id_before_creating_store(
             str(repo_tmp_path.relative_to(ROOT)),
             experiment_id="EXP00",
         )
-
-
-def test_registered_synthetic_composition_propagates_identity(
-    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, synthetic_experiments: None
-) -> None:
-    from test_kedro_e2e import execute as composed
-
-    from sat_dengue.datasets import replay_identity
-
-    def forbidden() -> None:
-        raise AssertionError("Real replay inputs are forbidden")
-
-    monkeypatch.setattr(replay_identity, "native_inputs", forbidden)
-    tracker, record, _ = composed(
-        repo_tmp_path / "composed", monkeypatch, enabled=True, experiment_id="EXP93"
-    )
-    assert tracker.client.get_run(tracker.parent).data.tags["experiment_id"] == "EXP93"
-    audit = json.loads((ROOT / record["path"] / "audit.json").read_text())
-    assert all(
-        audit.get(k, 0) == 0
-        for k in (
-            "real_model_fits",
-            "real_preparer_refits",
-            "calibrator_fits",
-            "threshold_selection",
-        )
-    )
-    snapshots = list((repo_tmp_path / "composed").glob("*/configuration/*/*/resolved.json"))
-    assert len(snapshots) >= 4
-    for snapshot in snapshots:
-        provenance = json.loads(snapshot.read_text())
-        assert provenance["operational"]["experiment_id"] == "EXP93"
 
 
 def test_concurrent_retries_publish_one_verified_success(

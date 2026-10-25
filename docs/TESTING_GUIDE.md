@@ -2,7 +2,10 @@
 
 ## Validation Policy
 
-Validation is mapped by touched surface and reported using explicit evidence states.
+Validation is mapped by touched surface and reported using explicit evidence states. The
+goal is the smallest safe gate, not the fewest checks. Unknown paths, changes to the CI
+workflow or classifier, protected-branch pushes, and mixed changes whose ownership is
+ambiguous fail closed to the conservative gate.
 
 Evidence states:
 
@@ -11,43 +14,109 @@ Evidence states:
 - BLOCKED
 - UNVERIFIED
 
-## Foundation Gate Set
+## Proportional Gate Set
 
-### Prerequisite
+### Local classifier
 
-- `python -m pip install --upgrade pip && pip install -e ".[dev]"`
+Use the same deterministic classifier as CI:
 
-### Full gate (required before merge)
+```bash
+.venv/bin/python scripts/classify_validation_surface.py <changed-path> [<changed-path> ...]
+.venv/bin/python scripts/classify_validation_surface.py --base <base-revision> --head HEAD
+```
 
-- `bash .agents/skills/deepworkplan/verify/conformance.sh`
-- `ruff check src tests`
-- `ruff format --check src tests`
-- `mypy src tests`
-- `pytest tests/unit -v`
+The JSON result identifies the surfaces, selected pytest scope, and each CI job gate.
+Classification is by repository-relative path and is intentionally conservative for empty,
+malformed and unknown inputs.
 
-### Security and policy scans (required)
+### Validation matrix
 
-- PITAGORAS exclusion scan:
-  - `grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp --exclude-dir=.github --include='*.py' --include='*.json' --include='*.toml' --include='*.sh' || true`
-- Secret pattern scan:
-  - `grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . --exclude-dir=.git --exclude=skills-lock.json || true`
+| Changed surface | Required gates |
+|---|---|
+| Narrative documentation | Markdown links, repository structure and security scans; no Python dependency install and no pytest |
+| DWP or agent governance | Narrative-documentation gates plus repository/scoped-plan conformance as applicable |
+| Stage 7 API, service or contractual fixtures | Scoped Ruff/format/mypy, the three Stage 7 API test modules, base-wheel validation and API-dashboard smoke |
+| Dashboard only | `bun install --frozen-lockfile`, lint, test and build |
+| Dashboard client, adapter, proxy/config or shared API contract | Dashboard gates plus API-dashboard smoke |
+| Stage 2/3 data preparation | Full Python quality and the public CI pytest suite |
+| Models, metrics or calibration | Full Python quality and the public CI pytest suite |
+| Tracking or MLflow | Full Python quality and the public CI pytest suite |
+| Kedro configuration or shared graph | Conservative gate because producer/consumer reach is cross-surface |
+| Scientific contracts | Owning data/model gates; Stage 6 additionally runs API-dashboard smoke |
+| Packaging or shared dependencies | Full Python quality, public CI pytest suite, dashboard, base wheel and smoke |
+| CI workflow, classifier, protected `main` push, unclassified configuration, unknown or ambiguous path | Conservative gate: all five required jobs execute their full steps |
+
+Mixed known surfaces use the union of their gates. A mixed API plus dashboard change, for
+example, runs scoped API checks, dashboard checks, base-wheel validation and the smoke; it
+does not escalate to the complete public suite merely because two known surfaces changed.
+
+The required CI job names stay stable even when a surface is not selected. Each job emits an
+explicit skip explanation and succeeds without installing its runtime. The stable names are
+`Repository Quality`, `Dashboard`, `Python Quality`, `Unit Tests`, and
+`Base wheel without optional dependencies`.
+
+### When to run each gate
+
+1. **During implementation:** run classifier tests and the focused tests, lint, format and
+   types for the files being changed. These are feedback, not final evidence.
+2. **Before commit or handoff:** run the union selected by the matrix against the complete
+   candidate. Put cheap gates first and apply the no-repeat rule below.
+3. **PR CI:** `Repository Quality` classifies the merge-base diff; the other four stable jobs
+   either execute selected steps or report an explicit successful skip. Unknown and shared
+   paths always retain the conservative gate.
+4. **Stage close or release:** run the conservative gate at the release candidate, plus the
+   API-dashboard smoke when the Stage owns that boundary. Human scientific and merge gates
+   remain separate; passing tests never approves G5, a Champion or an adjustment.
+
+The scientific public suite retains temporal-leakage, reserved-block, artifact-integrity,
+G5/Champion, read-only API and no-fallback controls. The matrix changes frequency and scope;
+it does not delete or relax those assertions.
+
+### Full public Python gate
+
+When the matrix selects `pytest_scope=full`, use the installed complete synthetic environment
+(`.[dev,modeling,tracking]`) and run:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest \
+  tests/unit tests/contracts tests/integration/test_migration_parity.py \
+  tests/integration/test_mlflow_tracking.py tests/integration/test_kedro_e2e.py -v
+```
+
+This public suite deselects private migration evidence unless the human explicitly requests
+`--require-migration-evidence`. It never authorizes a real replay, model adjustment, notebook
+execution or scientific regeneration.
+
+### Security and policy scans
+
+CI treats every match as a failure. Local inspection may use the Quick Commands in
+`AGENTS.md`, but a report must not call the scan PASS merely because `|| true` masked a match.
+The effective shell shape is fail-closed:
+
+```bash
+if grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp \
+  --exclude-dir=.github --include='*.py' --include='*.json' \
+  --include='*.toml' --include='*.sh'; then exit 1; fi
+if grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' \
+  . --exclude-dir=.git --exclude=skills-lock.json; then exit 1; fi
+```
 
 ### Documentation consistency checks (required)
 
 - `python3 scripts/check_markdown_links.py`
 
-## Surface-to-Gate Mapping
-
-- `docs/**`, `AGENTS.md`, `.github/**` changes:
-  - run full gate set above.
-- `.agents/**` and DWP governance changes:
-  - full gate set + DWP conformance is mandatory.
-- Maintained Python source/tests changes:
-  - full gate set plus scope-specific tests as required.
-
 ## Escalation Rule
 
-If test mapping is ambiguous, run the full gate set.
+If path ownership or a mixed surface is ambiguous, use the classifier's conservative gate.
+Do not weaken a gate ad hoc in the workflow.
+
+## No-repeat rule for DWP execution
+
+Order cheap scoped gates before broader gates. Once a broader passing gate demonstrably
+subsumes a narrower command at the same commit and environment, reuse that evidence rather
+than rerunning the subset. Rerun only when the relevant code/configuration/environment changed,
+the prior run failed or was interrupted, or the narrower command validates a distinct runtime
+boundary such as the API-dashboard smoke. Record the reason for any rerun in the active plan.
 
 ## Stage 7 executable read-only API contract
 
@@ -66,7 +135,8 @@ explicit department resolution, exact enums, territorial membership and uniquene
 reference-to-target month coherence including year rollover, UUID/nullability rules,
 availability/alert coherence, G5 governance, result identity uniqueness, and T1/T2
 completeness. They do not start a server, access Kedro, train a model, execute inference,
-or select a Champion. Run the full foundation gate before merge.
+or select a Champion. Apply the matrix above; API changes select the scoped API gate, base
+wheel and smoke without automatically selecting model/tracking tests.
 
 Product Contract v1.1 additionally requires exact DANE/DIVIPOLA inventories of
 47 Tolima and 29 Meta municipalities, the closed `INELIGIBLE` unavailable shape,
@@ -91,8 +161,7 @@ The tests protect exact department-period retrieval, no fallback to another pers
 period, substitute repositories, read-only repeatability, both successful department
 responses, contracted 400/404/500 bodies, safe internal-error filtering, and OpenAPI
 without an uncontracted 422 response. They start no server and execute no Kedro,
-training, inference, model selection, or write flow. Run the full foundation gate before
-merge.
+training, inference, model selection, or write flow. Apply the matrix above.
 
 ## Stage 7 installable distribution and local startup
 
@@ -148,11 +217,12 @@ Scoped commands:
 Mapping rule:
 
 - Use scoped commands for fast local inspection.
-- Use the full gate set for merge readiness and any material change.
+- Use the classifier and matrix above for merge readiness; materiality alone does not erase
+  the surface boundary.
 
 Fallback rule:
 
-- When command mapping is uncertain, default to the full gate set.
+- When command mapping is uncertain, use the classifier's conservative gate.
 
 ## Stage 8 standalone dashboard subtree
 
@@ -184,8 +254,9 @@ It starts the ASGI factory and dashboard on free loopback ports, waits for both,
 and queries Tolima `73/2026-09`, Meta `50/2026-12`, and a contracted 404 through
 the dashboard origin and configurable proxy. It terminates both process groups
 on success or failure. Verify generated dependency/build paths remain ignored.
-Run the full foundation gate before merge because CI and the dashboard
-integration surface changed.
+The smoke runs in CI only when the classifier selects the integration surface or for a
+protected `main` push. Pure visual dashboard changes retain lint/test/build without starting
+the Python service.
 
 ## Stage 2 data integrity and retired experimental EDA
 
