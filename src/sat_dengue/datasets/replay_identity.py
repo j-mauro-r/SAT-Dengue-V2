@@ -10,7 +10,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from sat_dengue.configuration import canonical_bytes, resolve_configuration
+from sat_dengue.configuration import canonical_bytes, resolve_configuration, validate_parameters
 from sat_dengue.datasets.stage2 import identity, local_path
 from sat_dengue.datasets.training import require_modeling
 
@@ -158,6 +158,7 @@ def verify_publication(
                 or resolved["execution"] != stage_inputs(context, stage)["execution"]
                 or resolved["operational"]
                 != {
+                    **context["operational"],
                     "profile": {
                         "data": "data",
                         "preparation": "preparation",
@@ -197,6 +198,9 @@ def open_execution(
         "replay" if mode == "replay" else "replay_synthetic",
     }:
         raise ValueError("E2E pipeline/profile mismatch")
+    parameters = validate_parameters(
+        {**parameters, "profile": "replay" if mode == "replay" else "replay_synthetic"}
+    )
     # Retained script facades are executable dependencies of the native loaders.
     # Hash them as code too: a dirty Boolean cannot identify an adapter change.
     adapters = sorted(Path.cwd().joinpath("scripts").rglob("*.py"))
@@ -217,6 +221,7 @@ def open_execution(
     resolved = resolve_configuration(
         inputs,
         {
+            **parameters,
             "profile": "replay" if mode == "replay" else "replay_synthetic",
             "tracking": parameters["tracking"],
         },

@@ -52,6 +52,7 @@ def execute(
     *,
     enabled: bool = False,
     fail: bool = False,
+    experiment_id: str | None = None,
 ) -> tuple[Any, dict[str, Any], dict[str, Any]]:
     bootstrap_project(ROOT)
     monkeypatch.setenv("SAT_DENGUE_REPLAY_ROOT", str(folder.relative_to(ROOT)))
@@ -60,7 +61,11 @@ def execute(
     catalog = DataCatalog.from_config(CATALOG)
     catalog["configuration_inputs"] = MemoryDataset(inputs)
     catalog["parameters"] = MemoryDataset(
-        {"profile": "replay_synthetic", "tracking": "enabled" if enabled else "disabled"}
+        {
+            "profile": "replay_synthetic",
+            "tracking": "enabled" if enabled else "disabled",
+            **({"experiment_id": experiment_id} if experiment_id else {}),
+        }
     )
     hooks = TrackingHooks()
     hooks.before_pipeline_run(

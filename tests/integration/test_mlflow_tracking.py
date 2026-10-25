@@ -12,6 +12,7 @@ from typing import Any
 from uuid import uuid4
 
 import pytest
+import yaml  # type: ignore[import-untyped]
 from kedro.framework.hooks.manager import _create_hook_manager
 from kedro.io import DataCatalog, MemoryDataset
 from kedro.runner import SequentialRunner
@@ -423,7 +424,7 @@ class Missing(importlib.abc.MetaPathFinder):
 sys.meta_path.insert(0,Missing())
 from sat_dengue.hooks import TrackingHooks
 class Catalog:
- def load(self,n): return {'tracking':'disabled'}
+ def load(self,n): return {'profile':'foundation','tracking':'disabled'}
 h=TrackingHooks();h.before_pipeline_run({},Catalog())
 assert not any(n.split('.')[0]=='mlflow' for n in sys.modules)
 from sat_dengue.tracking.local import LocalTracking
@@ -467,3 +468,225 @@ def test_training_synthetic_tracking_uses_its_own_publication(
     runs = hooks.tracker.client.search_runs([hooks.tracker.experiment])
     assert len(runs) == 4 and all(r.info.status == "FINISHED" for r in runs)
     assert not (repo_tmp_path / "unused").exists()
+
+
+@pytest.fixture
+def synthetic_experiments(repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Exercise the real resolver with an isolated registered synthetic protocol."""
+    import hashlib
+
+    from sat_dengue.configuration import canonical_bytes
+    from sat_dengue.tracking import experiments
+
+    registry = yaml.safe_load(experiments.REGISTRY.read_text())
+    original = registry["experiments"][0]
+    protocol = json.loads(Path(original["protocol"]).read_text())
+    entries = []
+    base = (repo_tmp_path / "docs/product/experiments").relative_to(ROOT)
+    for identifier in ("EXP91", "EXP92", "EXP93"):
+        entry = dict(original)
+        document = json.loads(json.dumps(protocol))
+        for target in (entry, document, document["mlflow"]["required_conceptual_tags"]):
+            target.update(
+                experiment_id=identifier,
+                hypothesis_id=identifier + "-H0",
+                experiment_slug="synthetic_tracking_fixture",
+            )
+        document["execution"]["kedro_pipeline"] = (
+            "replay_synthetic" if identifier == "EXP93" else "evaluation_synthetic"
+        )
+        entry["pipeline"] = document["execution"]["kedro_pipeline"]
+        path = base / identifier / "protocol.json"
+        path.parent.mkdir(parents=True)
+        path.write_bytes(canonical_bytes(document))
+        entry["protocol"] = str(path)
+        entry["conclusions"] = str(path.with_name("CONCLUSIONS.md"))
+        entry["protocol_sha256"] = hashlib.sha256(canonical_bytes(document)).hexdigest()
+        entries.append(entry)
+    registry["experiments"] = entries
+    path = base / "experiment-registry.yml"
+    path.write_text(yaml.safe_dump(registry))
+    monkeypatch.setattr(experiments, "REGISTRY", path)
+
+
+def test_registered_parent_children_names_counters_and_duplicate_isolation(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, synthetic_experiments: None
+) -> None:
+    from sat_dengue.tracking.experiments import resolve_experiment
+    from sat_dengue.tracking.lineage import COUNTERS
+
+    _, publication = execute(repo_tmp_path / "native", monkeypatch, enabled=False)
+    store = str((repo_tmp_path / "registered").relative_to(ROOT))
+    first = LocalTracking("evaluation_synthetic", "first", store, experiment_id="EXP91")
+    first.finish(publication)
+    tags = resolve_experiment("EXP91")
+    runs = first.client.search_runs([first.experiment])
+    assert len(runs) == 7
+    for run in runs:
+        assert all(run.data.tags[k] == v for k, v in tags.items())
+        assert run.info.status == "FINISHED"
+        if run.info.run_id == first.parent:
+            assert run.data.tags["mlflow.runName"].startswith("EXP91:synthetic_tracking_fixture:")
+            assert all(run.data.metrics[k] == 0 for k in COUNTERS)
+            assert run.data.params["G5"] == "NOT_APPROVED"
+            assert run.data.params["champion"] == "not_selected"
+        else:
+            assert run.data.tags["mlflow.runName"].startswith(
+                "EXP91:" + run.data.params["family"] + ":t" + run.data.params["horizon"] + ":"
+            )
+    retry = LocalTracking("evaluation_synthetic", "retry", store, experiment_id="EXP91")
+    assert retry.finish(publication) == first.parent
+    assert retry.client.get_run(retry.parent).data.tags["duplicate_of"] == first.parent
+    other = LocalTracking("evaluation_synthetic", "other", store, experiment_id="EXP92")
+    assert other.finish(publication) == other.parent
+    assert other.parent != first.parent
+    assert (
+        len(
+            first.client.search_runs(
+                [first.experiment], filter_string="attributes.status = 'FINISHED'"
+            )
+        )
+        == 14
+    )
+
+
+def test_store_rejects_rewritten_protocol_even_if_registry_hash_updated(
+    repo_tmp_path: Path, synthetic_experiments: None
+) -> None:
+    import hashlib
+
+    from sat_dengue.configuration import canonical_bytes
+    from sat_dengue.tracking.experiments import REGISTRY
+
+    store = str((repo_tmp_path / "frozen").relative_to(ROOT))
+    first = LocalTracking("evaluation_synthetic", "first", store, experiment_id="EXP91")
+    first.fail()
+    registry = yaml.safe_load(REGISTRY.read_text())
+    entry = registry["experiments"][0]
+    path = Path(entry["protocol"])
+    document = json.loads(path.read_text())
+    document["objective"] = "Modified protocol content"
+    path.write_bytes(canonical_bytes(document))
+    entry["protocol_sha256"] = hashlib.sha256(canonical_bytes(document)).hexdigest()
+    REGISTRY.write_text(yaml.safe_dump(registry))
+    with pytest.raises(ValueError, match="already frozen"):
+        LocalTracking("evaluation_synthetic", "changed", store, experiment_id="EXP91")
+    assert len(first.client.search_runs([first.experiment])) == 1
+
+
+def test_real_hook_requires_id_before_creating_store(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", str(repo_tmp_path.relative_to(ROOT)))
+    catalog = DataCatalog(
+        {"parameters": MemoryDataset({"profile": "foundation", "tracking": "enabled"})}
+    )
+    with pytest.raises(ValueError, match="requires experiment_id"):
+        TrackingHooks().before_pipeline_run({"pipeline_name": "replay"}, catalog)
+    assert not (repo_tmp_path / "tracking.sqlite").exists()
+    with pytest.raises(ValueError, match="pipeline mismatch"):
+        LocalTracking(
+            "evaluation_synthetic",
+            "mismatch",
+            str(repo_tmp_path.relative_to(ROOT)),
+            experiment_id="EXP00",
+        )
+
+
+def test_registered_synthetic_composition_propagates_identity(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, synthetic_experiments: None
+) -> None:
+    from test_kedro_e2e import execute as composed
+
+    from sat_dengue.datasets import replay_identity
+
+    def forbidden() -> None:
+        raise AssertionError("Real replay inputs are forbidden")
+
+    monkeypatch.setattr(replay_identity, "native_inputs", forbidden)
+    tracker, record, _ = composed(
+        repo_tmp_path / "composed", monkeypatch, enabled=True, experiment_id="EXP93"
+    )
+    assert tracker.client.get_run(tracker.parent).data.tags["experiment_id"] == "EXP93"
+    audit = json.loads((ROOT / record["path"] / "audit.json").read_text())
+    assert all(
+        audit.get(k, 0) == 0
+        for k in (
+            "real_model_fits",
+            "real_preparer_refits",
+            "calibrator_fits",
+            "threshold_selection",
+        )
+    )
+    snapshots = list((repo_tmp_path / "composed").glob("*/configuration/*/*/resolved.json"))
+    assert len(snapshots) >= 4
+    for snapshot in snapshots:
+        provenance = json.loads(snapshot.read_text())
+        assert provenance["operational"]["experiment_id"] == "EXP93"
+
+
+def test_concurrent_retries_publish_one_verified_success(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, synthetic_experiments: None
+) -> None:
+    from concurrent.futures import ThreadPoolExecutor
+
+    _, publication = execute(repo_tmp_path / "native", monkeypatch, enabled=False)
+    store = str((repo_tmp_path / "concurrent").relative_to(ROOT))
+    trackers = [
+        LocalTracking("evaluation_synthetic", str(i), store, experiment_id="EXP91")
+        for i in range(2)
+    ]
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        results = list(executor.map(lambda tracker: tracker.finish(publication), trackers))
+    assert results[0] == results[1]
+    assert sorted(t.client.get_run(t.parent).info.status for t in trackers) == [
+        "FINISHED",
+        "KILLED",
+    ]
+
+
+def test_scientific_registration_rejects_synthetic_payload(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _, publication = execute(repo_tmp_path / "native", monkeypatch, enabled=False)
+    tracker = LocalTracking(
+        "replay",
+        "synthetic-mismatch",
+        str((repo_tmp_path / "store").relative_to(ROOT)),
+        experiment_id="EXP00",
+    )
+    with pytest.raises(ValueError, match="cannot register a synthetic"):
+        tracker.finish(publication)
+    assert tracker.client.get_run(tracker.parent).info.status == "FAILED"
+
+
+def test_duplicate_rejects_corrupted_existing_metrics(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    first, publication = execute(repo_tmp_path / "native", monkeypatch)
+    first.client.log_metric(first.children[0], "brier", 999)
+    second = LocalTracking(
+        "evaluation_synthetic", "retry", str((repo_tmp_path / "native/tracking").relative_to(ROOT))
+    )
+    with pytest.raises(ValueError, match="scientific lineage changed"):
+        second.finish(publication)
+    assert second.client.get_run(second.parent).info.status == "FAILED"
+
+
+def test_private_child_name_is_rejected_before_mlflow_write(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from sat_dengue.tracking import local
+
+    _, publication = execute(repo_tmp_path / "native", monkeypatch, enabled=False)
+    params, candidates = verified_lineage(publication)
+    candidates[0]["window"] = "/Users/private/secret"
+    monkeypatch.setattr(local, "verified_lineage", lambda publication: (params, candidates))
+    tracker = LocalTracking(
+        "evaluation_synthetic", "private-child", str((repo_tmp_path / "store").relative_to(ROOT))
+    )
+    with pytest.raises(ValueError, match="Tracking value rejected"):
+        tracker.finish(publication)
+    runs = tracker.client.search_runs([tracker.experiment])
+    assert len(runs) == 1
+    assert "/Users/private" not in json.dumps(runs[0].data.tags)

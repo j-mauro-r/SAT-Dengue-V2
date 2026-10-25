@@ -1,0 +1,68 @@
+{
+  "schema": "sat-dengue-experiment-protocol-v1",
+  "version": "1.0.0",
+  "experiment_id": "EXP00",
+  "experiment_slug": "historical_pre_kedro_baseline",
+  "hypothesis_id": "EXP00-H0",
+  "title": "Historical pre-Kedro scientific baseline",
+  "classification": "retrospective_baseline_registration",
+  "objective": "Register the last pre-Kedro training and evaluation result as the immutable comparison baseline for future scientific experiments.",
+  "hypothesis": "No new scientific hypothesis is tested. Guarded Kedro replay must reproduce the accepted historical outputs without fitting, refitting, recalibration, threshold selection or model selection.",
+  "authority": {
+    "model_engineering_contract": "docs/product/stage-4/model_engineering_contract_v1.json",
+    "model_evaluation_contract": "docs/product/stage-5/model_evaluation_contract_v1.json",
+    "calibration_threshold_contract": "docs/product/stage-5/probability_calibration_thresholds_contract_v1.json",
+    "champion_decision_policy": "docs/product/stage-5/champion_decision_policy_v1.json",
+    "historical_final_bundle": "artifacts/model_final_evaluation/768406f872f4b859756b4603d684b965841e8c37a0f00c7f34618786dfa76e35"
+  },
+  "execution": {
+    "kedro_pipeline": "replay",
+    "mode": "guarded_saved_component_replay",
+    "tracking": "enabled_for_formal_registration",
+    "real_model_fits_allowed": false,
+    "real_preparer_refits_allowed": false,
+    "calibrator_fits_allowed": false,
+    "hyperparameter_search_allowed": false,
+    "threshold_selection_allowed": false
+  },
+  "population": {
+    "municipalities": 76,
+    "evaluation_window": "2025-01..2025-12",
+    "cohort_role": "consumed_replay_only",
+    "horizons": ["T+1", "T+2"]
+  },
+  "candidates": ["persistence", "xgboost", "lightgbm", "gam"],
+  "metrics": [
+    "average_precision",
+    "auroc",
+    "brier",
+    "onset_sensitivity",
+    "false_alarm_ratio",
+    "detected_onsets",
+    "real_onsets",
+    "false_alerts",
+    "emitted_alerts"
+  ],
+  "acceptance": {
+    "historical_outputs_reproduced": true,
+    "protected_inputs_and_artifacts_unchanged": true,
+    "real_adjustments": 0,
+    "required_scientific_gate": "NOT_APPROVED",
+    "required_champion": "not_selected",
+    "required_candidate_decision": "does_not_meet"
+  },
+  "mlflow": {
+    "experiment_name": "sat-dengue-bounded-v1",
+    "registration_status": "pending",
+    "required_conceptual_tags": {
+      "experiment_id": "EXP00",
+      "experiment_slug": "historical_pre_kedro_baseline",
+      "hypothesis_id": "EXP00-H0",
+      "objective_slug": "register_pre_kedro_baseline",
+      "experiment_type": "baseline_replay",
+      "target_definition": "excess_with_onset_evaluation"
+    },
+    "implementation_note": "The current tracker does not yet allowlist all conceptual tags. Add and test them only after explicit approval."
+  },
+  "interpretation_boundary": "Formal replay registration preserves the historical negative scientific result. It does not create a champion, approve G5 or make 2025 reusable for scientific adjustment."
+}

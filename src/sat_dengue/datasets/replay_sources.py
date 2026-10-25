@@ -12,7 +12,11 @@ from sat_dengue.datasets.stage2 import identity, local_path
 
 def data_inputs(context: dict[str, Any]) -> tuple[Any, ...]:
     inputs = stage_inputs(context, "data")
-    params = {"profile": "data", "tracking": context["operational"]["tracking"]}
+    params = {
+        **context["operational"],
+        "profile": "data",
+        "tracking": context["operational"]["tracking"],
+    }
     if "data" in context["cache"]:
         return inputs, params, CACHED, CACHED, CACHED
     if context["mode"] == "synthetic":
@@ -54,7 +58,11 @@ def preparation_inputs(context: dict[str, Any], data: dict[str, Any]) -> tuple[A
     if context["mode"] == "replay":
         data_parity(data)
     inputs = stage_inputs(context, "preparation")
-    params = {"profile": "preparation", "tracking": context["operational"]["tracking"]}
+    params = {
+        **context["operational"],
+        "profile": "preparation",
+        "tracking": context["operational"]["tracking"],
+    }
     if "preparation" in context["cache"]:
         return inputs, params, CACHED, CACHED
     from sat_dengue.training_preparation.eligibility import policy_from_years
@@ -110,7 +118,11 @@ def training_inputs(context: dict[str, Any], preparation: dict[str, Any]) -> tup
         preparation_parity(preparation)
     inputs = stage_inputs(context, "training")
     mode = context["mode"]
-    params = {"profile": "training_" + mode, "tracking": context["operational"]["tracking"]}
+    params = {
+        **context["operational"],
+        "profile": "training_" + mode,
+        "tracking": context["operational"]["tracking"],
+    }
     if mode == "synthetic":
         return inputs, params
     if "training" in context["cache"]:
@@ -125,6 +137,7 @@ def evaluation_inputs(context: dict[str, Any], training: dict[str, Any]) -> tupl
     verify_publication(training, context)
     inputs = stage_inputs(context, "evaluation")
     params = {
+        **context["operational"],
         "profile": "evaluation_" + context["mode"],
         "tracking": context["operational"]["tracking"],
     }

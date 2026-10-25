@@ -638,3 +638,30 @@ missing annotations or install undeclared stub packages to conceal failures.
 +paths. Earlier session logs/receipts and prior runtime observations are not
 +overwritten by a fresh regression. Unsafe/external output roots fail closed.
 +
+
+## Registered scientific experiment tracking
+
+`tracking/experiments.py`, experiment registry/protocols, configuration, hooks and
+replay parameter propagation map to the following permitted validation:
+
+```bash
+python -m pytest tests/unit tests/contracts tests/integration/test_mlflow_tracking.py -q
+python -m pytest tests/integration/test_kedro_e2e.py -k 'not test_one_command_full_guarded_replay_and_complete_preservation' -q
+python -m ruff check src tests
+python -m ruff format --check src tests
+python -m mypy src tests
+python scripts/check_markdown_links.py
+git diff --check
+bash .agents/skills/deepworkplan/verify/conformance.sh --repo-only
+bash .agents/skills/deepworkplan/verify/conformance.sh --plan PLAN_031_exp00_baseline_tracking
+```
+
+The tracking suite uses registered synthetic fixtures, including source-free
+composition, protocol immutability, privacy and duplicate registration checks.
+For PLAN_031 the user explicitly prohibited real replay, including
+`test_one_command_full_guarded_replay_and_complete_preservation` and private parity
+commands that invoke it. Do not use `--require-migration-evidence` for this work.
+The formal EXP00 replay is a pending manual final check, not a claimed pass.
+Report global historical DWP failures separately. Runtime setup remains owned by
+[the migration guide](operations/kedro-migration.md); experiment registration and
+the later manual command are owned by [the registry guide](product/experiments/README.md).

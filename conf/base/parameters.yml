@@ -1,2 +1,4 @@
 profile: foundation
 tracking: disabled
+# Select a registered identity for formal scientific tracking.
+experiment_id: null

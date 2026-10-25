@@ -14,15 +14,20 @@ class TrackingHooks:
     @hook_impl
     def before_pipeline_run(self, run_params: dict[str, Any], catalog: Any) -> None:
         self.tracker = None
+        from sat_dengue.configuration import validate_parameters
+
         parameters = catalog.load("parameters")
+        selected = run_params.get("pipeline_names") or [run_params.get("pipeline_name")]
+        pipeline = selected[0] if len(selected) == 1 else None
+        if pipeline in {"replay", "replay_synthetic"}:
+            parameters = {**parameters, "profile": pipeline}
+        parameters = validate_parameters(parameters)
         if parameters["tracking"] == "disabled":
             return
         if parameters["tracking"] != "enabled":
             raise ValueError("Tracking must be explicitly enabled or disabled")
         from sat_dengue.tracking.local import LocalTracking
 
-        selected = run_params.get("pipeline_names") or [run_params.get("pipeline_name")]
-        pipeline = selected[0] if len(selected) == 1 else None
         profile = parameters["profile"]
         if pipeline in {"replay", "replay_synthetic"}:
             profile = pipeline
@@ -40,7 +45,9 @@ class TrackingHooks:
             self.output = "replay_bundle"
         pipeline = pipeline or profile
         self.tracker = LocalTracking(
-            pipeline, run_params.get("session_id", run_params.get("run_id", "execution"))
+            pipeline,
+            run_params.get("session_id", run_params.get("run_id", "execution")),
+            experiment_id=parameters.get("experiment_id"),
         )
 
     @hook_impl
