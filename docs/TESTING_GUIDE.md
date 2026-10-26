@@ -16,9 +16,9 @@ Evidence states:
 
 ## Proportional Gate Set
 
-### Local classifier
+### CI classifier
 
-Use the same deterministic classifier as CI:
+Inspect CI selection with the existing deterministic classifier (this does not require running its full selection locally):
 
 ```bash
 .venv/bin/python scripts/classify_validation_surface.py <changed-path> [<changed-path> ...]
@@ -29,44 +29,88 @@ The JSON result identifies the surfaces, selected pytest scope, and each CI job 
 Classification is by repository-relative path and is intentionally conservative for empty,
 malformed and unknown inputs.
 
-### Validation matrix
+### CI validation matrix
 
 | Changed surface | Required gates |
 |---|---|
 | Narrative documentation | Markdown links, repository structure and security scans; no Python dependency install and no pytest |
 | DWP or agent governance | Narrative-documentation gates plus repository/scoped-plan conformance as applicable |
-| Stage 7 API, service or contractual fixtures | Scoped Ruff/format/mypy, the three Stage 7 API test modules, base-wheel validation and API-dashboard smoke |
-| Dashboard only | `bun install --frozen-lockfile`, lint, test and build |
-| Dashboard client, adapter, proxy/config or shared API contract | Dashboard gates plus API-dashboard smoke |
+| Stage 7 API, service or contractual fixtures | Scoped Ruff/format/mypy, the three Stage 7 API test modules and base-wheel validation; API-dashboard smoke is manual-only |
+| Dashboard only | Manual-only: `bun install --frozen-lockfile`, lint, test and build |
+| Dashboard client, adapter, proxy/config or shared API contract | Applicable Python/API jobs; Dashboard and API-dashboard smoke are manual-only |
 | Stage 2/3 data preparation | Full Python quality and the public CI pytest suite |
 | Models, metrics or calibration | Full Python quality and the public CI pytest suite |
 | Tracking or MLflow | Full Python quality and the public CI pytest suite |
 | Kedro configuration or shared graph | Conservative gate because producer/consumer reach is cross-surface |
-| Scientific contracts | Owning data/model gates; Stage 6 additionally runs API-dashboard smoke |
-| Packaging or shared dependencies | Full Python quality, public CI pytest suite, dashboard, base wheel and smoke |
-| CI workflow, classifier, protected `main` push, unclassified configuration, unknown or ambiguous path | Conservative gate: all five required jobs execute their full steps |
+| Scientific contracts | Owning data/model gates; Stage 6 API-dashboard smoke is manual-only |
+| Packaging or shared dependencies | Full Python quality, public CI pytest suite and base wheel; Dashboard/smoke manual-only |
+| CI workflow, classifier, protected `main` push, unclassified configuration, unknown or ambiguous path | Conservative gate: all four automatic base jobs execute their full steps; Dashboard remains manual-only |
 
 Mixed known surfaces use the union of their gates. A mixed API plus dashboard change, for
-example, runs scoped API checks, dashboard checks, base-wheel validation and the smoke; it
+example, runs scoped API checks and base-wheel validation; Dashboard/smoke stay manual; it
 does not escalate to the complete public suite merely because two known surfaces changed.
 
-The required CI job names stay stable even when a surface is not selected. Each job emits an
-explicit skip explanation and succeeds without installing its runtime. The stable names are
-`Repository Quality`, `Dashboard`, `Python Quality`, `Unit Tests`, and
-`Base wheel without optional dependencies`.
+The automatic base job names remain `Repository Quality`, `Python Quality`,
+`Unit Tests`, and `Base wheel without optional dependencies`. Existing surface selection
+still applies to these jobs. CodeQL Python remains a separately managed security check.
+Dashboard and its API smoke are available only through the `Manual Dashboard` workflow
+(`workflow_dispatch`); no automatic Dashboard check is emitted. Classifier Dashboard/smoke
+flags remain advisory for manual use and do not reactivate automatic execution.
 
 ### When to run each gate
 
-1. **During implementation:** run classifier tests and the focused tests, lint, format and
-   types for the files being changed. These are feedback, not final evidence.
-2. **Before commit or handoff:** run the union selected by the matrix against the complete
-   candidate. Put cheap gates first and apply the no-repeat rule below.
-3. **PR CI:** `Repository Quality` classifies the merge-base diff; the other four stable jobs
-   either execute selected steps or report an explicit successful skip. Unknown and shared
-   paths always retain the conservative gate.
-4. **Stage close or release:** run the conservative gate at the release candidate, plus the
-   API-dashboard smoke when the Stage owns that boundary. Human scientific and merge gates
-   remain separate; passing tests never approves G5, a Champion or an adjustment.
+1. **Before push:** run only existing focused tests for changed files/behavior, plus quick
+   syntax/configuration validation of affected workflows. Run Markdown links when linked
+   documentation changes and scan only changed files/the diff for secrets.
+2. **PR CI:** GitHub runs the complete validation required by the selected surfaces, using
+   the four automatic base jobs and separately managed CodeQL Python. Do not repeat that
+   full selection locally as a prerequisite to pushing.
+3. **Full local suites:** retain all commands below for manual use. Repeat a full suite
+   locally only when CI cannot execute it, while diagnosing a remote failure, or when a
+   change affects the repository across surfaces. This exception does not authorize a
+   scientific experiment or private-data access.
+4. **Dashboard:** Mauricio may run `Manual Dashboard` from Actions → Run workflow, selecting
+   a reviewed branch after this workflow exists on the default branch. It runs existing
+   install/lint/tests/build and API smoke. Reactivation of automatic execution requires a
+   separate explicit request.
+
+### GitHub security and required-check handoff
+
+The only versioned automatic workflow before this change was `ci.yml`, with Repository
+Quality, Dashboard, Python Quality, Unit Tests and Base wheel without optional dependencies.
+No CodeQL workflow is defined in this repository. Default setup, check runs, branch
+protection and ruleset API queries returned HTTP 403 during the audit; their configuration
+and required-check status are **UNVERIFIED**, not assumed disabled or safe to remove.
+
+Before merging, Mauricio must inspect Settings → Rules → Rulesets and Settings → Branches
+→ the rule for `main` → required status checks. Remove an automatic `Dashboard` requirement
+if present, and remove JavaScript/TypeScript or unconditional Actions CodeQL requirements
+that would otherwise wait forever. Preserve the four base job requirements and CodeQL
+Python. Also inspect any required Code Scanning tools; do not leave an obsolete language
+analysis mandatory. This PR remains draft/not ready until that review is complete.
+
+In Settings → Code security (or Code security and analysis) → Code scanning → CodeQL:
+
+- If **Default setup** owns the scans, edit its language selection to retain **Python only**;
+  deselect JavaScript/TypeScript and Actions. Python must remain enabled. Default setup
+  cannot express an Actions-only workflow-path condition; do not add a duplicate repository
+  CodeQL workflow to try to override it.
+- To retain Actions analysis with the approved scope, Mauricio must deliberately configure
+  **Advanced setup**, preserving the existing Python analysis, and review its generated
+  workflow before enabling it. The separate Actions-only workflow must use language
+  `actions`, PR/push path filters `.github/workflows/**`, base branch `main`, and no schedule
+  or unfiltered automatic trigger. Keep Python in its own automatic analysis so path filters
+  cannot suppress Python. Do not leave JavaScript/TypeScript in the matrix. If Advanced
+  setup already owns scans elsewhere, make those same changes in that owner rather than
+  enabling a second setup.
+- Verify a workflow-changing PR produces Actions analysis, while a subsequent ordinary
+  scientific/docs PR does not. Confirm CodeQL Python still reports successfully.
+
+These are manual configuration instructions, not changes performed by this branch.
+Remote CodeQL language removal, path scoping and required-check reconciliation remain
+pending until observed in GitHub. The dashboard directory still contains TypeScript;
+its automatic checks are suspended by explicit human scope decision, not because those
+files are absent.
 
 The scientific public suite retains temporal-leakage, reserved-block, artifact-integrity,
 G5/Champion, read-only API and no-fallback controls. The matrix changes frequency and scope;
@@ -74,7 +118,8 @@ it does not delete or relax those assertions.
 
 ### Full public Python gate
 
-When the matrix selects `pytest_scope=full`, use the installed complete synthetic environment
+In CI, or under the explicit full-local-suite exceptions above, when the matrix selects
+`pytest_scope=full`, use the installed complete synthetic environment
 (`.[dev,modeling,tracking]`) and run:
 
 ```bash
@@ -107,7 +152,8 @@ if grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----B
 
 ## Escalation Rule
 
-If path ownership or a mixed surface is ambiguous, use the classifier's conservative gate.
+If path ownership or a mixed surface is ambiguous, CI uses the classifier's conservative gate.
+Local pre-push validation follows the focused-check rule above.
 Do not weaken a gate ad hoc in the workflow.
 
 ## No-repeat rule for DWP execution
@@ -217,12 +263,12 @@ Scoped commands:
 Mapping rule:
 
 - Use scoped commands for fast local inspection.
-- Use the classifier and matrix above for merge readiness; materiality alone does not erase
-  the surface boundary.
+- Use the classifier and matrix above for CI selection; local pre-push checks remain focused.
 
 Fallback rule:
 
-- When command mapping is uncertain, use the classifier's conservative gate.
+- When command mapping is uncertain, let CI use the conservative gate; widen local checks
+  only under the explicit exceptions above.
 
 ## Stage 8 standalone dashboard subtree
 
@@ -737,6 +783,29 @@ Report global historical DWP failures separately. Runtime setup remains owned by
 [the migration guide](operations/kedro-migration.md); experiment registration and
 the later manual command are owned by [the registry guide](product/experiments/README.md).
 
+### EXP01 direct-onset infrastructure
+
+EXP01's scientific functions, frozen protocol resolver, synthetic Kedro graph,
+configuration profile and isolated MLflow path map to these tests:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_exp01_onset.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py -q
+.venv/bin/python -m pytest tests/integration/test_exp01_tracking.py -q
+.venv/bin/python -m ruff check src/sat_dengue/experiments src/sat_dengue/tracking tests/unit/test_exp01_onset.py tests/integration/test_exp01_tracking.py
+.venv/bin/python -m ruff format --check src tests
+MYPYPATH=src:tests:tests/integration:tests/unit:tests/contracts .venv/bin/python -m mypy --explicit-package-bases --exclude '(^|/)conftest\.py$' src tests
+.venv/bin/python scripts/check_markdown_links.py
+```
+
+These tests use generated rows and a dedicated ignored temporary MLflow store.
+The EXP01 integration check asserts the exact parent/36-child structure, protocol
+and data identities, no logged synthetic metrics, zero real-fit counters, and
+duplicate protection. It does not run a real scientific pipeline,
+load private panel data, or evaluate 2024/2025.
+
+The explicit mypy invocation avoids the repository's duplicate top-level
+conftest module names while checking all other source and test files.
+
 
 ## EXP00 tracking audit corrections
 
@@ -757,3 +826,34 @@ constraints. Run `pip check` and, outside source import paths (`python -I`), ver
 pinned version and its direct `Requires-Dist` metadata. Confirm optional MLflow and
 modeling packages remain absent. Run only `foundation` for a Kedro startup smoke.
 Do not execute real replay, its excluded E2E test or replay-dependent private suites.
+
+
+### EXP01 real runner corrective infrastructure
+
+The registered real graph, metadata descriptor, explicit approval/reservation,
+paired engine and result tracking map to `test_exp01_runner.py`,
+`test_exp01_runner_tracking.py`, the existing EXP01 onset/tracking tests,
+configuration contracts and base bootstrap. Use the pinned foundation environment:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+python -m pytest tests/unit/test_exp01_runner.py tests/unit/test_exp01_onset.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py tests/integration/test_exp01_runner_tracking.py tests/integration/test_exp01_tracking.py -q
+```
+
+Run the full unit/contracts plus MLflow/EXP01 and permitted synthetic E2E selection
+in a fresh source checkout without private `data/` or persistent `tmp/`. Preserve
+its existing three absent historical-EDA skips and default private-test
+deselections as separate limitations. Do not invoke real replay, private parity,
+real EXP01 or `--require-migration-evidence`. Every tracking test owns a fresh
+`repo_tmp_path` store. Confirm the permanent replay-MLflow file hashes before and
+after validation. Synthetic probe parents/children remain explicitly synthetic.
+
+Also run Ruff lint/format, the explicit mypy command above, maintained-script
+quality, Markdown links, `pip check`, secret/runtime scans, diff checks,
+repo-only/scoped-plan/all-plan DWP checks, an isolated base wheel installation
+and an isolated modeling/tracking wheel installation with frozen constraints.
+Build/register the actual installed graph outside source import paths. Run only
+foundation startup for the base wheel and generated synthetic probes for optional
+extras. Exercise metadata-only preflight on the local declared source paths and
+read-only permanent tracking destination; no private-content read is allowed.
+The handoff owns the [future command and approval boundary](operations/exp01-runner-handoff.md).

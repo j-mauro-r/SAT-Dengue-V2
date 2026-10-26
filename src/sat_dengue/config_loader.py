@@ -74,6 +74,11 @@ CATALOG["data.stage2_consolidated"] = {
 CATALOG["data.stage2_epi_raw"] = {"type": "MemoryDataset", "copy_mode": "assign"}
 CATALOG["data.stage2_climate_raw"] = {"type": "MemoryDataset", "copy_mode": "assign"}
 CATALOG["replay_bundle"] = {"type": "sat_dengue.datasets.replay.ReplayBundleDataset"}
+CATALOG["exp01_sources"] = {"type": "sat_dengue.datasets.exp01.Exp01SourcesDataset"}
+CATALOG["exp01_bundle"] = {
+    "type": "sat_dengue.datasets.exp01.Exp01BundleDataset",
+    "filepath": "tmp/kedro-migration/exp01-runs",
+}
 
 
 class ValidatedConfigLoader(OmegaConfigLoader):

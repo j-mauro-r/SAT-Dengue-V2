@@ -22,6 +22,15 @@ class TrackingHooks:
         if pipeline in {"replay", "replay_synthetic"}:
             parameters = {**parameters, "profile": pipeline}
         parameters = validate_parameters(parameters)
+        if pipeline in {"exp01", "exp01_preflight"} or parameters["profile"] in {
+            "exp01",
+            "exp01_preflight",
+        }:
+            if pipeline != parameters["profile"]:
+                raise ValueError("EXP01 profile must match its exact pipeline")
+            # EXP01 authorization precedes private reads and MLflow construction.
+            # Its dedicated execution/publication boundary owns the tracker.
+            return
         if parameters["tracking"] == "disabled":
             return
         if parameters["tracking"] != "enabled":
@@ -31,6 +40,17 @@ class TrackingHooks:
         profile = parameters["profile"]
         if pipeline in {"replay", "replay_synthetic"}:
             profile = pipeline
+        if profile == "exp01_synthetic":
+            if pipeline != "exp01_synthetic":
+                raise ValueError("EXP01 synthetic tracking is bound to its synthetic pipeline")
+            self.output = "exp01_synthetic_receipt"
+            pipeline = "exp01_synthetic"
+            self.tracker = LocalTracking(
+                pipeline,
+                run_params.get("session_id", run_params.get("run_id", "execution")),
+                experiment_id=parameters.get("experiment_id"),
+            )
+            return
         if profile not in {
             "replay",
             "replay_synthetic",
@@ -58,7 +78,10 @@ class TrackingHooks:
             published = catalog.load(self.output)
             if self.output == "replay_bundle":
                 published = published["stages"]["evaluation"]
-            self.tracker.finish(published)
+            if self.output == "exp01_synthetic_receipt":
+                self.tracker.finish_exp01_synthetic(published)
+            else:
+                self.tracker.finish(published)
         except BaseException:
             self.tracker.fail()
             raise

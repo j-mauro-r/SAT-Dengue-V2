@@ -16,3 +16,18 @@ experiments:
     champion: not_selected
     mlflow_registration: pending
     lifecycle_status: documented_pending_formal_tracking
+  - experiment_id: EXP01
+    experiment_slug: direct_episode_onset
+    hypothesis_id: EXP01-H1
+    title: EXP01 direct episode-onset prediction
+    objective: Compare direct episode-onset probability with monthly-excess probability under matched false-onset-alert budgets
+    experiment_type: paired_target_comparison
+    pipeline: exp01
+    protocol: docs/product/experiments/EXP01_direct_onset/protocol.json
+    protocol_sha256: 6be81e1b3226abc85cce94dcae7dba0c687282b7e0bc816ec460d033e445925b
+    conclusions: docs/product/experiments/EXP01_direct_onset/CONCLUSIONS.md
+    scientific_result: pending
+    scientific_gate: NOT_APPROVED
+    champion: not_selected
+    mlflow_registration: pending
+    lifecycle_status: planned_pending_execution_authorization

@@ -71,7 +71,10 @@ Execute incrementally by user stories (HUs), each with bounded scope, acceptance
 
 ## Validation Ownership
 
-`docs/TESTING_GUIDE.md` owns required gates and source-to-test mapping. Quick Commands above are shortcuts, not a second validation policy. Report repo-only, scoped-plan and all-plan conformance separately; historical plan failures must not be presented as current code failures or silently waived.
+`docs/TESTING_GUIDE.md` owns required gates and source-to-test mapping.
+Before push, run only focused checks for changed files/behavior and quick syntax/configuration checks for affected workflows.
+GitHub CI owns the complete required validation. Repeat a full suite locally only to diagnose remote failures, when CI cannot run it, or for changes across repository surfaces.
+Dashboard validation is manual-only until Mauricio explicitly requests reactivation. Quick Commands above are shortcuts, not a second validation policy. Report repo-only, scoped-plan and all-plan conformance separately; historical plan failures must not be presented as current code failures or silently waived.
 
 ## Human Gate Boundaries
 
