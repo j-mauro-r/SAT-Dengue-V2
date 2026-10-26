@@ -873,20 +873,20 @@ draft is historical; the explicit municipality identity alias changes no group.
 Read-only preflight (no private inputs, fits, reservations or MLflow writes):
 
 ```bash
-KEDRO_DISABLE_TELEMETRY=yes python -m sat_dengue.experiments.exp02_preflight
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp02_preflight --params=profile=exp02_preflight,tracking=enabled,experiment_id=EXP02
 ```
 
 Its equivalent graph is `exp02_preflight` with parameters
 `profile=exp02_preflight,tracking=enabled,experiment_id=EXP02`. The return value always
 has `execution_ready=false`, even on a clean structural pass. Missing private sources
-are checked only after authorization. The dedicated tracking root is
-`tmp/kedro-migration/exp02-mlflow`; the result root is
+are checked only after authorization. The shared tracking root is
+`SAT_DENGUE_TRACKING_ROOT`, explicitly selected as `tmp/kedro-migration/replay-mlflow`; the result root is
 `tmp/kedro-migration/exp02-runs`. EXP01's dataset and parallel path correction are not used.
 
 Synthetic graph, generated data only, no implicit tracking:
 
 ```bash
-KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=exp02_synthetic --params=profile=exp02_synthetic,tracking=disabled,experiment_id=EXP02
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp02_synthetic --params=profile=exp02_synthetic,tracking=disabled,experiment_id=EXP02
 ```
 
 **Future real execution: NOT AUTHORIZED by this delivery.** After independent review,
@@ -901,7 +901,7 @@ on the clean reviewed commit; an earlier receipt is stale after any code/runtime
 Only after that authorization, the future command would be:
 
 ```bash
-SAT_DENGUE_EXP02_APPROVAL=tmp/reviewed-exp02-approval.json KEDRO_DISABLE_TELEMETRY=yes kedro run --pipeline=exp02 --params=profile=exp02,tracking=enabled,experiment_id=EXP02
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow SAT_DENGUE_EXP02_APPROVAL=tmp/reviewed-exp02-approval.json KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp02 --params=profile=exp02,tracking=enabled,experiment_id=EXP02
 ```
 
 Do not run it as a validation command. Publication never overwrites a bundle. A persistent
@@ -911,3 +911,21 @@ or marker removal. Native bundles contain full frontiers; MLflow receives only a
 aggregate metrics and hash/token lineage. No raw rows, per-person predictions or absolute
 paths are uploaded. Fewer than two municipality/year clusters yields
 `insufficient_cluster_support`, without an IID substitute or numerical success margin.
+
+Protocol1.0.1 is an explicitly authorized pre-execution uncertainty clarification;
+[the prior version](product/experiments/EXP02_feature_ablation/protocol.v1.0.0.json)
+and both hashes are retained in the EXP02 conclusions. Every frozen evaluation
+window (2020, 2022, 2024) has one year: **none** supports the specified municipality ×
+year interval. All report `insufficient_cluster_support`. Paired metrics remain
+descriptive; no equivalence/noninferiority inference, pooled years or new bootstrap.
+
+MLflow records the complete aggregate budget frontier once, on the parent run in
+`<parent-run-id>.json` (`exp02-frontier-mlflow-v1`). Each cell retains variant, family,
+horizon, window, availability and the full selection-budget frontier: onset sensitivity,
+paired difference versus full, realized false alerts for both, and uncertainty status.
+Only this closed projection is uploaded, never municipal breakdowns, raw predictions,
+rows or absolute paths. `parameters.bundle_id` and `protocol_sha256` bind the verified
+native publication; `frontier_sha256` hashes canonical projected cells and is repeated
+as the parent tag `exp02.frontier_sha256`. Children do not receive artifact copies.
+Temporary upload staging is removed. A changed tracking-root variable invalidates
+preflight/approval, and old protocol pins are rejected rather than migrated.

@@ -25,7 +25,18 @@ from sat_dengue.experiments.exp02 import load_protocol
 from sat_dengue.tracking.experiments import unique_object
 
 OUTPUT_ROOT = "tmp/kedro-migration/exp02-runs"
-TRACKING_ROOT = "tmp/kedro-migration/exp02-mlflow"
+TRACKING_ROOT = "tmp/kedro-migration/replay-mlflow"  # Documented choice, not an implicit access.
+
+
+def tracking_root() -> str:
+    root = os.environ.get("SAT_DENGUE_TRACKING_ROOT", "")
+    if not root:
+        raise ValueError("EXP02 requires explicit SAT_DENGUE_TRACKING_ROOT")
+    resolved = safe_path(root)
+    output = safe_path(OUTPUT_ROOT, OUTPUT_ROOT)
+    if resolved.is_relative_to(output) or output.is_relative_to(resolved):
+        raise ValueError("EXP02 result and tracking roots must be separate")
+    return root
 
 
 def safe_path(value: str, canonical: str | None = None) -> Path:
@@ -84,14 +95,16 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
     versions = runtime_versions()
     metadata = execution_metadata()
     safe_path(OUTPUT_ROOT, OUTPUT_ROOT)
-    safe_path(TRACKING_ROOT, TRACKING_ROOT)
-    storage = storage_preflight(TRACKING_ROOT)
-    database = safe_path(TRACKING_ROOT) / "tracking.sqlite"
+    root = tracking_root()
+    storage = storage_preflight(root)
+    database = safe_path(root) / "tracking.sqlite"
     if database.exists():
         uri = "file:" + quote(str(database), safe="/") + "?mode=ro&immutable=1"
         with sqlite3.connect(uri, uri=True) as connection:
             pins = connection.execute(
-                "SELECT value FROM experiment_tags WHERE key = ?", ("protocol.EXP02",)
+                "SELECT t.value FROM experiment_tags t JOIN experiments e "
+                "ON t.experiment_id = e.experiment_id WHERE e.name = ? AND t.key = ?",
+                ("sat-dengue-bounded-v1", "protocol.EXP02"),
             ).fetchall()
             if any(value != digest(p) for (value,) in pins):
                 raise ValueError("Stored EXP02 protocol changed")
@@ -101,7 +114,13 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
         "experiment_id": "EXP02",
         "protocol_sha256": digest(p),
         "configuration_sha256": digest(
-            {"design": p["design"], "catalog": catalog, "versions": versions, **metadata}
+            {
+                "design": p["design"],
+                "catalog": catalog,
+                "versions": versions,
+                "tracking_root": root,
+                **metadata,
+            }
         ),
         "data_version": NATIVE_IDENTITIES[NATIVE_MANIFEST]["sha256"],
         "sources": sources,

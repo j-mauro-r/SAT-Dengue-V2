@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import shutil
 from pathlib import Path
 from typing import Any
@@ -83,6 +84,21 @@ def test_atomic_publication_tracking_and_duplicate(
     repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     result = generated_metadata()
+    # Artificial aggregate upload fixture, never a scientific experiment/result.
+    for c in result["children"]:
+        c["status"] = "evaluable"
+        c["municipality_code"] = "forbidden-source-dimension"
+        c["frontier"] = [
+            {
+                "selection_false_alert_budget": b,
+                "onset_sensitivity": 0.5,
+                "paired_onset_sensitivity_difference": 0.0,
+                "false_alerts": b,
+                "full_realized_false_alerts": b,
+                "paired_interval": {"status": "insufficient_cluster_support", "interval": None},
+            }
+            for b in range(3)
+        ]
     p = load_protocol()
     target = repo_tmp_path / "docs/product/experiments"
     shutil.copytree(ROOT / "docs/product/experiments", target)
@@ -111,6 +127,33 @@ def test_atomic_publication_tracking_and_duplicate(
     assert {r.data.tags["variant"] for r in children} == set(VARIANTS)
     assert all(r.data.tags["purpose"] == "synthetic_interface_probe" for r in children)
     assert all("/" not in value for r in runs for value in r.data.params.values())
+    parent = tracker.client.get_run(tracker.parent)
+    artifacts = tracker.client.list_artifacts(tracker.parent)
+    assert [a.path for a in artifacts] == [tracker.parent + ".json"]
+    assert all(not tracker.client.list_artifacts(r.info.run_id) for r in children)
+    destination = repo_tmp_path / "tmp" / "download"
+    destination.mkdir()
+    downloaded = tracker.client.download_artifacts(
+        tracker.parent, tracker.parent + ".json", str(destination)
+    )
+    aggregate = json.loads(Path(downloaded).read_text())
+    assert aggregate["parameters"]["bundle_id"] == publication["manifest"]["bundle_id"]
+    assert aggregate["frontier_sha256"] == parent.data.tags["exp02.frontier_sha256"]
+    assert aggregate["frontier_sha256"] == digest(aggregate["cells"])
+    assert all(
+        [r["selection_false_alert_budget"] for r in c["frontier"]] == [0, 1, 2]
+        for c in aggregate["cells"]
+    )
+    assert "municipality_code" not in Path(downloaded).read_text()
+    assert not list(Path(root).glob(".exp02-frontier-*"))
+    from sat_dengue.tracking.exp02 import validate_frontier_artifact
+
+    malicious = copy.deepcopy(aggregate)
+    malicious["cells"][0]["frontier"][0]["municipality_code"] = "not-allowed"
+    malicious["frontier_sha256"] = digest(malicious["cells"])
+    with pytest.raises(ValueError):
+        validate_frontier_artifact(malicious)
+
     with pytest.raises(DatasetError):
         dataset.save({"result": result, "provenance": provenance, "tracker": tracker})
     assert len(list(Path(OUTPUT_ROOT).glob("*/manifest.json"))) == 1

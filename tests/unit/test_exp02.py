@@ -175,7 +175,9 @@ def test_missing_approval_before_load(monkeypatch: pytest.MonkeyPatch) -> None:
         load_authorized_sources({})
 
 
-def test_preflight_no_private_reads_or_writes(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_preflight_no_private_reads_or_writes(
+    monkeypatch: pytest.MonkeyPatch, repo_tmp_path: Path
+) -> None:
     from kedro.io import DataCatalog
 
     from sat_dengue.config_loader import ValidatedConfigLoader
@@ -198,6 +200,8 @@ def test_preflight_no_private_reads_or_writes(monkeypatch: pytest.MonkeyPatch) -
             "environment_sha256": exp01.digest({}),
         },
     )
+    root = str(repo_tmp_path.relative_to(Path.cwd()) / "store-a")
+    monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", root)
     original = Path.open
 
     def guarded(path: Path, *a: Any, **kw: Any) -> Any:
@@ -211,6 +215,13 @@ def test_preflight_no_private_reads_or_writes(monkeypatch: pytest.MonkeyPatch) -
         {"profile": "exp02_preflight", "tracking": "enabled", "experiment_id": "EXP02"},
         pf.descriptor(),
     )
+    assert r["tracking"]["root"] == root
+    monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", root + "-other")
+    other = pf.preflight(
+        {"profile": "exp02_preflight", "tracking": "enabled", "experiment_id": "EXP02"},
+        pf.descriptor(),
+    )
+    assert r["configuration_sha256"] != other["configuration_sha256"]
     assert r["execution_ready"] is False
     assert all(
         r[k] == 0
@@ -280,6 +291,12 @@ def test_approval_tracks_initialization_but_rejects_mutation(
     monkeypatch.setattr(pf, "preflight", lambda parameters, sources: fresh)
     monkeypatch.setattr(pf, "git_identity", lambda: {"git_dirty": False})
     assert pf.authorize(receipt) == approval
+    prior_root = fresh["tracking"]["root"]
+    fresh["tracking"]["root"] = prior_root + "-different"
+    with pytest.raises(PermissionError, match="Stale"):
+        pf.authorize(receipt)
+    fresh["tracking"]["root"] = prior_root
+
     reverse = copy.deepcopy(fresh)
     fresh["tracking"]["state"] = "not_initialized"
     with pytest.raises(PermissionError, match="disappeared"):
@@ -330,3 +347,33 @@ def test_adapter_keeps_only_projected_columns(family: str, monkeypatch: pytest.M
     monkeypatch.setattr(candidate_families.ADAPTERS[family], "fit_candidate", stub)
     model = exp02.native_fit(family, X, y, design["families"][family], 42)
     assert list(model.predict(X)) == [0.0, 1.0]
+
+
+def test_amendment_keeps_design_and_all_windows_have_insufficient_support() -> None:
+    import numpy as np
+
+    from sat_dengue.experiments.onset_evaluation import paired_block_interval
+
+    current = exp02.load_protocol()
+    old = json.loads(exp02.PROTOCOL.with_name("protocol.v1.0.0.json").read_text())
+    assert current["design"] == old["design"]
+    assert current["amendments"][0]["from_protocol_sha256"] == exp01.digest(old)
+    for window in current["design"]["windows"]:
+        first, last = window["evaluation"]
+        assert first[:4] == last[:4]
+        frame = pd.DataFrame(
+            {"municipality_code": ["a", "b"], "target_month": [first, last], "onset_target": [1, 0]}
+        )
+        unavailable = paired_block_interval(
+            frame, np.array([True, False]), np.array([True, True]), seed=42
+        )
+        assert unavailable == {"status": "insufficient_cluster_support", "interval": None}
+
+
+@pytest.mark.parametrize(
+    "root", [pf.OUTPUT_ROOT, pf.OUTPUT_ROOT + "/nested", "tmp/kedro-migration"]
+)
+def test_tracking_root_rejects_result_overlap(root: str, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", root)
+    with pytest.raises(ValueError, match="separate"):
+        pf.tracking_root()

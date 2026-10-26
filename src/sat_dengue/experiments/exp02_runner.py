@@ -9,7 +9,7 @@ from typing import Any
 from sat_dengue.configuration import AUTHORITIES
 from sat_dengue.experiments.exp01 import digest, native_calibration
 from sat_dengue.experiments.exp02 import execute, load_protocol, native_fit
-from sat_dengue.experiments.exp02_preflight import OUTPUT_ROOT, TRACKING_ROOT, authorize, safe_path
+from sat_dengue.experiments.exp02_preflight import OUTPUT_ROOT, authorize, safe_path
 
 
 def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
@@ -73,7 +73,9 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
     }
     provenance["data_sha256"] = digest(sources["fingerprints"])
     execution_id = reserve_execution(provenance)
-    tracker = Exp02Tracking("exp02", execution_id, TRACKING_ROOT, experiment_id="EXP02")
+    tracker = Exp02Tracking(
+        "exp02", execution_id, receipt["tracking"]["root"], experiment_id="EXP02"
+    )
     try:
         tracker.initialize_ablation(provenance)
         result = execute(

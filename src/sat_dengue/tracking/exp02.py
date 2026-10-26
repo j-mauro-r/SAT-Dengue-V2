@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import json
+import math
+import tempfile
 from itertools import product
+from pathlib import Path
 from typing import Any
 
 from sat_dengue.datasets.stage2 import identity
@@ -82,6 +85,101 @@ def verified_result(publication: dict[str, Any]) -> dict[str, Any]:
     provenance = json.loads((folder / "provenance.json").read_text())
     validate_result(result, provenance)
     return {"result": result, "provenance": provenance, "manifest": manifest}
+
+
+FRONTIER_FIELDS = {
+    "selection_false_alert_budget",
+    "onset_sensitivity",
+    "paired_onset_sensitivity_difference",
+    "false_alerts",
+    "full_realized_false_alerts",
+    "uncertainty_status",
+}
+CELL_FIELDS = {"variant", "family", "horizon", "window", "status", "frontier"}
+
+
+def frontier_artifact(verified: dict[str, Any], parameters: dict[str, Any]) -> dict[str, Any]:
+    """One parent aggregate projection; no municipality dimensions or raw rows."""
+    cells = []
+    for child in verified["result"]["children"]:
+        cells.append(
+            {
+                **{k: child[k] for k in CELL_FIELDS - {"frontier"}},
+                "frontier": [
+                    {
+                        **{k: row[k] for k in FRONTIER_FIELDS - {"uncertainty_status"}},
+                        "uncertainty_status": row["paired_interval"]["status"],
+                    }
+                    for row in child["frontier"]
+                ],
+            }
+        )
+    value = {
+        "schema": "exp02-frontier-mlflow-v1",
+        "parameters": parameters,
+        "frontier_sha256": digest(cells),
+        "cells": cells,
+    }
+    validate_frontier_artifact(value)
+    return value
+
+
+def validate_frontier_artifact(value: dict[str, Any]) -> None:
+    """Closed aggregate schema enforced again by the safe artifact repository."""
+    from sat_dengue.tracking.local import allowed_parameters
+
+    p = load_protocol()
+    if (
+        set(value) != {"schema", "parameters", "frontier_sha256", "cells"}
+        or value["schema"] != "exp02-frontier-mlflow-v1"
+    ):
+        raise ValueError("Invalid EXP02 aggregate schema")
+    allowed_parameters(value["parameters"])
+    if value["parameters"].get("protocol_sha256") != digest(p) or not value["parameters"].get(
+        "bundle_id"
+    ):
+        raise ValueError("Unbound aggregate identity")
+    cells = value["cells"]
+    expected = set(
+        product(
+            VARIANTS, p["design"]["families"], (1, 2), [w["id"] for w in p["design"]["windows"]]
+        )
+    )
+    if (
+        not isinstance(cells, list)
+        or len(cells) != 108
+        or any(not isinstance(c, dict) or set(c) != CELL_FIELDS for c in cells)
+    ):
+        raise ValueError("Invalid aggregate cells")
+    if {
+        (c["variant"], c["family"], c["horizon"], c["window"]) for c in cells
+    } != expected or digest(cells) != value["frontier_sha256"]:
+        raise ValueError("Changed aggregate identity")
+    for cell in cells:
+        if cell["status"] not in {"evaluable", "non_evaluable"} or not isinstance(
+            cell["frontier"], list
+        ):
+            raise ValueError("Invalid aggregate availability")
+        if cell["status"] == "non_evaluable" and cell["frontier"]:
+            raise ValueError("Non-evaluable frontier")
+        for budget, row in enumerate(cell["frontier"]):
+            if (
+                set(row) != FRONTIER_FIELDS
+                or row["selection_false_alert_budget"] != budget
+                or row["uncertainty_status"] != "insufficient_cluster_support"
+            ):
+                raise ValueError("Invalid aggregate frontier")
+            for k in ("false_alerts", "full_realized_false_alerts"):
+                if type(row[k]) is not int or row[k] < 0:
+                    raise ValueError("Invalid aggregate count")
+            for k in ("onset_sensitivity", "paired_onset_sensitivity_difference"):
+                v = row[k]
+                if v is not None and (
+                    type(v) not in (int, float)
+                    or not math.isfinite(v)
+                    or not (-1 if k.startswith("paired") else 0) <= v <= 1
+                ):
+                    raise ValueError("Invalid aggregate metric")
 
 
 class Exp02Tracking(LocalTracking):
@@ -187,6 +285,18 @@ class Exp02Tracking(LocalTracking):
                         },
                     )
                     self.client.set_terminated(run, "FINISHED")
+                artifact = frontier_artifact(verified, common)
+                # Existing safe uploader accepts only generated parent-id receipts.
+                # Remove staging after upload; the artifact lives only on the parent.
+                from sat_dengue.configuration import canonical_bytes
+
+                with tempfile.TemporaryDirectory(prefix=".exp02-frontier-", dir=self.root) as stage:
+                    path = safe_path(str(Path(stage) / (self.parent + ".json")))
+                    path.write_bytes(canonical_bytes(artifact))
+                    self.client.log_artifact(self.parent, str(path))
+                self.client.set_tag(
+                    self.parent, "exp02.frontier_sha256", artifact["frontier_sha256"]
+                )
                 self.client.set_tag(self.parent, "status", "verified")
                 self.client.set_terminated(self.parent, "FINISHED")
                 self.terminal = True
