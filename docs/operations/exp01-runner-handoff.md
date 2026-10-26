@@ -44,14 +44,17 @@ satisfied. This reference does not add fitted models or MLflow children.
 
 ## No-fit preflight
 
-Use the pinned Kedro environment documented by the migration owner. A drifted
-`.venv` is rejected even when `pip check` alone finds no broken dependencies.
+Use the current-wheel runtime prepared at `tmp/exp01-runtime` with frozen
+constraints. The older foundation installation retains 0.1.0 distribution metadata
+and remains available for existing quality tools; its metadata must not stand in
+for a properly installed 0.2.0 EXP01 runtime. A drifted `.venv` is also rejected
+even when `pip check` alone finds no broken dependencies.
 All required base/modeling/tracking direct pins and installed exported transitive
 pins must match the frozen project/constraints. Preflight also verifies installed
 package bytes against the checkout and records explicit code/runtime hashes.
 
 ```bash
-export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+export PATH="$PWD/tmp/exp01-runtime/bin:$PATH"
 SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow \
 KEDRO_DISABLE_TELEMETRY=yes \
 python -m sat_dengue.experiments.exp01_preflight
@@ -132,7 +135,7 @@ store fingerprints, preflight receipts and reviewer findings are retained there.
 No EXP01 scientific result, conclusion, champion or human gate approval follows.
 
 The unbenchmarked planning estimate is 1–4 hours, one model thread, approximately
-2–8 GB RAM and less than 1 GB additional native/MLflow output. The existing source
+2–8 GB RAM and 0.1–2 GB additional native/MLflow output. The existing source
 reader must hash the roughly 1.1 GB notification file in addition to the monthly
 panel and traceability inputs. Full-frontier grouped metrics may dominate runtime.
 Actual class support, wall time, peak memory and storage remain unverified until
@@ -140,3 +143,50 @@ a separately authorized real run; no private benchmark was performed for this
 estimate. Each annual evaluation window lacks the two distinct years required by
 the frozen block bootstrap, so its interval remains unavailable under the existing
 protocol. Human scientific interpretation remains necessary.
+
+
+## Corrective file inventory
+
+Created (7): `docs/operations/exp01-runner-handoff.md`;
+`src/sat_dengue/datasets/exp01.py`;
+`src/sat_dengue/experiments/exp01_preflight.py`;
+`src/sat_dengue/experiments/exp01_runner.py`;
+`src/sat_dengue/tracking/exp01.py`;
+`tests/unit/test_exp01_runner.py`;
+`tests/integration/test_exp01_runner_tracking.py`.
+
+Modified (14): `conf/base/catalog.yml`; `docs/README.md`;
+`docs/TESTING_GUIDE.md`; `docs/product/experiments/README.md`;
+`docs/roadmap/master-plan.md`; `src/sat_dengue/config_loader.py`;
+`src/sat_dengue/configuration.py`; `src/sat_dengue/experiments/exp01.py`;
+`src/sat_dengue/experiments/onset.py`; `src/sat_dengue/hooks.py`;
+`src/sat_dengue/pipeline_registry.py`; `src/sat_dengue/tracking/artifacts.py`;
+`tests/integration/base_bootstrap.py`; `tests/unit/test_repository_bootstrap.py`.
+No files were deleted. This inventory is relative to corrective baseline
+`f6ee425f9ac00b1c0aeb99aced5186bdd9df3a52` and preserves earlier PR #27 work.
+
+## Corrective validation evidence
+
+| Gate | Result |
+| --- | --- |
+| Focused EXP01/configuration/bootstrap/tracking | PASS: 85 generated/public tests, DWP gate seq 14 |
+| Complete public unit/contracts/tracking/permitted E2E | PASS: 705; 3 existing absent historical-output skips; 12 private tests deselected by repository policy |
+| Ruff lint and format, including maintained scripts | PASS |
+| Explicit mypy and maintained scripts | PASS |
+| Markdown links and diff check | PASS; documentation handoff changes receive an additional owning check |
+| Fresh base and modeling/tracking wheel installs | PASS: source bytes verified, all graphs registered; base foundation startup and generated extras parent/36-child probe |
+| Source/base/extras/dedicated-runtime dependencies | PASS: pip checks; exact frozen dependency checks |
+| Dedicated-runtime standalone/Kedro preflight | PASS: structural only, zero fits/writes; execution authorization remains pending |
+| Secrets and prohibited runtime-pattern scan | PASS on 285 tracked project text files; pinned tools/UI/private data/historical notebooks excluded |
+| EXP00/permanent-store preservation | PASS: four permanent-store files byte-identical; protected protocol/conclusion/data/notebook paths absent from diff |
+| Independent review | R1–R7 resolved; no outstanding high or medium findings; infrastructure approval only |
+| Repository/scoped corrective DWP conformance | PASS; final closure is recorded in the local journal/receipt |
+| All local-plan conformance | FAIL: the two inherited PLAN_012 and legacy initial-recognition incidents remain; no historical evidence rewritten |
+
+Individual public-suite/wheel checks completed successfully before the 600-second
+parent wrapper deadline; the parent timeout is retained as a failed attempt.
+Continuation reuses those completed checks only after exact tested-tree/wheel
+correspondence and frozen-runtime verification, then executes remaining gates.
+Earlier metadata/backend/helper failures and their corrections remain in the local
+corrective evidence. These are not scientific EXP01 runs. Remote CI observation
+belongs to the current PR head rather than a claim based on earlier green runs.
