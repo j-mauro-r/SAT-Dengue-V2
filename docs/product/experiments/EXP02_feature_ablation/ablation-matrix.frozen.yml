@@ -1,0 +1,180 @@
+schema: sat-dengue-exp02-ablation-matrix-v1
+version: 1.0.0
+status: frozen
+experiment_id: EXP02
+groups:
+  historia:
+  - dengue_notifications_count
+  - dengue_grave_notifications_count
+  - dengue_lag_1
+  - dengue_lag_2
+  - dengue_lag_3
+  - grave_lag_1
+  - grave_lag_2
+  - dengue_cambio_1m
+  - dengue_media_3m
+  canal_actual:
+  - zona_canal_t
+  canal_historia:
+  - zona_canal_lag_1
+  estacionalidad:
+  - mes_sin
+  - mes_cos
+  clima:
+  - rain_mm_month_sum
+  - temp_mean_c_month_mean
+  - dewpoint_mean_c_month_mean
+  - surface_runoff_mm_month_sum
+  - total_evaporation_mm_month_sum_ecmwf
+  - solar_radiation_mj_m2_month_sum
+  - soil_water_l1_month_mean
+  - wind_u_ms_month_mean
+  - wind_v_ms_month_mean
+  - lluvia_lag_1
+  - lluvia_lag_2
+  - temperatura_lag_1
+  - temperatura_lag_2
+  - rocio_lag_1
+  - escorrentia_lag_1
+  contexto:
+  - municipality_code_feature
+variants:
+  full:
+  - dengue_notifications_count
+  - dengue_grave_notifications_count
+  - rain_mm_month_sum
+  - temp_mean_c_month_mean
+  - dewpoint_mean_c_month_mean
+  - surface_runoff_mm_month_sum
+  - total_evaporation_mm_month_sum_ecmwf
+  - solar_radiation_mj_m2_month_sum
+  - soil_water_l1_month_mean
+  - wind_u_ms_month_mean
+  - wind_v_ms_month_mean
+  - zona_canal_t
+  - dengue_lag_1
+  - dengue_lag_2
+  - dengue_lag_3
+  - grave_lag_1
+  - grave_lag_2
+  - dengue_cambio_1m
+  - dengue_media_3m
+  - zona_canal_lag_1
+  - lluvia_lag_1
+  - lluvia_lag_2
+  - temperatura_lag_1
+  - temperatura_lag_2
+  - rocio_lag_1
+  - escorrentia_lag_1
+  - mes_sin
+  - mes_cos
+  - municipality_code_feature
+  without_current_zone:
+  - dengue_notifications_count
+  - dengue_grave_notifications_count
+  - rain_mm_month_sum
+  - temp_mean_c_month_mean
+  - dewpoint_mean_c_month_mean
+  - surface_runoff_mm_month_sum
+  - total_evaporation_mm_month_sum_ecmwf
+  - solar_radiation_mj_m2_month_sum
+  - soil_water_l1_month_mean
+  - wind_u_ms_month_mean
+  - wind_v_ms_month_mean
+  - dengue_lag_1
+  - dengue_lag_2
+  - dengue_lag_3
+  - grave_lag_1
+  - grave_lag_2
+  - dengue_cambio_1m
+  - dengue_media_3m
+  - zona_canal_lag_1
+  - lluvia_lag_1
+  - lluvia_lag_2
+  - temperatura_lag_1
+  - temperatura_lag_2
+  - rocio_lag_1
+  - escorrentia_lag_1
+  - mes_sin
+  - mes_cos
+  - municipality_code_feature
+  without_channel:
+  - dengue_notifications_count
+  - dengue_grave_notifications_count
+  - rain_mm_month_sum
+  - temp_mean_c_month_mean
+  - dewpoint_mean_c_month_mean
+  - surface_runoff_mm_month_sum
+  - total_evaporation_mm_month_sum_ecmwf
+  - solar_radiation_mj_m2_month_sum
+  - soil_water_l1_month_mean
+  - wind_u_ms_month_mean
+  - wind_v_ms_month_mean
+  - dengue_lag_1
+  - dengue_lag_2
+  - dengue_lag_3
+  - grave_lag_1
+  - grave_lag_2
+  - dengue_cambio_1m
+  - dengue_media_3m
+  - lluvia_lag_1
+  - lluvia_lag_2
+  - temperatura_lag_1
+  - temperatura_lag_2
+  - rocio_lag_1
+  - escorrentia_lag_1
+  - mes_sin
+  - mes_cos
+  - municipality_code_feature
+  history:
+  - dengue_notifications_count
+  - dengue_grave_notifications_count
+  - dengue_lag_1
+  - dengue_lag_2
+  - dengue_lag_3
+  - grave_lag_1
+  - grave_lag_2
+  - dengue_cambio_1m
+  - dengue_media_3m
+  history_season:
+  - dengue_notifications_count
+  - dengue_grave_notifications_count
+  - dengue_lag_1
+  - dengue_lag_2
+  - dengue_lag_3
+  - grave_lag_1
+  - grave_lag_2
+  - dengue_cambio_1m
+  - dengue_media_3m
+  - mes_sin
+  - mes_cos
+  history_climate:
+  - dengue_notifications_count
+  - dengue_grave_notifications_count
+  - rain_mm_month_sum
+  - temp_mean_c_month_mean
+  - dewpoint_mean_c_month_mean
+  - surface_runoff_mm_month_sum
+  - total_evaporation_mm_month_sum_ecmwf
+  - solar_radiation_mj_m2_month_sum
+  - soil_water_l1_month_mean
+  - wind_u_ms_month_mean
+  - wind_v_ms_month_mean
+  - dengue_lag_1
+  - dengue_lag_2
+  - dengue_lag_3
+  - grave_lag_1
+  - grave_lag_2
+  - dengue_cambio_1m
+  - dengue_media_3m
+  - lluvia_lag_1
+  - lluvia_lag_2
+  - temperatura_lag_1
+  - temperatura_lag_2
+  - rocio_lag_1
+  - escorrentia_lag_1
+source_draft: ablation-matrix.draft.yml
+identity_alias:
+  municipality_code: municipality_code_feature
+interfaces: ../EXP01_direct_onset/protocol.json
+execution_authorized: false

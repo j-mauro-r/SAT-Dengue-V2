@@ -31,3 +31,19 @@ experiments:
     champion: not_selected
     mlflow_registration: pending
     lifecycle_status: planned_pending_execution_authorization
+  - experiment_id: EXP02
+    experiment_slug: feature_group_ablation
+    hypothesis_id: EXP02-H1
+    title: EXP02 — Feature group ablation
+    objective: Conditional predictive value for exact episode onset at common development
+      false-alert budgets
+    experiment_type: feature_group_ablation
+    pipeline: exp02
+    protocol: docs/product/experiments/EXP02_feature_ablation/protocol.json
+    protocol_sha256: fdf826827df2f7c31e54c6e09201af0ff85e6539275140bca6f573a04cc43118
+    conclusions: docs/product/experiments/EXP02_feature_ablation/CONCLUSIONS.md
+    scientific_result: pending
+    scientific_gate: NOT_APPROVED
+    champion: not_selected
+    mlflow_registration: pending
+    lifecycle_status: implemented_pending_execution_authorization

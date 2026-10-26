@@ -1,3 +1,11 @@
+> Evidencia histórica de diseño. El protocolo definitivo es [protocol.json](protocol.json)
+> y la matriz vigente es [ablation-matrix.frozen.yml](ablation-matrix.frozen.yml).
+> Sus dependencias EXP01 se resolvieron con referencias versionadas; los marcadores
+> históricos de este documento no son instrucciones del runner vigente.
+> Se documenta el alias identidad `municipality_code → municipality_code_feature`;
+> no cambia el grupo contexto. history_climate queda siempre entre las seis variantes.
+> La ejecución real sigue sin autorización.
+
 # EXP02 — Ablación de grupos de variables
 
 Estado: borrador de diseño; no autorizado para ejecución.
