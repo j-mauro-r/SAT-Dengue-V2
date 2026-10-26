@@ -75,3 +75,9 @@ exp01_sources:
 exp01_bundle:
   type: sat_dengue.datasets.exp01.Exp01BundleDataset
   filepath: tmp/kedro-migration/exp01-runs
+
+exp02_sources:
+  type: sat_dengue.datasets.exp02.Exp02SourcesDataset
+exp02_bundle:
+  type: sat_dengue.datasets.exp02.Exp02BundleDataset
+  filepath: tmp/kedro-migration/exp02-runs
