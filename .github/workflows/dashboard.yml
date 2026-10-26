@@ -60,4 +60,3 @@ jobs:
       - name: Run real API-dashboard smoke
         working-directory: .
         run: python scripts/dashboard_e2e_smoke.py
-
