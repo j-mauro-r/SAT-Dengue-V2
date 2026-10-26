@@ -70,3 +70,8 @@ data.stage2_climate_raw:
   copy_mode: assign
 replay_bundle:
   type: sat_dengue.datasets.replay.ReplayBundleDataset
+exp01_sources:
+  type: sat_dengue.datasets.exp01.Exp01SourcesDataset
+exp01_bundle:
+  type: sat_dengue.datasets.exp01.Exp01BundleDataset
+  filepath: tmp/kedro-migration/exp01-runs

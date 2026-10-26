@@ -28,6 +28,8 @@ def test_repository_bootstrap() -> None:
         "replay",
         "replay_synthetic",
         "exp01_synthetic",
+        "exp01",
+        "exp01_preflight",
     }
     assert {node.name for node in pipelines["foundation"].nodes} == {"resolve_configuration"}
     assert pipelines["foundation"].inputs() == {"configuration_inputs", "parameters"}

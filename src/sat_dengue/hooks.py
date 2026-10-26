@@ -22,6 +22,15 @@ class TrackingHooks:
         if pipeline in {"replay", "replay_synthetic"}:
             parameters = {**parameters, "profile": pipeline}
         parameters = validate_parameters(parameters)
+        if pipeline in {"exp01", "exp01_preflight"} or parameters["profile"] in {
+            "exp01",
+            "exp01_preflight",
+        }:
+            if pipeline != parameters["profile"]:
+                raise ValueError("EXP01 profile must match its exact pipeline")
+            # EXP01 authorization precedes private reads and MLflow construction.
+            # Its dedicated execution/publication boundary owns the tracker.
+            return
         if parameters["tracking"] == "disabled":
             return
         if parameters["tracking"] != "enabled":

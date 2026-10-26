@@ -29,6 +29,7 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Implemented training preparation pipeline | [Preparation contract and technical validation](product/stage-3/README.md) |
 | Stage 4 shared references and XGBoost candidate | [Model engineering deliveries](product/stage-4/README.md) |
 | Stage 5 final evaluation, G5 recommendation and handoff limits | [Model evaluation evidence](product/stage-5/README.md) |
+| EXP01 corrective runner, no-fit preflight and future authorization | [Runner handoff](operations/exp01-runner-handoff.md) |
 | Scientific experiment registry, frozen protocols and conclusions | [Experiment registry](product/experiments/README.md) |
 | Stage 6 read-only academic E2E MVP product contract | [Product Contract v1](product/stage-6/product-contract-v1.md) |
 | Data boundaries | [Data policy](data/data-policy.md) |

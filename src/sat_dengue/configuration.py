@@ -60,6 +60,8 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "evaluation_replay",
         "evaluation_synthetic",
         "exp01_synthetic",
+        "exp01",
+        "exp01_preflight",
         "replay",
         "replay_synthetic",
     ) or value["tracking"] not in ("disabled", "enabled"):
@@ -67,6 +69,10 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"
         )
     experiment_id = value.get("experiment_id")
+    if value["profile"] in {"exp01", "exp01_preflight"} and (
+        experiment_id != "EXP01" or value["tracking"] != "enabled"
+    ):
+        raise ValueError("EXP01 requires experiment_id=EXP01 and enabled tracking")
     if experiment_id is not None:
         from sat_dengue.tracking.experiments import resolve_experiment
 
@@ -76,6 +82,8 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "training_replay",
         "evaluation_replay",
         "exp01_synthetic",
+        "exp01",
+        "exp01_preflight",
     }:
         raise ValueError("Real scientific tracking requires experiment_id")
     return {k: v for k, v in value.items() if v is not None}

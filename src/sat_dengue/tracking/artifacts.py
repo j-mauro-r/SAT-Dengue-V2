@@ -79,6 +79,42 @@ def register_local_artifacts() -> None:
                         for child in children
                     )
                 )
+            elif value.get("schema") == "exp01-paired-mlflow-lineage-v1":
+                from itertools import product
+
+                from sat_dengue.experiments.exp01 import load_protocol
+
+                protocol = load_protocol()
+                children = value.get("children")
+                fields = {
+                    "objective",
+                    "family",
+                    "horizon",
+                    "window",
+                    "cohort_sha256",
+                    "predictors_sha256",
+                }
+                expected = set(
+                    product(
+                        ("excess", "onset"),
+                        protocol["design"]["families"],
+                        (1, 2),
+                        [window["id"] for window in protocol["design"]["windows"]],
+                    )
+                )
+                valid = (
+                    set(value) == {"schema", "parameters", "children"}
+                    and isinstance(children, list)
+                    and len(children) == 36
+                    and all(isinstance(child, dict) and set(child) == fields for child in children)
+                    and {(c["objective"], c["family"], c["horizon"], c["window"]) for c in children}
+                    == expected
+                    and all(
+                        isinstance(c[key], str) and re.fullmatch(r"[0-9a-f]{64}", c[key])
+                        for c in children
+                        for key in ("cohort_sha256", "predictors_sha256")
+                    )
+                )
             else:
                 valid = False
             if not valid:

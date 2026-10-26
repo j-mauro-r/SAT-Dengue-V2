@@ -132,9 +132,18 @@ def partitions(cohort: pd.DataFrame, window: dict[str, Any]) -> dict[str, pd.Dat
             and window.get("evidence_type") != "retrospective_stress"
         ):
             raise ValueError("2024 evaluation must be declared retrospective stress")
-        mask = cohort.target_month.between(start, end)
-        if previous_end is not None:
-            mask &= cohort.year_month.ge(previous_end)
+        target_role = cohort.target_month.between(start, end)
+        boundary = (
+            cohort.year_month.ge(previous_end)
+            if previous_end is not None
+            else pd.Series(True, index=cohort.index)
+        )
+        mask = target_role & boundary
         output[role] = cohort.loc[mask & cohort.eligible_at_t].copy()
+        output[role].attrs["coverage"] = {
+            "target_role_rows": int(target_role.sum()),
+            "embargo_excluded_rows": int((target_role & ~boundary).sum()),
+            "ineligible_at_t_rows": int((mask & ~cohort.eligible_at_t).sum()),
+        }
         previous_end = end
     return output

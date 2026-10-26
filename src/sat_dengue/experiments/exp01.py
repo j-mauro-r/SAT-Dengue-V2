@@ -1,8 +1,4 @@
-"""EXP01 paired scientific functions and a generated-data-only registered runner.
-
-Native adapters remain dormant until a separately reviewed real pipeline and
-authorization gate exist. The registered pipeline uses the synthetic probe only.
-"""
+"""EXP01 paired scientific functions and generated-data interface probes."""
 
 from __future__ import annotations
 
@@ -106,16 +102,22 @@ def native_calibration(
     return lambda values: _apply_sigmoid(values, fitted)
 
 
-def _execute_synthetic(
+def execute_paired(
     panel: pd.DataFrame,
     contract: dict[str, Any],
     design: dict[str, Any],
     *,
     fit: Fit,
     calibrate: Calibrate,
+    synthetic: bool = False,
 ) -> dict[str, Any]:
-    """Exercise the paired interfaces on generated rows; never call native fitters."""
+    """Evaluate frozen paired objectives through injected adapters; no I/O.
+
+    Both arms receive independently copied matrices from one common role/cohort.
+    Orchestration owns real execution authorization and persistence.
+    """
     from sat_dengue.metrics import auroc_metric, average_precision_metric, brier_metric
+    from sat_dengue.model_training.references import persistence_reference
 
     columns = design["predictors"]
     seed = design["seed"]
@@ -145,10 +147,6 @@ def _execute_synthetic(
                         role: predictor_projection(frame[columns], columns, availability)
                         for role, frame in selected.items()
                     }
-                    if fit is not synthetic_fit:
-                        raise ValueError(
-                            "Synthetic execution accepts only the fixed synthetic fitter"
-                        )
                     model = fit(
                         family, matrices["train"], selected["train"][target], parameters, seed
                     )
@@ -161,6 +159,22 @@ def _execute_synthetic(
                         role: transform(model.predict(matrices[role])).to_numpy(dtype=float)
                         for role in ("selection", "evaluation")
                     }
+                reference = persistence_reference(selected["evaluation"], horizon=horizon)
+                if not reference.state_evaluable.all():
+                    raise ValueError("Persistence reference cannot drop paired evaluation rows")
+                reference_alerts = reference.prediction_label.to_numpy(dtype=bool)
+                persistence = {
+                    "reference": "persistence",
+                    "prediction_kind": "deterministic",
+                    "formula": reference.reference_formula.iloc[0],
+                    "calibration": "not_applicable_deterministic_reference",
+                    "brier": None,
+                    **episode_metrics(selected["evaluation"], reference_alerts),
+                    "by_group": stratified_episode_metrics(
+                        selected["evaluation"], reference_alerts
+                    ),
+                    "secondary_guardrail": "unavailable_when_reference_has_no_alerts",
+                }
                 paired_frontier: list[dict[str, Any]] = []
                 selection_truth = selected["selection"].onset_target.to_numpy(dtype=int)
                 for budget in range(int((selection_truth == 0).sum()) + 1):
@@ -243,7 +257,11 @@ def _execute_synthetic(
                             "window": window["id"],
                             "cohort": "non_excess_at_t",
                             "seed": seed,
-                            "evidence_type": "synthetic_interface_probe",
+                            "evidence_type": (
+                                "synthetic_interface_probe"
+                                if synthetic
+                                else window["evidence_type"]
+                            ),
                             "average_precision": average_precision_metric(outcomes, prediction)[
                                 "value"
                             ],
@@ -258,8 +276,18 @@ def _execute_synthetic(
                                 evaluation[KEYS + ["target_month"]].to_dict("records")
                             ),
                             "predictors_sha256": digest(columns),
+                            "role_sha256": {
+                                role: digest(
+                                    frame[KEYS + ["target_month"] + columns].to_json(
+                                        orient="split", date_format="iso"
+                                    )
+                                )
+                                for role, frame in selected.items()
+                            },
+                            "operational_reference": persistence,
                             "coverage": {
                                 role: {
+                                    **parts[role].attrs["coverage"],
                                     "operational_rows": len(parts[role]),
                                     "evaluable_rows": len(frame),
                                 }
@@ -269,17 +297,31 @@ def _execute_synthetic(
                     )
     count = len(children)
     return {
-        "schema": "exp01-synthetic-probe-v1",
+        "schema": "exp01-paired-result-v1",
         "experiment_id": "EXP01",
-        "synthetic": True,
-        "real_model_fits": 0,
-        "real_preparer_refits": 0,
-        "calibrator_fits": 0,
-        "synthetic_interface_fits": count,
+        "synthetic": synthetic,
+        "real_model_fits": 0 if synthetic else count,
+        "real_preparer_refits": 0 if synthetic else count,
+        "calibrator_fits": 0 if synthetic else count,
+        "synthetic_interface_fits": count if synthetic else 0,
         "G5": "NOT_APPROVED",
         "champion": "not_selected",
         "children": children,
     }
+
+
+def _execute_synthetic(
+    panel: pd.DataFrame,
+    contract: dict[str, Any],
+    design: dict[str, Any],
+    *,
+    fit: Fit,
+    calibrate: Calibrate,
+) -> dict[str, Any]:
+    """Keep native fitters unreachable from the public synthetic route."""
+    if fit is not synthetic_fit:
+        raise ValueError("Synthetic execution accepts only the fixed synthetic fitter")
+    return execute_paired(panel, contract, design, fit=fit, calibrate=calibrate, synthetic=True)
 
 
 class SyntheticPredictor:
@@ -300,7 +342,8 @@ def synthetic_fit(
     return SyntheticPredictor(X, y, seed)
 
 
-def synthetic_run() -> dict[str, Any]:
+def synthetic_inputs() -> tuple[pd.DataFrame, dict[str, Any], dict[str, Any]]:
+    """Generate the source-free interface fixture, never reading private data."""
     protocol = load_protocol()
     contract = json.loads(
         Path("docs/product/stage-3/training_preparation_contract_v1.json").read_text()
@@ -341,8 +384,14 @@ def synthetic_run() -> dict[str, Any]:
                 if column != "zona_canal_t":
                     row[column] = float(rng.integers(0, 100))
             rows.append(row)
+    return pd.DataFrame(rows), contract, design
+
+
+def synthetic_run() -> dict[str, Any]:
+    protocol = load_protocol()
+    panel, contract, design = synthetic_inputs()
     receipt = _execute_synthetic(
-        pd.DataFrame(rows),
+        panel,
         contract,
         design,
         fit=synthetic_fit,
@@ -370,7 +419,7 @@ def synthetic_run() -> dict[str, Any]:
         "hypothesis_id": "EXP01-H1",
         "protocol_version": protocol["version"],
         "protocol_sha256": digest(protocol),
-        "data_sha256": digest(rows),
+        "data_sha256": digest(panel.to_dict("records")),
         "configuration_sha256": digest(design),
         "kind": SYNTHETIC_EVIDENCE,
         "evidence_type": "synthetic_interface_probe",

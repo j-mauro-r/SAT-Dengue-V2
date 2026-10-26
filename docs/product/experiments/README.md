@@ -139,3 +139,12 @@ validation evidence, negative results and limitations. Update the registry's
 registration status only then. Do not invent a run ID or change scientific results.
 For EXP00, G5 remains `NOT_APPROVED`, champion `not_selected`, all six candidate
 procedures `does_not_meet`, and 2025 remains consumed and replay-only.
+
+
+## EXP01 corrective runner infrastructure
+
+[Runner handoff](../../operations/exp01-runner-handoff.md) owns the later `exp01`
+and `exp01_preflight` implementation, approval schema and exact future command.
+The frozen protocol and its canonical hash remain unchanged. Its original
+implementation-status notes are historical delivery metadata; they do not grant
+real execution. Scientific execution/registration and conclusions stay pending.
