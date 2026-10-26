@@ -1,0 +1,136 @@
+schema: sat-dengue-exp03-channel-design
+version: 0.1.0
+status: draft
+experiment_id: EXP03
+implementation_authorized: false
+execution_authorized: false
+hypothesis: La parametrización puede cambiar etiquetas, episodios y carga sin implicar
+  superioridad predictiva.
+control:
+  id: C5
+  history_years: 5
+  seasonality: same_calendar_month
+  percentile: 0.75
+  interpolation: Hyndman_Fan_type_7
+  epidemic_years: include_all
+  weighting: uniform
+  zeros: include_covered_no_case_months
+  missing: non_evaluable_no_backfill
+candidate_factors:
+  history_years:
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  epidemic_years:
+  - include_all
+  - exclude_predeclared_conditional
+  zero_policy:
+  - preserve_control
+  outbreak_weighting:
+  - uniform_only
+variants:
+- id: C5
+  history_years: 5
+  epidemic_years: include_all
+  rationale: Control vigente
+  status: proposed
+- id: W6
+  history_years: 6
+  epidemic_years: include_all
+  rationale: Aislar efecto de longitud; otros factores fijos
+  status: proposed
+- id: W7
+  history_years: 7
+  epidemic_years: include_all
+  rationale: Aislar efecto de longitud; otros factores fijos
+  status: proposed
+- id: W8
+  history_years: 8
+  epidemic_years: include_all
+  rationale: Aislar efecto de longitud; otros factores fijos
+  status: proposed
+- id: W9
+  history_years: 9
+  epidemic_years: include_all
+  rationale: Aislar efecto de longitud; otros factores fijos
+  status: proposed
+- id: E5
+  history_years: 5
+  epidemic_years: exclude_predeclared_conditional
+  status: blocked_pending_human_rule
+  minimum_usable_observations: 5
+  replace_excluded_years: false
+  rationale: Cuantificar sensibilidad y pérdida de soporte; exclusión no reemplaza
+    historia ni relaja mínimo
+stages:
+- label_sensitivity
+- development_methodological_preselection
+- conditional_predictive_comparison
+- future_unseen_confirmation
+pending_exp01:
+  T+1: PENDING_EXP01
+  T+2: PENDING_EXP01
+  cohort: PENDING_EXP01
+  calendar: PENDING_EXP01
+  comparator: PENDING_EXP01
+  calibration: PENDING_EXP01
+  threshold: PENDING_EXP01
+  episode_metrics: PENDING_EXP01
+  mlflow: PENDING_EXP01
+pending_human_decisions:
+- epidemic_authority_and_geographic_scope
+- dated_exclusion_rule
+- common_truth_reference
+- channel_predictors_fixed_or_uniformly_excluded
+- coverage_acceptance
+- success_margins
+- block_bootstrap_parameters
+- multiplicity_family
+metrics:
+  epidemiological:
+  - P75_absolute_relative_change
+  - label_flip_rate
+  - agreement
+  - positive_Jaccard
+  - kappa
+  - onsets
+  - episode_duration
+  - fragmentation
+  - fusion
+  - coverage
+  - epidemic_strata
+  operational:
+  - onset_sensitivity
+  - onset_precision
+  - missed_episodes
+  - false_alerts
+  - false_alerts_per_municipality_year
+  - useful_lead_time
+  probabilistic:
+  - PR_AUC
+  - Brier
+  - calibration
+  - AUROC_secondary_only
+temporal:
+  '2025': consumed_no_training_or_selection
+  '2024': retrospective_stress_only
+  history: available_at_consumer_origin_no_target_self_inclusion
+  confirmation: future_unseen_data
+zero_missing_rules:
+  observed_zero: retain
+  no_notification_within_coverage: zero_under_DEC120
+  absent_outside_coverage: unknown
+  insufficient_history: non_evaluable
+  relative_change_zero_control: undefined_no_epsilon
+multiplicity: paired_comparisons_Holm_predeclared_families
+prohibitions:
+- implementation
+- execution
+- real_channel_recalculation
+- fits
+- protocol.json
+- registry_update
+- MLflow_access
+- champion_selection
