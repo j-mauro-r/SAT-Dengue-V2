@@ -30,6 +30,14 @@ AGGREGATES = {
     "real_onsets",
     "false_alerts",
     "emitted_alerts",
+    "onset_precision",
+    "missed_episodes",
+    "detected_episodes",
+    "false_alerts_per_municipality_year",
+    "useful_lead_months",
+    "calibration_error",
+    "evaluable_rows",
+    "unavailable_outcomes",
 }
 
 
@@ -131,7 +139,7 @@ def verified_lineage(record: dict[str, Any]) -> tuple[dict[str, Any], list[dict[
                     "horizon": row["horizon"],
                     "decision": row["result"],
                     "window": "2025-01..2025-12",
-                    "metrics": {k: float(row[k]) for k in AGGREGATES if row[k]},
+                    "metrics": {k: float(row[k]) for k in AGGREGATES if row.get(k)},
                 }
             )
         if [

@@ -99,6 +99,26 @@ existing success is returned; the new attempt becomes `KILLED` with
 attempts do not count as successful registration. Local tracking assumes trusted
 repository/store ownership; it is not a remote multi-user tracking service.
 
+### EXP01 paired-target lineage
+
+EXP01's registered scientific pipeline identity is exp01; its only executable
+pipeline in the infrastructure PR is exp01_synthetic. That source-free probe
+uses generated rows, verifies the frozen 36-child shape (objective × family ×
+horizon × three synthetic windows), and records no synthetic metric values. Its
+parent records protocol, commit, data, configuration, code and typed-receipt
+hashes, a generated-only cohort, evidence type and zero real-fit counters. Each
+child records only objective, family, horizon, window, seed, cohort and synthetic
+evidence type. No predictions, raw inputs, paths or scientific artifacts are
+logged.
+
+Retries are keyed by the immutable parent projection and all 36 child identities.
+A verified repeat returns the original parent and records the attempt as
+duplicate_verified. The official local store remains
+tmp/kedro-migration/replay-mlflow; tests use a separate UUID temporary store.
+The future real exp01 invocation requires a separately reviewed runner and
+authorization bound to the frozen protocol, commit and data identities. Enabling
+the synthetic profile never authorizes that run.
+
 ## Formal EXP00 registration — pending
 
 The implementation is authorized. Formal execution remains pending by the user's
@@ -119,3 +139,12 @@ validation evidence, negative results and limitations. Update the registry's
 registration status only then. Do not invent a run ID or change scientific results.
 For EXP00, G5 remains `NOT_APPROVED`, champion `not_selected`, all six candidate
 procedures `does_not_meet`, and 2025 remains consumed and replay-only.
+
+
+## EXP01 corrective runner infrastructure
+
+[Runner handoff](../../operations/exp01-runner-handoff.md) owns the later `exp01`
+and `exp01_preflight` implementation, approval schema and exact future command.
+The frozen protocol and its canonical hash remain unchanged. Its original
+implementation-status notes are historical delivery metadata; they do not grant
+real execution. Scientific execution/registration and conclusions stay pending.

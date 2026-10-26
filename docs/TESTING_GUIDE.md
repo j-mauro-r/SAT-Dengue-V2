@@ -737,6 +737,29 @@ Report global historical DWP failures separately. Runtime setup remains owned by
 [the migration guide](operations/kedro-migration.md); experiment registration and
 the later manual command are owned by [the registry guide](product/experiments/README.md).
 
+### EXP01 direct-onset infrastructure
+
+EXP01's scientific functions, frozen protocol resolver, synthetic Kedro graph,
+configuration profile and isolated MLflow path map to these tests:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_exp01_onset.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py -q
+.venv/bin/python -m pytest tests/integration/test_exp01_tracking.py -q
+.venv/bin/python -m ruff check src/sat_dengue/experiments src/sat_dengue/tracking tests/unit/test_exp01_onset.py tests/integration/test_exp01_tracking.py
+.venv/bin/python -m ruff format --check src tests
+MYPYPATH=src:tests:tests/integration:tests/unit:tests/contracts .venv/bin/python -m mypy --explicit-package-bases --exclude '(^|/)conftest\.py$' src tests
+.venv/bin/python scripts/check_markdown_links.py
+```
+
+These tests use generated rows and a dedicated ignored temporary MLflow store.
+The EXP01 integration check asserts the exact parent/36-child structure, protocol
+and data identities, no logged synthetic metrics, zero real-fit counters, and
+duplicate protection. It does not run a real scientific pipeline,
+load private panel data, or evaluate 2024/2025.
+
+The explicit mypy invocation avoids the repository's duplicate top-level
+conftest module names while checking all other source and test files.
+
 
 ## EXP00 tracking audit corrections
 
@@ -757,3 +780,34 @@ constraints. Run `pip check` and, outside source import paths (`python -I`), ver
 pinned version and its direct `Requires-Dist` metadata. Confirm optional MLflow and
 modeling packages remain absent. Run only `foundation` for a Kedro startup smoke.
 Do not execute real replay, its excluded E2E test or replay-dependent private suites.
+
+
+### EXP01 real runner corrective infrastructure
+
+The registered real graph, metadata descriptor, explicit approval/reservation,
+paired engine and result tracking map to `test_exp01_runner.py`,
+`test_exp01_runner_tracking.py`, the existing EXP01 onset/tracking tests,
+configuration contracts and base bootstrap. Use the pinned foundation environment:
+
+```bash
+export PATH="$PWD/tmp/kedro-migration/foundation/bin:$PATH"
+python -m pytest tests/unit/test_exp01_runner.py tests/unit/test_exp01_onset.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py tests/integration/test_exp01_runner_tracking.py tests/integration/test_exp01_tracking.py -q
+```
+
+Run the full unit/contracts plus MLflow/EXP01 and permitted synthetic E2E selection
+in a fresh source checkout without private `data/` or persistent `tmp/`. Preserve
+its existing three absent historical-EDA skips and default private-test
+deselections as separate limitations. Do not invoke real replay, private parity,
+real EXP01 or `--require-migration-evidence`. Every tracking test owns a fresh
+`repo_tmp_path` store. Confirm the permanent replay-MLflow file hashes before and
+after validation. Synthetic probe parents/children remain explicitly synthetic.
+
+Also run Ruff lint/format, the explicit mypy command above, maintained-script
+quality, Markdown links, `pip check`, secret/runtime scans, diff checks,
+repo-only/scoped-plan/all-plan DWP checks, an isolated base wheel installation
+and an isolated modeling/tracking wheel installation with frozen constraints.
+Build/register the actual installed graph outside source import paths. Run only
+foundation startup for the base wheel and generated synthetic probes for optional
+extras. Exercise metadata-only preflight on the local declared source paths and
+read-only permanent tracking destination; no private-content read is allowed.
+The handoff owns the [future command and approval boundary](operations/exp01-runner-handoff.md).

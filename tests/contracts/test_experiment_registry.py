@@ -126,20 +126,20 @@ def test_future_registered_experiment(registry: dict[str, Any]) -> None:
     protocol = json.loads(Path(entry["protocol"]).read_text())
     for doc in (entry, protocol, protocol["mlflow"]["required_conceptual_tags"]):
         doc.update(
-            experiment_id="EXP01", experiment_slug="future_comparison", hypothesis_id="EXP01-H1"
+            experiment_id="EXP89", experiment_slug="future_comparison", hypothesis_id="EXP89-H1"
         )
-    path = REGISTRY.parent / "EXP01_future/protocol.json"
+    path = REGISTRY.parent / "EXP89_future/protocol.json"
     path.parent.mkdir()
     path.write_bytes(canonical_bytes(protocol))
     entry["protocol"] = str(path)
     entry["protocol_sha256"] = hashlib.sha256(canonical_bytes(protocol)).hexdigest()
     registry["experiments"].append(entry)
     save(registry)
-    assert resolve_experiment("EXP01")["experiment_slug"] == "future_comparison"
+    assert resolve_experiment("EXP89")["experiment_slug"] == "future_comparison"
     protocol["objective"] = "changed after freezing"
     path.write_bytes(canonical_bytes(protocol))
     with pytest.raises(ValueError, match="hash"):
-        resolve_experiment("EXP01")
+        resolve_experiment("EXP89")
 
 
 def test_duplicate_document_keys(registry: dict[str, Any]) -> None:

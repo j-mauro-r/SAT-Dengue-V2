@@ -36,6 +36,12 @@ PARAMETERS = {
     "profile",
     "kind",
     "metric_definition_sha256",
+    "protocol_sha256",
+    "data_sha256",
+    "objective",
+    "evidence_type",
+    "protocol_version",
+    "synthetic_interface_fits",
     "seed",
     "cohort",
     "window",
@@ -89,7 +95,13 @@ class LocalTracking:
     ) -> None:
         allowed_parameters({"profile": pipeline})
         self.conceptual = resolve_experiment(experiment_id) if experiment_id is not None else {}
-        if self.conceptual and self.conceptual.pop("pipeline") != pipeline:
+        self.registered_pipeline = self.conceptual.pop("pipeline", None)
+        if self.conceptual and not isinstance(self.registered_pipeline, str):
+            raise ValueError("Registered experiment pipeline is missing")
+        if self.conceptual and pipeline not in {
+            self.registered_pipeline,
+            str(self.registered_pipeline) + "_synthetic",
+        }:
             raise ValueError("Registered experiment pipeline mismatch")
         if pipeline in {"replay", "training_replay", "evaluation_replay"} and not self.conceptual:
             raise ValueError("Real scientific tracking requires experiment_id")
@@ -230,9 +242,273 @@ class LocalTracking:
             self.fail()
             raise
 
+    def finish_exp01_synthetic(self, receipt: dict[str, Any]) -> str:
+        """Register only the zero-fit structure of the generated-data probe."""
+        try:
+            with self._lock():
+                return self._finish_exp01_synthetic(receipt)
+        except BaseException:
+            self.fail()
+            raise
+
+    def _finish_exp01_synthetic(self, receipt: dict[str, Any]) -> str:
+        from sat_dengue.experiments.exp01 import SYNTHETIC_EVIDENCE
+
+        if self.terminal:
+            raise RuntimeError("Tracking run is already terminal")
+        required = {
+            "schema",
+            "experiment_id",
+            "experiment_slug",
+            "hypothesis_id",
+            "protocol_version",
+            "protocol_sha256",
+            "data_sha256",
+            "configuration_sha256",
+            "kind",
+            "evidence_type",
+            "pipeline",
+            "profile",
+            "cohort",
+            "seed",
+            "real_model_fits",
+            "real_preparer_refits",
+            "calibrator_fits",
+            "hyperparameter_search",
+            "threshold_selection",
+            "synthetic_interface_fits",
+            "G5",
+            "champion",
+            "children",
+        }
+        if (
+            self.pipeline != "exp01_synthetic"
+            or self.conceptual.get("experiment_id") != "EXP01"
+            or not isinstance(receipt, dict)
+            or set(receipt) != required
+            or receipt["schema"] != "exp01-synthetic-probe-v1"
+            or receipt["kind"] != SYNTHETIC_EVIDENCE
+            or receipt["evidence_type"] != "synthetic_interface_probe"
+            or receipt["pipeline"] != self.pipeline
+            or receipt["profile"] != self.pipeline
+            or receipt["cohort"] != "generated_fixture_only"
+            or receipt["G5"] != "NOT_APPROVED"
+            or receipt["champion"] != "not_selected"
+            or any(
+                receipt[name] != 0
+                for name in (
+                    "real_model_fits",
+                    "real_preparer_refits",
+                    "calibrator_fits",
+                    "hyperparameter_search",
+                    "threshold_selection",
+                )
+            )
+        ):
+            raise ValueError("Invalid synthetic EXP01 tracking receipt")
+        current = resolve_experiment("EXP01")
+        if (
+            receipt["protocol_sha256"] != current["protocol_sha256"]
+            or receipt["experiment_slug"] != current["experiment_slug"]
+            or receipt["hypothesis_id"] != current["hypothesis_id"]
+        ):
+            raise ValueError("Synthetic receipt is not bound to the frozen protocol")
+        protocol = json.loads(
+            Path("docs/product/experiments/EXP01_direct_onset/protocol.json").read_text()
+        )
+        children = receipt["children"]
+        windows = {child.get("window") for child in children}
+        if len(windows) != 3 or any(
+            not isinstance(window, str) or not window.startswith("synthetic_window_")
+            for window in windows
+        ):
+            raise ValueError("Synthetic EXP01 requires three clearly synthetic windows")
+        expected = {
+            (objective, family, str(horizon), window)
+            for objective in ("excess", "onset")
+            for family in protocol["design"]["families"]
+            for horizon in (1, 2)
+            for window in windows
+        }
+        actual = set()
+        child_fields = {
+            "objective",
+            "family",
+            "horizon",
+            "window",
+            "cohort",
+            "seed",
+            "evidence_type",
+        }
+        for child in children:
+            if not isinstance(child, dict) or set(child) != child_fields:
+                raise ValueError("Synthetic children may contain structure only, never results")
+            if (
+                child["cohort"] != "non_excess_at_t"
+                or child["seed"] != protocol["design"]["seed"]
+                or child["evidence_type"] != "synthetic_interface_probe"
+            ):
+                raise ValueError("Synthetic child lineage mismatch")
+            actual.add(
+                (child["objective"], child["family"], str(child["horizon"]), child["window"])
+            )
+        if len(children) != 36 or actual != expected or len(actual) != len(children):
+            raise ValueError("Synthetic EXP01 requires the exact 36-child structure")
+
+        import hashlib
+        import platform
+        import subprocess
+
+        code_files = (
+            Path("src/sat_dengue/experiments/exp01.py"),
+            Path("src/sat_dengue/experiments/onset.py"),
+            Path("src/sat_dengue/experiments/onset_evaluation.py"),
+        )
+        code_sha = hashlib.sha256(
+            canonical_bytes({p.name: p.read_bytes().hex() for p in code_files})
+        ).hexdigest()
+        git_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+        git_dirty = bool(subprocess.check_output(["git", "status", "--porcelain"], text=True))
+        parameters = {
+            "profile": self.pipeline,
+            "kind": "synthetic",
+            "protocol_version": receipt["protocol_version"],
+            "protocol_sha256": receipt["protocol_sha256"],
+            "data_sha256": receipt["data_sha256"],
+            "input_sha256": receipt["data_sha256"],
+            "configuration_sha256": receipt["configuration_sha256"],
+            "code_sha256": code_sha,
+            "git_revision": git_revision,
+            "git_dirty": str(git_dirty).lower(),
+            "python_version": platform.python_version(),
+            "pipeline_identity_sha256": hashlib.sha256(self.pipeline.encode()).hexdigest(),
+            "cohort": receipt["cohort"],
+            "window": "expanding_pre_2025",
+            "seed": str(receipt["seed"]),
+            "objective": "paired_excess_and_onset",
+            "evidence_type": receipt["evidence_type"],
+            "G5": receipt["G5"],
+            "champion": receipt["champion"],
+            "synthetic_interface_fits": receipt["synthetic_interface_fits"],
+        }
+        parameters["manifest_sha256"] = hashlib.sha256(
+            canonical_bytes({"parameters": parameters, "children": children})
+        ).hexdigest()
+        bundle = hashlib.sha256(
+            canonical_bytes({"parameters": parameters, "children": children})
+        ).hexdigest()
+        parameters["bundle_id"] = bundle
+        self.params(self.parent, parameters)
+        self.metrics(self.parent, dict.fromkeys(COUNTERS, 0.0))
+        previous = self.client.search_runs(
+            [self.experiment],
+            filter_string="attributes.status = 'FINISHED' and params.bundle_id = '"
+            + bundle
+            + "' and tags.pipeline = '"
+            + self.pipeline
+            + "' and tags.status = 'verified' and tags.experiment_id = 'EXP01'"
+            + " and tags.protocol_sha256 = '"
+            + self.conceptual["protocol_sha256"]
+            + "'",
+        )
+        previous = [run for run in previous if "mlflow.parentRunId" not in run.data.tags]
+        if previous:
+            existing = previous[0]
+            if any(
+                existing.data.params.get(k) != v for k, v in allowed_parameters(parameters).items()
+            ):
+                raise ValueError("Existing synthetic EXP01 lineage changed")
+            old_children = self.client.search_runs(
+                [self.experiment],
+                filter_string="tags.mlflow.parentRunId = '" + existing.info.run_id + "'",
+            )
+
+            def child_key(run: Any) -> tuple[str, str, str, str]:
+                return (
+                    str(run.data.params.get("objective", "")),
+                    str(run.data.params.get("family", "")),
+                    str(run.data.params.get("horizon", "")),
+                    str(run.data.params.get("window", "")),
+                )
+
+            if (
+                {child_key(run) for run in old_children} != actual
+                or len(old_children) != 36
+                or any(run.data.metrics or run.info.status != "FINISHED" for run in old_children)
+                or any(existing.data.metrics.get(k) != 0 for k in COUNTERS)
+                or any(
+                    any(run.data.tags.get(key) != value for key, value in self.conceptual.items())
+                    for run in old_children
+                )
+            ):
+                raise ValueError("Existing synthetic child structure changed")
+            self.client.set_tag(self.parent, "duplicate_of", str(existing.info.run_id))
+            self.client.set_tag(self.parent, "status", "duplicate_verified")
+            self.client.set_terminated(self.parent, "KILLED")
+            self.terminal = True
+            return str(existing.info.run_id)
+
+        for child in children:
+            child_run = self.client.create_run(
+                self.experiment,
+                tags={
+                    "mlflow.parentRunId": self.parent,
+                    "mlflow.runName": (
+                        "EXP01:"
+                        + child["objective"]
+                        + ":"
+                        + child["family"]
+                        + ":t"
+                        + str(child["horizon"])
+                        + ":"
+                        + child["window"]
+                    ),
+                    **{k: v for k, v in self.conceptual.items() if k != "pipeline"},
+                    "pipeline": self.pipeline,
+                    "status": "verified",
+                },
+            ).info.run_id
+            self.children.append(child_run)
+            self.params(
+                child_run,
+                {
+                    "objective": child["objective"],
+                    "family": child["family"],
+                    "horizon": str(child["horizon"]),
+                    "window": child["window"],
+                    "cohort": child["cohort"],
+                    "seed": str(child["seed"]),
+                    "evidence_type": child["evidence_type"],
+                    "kind": "synthetic",
+                    "bundle_id": bundle,
+                },
+            )
+        receipt_path = self.root / "receipts" / (self.parent + ".json")
+        receipt_path.parent.mkdir(exist_ok=True)
+        receipt_path.write_bytes(
+            canonical_bytes(
+                {
+                    "schema": "exp01-synthetic-mlflow-lineage-v1",
+                    "parameters": allowed_parameters(parameters),
+                    "children": sorted([list(item) for item in actual]),
+                    "real_model_fits": 0,
+                    "real_adjustments": 0,
+                }
+            )
+        )
+        self.client.log_artifact(self.parent, str(receipt_path))
+        for child_run in self.children:
+            self.client.set_terminated(child_run, "FINISHED")
+        self.client.set_tag(self.parent, "status", "verified")
+        self.client.set_terminated(self.parent, "FINISHED")
+        self.terminal = True
+        return str(self.parent)
+
     def _finish(self, publication: dict[str, Any]) -> str:
         if self.terminal:
             raise RuntimeError("Tracking run is already terminal")
+        if self.conceptual.get("experiment_id") == "EXP01":
+            raise ValueError("EXP01 registration accepts only its structure-only synthetic probe")
         try:
             self._validate_storage()
             params, candidates = verified_lineage(publication)
@@ -253,7 +529,7 @@ class LocalTracking:
                 raise ValueError("Publication experiment identity mismatch")
             if self.conceptual:
                 current = resolve_experiment(self.conceptual["experiment_id"])
-                if current != {**self.conceptual, "pipeline": self.pipeline}:
+                if current != {**self.conceptual, "pipeline": self.registered_pipeline}:
                     raise ValueError("Experiment protocol changed during execution")
             self.params(self.parent, params)
             self.metrics(self.parent, dict.fromkeys(COUNTERS, 0.0))
