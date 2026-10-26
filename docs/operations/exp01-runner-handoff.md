@@ -19,8 +19,15 @@ owns the subsequent runner implementation without changing the protocol hash.
 `Exp01SourcesDataset` is a metadata-only descriptor for the existing pinned Stage 2
 manifest, construction contract, consolidated monthly panel, notification source,
 label/channel traceability and municipality catalog. Its `load()` never opens
-private contents. The existing Stage 3 reader verifies the pinned manifest and
-its payload fingerprints only after authorization. No EXP00 predictions are read.
+private contents. The EXP01-specific reader verifies the pinned manifest and complete payload fingerprints
+only after authorization. It checks the full header/dimensions, then projects keys, raw
+predictors and the controls needed for population, count and climate-coverage validation.
+It removes origins after December 2024 before typing predictor values. Supplied labels,
+future target metadata and channel values are not interpreted or validated; EXP01
+rebuilds its own channel and targets. Whole-file hashing establishes source identity
+and does not imply semantic use of discarded columns. November/December 2024 remain
+available as history; target roles still end before 2025. Only keys/raw predictors and
+verified provenance reach scientific preparation. No EXP00 predictions are read.
 `Exp01BundleDataset` publishes immutable `result.json`, `provenance.json` and a
 content-addressed manifest under `tmp/kedro-migration/exp01-runs`.
 Kedro resolves catalog dataset paths to absolute paths before materialization.
@@ -198,3 +205,35 @@ correspondence and frozen-runtime verification, then executes remaining gates.
 Earlier metadata/backend/helper failures and their corrections remain in the local
 corrective evidence. These are not scientific EXP01 runs. Remote CI observation
 belongs to the current PR head rather than a claim based on earlier green runs.
+
+## R1 raw-input admission correction
+
+The former generic reader validated legacy target/channel columns attached to retained
+late-2024 origins, allowing unused January/February 2025 target values to reject admission.
+`experiments/exp01_inputs.py` now applies the existing protocol through an explicit raw
+projection and compatible schema, key, calendar, population, category, missingness and
+coverage validators. Full input identities are checked before and after loading. No target
+columns are fabricated and no global validation is disabled. Historical `prepare_inputs`
+consumers retain their default full-schema and target/channel validation.
+
+The separate EXP02 runner also reused `prepare_inputs`. Its admission path therefore
+requires its own assessment/adoption on that branch. This PR does not change that branch
+or claim EXP02 is corrected. The frozen EXP01 protocol and hash, design, budgets, G5 and
+champion remain unchanged. The minor standalone logging-prefix observation is out of scope.
+
+A generated-manifest connection test materializes the real Kedro catalog (including
+canonical absolute publication-path resolution), exercises authorization denial before
+content reads, then uses an explicitly in-memory fixture boundary for source loading.
+It calls the paired engine with controlled estimator/calibrator substitutes and publishes
+an explicitly synthetic result through the real bundle dataset and isolated tracking: one
+parent and 36 children. It does not invoke the real EXP01 graph, create a real approval or
+reservation, access private sources, or write the permanent store. This proves connection
+compatibility, not successful private scientific execution.
+
+After merge, resume PLAN_039 without treating this correction as operational completion:
+update only the installed project package from the new clean main commit using `--no-deps`,
+verify unchanged dependencies and installed/source correspondence, and generate a new
+no-fit preflight. Review the independent disposition and the human authorization bound to
+that new commit, protocol, data and configuration. The existing runtime/receipt/approval
+identities do not automatically transfer to the merged code. Mauricio runs
+`kedro run --pipelines=exp01` only after the separate authorization process.

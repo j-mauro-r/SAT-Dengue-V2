@@ -8,7 +8,7 @@ from typing import Any
 
 from sat_dengue.configuration import AUTHORITIES
 from sat_dengue.datasets.legacy_preparation.contract import PreparationConfig
-from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint, prepare_inputs
+from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
 from sat_dengue.datasets.stage2 import NATIVE_IDENTITIES, NATIVE_MANIFEST
 from sat_dengue.experiments.exp01 import (
     digest,
@@ -17,6 +17,7 @@ from sat_dengue.experiments.exp01 import (
     native_calibration,
     native_fit,
 )
+from sat_dengue.experiments.exp01_inputs import prepare_exp01_inputs
 from sat_dengue.experiments.exp01_preflight import (
     authorize,
     git_identity,
@@ -33,7 +34,7 @@ def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("EXP01 source metadata changed after preflight")
     if fingerprint(safe_path(NATIVE_MANIFEST)) != NATIVE_IDENTITIES[NATIVE_MANIFEST]:
         raise ValueError("EXP01 data version differs from approved manifest")
-    prepared = prepare_inputs(PreparationConfig(Path.cwd()), reference_end="2024-12")
+    prepared = prepare_exp01_inputs(PreparationConfig(Path.cwd()))
     panel = prepared.panel
     if panel.year_month.ge("2025-01").any():
         raise ValueError("Consumed 2025 cannot enter EXP01")
