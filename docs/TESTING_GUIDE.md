@@ -879,9 +879,25 @@ The handoff owns the [future command and approval boundary](operations/exp01-run
 
 Map `experiments/exp02*.py`, `datasets/exp02.py`, `tracking/exp02.py`, the EXP02
 protocol/registry, graph/configuration changes and optional shared adapter exclusions
-to `tests/unit/test_exp02.py` and `tests/integration/test_exp02_tracking.py`.
+to `tests/unit/test_exp02.py`, `tests/integration/test_exp02_tracking.py` and
+`tests/integration/test_exp02_input_integration.py`.
 Run affected EXP01 and adapter tests when changing shared preparation/model dispatch;
 pre-push validation stays focused. CI owns the complete required suite.
+
+EXP02 reuses EXP01's `prepare_exp01_inputs` admission after authorization: complete
+source identity remains mandatory, supplied labels/channel are ignored, November and
+December 2024 remain available, and 2025 origins are excluded before scientific typing.
+Consumed invalid raw predictors still fail. The generated input integration probe
+uses the real catalog, preflight and admission with an in-memory authorization
+substitute, synthetic fit/calibration callbacks and isolated temporary publication
+and MLflow. Admission checks all 76 generated municipalities; synthetic computation
+uses the fixture's two distinct series while retaining the full 108-cell grid.
+It creates no execution approval or reservation and provides no real
+scientific evidence. Run only this module for an admission-only correction:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/integration/test_exp02_input_integration.py -q
+```
 
 The frozen [EXP02 protocol](product/experiments/EXP02_feature_ablation/protocol.json)
 retains six onset-only variants and the complete EXP01 budget frontier. The original

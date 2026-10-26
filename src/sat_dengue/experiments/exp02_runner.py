@@ -15,8 +15,9 @@ from sat_dengue.experiments.exp02_preflight import OUTPUT_ROOT, authorize, safe_
 def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
     approval = authorize(receipt)
     from sat_dengue.datasets.legacy_preparation.contract import PreparationConfig
-    from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint, prepare_inputs
+    from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
     from sat_dengue.datasets.stage2 import NATIVE_IDENTITIES, NATIVE_MANIFEST
+    from sat_dengue.experiments.exp01_inputs import prepare_exp01_inputs
 
     for declared in receipt["sources"]["declared_paths"]:
         safe_path(declared)
@@ -24,7 +25,7 @@ def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("Approved data manifest changed")
     if approval["data_version"] != receipt["data_version"]:
         raise PermissionError("Data version mismatch")
-    inputs = prepare_inputs(PreparationConfig(Path.cwd()), reference_end="2024-12")
+    inputs = prepare_exp01_inputs(PreparationConfig(Path.cwd()))
     if (
         inputs.panel.year_month.ge("2025-01").any()
         or inputs.panel.municipality_code.nunique() != 76
