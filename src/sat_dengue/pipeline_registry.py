@@ -3,6 +3,7 @@
 from kedro.pipeline import Pipeline, node
 
 from sat_dengue.configuration import resolve_configuration
+from sat_dengue.experiments.exp01 import synthetic_run
 from sat_dengue.pipelines.data.pipeline import create_pipeline
 from sat_dengue.pipelines.evaluation.pipeline import create_replay_pipeline as evaluation_replay
 from sat_dengue.pipelines.evaluation.pipeline import (
@@ -14,7 +15,7 @@ from sat_dengue.pipelines.training.pipeline import create_replay_pipeline, creat
 
 
 def register_pipelines() -> dict[str, Pipeline]:
-    """Expose foundation by default and explicit no-fit Stage 2 execution."""
+    """Expose foundation, implemented stages and the source-free EXP01 probe."""
     foundation = Pipeline(
         [
             node(
@@ -36,4 +37,14 @@ def register_pipelines() -> dict[str, Pipeline]:
         "preparation": preparation_pipeline(),
         "training_replay": create_replay_pipeline(),
         "training_synthetic": create_synthetic_pipeline(),
+        "exp01_synthetic": Pipeline(
+            [
+                node(
+                    synthetic_run,
+                    inputs=None,
+                    outputs="exp01_synthetic_receipt",
+                    name="exp01_synthetic_preflight",
+                )
+            ]
+        ),
     }

@@ -54,11 +54,34 @@ def register_local_artifacts() -> None:
             ):
                 raise ValueError("Only generated local lineage receipts may be logged")
             value = json.loads(source.read_text())
-            if (
-                set(value) != {"schema", "parameters", "real_adjustments"}
-                or value["schema"] != "bounded-mlflow-lineage-v1"
-                or value["real_adjustments"] != 0
-            ):
+            if value.get("schema") == "bounded-mlflow-lineage-v1":
+                valid = (
+                    set(value) == {"schema", "parameters", "real_adjustments"}
+                    and value["real_adjustments"] == 0
+                )
+            elif value.get("schema") == "exp01-synthetic-mlflow-lineage-v1":
+                children = value.get("children")
+                valid = (
+                    set(value)
+                    == {"schema", "parameters", "children", "real_model_fits", "real_adjustments"}
+                    and value["real_model_fits"] == 0
+                    and value["real_adjustments"] == 0
+                    and isinstance(children, list)
+                    and len(children) == 36
+                    and len({tuple(child) for child in children if isinstance(child, list)}) == 36
+                    and all(
+                        isinstance(child, list)
+                        and len(child) == 4
+                        and child[0] in {"excess", "onset"}
+                        and child[1] in {"xgboost", "lightgbm", "gam"}
+                        and child[2] in {"1", "2"}
+                        and child[3].startswith("synthetic_window_")
+                        for child in children
+                    )
+                )
+            else:
+                valid = False
+            if not valid:
                 raise ValueError("Unapproved tracking artifact schema")
             allowed_parameters(value["parameters"])
             super().log_artifact(str(source))

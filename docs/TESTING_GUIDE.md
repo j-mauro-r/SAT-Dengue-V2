@@ -737,6 +737,29 @@ Report global historical DWP failures separately. Runtime setup remains owned by
 [the migration guide](operations/kedro-migration.md); experiment registration and
 the later manual command are owned by [the registry guide](product/experiments/README.md).
 
+### EXP01 direct-onset infrastructure
+
+EXP01's scientific functions, frozen protocol resolver, synthetic Kedro graph,
+configuration profile and isolated MLflow path map to these tests:
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_exp01_onset.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py -q
+.venv/bin/python -m pytest tests/integration/test_exp01_tracking.py -q
+.venv/bin/python -m ruff check src/sat_dengue/experiments src/sat_dengue/tracking tests/unit/test_exp01_onset.py tests/integration/test_exp01_tracking.py
+.venv/bin/python -m ruff format --check src tests
+MYPYPATH=src:tests:tests/integration:tests/unit:tests/contracts .venv/bin/python -m mypy --explicit-package-bases --exclude '(^|/)conftest\.py$' src tests
+.venv/bin/python scripts/check_markdown_links.py
+```
+
+These tests use generated rows and a dedicated ignored temporary MLflow store.
+The EXP01 integration check asserts the exact parent/36-child structure, protocol
+and data identities, no logged synthetic metrics, zero real-fit counters, and
+duplicate protection. It does not run a real scientific pipeline,
+load private panel data, or evaluate 2024/2025.
+
+The explicit mypy invocation avoids the repository's duplicate top-level
+conftest module names while checking all other source and test files.
+
 
 ## EXP00 tracking audit corrections
 

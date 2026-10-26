@@ -103,6 +103,17 @@ def test_environment_yaml_cannot_add_scientific_settings(tmp_path: Path, content
         loader["parameters"]
 
 
+def test_exp01_synthetic_profile_requires_its_registered_identity() -> None:
+    from sat_dengue.configuration import validate_parameters
+
+    resolved = validate_parameters(
+        {"profile": "exp01_synthetic", "tracking": "disabled", "experiment_id": "EXP01"}
+    )
+    assert resolved["experiment_id"] == "EXP01"
+    with pytest.raises(ValueError, match="requires experiment_id"):
+        validate_parameters({"profile": "exp01_synthetic", "tracking": "enabled"})
+
+
 def test_catalog_cannot_replace_scientific_authority(tmp_path: Path) -> None:
     shutil.copytree(ROOT / "conf/base", tmp_path / "base")
     (tmp_path / "override").mkdir()

@@ -39,6 +39,7 @@ def main() -> None:
         "evaluation_synthetic",
         "replay",
         "replay_synthetic",
+        "exp01_synthetic",
     }
     assert pipelines["__default__"] is pipelines["foundation"]
     assert not OPTIONAL.intersection(sys.modules)

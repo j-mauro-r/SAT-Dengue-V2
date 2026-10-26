@@ -59,6 +59,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "training_synthetic",
         "evaluation_replay",
         "evaluation_synthetic",
+        "exp01_synthetic",
         "replay",
         "replay_synthetic",
     ) or value["tracking"] not in ("disabled", "enabled"):
@@ -74,6 +75,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "replay",
         "training_replay",
         "evaluation_replay",
+        "exp01_synthetic",
     }:
         raise ValueError("Real scientific tracking requires experiment_id")
     return {k: v for k, v in value.items() if v is not None}
