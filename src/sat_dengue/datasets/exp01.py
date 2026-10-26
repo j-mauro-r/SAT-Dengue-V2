@@ -2,15 +2,33 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from kedro.io import AbstractDataset, DatasetError
 
 from sat_dengue.configuration import canonical_bytes
+from sat_dengue.datasets.legacy_preparation.development import resolve_root
 from sat_dengue.datasets.legacy_preparation.persistence import publish_bundle
 from sat_dengue.experiments.exp01 import digest
 from sat_dengue.experiments.exp01_preflight import OUTPUT_ROOT, safe_path, source_metadata
 from sat_dengue.training_preparation.serialization import bytes_record
+
+
+def _publication_root(filepath: str) -> Path:
+    """Accept the fixed catalog path or Kedro's canonical absolute equivalent."""
+    root = resolve_root()
+    path = Path(filepath)
+    if (
+        Path.cwd().resolve() != root
+        or ".." in path.parts
+        or any(part.is_symlink() for part in (path, *path.parents))
+        or (not path.is_absolute() and filepath != OUTPUT_ROOT)
+        or path.resolve() != root / OUTPUT_ROOT
+    ):
+        raise ValueError("EXP01 publication path must match the fixed catalog")
+    # Preserve the relative internal representation used by global safe_path.
+    return safe_path(OUTPUT_ROOT, temporary=True)
 
 
 class Exp01SourcesDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
@@ -28,9 +46,7 @@ class Exp01SourcesDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
 
 class Exp01BundleDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
     def __init__(self, filepath: str) -> None:
-        if filepath != OUTPUT_ROOT:
-            raise ValueError("EXP01 publication path must match the fixed catalog")
-        self._root = safe_path(filepath, temporary=True)
+        self._root = _publication_root(filepath)
 
     def save(self, data: dict[str, Any]) -> None:
         tracker = data["tracker"]

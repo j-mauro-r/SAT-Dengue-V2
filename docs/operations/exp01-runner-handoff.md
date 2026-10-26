@@ -23,6 +23,14 @@ private contents. The existing Stage 3 reader verifies the pinned manifest and
 its payload fingerprints only after authorization. No EXP00 predictions are read.
 `Exp01BundleDataset` publishes immutable `result.json`, `provenance.json` and a
 content-addressed manifest under `tmp/kedro-migration/exp01-runs`.
+Kedro resolves catalog dataset paths to absolute paths before materialization.
+The dataset accepts the exact configured relative path and its canonical absolute
+equivalent under the real project root, preserving the global path restrictions.
+Preflight now materializes this dataset through a real Kedro session/context,
+without loading private contents or creating its output directory. After merging
+this correction, generate a fresh preflight and a new human/reviewer authorization
+for the resulting clean commit. The older approval is obsolete and must remain
+unused until Mauricio decides its disposition.
 
 Both horizons require observed Y(T)=0. T+2 Y(T+1) only constructs retrospective
 outcomes; it never filters operational eligibility or enters X. Unknown outcomes
@@ -65,7 +73,7 @@ The equivalent Kedro graph is:
 ```bash
 SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow \
 KEDRO_DISABLE_TELEMETRY=yes \
-kedro run --pipeline=exp01_preflight \
+kedro run --pipelines=exp01_preflight \
   --params="profile=exp01_preflight,tracking=enabled,experiment_id=EXP01"
 ```
 
@@ -102,7 +110,7 @@ Only after that separate authorization, Mauricio's exact command is:
 ```bash
 SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow \
 KEDRO_DISABLE_TELEMETRY=yes \
-kedro run --pipeline=exp01 \
+kedro run --pipelines=exp01 \
   --params="profile=exp01,tracking=enabled,experiment_id=EXP01"
 ```
 

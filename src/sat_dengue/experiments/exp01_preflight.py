@@ -163,6 +163,21 @@ def runtime_versions() -> dict[str, str]:
     return versions
 
 
+def materialize_publication_dataset() -> None:
+    """Exercise KedroContext's real absolute-path resolution without running nodes."""
+    from kedro.framework.session import KedroSession
+    from kedro.framework.startup import bootstrap_project
+
+    from sat_dengue.datasets.exp01 import Exp01BundleDataset
+
+    bootstrap_project(Path.cwd())
+    session = KedroSession.create(project_path=Path.cwd(), save_on_close=False)
+    with session:
+        dataset = session.load_context().catalog.get("exp01_bundle")
+        if not isinstance(dataset, Exp01BundleDataset):
+            raise ValueError("EXP01 publication dataset is incompatible")
+
+
 def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, Any]:
     operational = validate_parameters(parameters)
     if operational not in (
@@ -194,6 +209,7 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
         "exp01_bundle",
     } <= set(catalog):
         raise ValueError("EXP01 catalog/graph binding is incomplete")
+    materialize_publication_dataset()
     versions = runtime_versions()
     metadata = execution_metadata()
     output = safe_path(OUTPUT_ROOT, temporary=True)
