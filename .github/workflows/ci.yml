@@ -20,11 +20,9 @@ jobs:
     outputs:
       run_docs: ${{ steps.validation.outputs.run_docs }}
       run_dwp: ${{ steps.validation.outputs.run_dwp }}
-      run_dashboard: ${{ steps.validation.outputs.run_dashboard }}
       run_python_quality: ${{ steps.validation.outputs.run_python_quality }}
       pytest_scope: ${{ steps.validation.outputs.pytest_scope }}
       run_base_package: ${{ steps.validation.outputs.run_base_package }}
-      run_integration_smoke: ${{ steps.validation.outputs.run_integration_smoke }}
       full_gate: ${{ steps.validation.outputs.full_gate }}
       reason: ${{ steps.validation.outputs.reason }}
     steps:
@@ -101,71 +99,6 @@ jobs:
             echo "Potential credential pattern detected."
             exit 1
           fi
-
-  dashboard:
-    name: Dashboard
-    needs: repository-quality
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/dashboard
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Explain skipped dashboard validation
-        if: needs.repository-quality.outputs.run_dashboard != 'true'
-        working-directory: .
-        run: echo "Dashboard validation skipped — ${{ needs.repository-quality.outputs.reason }}"
-
-      - name: Setup Bun
-        if: needs.repository-quality.outputs.run_dashboard == 'true'
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.4.4"
-
-      - name: Cache Bun downloads
-        if: needs.repository-quality.outputs.run_dashboard == 'true'
-        uses: actions/cache@v4
-        with:
-          path: ~/.bun/install/cache
-          key: bun-${{ runner.os }}-${{ hashFiles('apps/dashboard/bun.lock') }}
-          restore-keys: bun-${{ runner.os }}-
-
-      - name: Install dependencies
-        if: needs.repository-quality.outputs.run_dashboard == 'true'
-        run: bun install --frozen-lockfile
-
-      - name: Lint
-        if: needs.repository-quality.outputs.run_dashboard == 'true'
-        run: bun run lint
-
-      - name: Test
-        if: needs.repository-quality.outputs.run_dashboard == 'true'
-        run: bun run test
-
-      - name: Build
-        if: needs.repository-quality.outputs.run_dashboard == 'true'
-        run: bun run build
-
-      - name: Setup Python for API-dashboard smoke
-        if: needs.repository-quality.outputs.run_integration_smoke == 'true'
-        uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install API server dependencies
-        if: needs.repository-quality.outputs.run_integration_smoke == 'true'
-        working-directory: .
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e ".[server]"
-
-      - name: Run real API-dashboard smoke
-        if: needs.repository-quality.outputs.run_integration_smoke == 'true'
-        working-directory: .
-        run: python scripts/dashboard_e2e_smoke.py
 
   python-quality:
     name: Python Quality

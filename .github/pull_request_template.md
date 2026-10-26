@@ -27,15 +27,17 @@ Not included:
 
 Record command + result state (PASS/FAIL/BLOCKED/UNVERIFIED):
 
-- [ ] `bash .agents/skills/deepworkplan/verify/conformance.sh`
-- [ ] `ruff check tests`
-- [ ] `ruff format --check tests`
-- [ ] `mypy tests`
-- [ ] `pytest tests/unit -v`
-- [ ] `find docs -type f -name '*.md' | sort` and `git diff -- docs AGENTS.md README.md .github`
-- [ ] `python3 scripts/check_markdown_links.py`
-- [ ] `grep -RIn "PITAGORAS" . --exclude-dir=.git --exclude-dir=.dwp --exclude-dir=.github --include='*.py' --include='*.json' --include='*.toml' --include='*.sh' || true`
-- [ ] `grep -RInE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|AIza[0-9A-Za-z_-]{35}|-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----' . --exclude-dir=.git --exclude=skills-lock.json || true`
+- Focused existing tests for changed files/behavior:
+- Affected workflow syntax/configuration checks:
+- `git diff --check`:
+- Markdown links, when linked documentation changes:
+- Secret scan of changed files/diff:
+- Repository/scoped DWP conformance, when required:
+- Remote CI results (integral validation belongs in GitHub):
+
+Run full suites locally only when CI cannot run them, to diagnose a remote failure,
+or for a change across repository surfaces. Manual full-suite commands remain in
+`docs/TESTING_GUIDE.md`. Dashboard is manual-only until explicitly reactivated.
 
 ## Evidence
 
