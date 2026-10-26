@@ -183,8 +183,8 @@ No files were deleted. This inventory is relative to corrective baseline
 | Repository/scoped corrective DWP conformance | PASS; final closure is recorded in the local journal/receipt |
 | All local-plan conformance | FAIL: the two inherited PLAN_012 and legacy initial-recognition incidents remain; no historical evidence rewritten |
 
-Individual public-suite/wheel checks completed successfully before the 600-second
-parent wrapper deadline; the parent timeout is retained as a failed attempt.
+The individual public-suite/wheel checks completed successfully; the parent
+wrapper exceeded its 600-second deadline and remains a failed attempt.
 Continuation reuses those completed checks only after exact tested-tree/wheel
 correspondence and frozen-runtime verification, then executes remaining gates.
 Earlier metadata/backend/helper failures and their corrections remain in the local
