@@ -61,6 +61,11 @@ def read_panel(
     if reference_end is not None:
         frame = frame.loc[frame["year_month"] <= reference_end].copy()
     frame.attrs["source_rows"] = source_rows
+    return parse_fields(frame, contract)
+
+
+def parse_fields(frame: pd.DataFrame, contract: dict[str, Any]) -> pd.DataFrame:
+    """Type only the supplied schema, preserving its nullable/empty-string policy."""
     for field in contract["schema"]:
         name = field["name"]
         s = frame[name]
@@ -115,35 +120,7 @@ def prepare_inputs(
     Raises:
         PreparationError: If fingerprints, schema, catalog or panel checks fail.
     """
-    contract_path = config.resolve(config.contract_path)
-    manifest_path = config.resolve(config.manifest_path)
-    before = {
-        str(config.contract_path): fingerprint(contract_path),
-        str(config.manifest_path): fingerprint(manifest_path),
-    }
-    contract = read_json(contract_path)
-    manifest = read_json(manifest_path)
-    expected_paths = {
-        "dengue_y_dengue_grave": "data/processed/dengue_y_dengue_grave.csv",
-        "panel_mensual_dengue_clima": contract["panel_path"],
-        "candidate_contract": contract["upstream_contract_path"],
-        "y_label_history_traceability": (
-            "data/interim/stage2_consolidated_dataset_pipeline/y_label_history_traceability.csv"
-        ),
-        "current_endemic_channel_traceability": "data/interim/stage2_consolidated_dataset_pipeline/"
-        "current_endemic_channel_traceability.csv",
-    }
-    for key, expected_path in expected_paths.items():
-        record = manifest["outputs"][key]
-        if record["path"] != expected_path:
-            raise PreparationError(f"Unexpected manifest output path: {key}")
-        actual = fingerprint(config.resolve(record["path"]))
-        if actual != {k: record[k] for k in ("sha256", "bytes")}:
-            raise PreparationError(f"Input fingerprint mismatch: {key}")
-        before[record["path"]] = actual
-    upstream = read_json(config.resolve(contract["upstream_contract_path"]))
-    if contract["schema"] != upstream["datasets"]["panel_mensual_dengue_clima"]["schema"]:
-        raise PreparationError("Preparation schema differs from construction schema")
+    contract, manifest, before = verified_sources(config)
     panel = read_panel(
         config.resolve(contract["panel_path"]), contract, reference_end=reference_end
     )
@@ -173,3 +150,39 @@ def prepare_inputs(
     report["contract_version"] = contract["version"]
     report["status"] = "PASS"
     return PreparationResult(panel, contract, report)
+
+
+def verified_sources(
+    config: PreparationConfig,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """Verify complete source identities and matching schemas before semantic reads."""
+    contract_path = config.resolve(config.contract_path)
+    manifest_path = config.resolve(config.manifest_path)
+    before = {
+        str(config.contract_path): fingerprint(contract_path),
+        str(config.manifest_path): fingerprint(manifest_path),
+    }
+    contract = read_json(contract_path)
+    manifest = read_json(manifest_path)
+    expected_paths = {
+        "dengue_y_dengue_grave": "data/processed/dengue_y_dengue_grave.csv",
+        "panel_mensual_dengue_clima": contract["panel_path"],
+        "candidate_contract": contract["upstream_contract_path"],
+        "y_label_history_traceability": (
+            "data/interim/stage2_consolidated_dataset_pipeline/y_label_history_traceability.csv"
+        ),
+        "current_endemic_channel_traceability": "data/interim/stage2_consolidated_dataset_pipeline/"
+        "current_endemic_channel_traceability.csv",
+    }
+    for key, expected_path in expected_paths.items():
+        record = manifest["outputs"][key]
+        if record["path"] != expected_path:
+            raise PreparationError(f"Unexpected manifest output path: {key}")
+        actual = fingerprint(config.resolve(record["path"]))
+        if actual != {k: record[k] for k in ("sha256", "bytes")}:
+            raise PreparationError(f"Input fingerprint mismatch: {key}")
+        before[record["path"]] = actual
+    upstream = read_json(config.resolve(contract["upstream_contract_path"]))
+    if contract["schema"] != upstream["datasets"]["panel_mensual_dengue_clima"]["schema"]:
+        raise PreparationError("Preparation schema differs from construction schema")
+    return contract, manifest, before

@@ -828,6 +828,23 @@ modeling packages remain absent. Run only `foundation` for a Kedro startup smoke
 Do not execute real replay, its excluded E2E test or replay-dependent private suites.
 
 
+### EXP01 raw-input admission correction (R1)
+
+`experiments/exp01_inputs.py`, its authorized runner binding and the shared source-identity/
+field-typing helpers map to `tests/unit/test_exp01_inputs.py` and
+`tests/integration/test_exp01_input_integration.py`, using
+`tests/integration/exp01_inputs_fixture.py`. Each changed synthetic CSV receives a freshly fingerprinted
+manifest; the byte-tamper case intentionally keeps its old fingerprint and must fail.
+The integration test uses a real catalog, generated inputs, controlled fit/calibration
+interfaces, an in-memory fixture authorization boundary and isolated synthetic publication/
+tracking. It never invokes the real EXP01 pipeline or writes its permanent store.
+
+For this bounded correction, run those modules plus the existing EXP01 path/authorization
+checks and affected historical preparation-reader regressions. Run Ruff/format/mypy only
+on changed Python files and links only for changed documentation. A single temporary
+wheel/import correspondence check covers the new installed module; do not reinstall the
+operational runtime. GitHub owns full Python/contract/E2E validation.
+
 ### EXP01 real runner corrective infrastructure
 
 The registered real graph, metadata descriptor, explicit approval/reservation,
