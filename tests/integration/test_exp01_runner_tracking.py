@@ -212,3 +212,27 @@ def test_invalid_result_is_rejected_before_native_publication(
     with pytest.raises(DatasetError):
         dataset.save(data)
     assert tracker.failed and not dataset._root.exists()
+
+
+def test_counter_projection_preserves_security_boundary_without_real_route_runs(
+    generated_result: dict[str, Any],
+) -> None:
+    from sat_dengue.tracking.exp01 import tracking_counters
+
+    assert tracking_counters(generated_result) == {
+        "real_model_fits": 0.0,
+        "real_preparer_refits": 0.0,
+        "calibrator_fits": 0.0,
+    }
+    future = {
+        **generated_result,
+        "synthetic": False,
+        "real_model_fits": 36,
+        "real_preparer_refits": 36,
+        "calibrator_fits": 36,
+    }
+    assert tracking_counters(future) == {}
+    assert future["real_model_fits"] == future["calibrator_fits"] == 36
+    invalid = {**generated_result, "calibrator_fits": 1}
+    with pytest.raises(ValueError, match="Only zero synthetic"):
+        tracking_counters(invalid)

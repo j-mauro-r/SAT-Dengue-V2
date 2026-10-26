@@ -114,8 +114,11 @@ Tracking reuses container `sat-dengue-bounded-v1`, scientific tag `EXP01`, commo
 hypothesis/objective tags and existing local artifact transport. One parent and
 36 objective/family/horizon/window children are expected. Parent identity/purpose
 is logged before computation, so failed runs retain provenance. Failures do not
-invent zero fit counts. Successful runs carry measured procedure counts and
-validated bundle identity. Full aggregate frontiers remain native; MLflow receives
+invent zero fit counts. Successful native results carry actual procedure counts and validated bundle
+identity. The existing security policy permits only zero synthetic adjustment
+counters in MLflow; real fit/preparer/calibrator counts remain native and are
+omitted from MLflow rather than replaced with zeros. Full aggregate frontiers
+remain native; MLflow receives
 allowlisted lineage/aggregate probability metrics and no raw rows/private paths.
 
 ## Validation and limitations

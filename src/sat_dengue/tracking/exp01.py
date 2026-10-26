@@ -75,6 +75,23 @@ def validate_result(result: dict[str, Any], provenance: dict[str, Any]) -> None:
             raise ValueError("EXP01 paired cohorts or predictors differ")
 
 
+def tracking_counters(result: dict[str, Any]) -> dict[str, float]:
+    """Security policy permits only zero synthetic adjustment counters in MLflow.
+
+    Actual real counts remain validated in the native result, never replaced with
+    fabricated zeros or uploaded through this existing replay-oriented allowlist.
+    """
+    if result["synthetic"] is not True:
+        return {}
+    values = {
+        name: float(result[name])
+        for name in ("real_model_fits", "real_preparer_refits", "calibrator_fits")
+    }
+    if any(value != 0 for value in values.values()):
+        raise ValueError("Only zero synthetic adjustment counters may be logged")
+    return values
+
+
 class Exp01Tracking(LocalTracking):
     """Separate EXP01 finish boundary; EXP00's replay registration stays unchanged."""
 
@@ -124,13 +141,7 @@ class Exp01Tracking(LocalTracking):
                 common["bundle_id"] = verified["manifest"]["bundle_id"]
                 self.params(self.parent, {"bundle_id": common["bundle_id"]})
                 purpose = common["evidence_type"]
-                self.metrics(
-                    self.parent,
-                    {
-                        k: float(result[k])
-                        for k in ("real_model_fits", "real_preparer_refits", "calibrator_fits")
-                    },
-                )
+                self.metrics(self.parent, tracking_counters(result))
                 previous = self.client.search_runs(
                     [self.experiment],
                     filter_string="tags.pipeline = '"
