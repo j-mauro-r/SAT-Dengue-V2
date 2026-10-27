@@ -1,4 +1,4 @@
-"""Pure six-arm onset ablation using frozen EXP01 science; no I/O during fitting."""
+"""Pure ten-arm onset ablation using frozen EXP01 science; no I/O during fitting."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 
 from sat_dengue.experiments import exp01
-from sat_dengue.experiments.onset import KEYS, partitions, predictor_projection
+from sat_dengue.experiments.onset import KEYS, predictor_projection
 from sat_dengue.experiments.onset_evaluation import (
     calibration_summary,
     episode_metrics,
@@ -19,64 +19,48 @@ from sat_dengue.experiments.onset_evaluation import (
     stratified_episode_metrics,
 )
 
-PROTOCOL = Path("docs/product/experiments/EXP02_feature_ablation/protocol.json")
+PROTOCOL = Path("docs/product/experiments/EXP03_feature_ablation/protocol.json")
 VARIANTS = (
+    "baseline_history_season",
+    "baseline_plus_target_thresholds",
+    "baseline_plus_recent_channel_state",
+    "baseline_plus_sir",
+    "baseline_plus_climate",
+    "baseline_plus_complete_channel",
     "full",
-    "without_current_zone",
-    "without_channel",
-    "history",
-    "history_season",
-    "history_climate",
+    "full_without_target_thresholds",
+    "full_without_recent_channel_state",
+    "full_without_sir",
 )
 
 
 def load_protocol() -> dict[str, Any]:
+    from sat_dengue.experiments.exp03_features import validate_design
     from sat_dengue.tracking.experiments import resolve_experiment
 
     p = json.loads(PROTOCOL.read_text())
     source = exp01.load_protocol()
-    if exp01.digest(p) != resolve_experiment("EXP02")["protocol_sha256"]:
-        raise ValueError("EXP02 protocol changed")
+    if exp01.digest(p) != resolve_experiment("EXP03")["protocol_sha256"]:
+        raise ValueError("EXP03 protocol changed")
     if exp01.digest(source) != p["reproducibility"]["exp01_protocol_sha256"]:
         raise ValueError("EXP01 scientific interface changed")
     for key in (
-        "predictors",
         "families",
-        "windows",
         "seed",
         "threads",
         "calibration",
         "predictor_availability_offset_months",
     ):
         if p["design"][key] != source["design"][key]:
-            raise ValueError("EXP02 differs from EXP01: " + key)
-    groups = p["design"]["groups"]
-    expected = source["design"]["predictors"]
-    if len(sum(groups.values(), [])) != len(expected) or set(sum(groups.values(), [])) != set(
-        expected
-    ):
-        raise ValueError("Feature group mismatch")
-    memberships = {
-        "full": list(groups),
-        "without_current_zone": [g for g in groups if g != "canal_actual"],
-        "without_channel": [g for g in groups if not g.startswith("canal")],
-        "history": ["historia"],
-        "history_season": ["historia", "estacionalidad"],
-        "history_climate": ["historia", "clima"],
-    }
+            raise ValueError("EXP03 differs from EXP01: " + key)
+    validate_design(p["design"])
     if set(p["design"]["variants"]) != set(VARIANTS):
-        raise ValueError("EXP02 requires six variants")
-    for name, included in memberships.items():
-        if p["design"]["variants"][name] != [
-            c for c in expected if c in sum((groups[g] for g in included), [])
-        ]:
-            raise ValueError("Variant composition changed")
-    if any(
-        p["design"][k] != 108
-        for k in ("expected_children", "expected_model_fits", "expected_calibrator_fits")
-    ):
-        raise ValueError("Fit budget changed")
+        raise ValueError("Canonical variants changed")
     return p
+
+
+def variant_names() -> tuple[str, ...]:
+    return tuple(load_protocol()["design"]["variants"])
 
 
 def native_fit(
@@ -114,27 +98,42 @@ def execute(
     synthetic: bool = False,
 ) -> dict[str, Any]:
     """Exactly one fit per evaluable cell, common rows fixed BEFORE subsetting X."""
+    from sat_dengue.experiments.exp03_contrasts import evaluate
+    from sat_dengue.experiments.exp03_features import (
+        cohorts,
+        validate_design,
+    )
+    from sat_dengue.experiments.exp03_features import (
+        coverage as operational_summary,
+    )
     from sat_dengue.metrics import auroc_metric, average_precision_metric, brier_metric
 
+    expected = validate_design(design)
+    prepared = cohorts(panel, contract, design)
+    cache = {}
+    operational_coverage = []
     full = design["predictors"]
     variants = design["variants"]
-    if set(variants) != set(VARIANTS) or variants["full"] != full:
+    if variants["full"] != full:
         raise ValueError("Noncanonical variants")
     if synthetic and fit is not exp01.synthetic_fit:
         raise ValueError("Synthetic route cannot call production estimators")
     children: list[dict[str, Any]] = []
     fits = 0
     calibrations = 0
-    for horizon in (1, 2):
-        cohort = exp01.prepare(panel, contract, horizon)
+    for horizon in design["horizons"]:
         for window in design["windows"]:
-            parts = partitions(cohort, window)
-            selected = {
-                role: f.loc[
-                    f.onset_target.notna() & f.excess_target.notna() & f[full].notna().all(axis=1)
-                ].copy()
-                for role, f in parts.items()
-            }
+            parts, selected = prepared[horizon, window["id"]]
+            for name, cols in variants.items():
+                operational_coverage.append(
+                    {
+                        "variant": name,
+                        "horizon": horizon,
+                        "window": window["id"],
+                        "analysis": "secondary_coverage_not_paired_prediction",
+                        **operational_summary(parts["evaluation"], cols, full),
+                    }
+                )
             hashes = {
                 role: exp01.digest(
                     f[KEYS + ["target_month", "onset_target"]].to_json(orient="split")
@@ -151,10 +150,11 @@ def execute(
             }
             for family, parameters in design["families"].items():
                 cells: dict[str, Any] = {}
-                for variant in VARIANTS:
+                for variant in variants:
                     cols = variants[variant]
                     child = {
                         "variant": variant,
+                        "cell_id": exp01.digest([variant, family, horizon, window["id"]]),
                         "objective": "onset",
                         "family": family,
                         "horizon": horizon,
@@ -207,7 +207,12 @@ def execute(
                     }
                     truth = selected["evaluation"].onset_target
                     prediction = pd.Series(scores["evaluation"], index=truth.index)
+                    from sat_dengue.experiments.exp03_decisions import calibration_coefficients
+
                     child.update(
+                        calibration_coefficients=calibration_coefficients(
+                            truth.to_numpy(dtype=int), scores["evaluation"]
+                        ),
                         status="evaluable",
                         average_precision=average_precision_metric(truth, prediction)["value"],
                         brier=brier_metric(truth, prediction)["value"],
@@ -221,7 +226,7 @@ def execute(
                     truth = selected["selection"].onset_target.to_numpy(dtype=int)
                     evaluation = selected["evaluation"]
                     for budget in range(int((truth == 0).sum()) + 1):
-                        for variant in VARIANTS:
+                        for variant in variants:
                             cell = cells[variant]
                             if cell["child"]["status"] != "evaluable":
                                 continue
@@ -242,6 +247,12 @@ def execute(
                             }
                             base = episode_metrics(evaluation, alerts["excess"])
                             metric = episode_metrics(evaluation, alerts["onset"])
+                            profile_metrics = {}
+                            for profile in evaluation.transmission_profile.dropna().unique():
+                                mask = evaluation.transmission_profile.eq(profile).to_numpy()
+                                profile_metrics[str(profile)] = episode_metrics(
+                                    evaluation.loc[mask], alerts["onset"][mask]
+                                )
                             emitted = alerts["onset"]
                             metric["excess_false_alarm_ratio"] = (
                                 float(
@@ -274,16 +285,26 @@ def execute(
                                     ),
                                     "by_group": stratified_episode_metrics(
                                         evaluation, alerts["onset"]
-                                    ),
+                                    )
+                                    | {"transmission_profile": profile_metrics},
                                     **metric,
                                 }
                             )
-                children.extend(cells[v]["child"] for v in VARIANTS)
-    if len(children) != 108 or fits > 108 or calibrations != fits:
-        raise ValueError("EXP02 count safety boundary")
+                cache[family, horizon, window["id"]] = (selected, cells)
+                children.extend(cells[v]["child"] for v in variants)
+    if len(children) != expected or fits != expected or calibrations != fits:
+        raise ValueError("EXP03 count safety boundary")
+    contrasts, audit = evaluate(cache, design)
+    from sat_dengue.experiments.exp03_decisions import candidates
+
+    decisions = candidates(contrasts, design)
     return {
-        "schema": "exp02-result-v1",
-        "experiment_id": "EXP02",
+        "decision_candidates": decisions,
+        "contrasts": contrasts,
+        "oof_audit": audit,
+        "operational_coverage": operational_coverage,
+        "schema": "exp03-result-v1",
+        "experiment_id": "EXP03",
         "synthetic": synthetic,
         "real_model_fits": 0 if synthetic else fits,
         "real_preparer_refits": 0 if synthetic else fits,
@@ -296,16 +317,14 @@ def execute(
 
 
 def synthetic_run() -> dict[str, Any]:
-    panel, contract, generated = exp01.synthetic_inputs()
-    frozen = load_protocol()["design"]
-    for window, original in zip(generated["windows"], frozen["windows"], strict=True):
-        window["id"] = original["id"]
-    design = {**frozen, "windows": generated["windows"]}
+    panel, contract, _ = exp01.synthetic_inputs()
+    panel["year_month"] = [str(pd.Period(value, freq="M") + 180) for value in panel.year_month]
+    design = load_protocol()["design"]
     return execute(
         panel,
         contract,
         design,
         fit=exp01.synthetic_fit,
-        calibrate=lambda scores, truth, seed: lambda x: x,
+        calibrate=lambda scores, truth, seed: lambda values: values,
         synthetic=True,
     )

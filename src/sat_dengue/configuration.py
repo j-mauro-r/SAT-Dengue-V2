@@ -59,9 +59,9 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "training_synthetic",
         "evaluation_replay",
         "evaluation_synthetic",
-        "exp02",
-        "exp02_preflight",
-        "exp02_synthetic",
+        "exp03",
+        "exp03_preflight",
+        "exp03_synthetic",
         "exp01_synthetic",
         "exp01",
         "exp01_preflight",
@@ -76,14 +76,14 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         experiment_id != "EXP01" or value["tracking"] != "enabled"
     ):
         raise ValueError("EXP01 requires experiment_id=EXP01 and enabled tracking")
-    if value["profile"] in {"exp02", "exp02_preflight"} and (
-        experiment_id != "EXP02" or value["tracking"] != "enabled"
+    if value["profile"] in {"exp03", "exp03_preflight"} and (
+        experiment_id != "EXP03" or value["tracking"] != "enabled"
     ):
-        raise ValueError("EXP02 requires experiment_id=EXP02 and enabled tracking")
-    if value["profile"] == "exp02_synthetic" and (
-        value["tracking"] != "disabled" or experiment_id != "EXP02"
+        raise ValueError("EXP03 requires experiment_id=EXP03 and enabled tracking")
+    if value["profile"] == "exp03_synthetic" and (
+        value["tracking"] != "disabled" or experiment_id != "EXP03"
     ):
-        raise ValueError("EXP02 synthetic pipeline has no implicit MLflow writes")
+        raise ValueError("EXP03 synthetic pipeline has no implicit MLflow writes")
     if experiment_id is not None:
         from sat_dengue.tracking.experiments import resolve_experiment
 

@@ -80,10 +80,10 @@ CATALOG["exp01_bundle"] = {
     "filepath": "tmp/kedro-migration/exp01-runs",
 }
 
-CATALOG["exp02_sources"] = {"type": "sat_dengue.datasets.exp02.Exp02SourcesDataset"}
-CATALOG["exp02_bundle"] = {
-    "type": "sat_dengue.datasets.exp02.Exp02BundleDataset",
-    "filepath": "tmp/kedro-migration/exp02-runs",
+CATALOG["exp03_sources"] = {"type": "sat_dengue.datasets.exp03.Exp03SourcesDataset"}
+CATALOG["exp03_bundle"] = {
+    "type": "sat_dengue.datasets.exp03.Exp03BundleDataset",
+    "filepath": "tmp/kedro-migration/exp03-runs",
 }
 
 

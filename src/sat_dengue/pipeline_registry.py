@@ -3,7 +3,7 @@
 from kedro.pipeline import Pipeline, node
 
 from sat_dengue.configuration import resolve_configuration
-from sat_dengue.experiments import exp02, exp02_preflight, exp02_runner
+from sat_dengue.experiments import exp03, exp03_preflight, exp03_runner
 from sat_dengue.experiments.exp01 import synthetic_run
 from sat_dengue.experiments.exp01_preflight import preflight
 from sat_dengue.experiments.exp01_runner import execute_authorized, load_authorized_sources
@@ -55,42 +55,42 @@ def register_pipelines() -> dict[str, Pipeline]:
             ),
         ]
     )
-    exp02_check = Pipeline(
+    exp03_check = Pipeline(
         [
             node(
-                exp02_preflight.preflight,
-                inputs=["parameters", "exp02_sources"],
-                outputs="exp02_preflight_receipt",
-                name="exp02_preflight",
+                exp03_preflight.preflight,
+                inputs=["parameters", "exp03_sources"],
+                outputs="exp03_preflight_receipt",
+                name="exp03_preflight",
             )
         ]
     )
-    exp02_real = exp02_check + Pipeline(
+    exp03_real = exp03_check + Pipeline(
         [
             node(
-                exp02_runner.load_authorized_sources,
-                inputs="exp02_preflight_receipt",
-                outputs="exp02_authorized_sources",
-                name="exp02_authorize_and_load",
+                exp03_runner.load_authorized_sources,
+                inputs="exp03_preflight_receipt",
+                outputs="exp03_authorized_sources",
+                name="exp03_authorize_and_load",
             ),
             node(
-                exp02_runner.execute_authorized,
-                inputs="exp02_authorized_sources",
-                outputs="exp02_bundle",
-                name="exp02_execute_ablation",
+                exp03_runner.execute_authorized,
+                inputs="exp03_authorized_sources",
+                outputs="exp03_bundle",
+                name="exp03_execute_ablation",
             ),
         ]
     )
     return {
-        "exp02": exp02_real,
-        "exp02_preflight": exp02_check,
-        "exp02_synthetic": Pipeline(
+        "exp03": exp03_real,
+        "exp03_preflight": exp03_check,
+        "exp03_synthetic": Pipeline(
             [
                 node(
-                    exp02.synthetic_run,
+                    exp03.synthetic_run,
                     inputs=None,
-                    outputs="exp02_synthetic_receipt",
-                    name="exp02_synthetic_probe",
+                    outputs="exp03_synthetic_receipt",
+                    name="exp03_synthetic_probe",
                 )
             ]
         ),

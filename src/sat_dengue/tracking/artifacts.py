@@ -115,8 +115,8 @@ def register_local_artifacts() -> None:
                         for key in ("cohort_sha256", "predictors_sha256")
                     )
                 )
-            elif value.get("schema") == "exp02-frontier-mlflow-v1":
-                from sat_dengue.tracking.exp02 import validate_frontier_artifact
+            elif value.get("schema") == "exp03-frontier-mlflow-v1":
+                from sat_dengue.tracking.exp03 import validate_frontier_artifact
 
                 validate_frontier_artifact(value)
                 valid = True

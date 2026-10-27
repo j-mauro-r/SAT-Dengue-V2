@@ -22,13 +22,13 @@ class TrackingHooks:
         if pipeline in {"replay", "replay_synthetic"}:
             parameters = {**parameters, "profile": pipeline}
         parameters = validate_parameters(parameters)
-        if pipeline in {"exp02", "exp02_preflight", "exp02_synthetic"} or parameters["profile"] in {
-            "exp02",
-            "exp02_preflight",
-            "exp02_synthetic",
+        if pipeline in {"exp03", "exp03_preflight", "exp03_synthetic"} or parameters["profile"] in {
+            "exp03",
+            "exp03_preflight",
+            "exp03_synthetic",
         }:
             if pipeline != parameters["profile"]:
-                raise ValueError("EXP02 profile must match pipeline")
+                raise ValueError("EXP03 profile must match pipeline")
             return  # Dedicated authorization owns real tracking; synthetic has none.
         if pipeline in {"exp01", "exp01_preflight"} or parameters["profile"] in {
             "exp01",

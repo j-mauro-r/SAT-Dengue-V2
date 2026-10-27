@@ -1,4 +1,4 @@
-"""EXP02 authorization precedes private reads, reservations, fits and tracking."""
+"""EXP03 authorization precedes private reads, reservations, fits and tracking."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ from typing import Any
 
 from sat_dengue.configuration import AUTHORITIES
 from sat_dengue.experiments.exp01 import digest, native_calibration
-from sat_dengue.experiments.exp02 import execute, load_protocol, native_fit
-from sat_dengue.experiments.exp02_preflight import OUTPUT_ROOT, authorize, safe_path
+from sat_dengue.experiments.exp03 import execute, load_protocol, native_fit
+from sat_dengue.experiments.exp03_preflight import OUTPUT_ROOT, authorize, safe_path
 
 
 def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
@@ -30,7 +30,7 @@ def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
         inputs.panel.year_month.ge("2025-01").any()
         or inputs.panel.municipality_code.nunique() != 76
     ):
-        raise ValueError("EXP02 population/time mismatch")
+        raise ValueError("EXP03 population/time mismatch")
     contract = json.loads(
         safe_path(AUTHORITIES["training_preparation_contract_v1"]["path"]).read_text()
     )
@@ -47,7 +47,7 @@ def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
 
 def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
     from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
-    from sat_dengue.tracking.exp02 import Exp02Tracking
+    from sat_dengue.tracking.exp03 import Exp03Tracking
 
     receipt = sources["preflight"]
     if digest(authorize(receipt)) != sources["approval_sha256"]:
@@ -56,7 +56,7 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
     def verify() -> None:
         for name, record in sources["fingerprints"].items():
             if fingerprint(safe_path(name)) != record:
-                raise ValueError("EXP02 data changed during execution")
+                raise ValueError("EXP03 data changed during execution")
         if digest(authorize(receipt)) != sources["approval_sha256"]:
             raise PermissionError("Authorization changed")
 
@@ -73,9 +73,12 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
         )
     }
     provenance["data_sha256"] = digest(sources["fingerprints"])
+    from sat_dengue.experiments.exp03_features import cohorts
+
+    cohorts(sources["panel"], sources["contract"], load_protocol()["design"])
     execution_id = reserve_execution(provenance)
-    tracker = Exp02Tracking(
-        "exp02", execution_id, receipt["tracking"]["root"], experiment_id="EXP02"
+    tracker = Exp03Tracking(
+        "exp03", execution_id, receipt["tracking"]["root"], experiment_id="EXP03"
     )
     try:
         tracker.initialize_ablation(provenance)

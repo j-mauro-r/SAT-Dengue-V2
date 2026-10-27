@@ -875,90 +875,50 @@ extras. Exercise metadata-only preflight on the local declared source paths and
 read-only permanent tracking destination; no private-content read is allowed.
 The handoff owns the [future command and approval boundary](operations/exp01-runner-handoff.md).
 
-## EXP02 guarded feature ablation
+## EXP03 guarded selective feature ablation
 
-Map `experiments/exp02*.py`, `datasets/exp02.py`, `tracking/exp02.py`, the EXP02
-protocol/registry, graph/configuration changes and optional shared adapter exclusions
-to `tests/unit/test_exp02.py`, `tests/integration/test_exp02_tracking.py` and
-`tests/integration/test_exp02_input_integration.py`.
-Run affected EXP01 and adapter tests when changing shared preparation/model dispatch;
-pre-push validation stays focused. CI owns the complete required suite.
+[EXP03 design](product/experiments/EXP03_feature_ablation/DESIGN.md) owns the
+scientific definitions; its protocol/matrix freeze ten unique sets and eleven
+contrasts. EXP01 is prioritized experiment 1; label sensitivity 5/7/9 (experiment2)
+remains pending; EXP03 implements prioritized experiment3.
 
-EXP02 reuses EXP01's `prepare_exp01_inputs` admission after authorization: complete
-source identity remains mandatory, supplied labels/channel are ignored, November and
-December 2024 remain available, and 2025 origins are excluded before scientific typing.
-Consumed invalid raw predictors still fail. The generated input integration probe
-uses the real catalog, preflight and admission with an in-memory authorization
-substitute, synthetic fit/calibration callbacks and isolated temporary publication
-and MLflow. Admission checks all 76 generated municipalities; synthetic computation
-uses the fixture's two distinct series while retaining the full 108-cell grid.
-It creates no execution approval or reservation and provides no real
-scientific evidence. Run only this module for an admission-only correction:
+Changed EXP03 preparation/contrasts/decisions/tracking map to `tests/unit/test_exp03.py`,
+`tests/integration/test_exp03_tracking.py` and `tests/integration/test_exp03_input_integration.py`.
+Use modified-file Ruff/format/mypy, relevant contracts, Markdown links and diff
+privacy checks. The full CI selection includes the new integration module.
+
+Source-free structural preflight (does not authorize real execution):
 
 ```bash
-KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/integration/test_exp02_input_integration.py -q
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp03_preflight --params=profile=exp03_preflight,tracking=enabled,experiment_id=EXP03
 ```
 
-The frozen [EXP02 protocol](product/experiments/EXP02_feature_ablation/protocol.json)
-retains six onset-only variants and the complete EXP01 budget frontier. The original
-draft is historical; the explicit municipality identity alias changes no group.
+It always returns `execution_ready=false`. It validates declared three-year OOF
+support; actual common-cohort support is checked only after human authorization,
+before reservation/fits/tracking. A shared-store preflight is an operational task
+for a later authorized session; tests select isolated temporary stores.
 
-Read-only preflight (no private inputs, fits, reservations or MLflow writes):
+Generated-only probe, zero real fits/calibrations/reservations:
 
 ```bash
-SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp02_preflight --params=profile=exp02_preflight,tracking=enabled,experiment_id=EXP02
+KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp03_synthetic --params=profile=exp03_synthetic,tracking=disabled,experiment_id=EXP03
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp03.py tests/integration/test_exp03_tracking.py tests/integration/test_exp03_input_integration.py -q
 ```
 
-Its equivalent graph is `exp02_preflight` with parameters
-`profile=exp02_preflight,tracking=enabled,experiment_id=EXP02`. The return value always
-has `execution_ready=false`, even on a clean structural pass. Missing private sources
-are checked only after authorization. The shared tracking root is
-`SAT_DENGUE_TRACKING_ROOT`, explicitly selected as `tmp/kedro-migration/replay-mlflow`; the result root is
-`tmp/kedro-migration/exp02-runs`. EXP01's dataset and parallel path correction are not used.
+Future real execution remains **NOT AUTHORIZED**. Mauricio must separately provide
+`SAT_DENGUE_EXP03_APPROVAL`, a repository-tmp JSON record with exact schema
+`exp03-execution-approval-v1`, EXP03 identity, authority Mauricio, independent
+reviewer, protocol/Git/data/configuration hashes and the four explicit execution,
+comparator-refit, variant-refit and retrospective-availability flags. It must bind
+a new clean reviewed commit/environment. Never reuse historical records or pins.
 
-Synthetic graph, generated data only, no implicit tracking:
+Only after separate authorization, the future command is:
 
 ```bash
-KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp02_synthetic --params=profile=exp02_synthetic,tracking=disabled,experiment_id=EXP02
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow SAT_DENGUE_EXP03_APPROVAL=tmp/reviewed-exp03-approval.json KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp03 --params=profile=exp03,tracking=enabled,experiment_id=EXP03
 ```
 
-**Future real execution: NOT AUTHORIZED by this delivery.** After independent review,
-Mauricio must supply a separate approval JSON in repository `tmp/`, never generated by
-this runner. It requires exactly: schema `exp02-execution-approval-v1`, experiment_id
-`EXP02`, authority `Mauricio`, an independent reviewer identifier, the preflight's
-`protocol_sha256`, `git_revision`, `data_version`, `configuration_sha256`, and explicit
-true values for `real_execution_authorized`, `comparator_refit_authorized`,
-`variant_refits_authorized`, `retrospective_availability_acknowledged`. Recompute preflight
-on the clean reviewed commit; an earlier receipt is stale after any code/runtime change.
-
-Only after that authorization, the future command would be:
-
-```bash
-SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow SAT_DENGUE_EXP02_APPROVAL=tmp/reviewed-exp02-approval.json KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp02 --params=profile=exp02,tracking=enabled,experiment_id=EXP02
-```
-
-Do not run it as a validation command. Publication never overwrites a bundle. A persistent
-exclusive scientific-identity reservation blocks repeated/interrupted execution, including
-runs with replaced approval files. Recovery requires human inspection; no automatic retry
-or marker removal. Native bundles contain full frontiers; MLflow receives only approved
-aggregate metrics and hash/token lineage. No raw rows, per-person predictions or absolute
-paths are uploaded. Fewer than two municipality/year clusters yields
-`insufficient_cluster_support`, without an IID substitute or numerical success margin.
-
-Protocol1.0.1 is an explicitly authorized pre-execution uncertainty clarification;
-[the prior version](product/experiments/EXP02_feature_ablation/protocol.v1.0.0.json)
-and both hashes are retained in the EXP02 conclusions. Every frozen evaluation
-window (2020, 2022, 2024) has one year: **none** supports the specified municipality ×
-year interval. All report `insufficient_cluster_support`. Paired metrics remain
-descriptive; no equivalence/noninferiority inference, pooled years or new bootstrap.
-
-MLflow records the complete aggregate budget frontier once, on the parent run in
-`<parent-run-id>.json` (`exp02-frontier-mlflow-v1`). Each cell retains variant, family,
-horizon, window, availability and the full selection-budget frontier: onset sensitivity,
-paired difference versus full, realized false alerts for both, and uncertainty status.
-Only this closed projection is uploaded, never municipal breakdowns, raw predictions,
-rows or absolute paths. `parameters.bundle_id` and `protocol_sha256` bind the verified
-native publication; `frontier_sha256` hashes canonical projected cells and is repeated
-as the parent tag `exp02.frontier_sha256`. Children do not receive artifact copies.
-Temporary upload staging is removed. A changed tracking-root variable invalidates
-preflight/approval, and old protocol pins are rejected rather than migrated.
+Results stay under `tmp/kedro-migration/exp03-runs`, disjoint from tracking. The
+single parent `exp03-frontier-mlflow-v1` artifact contains closed aggregate cells
+and contrasts, protocol/bundle/hash binding and canonical cell references. Native
+OOF audit rows/municipality strata never enter MLflow. G5/champion remain unchanged.

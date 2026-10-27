@@ -11,11 +11,11 @@ from typing import Any
 import pytest
 from kedro.io import DatasetError
 
-from sat_dengue.datasets.exp02 import Exp02BundleDataset
+from sat_dengue.datasets.exp03 import Exp03BundleDataset
 from sat_dengue.experiments.exp01 import digest
-from sat_dengue.experiments.exp02 import VARIANTS, load_protocol
-from sat_dengue.experiments.exp02_preflight import OUTPUT_ROOT
-from sat_dengue.tracking.exp02 import Exp02Tracking, validate_result, verified_result
+from sat_dengue.experiments.exp03 import VARIANTS, load_protocol
+from sat_dengue.experiments.exp03_preflight import OUTPUT_ROOT
+from sat_dengue.tracking.exp03 import Exp03Tracking, validate_result, verified_result
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -49,8 +49,8 @@ def generated_metadata() -> dict[str, Any]:
                         }
                     )
     return {
-        "schema": "exp02-result-v1",
-        "experiment_id": "EXP02",
+        "schema": "exp03-result-v1",
+        "experiment_id": "EXP03",
         "synthetic": True,
         "G5": "NOT_APPROVED",
         "champion": "not_selected",
@@ -100,11 +100,52 @@ def test_atomic_publication_tracking_and_duplicate(
             for b in range(3)
         ]
     p = load_protocol()
+    from sat_dengue.tracking.exp03_contrasts import METRICS
+
+    # Closed aggregate metadata only, not probabilities, fits or scientific evidence.
+    result["contrasts"] = []
+    for c in p["design"]["contrasts"]:
+        for family in p["design"]["families"]:
+            for h in (1, 2):
+                for w in [v["id"] for v in p["design"]["windows"]] + ["development_oof"]:
+                    cuts = (
+                        [
+                            v["id"]
+                            for v in p["design"]["windows"]
+                            if v["evidence_type"] == "retrospective_development"
+                        ]
+                        if w == "development_oof"
+                        else [w]
+                    )
+                    for budget in range(3):
+                        result["contrasts"].append(
+                            {
+                                "contrast_id": c["id"],
+                                "family": family,
+                                "horizon": h,
+                                "window": w,
+                                "left_variant": c["left"],
+                                "right_variant": c["right"],
+                                "semantic_roles": c["semantic_roles"],
+                                "source_cuts": cuts,
+                                "left_cells": [digest([c["left"], family, h, v]) for v in cuts],
+                                "right_cells": [digest([c["right"], family, h, v]) for v in cuts],
+                                "left_metrics": dict.fromkeys(METRICS, 0),
+                                "right_metrics": dict.fromkeys(METRICS, 0),
+                                "selection_false_alert_budget": budget,
+                                "paired_sensitivity_difference": None,
+                                "paired_interval": {
+                                    "status": "insufficient_cluster_support",
+                                    "interval": None,
+                                    "valid_replicates": 0,
+                                },
+                            }
+                        )
     target = repo_tmp_path / "docs/product/experiments"
     shutil.copytree(ROOT / "docs/product/experiments", target)
     monkeypatch.chdir(repo_tmp_path)
-    root = "tmp/generated-exp02-tracking"
-    tracker = Exp02Tracking("exp02_synthetic", "generated-metadata", root, experiment_id="EXP02")
+    root = "tmp/generated-exp03-tracking"
+    tracker = Exp03Tracking("exp03_synthetic", "generated-metadata", root, experiment_id="EXP03")
     provenance = {
         k: "b" * 64
         for k in (
@@ -116,14 +157,14 @@ def test_atomic_publication_tracking_and_duplicate(
         )
     }
     provenance.update(protocol_sha256=digest(p), git_revision="a" * 40)
-    dataset = Exp02BundleDataset(str(repo_tmp_path / OUTPUT_ROOT))
+    dataset = Exp03BundleDataset(str(repo_tmp_path / OUTPUT_ROOT))
     dataset.save({"result": result, "provenance": provenance, "tracker": tracker})
     publication = dataset.load()
     assert verified_result(publication)["result"] == result
     runs = tracker.client.search_runs([tracker.experiment])
-    assert len(runs) == 109
+    assert len(runs) == 241
     children = [r for r in runs if "mlflow.parentRunId" in r.data.tags]
-    assert len(children) == 108
+    assert len(children) == 240
     assert {r.data.tags["variant"] for r in children} == set(VARIANTS)
     assert all(r.data.tags["purpose"] == "synthetic_interface_probe" for r in children)
     assert all("/" not in value for r in runs for value in r.data.params.values())
@@ -137,22 +178,46 @@ def test_atomic_publication_tracking_and_duplicate(
         tracker.parent, tracker.parent + ".json", str(destination)
     )
     aggregate = json.loads(Path(downloaded).read_text())
+    by_cell = {r.data.tags["cell_id"]: r for r in children}
+    assert len(by_cell) == len(children) == 240
+    assert not any(r.data.tags["variant"] == "full_without_climate" for r in children)
+    for contrast in aggregate["contrasts"]:
+        if contrast["contrast_id"] == "full_without_climate":
+            assert contrast["right_variant"] == "baseline_plus_complete_channel"
+            assert all(
+                by_cell[cell].data.tags["variant"] == "baseline_plus_complete_channel"
+                for cell in contrast["right_cells"]
+            )
     assert aggregate["parameters"]["bundle_id"] == publication["manifest"]["bundle_id"]
-    assert aggregate["frontier_sha256"] == parent.data.tags["exp02.frontier_sha256"]
+    assert aggregate["frontier_sha256"] == parent.data.tags["exp03.frontier_sha256"]
     assert aggregate["frontier_sha256"] == digest(aggregate["cells"])
     assert all(
         [r["selection_false_alert_budget"] for r in c["frontier"]] == [0, 1, 2]
         for c in aggregate["cells"]
     )
     assert "municipality_code" not in Path(downloaded).read_text()
-    assert not list(Path(root).glob(".exp02-frontier-*"))
-    from sat_dengue.tracking.exp02 import validate_frontier_artifact
+    assert not list(Path(root).glob(".exp03-frontier-*"))
+    from sat_dengue.tracking.exp03 import validate_frontier_artifact
 
     malicious = copy.deepcopy(aggregate)
     malicious["cells"][0]["frontier"][0]["municipality_code"] = "not-allowed"
     malicious["frontier_sha256"] = digest(malicious["cells"])
     with pytest.raises(ValueError):
         validate_frontier_artifact(malicious)
+
+    for remove in ("contrast", "budget"):
+        incomplete = copy.deepcopy(aggregate)
+        incomplete["contrasts"] = [
+            r
+            for r in incomplete["contrasts"]
+            if not (
+                r["contrast_id"] == p["design"]["contrasts"][0]["id"]
+                and (remove == "contrast" or r["selection_false_alert_budget"] == 1)
+            )
+        ]
+        incomplete["contrasts_sha256"] = digest(incomplete["contrasts"])
+        with pytest.raises(ValueError, match="Incomplete eleven"):
+            validate_frontier_artifact(incomplete)
 
     with pytest.raises(DatasetError):
         dataset.save({"result": result, "provenance": provenance, "tracker": tracker})

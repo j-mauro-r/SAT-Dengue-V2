@@ -1,3 +1,4 @@
+# Prioritized experiment 2: label sensitivity 5/7/9 remains PENDING; no executable registration or approval.
 schema: sat-dengue-experiment-registry-v1
 version: 1.0.0
 experiments:
@@ -19,7 +20,7 @@ experiments:
   - experiment_id: EXP01
     experiment_slug: direct_episode_onset
     hypothesis_id: EXP01-H1
-    title: EXP01 direct episode-onset prediction
+    title: EXP01 — Prioritized experiment 1 — direct episode-onset prediction
     objective: Compare direct episode-onset probability with monthly-excess probability under matched false-onset-alert budgets
     experiment_type: paired_target_comparison
     pipeline: exp01
@@ -31,17 +32,17 @@ experiments:
     champion: not_selected
     mlflow_registration: pending
     lifecycle_status: planned_pending_execution_authorization
-  - experiment_id: EXP02
+  - experiment_id: EXP03
     experiment_slug: feature_group_ablation
-    hypothesis_id: EXP02-H1
-    title: EXP02 — Feature group ablation
+    hypothesis_id: EXP03-H1
+    title: EXP03 — Prioritized experiment 3 — selective history channel and climate ablation
     objective: Conditional predictive value for exact episode onset at common development
       false-alert budgets
     experiment_type: feature_group_ablation
-    pipeline: exp02
-    protocol: docs/product/experiments/EXP02_feature_ablation/protocol.json
-    protocol_sha256: f8b4c83ceaba9632c22b2d5ec83328ba3bf1060bee69157a5289b478144fa525
-    conclusions: docs/product/experiments/EXP02_feature_ablation/CONCLUSIONS.md
+    pipeline: exp03
+    protocol: docs/product/experiments/EXP03_feature_ablation/protocol.json
+    protocol_sha256: 2356d7b0e8fa5cc457e8775a268b5321e60974dc954671419b9a81afbc1aaaa9
+    conclusions: docs/product/experiments/EXP03_feature_ablation/CONCLUSIONS.md
     scientific_result: pending
     scientific_gate: NOT_APPROVED
     champion: not_selected

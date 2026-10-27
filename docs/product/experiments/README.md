@@ -1,5 +1,11 @@
 # Scientific Experiment Registry
 
+EXP01 is prioritized experiment 1. Prioritized experiment 2 (label sensitivity
+5/7/9) remains pending and is outside EXP03. EXP03 is prioritized experiment 3:
+[selective history/channel/climate ablation](EXP03_feature_ablation/DESIGN.md),
+with ten canonical predictor sets and eleven contrasts. Its real execution and
+scientific conclusions remain pending independent authorization.
+
 This directory is the authoritative index for planned, running and completed
 scientific experiments in SAT-Dengue V2. It connects each experiment and
 hypothesis to its frozen protocol, Kedro pipeline, MLflow lineage and written

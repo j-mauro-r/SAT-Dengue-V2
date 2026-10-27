@@ -1,4 +1,4 @@
-"""Generated EXP02 admission and catalog connection probe; no real execution."""
+"""Generated EXP03 admission and catalog connection probe; no real execution."""
 
 from __future__ import annotations
 
@@ -15,19 +15,19 @@ from kedro.framework.startup import bootstrap_project
 from kedro.pipeline import node, pipeline
 from kedro.runner import SequentialRunner
 
-from sat_dengue.datasets import exp02 as datasets
+from sat_dengue.datasets import exp03 as datasets
 from sat_dengue.datasets import stage2
 from sat_dengue.datasets.legacy_preparation import contract as preparation
 from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
-from sat_dengue.experiments import exp01, exp02
-from sat_dengue.experiments import exp02_preflight as checks
-from sat_dengue.experiments import exp02_runner as runner
+from sat_dengue.experiments import exp01, exp03
+from sat_dengue.experiments import exp03_preflight as checks
+from sat_dengue.experiments import exp03_runner as runner
 from sat_dengue.pipeline_registry import register_pipelines
-from sat_dengue.tracking import exp02 as tracking
+from sat_dengue.tracking import exp03 as tracking
 
 
 def generated_sources(root: Path, *, full_history: bool = False) -> preparation.PreparationConfig:
-    """Reuse PR31's source fixture, expanded to EXP02's frozen 76 municipalities."""
+    """Reuse PR31's source fixture, expanded to EXP03's frozen 76 municipalities."""
     source = generated_panel("2010-01" if full_history else "2024-01", "2025-02")
     codes = [f"{department}{n:03d}" for department in ("50", "73") for n in range(1, 39)]
     panel = pd.concat(
@@ -81,7 +81,7 @@ def bind_generated_sources(
 
 
 @pytest.mark.parametrize("fault", [None, "consumed_predictor", "unconsumed_tamper"])
-def test_exp02_admission_uses_raw_inputs_and_full_identity(
+def test_exp03_admission_uses_raw_inputs_and_full_identity(
     repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, fault: str | None
 ) -> None:
     config = generated_sources(repo_tmp_path / "sources")
@@ -124,12 +124,12 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
     root = str((repo_tmp_path / "tracking").relative_to(ROOT))
     output = str((repo_tmp_path / "publication").relative_to(ROOT))
     monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", root)
-    monkeypatch.delenv("SAT_DENGUE_EXP02_APPROVAL", raising=False)
+    monkeypatch.delenv("SAT_DENGUE_EXP03_APPROVAL", raising=False)
     monkeypatch.setattr(checks, "runtime_versions", lambda: {"fixture": "generated"})
     monkeypatch.setattr(checks, "execution_metadata", lambda: {})
     monkeypatch.setattr(tracking, "OUTPUT_ROOT", output)
     events: list[str] = []
-    trackers: list[tracking.Exp02Tracking] = []
+    trackers: list[tracking.Exp03Tracking] = []
     original_open, original_path_open = builtins.open, Path.open
 
     def guard(path: Any) -> None:
@@ -177,18 +177,18 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
             code_sha256=exp01.digest({"fixture": "generated"}),
             environment_sha256=exp01.digest({"fixture": "controlled_substitutes"}),
         )
-        tracker = tracking.Exp02Tracking(
-            "exp02_synthetic", "generated-raw-admission", root, experiment_id="EXP02"
+        tracker = tracking.Exp03Tracking(
+            "exp03_synthetic", "generated-raw-admission", root, experiment_id="EXP03"
         )
         trackers.append(tracker)
         assert sources["panel"].municipality_code.nunique() == 76
         # Admission above validates all 76; retain PR31's two generated series for
         # the synthetic connection probe to bound frontier computation in CI.
         panel = sources["panel"].loc[sources["panel"].municipality_code.isin(["50001", "73001"])]
-        result = exp02.execute(
+        result = exp03.execute(
             panel,
             sources["contract"],
-            exp02.load_protocol()["design"],
+            exp03.load_protocol()["design"],
             fit=exp01.synthetic_fit,
             calibrate=lambda scores, truth, seed: lambda values: values,
             synthetic=True,
@@ -205,35 +205,35 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
     monkeypatch.setattr(runner, "reserve_execution", forbidden)
     monkeypatch.setattr(runner, "native_fit", forbidden)
     monkeypatch.setattr(runner, "native_calibration", forbidden)
-    monkeypatch.setattr(exp02, "native_fit", forbidden)
+    monkeypatch.setattr(exp03, "native_fit", forbidden)
     monkeypatch.setattr(exp01, "native_fit", forbidden)
     monkeypatch.setattr(exp01, "native_calibration", forbidden)
     bootstrap_project(ROOT)
     session = KedroSession.create(
         project_path=ROOT,
         save_on_close=False,
-        runtime_params={"profile": "exp02", "tracking": "enabled", "experiment_id": "EXP02"},
+        runtime_params={"profile": "exp03", "tracking": "enabled", "experiment_id": "EXP03"},
     )
     with session:
         catalog = session.load_context().catalog
-        assert isinstance(catalog.get("exp02_sources"), datasets.Exp02SourcesDataset)
-        bundle = catalog.get("exp02_bundle")
-        assert isinstance(bundle, datasets.Exp02BundleDataset)
+        assert isinstance(catalog.get("exp03_sources"), datasets.Exp03SourcesDataset)
+        bundle = catalog.get("exp03_bundle")
+        assert isinstance(bundle, datasets.Exp03BundleDataset)
         assert bundle._describe()["filepath"] == str(ROOT / checks.OUTPUT_ROOT)
         bundle._root = ROOT / output
         # Keep the real catalog/preflight/loader; substitute only real execution.
         graph = pipeline(
             [
-                *register_pipelines()["exp02"]
-                .only_nodes("exp02_preflight", "exp02_authorize_and_load")
+                *register_pipelines()["exp03"]
+                .only_nodes("exp03_preflight", "exp03_authorize_and_load")
                 .nodes,
-                node(generated_computation, "exp02_authorized_sources", "exp02_bundle"),
+                node(generated_computation, "exp03_authorized_sources", "exp03_bundle"),
             ]
         )
         SequentialRunner().run(graph, catalog)
-        publication = catalog.load("exp02_bundle")
+        publication = catalog.load("exp03_bundle")
     result = tracking.verified_result(publication)["result"]
-    assert len(result["children"]) == result["synthetic_interface_fits"] == 108
+    assert len(result["children"]) == result["synthetic_interface_fits"] == 240
     assert all(c["status"] == "evaluable" for c in result["children"])
     assert all(
         result[k] == 0 for k in ("real_model_fits", "real_preparer_refits", "calibrator_fits")
@@ -241,9 +241,9 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
     assert result["G5"] == "NOT_APPROVED" and result["champion"] == "not_selected"
     tracker = trackers[0]
     runs = tracker.client.search_runs([tracker.experiment])
-    assert len(runs) == 109 and all(r.info.status == "FINISHED" for r in runs)
+    assert len(runs) == 241 and all(r.info.status == "FINISHED" for r in runs)
     children = [r for r in runs if r.data.tags.get("mlflow.parentRunId") == tracker.parent]
-    assert len(children) == 108
+    assert len(children) == 240
     assert all(r.data.params["kind"] == "synthetic" for r in runs)
     artifacts = tracker.client.list_artifacts(tracker.parent)
     assert [a.path for a in artifacts] == [tracker.parent + ".json"]
