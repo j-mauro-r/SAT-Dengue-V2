@@ -10,6 +10,9 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from kedro.framework.session import KedroSession
+from kedro.framework.startup import bootstrap_project
+from kedro.runner import SequentialRunner
 from test_exp03_input_integration import ROOT, bind_generated_sources, generated_sources
 
 from sat_dengue.experiments import exp01_inputs
@@ -17,6 +20,7 @@ from sat_dengue.experiments import exp03_admission as admission
 from sat_dengue.experiments import exp03_preflight as pf
 from sat_dengue.experiments import exp03_runner as runner
 from sat_dengue.experiments.exp01 import digest
+from sat_dengue.pipeline_registry import register_pipelines
 
 
 @pytest.fixture
@@ -80,6 +84,30 @@ def admitted_context(repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> di
     return dict(
         config=config, receipt=receipt, approval=approval, effects=effects, root=repo_tmp_path
     )
+
+
+def test_kedro_catalog_admits_generated_sources_without_execution(
+    admitted_context: dict[str, Any],
+) -> None:
+    """Exercise the catalog's imported descriptor through real admission nodes, without fits."""
+    bootstrap_project(ROOT)
+    session = KedroSession.create(
+        project_path=ROOT,
+        save_on_close=False,
+        runtime_params={"profile": "exp03", "tracking": "enabled", "experiment_id": "EXP03"},
+    )
+    with session:
+        catalog = session.load_context().catalog
+        graph = register_pipelines()["exp03"].only_nodes(
+            "exp03_preflight", "exp03_authorize_and_load"
+        )
+        outputs = SequentialRunner().run(graph, catalog)
+        sources = outputs["exp03_authorized_sources"].load()
+    assert sources["preflight"] == admitted_context["receipt"]
+    assert sources["admission"]["source_identity_status"] == "verified"
+    assert sources["panel"].municipality_code.nunique() == 76
+    assert admitted_context["effects"] == dict(admission.ZERO_EFFECTS)
+    assert not (admitted_context["root"] / "tracking").exists()
 
 
 def test_structural_receipt_never_opens_sources(

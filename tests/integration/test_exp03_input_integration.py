@@ -98,6 +98,9 @@ def bind_generated_sources(
         return value
 
     monkeypatch.setattr(checks, "descriptor", generated_descriptor)
+    # The catalog dataset imports its own reference; bind both consumers to
+    # the generated pin paths instead of mixing fixture and production paths.
+    monkeypatch.setattr(datasets, "descriptor", generated_descriptor)
     return {
         "sources": checks.descriptor(),
         "data_version": record["sha256"],
