@@ -12,7 +12,7 @@
   "classification": "prespecified_retrospective_design_v2_pending_scientific_authorization",
   "comparison": {
     "aggregation": "Development 2020-2022 paired two-way municipal/year intervals; stress and consumed benchmark separate.",
-    "budget": "One B_primary false-onset-alert rate per monitored municipality-year; numeric choice pending. floor(B*D); whole ties and no-alert policy.",
+    "budget": "One B_primary=1.0 false-onset-alert rate per monitored municipality-year, fixed by human decision before execution. floor(B*D); whole ties and no-alert policy.",
     "comparator": "Four primary and twelve secondary paired ablations plus two T+2 objective controls",
     "paired": "Common all-predictor complete rows and onset/excess evaluability for every variant, no variant-dependent row deletion; role key/label hashes identical. Data/class shortage remains non_evaluable; never remove a variant.",
     "realized_burden": "Selection caps are equal, realized evaluation false alerts can differ. Report paired realized burden and do not claim equal realized burden merely because development caps match."
@@ -2175,9 +2175,9 @@
       "V00",
       "V09"
     ],
-    "B_primary": null,
+    "B_primary": 1.0,
     "budget_units": "false_onset_alerts_per_monitored_municipality_year",
-    "budget_rationale": null,
+    "budget_rationale": "A primary budget of 1.0 false onset alert per monitored municipality-year is fixed to provide a common, interpretable and reproducible criterion for comparing variants. The value is conservative and is established before executing EXP03. It does not represent validated operational capacity, clinical equivalence or a deployment threshold.",
     "delay_variants": [
       "V09",
       "V13"
@@ -2322,22 +2322,24 @@
     "zero_denominator_resamples": "Sensitivity invalid for zero-onset draws; burden remains valid with positive resampled monitored exposure. Report metric-specific valid/failed draws and never hold exposure fixed."
   },
   "title": "EXP03 — Feature group ablation",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scope_revision": {
     "source": "alcance.md",
     "legacy_protocol_sha256": "c2f445e767b36dfac5acebca865775d793a93c2a75dc05d829bce82257b57396",
     "execution_authorized": false,
-    "scientific_budget_pending": true,
+    "scientific_budget_pending": false,
     "approval_schema": "exp03-execution-approval-v2",
     "derived_counts": {
       "onset": 384,
       "excess": 24,
       "total": 408,
       "terminal": 102
-    }
+    },
+    "scientific_budget_decision": "human_approved_before_execution",
+    "previous_protocol_sha256": "f806f3897a8dbef2bea01333626ee943e45aec9892f91607ca899f003e55beaf"
   },
   "alert_policy": {
-    "B_primary": null,
+    "B_primary": 1.0,
     "units": "false_onset_alerts_per_monitored_municipality_year",
     "monitored_exposure": "Distinct covered municipality-target months with known current state after embargo and before Y(T)=0, divided by12. Same D for all arms.",
     "selection": "floor(B*D); maximize onsetTP then fewerFP then feweralerts then higherwhole-tie threshold; include no-alert policy",

@@ -275,7 +275,7 @@ def test_pending_budget_blocks_before_authorization_or_any_raw_read(
         raise AssertionError("Pending B_primary reached authorization or scientific source reader")
 
     protocol = copy.deepcopy(exp03.load_protocol())
-    assert protocol["design"]["B_primary"] is None
+    protocol["design"]["B_primary"] = None
     monkeypatch.setattr(runner, "load_protocol", lambda: protocol)
     monkeypatch.setattr(runner, "authorize", forbidden)
     monkeypatch.setattr(exp01_inputs, "prepare_exp01_inputs", forbidden)

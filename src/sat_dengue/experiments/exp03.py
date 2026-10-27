@@ -10,7 +10,7 @@ from typing import Any
 import pandas as pd  # type: ignore[import-untyped]
 
 from sat_dengue.experiments import exp01
-from sat_dengue.experiments.exp03_engine import execute
+from sat_dengue.experiments.exp03_engine import execute, require_budget
 from sat_dengue.experiments.exp03_persistence import fit_calibration
 from sat_dengue.experiments.exp03_persistence import fit_native as native_fit
 from sat_dengue.experiments.exp03_revision import COMPOSITIONS, validate_design
@@ -32,6 +32,16 @@ def load_protocol() -> dict[str, Any]:
         if p["design"][key] != source["design"][key]:
             raise ValueError("EXP03 differs from fixed EXP01 families: " + key)
     validate_design(p["design"])
+    require_budget(p["design"])
+    if (
+        p["version"] != "2.0.1"
+        or p["scope_revision"].get("scientific_budget_pending") is not False
+        or p["scope_revision"].get("scientific_budget_decision")
+        != "human_approved_before_execution"
+        or p["alert_policy"].get("B_primary") != p["design"]["B_primary"]
+        or p["alert_policy"].get("units") != p["design"]["budget_units"]
+    ):
+        raise ValueError("EXP03 scientific budget decision is inconsistent")
     return p
 
 

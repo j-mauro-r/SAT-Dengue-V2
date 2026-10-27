@@ -1,7 +1,12 @@
 # EXP03 engineering validation and publication evidence
 
+Current protocol: 2.0.1; primary budget fixed by the [human decision](DESIGN.md#primary-budget-decision--2026-10-27).
+The earlier review/validation records below describe protocol 2.0.0 and remain historical evidence;
+their hashes and test counts do not certify the budget patch. Scientific execution remains unauthorized.
+
+
 **Engineering PASS on generated data; scientific results NOT_EVALUATED.**
-`B_primary` remains null in the scientific protocol; no new scientific execution,
+`B_primary=1.0` is fixed in scientific protocol 2.0.1; no new scientific execution,
 private-data exploration, permanent MLflow write, scientific reservation/approval,
 champion selection, G5 approval or merge was performed.
 
@@ -121,7 +126,8 @@ publication boundaries and re-signs altered synthetic artifacts to exercise
 semantic rejection. No private source, real scientific execution or permanent
 MLflow store was used. Models, features, labels, budget, windows, matrix and
 scientific methods are unchanged; the canonical protocol SHA above is unchanged.
-`B_primary` remains pending, G5 `NOT_APPROVED`, champion `not_selected`.
+At that validation of protocol 2.0.0, `B_primary` was pending (superseded by 2.0.1);
+G5 was `NOT_APPROVED`, champion `not_selected`.
 
 ## EXP02 integration conflict resolution — 2026-10-27
 
@@ -155,4 +161,33 @@ Focused integration evidence:
 
 Remote CI for the resulting merge commit must be observed separately. This bounded
 integration check is not a new independent scientific review or real-run approval.
-`B_primary`, scientific authorization and Mauricio's PR merge decision remain pending.
+At that integration check, the budget, scientific authorization and PR merge decision
+were pending. The budget is now resolved by protocol 2.0.1; authorization remains separate.
+
+## Protocol 2.0.1 budget correction — 2026-10-27
+
+PLAN_045 records the separate versioned decision resolving PLAN_044's historical
+budget blocker. The original operational failed gate remains intact; no operational
+task was resumed. Current and prior canonical hashes are recorded in
+[the decision owner](DESIGN.md#primary-budget-decision--2026-10-27).
+
+- PASS: protocol/matrix check; **384 onset + 24 excess = 408 cells; 102 terminal cells**.
+- PASS: **36 focused tests**, two unrelated generated-fit/reservation cases deselected,
+  five existing dependency warnings. Command: `.venv/bin/python -m pytest tests/contracts/test_exp03_budget.py tests/unit/test_exp03.py tests/integration/test_exp03_input_integration.py::test_pending_budget_blocks_before_authorization_or_any_raw_read -k 'not probe_counts and not reservation_survives' -q`.
+- PASS: Ruff, formatting and mypy on all seven modified/added Python files.
+- PASS: JSON/YAML parsing, Markdown links, diff whitespace and diff secrets/private-path scan.
+- PASS: independent read-only [review](REVIEW.md#protocol-201-budget-decision-review--2026-10-27).
+- PASS: repository-only DWP conformance. Scoped PLAN_045 closure is recorded locally.
+  Global initial conformance failed on two pre-existing historical plan issues;
+  those failures are not current-code failures and were not waived or repaired.
+
+The first focused attempts exposed a test mock that incorrectly intercepted EXP01's
+whole-registry validation. The fixture now captures EXP01's valid identity before
+mutating EXP03; the final focused selection passed. Original failure logs remain
+in the local DWP journal.
+
+No scientific execution, native-estimator probe, fits/calibrations, private-data read,
+operational preflight, `approval.json`, runtime build or MLflow write occurred.
+GitHub owns full tests, wheels and general checks; remote status is reported in
+the PR handoff, not inferred from these scoped results. After merge, restart the
+operational sequence on the new commit as specified by DESIGN.md.

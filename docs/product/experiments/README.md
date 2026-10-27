@@ -156,3 +156,8 @@ and `exp01_preflight` implementation, approval schema and exact future command.
 The frozen protocol and its canonical hash remain unchanged. Its original
 implementation-status notes are historical delivery metadata; they do not grant
 real execution. Scientific execution/registration and conclusions stay pending.
+
+EXP03 protocol 2.0.1 fixes the primary experimental comparison budget at 1.0 false
+onset alert per monitored municipality-year before execution. See the
+[decision and historical identity](EXP03_feature_ablation/DESIGN.md#primary-budget-decision--2026-10-27).
+Execution still requires separate operational preparation and authorization.

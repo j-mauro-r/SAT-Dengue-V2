@@ -1,5 +1,10 @@
 # EXP03 independent method and code review
 
+Current protocol: 2.0.1; primary budget fixed by the [human decision](DESIGN.md#primary-budget-decision--2026-10-27).
+The earlier review/validation records below describe protocol 2.0.0 and remain historical evidence;
+their hashes and test counts do not certify the budget patch. Scientific execution remains unauthorized.
+
+
 Source review: **PASS**. All fourteen concrete findings below are resolved in
 the reviewed candidate. Core combined validation is **PASS**, with supplemental
 validation for the final presentation-only correction;
@@ -108,7 +113,8 @@ Rendering reused the validated native predictions with zero additional fits.
 Recommendation: approve the reviewed source; the core combined gate and focused
 presentation checks passed. No remaining source blocker was found. This review supplies
 no merge approval, human execution authorization, G5 approval or champion
-selection. `B_primary` and scientific execution remain pending, G5 remains
+selection. At that review of protocol 2.0.0, `B_primary` and scientific execution were pending
+(the budget decision is superseded by 2.0.1), G5 remains
 `NOT_APPROVED`, and champion remains `not_selected`.
 
 ## PR #34 transport-period correction review
@@ -127,3 +133,19 @@ This is engineering review by an independent agent lane on the same backend,
 not cross-vendor review, scientific authorization, formal orchestra approval or
 merge approval. The protocol and scientific sources are unchanged. See the
 [validation correction evidence](VALIDATION.md#consumed-2025-transport-validation-correction-pr-34).
+
+## Protocol 2.0.1 budget decision review — 2026-10-27
+
+An independent read-only agent applied the installed AI Diff Reviewer methodology
+and repository extension to the bounded diff against `4f43482c5fd25e64df73c0396c1fef183f95c39a`.
+Recommendation: approve the code change; no unresolved findings. A historical
+wording concern was corrected by distinguishing 2.0.0 evidence from current status.
+The reviewer independently verified the approved value/rationale, historical
+protocol byte preservation, both canonical hashes, registry/matrix agreement,
+unchanged 408/102 scope and EXP00–EXP02 identities, fail-closed admission and
+unchanged execution/G5/champion boundaries. All eight original EXP03 artifacts
+were inspected, including the SIR/climate and 2024/2025 limitations.
+
+This is engineering review, not scientific execution authorization or merge approval.
+No experiment, fit, calibration, private read, operational preflight, approval-file
+creation or MLflow write was performed for this patch.

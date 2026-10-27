@@ -56,7 +56,7 @@ experiments:
     experiment_type: feature_group_ablation
     pipeline: exp03
     protocol: docs/product/experiments/EXP03_feature_ablation/protocol.json
-    protocol_sha256: f806f3897a8dbef2bea01333626ee943e45aec9892f91607ca899f003e55beaf
+    protocol_sha256: 18ce612581d710245294f3966187178e697df1972d45b460f54be7cc2f4d1611
     conclusions: docs/product/experiments/EXP03_feature_ablation/CONCLUSIONS.md
     scientific_result: pending
     scientific_gate: NOT_APPROVED
