@@ -22,4 +22,4 @@ test evidence and independent review are recorded in the replacement PR body.
 The final focused suite passed 94 tests; code quality and documentation checks
 are recorded separately. The tests produced zero real scientific fits or results.
 
-New canonical protocol SHA-256: `2356d7b0e8fa5cc457e8775a268b5321e60974dc954671419b9a81afbc1aaaa9`.
+New canonical protocol SHA-256: `c2f445e767b36dfac5acebca865775d793a93c2a75dc05d829bce82257b57396`.

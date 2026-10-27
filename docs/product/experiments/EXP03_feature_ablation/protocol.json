@@ -443,7 +443,7 @@
       },
       "zona_canal_t": {
         "availability_offset_months": 0,
-        "formula": "Observed municipal raw value at T",
+        "formula": "Reconstruct municipal zone at T from dengue notifications C(T) and prior-five-same-month type-7 P25/P50/P75: EXITO if C<P25, SEGURIDAD if C<=P50, ALERTA if C<=P75, else EXCESO; missing current/history -> missing. P50 is the existing current-zone contract, not a new target-month predictor.",
         "group": "recent_channel_state",
         "leakage_risk": "future counts forbidden; exact historical calendar lookup only",
         "source": "data/processed/panel_mensual_dengue_clima.csv: dengue_notifications_count plus exact historical calendar",

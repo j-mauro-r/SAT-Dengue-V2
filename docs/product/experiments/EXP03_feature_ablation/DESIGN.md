@@ -86,7 +86,7 @@ are reconstructed, never taken from supplied legacy labels or percentiles.
 | `wind_u_ms_month_mean` | climate | Observed municipal raw value at T | T | retrospective consolidated climate availability UNPROVEN |
 | `wind_v_ms_month_mean` | climate | Observed municipal raw value at T | T | retrospective consolidated climate availability UNPROVEN |
 | `zona_canal_lag_1` | recent_channel_state | {"missing": "preserve", "months": 1, "operation": "lag", "source": "zona_canal_t"} | T | future counts forbidden; exact historical calendar lookup only |
-| `zona_canal_t` | recent_channel_state | Observed municipal raw value at T | T | future counts forbidden; exact historical calendar lookup only |
+| `zona_canal_t` | recent_channel_state | Reconstruct municipal zone at T from dengue notifications C(T) and prior-five-same-month type-7 P25/P50/P75: EXITO if C<P25, SEGURIDAD if C<=P50, ALERTA if C<=P75, else EXCESO; missing current/history -> missing. P50 is the existing current-zone contract, not a new target-month predictor. | T | future counts forbidden; exact historical calendar lookup only |
 
 Thresholds are type-7 P25/P75 from the five previous years of the target calendar
 month. The target's observed cases, zone and label never enter X. P50 is absent.
