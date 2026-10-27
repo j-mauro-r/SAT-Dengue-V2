@@ -12,6 +12,7 @@ from typing import Any
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
+from sat_dengue.experiments import exp03_reporting as reporting
 from sat_dengue.experiments.exp03_reporting import (
     aggregate_projection,
     validate_bundle,
@@ -179,6 +180,66 @@ def generated_delivery() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]
     ]
     provenance = {"protocol_sha256": "fixture", "git_revision": "fixture-not-a-scientific-run"}
     return result, provenance, design
+
+
+@pytest.mark.parametrize(
+    "destination",
+    [
+        "relative",
+        "absolute",
+        "external",
+        "foreign_tmp",
+        "traversal",
+        "symlink",
+        "ancestor",
+        "descendant",
+    ],
+)
+def test_installed_reporting_protects_operational_repository_tmp(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, destination: str
+) -> None:
+    project = repo_tmp_path / "project"
+    project.mkdir()
+    (project / "tmp").mkdir()
+    monkeypatch.chdir(project)
+    monkeypatch.setattr(
+        reporting,
+        "__file__",
+        str(
+            repo_tmp_path
+            / "runtime/lib/python3.12/site-packages/sat_dengue/experiments/exp03_reporting.py"
+        ),
+    )
+    root = project / "tmp/report"
+    if destination in {"relative", "absolute"}:
+        result, provenance, design = generated_delivery()
+        path = root.relative_to(project) if destination == "relative" else root
+        manifest = write_bundle(path, result, provenance, design)
+        assert validate_bundle(path) == manifest
+        with pytest.raises(FileExistsError):
+            write_bundle(path, result, provenance, design)
+        return
+    if destination == "external":
+        root = project / "outside"
+    elif destination == "foreign_tmp":
+        root = repo_tmp_path / "another-repository/tmp/report"
+    elif destination == "traversal":
+        root = project / "tmp/nested/../report"
+    else:
+        target = project / "tmp/target"
+        target.mkdir()
+        if destination == "symlink":
+            root.symlink_to(target, target_is_directory=True)
+        elif destination == "ancestor":
+            link = project / "tmp/link"
+            link.symlink_to(target, target_is_directory=True)
+            root = link / "report"
+        else:
+            root.mkdir()
+            (root / "linked-data").symlink_to(target, target_is_directory=True)
+    with pytest.raises(ValueError):
+        reporting._protected(root)
+    assert not (root / "manifest.json").exists()
 
 
 def test_substantive_delivery_and_adverse_undefined_evidence(repo_tmp_path: Path) -> None:

@@ -219,3 +219,32 @@ fit/calibration or permanent MLflow write occurred. Generated source files and
 transient verified copies were isolated under ignored tmp; no scientific results
 are claimed. GitHub owns full suites, wheel validation and general checks.
 After merge, restart PLAN_044 using the documented three-phase operational contract.
+
+## Installed-wheel publication root correction — 2026-10-27
+
+PLAN_044's independent operational review found that reporting derived the
+repository from `__file__`, placing the protected root inside the installed
+runtime rather than the operational checkout. The reporting guard now uses
+`Path.cwd().resolve() / "tmp"`, consistently with EXP03's other operational
+boundaries, and explicitly rejects `..` before normalization. External paths,
+other repositories' tmp directories, symlink paths and descendants remain denied.
+Publication staging, no-overwrite checks and complete bundle validation are unchanged.
+
+- The site-packages regression failed before the fix for both legitimate relative
+  and absolute destinations. Afterward, **eight focused cases passed**, including
+  generated bundle write/validation, no overwrite, external/foreign-tmp paths,
+  traversal and symlink destination/ancestor/descendant rejection.
+- Command: `.venv/bin/python -m pytest tests/unit/test_exp03_reporting.py -k installed_reporting_protects_operational_repository_tmp -q`.
+- PASS: scoped Ruff lint/format and mypy on the two changed Python files.
+- PASS: a newly built wheel, installed into an isolated target, accepted the
+  canonical destination from the repository root and rejected external and
+  traversal paths. This diagnostic check did not publish a bundle or use MLflow.
+
+PLAN_047 records the technical correction; PLAN_044 remains open with all earlier
+blockers preserved. Protocol 2.0.1 and its canonical hash, budget 1.0 and the
+408/102/409 cell/terminal/run counts are unchanged. No private inputs, approval,
+admission, scientific execution, fits/calibrations or MLflow writes occurred.
+After merge, rebuild wheel/runtime and repeat structural preflight, independent
+review, fresh authorization and official admission. The old operational wheel
+`d4d6d7117b467fa141e8f10526a0b1f984953a66f926f7c0ec9afd3e642bad58`
+is superseded and must not be reused for that preparation.
