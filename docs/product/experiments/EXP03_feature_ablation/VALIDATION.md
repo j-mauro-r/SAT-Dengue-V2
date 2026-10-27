@@ -248,3 +248,39 @@ After merge, rebuild wheel/runtime and repeat structural preflight, independent
 review, fresh authorization and official admission. The old operational wheel
 `d4d6d7117b467fa141e8f10526a0b1f984953a66f926f7c0ec9afd3e642bad58`
 is superseded and must not be reused for that preparation.
+
+## Large CSV field publication correction — 2026-10-27
+
+A subsequent authorized manual execution reached bundle publication, where
+`validate_bundle` reparsed CSVs with `DictReader` solely to check row presence.
+Its default 131,072-character field limit rejected a legitimate JSON-valued field.
+The generated reproducer uses `error_types_and_delay.csv.effective_source_months`,
+the existing per-origin source-month list emitted by the stale-feature diagnostic.
+The failed execution's private payloads were not reopened to identify this example.
+
+The redundant parsing is removed. No replacement CSV field-size limit or global
+`csv.field_size_limit` mutation is introduced: nonempty native tables are still
+validated and their canonical CSV bytes must match `result.json` exactly.
+Reliability bins and group effects now receive the same reconstruction comparison
+as the existing native, summary and optional feature-provenance tables. Unsupported
+CSV names are rejected. Manifest identity, SHA-256/byte counts, unexpected files,
+symlinks/traversal, thresholds, receipts, atomic publication and no overwrite remain
+enforced; scientific calculations and protocol 2.0.1 are unchanged.
+
+- The generated large-field regression failed before correction with the exact
+  `_csv.Error: field larger than field limit (131072)`.
+- PASS: 55 focused reporting tests, including complete large-field bundle write/
+  reload, empty/header-only/truncated/modified tables with recomputed manifests,
+  inconsistent hashes/identity and unexpected CSV rejection.
+- PASS: the same large-field roundtrip from a newly built wheel in an isolated
+  temporary runtime; all 177 package files match checkout/wheel/installation and
+  the global CSV limit remains 131,072. The operational runtime was not modified.
+
+PLAN_048 records this technical correction. Failed parent
+`402af58f6ac248cc9f99d98dd86f3c4f`, reservation
+`0224bd39bbe8680dd07273378cd5f47e25d1e078f4c152a6e4adcb8416325be5.reservation`
+and its terminal-model directory remain untouched. No new private-input reads,
+scientific execution, fits/calibrations, reservations, runs or MLflow writes occur
+in this correction. After merge, EXP03 must be repeated only after rebuilding the
+operational wheel/runtime and obtaining a new preflight, independent review and
+authorization; no new operational approval is created here.
