@@ -86,6 +86,12 @@ CATALOG["exp02_bundle"] = {
     "filepath": "tmp/kedro-migration/exp02-runs",
 }
 
+CATALOG["exp03_sources"] = {"type": "sat_dengue.datasets.exp03.Exp03SourcesDataset"}
+CATALOG["exp03_bundle"] = {
+    "type": "sat_dengue.datasets.exp03.Exp03BundleDataset",
+    "filepath": "tmp/kedro-migration/exp03-runs",
+}
+
 
 class ValidatedConfigLoader(OmegaConfigLoader):
     """Allow only the operational catalog exercised by implemented pipelines."""

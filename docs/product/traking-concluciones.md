@@ -1862,3 +1862,15 @@ G4/G5 are not approved by implementation or by this registration.
   baseline.
 - **Boundary:** This decision does not rerun EDA, change datasets or labels, approve
   predictive performance, reverse G5 `NOT_APPROVED`, or authorize model integration.
+
+
+### EXP03 revised implementation boundary — no scientific execution
+
+The current [EXP03 scope](experiments/EXP03_feature_ablation/alcance.md) owns the
+sixteen-set information-value design. [Implementation traceability](experiments/EXP03_feature_ablation/IMPLEMENTATION.md)
+records the code, generated acceptance and independent-review evidence. The new
+executable protocol invalidates legacy EXP03 approvals without changing EXP00/EXP01
+scientific identities or EXP02 label-sensitivity ownership. Numeric B_primary,
+private-input coverage/maturity and scientific authorization remain pending.
+Synthetic fits and consumed-year fixtures are engineering evidence only;
+G5 remains NOT_APPROVED and champion not_selected.

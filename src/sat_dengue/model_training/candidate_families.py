@@ -23,6 +23,7 @@ def fit_model(
     *,
     seed: int,
     threads: int,
+    excluded: list[str] | None = None,
 ) -> FittedModel:
     """Fit one supported adapter without accepting external validation inputs.
 
@@ -38,7 +39,9 @@ def fit_model(
         Model with prediction, preparation and safe persistence operations.
     """
     validate_grid(family, [parameters])
-    return ADAPTERS[family].fit_candidate(X, y, parameters, seed=seed, threads=threads)
+    return ADAPTERS[family].fit_candidate(
+        X, y, parameters, seed=seed, threads=threads, excluded=excluded
+    )
 
 
 def restore_model(family: str, data: bytes, preparer: dict[str, Any]) -> FittedModel:

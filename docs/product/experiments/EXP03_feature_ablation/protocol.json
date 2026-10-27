@@ -1,0 +1,2385 @@
+{
+  "acceptance": {
+    "G5": "NOT_APPROVED",
+    "authority": "Explicit EXP03 implementation request and EXP01 frozen onset interfaces",
+    "champion": "not_selected",
+    "primary": "Report paired effects, burden, calibration, support and tri-state territorial/profile guardrails; no automatic selection or equivalence",
+    "prospective_required": true
+  },
+  "architecture": {
+    "decision": "EXP03 owns explicit recipe preparation, pre-gate exposure and benchmark boundaries; reuse immutable EXP01 onset semantics and fixed Stage4 families/sigmoid without weakening historical guards."
+  },
+  "classification": "prespecified_retrospective_design_v2_pending_scientific_authorization",
+  "comparison": {
+    "aggregation": "Development 2020-2022 paired two-way municipal/year intervals; stress and consumed benchmark separate.",
+    "budget": "One B_primary false-onset-alert rate per monitored municipality-year; numeric choice pending. floor(B*D); whole ties and no-alert policy.",
+    "comparator": "Four primary and twelve secondary paired ablations plus two T+2 objective controls",
+    "paired": "Common all-predictor complete rows and onset/excess evaluability for every variant, no variant-dependent row deletion; role key/label hashes identical. Data/class shortage remains non_evaluable; never remove a variant.",
+    "realized_burden": "Selection caps are equal, realized evaluation false alerts can differ. Report paired realized burden and do not claim equal realized burden merely because development caps match."
+  },
+  "design": {
+    "calibration": "Same sigmoid implementation from Stage 5 per arm/family/horizon/window, fitted on separate out-of-time calibration predictions. Single-class calibration fails; no identity fallback in real execution.",
+    "contrasts": [
+      {
+        "id": "P1",
+        "left": "V06",
+        "right": "V00",
+        "tier": "primary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "P2",
+        "left": "V09",
+        "right": "V07",
+        "tier": "primary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "P3",
+        "left": "V04",
+        "right": "V00",
+        "tier": "primary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "P4",
+        "left": "V01",
+        "right": "V00",
+        "tier": "primary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "S1",
+        "left": "V02",
+        "right": "V00",
+        "tier": "secondary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "S2",
+        "left": "V03",
+        "right": "V00",
+        "tier": "secondary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "S3",
+        "left": "V05",
+        "right": "V00",
+        "tier": "secondary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "S4",
+        "left": "V14",
+        "right": "V00",
+        "tier": "secondary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "S5",
+        "left": "V09",
+        "right": "V00",
+        "tier": "secondary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "S6",
+        "left": "V09",
+        "right": "V10",
+        "tier": "secondary",
+        "interpretation": "block_removal_loss"
+      },
+      {
+        "id": "S7",
+        "left": "V09",
+        "right": "V11",
+        "tier": "secondary",
+        "interpretation": "block_removal_loss"
+      },
+      {
+        "id": "S8",
+        "left": "V09",
+        "right": "V12",
+        "tier": "secondary",
+        "interpretation": "block_removal_loss"
+      },
+      {
+        "id": "S9",
+        "left": "V09",
+        "right": "V08",
+        "tier": "secondary",
+        "interpretation": "block_removal_loss"
+      },
+      {
+        "id": "S10",
+        "left": "V09",
+        "right": "V15",
+        "tier": "secondary",
+        "interpretation": "block_removal_loss"
+      },
+      {
+        "id": "S11",
+        "left": "V07",
+        "right": "V00",
+        "tier": "secondary",
+        "interpretation": "incremental"
+      },
+      {
+        "id": "S12",
+        "left": "V13",
+        "right": "V09",
+        "tier": "secondary",
+        "interpretation": "incremental"
+      }
+    ],
+    "expected_calibrator_fits": 408,
+    "expected_children": 408,
+    "expected_model_fits": 408,
+    "families": {
+      "gam": {
+        "C": 0.1,
+        "n_knots": 4
+      },
+      "lightgbm": {
+        "lambda_l1": 0,
+        "lambda_l2": 1,
+        "learning_rate": 0.05,
+        "max_bin": 128,
+        "max_depth": 3,
+        "min_data_in_leaf": 20,
+        "n_estimators": 80,
+        "num_leaves": 7
+      },
+      "xgboost": {
+        "eta": 0.05,
+        "max_bin": 128,
+        "max_depth": 2,
+        "min_child_weight": 5,
+        "n_estimators": 80,
+        "reg_alpha": 0,
+        "reg_lambda": 1
+      }
+    },
+    "family_choice": "First predeclared configuration of each Stage 4 family, fixed before EXP01, not selected from 2024/2025; no hyperparameter search.",
+    "fit_count": "Derived Cartesian grid; each unique predictor set fitted/calibrated once per family/horizon/window; contrasts reuse these cells.",
+    "groups": {
+      "B": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature"
+      ],
+      "U": [
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m"
+      ],
+      "L": [
+        "zona_canal_lag_1",
+        "channel_excess_lag_1"
+      ],
+      "Z": [
+        "zona_canal_t",
+        "channel_excess_t"
+      ],
+      "R-": [
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1"
+      ],
+      "R0": [
+        "notification_log1p_oe_t",
+        "expected_zero_t"
+      ],
+      "F": [
+        "channel_target_p25",
+        "channel_target_p75"
+      ],
+      "C-": [
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ],
+      "Cm": [
+        "rain_mm_month_sum",
+        "temp_mean_c_month_mean",
+        "dewpoint_mean_c_month_mean",
+        "surface_runoff_mm_month_sum",
+        "total_evaporation_mm_month_sum_ecmwf",
+        "solar_radiation_mj_m2_month_sum",
+        "soil_water_l1_month_mean",
+        "wind_u_ms_month_mean",
+        "wind_v_ms_month_mean",
+        "rain_mm_month_sum__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "temp_mean_c_month_mean__lag_1",
+        "temp_mean_c_month_mean__lag_2",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1"
+      ]
+    },
+    "horizons": [
+      1,
+      2
+    ],
+    "identity_alias": {
+      "municipality_code": "municipality_code_feature"
+    },
+    "inventory": {
+      "dengue_lag_1": {
+        "source": "dengue_notifications_count",
+        "transform": "exact_calendar_lookup",
+        "formula": "count[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_lag_2": {
+        "source": "dengue_notifications_count",
+        "transform": "exact_calendar_lookup",
+        "formula": "count[T-2]",
+        "latest_event_offset_months": -2,
+        "availability_offset_months": -2,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_lag_3": {
+        "source": "dengue_notifications_count",
+        "transform": "exact_calendar_lookup",
+        "formula": "count[T-3]",
+        "latest_event_offset_months": -3,
+        "availability_offset_months": -3,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -3
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "grave_lag_1": {
+        "source": "dengue_grave_notifications_count",
+        "transform": "exact_calendar_lookup",
+        "formula": "severe_count[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_grave_notifications_count"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "grave_lag_2": {
+        "source": "dengue_grave_notifications_count",
+        "transform": "exact_calendar_lookup",
+        "formula": "severe_count[T-2]",
+        "latest_event_offset_months": -2,
+        "availability_offset_months": -2,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_grave_notifications_count"
+        ],
+        "source_offsets": [
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_mean_lagged_3m": {
+        "source": "dengue_notifications_count",
+        "transform": "complete_arithmetic_mean",
+        "formula": "mean(count[T-1],count[T-2],count[T-3]); all required",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -1,
+          -2,
+          -3
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_difference_lagged_1m": {
+        "source": "dengue_notifications_count",
+        "transform": "difference",
+        "formula": "count[T-1]-count[T-2]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -1,
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "mes_sin": {
+        "source": "forecast_origin_calendar_month",
+        "transform": "calendar_sine",
+        "formula": "sin(2*pi*(month(T)-1)/12)",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "forecast_origin_calendar_month"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "mes_cos": {
+        "source": "forecast_origin_calendar_month",
+        "transform": "calendar_cosine",
+        "formula": "cos(2*pi*(month(T)-1)/12)",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "forecast_origin_calendar_month"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "municipality_code_feature": {
+        "source": "municipality_code",
+        "transform": "categorical_identity",
+        "formula": "municipality_code categorical; learned encoding training-only",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "B"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "municipality_code"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_notifications_count": {
+        "source": "dengue_notifications_count",
+        "transform": "raw_notification_count",
+        "formula": "dengue_notifications_count[T]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "U"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_grave_notifications_count": {
+        "source": "dengue_grave_notifications_count",
+        "transform": "raw_notification_count",
+        "formula": "dengue_grave_notifications_count[T]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "U"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_grave_notifications_count"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_cambio_1m": {
+        "source": "dengue_notifications_count",
+        "transform": "difference",
+        "formula": "count[T]-count[T-1]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "U"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          0,
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dengue_media_3m": {
+        "source": "dengue_notifications_count",
+        "transform": "complete_mean",
+        "formula": "mean(count[T],count[T-1],count[T-2]); all required",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "U"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          0,
+          -1,
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "zona_canal_lag_1": {
+        "source": "dengue_notifications_count",
+        "transform": "type7_historical_channel_zone",
+        "formula": "At s=T+source_offsets[0], reconstruct type7 P25/P50/P75 from count[s-12*k], k=1..5. EXITO if count[s]<P25; SEGURIDAD if <=P50; ALERTA if <=P75; EXCESO otherwise. Any required missing count makes zone unavailable.",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "L"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -1,
+          -13,
+          -25,
+          -37,
+          -49,
+          -61
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "channel_excess_lag_1": {
+        "source": "dengue_notifications_count",
+        "transform": "strict_historical_p75_excess_indicator",
+        "formula": "At s=T+source_offsets[0], 1[count[s]>type7_P75(count[s-12*k],k=1..5)]; missing observations remain unknown.",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "L"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -1,
+          -13,
+          -25,
+          -37,
+          -49,
+          -61
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "zona_canal_t": {
+        "source": "dengue_notifications_count",
+        "transform": "type7_historical_channel_zone",
+        "formula": "At s=T+source_offsets[0], reconstruct type7 P25/P50/P75 from count[s-12*k], k=1..5. EXITO if count[s]<P25; SEGURIDAD if <=P50; ALERTA if <=P75; EXCESO otherwise. Any required missing count makes zone unavailable.",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Z"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          0,
+          -12,
+          -24,
+          -36,
+          -48,
+          -60
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "channel_excess_t": {
+        "source": "dengue_notifications_count",
+        "transform": "strict_historical_p75_excess_indicator",
+        "formula": "At s=T+source_offsets[0], 1[count[s]>type7_P75(count[s-12*k],k=1..5)]; missing observations remain unknown.",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Z"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          0,
+          -12,
+          -24,
+          -36,
+          -48,
+          -60
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid",
+        "cohort_constraint": "Constant zero under known Y(T)=0 eligibility; no learned predictive value claimed"
+      },
+      "notification_log1p_oe_lag_1": {
+        "source": "dengue_notifications_count",
+        "transform": "finite_notification_observed_expected_log1p",
+        "formula": "s=T+source_offsets[0]; E_s=mean(count[s-12*k],k=1..5); log1p(count[s]/E_s) when E_s>0; otherwise sentinel0 with expected_zero flag. Missing count or any reference makes both ratio representation columns unavailable.",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "R-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -1,
+          -13,
+          -25,
+          -37,
+          -49,
+          -61
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "expected_zero_lag_1": {
+        "source": "dengue_notifications_count",
+        "transform": "zero_expected_notification_reference_indicator",
+        "formula": "s=T+source_offsets[0]; E_s=mean(count[s-12*k],k=1..5); 1[E_s=0]; missing count[s] or any reference remains unknown. The matching raw count and ratio sentinel are separate.",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "R-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          -1,
+          -13,
+          -25,
+          -37,
+          -49,
+          -61
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "notification_log1p_oe_t": {
+        "source": "dengue_notifications_count",
+        "transform": "finite_notification_observed_expected_log1p",
+        "formula": "s=T+source_offsets[0]; E_s=mean(count[s-12*k],k=1..5); log1p(count[s]/E_s) when E_s>0; otherwise sentinel0 with expected_zero flag. Missing count or any reference makes both ratio representation columns unavailable.",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "R0"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          0,
+          -12,
+          -24,
+          -36,
+          -48,
+          -60
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "expected_zero_t": {
+        "source": "dengue_notifications_count",
+        "transform": "zero_expected_notification_reference_indicator",
+        "formula": "s=T+source_offsets[0]; E_s=mean(count[s-12*k],k=1..5); 1[E_s=0]; missing count[s] or any reference remains unknown. The matching raw count and ratio sentinel are separate.",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "R0"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": [
+          0,
+          -12,
+          -24,
+          -36,
+          -48,
+          -60
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "channel_target_p25": {
+        "source": "dengue_notifications_count",
+        "transform": "type7_same_target_calendar_month_historical_quantile",
+        "formula": "S=T+h; type7_P25(count[S-12*k],k=1..5). All five historical sources required. Actual dates asserted <=T-1; no supplied future zone, label or percentile is consumed.",
+        "latest_event_offset_months": -10,
+        "availability_offset_months": -10,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "F"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": {
+          "1": [
+            -11,
+            -23,
+            -35,
+            -47,
+            -59
+          ],
+          "2": [
+            -10,
+            -22,
+            -34,
+            -46,
+            -58
+          ]
+        },
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid",
+        "quantile": 0.25
+      },
+      "channel_target_p75": {
+        "source": "dengue_notifications_count",
+        "transform": "type7_same_target_calendar_month_historical_quantile",
+        "formula": "S=T+h; type7_P75(count[S-12*k],k=1..5). All five historical sources required. Actual dates asserted <=T-1; no supplied future zone, label or percentile is consumed.",
+        "latest_event_offset_months": -10,
+        "availability_offset_months": -10,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "F"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dengue_notifications_count"
+        ],
+        "source_offsets": {
+          "1": [
+            -11,
+            -23,
+            -35,
+            -47,
+            -59
+          ],
+          "2": [
+            -10,
+            -22,
+            -34,
+            -46,
+            -58
+          ]
+        },
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid",
+        "quantile": 0.75
+      },
+      "rain_mm_month_sum__lag_1": {
+        "source": "rain_mm_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "rain_mm_month_sum[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-",
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "rain_mm_month_sum"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "temp_mean_c_month_mean__lag_1": {
+        "source": "temp_mean_c_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "temp_mean_c_month_mean[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-",
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "temp_mean_c_month_mean"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dewpoint_mean_c_month_mean__lag_1": {
+        "source": "dewpoint_mean_c_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "dewpoint_mean_c_month_mean[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-",
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dewpoint_mean_c_month_mean"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "surface_runoff_mm_month_sum__lag_1": {
+        "source": "surface_runoff_mm_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "surface_runoff_mm_month_sum[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-",
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "surface_runoff_mm_month_sum"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "total_evaporation_mm_month_sum_ecmwf__lag_1": {
+        "source": "total_evaporation_mm_month_sum_ecmwf",
+        "transform": "exact_calendar_lookup",
+        "formula": "total_evaporation_mm_month_sum_ecmwf[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "total_evaporation_mm_month_sum_ecmwf"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "solar_radiation_mj_m2_month_sum__lag_1": {
+        "source": "solar_radiation_mj_m2_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "solar_radiation_mj_m2_month_sum[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "solar_radiation_mj_m2_month_sum"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "soil_water_l1_month_mean__lag_1": {
+        "source": "soil_water_l1_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "soil_water_l1_month_mean[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "soil_water_l1_month_mean"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "wind_u_ms_month_mean__lag_1": {
+        "source": "wind_u_ms_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "wind_u_ms_month_mean[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "wind_u_ms_month_mean"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "wind_v_ms_month_mean__lag_1": {
+        "source": "wind_v_ms_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "wind_v_ms_month_mean[T-1]",
+        "latest_event_offset_months": -1,
+        "availability_offset_months": -1,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "wind_v_ms_month_mean"
+        ],
+        "source_offsets": [
+          -1
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "rain_mm_month_sum__lag_2": {
+        "source": "rain_mm_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "rain_mm_month_sum[T-2]",
+        "latest_event_offset_months": -2,
+        "availability_offset_months": -2,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-",
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "rain_mm_month_sum"
+        ],
+        "source_offsets": [
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "rain_mm_month_sum__lag_3": {
+        "source": "rain_mm_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "rain_mm_month_sum[T-3]",
+        "latest_event_offset_months": -3,
+        "availability_offset_months": -3,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "rain_mm_month_sum"
+        ],
+        "source_offsets": [
+          -3
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "temp_mean_c_month_mean__lag_2": {
+        "source": "temp_mean_c_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "temp_mean_c_month_mean[T-2]",
+        "latest_event_offset_months": -2,
+        "availability_offset_months": -2,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-",
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "temp_mean_c_month_mean"
+        ],
+        "source_offsets": [
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "temp_mean_c_month_mean__lag_3": {
+        "source": "temp_mean_c_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "temp_mean_c_month_mean[T-3]",
+        "latest_event_offset_months": -3,
+        "availability_offset_months": -3,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "temp_mean_c_month_mean"
+        ],
+        "source_offsets": [
+          -3
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dewpoint_mean_c_month_mean__lag_2": {
+        "source": "dewpoint_mean_c_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "dewpoint_mean_c_month_mean[T-2]",
+        "latest_event_offset_months": -2,
+        "availability_offset_months": -2,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dewpoint_mean_c_month_mean"
+        ],
+        "source_offsets": [
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "surface_runoff_mm_month_sum__lag_2": {
+        "source": "surface_runoff_mm_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "surface_runoff_mm_month_sum[T-2]",
+        "latest_event_offset_months": -2,
+        "availability_offset_months": -2,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "C-"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "surface_runoff_mm_month_sum"
+        ],
+        "source_offsets": [
+          -2
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "rain_mm_month_sum": {
+        "source": "rain_mm_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "rain_mm_month_sum[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "rain_mm_month_sum"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "temp_mean_c_month_mean": {
+        "source": "temp_mean_c_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "temp_mean_c_month_mean[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "temp_mean_c_month_mean"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "dewpoint_mean_c_month_mean": {
+        "source": "dewpoint_mean_c_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "dewpoint_mean_c_month_mean[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "dewpoint_mean_c_month_mean"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "surface_runoff_mm_month_sum": {
+        "source": "surface_runoff_mm_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "surface_runoff_mm_month_sum[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "surface_runoff_mm_month_sum"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "total_evaporation_mm_month_sum_ecmwf": {
+        "source": "total_evaporation_mm_month_sum_ecmwf",
+        "transform": "exact_calendar_lookup",
+        "formula": "total_evaporation_mm_month_sum_ecmwf[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "total_evaporation_mm_month_sum_ecmwf"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "solar_radiation_mj_m2_month_sum": {
+        "source": "solar_radiation_mj_m2_month_sum",
+        "transform": "exact_calendar_lookup",
+        "formula": "solar_radiation_mj_m2_month_sum[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "solar_radiation_mj_m2_month_sum"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "soil_water_l1_month_mean": {
+        "source": "soil_water_l1_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "soil_water_l1_month_mean[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "soil_water_l1_month_mean"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "wind_u_ms_month_mean": {
+        "source": "wind_u_ms_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "wind_u_ms_month_mean[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "wind_u_ms_month_mean"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      },
+      "wind_v_ms_month_mean": {
+        "source": "wind_v_ms_month_mean",
+        "transform": "exact_calendar_lookup",
+        "formula": "wind_v_ms_month_mean[T+0]",
+        "latest_event_offset_months": 0,
+        "availability_offset_months": 0,
+        "assumed_publication_availability": "event-month proxy; actual publication unverified",
+        "as_of_policy": "no observation after forecast origin",
+        "groups": [
+          "Cm"
+        ],
+        "leakage_risk": "publication dates not demonstrated",
+        "source_columns": [
+          "wind_v_ms_month_mean"
+        ],
+        "source_offsets": [
+          0
+        ],
+        "publication_availability_verified": false,
+        "availability_policy": "event-month proxy only; historical publication dates unverified",
+        "source_time_unit": "calendar_months_relative_to_forecast_origin_T",
+        "source_date_evidence": "per-row source_months and source_event_months; checked <=T",
+        "missing_policy": "required source absent stays unavailable; covered zero is valid"
+      }
+    },
+    "predictor_availability_offset_months": 0,
+    "predictors": [
+      "dengue_lag_1",
+      "dengue_lag_2",
+      "dengue_lag_3",
+      "grave_lag_1",
+      "grave_lag_2",
+      "dengue_mean_lagged_3m",
+      "dengue_difference_lagged_1m",
+      "mes_sin",
+      "mes_cos",
+      "municipality_code_feature",
+      "channel_target_p25",
+      "channel_target_p75",
+      "zona_canal_lag_1",
+      "channel_excess_lag_1",
+      "zona_canal_t",
+      "channel_excess_t",
+      "notification_log1p_oe_t",
+      "expected_zero_t",
+      "rain_mm_month_sum__lag_1",
+      "temp_mean_c_month_mean__lag_1",
+      "dewpoint_mean_c_month_mean__lag_1",
+      "surface_runoff_mm_month_sum__lag_1",
+      "total_evaporation_mm_month_sum_ecmwf__lag_1",
+      "solar_radiation_mj_m2_month_sum__lag_1",
+      "soil_water_l1_month_mean__lag_1",
+      "wind_u_ms_month_mean__lag_1",
+      "wind_v_ms_month_mean__lag_1",
+      "rain_mm_month_sum__lag_2",
+      "rain_mm_month_sum__lag_3",
+      "temp_mean_c_month_mean__lag_2",
+      "temp_mean_c_month_mean__lag_3",
+      "dewpoint_mean_c_month_mean__lag_2",
+      "surface_runoff_mm_month_sum__lag_2",
+      "notification_log1p_oe_lag_1",
+      "expected_zero_lag_1",
+      "dengue_notifications_count",
+      "dengue_grave_notifications_count",
+      "dengue_cambio_1m",
+      "dengue_media_3m",
+      "rain_mm_month_sum",
+      "temp_mean_c_month_mean",
+      "dewpoint_mean_c_month_mean",
+      "surface_runoff_mm_month_sum",
+      "total_evaporation_mm_month_sum_ecmwf",
+      "solar_radiation_mj_m2_month_sum",
+      "soil_water_l1_month_mean",
+      "wind_u_ms_month_mean",
+      "wind_v_ms_month_mean"
+    ],
+    "seed": 42,
+    "threads": 1,
+    "variant_groups": {
+      "V00": [
+        "B"
+      ],
+      "V01": [
+        "B",
+        "F"
+      ],
+      "V02": [
+        "B",
+        "L",
+        "Z"
+      ],
+      "V03": [
+        "B",
+        "R0"
+      ],
+      "V04": [
+        "B",
+        "C-"
+      ],
+      "V05": [
+        "B",
+        "F",
+        "L",
+        "R-"
+      ],
+      "V06": [
+        "B",
+        "U",
+        "Z",
+        "R0"
+      ],
+      "V07": [
+        "B",
+        "F",
+        "L",
+        "R-",
+        "C-"
+      ],
+      "V08": [
+        "B",
+        "F",
+        "L",
+        "R-",
+        "U",
+        "Z",
+        "R0"
+      ],
+      "V09": [
+        "B",
+        "F",
+        "L",
+        "R-",
+        "U",
+        "Z",
+        "R0",
+        "C-"
+      ],
+      "V10": [
+        "B",
+        "L",
+        "R-",
+        "U",
+        "Z",
+        "R0",
+        "C-"
+      ],
+      "V11": [
+        "B",
+        "F",
+        "R-",
+        "U",
+        "R0",
+        "C-"
+      ],
+      "V12": [
+        "B",
+        "F",
+        "L",
+        "U",
+        "Z",
+        "C-"
+      ],
+      "V13": [
+        "B",
+        "F",
+        "L",
+        "R-",
+        "U",
+        "Z",
+        "R0",
+        "Cm"
+      ],
+      "V14": [
+        "B",
+        "F",
+        "L",
+        "Z",
+        "R-",
+        "R0"
+      ],
+      "V15": [
+        "B",
+        "U",
+        "C-"
+      ]
+    },
+    "variants": {
+      "V00": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature"
+      ],
+      "V01": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75"
+      ],
+      "V02": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "zona_canal_t",
+        "channel_excess_t"
+      ],
+      "V03": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "notification_log1p_oe_t",
+        "expected_zero_t"
+      ],
+      "V04": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ],
+      "V05": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1"
+      ],
+      "V06": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_t",
+        "channel_excess_t",
+        "notification_log1p_oe_t",
+        "expected_zero_t"
+      ],
+      "V07": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1",
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ],
+      "V08": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_t",
+        "channel_excess_t",
+        "notification_log1p_oe_t",
+        "expected_zero_t"
+      ],
+      "V09": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_t",
+        "channel_excess_t",
+        "notification_log1p_oe_t",
+        "expected_zero_t",
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ],
+      "V10": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_t",
+        "channel_excess_t",
+        "notification_log1p_oe_t",
+        "expected_zero_t",
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ],
+      "V11": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "notification_log1p_oe_t",
+        "expected_zero_t",
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ],
+      "V12": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_t",
+        "channel_excess_t",
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ],
+      "V13": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "zona_canal_t",
+        "channel_excess_t",
+        "notification_log1p_oe_t",
+        "expected_zero_t",
+        "rain_mm_month_sum",
+        "temp_mean_c_month_mean",
+        "dewpoint_mean_c_month_mean",
+        "surface_runoff_mm_month_sum",
+        "total_evaporation_mm_month_sum_ecmwf",
+        "solar_radiation_mj_m2_month_sum",
+        "soil_water_l1_month_mean",
+        "wind_u_ms_month_mean",
+        "wind_v_ms_month_mean",
+        "rain_mm_month_sum__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "temp_mean_c_month_mean__lag_1",
+        "temp_mean_c_month_mean__lag_2",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1"
+      ],
+      "V14": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "channel_target_p25",
+        "channel_target_p75",
+        "zona_canal_lag_1",
+        "channel_excess_lag_1",
+        "zona_canal_t",
+        "channel_excess_t",
+        "notification_log1p_oe_lag_1",
+        "expected_zero_lag_1",
+        "notification_log1p_oe_t",
+        "expected_zero_t"
+      ],
+      "V15": [
+        "dengue_lag_1",
+        "dengue_lag_2",
+        "dengue_lag_3",
+        "grave_lag_1",
+        "grave_lag_2",
+        "dengue_mean_lagged_3m",
+        "dengue_difference_lagged_1m",
+        "mes_sin",
+        "mes_cos",
+        "municipality_code_feature",
+        "dengue_notifications_count",
+        "dengue_grave_notifications_count",
+        "dengue_cambio_1m",
+        "dengue_media_3m",
+        "rain_mm_month_sum__lag_1",
+        "temp_mean_c_month_mean__lag_1",
+        "dewpoint_mean_c_month_mean__lag_1",
+        "surface_runoff_mm_month_sum__lag_1",
+        "total_evaporation_mm_month_sum_ecmwf__lag_1",
+        "solar_radiation_mj_m2_month_sum__lag_1",
+        "soil_water_l1_month_mean__lag_1",
+        "wind_u_ms_month_mean__lag_1",
+        "wind_v_ms_month_mean__lag_1",
+        "rain_mm_month_sum__lag_2",
+        "rain_mm_month_sum__lag_3",
+        "temp_mean_c_month_mean__lag_2",
+        "temp_mean_c_month_mean__lag_3",
+        "dewpoint_mean_c_month_mean__lag_2",
+        "surface_runoff_mm_month_sum__lag_2"
+      ]
+    },
+    "windows": [
+      {
+        "id": "development_2020",
+        "train": [
+          "2012-01",
+          "2018-12"
+        ],
+        "calibration": [
+          "2019-01",
+          "2019-06"
+        ],
+        "selection": [
+          "2019-07",
+          "2019-12"
+        ],
+        "evaluation": [
+          "2020-01",
+          "2020-12"
+        ],
+        "evidence_type": "retrospective_development"
+      },
+      {
+        "id": "development_2021",
+        "train": [
+          "2012-01",
+          "2019-12"
+        ],
+        "calibration": [
+          "2020-01",
+          "2020-06"
+        ],
+        "selection": [
+          "2020-07",
+          "2020-12"
+        ],
+        "evaluation": [
+          "2021-01",
+          "2021-12"
+        ],
+        "evidence_type": "retrospective_development"
+      },
+      {
+        "id": "development_2022",
+        "train": [
+          "2012-01",
+          "2020-12"
+        ],
+        "calibration": [
+          "2021-01",
+          "2021-06"
+        ],
+        "selection": [
+          "2021-07",
+          "2021-12"
+        ],
+        "evaluation": [
+          "2022-01",
+          "2022-12"
+        ],
+        "evidence_type": "retrospective_development"
+      },
+      {
+        "id": "stress_2024",
+        "train": [
+          "2012-01",
+          "2022-12"
+        ],
+        "calibration": [
+          "2023-01",
+          "2023-06"
+        ],
+        "selection": [
+          "2023-07",
+          "2023-12"
+        ],
+        "evaluation": [
+          "2024-01",
+          "2024-12"
+        ],
+        "evidence_type": "retrospective_stress"
+      }
+    ],
+    "revision": "exp03-complete-scope-v2",
+    "variant_names": {
+      "V00": "base_lagged",
+      "V01": "base_plus_target_thresholds",
+      "V02": "base_plus_recent_channel_state",
+      "V03": "base_plus_current_notification_ratio",
+      "V04": "base_plus_lagged_climate",
+      "V05": "base_plus_historical_channel",
+      "V06": "base_plus_current_state",
+      "V07": "full_without_current_state",
+      "V08": "full_without_climate",
+      "V09": "full",
+      "V10": "full_without_target_thresholds",
+      "V11": "full_without_recent_channel_state",
+      "V12": "full_without_notification_ratios",
+      "V13": "full_mixed_climate",
+      "V14": "base_plus_complete_channel",
+      "V15": "full_without_complete_channel"
+    },
+    "excess_controls": [
+      "V00",
+      "V09"
+    ],
+    "B_primary": null,
+    "budget_units": "false_onset_alerts_per_monitored_municipality_year",
+    "budget_rationale": null,
+    "delay_variants": [
+      "V09",
+      "V13"
+    ],
+    "profile_rule": {
+      "months": 60,
+      "minimum_covered": 48,
+      "intermittent_zero_fraction": 0.5,
+      "quantiles": [
+        0.3333333333333333,
+        0.6666666666666666
+      ],
+      "method": "type7",
+      "collapsed": "volume_tertiles_collapsed"
+    },
+    "expected_terminal_cells": 102
+  },
+  "execution": {
+    "authorization": "SAT_DENGUE_EXP03_APPROVAL: independent Mauricio approval of full and reduced refits, clean commit, protocol, data, configuration and retrospective availability",
+    "formal_tracking": "pending",
+    "kedro_pipeline": "exp03",
+    "mode": "authorization_required",
+    "real_execution_authorized": false,
+    "synthetic_pipeline": "exp03_synthetic"
+  },
+  "experiment_id": "EXP03",
+  "experiment_slug": "feature_group_ablation",
+  "hypothesis": "Information blocks may have conditional exact-onset predictive contribution; assess paired detection, realized burden and transport without promising gain or biological causality.",
+  "hypothesis_id": "EXP03-H1",
+  "labels": {
+    "eligibility": "Known Y(T)=0; unknown Y(T) is a distinct inability-to-issue/abstention state. T+1 never filters T+2 issuance.",
+    "evaluation_evaluability": "Post-outcome evaluability is separate from operational eligibility. Both arms use identical evaluable intersections; report excluded/unknown support without treating unknown as zero.",
+    "excess": "General dengue count strictly above same-calendar-month prior-five-year type-7 P75; all epidemic years retained.",
+    "missing_months": "Exact calendar keys only. Missing predecessor, outcome or required historical month yields unavailable label; no interpolation or bridging.",
+    "t1": "Y(T)=0 and Y(T+1)=1",
+    "t1_onset_in_t2": "Keep origins with Y(T)=0,Y(T+1)=1 as negatives for exact T+2 onset, including continued episodes. Never retrospectively remove them from the operational cohort.",
+    "t2": "Y(T+1)=0 and Y(T+2)=1; only Y(T)=0 determines operational eligibility."
+  },
+  "metrics": {
+    "complementary": [
+      "onset_precision",
+      "detected_onsets",
+      "detected_episodes",
+      "missed_episodes",
+      "false_alerts",
+      "false_alarm_ratio",
+      "false_alerts_per_municipality_year",
+      "useful_lead_months",
+      "average_precision",
+      "auroc",
+      "brier",
+      "calibration",
+      "coverage",
+      "number_of_variables"
+    ],
+    "episode": "One onset is a known 0->1 transition at exact calendar S-1/S; continued months never add episodes. Each horizon reported independently; missing prediction counts as missed onset, not lost denominator.",
+    "false_alert_definition": "No exact onset at target, including continuation; excess probability metrics are separately labelled. No EXP00 FAR margin is reused.",
+    "groups": [
+      "horizon",
+      "department",
+      "municipality",
+      "target_year",
+      "window",
+      "family",
+      "budget",
+      "variant",
+      "historical_profile"
+    ],
+    "primary": "Paired exact-onset sensitivity difference jointly with realized false-alert burden, at prespecified B_primary",
+    "probability": "Grouped-tie noninterpolated AP (PR-AUC convention), Brier and complementary AUROC per fitted objective. Calibration curves use ten equal-width bins; no model ranking by AUROC.",
+    "uncertainty": "1000 paired municipality/year development-only draws, identical weights on event and false-alert counts plus monitored/eligible/common exposures. Sensitivity interval needs three onset-supported OOF years; zero-onset draws can still estimate burden. Valid draws per metric, no IID fallback; conditional retrospective pointwise intervals."
+  },
+  "mlflow": {
+    "experiment_name": "sat-dengue-bounded-v1",
+    "required_conceptual_tags": {
+      "experiment_id": "EXP03",
+      "experiment_slug": "feature_group_ablation",
+      "experiment_type": "feature_group_ablation",
+      "hypothesis_id": "EXP03-H1",
+      "objective_slug": "ablate_feature_groups",
+      "target_definition": "exact_episode_onset"
+    }
+  },
+  "normalization": {
+    "unique_variants": 16,
+    "contrasts": 16,
+    "objective_controls": 2,
+    "duplicate_fits": false,
+    "prior_identities_invalidated": true,
+    "legacy_protocol_sha256": "c2f445e767b36dfac5acebca865775d793a93c2a75dc05d829bce82257b57396"
+  },
+  "objective": "Conditional exact-onset information value at one explicit normalized selection budget",
+  "population": {
+    "availability": "Retrospective consolidated data cannot prove historical operational availability; real preflight requires reviewer acknowledgement. No future observation or reporting completeness inferred.",
+    "departments": [
+      "50",
+      "73"
+    ],
+    "municipalities": 76,
+    "operational": "Non-excess at origin in both horizons; all required predictors available by T.",
+    "scope_source": "Stage 7 demonstrative fixture municipality inventories (public DANE codes, not outcomes)."
+  },
+  "reproducibility": {
+    "authority_sha256": {
+      "docs/product/stage-3/training_preparation_contract_v1.json": "4405e9c7fb209c287dc5f9a838ded027675bf21a2d0d8b933247eee44362892d",
+      "docs/product/stage-4/model_engineering_contract_v1.json": "70f2d1e8a5fe8dd950b3be9bd453fc953b07187f5a092e692c3dfe8918e21862",
+      "docs/product/stage-5/champion_decision_policy_v1.json": "29b5d6d7924c74d0c0b1f3cd2e588d1ab587a22c3f59b64d385469246f7a4ec8",
+      "pyproject.toml": "92ab435ccad1e0844c433d82d54ffb7b5374f029c5895a9bca80ddbc97e9e123"
+    },
+    "dependencies": "Exact pins in pyproject.toml and exported constraints",
+    "exp01_protocol_sha256": "6be81e1b3226abc85cce94dcae7dba0c687282b7e0bc816ec460d033e445925b",
+    "freeze": "Canonical finite sorted UTF8 JSON plus newline; approved scientific change requires version/approval, never silent repin.",
+    "input_identity": "Hash input bytes before and after execution; configuration/protocol/code/runtime hashes in receipt, no raw data in MLflow.",
+    "python": ">=3.12,<3.13"
+  },
+  "schema": "sat-dengue-experiment-protocol-v1",
+  "sir_definition": {
+    "adaptation": "V2 notification observed/expected proxy; not a population-standardized incidence or relative-risk estimate. V1 formula is not copied. Demographic/reporting changes can confound it.",
+    "expected": "Five prior same-calendar-month mean; log1p(observed/expected) when positive",
+    "low_transmission": "unstable small expected counts retained without clipping, sensitivity visible in transmission strata; zero expected explicitly tracked",
+    "numerator": "Notifications at T or T-1",
+    "population_reference": "within-municipality historical notification baseline, not census person-time; 76 municipalities evaluated separately",
+    "zeros": "expected=0 -> sentinel0 plus expected_zero flag; missing stays unavailable; positive/zero excluded by current gate under same reference"
+  },
+  "temporal": {
+    "channel": "Recompute five prior-year same-month percentiles for each origin/target; reference observations must be <= origin. No supplied precomputed labels/channel are consumed.",
+    "consumed_2025": "Separate consumed_2025_benchmark inference-only; all102 terminal artifacts frozen before opening2024/2025; zero fits/calibration/search/threshold selection",
+    "predictor_availability": "Every frozen predictor is a T-or-earlier feature (maximum month offset 0). The ordered allowlist and explicit offset are checked before each interface call. Retrospective consolidated inputs cannot establish actual publication latency; operational availability remains a real-run precondition.",
+    "prospective": "A truly unobserved later period must be separately reserved and authorized.",
+    "roles": "Target-time partitions; calibration/selection/evaluation origins must be >= prior role target-end. Horizon-dependent boundary embargo is reported as coverage, not silently backfilled.",
+    "stress_2024": "Retrospective stress only, known epidemic year; never model/configuration selection or blind confirmation.",
+    "transformations": "Deterministic past-only Stage 3 features; native Stage 4 model adapters fit their existing train-only preparer on training X. Sigmoid fit exclusively on out-of-time calibration. No outer-train refit after calibration."
+  },
+  "temporal_support": {
+    "data_preflight": "After budget and authorization, before reservation: build common cohorts and exposure ledger. Insufficient fit/calibration classes remain explicit non-evaluable; uncertainty support is checked independently.",
+    "metadata_preflight": "source-free declaration check only; cannot prove private cohort support",
+    "minimum_development_years": 3,
+    "minimum_municipalities": 2,
+    "minimum_onset_municipalities": 2,
+    "minimum_onset_years": 3,
+    "pool": "development out-of-sample predictions only; unique municipality/target/cut; train/calibrate/select precede evaluation origins",
+    "zero_denominator_resamples": "Sensitivity invalid for zero-onset draws; burden remains valid with positive resampled monitored exposure. Report metric-specific valid/failed draws and never hold exposure fixed."
+  },
+  "title": "EXP03 — Feature group ablation",
+  "version": "2.0.0",
+  "scope_revision": {
+    "source": "alcance.md",
+    "legacy_protocol_sha256": "c2f445e767b36dfac5acebca865775d793a93c2a75dc05d829bce82257b57396",
+    "execution_authorized": false,
+    "scientific_budget_pending": true,
+    "approval_schema": "exp03-execution-approval-v2",
+    "derived_counts": {
+      "onset": 384,
+      "excess": 24,
+      "total": 408,
+      "terminal": 102
+    }
+  },
+  "alert_policy": {
+    "B_primary": null,
+    "units": "false_onset_alerts_per_monitored_municipality_year",
+    "monitored_exposure": "Distinct covered municipality-target months with known current state after embargo and before Y(T)=0, divided by12. Same D for all arms.",
+    "selection": "floor(B*D); maximize onsetTP then fewerFP then feweralerts then higherwhole-tie threshold; include no-alert policy",
+    "evaluation": "Frozen threshold; report realized burden/cap status; no retuning"
+  },
+  "profiles": {
+    "months": 60,
+    "minimum_covered": 48,
+    "intermittent_zero_fraction": 0.5,
+    "quantiles": [
+      0.3333333333333333,
+      0.6666666666666666
+    ],
+    "method": "type7",
+    "collapsed": "volume_tertiles_collapsed",
+    "support_floor": {
+      "onsets": 10,
+      "municipalities": 3,
+      "development_years_with_onsets": 2
+    },
+    "frozen_for_benchmark": true,
+    "interpretation": "Notification-volume design conventions, not population incidence"
+  },
+  "delay": {
+    "variants": [
+      "V09",
+      "V13"
+    ],
+    "new_fits": 0,
+    "current_transforms": "Recompute U,Z,R0,currentCm atT-1; U differenceT-1 minusT-2 and meanT-1,T-2,T-3; independent B/L/R-/C- remain at original source dates",
+    "strict_availability": "If Y(T) unavailable, cannot issue; do not replace gate",
+    "support": "Report frozen training vocabulary/range violations"
+  },
+  "persistence": {
+    "format": "Native family bytes plus safe JSON preparer/calibrator/profile/policy; no pickle",
+    "terminal_cells": 102,
+    "freeze_before_outputs": [
+      2024,
+      2025
+    ],
+    "reload_atol": 1e-12,
+    "reload_rtol": 0,
+    "calibration_or_threshold_refit": false
+  }
+}

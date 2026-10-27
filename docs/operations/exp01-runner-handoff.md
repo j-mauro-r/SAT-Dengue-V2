@@ -3,7 +3,7 @@
 This corrective delivery registers the future real `exp01` graph and a separate
 `exp01_preflight` graph on PR #27. EXP01 scientific execution and formal MLflow
 registration remain pending. The frozen protocol, experiment registry status,
-conclusions, EXP00, EXP02, G5 `NOT_APPROVED` and champion `not_selected` retain
+conclusions, EXP00, EXP03, G5 `NOT_APPROVED` and champion `not_selected` retain
 their existing identities and decisions. The protocol's implementation-status
 paragraph describes its original infrastructure delivery; this engineering record
 owns the subsequent runner implementation without changing the protocol hash.
@@ -216,9 +216,9 @@ coverage validators. Full input identities are checked before and after loading.
 columns are fabricated and no global validation is disabled. Historical `prepare_inputs`
 consumers retain their default full-schema and target/channel validation.
 
-The separate EXP02 runner also reused `prepare_inputs`. Its admission path therefore
+The separate EXP03 runner also reused `prepare_inputs`. Its admission path therefore
 requires its own assessment/adoption on that branch. This PR does not change that branch
-or claim EXP02 is corrected. The frozen EXP01 protocol and hash, design, budgets, G5 and
+or claim EXP03 is corrected. The frozen EXP01 protocol and hash, design, budgets, G5 and
 champion remain unchanged. The minor standalone logging-prefix observation is out of scope.
 
 A generated-manifest connection test materializes the real Kedro catalog (including

@@ -59,7 +59,13 @@ def restore_candidate(model_bytes: bytes, preparer: dict[str, Any]) -> FittedLig
 
 
 def fit_candidate(
-    X: pd.DataFrame, y: pd.Series, parameters: dict[str, Any], *, seed: int, threads: int
+    X: pd.DataFrame,
+    y: pd.Series,
+    parameters: dict[str, Any],
+    *,
+    seed: int,
+    threads: int,
+    excluded: list[str] | None = None,
 ) -> FittedLightGBM:
     """Fit on training only, with no evaluation set or early stopping.
 
@@ -74,7 +80,7 @@ def fit_candidate(
         Native binary booster and fitted representation.
     """
     validate_training(X, y)
-    preparer = fit_representation(X)
+    preparer = fit_representation(X, excluded)
     matrix = transform_representation(X, preparer).to_numpy(dtype=float)
     params = {k: v for k, v in parameters.items() if k != "n_estimators"}
     params.update(
