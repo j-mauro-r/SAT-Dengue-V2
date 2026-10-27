@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 
 from sat_dengue.experiments.exp01 import synthetic_fit
 from sat_dengue.experiments.exp02_labels import construct_variants

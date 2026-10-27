@@ -1,45 +1,85 @@
-# EXP02 — Diseño de estabilidad de etiquetas y episodios
+# EXP02 — Estabilidad de etiquetas y episodios
 
-## Autoridad y límites
+## Autoridad y alcance
 
-La segunda fila del [plan oficial](../experimentos.md) defineEXP02. No es una ablación de variables. Se mantienen G5`NOT_APPROVED`, champion`not_selected`, exclusión de2025 y2024como estrés retrospectivo. La implementación no autoriza lectura privada, ejecución ni decisiones científicas nuevas. El [protocolo](protocol.json) fija la comparación; el registro conserva su hash canónico.
+La segunda fila del [plan oficial](../experimentos.md) define EXP02. El [protocolo](protocol.json) y su hash canónico en el [registro](../experiment-registry.yml) fijan la comparación de ventanas de 5, 7 y 9 años. No se cambian las variables predictoras.
+
+G5 permanece en `NOT_APPROVED` y el champion en `not_selected`. Se excluye 2025 de toda operación científica; 2024 es estrés retrospectivo, no evidencia ciega. Esta implementación no autoriza lectura privada, ajustes reales ni ejecución del experimento.
 
 ## Auditoría científica
 
-`data/consolidation.py::history_periods_for_target` requiere el mismo mes de losHaños inmediatamente anteriores al año objetivo. `percentile_type7` fija interpolación lineal; `compute_current_endemic_channel` ya aceptaH. DEC-120/121/122del [registro](../../traking-concluciones.md#dec-122) mantienen ceros respaldados por cobertura y todos los años epidémicos; no se sustituye un mes faltante por otro año. El percentil usa solo meses anteriores al objetivo y, para h=1/2, anteriores al origen. El conteo del objetivo pertenece únicamente a la verdad retrospectiva.
+`data/consolidation.py::history_periods_for_target` selecciona el mismo mes de los H años inmediatamente anteriores al año objetivo. `percentile_type7` usa interpolación lineal y `compute_current_endemic_channel` ya acepta el parámetro H. Ningún mes futuro interviene en el canal. DEC-120/121/122 del [registro de decisiones](../../traking-concluciones.md#dec-122) mantienen las siguientes reglas:
 
-P75=0con historia completa: cero no es exceso y cualquier conteo positivo sí lo es. Historia incompleta o conteo desconocido: no evaluable. No se convierte desconocido en cero. `experiments/onset.py::labels` exige los estados exactosS/S−1, también en enero/diciembre; no se utiliza el T+1futuro como predictor ni como filtro de elegibilidadT.
+- El exceso exige conteo estrictamente mayor que P75. Con P75=0, cero casos no es exceso y cualquier conteo positivo sí lo es.
+- Los H meses históricos deben estar disponibles. No se sustituye un año faltante por otro más antiguo ni se completa historia desconocida con ceros.
+- Cero notificaciones requiere respaldo de cobertura. Fuera de cobertura, el conteo permanece desconocido. El clima no se imputa para crear soporte.
+- El inicio requiere exceso en S y ausencia de exceso en S−1, usando el mes calendario exacto. Un estado desconocido no se convierte en negativo.
 
-Un episodio es una secuencia máxima de exceso en meses consecutivos conocidos. Un hueco rompe la secuencia y genera censura, no un inicio confirmado. Se conserva identificador local, duración observada y censura izquierda/derecha. Los episodios pueden cruzar años; recortar un periodo no crea nuevos inicios ni sustituye la duración global por la porción observada. Fragmentación: un episodio de referencia intersecta más de uno de la variante en claves comunes; unión: la relación inversa. Se informan denominadores y episodios sin solapamiento.
+`experiments/onset.py` aporta objetivos por horizonte, elegibilidad en origen y particiones; `onset_evaluation.py` aporta métricas y selección de umbrales. EXP01 no identificaba episodios completos ni sus relaciones de fragmentación. EXP02 define cada episodio como una secuencia máxima de meses consecutivos conocidos en exceso. Conserva identidad, duración observada, inicio/final confirmado y censura izquierda/derecha. Los episodios pueden cruzar años; un hueco desconocido los interrumpe. Las relaciones entre segmentos censurados se reportan como ambiguas, separadas de fragmentación o unión confirmadas.
 
-Las notas locales de Umaña y V1 apoyan analizar episodios, incertidumbre y sensibilidad5/7/9, pero no establecen causalidad ni una regla transferible para excluir años epidémicos del percentil mensual. El ejemploINSde2015–2022que excluye2016/2019es contextual, no una política automática para cada municipio/corte. El [registro de brotes](../../../research/colombia-dengue-outbreak-events.md) no es verdad de entrenamiento. Por tanto se incluye toda historia válida y el segundo eje queda `pending_scientific_definition`, sin fabricar variantes o resultados.
+La documentación del proyecto distingue el inicio del objetivo en 2012 del comienzo del soporte bruto común en 2007. Una ventana de nueve años puede disponer de estados desde 2016 e inicios desde febrero de 2016, condicionado a historia completa. Esto es una consecuencia del calendario documentado, no una comprobación de datos privados.
 
-El intervalo común documentado desde2007es evidencia histórica de cobertura, no garantía de completitud de cada municipio. Con historia completa, nueve años permitirían estados desde2016; enero todavía puede carecer de predecesor conocido. La carga autorizada determina soporte real; nunca se inventa historia ni se presume soporte suficiente por las fechas nominales.
+Las fuentes históricas de Umaña y SAT-Dengue V1, junto con las decisiones vigentes de V2, no fijan una alternativa mensual trasladable para excluir años epidémicos. El ejemplo semanal del INS que excluye 2016/2019 y las referencias Bortman de 5–9 años no autorizan una nueva regla mensual. La política vigente conserva todos los años, incluido 2013. El segundo eje queda como `pending_scientific_definition`.
 
-## Cohortes y controles constantes
+## Población y comparación
 
-Se reutilizan los calendarios EXP01: entrenamiento2012–2018/calibración2019-01..06/selección2019-07..12/evaluación2020; entrenamiento2012–2020/calibración2021-01..06/selección2021-07..12/evaluación2022; entrenamiento2012–2022/calibración2023-01..06/selección2023-07..12/evaluación2024. Los límites son meses objetivo; los embargos por origen se conservan. Noviembre y diciembre2024se mantienen cuando el horizonte dispone de sus orígenes y contexto;2025no interviene.
+La población declarada comprende 76 municipios de Meta y Tolima. La carga reutiliza `prepare_exp01_inputs`: valida fuentes, cobertura y dimensiones después de autorizar; proyecta columnas raw; excluye 2025 antes del tipado semántico; ignora etiquetas, P75 y canal heredados.
 
-CapaA: conservar todas las etiquetas5/7/9y su cobertura individual; comparar exceso e inicio en respectivas intersecciones de disponibilidad, sin filtrar por valor deY. Desgloses locales por municipio, departamento y periodo, conP75=0, cantidad de historia y proporción de ceros. “Mayoría de ceros” significa fracción histórica5años>0.5y es solo un descriptor, no una selección poblacional.
+La capa descriptiva conserva cobertura individual y usa la intersección de estados evaluables 5/7/9 para los cambios de exceso. Los cambios de inicio requieren S y S−1 evaluables en las tres definiciones. Los desgloses individuales conservan su H; los desgloses **pareados** por municipio, departamento, año, muchos ceros, P75=0 e historia insuficiente usan una definición de estrato fija de cinco años. Los denominadores comunes y las exclusiones quedan explícitos. Así, un cambio de composición no se interpreta como un cambio de etiqueta.
 
-CapaB: construirXuna sola vez con el canal aprobado5años y el mismo allowlist de29predictores EXP01. Elegibilidad operativa común=estado5años no excesivo enT; no cambiarXo población al variarY. Intersectar disponibilidad de objetivos5/7/9y deXen cada rol. Entrenar cada objetivo de inicio por separado, con misma familia/configuración/semilla y preparador independiente. No reutilizar modelos de otra definición.
+La capa predictiva mantiene el canal de cinco años como predictor y la elegibilidad basal de ausencia de exceso en origen T. X, fechas y claves son idénticos entre las tres variantes; solo cambia Y. Cada modelo, preparador y calibrador se ajusta independientemente. Si alguna variante carece de un rol temporal o tiene una sola clase en entrenamiento/calibración, se conservan las tres celdas del grupo como no evaluables antes de cualquier ajuste.
 
-Se congelan9celdas descriptivas(3definiciones×3periodos) y54predictivas(3definiciones×3periodos×2horizontes×3familias). Todas las celdas existen aun sin soporte; no se omiten silenciosamente. Máximo54fits/preparadores/calibradores, únicamente en futura ejecución autorizada. Si cualquier variante tiene rol vacío o entrenamiento/calibración de clase única, el grupo pareado completo queda no evaluable antes de ajustar. No hay fallback ni selección automática de ventana.
+| Periodo | Entrenamiento | Calibración | Selección | Evaluación |
+| --- | --- | --- | --- | --- |
+| Desarrollo 2020 | 2012–2018 | Ene–jun 2019 | Jul–dic 2019 | 2020 |
+| Desarrollo 2022 | 2012–2020 | Ene–jun 2021 | Jul–dic 2021 | 2022 |
+| Estrés retrospectivo 2024 | 2012–2022 | Ene–jun 2023 | Jul–dic 2023 | 2024 |
 
-## Interpretación predictiva
+Se reutilizan las tres familias y parámetros de EXP01, los horizontes 1/2, semilla 42 y un hilo. Los cortes se aplican al mes objetivo con embargo entre roles. Noviembre y diciembre de 2024 se conservan cuando existe soporte. El diseño contempla 9 celdas descriptivas y 54 predictivas: como máximo 54 ajustes de modelo/preparador y 54 calibraciones, únicamente tras autorización futura.
 
-Se reutilizan modelos, sigmoid y métricas existentes. Calibrar cada modelo contra su propiaYcon rol temporal separado. Frente principal: todos los topes enteros de falsas alertas de selección, usando inicio5años como referencia fija para las tres variantes. Los topes se emparejan en selección; no prometen igual carga realizada en evaluación. Se conserva el frente completo, sin elegir retrospectivamente un presupuesto.
+## Métricas e interpretación
 
-Separar métricas contraYpropia y contra referencia5años. Las primeras describen sensibilidad a la definición; las segundas permiten comparar alertas sobre el mismo desenlace. Probabilidad calibrada paraYpropia no implica calibración para referencia5años. Registrar AP/PR-AUC, Brier, sensibilidad, precisión, inicios perdidos, alertas y falsas alertas; FAR=falsas/alertas. No confundir APcon precisión ni filas con episodios.
+Se reportan cobertura, etiquetas cambiadas 0→1 y 1→0, inicios, episodios, fragmentación, unión y relaciones ambiguas. El bundle conserva etiquetas mensuales y episodios completos, no solo los totales.
 
-Bootstrap pareado por municipio y año,1000réplicas/semilla42, percentiles2.5/97.5; exigir al menos2municipios y2años. Celdas anuales devuelven intervalo nulo por soporte insuficiente, sin sustitutoIID. No hay umbral de materialidad aprobado ni regla para declarar ganador. La revisión humana distinguirá hallazgo descriptivo, interpretación, limitación e hipótesis.
+Las métricas predictivas distinguen la verdad propia de cada H y una referencia fija de inicio de cinco años. Las primeras describen sensibilidad a la definición; las segundas comparan alertas contra el mismo desenlace. Una probabilidad calibrada para Y propia no implica calibración respecto de la referencia fija. Se conservan AP/PR-AUC, Brier, sensibilidad, precisión, inicios perdidos, alertas y falsas alertas. FAR es falsas alertas dividido por alertas evaluables; AP no es precisión de alertas.
 
-## Seguridad e integración
+La selección utiliza todos los presupuestos enteros de falsas alertas posibles en selección sobre la verdad fija, respetando empates completos. Cada variante recibe el mismo límite; el gasto realizado puede ser distinto. El frente completo se conserva, sin elegir retrospectivamente una política por el resultado de evaluación.
 
-Preflight sin contenido privado, fits, calibración, reserva ni escrituraMLflow. Debe comprobar commit limpio, protocolo/registro/configuración, código instalado, entorno, identidades declaradas, rutas y grafo/catálogo materializado. `execution_ready=false` siempre. La autorización posterior vía`SAT_DENGUE_EXP02_APPROVAL`vincula commit, protocolo, datos, configuración, código, entorno y destinos; exige Mauricio, revisión independiente, reconocimiento retrospectivo y presupuesto explícito.
+La incertidumbre usa bootstrap pareado por municipio y año, 1.000 réplicas, semilla 42 y percentiles 2,5/97,5. Exige al menos dos municipios y dos años. Las celdas anuales devuelven intervalo nulo por soporte insuficiente, sin sustituto IID. No existe umbral aprobado de materialidad ni regla automática para declarar una ventana ganadora. Cambiar Y y mejorar sus métricas no demuestra mejor capacidad predictiva.
 
-La carga reutiliza la admisiónrawcorregida deEXP01: ignorar etiquetas/canal/P75heredados; excluir2025antes de tipado semántico; validar fuentes y dimensiones después de autorizar. Revalidar identidades antes de reserva, ajuste y publicación; reservar persistentemente, publicar atómicamente y no sobrescribir. Un fallo exige recuperación humana; no borrar reservas ni reintentar ciencia automáticamente.
+## Integración y protecciones
 
-El bundle local conserva manifiesto, procedencia, etiquetas/episodios, resultados, frentes, probabilidades, calibración, incertidumbre y motivos de no evaluación para exportar sin entrenar otra vez. MLflow solo recibe una proyección cerrada y agregada: parentcomparativo y63childrencon dimensiones científicas validadas. Nunca IDsmunicipales, predicciones individuales, rutas privadas, texto libre ni secretos. Pruebas en tiendas temporales aisladas; futura tienda formal mediante`SAT_DENGUE_TRACKING_ROOT`.
+Los pipelines registrados son `exp02_preflight`, `exp02_synthetic` y `exp02`. El recorrido real es:
 
-La verificación sintética demuestra contratos y recorrido técnico, no evidencia epidemiológica. Preparación operacional, preflight definitivo, autorización real y ejecución manual corresponden a otra sesión después del merge decidido por Mauricio.
+`preflight → autorización/carga → variantes → estabilidad → evaluación predictiva → publicación`
+
+El catálogo materializa fuentes que solo consultan metadatos y un dataset final con ruta fija `tmp/kedro-migration/exp02-runs`. Se rechazan rutas externas, traversal, symlinks y solapamiento con tracking. La ruta absoluta equivalente que Kedro construye sí es válida.
+
+El preflight no abre contenido privado, ajusta, calibra, reserva ni escribe MLflow. Comprueba commit limpio, protocolo/registro, autoridades públicas, catálogo/grafo, correspondencia del código cargado, runtime congelado, metadatos de fuentes y destinos. El descriptor de datos combina la identidad declarada del manifiesto con tamaño, tiempos e inode; **no afirma haber verificado contenido privado**. La admisión posterior a la autorización verifica hashes y reglas de contenido. `execution_ready=false` siempre.
+
+La autorización futura mediante `SAT_DENGUE_EXP02_APPROVAL` vincula los ocho campos de `BINDINGS`, exige autoridad Mauricio, identidad real y decisión explícita del revisor independiente, reconocimiento retrospectivo y permiso explícito para los máximos 54/54 ajustes. Es un registro local auditable, no autenticación criptográfica. Debe crearse fuera de esta implementación después de revisar un preflight operativo nuevo.
+
+Se revalidan autorización, código, entorno, configuración, fuentes y rutas antes de las etapas y de cada interfaz de ajuste. Los hashes de contenido se verifican en admisión y en fronteras de ejecución/publicación. La reserva se crea exclusivamente después de autorizar y admitir las fuentes; persiste ante fallos. Cambiar el archivo de aprobación no permite repetir la identidad científica reservada.
+
+La publicación usa staging, fsync y renombre atómico, nunca sobrescritura. El manifiesto verifica todos los payloads antes de declarar éxito. MLflow se abre después de publicar y verificar el bundle; una interrupción anterior deja reserva persistente sin crear runs. Si falla el tracking, el bundle se conserva para una exportación posterior autorizada, sin reentrenar.
+
+## Artefactos y tracking
+
+El bundle local contiene manifiesto, procedencia, etiquetas, episodios, cobertura, cambios y desgloses, predicciones individuales de selección/evaluación, frentes, calibración, incertidumbre y motivos de no evaluación. `verified_result` comprueba integridad y estructura; `export_authorized` permite registrar una publicación existente sin ajustes, bajo las identidades autorizadas vigentes.
+
+MLflow recibe una proyección cerrada con un parent comparativo y 63 children. Incluye dimensiones científicas, hashes, conteos, probabilidades agregadas, calibración y frentes sin desgloses municipales. La política epidémica está etiquetada como `include_all_years`. Los contadores reales permanecen en el bundle nativo; no se sustituyen por ceros en tracking. No se admiten identificadores municipales, predicciones individuales, rutas privadas, texto libre ni secretos. La proyección se valida nuevamente en el repositorio de artefactos MLflow.
+
+Las pruebas usan tiendas y publicaciones aisladas; las rutas sintéticas no pueden coincidir ni solaparse con los destinos operativos protegidos. `exp02_synthetic` devuelve únicamente memoria con tracking deshabilitado y adaptadores fijos sin estimadores/calibradores reales. Sus resultados no son evidencia epidemiológica.
+
+## Operación futura y gate humano
+
+Después del merge decidido por Mauricio, otra preparación deberá construir e instalar el paquete revisado, verificar correspondencia y dependencias, preservar la tienda existente y emitir un preflight nuevo. El comando futuro es:
+
+```sh
+SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow \
+KEDRO_DISABLE_TELEMETRY=yes \
+kedro run --pipelines=exp02_preflight \
+  --params=profile=exp02_preflight,tracking=enabled,experiment_id=EXP02
+```
+
+Este comando no se ejecuta operativamente durante la implementación. Mauricio y un revisor independiente deberán revisar sus identidades y condiciones antes de crear una autorización real. Solo después corresponderá la ejecución manual de Mauricio. El eje epidémico pendiente, la disponibilidad histórica no demostrada y la falta de umbral de materialidad deben mantenerse visibles en esa revisión.

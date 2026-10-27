@@ -71,7 +71,9 @@ def git_identity() -> dict[str, Any]:
     }
 
 
-def storage_preflight(root: str) -> dict[str, Any]:
+def storage_preflight(
+    root: str, *, experiment_id: str = "EXP01", protocol_sha256: str | None = None
+) -> dict[str, Any]:
     """Validate ignored storage and existing experiment metadata without creating it."""
     path = safe_path(root, temporary=True)
     if path.exists() and not path.is_dir():
@@ -105,10 +107,10 @@ def storage_preflight(root: str) -> dict[str, Any]:
             if rows:
                 pinned = connection.execute(
                     "SELECT value FROM experiment_tags WHERE experiment_id = ? AND key = ?",
-                    (rows[0][0], "protocol.EXP01"),
+                    (rows[0][0], "protocol." + experiment_id),
                 ).fetchone()
-                if pinned and pinned[0] != digest(load_protocol()):
-                    raise ValueError("MLflow EXP01 protocol pin differs")
+                if pinned and pinned[0] != (protocol_sha256 or digest(load_protocol())):
+                    raise ValueError("MLflow experiment protocol pin differs")
             state = "existing_read_only_verified"
     return {"root": root, "state": state, "writes": 0}
 

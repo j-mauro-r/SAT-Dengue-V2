@@ -1,7 +1,7 @@
 """Verificaciones discriminantes de calendario, cobertura y episodios EXP02."""
 
 import numpy as np
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
 from sat_dengue.experiments.exp02_labels import (
@@ -140,3 +140,45 @@ def test_interval_requires_cluster_support_and_keeps_pairs():
         }
     )
     assert change_interval(keys, np.ones(4), seed=42, repeats=20)["interval"] == [1, 1]
+
+
+def test_unknown_gap_is_ambiguous_not_confirmed_fragmentation_or_merge():
+    months = pd.period_range("2024-01", periods=5, freq="M").astype(str)
+    left, _ = episodes(state_frame(months, [0, 1, 1, 1, 0]), 5)
+    right, _ = episodes(state_frame(months, [0, 1, None, 1, 0]), 9)
+    common = left.excess.notna() & right.excess.notna()
+    forward, reverse = episode_overlap(left, right, common), episode_overlap(right, left, common)
+    assert forward["fragmented_reference_episodes"] == reverse["merged_variant_episodes"] == 0
+    assert forward["ambiguous_fragmentation"] == reverse["ambiguous_merging"] == 1
+
+
+def test_paired_strata_detect_changes_hidden_by_equal_positive_totals():
+    variants = construct_variants(panel({"2010-01": 3}))
+    for h in (7, 9):
+        frame = variants[h]["states"]
+        frame.loc[frame.year_month.eq("2010-01"), "excess"] = 0
+        frame.loc[frame.year_month.eq("2010-02"), "excess"] = 1
+        variants[h]["states"], variants[h]["episodes"] = episodes(frame, h)
+    result = compare_stability(
+        variants,
+        {
+            "seed": 42,
+            "windows": [
+                {
+                    "id": "fixture",
+                    "evaluation": ["2010-01", "2010-12"],
+                    "evidence_type": "generated",
+                }
+            ],
+        },
+    )
+    pair = next(
+        p
+        for p in result["paired_by_group"]
+        if p["dimension"] == "municipality"
+        and p["reference_years"] == 5
+        and p["variant_years"] == 9
+    )
+    assert pair["excess"]["zero_to_one"] == pair["excess"]["one_to_zero"] == 1
+    assert pair["excess"]["changed"] == 2
+    assert pair["stratum_definition"] == "five_year_reference"

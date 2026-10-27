@@ -17,7 +17,6 @@ from sat_dengue.experiments.onset_evaluation import (
     paired_block_interval,
     stratified_episode_metrics,
 )
-from sat_dengue.metrics import average_precision_metric, brier_metric
 
 
 def common_partitions(
@@ -53,6 +52,8 @@ def common_partitions(
 
 
 def probability_summary(frame: pd.DataFrame, scores: np.ndarray, history: int) -> dict[str, Any]:
+    from sat_dengue.metrics import average_precision_metric, brier_metric
+
     truth = frame[f"onset_{history}"].astype(int)
     prediction = pd.Series(scores, index=frame.index)
     return {

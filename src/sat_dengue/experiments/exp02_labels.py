@@ -41,6 +41,7 @@ def episodes(states: pd.DataFrame, years: int) -> tuple[pd.DataFrame, list[dict[
     frame.loc[previous.isna() | frame.excess.isna(), "onset"] = pd.NA
     frame["episode_id"] = pd.Series([None] * len(frame), dtype="string")
     frame["episode_duration"] = pd.Series([pd.NA] * len(frame), dtype="Int64")
+    frame["episode_censored"] = False
     output: list[dict[str, Any]] = []
     for municipality, group in frame.groupby("municipality_code", sort=True):
         active: list[int] = []
@@ -70,6 +71,7 @@ def episodes(states: pd.DataFrame, years: int) -> tuple[pd.DataFrame, list[dict[
             output.append(item)
             frame.loc[active, "episode_id"] = identifier
             frame.loc[active, "episode_duration"] = len(active)
+            frame.loc[active, "episode_censored"] = item["left_censored"] or item["right_censored"]
             active.clear()
 
         for index, row in group.iterrows():
@@ -138,21 +140,32 @@ def episode_overlap(left: pd.DataFrame, right: pd.DataFrame, mask: pd.Series) ->
     a, b = left.loc[mask, "episode_id"], right.loc[mask, "episode_id"]
     edges = set(zip(a[a.notna() & b.notna()], b[a.notna() & b.notna()], strict=True))
     left_ids, right_ids = set(a.dropna()), set(b.dropna())
+
+    def censored(frame: pd.DataFrame) -> set[str]:
+        return set(frame.loc[frame.episode_censored, "episode_id"].dropna())
+
+    left_censored, right_censored = censored(left), censored(right)
+    fragmented = {value for value in left_ids if sum(x == value for x, _ in edges) > 1}
+    merged = {value for value in right_ids if sum(y == value for _, y in edges) > 1}
+    ambiguous_f = {
+        value
+        for value in fragmented
+        if value in left_censored or any(y in right_censored for x, y in edges if x == value)
+    }
+    ambiguous_m = {
+        value
+        for value in merged
+        if value in right_censored or any(x in left_censored for x, y in edges if y == value)
+    }
     return {
         "reference_episodes": len(left_ids),
         "variant_episodes": len(right_ids),
-        "fragmented_reference_episodes": sum(
-            sum(x == value for x, _ in edges) > 1 for value in left_ids
-        ),
-        "merged_variant_episodes": sum(
-            sum(y == value for _, y in edges) > 1 for value in right_ids
-        ),
-        "reference_without_overlap": sum(
-            not any(x == value for x, _ in edges) for value in left_ids
-        ),
-        "variant_without_overlap": sum(
-            not any(y == value for _, y in edges) for value in right_ids
-        ),
+        "fragmented_reference_episodes": len(fragmented - ambiguous_f),
+        "merged_variant_episodes": len(merged - ambiguous_m),
+        "ambiguous_fragmentation": len(ambiguous_f),
+        "ambiguous_merging": len(ambiguous_m),
+        "reference_without_overlap": sum(not any(x == v for x, _ in edges) for v in left_ids),
+        "variant_without_overlap": sum(not any(y == v for _, y in edges) for v in right_ids),
     }
 
 
@@ -168,7 +181,7 @@ def compare_stability(
         label: pd.concat([f[label].notna() for f in frames.values()], axis=1).all(axis=1)
         for label in ("excess", "onset")
     }
-    children, pairs, breakdowns = [], [], []
+    children, pairs, breakdowns, paired_groups = [], [], [], []
     for window in design["windows"]:
         period_mask = base.year_month.between(*window["evaluation"])
         for history, frame in frames.items():
@@ -227,32 +240,64 @@ def compare_stability(
                     )
         for left_h, right_h in itertools.combinations(HISTORY_YEARS, 2):
             left, right = frames[left_h], frames[right_h]
-            item: dict[str, Any] = {
-                "reference_years": left_h,
-                "variant_years": right_h,
-                "window": window["id"],
+
+            def paired(
+                mask: pd.Series, left: pd.DataFrame = left, right: pd.DataFrame = right
+            ) -> dict[str, Any]:
+                item: dict[str, Any] = {}
+                for label in ("excess", "onset"):
+                    selected = mask & common[label]
+                    a, b = left.loc[selected, label], right.loc[selected, label]
+                    changed = int(a.ne(b).sum())
+                    item[label] = {
+                        "paired_rows": int(selected.sum()),
+                        "changed": changed,
+                        "excluded_rows": int((mask & ~common[label]).sum()),
+                        "change_rate": changed / int(selected.sum()) if selected.any() else None,
+                        "zero_to_one": int((a.eq(0) & b.eq(1)).sum()),
+                        "one_to_zero": int((a.eq(1) & b.eq(0)).sum()),
+                        "cohort_sha256": digest(records(base.loc[selected, KEYS])),
+                        "uncertainty": change_interval(
+                            base.loc[selected, KEYS],
+                            a.ne(b).to_numpy(dtype=float),
+                            seed=design["seed"],
+                        ),
+                    }
+                item["episodes"] = episode_overlap(left, right, mask & common["excess"])
+                return item
+
+            identity = {"reference_years": left_h, "variant_years": right_h, "window": window["id"]}
+            pairs.append({**identity, **paired(period_mask)})
+            # All paired strata use one fixed five-year definition, even for 7 vs 9.
+            fixed_groups = {
+                "municipality": base.municipality_code,
+                "department": base.municipality_code.str[:2],
+                "target_year": base.year_month.str[:4],
+                "zero_heavy": base.baseline_zero_fraction.gt(0.5)
+                .astype(str)
+                .where(base.baseline_zero_fraction.notna(), "unknown"),
+                "p75_zero": base.p75_zero.astype(str).where(base.p75.notna(), "unknown"),
+                "insufficient_history": base.non_evaluable_reason.eq("insufficient_history").astype(
+                    str
+                ),
             }
-            for label in ("excess", "onset"):
-                selected = period_mask & common[label]
-                a, b = left.loc[selected, label], right.loc[selected, label]
-                changed = int(a.ne(b).sum())
-                item[label] = {
-                    "paired_rows": int(selected.sum()),
-                    "changed": changed,
-                    "change_rate": changed / int(selected.sum()) if selected.any() else None,
-                    "zero_to_one": int((a.eq(0) & b.eq(1)).sum()),
-                    "one_to_zero": int((a.eq(1) & b.eq(0)).sum()),
-                    "cohort_sha256": digest(records(base.loc[selected, KEYS])),
-                    "uncertainty": change_interval(
-                        base.loc[selected, KEYS], a.ne(b).to_numpy(dtype=float), seed=design["seed"]
-                    ),
-                }
-            item["episodes"] = episode_overlap(left, right, period_mask & common["excess"])
-            pairs.append(item)
+            for dimension, group in fixed_groups.items():
+                for value in sorted(group.loc[period_mask].unique()):
+                    paired_groups.append(
+                        {
+                            **identity,
+                            "stratum_definition": "five_year_reference",
+                            "dimension": dimension,
+                            "group": value,
+                            **paired(period_mask & group.eq(value)),
+                        }
+                    )
+
     return {
         "children": children,
         "pairs": pairs,
         "by_group": breakdowns,
+        "paired_by_group": paired_groups,
         "epidemic_axis": "pending_scientific_definition",
         "automatic_window_selection": False,
     }
