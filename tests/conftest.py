@@ -19,6 +19,9 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 
 def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
+        "markers", "historical_artifact: acceptance of frozen historical artifacts; no execution"
+    )
+    config.addinivalue_line(
         "markers", "migration_evidence: requires immutable private migration evidence"
     )
 

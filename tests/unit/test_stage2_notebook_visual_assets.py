@@ -511,6 +511,7 @@ ROOT = Path(__file__).resolve().parents[2]
 NOTEBOOK_PATH = ROOT / "notebooks/03_consolidated_dataset_pipeline.ipynb"
 
 
+@pytest.mark.historical_artifact
 @pytest.mark.skipif(
     not NOTEBOOK_PATH.exists(),
     reason="notebook fixture is not present in this checkout",
