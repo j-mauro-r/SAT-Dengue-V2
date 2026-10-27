@@ -965,3 +965,13 @@ For the budget-only correction, use `tests/contracts/test_exp03_budget.py`, the
 non-fit budget/admission/preflight cases in `tests/unit/test_exp03.py`, and the
 pending-budget regression in `test_exp03_input_integration.py`. Do not invoke the
 generated native-estimator fixture, scientific runtime or operational preflight.
+
+## Test-suite value reduction acceptance
+
+The full CI command is the single command in `.github/workflows/ci.yml` under
+`Run units, contracts including test_repository_disposition.py, and synthetic E2E`.
+It includes EXP02 catalog/execution/tracking and EXP03 input/tracking/revision
+acceptance. `test_exp03_admission.py` is absent on the main baseline; its unmerged
+production implementation is not imported as part of test cleanup. Private
+`migration_evidence` remains deselected by default and is not public CI evidence.
+

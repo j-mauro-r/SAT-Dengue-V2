@@ -192,7 +192,7 @@ jobs:
 
       - name: Run units, contracts including test_repository_disposition.py, and synthetic E2E
         if: needs.repository-quality.outputs.pytest_scope == 'full'
-        run: KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration/test_migration_parity.py tests/integration/test_mlflow_tracking.py tests/integration/test_kedro_e2e.py tests/integration/test_exp03_input_integration.py tests/integration/test_exp03_tracking.py -v
+        run: KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration/test_migration_parity.py tests/integration/test_mlflow_tracking.py tests/integration/test_kedro_e2e.py tests/integration/test_exp03_input_integration.py tests/integration/test_exp03_tracking.py tests/integration/test_exp03_revision_tracking.py tests/integration/test_exp02_catalog.py tests/integration/test_exp02_execution.py tests/integration/test_exp02_tracking.py -v
 
       - name: Run Stage 7 API contract tests
         if: needs.repository-quality.outputs.pytest_scope == 'api'

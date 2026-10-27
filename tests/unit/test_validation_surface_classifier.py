@@ -172,3 +172,41 @@ def test_protected_branch_push_forces_complete_plan() -> None:
     assert plan.run_base_package
     assert plan.run_integration_smoke
     assert plan.run_dwp
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "src/sat_dengue/experiments/exp03_admission.py",
+        "src/sat_dengue/experiments/exp03_reporting.py",
+        "src/sat_dengue/tracking/exp03.py",
+        "docs/product/experiments/EXP03_feature_ablation/protocol.json",
+        "src/sat_dengue/experiments/exp02_runner.py",
+        "tests/integration/test_exp02_execution.py",
+    ],
+)
+def test_experiment_changes_select_full_acceptance(path: str) -> None:
+    assert classify_paths([path]).pytest_scope == "full"
+
+
+def test_workflow_retains_critical_public_integrations() -> None:
+    from pathlib import Path
+
+    import yaml
+
+    workflow = yaml.safe_load(Path(".github/workflows/ci.yml").read_text())
+    step = next(
+        s
+        for s in workflow["jobs"]["unit-tests"]["steps"]
+        if s.get("if", "").endswith("== 'full'") and "pytest " in s.get("run", "")
+    )
+    for name in (
+        "exp02_catalog",
+        "exp02_execution",
+        "exp02_tracking",
+        "exp03_input_integration",
+        "exp03_revision_tracking",
+        "exp03_tracking",
+    ):
+        assert f"tests/integration/test_{name}.py" in step["run"]
+    assert "--require-migration-evidence" not in step["run"]
