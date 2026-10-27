@@ -10,10 +10,11 @@ remote CI and publication status are not asserted here.
 - Review base: `01ce215c2d7738efe3a664e869ae87a3dd7199a6`.
 - Pre-implementation HEAD: `b61cec9e1658b81efb5985b68cf511b610961e90`, including
   reconciliation with main's consolidated EXP00/EXP01 conclusions.
+- Reviewed implementation commit: `a95bf04473aff1962240dc3da50f75fff5145628`.
 - Canonical protocol SHA-256:
   `f806f3897a8dbef2bea01333626ee943e45aec9892f91607ca899f003e55beaf`.
 - Reviewed source candidate fingerprint:
-  `4e4219c18c3300b063964d8a8889a9be86f64c22ecb39dc63b814321464e2578`.
+  `cfd563546031c16fa9f1bd53b154722108711c1f31daaf28d727ea8693e089e0`.
 
 The fingerprint covers the 44 changed/new nonignored files other than this
 review document, excluded to avoid a self-referential digest. Its definition is SHA-256 of the
@@ -78,8 +79,8 @@ neither is asserted by this review.
 After that core gate, visual inspection identified presentation-only defects.
 The final change is limited to `exp03_reporting.py` and its generated tests;
 the scientific engine, predictors, metrics, decisions and native predictions
-remain unchanged. The owning lane reports **18 reporting tests PASS** plus
-scoped Ruff, format and mypy PASS. No additional fit, calibration or threshold
+remain unchanged. The reviewer read `tmp/exp03-reporting-final.log`: **19 tests
+PASS in 0.94 seconds**. Scoped Ruff, format and mypy also passed. No additional fit, calibration or threshold
 selection is needed to render those validated native predictions again.
 
 The reviewer inspected the numerical aggregation and completeness rules:
@@ -91,8 +92,18 @@ outcomes are retained. All secondary/objective and common-month/pooled transport
 rows remain in their complete native source tables. Figure captions identify
 the narrower primary overview and its complete source, rather than selecting
 favorable variants. The renderer SHA-256 at review is
-`ae5fb99659041add41416632e4ae98e037a048a5b6f0ec1af5660ac70bd40be7`;
+`7240deb83925707097d26e02ccb697a8f28e56db30eaad1c841f195cb3248f1a`;
 the original producer identity and final renderer identity remain distinct.
+
+The final table formats detection differences and their intervals in percentage
+points (both multiplied by 100) and preserves burden in false alerts per
+monitored municipality-year. Aggregate support and department/profile guardrails
+are shown separately; unknown subgroup checks remain unknown. This formatting
+does not change any native CSV value, statistical result or model decision.
+The lead inspected the regenerated coverage/transport images and reports the
+synthetic bundle at `tmp/exp03-generated-example`, identity
+`f9f0241e00528c74e3ed19e364558ddc63ca00666b807106b2301ea27ef3bbe3`.
+Rendering reused the validated native predictions with zero additional fits.
 
 Recommendation: approve the reviewed source; the core combined gate and focused
 presentation checks passed. No remaining source blocker was found. This review supplies
