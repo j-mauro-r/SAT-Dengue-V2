@@ -115,6 +115,11 @@ def register_local_artifacts() -> None:
                         for key in ("cohort_sha256", "predictors_sha256")
                     )
                 )
+            elif value.get("schema") == "exp02-aggregate-lineage-v1":
+                from .exp02 import validate_safe_receipt
+
+                validate_safe_receipt(value)
+                valid = True
             elif value.get("schema") in {"exp03-frontier-mlflow-v1", "exp03-frontier-mlflow-v2"}:
                 from sat_dengue.tracking.exp03 import validate_frontier_artifact
 

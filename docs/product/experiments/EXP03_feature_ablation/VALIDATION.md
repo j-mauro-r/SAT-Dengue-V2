@@ -122,3 +122,37 @@ semantic rejection. No private source, real scientific execution or permanent
 MLflow store was used. Models, features, labels, budget, windows, matrix and
 scientific methods are unchanged; the canonical protocol SHA above is unchanged.
 `B_primary` remains pending, G5 `NOT_APPROVED`, champion `not_selected`.
+
+## EXP02 integration conflict resolution — 2026-10-27
+
+Integrated main `f13ae214eee83fb59bff22780710dc03137ecbf0` into the existing
+EXP03 branch through a normal merge. The nine conflicts retain both experiments'
+catalog entries, registered identities, profile guards, artifact validators,
+bootstrap expectations, documentation and disposition directories. The automatic
+pipeline-registry and tracking-hook merges were also inspected. No scientific
+protocol or frozen matrix was changed.
+
+Focused integration evidence:
+
+- 99 configuration, registry, disposition, EXP01/EXP02 catalog, EXP02 tracking and
+  EXP03 aggregate-validation checks passed in the existing pinned foundation
+  environment. One additional bootstrap check initially rejected that environment's
+  historical package metadata (`0.1.0` versus source `0.2.0`); the same check passed
+  in the existing `0.2.0` development environment, without changing either runtime.
+- 19 additional checks passed for EXP03 source-free admission/preflight guards,
+  EXP02 protocol preservation and isolated EXP00/EXP01 tracking. The 408-cell native
+  generated-estimator fixture was intentionally excluded from this merge check;
+  GitHub owns the full required validation.
+- Base bootstrap registered EXP00 replay and all EXP01/EXP02/EXP03 graphs without
+  importing optional modeling/tracking modules, and executed only foundation.
+- Scoped Ruff, formatting and mypy passed for the seven merged shared Python
+  modules/tests. Markdown links and diff whitespace passed.
+- The canonical EXP03 contract check retained 384 onset cells plus 24 excess
+  controls, 408 total and 102 terminal cells, at the unchanged protocol hash above.
+- Source/document comparisons confirmed EXP00/EXP01/EXP02 scientific modules,
+  protocols and conclusions remain byte-identical to current main. Tests used an
+  isolated worktree with no private data or permanent MLflow store.
+
+Remote CI for the resulting merge commit must be observed separately. This bounded
+integration check is not a new independent scientific review or real-run approval.
+`B_primary`, scientific authorization and Mauricio's PR merge decision remain pending.

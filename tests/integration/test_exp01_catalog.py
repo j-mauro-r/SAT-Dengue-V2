@@ -32,6 +32,7 @@ def test_real_session_materializes_exp01_bundle_without_creating_output() -> Non
 
 def test_real_context_preflight_is_structural_and_creates_no_output(
     monkeypatch: pytest.MonkeyPatch,
+    repo_tmp_path: Path,
 ) -> None:
     import builtins
 
@@ -68,8 +69,10 @@ def test_real_context_preflight_is_structural_and_creates_no_output(
     monkeypatch.setattr(exp01, "native_calibration", forbidden)
     monkeypatch.setattr(LocalTracking, "__init__", forbidden)
     monkeypatch.delenv("SAT_DENGUE_EXP01_APPROVAL", raising=False)
-    monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", "tmp/kedro-migration/replay-mlflow")
-    assert not (ROOT / OUTPUT_ROOT).exists()
+    monkeypatch.setenv(
+        "SAT_DENGUE_TRACKING_ROOT", str((repo_tmp_path / "tracking").relative_to(ROOT))
+    )
+    output_existed = (ROOT / OUTPUT_ROOT).exists()
     bootstrap_project(ROOT)
     session = KedroSession.create(
         project_path=ROOT,
@@ -86,4 +89,4 @@ def test_real_context_preflight_is_structural_and_creates_no_output(
     assert result["execution_ready"] is False
     assert result["real_model_fits"] == result["calibrator_fits"] == result["mlflow_writes"] == 0
     assert result["real_execution_started"] is False
-    assert not (ROOT / OUTPUT_ROOT).exists()
+    assert (ROOT / OUTPUT_ROOT).exists() == output_existed

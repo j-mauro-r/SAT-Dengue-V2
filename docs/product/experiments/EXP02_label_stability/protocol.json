@@ -1,0 +1,294 @@
+{
+  "schema": "sat-dengue-experiment-protocol-v1",
+  "version": "1.0.0",
+  "experiment_id": "EXP02",
+  "experiment_slug": "label_episode_stability",
+  "hypothesis_id": "EXP02-H1",
+  "title": "Estabilidad de etiquetas y episodios",
+  "objective": "Cuantificar cambios de exceso e inicio, cobertura y fragmentación al comparar5/7/9años con decisiones restantes constantes.",
+  "classification": "paired_label_definition_sensitivity",
+  "authority": {
+    "official_plan": "docs/product/experiments/experimentos.md",
+    "decision_register": "docs/product/traking-concluciones.md#dec-122",
+    "current_policy": "Mantener años epidémicos, incluida2013; DEC-120/121/122; no sustituir historia faltante."
+  },
+  "execution": {
+    "kedro_pipeline": "exp02",
+    "mode": "authorized_real_run_only",
+    "approval_environment_variable": "SAT_DENGUE_EXP02_APPROVAL",
+    "real_execution_authorized": false
+  },
+  "population": {
+    "municipalities": 76,
+    "departments": [
+      "50",
+      "73"
+    ],
+    "reference_end": "2024-12",
+    "common_state": "Intersección de estados evaluables5/7/9en idénticas claves municipio/mes; cobertura individual preservada.",
+    "common_onset": "Intersección de estados S y S-1 evaluables5/7/9; no filtrar por valor de etiqueta.",
+    "predictive_eligibility": "Ausencia de exceso5años en origenT; misma elegibilidadT para todas las variantes; intersección de disponibilidad de objetivos y predictores."
+  },
+  "labels": {
+    "history_years": [
+      5,
+      7,
+      9
+    ],
+    "percentile": 0.75,
+    "percentile_method": "type7_linear",
+    "history": "Mismo mes de los H años inmediatamente anteriores al año objetivo; mes histórico cerrado; ninguna sustitución.",
+    "excess": "count_strictly_greater_than_p75",
+    "p75_zero": "Cero casos no es exceso; cualquier conteo positivo es exceso si historia completa yP75=0.",
+    "missing_history": "non_evaluable_no_backfill",
+    "zero_counts": "Solo cero respaldado por cobertura; desconocido permanece nulo.",
+    "onset": "exact_previous_month_non_excess_to_current_excess",
+    "episode": "Máxima secuencia mensual consecutiva conocida de exceso; no atravesar meses desconocidos ni discontinuidades; censura explícita en límites.",
+    "epidemic_policy": "include_all_years",
+    "epidemic_axis": "pending_scientific_definition",
+    "zero_heavy_subgroup": "Fracción de ceros en los5meses históricos de referencia; mayoría>0.5descriptiva, nunca criterio de exclusión."
+  },
+  "design": {
+    "history_years": [
+      5,
+      7,
+      9
+    ],
+    "seed": 42,
+    "threads": 1,
+    "predictors": [
+      "dengue_notifications_count",
+      "dengue_grave_notifications_count",
+      "rain_mm_month_sum",
+      "temp_mean_c_month_mean",
+      "dewpoint_mean_c_month_mean",
+      "surface_runoff_mm_month_sum",
+      "total_evaporation_mm_month_sum_ecmwf",
+      "solar_radiation_mj_m2_month_sum",
+      "soil_water_l1_month_mean",
+      "wind_u_ms_month_mean",
+      "wind_v_ms_month_mean",
+      "zona_canal_t",
+      "dengue_lag_1",
+      "dengue_lag_2",
+      "dengue_lag_3",
+      "grave_lag_1",
+      "grave_lag_2",
+      "dengue_cambio_1m",
+      "dengue_media_3m",
+      "zona_canal_lag_1",
+      "lluvia_lag_1",
+      "lluvia_lag_2",
+      "temperatura_lag_1",
+      "temperatura_lag_2",
+      "rocio_lag_1",
+      "escorrentia_lag_1",
+      "mes_sin",
+      "mes_cos",
+      "municipality_code_feature"
+    ],
+    "predictor_availability_offset_months": 0,
+    "predictor_channel_years": 5,
+    "families": {
+      "xgboost": {
+        "n_estimators": 80,
+        "max_depth": 2,
+        "eta": 0.05,
+        "reg_lambda": 1,
+        "reg_alpha": 0,
+        "max_bin": 128,
+        "min_child_weight": 5
+      },
+      "lightgbm": {
+        "n_estimators": 80,
+        "num_leaves": 7,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "lambda_l1": 0,
+        "lambda_l2": 1,
+        "max_bin": 128,
+        "min_data_in_leaf": 20
+      },
+      "gam": {
+        "n_knots": 4,
+        "C": 0.1
+      }
+    },
+    "windows": [
+      {
+        "id": "development_2020",
+        "train": [
+          "2012-01",
+          "2018-12"
+        ],
+        "calibration": [
+          "2019-01",
+          "2019-06"
+        ],
+        "selection": [
+          "2019-07",
+          "2019-12"
+        ],
+        "evaluation": [
+          "2020-01",
+          "2020-12"
+        ],
+        "evidence_type": "retrospective_development"
+      },
+      {
+        "id": "development_2022",
+        "train": [
+          "2012-01",
+          "2020-12"
+        ],
+        "calibration": [
+          "2021-01",
+          "2021-06"
+        ],
+        "selection": [
+          "2021-07",
+          "2021-12"
+        ],
+        "evaluation": [
+          "2022-01",
+          "2022-12"
+        ],
+        "evidence_type": "retrospective_development"
+      },
+      {
+        "id": "stress_2024",
+        "train": [
+          "2012-01",
+          "2022-12"
+        ],
+        "calibration": [
+          "2023-01",
+          "2023-06"
+        ],
+        "selection": [
+          "2023-07",
+          "2023-12"
+        ],
+        "evaluation": [
+          "2024-01",
+          "2024-12"
+        ],
+        "evidence_type": "retrospective_stress"
+      }
+    ],
+    "horizons": [
+      1,
+      2
+    ],
+    "objective": "onset",
+    "predictive_enabled": true,
+    "expected_label_children": 9,
+    "expected_predictive_children": 54,
+    "expected_children": 63,
+    "maximum_model_fits": 54,
+    "maximum_preparer_fits": 54,
+    "maximum_calibrator_fits": 54,
+    "fit_budget": "3ventanas temporales×2horizontes×3familias×3definiciones; una preparación/modelo y calibrador independiente por celda evaluable. Ningún fit por presupuesto.",
+    "support_policy": "Si alguna variante tiene rol vacío o entrenamiento/calibración de clase única, las3variantes del grupo quedan no evaluables antes de ajustar; no fallback ni rellenar historia.",
+    "calibration": "Sigmoid existente ajustado en rol separado conYpropia; sin búsqueda ni selección entre calibradores.",
+    "selection_anchor_years": 5,
+    "false_alert_budget": "Todos los topes enteros0..Nnegativos de inicio5años en selección común; mismos topes para las3variantes, nunca elegidos en evaluación.",
+    "predictive_reporting": "Frente principal contra inicio5años común; métricas propias de cadaY separadas; probabilidades calibradas paraYpropia no implican calibración para referencia5años.",
+    "feature_policy": "Mismos valores, orden, claves y roles deX; canal predictor5años fijo; cambiar únicamenteY; modelos y preparadores independientes."
+  },
+  "metrics": {
+    "primary": [
+      "excess_label_changes",
+      "onset_label_changes",
+      "coverage",
+      "onset_count",
+      "episode_count",
+      "episode_fragmentation",
+      "episode_merging"
+    ],
+    "complementary": [
+      "onset_sensitivity",
+      "false_alerts",
+      "false_alarm_ratio",
+      "precision",
+      "missed_onsets",
+      "average_precision",
+      "brier"
+    ],
+    "definitions": "Alerta=municipio/mes objetivo/horizonte; falsas alertas=alertas sin inicio de la verdad declarada; FAR=falsas/alertas; precisión=aciertos/alertas. AP no es precisión de alertas.",
+    "strata": [
+      "municipality",
+      "department",
+      "target_year",
+      "zero_heavy",
+      "p75_zero",
+      "insufficient_history"
+    ]
+  },
+  "uncertainty": {
+    "method": "paired_municipality_and_year_cluster_bootstrap",
+    "seed": 42,
+    "repeats": 1000,
+    "percentiles": [
+      2.5,
+      97.5
+    ],
+    "minimum_municipalities": 2,
+    "minimum_years": 2,
+    "insufficient_support": "interval_null_insufficient_cluster_support",
+    "interpretation": "Las celdas anuales no alcanzan dos años: intervalo no disponible, sin sustitución IID. Comparaciones descriptivas no prueban superioridad causal."
+  },
+  "acceptance": {
+    "scientific_result": "pending",
+    "materiality_threshold": "not_defined_no_automatic_decision",
+    "success": "Producir comparaciones pareadas trazables con cobertura y límites; la materialidad epidemiológica requiere revisión humana.",
+    "no_decision": [
+      "insufficient_history",
+      "empty_common_cohort",
+      "single_class_training_or_calibration",
+      "insufficient_cluster_support",
+      "pending_scientific_definition"
+    ],
+    "window_selection": "prohibited_automatic_winner",
+    "G5": "NOT_APPROVED",
+    "champion": "not_selected"
+  },
+  "restrictions": {
+    "exclude_2025": true,
+    "stress_2024": "retrospective_stress_evaluation_only",
+    "real_time_availability": "unproven_retrospective_acknowledgement_required",
+    "changed_y": "Mejorar métricas solo por modificarY no demuestra mejor capacidad predictiva."
+  },
+  "reproducibility": {
+    "authority_sha256": {
+      "pyproject.toml": "92ab435ccad1e0844c433d82d54ffb7b5374f029c5895a9bca80ddbc97e9e123",
+      "docs/product/stage-3/training_preparation_contract_v1.json": "4405e9c7fb209c287dc5f9a838ded027675bf21a2d0d8b933247eee44362892d",
+      "docs/product/stage-4/model_engineering_contract_v1.json": "70f2d1e8a5fe8dd950b3be9bd453fc953b07187f5a092e692c3dfe8918e21862",
+      "docs/product/stage-5/champion_decision_policy_v1.json": "29b5d6d7924c74d0c0b1f3cd2e588d1ab587a22c3f59b64d385469246f7a4ec8"
+    },
+    "input_admission": "Reutilizar admisión raw deEXP01; excluir2025 antes de tipado; nunca consumir etiquetas/canal heredados.",
+    "hash_binding": [
+      "git_revision",
+      "protocol_sha256",
+      "data_version",
+      "configuration_sha256",
+      "code_sha256",
+      "environment_sha256",
+      "tracking_root",
+      "output_root"
+    ],
+    "output_root": "tmp/kedro-migration/exp02-runs",
+    "publication": "atomic_no_overwrite_persistent_reservation"
+  },
+  "mlflow": {
+    "experiment_name": "sat-dengue-bounded-v1",
+    "required_conceptual_tags": {
+      "experiment_id": "EXP02",
+      "experiment_slug": "label_episode_stability",
+      "hypothesis_id": "EXP02-H1",
+      "objective_slug": "label_episode_stability",
+      "experiment_type": "paired_label_definition_sensitivity",
+      "target_definition": "label_episode_stability"
+    }
+  }
+}
