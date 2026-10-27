@@ -142,7 +142,8 @@ def generated_delivery() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]
         ],
         "transport_2024_2025": [
             {
-                "year": 2025,
+                "target_year": 2025,
+                "view": "annual",
                 "evidence_type": "consumed_retrospective_benchmark",
                 "status": "not_evaluable",
                 "reason": "synthetic_missing_coverage",

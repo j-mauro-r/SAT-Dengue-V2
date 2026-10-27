@@ -110,3 +110,20 @@ presentation checks passed. No remaining source blocker was found. This review s
 no merge approval, human execution authorization, G5 approval or champion
 selection. `B_primary` and scientific execution remain pending, G5 remains
 `NOT_APPROVED`, and champion remains `not_selected`.
+
+## PR #34 transport-period correction review
+
+A separate same-backend agent reviewed the bounded working diff and actual
+producer-shaped generated regressions. It identified fixture issues (conflicting
+year must itself be valid; reload presentation summary must be regenerated;
+explicit null differs from absence) and a contradictory `target_months` gap.
+All were corrected before publication. The final checks cover canonical period,
+redundant-alias agreement, annual/common/pooled view identity, retrospective
+classification and five strict integer-zero counters at write and reload.
+Valid unavailable rows preserve their reasons and explicit zeros. No unresolved
+correctness findings were reported in the working-diff review.
+
+This is engineering review by an independent agent lane on the same backend,
+not cross-vendor review, scientific authorization, formal orchestra approval or
+merge approval. The protocol and scientific sources are unchanged. See the
+[validation correction evidence](VALIDATION.md#consumed-2025-transport-validation-correction-pr-34).

@@ -128,6 +128,7 @@ def _evaluate_frozen_grid(
                         **spec,
                         "cell_id": cell_id,
                         "target_year": year,
+                        "view": "annual",
                         "status": "not_evaluable",
                         "reason": reason,
                         "target_months": [],

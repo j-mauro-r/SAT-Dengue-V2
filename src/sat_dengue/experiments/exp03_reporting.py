@@ -249,22 +249,64 @@ def _validate_tables(tables: dict[str, list[dict[str, Any]]], design: dict[str, 
     if not expected <= actual:
         raise ValueError("Missing prescribed contrasts in scientific delivery")
     for row in tables["transport_2024_2025"]:
-        if (
-            row.get("year") in (2025, "2025")
-            and row.get("evidence_type", row.get("evidence_level"))
-            != "consumed_retrospective_benchmark"
+        _validate_transport(row)
+
+
+def _validate_transport(row: dict[str, Any]) -> None:
+    """Fail closed on canonical period, evidence class and inference-only counters.
+
+    Legacy year-only rows are deliberately unsupported. A redundant year alias
+    may accompany target_year only when its explicitly normalized identity agrees.
+    JSON integers and their exact string forms are accepted; booleans, floating
+    years and coercible/partial spellings are not temporal identities.
+    """
+
+    def period(value: Any) -> str:
+        if (type(value) is int and value in (2024, 2025)) or (
+            type(value) is str and value in ("2024", "2025", "2024-2025")
         ):
-            raise ValueError("2025 transport must be labelled consumed_retrospective_benchmark")
-        if row.get("year") in (2025, "2025"):
-            for key in (
-                "model_fits",
-                "preparer_fits",
-                "calibrator_fits",
-                "searches",
-                "threshold_selections",
-            ):
-                if row.get(key) != 0:
-                    raise ValueError("Benchmark must record explicit zero execution counters")
+            return str(value)
+        raise ValueError("Invalid or missing transport temporal identity: target_year required")
+
+    target_year = period(row.get("target_year"))
+    if "year" in row and period(row["year"]) != target_year:
+        raise ValueError("Conflicting transport target_year and year identities")
+    if "target_months" in row:
+        months = row["target_months"]
+        allowed_years = {"2024", "2025"} if target_year == "2024-2025" else {target_year}
+        if not isinstance(months, list) or any(
+            not isinstance(month, str)
+            or re.fullmatch(r"(?:2024|2025)-(?:0[1-9]|1[0-2])", month) is None
+            or month[:4] not in allowed_years
+            for month in months
+        ):
+            raise ValueError("Transport target_months contradicts temporal identity")
+    pooled = target_year == "2024-2025"
+    view = row.get("view", "annual")
+    if (pooled and view != "count_pooled_descriptive") or (
+        not pooled and view not in ("annual", "common_calendar_months")
+    ):
+        raise ValueError("Transport view contradicts target_year identity")
+    evidence = {
+        "2024": "retrospective_stress",
+        "2025": "consumed_retrospective_benchmark",
+        "2024-2025": "descriptive_consumed_2024_2025_context",
+    }[target_year]
+    if row.get("evidence_type") != evidence or (
+        "evidence_level" in row and row["evidence_level"] != evidence
+    ):
+        raise ValueError(f"{target_year} transport must be labelled {evidence}")
+    for key in (
+        "model_fits",
+        "preparer_fits",
+        "calibrator_fits",
+        "searches",
+        "threshold_selections",
+    ):
+        if type(row.get(key)) is not int or row[key] != 0:
+            raise ValueError(
+                f"Benchmark must record explicit integer zero execution counters: {key}"
+            )
 
 
 def _validate_thresholds(rows: list[dict[str, Any]], thresholds: list[dict[str, Any]]) -> None:

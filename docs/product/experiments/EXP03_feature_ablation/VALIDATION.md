@@ -90,3 +90,35 @@ run the actual 408-cell experiment and consumed benchmark, and interpret real
 results. Private parity and actual capacity are unverified. The implemented
 benchmark emits explicit not-evaluable records when provenance is insufficient.
 G5 stays `NOT_APPROVED`; champion stays `not_selected`.
+
+## Consumed-2025 transport validation correction (PR #34)
+
+The reviewed baseline `171f0af6b40b06edb8ab08d71f96335af5cf7ed5` inspected
+`year`, while the benchmark producer emitted `target_year`. A generated-data
+reproduction using the baseline `_validate_tables` accepted an annual 2025 row
+with `evidence_type=prospective_confirmation` and `model_fits=99` through both
+`write_bundle` and `validate_bundle`. The reload fixture regenerated native JSON,
+CSV, annual presentation summary, payload hashes and bundle identity; rejection
+was not masked by an integrity failure. Local evidence is retained in ignored
+`tmp/exp03-transport-reproduction.log`.
+
+The shared writer/reloader validator now requires canonical `target_year`.
+Year-only legacy rows are rejected; a redundant `year` is explicitly normalized
+and must agree. Annual/common-month 2024 rows require `retrospective_stress`,
+2025 rows require `consumed_retrospective_benchmark`, and `2024-2025` requires
+`count_pooled_descriptive` / `descriptive_consumed_2024_2025_context`.
+Supplied target months must agree with that period. All periods require the five
+explicit integer-zero fit/search/threshold-selection counters, including valid
+reason-bearing `not_evaluable` rows. Missing, null, boolean and non-integer
+counter values are rejected. The producer now explicitly names its unavailable
+annual view, and the old reporting fixture uses its real `target_year` schema.
+
+Validation: **461 generated-only tests PASS** (22 dependency warnings), covering
+the new producer-shaped regression suite, reporting, benchmark, revision,
+experiment-registry and Kedro-configuration contracts. Scoped Ruff, formatting,
+mypy and canonical protocol/matrix checks PASS. The regression suite checks both
+publication boundaries and re-signs altered synthetic artifacts to exercise
+semantic rejection. No private source, real scientific execution or permanent
+MLflow store was used. Models, features, labels, budget, windows, matrix and
+scientific methods are unchanged; the canonical protocol SHA above is unchanged.
+`B_primary` remains pending, G5 `NOT_APPROVED`, champion `not_selected`.
