@@ -1010,3 +1010,12 @@ mutation, benchmark revalidation and real-publication lineage. The positive case
 stops at the reservation boundary without reserving, creating runs or fitting.
 Use modified-file Ruff/format/mypy and changed-document links/diff privacy checks.
 Leave native-estimator fixtures, full suites and wheel checks to GitHub.
+
+Relocated generated graph/native-estimator owners are
+`tests/integration/test_full_{model_training,training_preparation,final_evaluation,kedro_data,xgboost_candidate}.py`,
+`test_exp03_generated_engine.py`, `test_exp03_benchmark.py` and
+`test_exp03_transport_bundle.py`. Pure transport rules remain in unit. The removed
+`test_exp03_causality.py` scenarios retain their names in revision/evaluation units;
+real-role isolation lives in `test_exp03_causal_flow.py`. The
+[scenario disposition and risk matrix](operations/test-suite-value-reduction.md)
+records each absorption.
