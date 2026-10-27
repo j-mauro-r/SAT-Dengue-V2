@@ -13,6 +13,7 @@ import pandas as pd  # type: ignore[import-untyped]
 import pytest
 from exp03_reporting_fixture import generated_delivery
 
+from sat_dengue.experiments import exp03_reporting as reporting
 from sat_dengue.experiments.exp03_reporting import (
     aggregate_projection,
     validate_bundle,
