@@ -1130,6 +1130,7 @@ def validate_bundle(root: Path | str) -> dict[str, Any]:
         actual != set(manifest["files"])
         or not required <= actual
         or not any(n.startswith("model_artifacts/") for n in actual)
+        or not {n for n in actual if n.endswith(".csv")} <= required | {"feature_provenance.csv"}
     ):
         raise ValueError("Incomplete or unexpected scientific payloads")
     for name, record in manifest["files"].items():
@@ -1138,8 +1139,8 @@ def validate_bundle(root: Path | str) -> dict[str, Any]:
         payload = (folder / name).read_bytes()
         if set(record) != {"sha256", "bytes"} or record != bytes_record(payload):
             raise ValueError(f"Changed native payload {name}")
-        if name.endswith(".csv") and not list(csv.DictReader(io.StringIO(payload.decode()))):
-            raise ValueError("Empty scientific table")
+    # Every CSV is compared with its nonempty canonical reconstruction below;
+    # reparsing here would impose csv.reader's unrelated process-global field cap.
     receipt = json.loads((folder / "scope_execution_receipt.json").read_text())
     if (
         receipt["synthetic"] != manifest["synthetic"]
@@ -1158,6 +1159,13 @@ def validate_bundle(root: Path | str) -> dict[str, Any]:
     for name, rows in (
         ("coverage_summary", _coverage_summary(native_tables["exposure_by_cluster"])),
         ("transport_summary", _transport_summary(native_tables["transport_2024_2025"])),
+        ("reliability_bins", _reliability(native_tables["oof_predictions"])),
+        (
+            "group_effects",
+            _joint_effects(
+                native_tables["oof_predictions"], native_tables["exposure_by_cluster"], inventory
+            ),
+        ),
     ):
         if (folder / (name + ".csv")).read_bytes() != _csv(rows):
             raise ValueError("Presentation summary differs from complete native source")
