@@ -253,5 +253,5 @@ the read-only prototype described above, subject to its own bounded authorizatio
 The [EXP01 runner handoff](../operations/exp01-runner-handoff.md) records the
 registered real graph and metadata-only preflight from corrective PLAN_037 on
 PR #27. This infrastructure does not execute EXP01 or change its frozen protocol,
-EXP00, EXP02, G5 `NOT_APPROVED` or champion `not_selected`. Real execution requires
+EXP00, EXP03, G5 `NOT_APPROVED` or champion `not_selected`. Real execution requires
 a separate protocol-, commit- and data-bound human/reviewer authorization.

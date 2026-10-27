@@ -45,6 +45,9 @@ def main() -> None:
         "exp02",
         "exp02_preflight",
         "exp02_synthetic",
+        "exp03",
+        "exp03_preflight",
+        "exp03_synthetic",
     }
     assert pipelines["__default__"] is pipelines["foundation"]
     assert not OPTIONAL.intersection(sys.modules)

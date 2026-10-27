@@ -120,6 +120,11 @@ def register_local_artifacts() -> None:
 
                 validate_safe_receipt(value)
                 valid = True
+            elif value.get("schema") in {"exp03-frontier-mlflow-v1", "exp03-frontier-mlflow-v2"}:
+                from sat_dengue.tracking.exp03 import validate_frontier_artifact
+
+                validate_frontier_artifact(value)
+                valid = True
             else:
                 valid = False
             if not valid:
