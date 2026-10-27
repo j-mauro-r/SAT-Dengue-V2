@@ -31,6 +31,15 @@ class TrackingHooks:
             # EXP01 authorization precedes private reads and MLflow construction.
             # Its dedicated execution/publication boundary owns the tracker.
             return
+        if pipeline in {"exp02", "exp02_preflight", "exp02_synthetic"} or parameters["profile"] in {
+            "exp02",
+            "exp02_preflight",
+            "exp02_synthetic",
+        }:
+            if pipeline != parameters["profile"]:
+                raise ValueError("EXP02 profile must match its exact pipeline")
+            # The EXP02 publication boundary owns tracking after authorization.
+            return
         if parameters["tracking"] == "disabled":
             return
         if parameters["tracking"] != "enabled":

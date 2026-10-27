@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 import yaml  # type: ignore[import-untyped]
@@ -47,3 +48,91 @@ def synthetic_experiments(repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     path = base / "experiment-registry.yml"
     path.write_text(yaml.safe_dump(registry))
     monkeypatch.setattr(experiments, "REGISTRY", path)
+
+
+@pytest.fixture
+def exp02_receipt(repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    from sat_dengue.experiments import exp02_preflight as checks
+    from sat_dengue.experiments.exp01 import digest
+
+    descriptor = {"schema": "exp02-source-metadata-v1", "files": {"generated": {"bytes": 1}}}
+    metadata: dict[str, Any] = {
+        "code": {"generated.py": "b" * 64},
+        "runtime": {"generated": "only"},
+    }
+    metadata.update(
+        code_sha256=digest(metadata["code"]), environment_sha256=digest(metadata["runtime"])
+    )
+    monkeypatch.setattr(checks, "source_metadata", lambda: descriptor)
+    monkeypatch.setattr(checks, "execution_metadata", lambda: metadata)
+    monkeypatch.setattr(checks, "runtime_versions", lambda: {"generated": "1"})
+    monkeypatch.setattr(
+        checks, "git_identity", lambda: {"git_revision": "a" * 40, "git_dirty": False}
+    )
+    monkeypatch.setenv(
+        "SAT_DENGUE_TRACKING_ROOT", str((repo_tmp_path / "tracking").relative_to(ROOT))
+    )
+    monkeypatch.delenv("SAT_DENGUE_EXP02_APPROVAL", raising=False)
+    return checks.preflight(
+        {"profile": "exp02_preflight", "tracking": "enabled", "experiment_id": "EXP02"}, descriptor
+    )
+
+
+@pytest.fixture(scope="session")
+def exp02_generated_result():
+    from sat_dengue.experiments.exp02_runner import synthetic_run
+
+    return synthetic_run(
+        {"profile": "exp02_synthetic", "tracking": "disabled", "experiment_id": "EXP02"}
+    )
+
+
+@pytest.fixture
+def exp02_generated_bundle(exp02_generated_result):
+    from sat_dengue.experiments.exp01 import digest
+    from sat_dengue.experiments.exp02_preflight import load_protocol
+
+    code, runtime = {"generated.py": "b" * 64}, {"generated": "only"}
+    provenance = {
+        "protocol_sha256": digest(load_protocol()),
+        "git_revision": "a" * 40,
+        "data_sha256": "c" * 64,
+        "configuration_sha256": "d" * 64,
+        "code": code,
+        "runtime": runtime,
+        "code_sha256": digest(code),
+        "environment_sha256": digest(runtime),
+    }
+    return {"result": exp02_generated_result, "provenance": provenance}
+
+
+@pytest.fixture(autouse=True)
+def prohibit_exp02_test_access_to_permanent_store(request, monkeypatch):
+    if "exp02" not in str(request.fspath) and "test_exp01_catalog" not in str(request.fspath):
+        return
+    import builtins
+    import sqlite3
+
+    real_open, real_path_open, real_connect = builtins.open, Path.open, sqlite3.connect
+    protected = ROOT / "tmp/kedro-migration/replay-mlflow"
+
+    def guard(path):
+        if isinstance(path, (str, Path)):
+            assert "replay-mlflow" not in str(path), "Permanent MLflow access is forbidden"
+            assert not Path(path).absolute().is_relative_to(protected)
+
+    def guarded_open(path, *args, **kwargs):
+        guard(path)
+        return real_open(path, *args, **kwargs)
+
+    def guarded_path_open(path, *args, **kwargs):
+        guard(path)
+        return real_path_open(path, *args, **kwargs)
+
+    def guarded_connect(database, *args, **kwargs):
+        guard(database)
+        return real_connect(database, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "open", guarded_open)
+    monkeypatch.setattr(Path, "open", guarded_path_open)
+    monkeypatch.setattr(sqlite3, "connect", guarded_connect)

@@ -874,3 +874,22 @@ foundation startup for the base wheel and generated synthetic probes for optiona
 extras. Exercise metadata-only preflight on the local declared source paths and
 read-only permanent tracking destination; no private-content read is allowed.
 The handoff owns the [future command and approval boundary](operations/exp01-runner-handoff.md).
+
+### EXP02: estabilidad de etiquetas y episodios
+
+El alcance nuevo se mapea a `tests/contracts/test_exp02_protocol.py`,
+`tests/unit/test_exp02_labels.py`, `tests/unit/test_exp02_prediction.py` y
+`tests/integration/test_exp02_{execution,catalog,tracking}.py`. Las regresiones
+compartidas pertinentes son rutas/catálogo de EXP01, registro de experimentos,
+configuración y bootstrap. Ejecutar únicamente esa selección durante el desarrollo;
+las suites completas siguen siendo responsabilidad de GitHub.
+
+Las pruebas de EXP02 usan fuentes generadas, adaptadores fijos y tiendas temporales
+propias. El recorrido real se ejercita con admisión y ajustes sustituidos por fixtures:
+ninguna llamada de interfaz es un fit de estimador o calibrador. El guard de pruebas
+rechaza acceso al almacenamiento permanente. Las reservas y aprobaciones de prueba
+son ficticias y se eliminan con su directorio aislado.
+
+El preflight operativo, la admisión privada, la preparación del runtime y la ejecución
+científica no son gates de esta implementación. El [diseño de EXP02](product/experiments/EXP02_label_stability/DESIGN.md)
+conserva el comando futuro y los gates de Mauricio y del revisor independiente.
