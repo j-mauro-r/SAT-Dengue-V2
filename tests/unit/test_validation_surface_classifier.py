@@ -205,6 +205,7 @@ def test_workflow_retains_critical_public_integrations() -> None:
         "exp02_execution",
         "exp02_tracking",
         "exp03_input_integration",
+        "exp03_admission",
         "exp03_revision_tracking",
         "exp03_tracking",
     ):

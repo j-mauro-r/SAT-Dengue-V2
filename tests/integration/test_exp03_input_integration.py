@@ -23,6 +23,7 @@ from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
 from sat_dengue.experiments import exp01, exp03
 from sat_dengue.experiments import exp03_preflight as checks
 from sat_dengue.experiments import exp03_runner as runner
+from sat_dengue.experiments.exp03_admission import AdmissionError
 from sat_dengue.pipeline_registry import register_pipelines
 from sat_dengue.tracking import exp03 as tracking
 
@@ -68,6 +69,9 @@ def bind_generated_sources(
     monkeypatch.setattr(stage2, "NATIVE_IDENTITIES", {manifest: record})
     monkeypatch.setattr(checks, "NATIVE_MANIFEST", manifest)
     monkeypatch.setattr(checks, "NATIVE_IDENTITIES", {manifest: record})
+    catalog = "data/sources/Divipola-municipios.md"
+    catalog_path = str(config.resolve(catalog).relative_to(ROOT))
+    monkeypatch.setattr(checks, "SOURCE_IDENTITIES", {catalog: fingerprint(ROOT / catalog_path)})
     monkeypatch.setattr(
         checks,
         "SOURCE_PATHS",
@@ -86,7 +90,22 @@ def bind_generated_sources(
         budget_rationale="Generated raw-admission fixture only; no scientific authorization",
     )
     monkeypatch.setattr(runner, "load_protocol", lambda: protocol)
-    return {"sources": checks.descriptor(), "data_version": record["sha256"]}
+    original_descriptor = checks.descriptor
+
+    def generated_descriptor() -> dict[str, Any]:
+        value = original_descriptor()
+        value["expected_pinned_files"][catalog_path] = value["expected_pinned_files"].pop(catalog)
+        return value
+
+    monkeypatch.setattr(checks, "descriptor", generated_descriptor)
+    # The catalog dataset imports its own reference; bind both consumers to
+    # the generated pin paths instead of mixing fixture and production paths.
+    monkeypatch.setattr(datasets, "descriptor", generated_descriptor)
+    return {
+        "sources": checks.descriptor(),
+        "data_version": record["sha256"],
+        "expected_source_sha256": record["sha256"],
+    }
 
 
 @pytest.mark.parametrize("fault", [None, "consumed_predictor", "unconsumed_tamper"])
@@ -109,7 +128,7 @@ def test_exp03_admission_uses_raw_inputs_and_full_identity(
     monkeypatch.setattr(runner, "authorize", lambda value: {"data_version": value["data_version"]})
     if fault:
         match = "rain_mm_month_sum" if fault == "consumed_predictor" else "fingerprint mismatch"
-        with pytest.raises(preparation.PreparationError, match=match):
+        with pytest.raises(AdmissionError, match=match):
             runner.load_authorized_sources(receipt)
         return
     sources = runner.load_authorized_sources(receipt)
@@ -119,10 +138,7 @@ def test_exp03_admission_uses_raw_inputs_and_full_identity(
     assert len(panel.loc[panel.year_month.isin(["2024-11", "2024-12"])]) == 152
     assert not panel.year_month.ge("2025-01").any()
     assert not {"y_t1", "y_t2", "zona_canal_t", "p75_canal_t", "p75_t2"} & set(panel)
-    assert all(
-        fingerprint(config.resolve(name)) == value
-        for name, value in sources["fingerprints"].items()
-    )
+    assert all(fingerprint(ROOT / name) == value for name, value in sources["fingerprints"].items())
 
 
 def test_generated_catalog_admission_ablation_publication_and_tracking(
