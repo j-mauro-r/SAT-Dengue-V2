@@ -14,6 +14,7 @@ def fixture_fingerprint(root: Path, identity: dict[str, Any]) -> str:
     files += sorted(root.joinpath("docs/product/experiments").rglob("protocol.json"))
     files += [
         root / "pyproject.toml",
+        root / "docs/product/stage-3/training_preparation_contract_v1.json",
         root / "docs/product/experiments/EXP03_feature_ablation/alcance.md",
     ]
     return hashlib.sha256(

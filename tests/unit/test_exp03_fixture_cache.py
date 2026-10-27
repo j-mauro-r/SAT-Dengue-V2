@@ -10,6 +10,7 @@ from exp03_fixture_cache import fixture_fingerprint
     "path",
     [
         "src/module.py",
+        "docs/product/stage-3/training_preparation_contract_v1.json",
         "docs/product/experiments/EXP03_feature_ablation/protocol.json",
         "docs/product/experiments/EXP03_feature_ablation/alcance.md",
         "pyproject.toml",
@@ -18,6 +19,7 @@ from exp03_fixture_cache import fixture_fingerprint
 def test_consumed_file_change_invalidates_fixture_cache(repo_tmp_path: Path, path: str) -> None:
     for name in (
         "src/module.py",
+        "docs/product/stage-3/training_preparation_contract_v1.json",
         "docs/product/experiments/EXP03_feature_ablation/protocol.json",
         "docs/product/experiments/EXP03_feature_ablation/alcance.md",
         "pyproject.toml",
@@ -27,6 +29,7 @@ def test_consumed_file_change_invalidates_fixture_cache(repo_tmp_path: Path, pat
         file.write_text("initial")
     before = fixture_fingerprint(repo_tmp_path, {"runtime": "fixed"})
     assert before == fixture_fingerprint(repo_tmp_path, {"runtime": "fixed"})
+    assert before != fixture_fingerprint(repo_tmp_path, {"runtime": "changed"})
     (repo_tmp_path / path).write_text("changed")
     assert before != fixture_fingerprint(repo_tmp_path, {"runtime": "fixed"})
     assert before != fixture_fingerprint(repo_tmp_path, {"runtime": "changed"})
