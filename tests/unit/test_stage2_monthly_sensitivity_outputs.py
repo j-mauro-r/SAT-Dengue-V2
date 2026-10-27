@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "data/interim/stage2_monthly_sensitivity_associations"
 
 
+@pytest.mark.historical_artifact
 @pytest.mark.skipif(
     not OUT_DIR.exists(), reason="Stage 2 monthly sensitivity outputs not generated"
 )
@@ -21,6 +22,7 @@ def test_anomaly_cardinality_reference_matches() -> None:
     assert int(values["matches_reference"]) == 1
 
 
+@pytest.mark.historical_artifact
 @pytest.mark.skipif(
     not OUT_DIR.exists(), reason="Stage 2 monthly sensitivity outputs not generated"
 )
@@ -40,6 +42,7 @@ def test_scenario_cardinality_and_monotonic_exclusion() -> None:
     assert int(s1["dengue_count"].sum() - s3["dengue_count"].sum()) == 8556
 
 
+@pytest.mark.historical_artifact
 @pytest.mark.skipif(
     not OUT_DIR.exists(), reason="Stage 2 monthly sensitivity outputs not generated"
 )

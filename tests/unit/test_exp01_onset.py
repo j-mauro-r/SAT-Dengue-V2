@@ -50,14 +50,24 @@ def test_t2_exact_onset_and_continuing_episode_negative_are_frozen() -> None:
     assert result.loc[1, "eligible_at_t"]
 
 
-def test_operational_eligibility_depends_only_on_observed_current_state() -> None:
-    current = pd.Series([0, 1, pd.NA], dtype="Int64")
-    before = operational_eligibility(current)
-    # The function accepts only Y(T), so future states cannot alter its result.
-    future = pd.Series([1, 0, 1], dtype="Int64")
-    future[:] = [0, 1, 0]
-    assert operational_eligibility(current).equals(before)
-    assert before.tolist() == [True, False, False]
+@pytest.mark.parametrize("current,expected", [(0, True), (1, False), (pd.NA, False)])
+def test_operational_eligibility_depends_only_on_observed_current_state(
+    current: Any, expected: bool
+) -> None:
+    assert operational_eligibility(pd.Series([current], dtype="Int64")).tolist() == [expected]
+
+
+@pytest.mark.parametrize("horizon", [1, 2])
+def test_future_states_reach_label_boundary_without_changing_origin_gate(horizon: int) -> None:
+    states = state_frame()
+    before = labels(states, horizon)
+    changed = states.copy()
+    changed.loc[changed.year_month.gt("2020-12"), "excess"] = 0
+    after = labels(changed, horizon)
+    origin = states.year_month.eq("2020-12")
+    assert before.loc[origin, "eligible_at_t"].tolist() == [True]
+    assert after.loc[origin, "eligible_at_t"].equals(before.loc[origin, "eligible_at_t"])
+    assert not after.loc[origin, "excess_target"].equals(before.loc[origin, "excess_target"])
 
 
 def test_future_label_and_positive_availability_offsets_are_rejected() -> None:
@@ -67,10 +77,6 @@ def test_future_label_and_positive_availability_offsets_are_rejected() -> None:
         )
     with pytest.raises(ValueError, match="availability"):
         predictor_projection(pd.DataFrame({"rain": [1.0]}), ["rain"], {"rain": 1})
-
-
-def test_unknown_current_excess_is_not_operationally_eligible() -> None:
-    assert not operational_eligibility(pd.Series([pd.NA], dtype="Int64")).iloc[0]
 
 
 def test_missing_calendar_month_is_never_bridged() -> None:

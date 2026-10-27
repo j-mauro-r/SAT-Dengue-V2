@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import copy
+
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
+from exp03_causal_fixture import cluster_pair, generated
 
 from sat_dengue.experiments.exp03_evaluation import (
     BUDGET_UNITS,
@@ -14,10 +17,17 @@ from sat_dengue.experiments.exp03_evaluation import (
     paired_interval,
     select_threshold,
 )
+from sat_dengue.experiments.exp03_features import (
+    validate_design,
+)
 
 
 def test_budget_floor_ties_no_alert_and_reconstructable_policy() -> None:
     truth, scores = [1, 0, 1, 0], [0.9, 0.8, 0.8, 0.1]
+    # Manual candidate table (threshold, TP, FP, alerts):
+    # >.9 -> (0,0,0); .9 -> (1,0,1); .8 -> (2,1,3); .1 -> (2,2,4).
+    # floor(.5 * 3)=1 forbids the final candidate, and whole ties forbid
+    # separating the positive/negative at .8. Thus .8 uniquely maximizes TP.
     chosen = select_threshold(truth, scores, 0.5, 3.0)
     assert chosen["selection_false_alert_cap"] == 1
     assert chosen["threshold"] == 0.8
@@ -26,6 +36,7 @@ def test_budget_floor_ties_no_alert_and_reconstructable_policy() -> None:
     assert chosen["false_alerts"] == 1
     assert chosen["emitted_alerts"] == 3
     assert chosen["underspend"] == 0
+    assert [score >= chosen["threshold"] for score in scores] == [True, True, True, False]
     assert select_threshold([1, 0], [0.7, 0.7], 0, 1)["no_alert"]
     assert select_threshold([0], [0.8], 1, 1)["no_alert"]
     assert select_threshold([1, 0], [0.8, 0.7], 0, 1)["threshold"] == 0.8
@@ -405,3 +416,48 @@ def test_covered_eligible_and_common_onset_populations_are_distinct_at_t2() -> N
     frame.attrs = {}
     direct = metrics(frame, [True], 1.0, 0.5)
     assert direct["covered_onsets"] == direct["eligible_onsets"] == 1
+
+
+def test_temporal_support_and_stress_isolation_with_resampled_exposure() -> None:
+    _, _, design = generated()
+    short = copy.deepcopy(design)
+    short["windows"] = [w for w in short["windows"] if w["id"] != "development_2021"]
+    with pytest.raises(ValueError, match="scientific field"):
+        validate_design(short)
+    future = copy.deepcopy(design)
+    future["windows"][0]["selection"] = ["2024-01", "2024-02"]
+    with pytest.raises(ValueError):
+        validate_design(future)
+    left, right, exposure = cluster_pair()
+    result = paired_interval(left, right, exposure, seed=42)
+    sensitivity = result["sensitivity_difference"]
+    assert sensitivity["status"] == "available"
+    assert sensitivity["lower"] == sensitivity["upper"] == 1.0
+    assert sensitivity["valid_draws"] == 1000
+    assert result["exposure_draws"]["resampled"] is True
+    assert result["exposure_draws"]["minimum"] < result["exposure_draws"]["maximum"]
+    single = paired_interval(left.iloc[:2], right.iloc[:2], exposure.iloc[:2], seed=42)
+    assert single["sensitivity_difference"]["status"] == "unavailable"
+    assert single["sensitivity_difference"]["valid_draws"] == 0
+    bad = left.copy()
+    bad.loc[0, "target_month"] = "2024-02"
+    with pytest.raises(ValueError, match="development"):
+        paired_interval(bad, bad, exposure)
+
+
+def test_zero_oof_onsets_is_unknown_not_a_successful_guardrail() -> None:
+    left, right, exposure = cluster_pair()
+    left["onset_target"] = 0
+    right["onset_target"] = 0
+    result = paired_interval(left, right, exposure)
+    assert result["sensitivity_difference"]["estimate"] is None
+    assert result["sensitivity_difference"]["status"] == "unavailable"
+    assert result["false_alert_rate_difference"]["valid_draws"] == 1000
+    assert result["false_alert_rate_difference"]["estimate"] == pytest.approx(6 / 9)
+    # Unknown labels are not promoted to negatives, while known unsupported zeros
+    # still supply a meaningful false-alert numerator and monitored denominator.
+    left.loc[0, "onset_target"] = np.nan
+    summary = metrics(left, left.alert, 9.0, 3.0)
+    assert summary["onset_sensitivity"] is None
+    assert summary["unknown_outcomes"] == 1
+    assert summary["false_alerts"] == 5

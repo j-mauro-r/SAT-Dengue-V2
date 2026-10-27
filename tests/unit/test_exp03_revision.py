@@ -8,9 +8,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
+from exp03_causal_fixture import generated
+from pandas.testing import assert_frame_equal  # type: ignore[import-untyped]
 
 from sat_dengue.experiments.exp03_features import (
     cohorts,
+    coverage,
     coverage_groups,
     exposure_table,
     historical_profiles,
@@ -371,3 +374,90 @@ def test_group_coverage_reconciles_embargo_missingness_and_zero_retained_groups(
         result.dimension.eq("transmission_profile") & result.group.eq("unknown")
     ].iloc[0]
     assert unknown_profile.unknown_current_state_rows == 1
+
+
+@pytest.mark.parametrize("horizon", [1, 2])
+def test_no_future_observation_changes_origin_predictors_or_gate(horizon: int) -> None:
+    panel, contract, design = generated()
+    origin = "2020-10"
+    before = prepare(panel, contract, horizon)
+    altered = panel.copy()
+    for column in contract["roles"]["predictors"]:
+        if column != "zona_canal_t":
+            altered.loc[altered.year_month.gt(origin), column] = 9999.0
+    after = prepare(altered, contract, horizon)
+    cols = design["predictors"] + ["eligible_at_t", "current_excess"]
+    assert_frame_equal(
+        before.loc[before.year_month.eq(origin), cols], after.loc[after.year_month.eq(origin), cols]
+    )
+    row = before.loc[(before.year_month == origin) & (before.municipality_code == "50001")].iloc[0]
+    target = pd.Period(origin, freq="M") + horizon
+    historical = panel.loc[
+        (panel.municipality_code == "50001")
+        & panel.year_month.isin([f"{target.year - n}-{target.month:02}" for n in range(1, 6)]),
+        "dengue_notifications_count",
+    ].to_numpy(dtype=float)
+    assert row.channel_target_p25 == np.quantile(historical, 0.25, method="linear")
+    assert row.channel_target_p75 == np.quantile(historical, 0.75, method="linear")
+    # Raw counts at an observed month legitimately change later-origin lag recipes.
+    next_origin = str(pd.Period(origin, freq="M") + 2)
+    assert not before.loc[before.year_month.eq(next_origin), "dengue_lag_1"].equals(
+        after.loc[after.year_month.eq(next_origin), "dengue_lag_1"]
+    )
+
+
+def test_notification_observed_expected_zero_and_missing_are_distinct() -> None:
+    panel, contract, _ = generated()
+    panel["dengue_notifications_count"] = 0.0
+    first = prepare(panel, contract, 1)
+    origin = first.year_month.eq("2020-10")
+    assert first.loc[origin, "notification_log1p_oe_t"].eq(0).all()
+    assert first.loc[origin, "expected_zero_t"].eq(1).all()
+    assert first.loc[origin, "eligible_at_t"].all()
+    panel.loc[panel.year_month.eq("2020-10"), "dengue_notifications_count"] = 1.0
+    second = prepare(panel, contract, 1)
+    assert second.loc[origin, "notification_log1p_oe_t"].eq(0).all()
+    assert second.loc[origin, "expected_zero_t"].eq(1).all()
+    assert second.loc[origin, "positive_zero_reference_t"].all()
+    assert not second.loc[origin, "eligible_at_t"].any()
+    # Positive/zero is excluded by Y(T)=1, not an artificial missing ratio.
+    panel.loc[panel.year_month.eq("2017-10"), "dengue_notifications_count"] = np.nan
+    unknown = prepare(panel, contract, 1)
+    assert unknown.loc[origin, "notification_log1p_oe_t"].isna().all()
+    assert unknown.loc[origin, "expected_zero_t"].isna().all()
+    assert unknown.loc[origin, "missing_reference_t"].all()
+
+
+def test_variant_coverage_is_potential_and_primary_common_rows_do_not_change() -> None:
+    panel, contract, design = generated()
+    altered = panel.copy()
+    altered["rain_mm_month_sum"] = np.nan
+    frame = prepare(altered, contract, 1)
+    base = coverage(frame, design["variants"]["V00"], design["predictors"])
+    full = coverage(frame, design["variants"]["V09"])
+    assert base["rows"] > full["rows"] == 0
+    assert base["recovered_rows"] == base["rows"]
+    assert base["potential_coverage_only"] is True
+    assert base["municipalities"] == 2
+    prepared = cohorts(altered, contract, design)
+    for parts, common in prepared.values():
+        # Missing any union recipe empties every primary arm's shared cohort.
+        assert common["evaluation"].empty
+        ledger = exposure_table(parts)
+        evaluation = ledger.loc[ledger.role.eq("evaluation")]
+        assert evaluation.monitored_exposure.sum() > 0
+        assert evaluation.common_exposure.sum() == 0
+        assert evaluation.excluded_onsets.sum() == evaluation.known_eligible_onsets.sum()
+
+
+def test_stored_labels_are_reconstructed_and_post_cut_counts_do_not_change_profiles() -> None:
+    panel, contract, _ = generated()
+    before = prepare(panel, contract, 2)
+    injected = panel.assign(onset_target=999, excess_target=999, zona_canal_t="EXCESO")
+    after = prepare(injected, contract, 2)
+    assert_frame_equal(before, after)
+    before_profile, meta = historical_profiles(panel, "2018-12")
+    panel.loc[panel.year_month.gt("2018-12"), "dengue_notifications_count"] = 10000.0
+    after_profile, changed_meta = historical_profiles(panel, "2018-12")
+    assert_frame_equal(before_profile, after_profile)
+    assert meta == changed_meta

@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 import pytest
+import yaml  # type: ignore[import-untyped]
 from cleanup_support import CEILING_SHA256, MAPPING, load_cleanup, verify_cleanup
 from migration_support import (
     BASELINE_SHA256,
@@ -344,7 +345,25 @@ def test_active_commands_ci_and_historical_notebook_boundary() -> None:
         assert value["production_entrypoint"] in (ROOT / name).read_text()
     ci = (ROOT / ".github/workflows/ci.yml").read_text()
     assert ".[dev,modeling,tracking]" in ci
-    assert "test_kedro_e2e.py" in ci and "test_repository_disposition.py" in ci
+    workflow = yaml.safe_load(ci)
+    command = next(
+        step["run"]
+        for step in workflow["jobs"]["unit-tests"]["steps"]
+        if "pytest " in step.get("run", "") and step.get("if", "").endswith("== 'full'")
+    )
+    args = shlex.split(command)
+    assert {"tests/unit", "tests/contracts", "tests/integration"} <= set(args)
+    assert not any(
+        arg.startswith(("--ignore", "--deselect")) or arg in {"-k", "-m", "--lf", "--last-failed"}
+        for arg in args
+    ), "Public CI must not hide required acceptance through exclusions"
+    for required in (
+        "tests/integration/test_kedro_e2e.py",
+        "tests/contracts/test_repository_disposition.py",
+    ):
+        path = ROOT / required
+        assert path.is_file()
+        assert any(path.is_relative_to(ROOT / root) for root in args if root.startswith("tests/"))
     assert "--require-migration-evidence" not in ci
     assert "nbconvert" not in ci and "nbclient" not in ci
     assert all(row["production_entrypoint"] is False for row in value["notebooks"].values())

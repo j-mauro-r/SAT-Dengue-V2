@@ -63,6 +63,30 @@ def test_five_seven_nine_labels_can_differ_on_identical_target_keys():
     assert any(x["dimension"] == "zero_heavy" for x in result["by_group"])
 
 
+@pytest.mark.parametrize(
+    "target_count,expected_labels",
+    [(5, [1, 0, 0]), (8, [1, 1, 0]), (15, [1, 1, 0]), (16, [1, 1, 1])],
+)
+def test_five_seven_nine_manual_interpolation_oracle(target_count, expected_labels):
+    # January history in chronological order, oldest first. The sorted windows
+    # are [0,1,2,3,4], [0,1,2,3,4,11,15], [0,1,2,3,4,11,15,20,30].
+    # HF7 ranks 3, 4.5 and 6 give P75=3, (4+11)/2=7.5 and 15.
+    # n=5/9 have integer ranks for integer counts; n=7 discriminates interpolation.
+    counts = {
+        f"{year}-01": value
+        for year, value in zip(range(2001, 2010), [20, 30, 11, 15, 0, 1, 2, 3, 4], strict=True)
+    }
+    counts["2010-01"] = target_count
+    variants = construct_variants(panel(counts))
+    for history, expected_p75, expected_label in zip(
+        [5, 7, 9], [3.0, 7.5, 15.0], expected_labels, strict=True
+    ):
+        state = variants[history]["states"].set_index("year_month").loc["2010-01"]
+        assert state["p75"] == expected_p75
+        assert state["excess"] == expected_label
+        assert state["history_available"] == history
+
+
 def test_future_mutation_does_not_change_earlier_channel_and_legacy_ignored():
     data = panel({"2010-01": 3})
     original = construct_variants(data)

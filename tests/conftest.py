@@ -19,6 +19,9 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 
 def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line(
+        "markers", "historical_artifact: acceptance of frozen historical artifacts; no execution"
+    )
+    config.addinivalue_line(
         "markers", "migration_evidence: requires immutable private migration evidence"
     )
 
@@ -62,32 +65,30 @@ def exp03_generated_result() -> dict:
     """Generated native fits cached by scientific code fingerprint, never private sources."""
     import base64
     import hashlib
-    import importlib.metadata
     import json
-    import sys
 
-    from sat_dengue.experiments.exp03 import synthetic_run
+    from exp03_fixture_cache import fixture_fingerprint, load_cached_result
 
-    files = sorted(Path("src").rglob("*.py"))
-    files += sorted(Path("docs/product/experiments").rglob("protocol.json"))
-    files += [Path("pyproject.toml")]
-    versions = sorted((d.metadata["Name"], d.version) for d in importlib.metadata.distributions())
-    fingerprint = hashlib.sha256(
-        b"".join(str(p).encode() + p.read_bytes() for p in files)
-        + json.dumps(versions).encode()
-        + sys.version.encode()
-    ).hexdigest()
+    from sat_dengue.experiments.exp01_preflight import execution_metadata, git_identity
+    from sat_dengue.experiments.exp03 import load_protocol, synthetic_run
+
+    # These validations run on every session, including cache hits. Freeze time
+    # remains the producer's; provenance changes invalidate rather than relabel it.
+    protocol = load_protocol()
+    fingerprint = fixture_fingerprint(
+        Path.cwd(),
+        {
+            "protocol": protocol,
+            "execution": execution_metadata(),
+            "git": git_identity(),
+        },
+    )
     cache = Path("tmp/exp03-generated-fixtures") / fingerprint
     cache.mkdir(parents=True, exist_ok=True)
     saved = cache / "generated-result.json"
-    if saved.exists():
-        if (cache / "payload.sha256").read_text() != hashlib.sha256(saved.read_bytes()).hexdigest():
-            raise ValueError("Generated fixture cache changed")
-        value = json.loads(saved.read_text())
-        value["model_artifacts"] = {
-            k: base64.b64decode(v) for k, v in value["model_artifacts"].items()
-        }
-        return value
+    cached = load_cached_result(cache)
+    if cached is not None:
+        return cached
     value = synthetic_run()
     encoded = {
         **value,

@@ -4,6 +4,7 @@ import ast
 import importlib.metadata
 from pathlib import Path
 
+import pytest
 from kedro.framework.project import pipelines
 from kedro.framework.startup import bootstrap_project
 
@@ -80,3 +81,13 @@ def test_base_bootstrap_and_training_dependency_boundary() -> None:
     )
     assert result.returncode == 0, result.stdout + result.stderr
     assert '"optional_modules_imported": []' in result.stdout
+
+
+@pytest.mark.parametrize("domain", ["model_training", "training_preparation"])
+def test_training_domains_have_no_framework_or_filesystem_imports(domain: str) -> None:
+    forbidden = {"pathlib", "os", "tempfile", "kedro", "mlflow"}
+    for path in (ROOT / "src/sat_dengue" / domain).glob("*.py"):
+        tree = ast.parse(path.read_text())
+        names = [n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+        names += [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
+        assert not {name.split(".")[0] for name in names} & forbidden, path

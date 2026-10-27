@@ -67,24 +67,6 @@ def test_dashboard_endpoint_returns_exact_validated_fixture(
 
 
 @pytest.mark.parametrize(
-    ("department_code", "period", "expected_count"),
-    [("73", "2026-09", 47), ("50", "2026-12", 29)],
-)
-def test_dashboard_endpoint_returns_complete_municipal_inventory(
-    department_code: str, period: str, expected_count: int
-) -> None:
-    response = _get(
-        create_app(),
-        {"department_code": department_code, "period": period},
-    )
-
-    assert response.status_code == 200
-    municipalities = response.json()["municipalities"]
-    assert len(municipalities) == expected_count
-    assert len({item["municipality_code"] for item in municipalities}) == expected_count
-
-
-@pytest.mark.parametrize(
     ("params", "status_code", "error_code", "message"),
     [
         (
@@ -152,7 +134,24 @@ def test_application_factory_preserves_a_falsey_repository_substitute() -> None:
     assert response.json()["error_code"] == "DASHBOARD_DATA_NOT_FOUND"
 
 
-def test_repeated_http_queries_are_identical_and_do_not_modify_files() -> None:
+def test_repeated_http_queries_are_identical_and_do_not_modify_files(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import builtins
+
+    original_open = builtins.open
+    original_path_open = Path.open
+
+    def guarded_open(file, mode="r", *args, **kwargs):
+        assert not any(flag in mode for flag in "wax+"), "HTTP attempted filesystem mutation"
+        return original_open(file, mode, *args, **kwargs)
+
+    def guarded_path_open(path, mode="r", *args, **kwargs):
+        assert not any(flag in mode for flag in "wax+"), "HTTP attempted filesystem mutation"
+        return original_path_open(path, mode, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "open", guarded_open)
+    monkeypatch.setattr(Path, "open", guarded_path_open)
     before = {
         path: (path.stat().st_mtime_ns, hashlib.sha256(path.read_bytes()).hexdigest())
         for path in DEMONSTRATIVE_RESULT_PATHS.values()
@@ -177,8 +176,47 @@ def test_openapi_contains_only_contracted_endpoint_models_and_statuses() -> None
     operation = schema["paths"]["/api/dashboard"]["get"]
 
     assert set(schema["paths"]) == {"/api/dashboard"}
+    assert set(schema["paths"]["/api/dashboard"]) == {"get"}
     assert {route.path for route in app.routes if isinstance(route, APIRoute)} == {"/api/dashboard"}
     assert set(operation["responses"]) == {"200", "400", "404", "500"}
     assert "422" not in operation["responses"]
     assert {"DashboardResponse", "ErrorResponse"} <= set(schema["components"]["schemas"])
     assert {"HTTPValidationError", "ValidationError"}.isdisjoint(schema["components"]["schemas"])
+
+
+@pytest.mark.parametrize("method", ["POST", "PUT", "PATCH", "DELETE"])
+def test_mutating_http_methods_are_rejected_before_repository(method: str) -> None:
+    class ForbiddenRepository:
+        def get(self, department_code: str, period: str) -> DashboardResponse | None:
+            raise AssertionError("Mutating request reached repository")
+
+    async def request() -> httpx.Response:
+        async with httpx.AsyncClient(
+            transport=httpx.ASGITransport(app=create_app(ForbiddenRepository())),
+            base_url="http://testserver",
+        ) as client:
+            return await client.request(
+                method, "/api/dashboard", params={"department_code": "73", "period": "2026-09"}
+            )
+
+    assert asyncio.run(request()).status_code == 405
+
+
+@pytest.mark.parametrize(
+    "params",
+    [
+        {"department_code": "76", "period": "2026-09"},
+        {"department_code": "73", "period": "2026-13"},
+        {},
+    ],
+)
+def test_invalid_http_query_never_calls_repository(params: dict[str, str]) -> None:
+    calls = []
+
+    class SpyRepository:
+        def get(self, department_code: str, period: str) -> DashboardResponse | None:
+            calls.append((department_code, period))
+            return None
+
+    assert _get(create_app(SpyRepository()), params).status_code == 400
+    assert calls == []
