@@ -240,7 +240,16 @@ def test_git_errors_never_report_a_successful_narrow_gate(repo_tmp_path) -> None
     assert '"pytest_scope": "none"' not in result.stdout
 
 
-def test_rename_and_delete_keep_both_risk_paths(repo_tmp_path) -> None:
+@pytest.mark.parametrize(
+    "old_path,new_path",
+    [
+        ("docs/old.md", "new.xyz"),
+        ("src/sat_dengue/experiments/exp03_admission.py", "docs/new.md"),
+    ],
+)
+def test_rename_and_delete_keep_both_risk_paths(
+    repo_tmp_path, old_path: str, new_path: str
+) -> None:
     import subprocess
 
     from scripts.classify_validation_surface import _changed_paths
@@ -251,15 +260,17 @@ def test_rename_and_delete_keep_both_risk_paths(repo_tmp_path) -> None:
     git("init")
     git("config", "user.email", "synthetic@example.invalid")
     git("config", "user.name", "Synthetic fixture")
-    old = repo_tmp_path / "docs/old.md"
-    old.parent.mkdir()
+    old = repo_tmp_path / old_path
+    old.parent.mkdir(parents=True)
     old.write_text("unchanged material\n")
-    deleted = repo_tmp_path / "unknown.xyz"
+    deleted = repo_tmp_path / "docs/deleted.md"
+    deleted.parent.mkdir(parents=True, exist_ok=True)
     deleted.write_text("removed\n")
     git("add", ".")
     git("commit", "-m", "base")
     base = git("rev-parse", "HEAD")
-    new = repo_tmp_path / "new.xyz"
+    new = repo_tmp_path / new_path
+    new.parent.mkdir(parents=True, exist_ok=True)
     old.rename(new)
     deleted.unlink()
     git("add", "-A")
@@ -273,5 +284,5 @@ def test_rename_and_delete_keep_both_risk_paths(repo_tmp_path) -> None:
         side_effect=lambda args, **kw: original_run(args, cwd=repo_tmp_path, **kw),
     ):
         paths = _changed_paths(base, "HEAD")
-    assert "new.xyz" in paths and "unknown.xyz" in paths
+    assert old_path in paths and new_path in paths and "docs/deleted.md" in paths
     assert classify_paths(paths).full_gate

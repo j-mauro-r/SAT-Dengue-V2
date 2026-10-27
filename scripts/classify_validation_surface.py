@@ -203,6 +203,7 @@ def _changed_paths(base: str, head: str) -> list[str]:
             "git",
             "diff",
             "--name-only",
+            "--no-renames",
             "--diff-filter=ACDMRTUXB",
             "-z",
             f"{base}...{head}",
