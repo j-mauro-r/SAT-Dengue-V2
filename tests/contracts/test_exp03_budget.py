@@ -137,9 +137,13 @@ def test_authorization_rejects_identity_or_budget_substitution(
         "tracking": {"state": "not_initialized"},
         "git_dirty": False,
         "B_primary": 1.0,
+        "status": "structural_pass",
+        "source_identity_status": "pending_authorized_verification",
+        "execution_ready": False,
     }
     approval = {
         "schema": "exp03-execution-approval-v2",
+        "structural_receipt_sha256": digest(receipt),
         "experiment_id": "EXP03",
         "authority": "Mauricio",
         "independent_reviewer": "FixtureReviewer",

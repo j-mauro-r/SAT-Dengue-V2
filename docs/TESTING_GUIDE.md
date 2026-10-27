@@ -917,7 +917,9 @@ Source-free structural preflight (does not authorize real execution):
 SAT_DENGUE_TRACKING_ROOT=tmp/kedro-migration/replay-mlflow KEDRO_DISABLE_TELEMETRY=yes kedro run --pipelines=exp03_preflight --params=profile=exp03_preflight,tracking=enabled,experiment_id=EXP03
 ```
 
-It always returns `execution_ready=false`. It validates declared three-year OOF
+It returns `status="structural_pass"`, `execution_ready=false`, and
+`source_identity_status="pending_authorized_verification"`. The expected source hash
+is the reviewed manifest pin, not an observation of private bytes. It validates declared three-year OOF
 support; actual common-cohort support is checked only after human authorization,
 before reservation/fits/tracking. A shared-store preflight is an operational task
 for a later authorized session; tests select isolated temporary stores.
@@ -932,7 +934,9 @@ KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp03.py 
 Future real execution remains **NOT AUTHORIZED**. Mauricio must separately provide
 `SAT_DENGUE_EXP03_APPROVAL`, a repository-tmp JSON record with exact schema
 `exp03-execution-approval-v2`, EXP03 identity, authority Mauricio, independent
-reviewer, protocol/Git/data/configuration hashes and the four explicit execution,
+reviewer, protocol/Git/data/configuration hashes, the canonical
+`structural_receipt_sha256` binding the complete structural receipt (including
+runtime and both storage roots), and the four explicit execution,
 comparator-refit, variant-refit and retrospective-availability flags. It must bind
 a new clean reviewed commit/environment. Never reuse historical records or pins.
 
@@ -965,3 +969,24 @@ For the budget-only correction, use `tests/contracts/test_exp03_budget.py`, the
 non-fit budget/admission/preflight cases in `tests/unit/test_exp03.py`, and the
 pending-budget regression in `test_exp03_input_integration.py`. Do not invoke the
 generated native-estimator fixture, scientific runtime or operational preflight.
+
+
+### EXP03 three-phase preflight and admission correction
+
+`exp03_preflight.py`, `exp03_admission.py`, runner consumption boundaries and
+real-result lineage checks map to the generated-only focused admission tests.
+See [the operational contract](product/experiments/EXP03_feature_ablation/IMPLEMENTATION.md#operational-admission-contract)
+for structural preflight → authorization → verified admission and post-merge restart.
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/integration/test_exp03_admission.py tests/integration/test_exp03_input_integration.py tests/contracts/test_exp03_budget.py tests/unit/test_exp03.py -k 'not generated_catalog and not probe_counts and not reservation_survives' -q
+.venv/bin/python -m sat_dengue.experiments.exp03_contract --check
+```
+
+This selection uses generated sources and in-memory approval fixtures only. It
+checks denied authorization, manifest/payload/catalog identity, missing/tampered
+files, unsafe paths, schema rejection, replace/restore during parsing, pre-reserve
+mutation, benchmark revalidation and real-publication lineage. The positive case
+stops at the reservation boundary without reserving, creating runs or fitting.
+Use modified-file Ruff/format/mypy and changed-document links/diff privacy checks.
+Leave native-estimator fixtures, full suites and wheel checks to GitHub.

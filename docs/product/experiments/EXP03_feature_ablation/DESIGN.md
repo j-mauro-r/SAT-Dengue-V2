@@ -87,3 +87,7 @@ preparation only. Its original failed readiness gate is preserved. After merge,
 restart operational preparation on the new commit: wheel, runtime, preflight,
 independent review, separate authorization, then deliver the manual command to
 Mauricio. No existing approval or runtime identity may be reused.
+
+The operational distinction between structural validation, authorization and
+verified input admission is owned by [implementation](IMPLEMENTATION.md#operational-admission-contract).
+A structural receipt never certifies scientific input bytes or grants execution.

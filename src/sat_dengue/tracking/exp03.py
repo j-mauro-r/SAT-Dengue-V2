@@ -182,6 +182,10 @@ def validate_result(result: dict[str, Any], provenance: dict[str, Any]) -> None:
         or provenance.get("protocol_sha256") != digest(p)
     ):
         raise ValueError("Invalid EXP03 result identity")
+    if result["synthetic"] is False:
+        from sat_dengue.experiments.exp03_admission import validate_admission
+
+        validate_admission(provenance)
     expected = expected_grid(p["design"])
     children = result.get("children", [])
     actual = [cell_identity(c) for c in children]
