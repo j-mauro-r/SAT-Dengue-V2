@@ -182,6 +182,118 @@ def generated_delivery() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]
     return result, provenance, design
 
 
+def test_large_csv_field_roundtrip(repo_tmp_path: Path) -> None:
+    result, provenance, design = generated_delivery()
+    # The engine writes one source-month dictionary per evaluated origin into
+    # this single JSON-valued diagnostic CSV field (912 municipality-months).
+    source_months = [
+        {
+            feature: "2023-12"
+            for feature in (
+                "rain_mm_month_sum__lag_1",
+                "temp_mean_c_month_mean__lag_1",
+                "solar_radiation_mj_m2_month_sum__lag_1",
+                "total_evaporation_mm_month_sum_ecmwf__lag_1",
+            )
+        }
+        for _ in range(912)
+    ]
+    assert len(json.dumps(source_months).encode()) > 131_072
+    result["error_types_and_delay"][0].update(
+        diagnostic="conditional_stale_feature_stress", effective_source_months=source_months
+    )
+    root = repo_tmp_path / "large-csv"
+    previous_limit = csv.field_size_limit()
+    try:
+        manifest = write_bundle(root, result, provenance, design)
+        assert validate_bundle(root) == manifest
+        saved = json.loads((root / "result.json").read_text())
+        assert saved["error_types_and_delay"][0]["effective_source_months"] == source_months
+        assert (root / "error_types_and_delay.csv").read_bytes() == reporting._csv(
+            result["error_types_and_delay"]
+        )
+        with pytest.raises(FileExistsError):
+            write_bundle(root, result, provenance, design)
+    finally:
+        assert csv.field_size_limit() == previous_limit
+
+
+def _rebind_test_payload(root: Path, name: str, payload: bytes) -> None:
+    """Keep hashes self-consistent so negative tests reach semantic validation."""
+    (root / name).write_bytes(payload)
+    manifest = json.loads((root / "manifest.json").read_text())
+    manifest["files"][name] = reporting.bytes_record(payload)
+    body = {key: value for key, value in manifest.items() if key != "bundle_id"}
+    manifest["bundle_id"] = reporting.digest(body)
+    (root / "manifest.json").write_bytes(reporting.canonical_bytes(manifest))
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "error_types_and_delay.csv",
+        "reliability_bins.csv",
+        "group_effects.csv",
+        "coverage_summary.csv",
+        "transport_summary.csv",
+        "feature_provenance.csv",
+    ],
+)
+@pytest.mark.parametrize("mutation", ["empty", "header_only", "truncated", "modified"])
+def test_csv_canonical_validation_rejects_rehashed_tampering(
+    repo_tmp_path: Path, name: str, mutation: str
+) -> None:
+    result, provenance, design = generated_delivery()
+    result["feature_provenance"] = [
+        {
+            "municipality_code": "synthetic_001",
+            "year_month": "2019-12",
+            "target_month": "2020-01",
+            "horizon": 1,
+            "window": "development_2020",
+            "role": "evaluation",
+            "source_months": {"lag1": "2019-11"},
+            "source_event_months": {"lag1": ["2019-11"]},
+        }
+    ]
+    root = repo_tmp_path / "rehashed-csv"
+    write_bundle(root, result, provenance, design)
+    original = (root / name).read_bytes()
+    payload = {
+        "empty": b"",
+        "header_only": original.partition(b"\n")[0] + b"\n",
+        "truncated": original[:-3],
+        "modified": original + b"tampered\n",
+    }[mutation]
+    _rebind_test_payload(root, name, payload)
+    with pytest.raises(ValueError, match="differs"):
+        validate_bundle(root)
+
+
+@pytest.mark.parametrize("inconsistency", ["payload_hash", "bundle_id"])
+def test_csv_manifest_inconsistency_is_rejected(repo_tmp_path: Path, inconsistency: str) -> None:
+    result, provenance, design = generated_delivery()
+    root = repo_tmp_path / "inconsistent-manifest"
+    write_bundle(root, result, provenance, design)
+    manifest = json.loads((root / "manifest.json").read_text())
+    manifest["files"]["error_types_and_delay.csv"]["sha256"] = "0" * 64
+    if inconsistency == "payload_hash":
+        body = {key: value for key, value in manifest.items() if key != "bundle_id"}
+        manifest["bundle_id"] = reporting.digest(body)
+    (root / "manifest.json").write_bytes(reporting.canonical_bytes(manifest))
+    with pytest.raises(ValueError, match="Changed"):
+        validate_bundle(root)
+
+
+def test_unexpected_manifested_csv_is_rejected(repo_tmp_path: Path) -> None:
+    result, provenance, design = generated_delivery()
+    root = repo_tmp_path / "unexpected-csv"
+    write_bundle(root, result, provenance, design)
+    _rebind_test_payload(root, "unexpected.csv", b"status\nextra\n")
+    with pytest.raises(ValueError, match="unexpected"):
+        validate_bundle(root)
+
+
 @pytest.mark.parametrize(
     "destination",
     [
