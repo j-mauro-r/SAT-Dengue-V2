@@ -192,7 +192,7 @@ def test_experiment_changes_select_full_acceptance(path: str) -> None:
 def test_workflow_retains_critical_public_integrations() -> None:
     from pathlib import Path
 
-    import yaml
+    import yaml  # type: ignore[import-untyped]
 
     workflow = yaml.safe_load(Path(".github/workflows/ci.yml").read_text())
     step = next(
@@ -208,5 +208,69 @@ def test_workflow_retains_critical_public_integrations() -> None:
         "exp03_revision_tracking",
         "exp03_tracking",
     ):
-        assert f"tests/integration/test_{name}.py" in step["run"]
+        assert Path(f"tests/integration/test_{name}.py").is_file()
+        assert "tests/integration" in step["run"].split()
     assert "--require-migration-evidence" not in step["run"]
+    assert step["run"] in Path("docs/TESTING_GUIDE.md").read_text()
+
+
+@pytest.mark.parametrize("paths", [[], [""], ["../escape"], ["unknown/file.xyz"]])
+def test_empty_unknown_and_malformed_paths_fail_closed(paths: list[str]) -> None:
+    assert classify_paths(paths).full_gate
+
+
+def test_git_errors_never_report_a_successful_narrow_gate(repo_tmp_path) -> None:
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/classify_validation_surface.py",
+            "--base",
+            "no-such-base",
+            "--head",
+            "HEAD",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    assert '"pytest_scope": "none"' not in result.stdout
+
+
+def test_rename_and_delete_keep_both_risk_paths(repo_tmp_path) -> None:
+    import subprocess
+
+    from scripts.classify_validation_surface import _changed_paths
+
+    def git(*args: str) -> str:
+        return subprocess.check_output(["git", "-C", str(repo_tmp_path), *args], text=True).strip()
+
+    git("init")
+    git("config", "user.email", "synthetic@example.invalid")
+    git("config", "user.name", "Synthetic fixture")
+    old = repo_tmp_path / "docs/old.md"
+    old.parent.mkdir()
+    old.write_text("unchanged material\n")
+    deleted = repo_tmp_path / "unknown.xyz"
+    deleted.write_text("removed\n")
+    git("add", ".")
+    git("commit", "-m", "base")
+    base = git("rev-parse", "HEAD")
+    new = repo_tmp_path / "new.xyz"
+    old.rename(new)
+    deleted.unlink()
+    git("add", "-A")
+    git("commit", "-m", "rename/delete")
+    # Exercise the real Git command from a separate generated repository.
+    from unittest.mock import patch
+
+    original_run = subprocess.run
+    with patch(
+        "scripts.classify_validation_surface.subprocess.run",
+        side_effect=lambda args, **kw: original_run(args, cwd=repo_tmp_path, **kw),
+    ):
+        paths = _changed_paths(base, "HEAD")
+    assert "new.xyz" in paths and "unknown.xyz" in paths
+    assert classify_paths(paths).full_gate

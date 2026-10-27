@@ -975,3 +975,14 @@ acceptance. `test_exp03_admission.py` is absent on the main baseline; its unmerg
 production implementation is not imported as part of test cleanup. Private
 `migration_evidence` remains deselected by default and is not public CI evidence.
 
+
+Public complete gate (all current and subsequently moved integrations are included):
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes pytest tests/unit tests/contracts tests/integration -v
+```
+
+The integration directory is selected as a unit to prevent silent omissions of
+new tests. The root collection hook excludes `migration_evidence` unless explicitly
+requested. The classifier tests verify critical files exist, the directory remains
+selected and this exact command agrees with the workflow.
