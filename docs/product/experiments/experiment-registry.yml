@@ -31,3 +31,18 @@ experiments:
     champion: not_selected
     mlflow_registration: pending
     lifecycle_status: planned_pending_execution_authorization
+  - experiment_id: EXP02
+    experiment_slug: label_episode_stability
+    hypothesis_id: EXP02-H1
+    title: Estabilidad de etiquetas y episodios
+    objective: Comparar estabilidad de etiquetas y episodios entre5/7/9años
+    experiment_type: paired_label_definition_sensitivity
+    pipeline: exp02
+    protocol: docs/product/experiments/EXP02_label_stability/protocol.json
+    protocol_sha256: 1bb7f929d88a01bc4036fa74046284117b8ebc8b89c6ee9cb69470691c84b31e
+    conclusions: docs/product/experiments/EXP02_label_stability/CONCLUSIONS.md
+    scientific_result: pending
+    scientific_gate: NOT_APPROVED
+    champion: not_selected
+    mlflow_registration: pending
+    lifecycle_status: planned_pending_execution_authorization
