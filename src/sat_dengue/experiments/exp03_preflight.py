@@ -12,7 +12,7 @@ from typing import Any
 from urllib.parse import quote
 
 from sat_dengue.configuration import canonical_bytes, validate_parameters
-from sat_dengue.datasets.stage2 import NATIVE_IDENTITIES, NATIVE_MANIFEST
+from sat_dengue.datasets.stage2 import NATIVE_IDENTITIES, NATIVE_MANIFEST, SOURCE_IDENTITIES
 from sat_dengue.experiments.exp01 import digest
 from sat_dengue.experiments.exp01_preflight import (
     SOURCE_PATHS,
@@ -62,6 +62,16 @@ def descriptor() -> dict[str, Any]:
     return {
         "schema": "exp03-source-descriptor-v1",
         "declared_paths": list(SOURCE_PATHS),
+        "manifest_path": NATIVE_MANIFEST,
+        "source_kind": "manifest_root_of_trust",
+        "expected_source_sha256": NATIVE_IDENTITIES[NATIVE_MANIFEST]["sha256"],
+        "expected_identity_origin": "reviewed_code:NATIVE_IDENTITIES; not observed source bytes",
+        "expected_pinned_files": {
+            **NATIVE_IDENTITIES,
+            "data/sources/Divipola-municipios.md": SOURCE_IDENTITIES[
+                "data/sources/Divipola-municipios.md"
+            ],
+        },
         "private_reads": 0,
     }
 
@@ -82,6 +92,8 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
         raise ValueError("EXP03 profile and tracking binding required")
     if sources != descriptor():
         raise ValueError("Source descriptor mismatch")
+    for declared in sources["declared_paths"]:
+        safe_path(declared)
     for relative, sha in p["reproducibility"]["authority_sha256"].items():
         if hashlib.sha256(safe_path(relative).read_bytes()).hexdigest() != sha:
             raise ValueError("Scientific authority changed")
@@ -99,7 +111,7 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
     metadata = execution_metadata()
     safe_path(OUTPUT_ROOT, OUTPUT_ROOT)
     root = tracking_root()
-    storage = storage_preflight(root)
+    storage = storage_preflight(root, experiment_id="EXP03", protocol_sha256=digest(p))
     database = safe_path(root) / "tracking.sqlite"
     if database.exists():
         uri = "file:" + quote(str(database), safe="/") + "?mode=ro&immutable=1"
@@ -113,6 +125,11 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
                 raise ValueError("Stored EXP03 protocol changed")
     return {
         "schema": "exp03-preflight-v2",
+        "status": "structural_pass",
+        "source_identity_status": "pending_authorized_verification",
+        "expected_source_sha256": sources["expected_source_sha256"],
+        "expected_identity_origin": sources["expected_identity_origin"],
+        "protocol_version": p["version"],
         "revision": p["design"]["revision"],
         "B_primary": p["design"]["B_primary"],
         "budget_status": "pending" if p["design"]["B_primary"] is None else "specified",
@@ -136,6 +153,8 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
         "tracking": storage,
         "output_root": OUTPUT_ROOT,
         "expected_children": expected,
+        "expected_terminal_cells": p["scope_revision"]["derived_counts"]["terminal"],
+        "expected_runs": expected + 1,
         "expected_model_fits": expected,
         "expected_calibrator_fits": expected,
         "real_model_fits": 0,
@@ -168,9 +187,22 @@ def authorize(receipt: dict[str, Any]) -> dict[str, Any]:
         "variant_refits_authorized",
         "retrospective_availability_acknowledged",
     )
-    required = {"schema", "experiment_id", "authority", "independent_reviewer", *bound, *flags}
+    required = {
+        "schema",
+        "experiment_id",
+        "authority",
+        "independent_reviewer",
+        "structural_receipt_sha256",
+        *bound,
+        *flags,
+    }
     if (
-        set(approval) != required
+        not isinstance(approval, dict)
+        or set(approval) != required
+        or receipt.get("status") != "structural_pass"
+        or receipt.get("source_identity_status") != "pending_authorized_verification"
+        or receipt.get("execution_ready") is not False
+        or approval.get("structural_receipt_sha256") != digest(receipt)
         or approval["schema"] != "exp03-execution-approval-v2"
         or approval["experiment_id"] != "EXP03"
         or approval["authority"] != "Mauricio"

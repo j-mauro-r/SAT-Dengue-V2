@@ -98,3 +98,69 @@ provenance under `coverage.exp03_consumed_2025_readiness` with explicit
 supply that evidence. Missing evidence produces per-cell not-evaluable transport.
 Private-data parity, publication vintages, actual capacity, real scientific
 results and any later prospective confirmation remain pending authorization.
+
+## Operational admission contract
+
+The operational sequence is **structural preflight → authorization → verified
+admission**. This changes the execution boundary, not scientific protocol 2.0.1
+or its canonical hash `18ce612581d710245294f3966187178e697df1972d45b460f54be7cc2f4d1611`.
+The frozen budget remains 1.0; 408 cells include 102 terminal cells, yielding one
+parent and 408 children (409 expected runs).
+
+1. **Structural preflight:** validates the public protocol, configuration, catalog,
+   declared canonical paths, installed runtime and separate result/tracking roots.
+   It returns `status="structural_pass"`, `execution_ready=false` and
+   `source_identity_status="pending_authorized_verification"`. It neither opens
+   nor hashes scientific inputs. `expected_source_sha256` is explicitly the
+   reviewed `NATIVE_IDENTITIES` pin for the Stage 2 manifest, a root of trust for
+   its output records; it is not an observed hash of the panel CSV. The existing
+   `data_version` field remains an expected-manifest identity alias. The descriptor
+   names this origin and the separately pinned DIVIPOLA catalog. Private reads,
+   fits/calibrations, reservations and MLflow writes stay zero.
+2. **Authorization:** a new EXP03-only record under the existing
+   `exp03-execution-approval-v2` schema must additionally contain
+   `structural_receipt_sha256=digest(receipt)`. This canonical digest binds the
+   entire receipt: commit, protocol/version, budget, configuration, runtime/code,
+   expected source identities, MLflow root, output path and counts. Existing
+   approvals lacking that field fail closed. It authorizes verification; it does
+   not claim that actual input bytes have already been verified. `authorize`
+   reruns structural preflight for freshness without opening scientific inputs.
+3. **Verified admission:** only after authorization, authenticate the manifest
+   bytes against their expected pin before parsing it. Require exact governed
+   output paths, reject symlinks/traversal/external paths and verify all dependent
+   payload hashes plus the separately pinned catalog. Validate the necessary
+   consumed-column schema through the unchanged EXP01 raw-input adapter. Return
+   `source_identity_status="verified"`, distinct expected/observed manifest hashes
+   and observed per-file fingerprints. Only after schema admission is the receipt
+   status `verified` and deterministic cohort preparation allowed to reach the
+   execution-reservation boundary.
+
+The parser consumes temporary verified copies under ignored
+`tmp/exp03-admission-snapshots`, with owner-only directory/file permissions.
+Each bounded-memory copy is hashed from the same open descriptor and compared
+against the approved identity before the parser can see it. Copies are deleted
+on success or failure. Replacing and restoring an original file during parsing
+cannot substitute its new values into the verified snapshot. Original paths are
+rechecked after parsing and immediately before reservation/MLflow; persistent
+source changes fail closed. Snapshot copies are private transient inputs, not
+scientific publications or MLflow artifacts. Operational disk estimates must
+include one temporary copy of admitted inputs.
+
+The later consumed-2025 path checks the terminal freeze, revalidates the manifest
+before reading coverage/maturity, and uses a new verified snapshot if that path
+is evaluable. It does not change 2024/2025 eligibility, fitting or inference rules.
+The receipt and final native provenance retain the observed identities,
+`source_admission` and `admission_sha256`; real-result validation/publication rejects
+missing or contradictory admission lineage. Aggregate-only MLflow privacy remains
+unchanged. Admission failures and pre-reservation failures carry explicit zero
+reservation/run-write/fit/calibration/publication counters. Failures after tracking
+or fitting starts do not claim those earlier effects were zero.
+
+After this correction is merged, resume PLAN_044 on the new clean commit: rebuild
+wheel/runtime, verify checkout/wheel/installation correspondence and preservation
+hashes, run one standalone structural preflight, obtain independent operational
+review, create a fresh full-receipt-bound approval, validate `authorize(receipt)`,
+then validate admission without calling `execute_authorized`. Record before/after
+protected-store identities and provide Mauricio the separately authorized manual
+command. Authorization-time structural rechecks are required freshness checks,
+not scientific execution. No operational approval is created by this PR.

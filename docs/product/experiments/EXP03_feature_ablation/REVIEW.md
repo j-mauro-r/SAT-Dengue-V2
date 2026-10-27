@@ -149,3 +149,27 @@ were inspected, including the SIR/climate and 2024/2025 limitations.
 This is engineering review, not scientific execution authorization or merge approval.
 No experiment, fit, calibration, private read, operational preflight, approval-file
 creation or MLflow write was performed for this patch.
+
+## Three-phase operational admission review — 2026-10-27
+
+An independent read-only agent reviewed the complete catalog → structural
+preflight → authorization → admission → reservation → tracking → preparation/
+fitting → benchmark → publication path using the installed AI Diff Reviewer
+methodology and repository extension. Final recommendation: **approve**, with no
+unresolved critical, high or medium findings.
+
+A high TOCTOU finding was corrected: hashing a path before a later parser reopen
+was insufficient against replace-and-restore. The adapters now consume verified
+temporary copies; a regression changes/restores the original during parser access
+and confirms approved values are consumed. A medium failure-reporting finding was
+corrected: pre-reservation errors expose zero-effect receipts, while late errors
+do not claim earlier effects were zero.
+
+The final review verified privacy before authorization, full structural-receipt
+binding, expected/observed manifest and payload identities, pinned catalog checks,
+snapshot cleanup, benchmark revalidation, native lineage and publication gates.
+Protocol 2.0.1, its canonical hash, budget, 408/102 matrix and EXP00–EXP02 remain
+unchanged. The [operational handoff](IMPLEMENTATION.md#operational-admission-contract)
+requires separate post-merge runtime/review/authorization/admission work.
+No scientific approval, real authorization, experiment or result follows from
+this engineering review. The reviewer performed no tests or scientific operations.
