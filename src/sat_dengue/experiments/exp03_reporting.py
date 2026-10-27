@@ -951,6 +951,10 @@ def write_bundle(
     synthetic = result.get("synthetic")
     if type(synthetic) is not bool:
         raise ValueError("Scientific evidence class must be explicit")
+    if not synthetic:
+        from sat_dengue.experiments.exp03_admission import validate_admission
+
+        validate_admission(provenance)
     if not synthetic and any(not provenance.get(k) for k in PROVENANCE_KEYS):
         raise ValueError("Scientific execution requires complete scope/runtime/freeze identities")
     if (

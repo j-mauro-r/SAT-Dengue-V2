@@ -191,3 +191,31 @@ operational preflight, `approval.json`, runtime build or MLflow write occurred.
 GitHub owns full tests, wheels and general checks; remote status is reported in
 the PR handoff, not inferred from these scoped results. After merge, restart the
 operational sequence on the new commit as specified by DESIGN.md.
+
+## Structural preflight and authorized admission correction — 2026-10-27
+
+PLAN_046 resolves the implementation gap recorded by PLAN_044 without rewriting
+its historical blocker or completing its operational task. The active scientific
+protocol remains byte-identical at version 2.0.1, canonical SHA-256
+`18ce612581d710245294f3966187178e697df1972d45b460f54be7cc2f4d1611`.
+
+- **PASS: 64 focused tests**, three generated-fit/reservation cases excluded,
+  97 dependency warnings. Exact no-fit selection is documented in the
+  [testing guide](../../../TESTING_GUIDE.md#exp03-three-phase-preflight-and-admission-correction).
+- PASS: structural privacy, expected identity provenance, full-receipt authorization,
+  valid generated admission, missing/tampered sources, unsafe paths, schema denial,
+  replace/restore parser race, pre-reservation mutation, benchmark recheck and
+  observed-lineage publication rejection. Negative cases retain zero scientific
+  effects; the positive execution-path probe stops before reservation/fitting.
+- PASS: Ruff, formatting and mypy on eight modified/added Python files.
+- PASS: protocol/hash, **408 cells / 102 terminal cells / 409 expected runs**,
+  protected EXP00–EXP02 contracts, changed-document links, whitespace and privacy scans.
+- PASS: repository-only DWP conformance; scoped plan evidence is local. Existing
+  historical all-plan failures remain separate from current-code validation.
+- PASS: independent read-only full-route review, with both in-scope findings resolved.
+
+No real EXP03 pipeline, private data, real approval/preflight, runtime build,
+fit/calibration or permanent MLflow write occurred. Generated source files and
+transient verified copies were isolated under ignored tmp; no scientific results
+are claimed. GitHub owns full suites, wheel validation and general checks.
+After merge, restart PLAN_044 using the documented three-phase operational contract.
