@@ -110,7 +110,9 @@ PROVENANCE_KEYS = (
 
 def _protected(root: Path) -> Path:
     """Reject symlinks and paths outside the repository-local ignored tmp tree."""
-    repository = Path(__file__).resolve().parents[3]
+    repository = Path.cwd().resolve()
+    if ".." in root.parts:
+        raise ValueError("Traversal in EXP03 native bundle path")
     absolute = root.absolute()
     allowed = (repository / "tmp").resolve()
     if not absolute.resolve().is_relative_to(allowed):
