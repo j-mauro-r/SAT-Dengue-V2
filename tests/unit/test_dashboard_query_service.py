@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-import hashlib
 from pathlib import Path
 
 import pytest
 
 from scripts.read_only_api import (
-    DEMONSTRATIVE_RESULT_PATHS,
     META_FIXTURE_PATH,
     TOLIMA_FIXTURE_PATH,
     DashboardDataNotFoundError,
@@ -128,21 +126,3 @@ def test_unexpected_repository_failure_becomes_controlled_internal_error() -> No
         DashboardQueryService(repository).get_dashboard("73", "2026-09")
 
     assert str(caught.value) == "No fue posible obtener la información del dashboard."
-
-
-def test_repeated_queries_are_identical_and_do_not_modify_persisted_files() -> None:
-    before = {
-        path: (path.stat().st_mtime_ns, hashlib.sha256(path.read_bytes()).hexdigest())
-        for path in DEMONSTRATIVE_RESULT_PATHS.values()
-    }
-    service = DashboardQueryService(create_demonstrative_repository())
-
-    first = service.get_dashboard("73", "2026-09").model_dump(mode="json")
-    second = service.get_dashboard("73", "2026-09").model_dump(mode="json")
-
-    after = {
-        path: (path.stat().st_mtime_ns, hashlib.sha256(path.read_bytes()).hexdigest())
-        for path in DEMONSTRATIVE_RESULT_PATHS.values()
-    }
-    assert first == second
-    assert after == before

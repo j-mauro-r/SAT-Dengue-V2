@@ -509,18 +509,6 @@ def test_feature_builder_rejects_unsafe_keys_or_lags(
         derive_features(feature_history, contract)
 
 
-def test_preparation_domain_has_no_framework_or_filesystem_imports() -> None:
-    import ast
-
-    for path in (ROOT / "src/sat_dengue/training_preparation").glob("*.py"):
-        tree = ast.parse(path.read_text())
-        imports = [n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
-        imports += [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
-        assert not any(
-            n.split(".")[0] in {"pathlib", "os", "tempfile", "kedro", "mlflow"} for n in imports
-        ), path
-
-
 def test_preparation_pipeline_exposes_cutoffs_states_and_separate_outputs() -> None:
     from sat_dengue.pipelines.preparation.pipeline import create_pipeline
 

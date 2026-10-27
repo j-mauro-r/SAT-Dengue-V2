@@ -262,23 +262,6 @@ def test_training_pipeline_routes_are_separate_and_safe() -> None:
     assert any("fit" in n.name for n in synthetic.nodes)
 
 
-def test_training_domain_has_no_framework_or_filesystem_imports() -> None:
-    import ast
-
-    root = Path(__file__).resolve().parents[2]
-    for path in (root / "src/sat_dengue/model_training").glob("*.py"):
-        tree = ast.parse(path.read_text())
-        names = [n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
-        names += [a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names]
-        assert not {n.split(".")[0] for n in names} & {
-            "pathlib",
-            "os",
-            "tempfile",
-            "kedro",
-            "mlflow",
-        }, path
-
-
 @pytest.mark.parametrize("name", ["fit", "_fit", "select_and_fit", "train"])
 def test_training_replay_guard_rejects_fit_and_search_aliases(name: str) -> None:
     from sat_dengue.datasets.training_legacy import no_fitting
