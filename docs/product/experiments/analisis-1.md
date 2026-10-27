@@ -151,4 +151,4 @@ La próxima iteración debe producir predicciones fuera de muestra para varios a
 - Priorizar después adaptación temporal de calibración y umbral.
 - Reservar información futura realmente no observada para confirmación.
 
-La evidencia está documentada en [EXP00 — conclusiones](/Users/mauriciorodriguez/Projects/AI-Masters/SAT-Dengue-V2/docs/product/experiments/EXP00_historical_baseline/CONCLUSIONS.md), [EXP01 — conclusiones](/Users/mauriciorodriguez/Projects/AI-Masters/SAT-Dengue-V2/docs/product/experiments/EXP01_direct_onset/CONCLUSIONS.md) y el [plan de experimentos](/Users/mauriciorodriguez/Projects/AI-Masters/SAT-Dengue-V2/docs/product/experiments/experimentos.md).
+La evidencia está documentada en [EXP00 — conclusiones](EXP00_historical_baseline/CONCLUSIONS.md), [EXP01 — conclusiones](EXP01_direct_onset/CONCLUSIONS.md) y el [plan de experimentos](experimentos.md).
