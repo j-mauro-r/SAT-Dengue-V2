@@ -55,7 +55,7 @@ def test_preflight_graph_performs_no_fits_or_private_content_reads_or_mlflow_wri
 ) -> None:
     import builtins
 
-    from sat_dengue.experiments import exp01
+    from sat_dengue.experiments import exp01, exp01_runner
     from sat_dengue.tracking.local import LocalTracking
 
     root = str((repo_tmp_path / "tracking").relative_to(ROOT))
@@ -65,15 +65,19 @@ def test_preflight_graph_performs_no_fits_or_private_content_reads_or_mlflow_wri
     private_reads = []
 
     def guarded_open(file: Any, *args: Any, **kwargs: Any) -> Any:
-        if isinstance(file, (str, Path)) and str(file).startswith("data/"):
+        if isinstance(file, (str, Path)) and Path(file).resolve().is_relative_to(ROOT / "data"):
             private_reads.append(str(file))
             raise AssertionError("Private content read")
+        mode = args[0] if args else kwargs.get("mode", "r")
+        assert not any(c in str(mode) for c in "wax+"), "Preflight write"
         return actual_open(file, *args, **kwargs)
 
     def guarded_path_open(path: Path, *args: Any, **kwargs: Any) -> Any:
-        if str(path).startswith("data/"):
+        if path.resolve().is_relative_to(ROOT / "data"):
             private_reads.append(str(path))
             raise AssertionError("Private content read")
+        mode = args[0] if args else kwargs.get("mode", "r")
+        assert not any(c in str(mode) for c in "wax+"), "Preflight write"
         return actual_path_open(path, *args, **kwargs)
 
     def forbidden(*args: Any, **kwargs: Any) -> Any:
@@ -84,6 +88,32 @@ def test_preflight_graph_performs_no_fits_or_private_content_reads_or_mlflow_wri
     monkeypatch.setattr(exp01, "native_fit", forbidden)
     monkeypatch.setattr(exp01, "native_calibration", forbidden)
     monkeypatch.setattr(LocalTracking, "__init__", forbidden)
+    monkeypatch.setattr(exp01_runner, "prepare_exp01_inputs", forbidden)
+    monkeypatch.setattr(exp01_runner, "reserve_execution", forbidden)
+    monkeypatch.setattr(exp01_runner, "native_fit", forbidden)
+    monkeypatch.setattr(exp01_runner, "native_calibration", forbidden)
+    # These deliberately invalid accesses prove both hooks catch canonical paths.
+    for private in (Path("data/never-read.csv"), ROOT / "data/never-read.csv"):
+        with pytest.raises(AssertionError, match="Private content"):
+            private.open()
+        with pytest.raises(AssertionError, match="Private content"):
+            builtins.open(private)
+    for opening in (
+        lambda: Path("tmp/never-written").open("w"),
+        lambda: builtins.open("tmp/never-written", "w"),
+    ):
+        with pytest.raises(AssertionError, match="Preflight write"):
+            opening()
+    private_reads.clear()
+    actual_load = DataCatalog.load
+
+    def guarded_catalog_load(self: Any, name: str, *args: Any, **kwargs: Any) -> Any:
+        assert name in {"parameters", "exp01_sources", "exp01_preflight_receipt"}, (
+            "Private catalog load"
+        )
+        return actual_load(self, name, *args, **kwargs)
+
+    monkeypatch.setattr(DataCatalog, "load", guarded_catalog_load)
     catalog = DataCatalog(
         {
             "parameters": MemoryDataset(PARAMETERS),
@@ -156,6 +186,15 @@ def test_profile_cannot_be_used_on_another_graph() -> None:
 def test_authorization_denial_precedes_private_reads_and_mlflow_creation(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    from sat_dengue.experiments import exp01_runner
+    from sat_dengue.tracking.local import LocalTracking
+
+    def forbidden(*args: Any, **kwargs: Any) -> Any:
+        raise AssertionError("Authorization denial reached scientific side effect")
+
+    for name in ("prepare_exp01_inputs", "native_fit", "native_calibration", "reserve_execution"):
+        monkeypatch.setattr(exp01_runner, name, forbidden)
+    monkeypatch.setattr(LocalTracking, "__init__", forbidden)
     monkeypatch.delenv("SAT_DENGUE_EXP01_APPROVAL", raising=False)
     with pytest.raises(PermissionError, match="separate human authorization"):
         load_authorized_sources({})

@@ -136,8 +136,18 @@ def test_kedro_absolute_and_symlink(repo_tmp_path: Path, monkeypatch: pytest.Mon
 
 
 def test_missing_approval_before_load(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sat_dengue.experiments import exp03_runner
     from sat_dengue.experiments.exp03_runner import load_authorized_sources
+    from sat_dengue.tracking.local import LocalTracking
 
+    def forbidden(*args: Any, **kwargs: Any) -> Any:
+        raise AssertionError("Missing authorization reached scientific side effect")
+
+    monkeypatch.setattr(exp03_runner, "native_fit", forbidden)
+    monkeypatch.setattr(exp03_runner, "fit_calibration", forbidden)
+    monkeypatch.setattr(exp03_runner, "reserve_execution", forbidden)
+    monkeypatch.setattr("sat_dengue.experiments.exp01_inputs.prepare_exp01_inputs", forbidden)
+    monkeypatch.setattr(LocalTracking, "__init__", forbidden)
     monkeypatch.delenv("SAT_DENGUE_EXP03_APPROVAL", raising=False)
     with pytest.raises(PermissionError):
         load_authorized_sources({})
@@ -146,12 +156,60 @@ def test_missing_approval_before_load(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_preflight_no_private_reads_or_writes(
     monkeypatch: pytest.MonkeyPatch, repo_tmp_path: Path
 ) -> None:
+    import builtins
+
     from kedro.io import DataCatalog
 
     from sat_dengue.config_loader import ValidatedConfigLoader
+    from sat_dengue.experiments import exp03_runner
     from sat_dengue.pipeline_registry import register_pipelines
+    from sat_dengue.tracking.local import LocalTracking
 
-    # Real catalog is resolved absolutely by Kedro; descriptor cannot read data.
+    root_path = Path.cwd().resolve()
+    original_open, original_path_open = builtins.open, Path.open
+
+    def guard(path: Any, mode: Any) -> None:
+        if isinstance(path, (str, Path)):
+            assert not Path(path).resolve().is_relative_to(root_path / "data"), (
+                "Private content read"
+            )
+        assert not any(ch in str(mode) for ch in "wax+"), "Preflight write"
+
+    def guarded_open(file: Any, *a: Any, **kw: Any) -> Any:
+        guard(file, a[0] if a else kw.get("mode", "r"))
+        return original_open(file, *a, **kw)
+
+    def guarded_path_open(path: Path, *a: Any, **kw: Any) -> Any:
+        guard(path, a[0] if a else kw.get("mode", "r"))
+        return original_path_open(path, *a, **kw)
+
+    def forbidden(*args: Any, **kwargs: Any) -> Any:
+        raise AssertionError("Preflight reached scientific side effect")
+
+    monkeypatch.setattr(builtins, "open", guarded_open)
+    monkeypatch.setattr(Path, "open", guarded_path_open)
+    for name in ("native_fit", "fit_calibration", "reserve_execution"):
+        monkeypatch.setattr(exp03_runner, name, forbidden)
+    monkeypatch.setattr("sat_dengue.experiments.exp01_inputs.prepare_exp01_inputs", forbidden)
+    monkeypatch.setattr(LocalTracking, "__init__", forbidden)
+    for private in (Path("data/never-read.csv"), root_path / "data/never-read.csv"):
+        for opening in (lambda p=private: p.open(), lambda p=private: builtins.open(p)):
+            with pytest.raises(AssertionError, match="Private content read"):
+                opening()
+    for writing in (
+        lambda: Path("tmp/never-written").open("w"),
+        lambda: builtins.open("tmp/never-written", "w"),
+    ):
+        with pytest.raises(AssertionError, match="Preflight write"):
+            writing()
+    actual_load = DataCatalog.load
+
+    def guarded_catalog_load(self: Any, name: str, *args: Any, **kwargs: Any) -> Any:
+        assert name == "exp03_sources", "Private catalog load"
+        return actual_load(self, name, *args, **kwargs)
+
+    monkeypatch.setattr(DataCatalog, "load", guarded_catalog_load)
+    # Guards precede the real absolute Kedro source-descriptor load.
     cat = DataCatalog.from_config(
         ValidatedConfigLoader("conf", base_env="base", default_run_env="base")["catalog"]
     )
@@ -170,15 +228,6 @@ def test_preflight_no_private_reads_or_writes(
     )
     root = str(repo_tmp_path.relative_to(Path.cwd()) / "store-a")
     monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", root)
-    original = Path.open
-
-    def guarded(path: Path, *a: Any, **kw: Any) -> Any:
-        mode = a[0] if a else kw.get("mode", "r")
-        assert not str(path).startswith("data/")
-        assert not any(ch in str(mode) for ch in ("w", "a", "x", "+"))
-        return original(path, *a, **kw)
-
-    monkeypatch.setattr(Path, "open", guarded)
     r = pf.preflight(
         {"profile": "exp03_preflight", "tracking": "enabled", "experiment_id": "EXP03"},
         pf.descriptor(),

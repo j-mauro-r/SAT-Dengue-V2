@@ -18,6 +18,10 @@ from sat_dengue.experiments.exp03_evaluation import (
 
 def test_budget_floor_ties_no_alert_and_reconstructable_policy() -> None:
     truth, scores = [1, 0, 1, 0], [0.9, 0.8, 0.8, 0.1]
+    # Manual candidate table (threshold, TP, FP, alerts):
+    # >.9 -> (0,0,0); .9 -> (1,0,1); .8 -> (2,1,3); .1 -> (2,2,4).
+    # floor(.5 * 3)=1 forbids the final candidate, and whole ties forbid
+    # separating the positive/negative at .8. Thus .8 uniquely maximizes TP.
     chosen = select_threshold(truth, scores, 0.5, 3.0)
     assert chosen["selection_false_alert_cap"] == 1
     assert chosen["threshold"] == 0.8
@@ -26,6 +30,7 @@ def test_budget_floor_ties_no_alert_and_reconstructable_policy() -> None:
     assert chosen["false_alerts"] == 1
     assert chosen["emitted_alerts"] == 3
     assert chosen["underspend"] == 0
+    assert [score >= chosen["threshold"] for score in scores] == [True, True, True, False]
     assert select_threshold([1, 0], [0.7, 0.7], 0, 1)["no_alert"]
     assert select_threshold([0], [0.8], 1, 1)["no_alert"]
     assert select_threshold([1, 0], [0.8, 0.7], 0, 1)["threshold"] == 0.8

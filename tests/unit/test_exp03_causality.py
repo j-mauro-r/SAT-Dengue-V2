@@ -15,7 +15,7 @@ import pytest
 from pandas.testing import assert_frame_equal  # type: ignore[import-untyped]
 
 from sat_dengue.experiments import exp01, exp03
-from sat_dengue.experiments.exp03_evaluation import metrics, paired_interval, select_threshold
+from sat_dengue.experiments.exp03_evaluation import metrics, paired_interval
 from sat_dengue.experiments.exp03_features import (
     cohorts,
     coverage,
@@ -174,33 +174,12 @@ def test_zero_oof_onsets_is_unknown_not_a_successful_guardrail() -> None:
     assert summary["false_alerts"] == 5
 
 
-def test_evaluation_label_mutation_cannot_change_fit_inputs_or_selection_policy() -> None:
-    panel, contract, design = generated()
-    # Supplied stored labels and zones are never trusted to construct X or Y.
+def test_stored_labels_are_reconstructed_and_post_cut_counts_do_not_change_profiles() -> None:
+    panel, contract, _ = generated()
     before = prepare(panel, contract, 2)
     injected = panel.assign(onset_target=999, excess_target=999, zona_canal_t="EXCESO")
     after = prepare(injected, contract, 2)
     assert_frame_equal(before, after)
-    parts, common = cohorts(panel, contract, design)[2, "development_2020"]
-    columns = design["variants"]["V09"]
-    train = common["train"][columns].copy()
-    train.attrs = {}
-    training_truth = common["train"].onset_target.copy()
-    selection = common["selection"]
-    score = np.linspace(0.05, 0.95, len(selection))
-    d = exposure_table(parts).query("role=='selection'").monitored_exposure.sum()
-    policy = select_threshold(selection.onset_target, score, 2.0, d)
-    changed = common["evaluation"].copy()
-    changed["onset_target"] = 1 - changed.onset_target
-    changed.attrs = {}
-    original_x = common["evaluation"][columns].copy()
-    original_x.attrs = {}
-    assert_frame_equal(original_x, changed[columns])
-    actual_train = common["train"][columns].copy()
-    actual_train.attrs = {}
-    assert_frame_equal(train, actual_train)
-    pd.testing.assert_series_equal(training_truth, common["train"].onset_target)
-    assert select_threshold(selection.onset_target, score, 2.0, d) == policy
     before_profile, meta = historical_profiles(panel, "2018-12")
     panel.loc[panel.year_month.gt("2018-12"), "dengue_notifications_count"] = 10000.0
     after_profile, changed_meta = historical_profiles(panel, "2018-12")

@@ -501,8 +501,10 @@ def test_scope_catalog_loader_requires_76_scope_municipalities(tmp_path: Path) -
 
 
 def test_percentile_type7_uses_hf7_linear_interpolation() -> None:
-    values = [1.0, 2.0, 3.0, 4.0, 5.0]
-    assert pipeline.percentile_type7(values, 0.75) == 4.0
+    # HF7 rank is (7 - 1) * .75 = 4.5: halfway between 4 and 10.
+    # Nearest/lower/integer-index implementations give 4 or 10, never 7.
+    values = [0.0, 1.0, 2.0, 3.0, 4.0, 10.0, 20.0]
+    assert pipeline.percentile_type7(values, 0.75) == 7.0
 
 
 def test_compute_y_labels_t1_uses_same_month_previous_five_years() -> None:
@@ -1165,9 +1167,19 @@ def test_temporal_regression_all_cutoff_months_and_horizons_reference_rule() -> 
         current = labeled[labeled["year_month"] == cutoff].iloc[0]
         for horizon in (1, 2):
             suffix = f"t{horizon}"
-            target_period = str(current[f"target_period_{suffix}"])
-            expected = "|".join(_independent_history_periods(target_period, years=5))
+            # Derive the oracle from the input origin, never the produced target.
+            # Integer calendar arithmetic is independent of the production helper.
+            origin_year, origin_month = (int(part) for part in cutoff.split("-"))
+            target_index = origin_year * 12 + origin_month - 1 + horizon
+            target_year, zero_based_month = divmod(target_index, 12)
+            target_month = zero_based_month + 1
+            expected_target = f"{target_year:04d}-{target_month:02d}"
+            assert current[f"target_period_{suffix}"] == expected_target
+            expected = "|".join(
+                f"{year:04d}-{target_month:02d}" for year in range(target_year - 5, target_year)
+            )
             assert current[f"history_periods_expected_{suffix}"] == expected
+            assert current[f"history_periods_used_{suffix}"] == expected
 
 
 def test_temporal_regression_target_count_change_does_not_change_its_own_threshold() -> None:
