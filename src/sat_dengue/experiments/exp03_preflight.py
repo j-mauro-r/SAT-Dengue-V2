@@ -112,7 +112,10 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
             if any(value != digest(p) for (value,) in pins):
                 raise ValueError("Stored EXP03 protocol changed")
     return {
-        "schema": "exp03-preflight-v1",
+        "schema": "exp03-preflight-v2",
+        "revision": p["design"]["revision"],
+        "B_primary": p["design"]["B_primary"],
+        "budget_status": "pending" if p["design"]["B_primary"] is None else "specified",
         "execution_ready": False,
         "experiment_id": "EXP03",
         "protocol_sha256": digest(p),
@@ -145,6 +148,9 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
 
 
 def authorize(receipt: dict[str, Any]) -> dict[str, Any]:
+    from sat_dengue.experiments.exp03_engine import require_budget
+
+    require_budget(load_protocol()["design"])
     value = os.environ.get("SAT_DENGUE_EXP03_APPROVAL", "")
     if not value:
         raise PermissionError("EXP03 requires independent SAT_DENGUE_EXP03_APPROVAL")
@@ -162,7 +168,7 @@ def authorize(receipt: dict[str, Any]) -> dict[str, Any]:
     required = {"schema", "experiment_id", "authority", "independent_reviewer", *bound, *flags}
     if (
         set(approval) != required
-        or approval["schema"] != "exp03-execution-approval-v1"
+        or approval["schema"] != "exp03-execution-approval-v2"
         or approval["experiment_id"] != "EXP03"
         or approval["authority"] != "Mauricio"
         or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]{1,79}", str(approval["independent_reviewer"]))

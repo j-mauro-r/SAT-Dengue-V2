@@ -1,0 +1,92 @@
+# EXP03 engineering validation and publication evidence
+
+**Engineering PASS on generated data; scientific results NOT_EVALUATED.**
+`B_primary` remains null in the scientific protocol; no new scientific execution,
+private-data exploration, permanent MLflow write, scientific reservation/approval,
+champion selection, G5 approval or merge was performed.
+
+## Frozen identities and matrix
+
+- Scope authority: [alcance.md](alcance.md).
+- Revised canonical protocol SHA-256: `f806f3897a8dbef2bea01333626ee943e45aec9892f91607ca899f003e55beaf`.
+- Legacy protocol SHA-256: `c2f445e767b36dfac5acebca865775d793a93c2a75dc05d829bce82257b57396`.
+- Derived matrix: 16 unique sets, 384 onset cells + 24 excess controls = 408 fits;
+  102 terminal cells included in those fits. Four primary/twelve secondary ablations
+  and two objective comparisons reuse predictions, producing 204 pooled/stress
+  contrast records. There is no duplicate T+1 excess fit.
+- Three fixed families, both horizons, three overlapping development OOF cuts and
+  one separate 2024 stress cut; 2025 is frozen inference only.
+- Main `f48f3d4b5a3aa9f67cc4d31dc02424d327f610fb` was merged without conflicts.
+  Consolidated EXP00/EXP01 conclusions are preserved; their protocols and science
+  code remain byte-identical to main. EXP02 was not modified.
+
+## Executed evidence
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Combined EXP03 generated suites, experiment registry, Kedro configuration and base bootstrap | PASS: 170 tests, 30 dependency/deprecation warnings | DWP gate sequence 7; 497.73 seconds |
+| Core scoped Ruff lint and formatting | PASS | 33 formatted files checked |
+| Final report rendering and source-summary checks | PASS: 19 focused tests | Native predictions reused, zero additional fits; scoped Ruff/format/mypy PASS |
+| Scoped mypy including source and acceptance tests | PASS | 32 source/test files checked |
+| Canonical matrix/protocol generation check | PASS | Reproduces the hash and derived counts above |
+| Markdown links and diff whitespace | PASS | Repository link checker and `git diff --check` |
+| Public repository-disposition contracts | PASS: 25 tests | Missing pinned Git objects were fetched; historical identities were not edited |
+| Changed-file secret/runtime scans; EXP00/EXP01 preservation | PASS | Diff/source-only scans; no private input or permanent tracking store was read |
+| Repository DWP conformance | PASS | 17 checks, no advisory |
+| Scoped-plan / all-plan DWP conformance | PASS with advisories | Recorded separately; final task closure is derived from the journal |
+| Wheel build and installed-runtime boundary | PASS | Installed wheel runs foundation and rejects optional modeling imports during registration |
+| Independent method/code review | PASS | [Durable review](REVIEW.md), 14 findings resolved; same-backend independent agent |
+
+The combined command is documented in the [testing guide](../../../TESTING_GUIDE.md).
+All estimator adjustments use generated notifications/climate; full-example native
+models/preparers/calibrators are synthetic engineering artifacts. The source-free
+budget tests prove denial before private readers, approval evaluation, reservations
+or fitting. Native and aggregate fit counters distinguish fitted-but-unavailable
+cells and missing versus present zeros. Phase counters reconcile development,
+terminal stress and zero-fit benchmarking.
+
+The original performance/debug attempts remain recorded as interrupted, not PASS.
+Numerical grouping now avoids copying date-audit DataFrames and reuses each
+horizon/cut exposure ledger; this does not change cohorts, estimators or estimands.
+No historical plan gate or protected migration identity was rewritten.
+
+## Inspect the complete synthetic example
+
+The full protected example is generated under `tmp/exp03-generated-example/`.
+Final bundle ID: `f9f0241e00528c74e3ed19e364558ddc63ca00666b807106b2301ea27ef3bbe3`.
+It preserves the validated fit producer and separately records the final renderer
+hash. The report-only refinement used zero additional fits. Coverage and transport
+SVGs were rendered to PNG and visually inspected; all 102 terminal cells remain
+in the annual transport source.
+Its entry point is `report.md`; it includes all native CSV/JSON tables, source-date
+provenance, reloadable terminal artifacts, checksum manifest and standalone SVGs.
+The example includes adverse effects, undefined metrics and unknown sparse-group
+guardrails. It is explicitly synthetic and contains no scientific finding.
+
+Reproduce with:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m sat_dengue.experiments.exp03_demo --output tmp/exp03-generated-example
+```
+
+A populated native bundle is required: empty placeholders do not pass validation.
+Existing output manifests are never overwritten. Its actual generated-data,
+code/runtime, protocol and freeze identities remain inside its native receipt.
+Protected native rows, municipality diagnostics and model bytes are not committed
+or uploaded to MLflow. Only explicitly synthetic, allowlisted aggregates are used
+by isolated tracking tests.
+
+## Remote publication and pending scientific work
+
+Publish only to `feature/exp03-complete-feature-ablation` / existing PR #34,
+without force push or merge. GitHub API GraphQL and REST queries returned
+`Forbidden` in this environment; remote CI and PR-body updates must be reported
+from observed results, never inferred from local PASS or publication.
+
+Remaining scientific tasks are exclusively future authorized work: choose numeric
+B and its interpretation, review/freeze that identity and clean environment,
+verify private source coverage/maturity and historical publication availability,
+run the actual 408-cell experiment and consumed benchmark, and interpret real
+results. Private parity and actual capacity are unverified. The implemented
+benchmark emits explicit not-evaluable records when provenance is insufficient.
+G5 stays `NOT_APPROVED`; champion stays `not_selected`.

@@ -7,12 +7,16 @@ from pathlib import Path
 from typing import Any
 
 from sat_dengue.configuration import AUTHORITIES
-from sat_dengue.experiments.exp01 import digest, native_calibration
+from sat_dengue.experiments.exp01 import digest
 from sat_dengue.experiments.exp03 import execute, load_protocol, native_fit
+from sat_dengue.experiments.exp03_persistence import fit_calibration
 from sat_dengue.experiments.exp03_preflight import OUTPUT_ROOT, authorize, safe_path
 
 
 def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
+    from sat_dengue.experiments.exp03_engine import require_budget
+
+    require_budget(load_protocol()["design"])
     approval = authorize(receipt)
     from sat_dengue.datasets.legacy_preparation.contract import PreparationConfig
     from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
@@ -47,8 +51,10 @@ def load_authorized_sources(receipt: dict[str, Any]) -> dict[str, Any]:
 
 def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
     from sat_dengue.datasets.legacy_preparation.pipeline import fingerprint
+    from sat_dengue.experiments.exp03_engine import require_budget
     from sat_dengue.tracking.exp03 import Exp03Tracking
 
+    require_budget(load_protocol()["design"])
     receipt = sources["preflight"]
     if digest(authorize(receipt)) != sources["approval_sha256"]:
         raise PermissionError("Approval changed")
@@ -73,6 +79,12 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
         )
     }
     provenance["data_sha256"] = digest(sources["fingerprints"])
+    import hashlib
+
+    provenance["scope_sha256"] = hashlib.sha256(
+        safe_path("docs/product/experiments/EXP03_feature_ablation/alcance.md").read_bytes()
+    ).hexdigest()
+    provenance["matrix_sha256"] = digest(load_protocol()["design"])
     from sat_dengue.experiments.exp03_features import cohorts
 
     cohorts(sources["panel"], sources["contract"], load_protocol()["design"])
@@ -87,8 +99,18 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
             sources["contract"],
             load_protocol()["design"],
             fit=native_fit,
-            calibrate=native_calibration,
+            calibrate=fit_calibration,
+            terminal_root=safe_path(OUTPUT_ROOT) / (execution_id + "-terminal"),
+            provenance=provenance,
         )
+        provenance["freeze_timestamp"] = result["terminal_manifest"]["frozen_at"]
+        benchmark = evaluate_authorized_benchmark(
+            sources, result, safe_path(OUTPUT_ROOT) / (execution_id + "-terminal")
+        )
+        result["transport_2024_2025"] = benchmark["transport_2024_2025"]
+        result["benchmark_predictions"] = benchmark["benchmark_predictions"]
+        result["benchmark_execution_counters"] = benchmark["execution_counters"]
+        result["performance_by_group"].extend(benchmark["performance_by_group"])
         verify()
         return {"result": result, "provenance": provenance, "tracker": tracker}
     except BaseException:
@@ -105,3 +127,43 @@ def reserve_execution(provenance: dict[str, Any]) -> str:
     with safe_path(str(root / (execution_id + ".reservation"))).open("x") as stream:
         stream.write(execution_id + "\n")
     return execution_id
+
+
+def evaluate_authorized_benchmark(
+    sources: dict[str, Any], result: dict[str, Any], terminal_root: Path
+) -> dict[str, Any]:
+    """Admit governed consumed-year sources only after the complete terminal freeze.
+
+    Source provenance must explicitly establish coverage and maturity. Missing
+    evidence is a per-cell not-evaluable result, never a guessed calendar approval.
+    """
+    import pandas as pd  # type: ignore[import-untyped]
+
+    from sat_dengue.datasets.legacy_preparation.contract import PreparationConfig
+    from sat_dengue.datasets.stage2 import NATIVE_MANIFEST
+    from sat_dengue.experiments.exp03_benchmark import evaluate_benchmark
+    from sat_dengue.experiments.exp03_engine import require_budget
+    from sat_dengue.experiments.exp03_inputs import prepare_benchmark_inputs
+    from sat_dengue.experiments.exp03_persistence import _load_terminal
+
+    design = load_protocol()["design"]
+    require_budget(design)
+    if digest(authorize(sources["preflight"])) != sources["approval_sha256"]:
+        raise PermissionError("Benchmark authorization changed")
+    _, _, freeze_identity = _load_terminal(terminal_root)
+    if freeze_identity != result["terminal_manifest"]["manifest_sha256"]:
+        raise ValueError("Terminal freeze changed before source admission")
+    source_manifest = json.loads(safe_path(NATIVE_MANIFEST).read_text())
+    readiness = source_manifest.get("coverage", {}).get("exp03_consumed_2025_readiness", {})
+    if not isinstance(readiness, dict):
+        raise ValueError("Invalid consumed-year provenance readiness record")
+    coverage = {**readiness, "provenance_sha256": digest(source_manifest)}
+    ready = coverage.get("governed_coverage") is True and coverage.get("maturity_verified") is True
+    panel = (
+        prepare_benchmark_inputs(PreparationConfig(Path.cwd()), coverage).panel
+        if ready
+        else pd.DataFrame()
+    )
+    return evaluate_benchmark(
+        panel, sources["contract"], design, terminal_root, coverage, freeze_identity
+    )

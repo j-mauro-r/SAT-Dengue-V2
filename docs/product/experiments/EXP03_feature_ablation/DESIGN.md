@@ -1,6 +1,6 @@
 # EXP03 — Information value for exact-onset prediction
 
-**Scope revision: defined; implementation pending; scientific execution not authorized.**
+**Scope revision implemented; generated-data validation passed; scientific execution not authorized.**
 
 [alcance.md](alcance.md) is the authoritative specification for the expansion
 requested after review of EXP00 and EXP01. It defines the questions, finite variant
@@ -49,17 +49,13 @@ label sensitivity. Five-year labels remain the conditional reference here.
 The implementation reviewed at `52e13a4af73add8acd1c87b42d413e0e967235d3` has ten
 unique sets, eleven contrasts and 240 cells. Its
 [original design](https://github.com/j-mauro-r/SAT-Dengue-V2/blob/52e13a4af73add8acd1c87b42d413e0e967235d3/docs/product/experiments/EXP03_feature_ablation/DESIGN.md)
-remains inspectable in Git. The local [protocol](protocol.json) and
-[frozen matrix](ablation-matrix.frozen.yml) still encode that historical version;
-their unchanged canonical protocol hash is
+remains inspectable in Git. The historical protocol and matrix remain inspectable at that reviewed Git revision;
+their legacy canonical protocol hash is
 `c2f445e767b36dfac5acebca865775d793a93c2a75dc05d829bce82257b57396`.
 
-They have not been rewritten to suggest that expanded code already exists. The
-next implementation must migrate code, executable contracts, registry, provenance,
-report schemas and tests together, then issue a new hash and reviewed identity.
-The old ten-set alias, 240 count and reported 94 synthetic tests do not certify
-this revised matrix. Preserve EXP00/EXP01 scientific identities and reconcile the
-newer consolidated conclusions from main before coding.
-
-[CONCLUSIONS.md](CONCLUSIONS.md) tracks scientific status. Completion of this
-scope document does not select a champion, approve G5, authorize a run or merge.
+The current [protocol](protocol.json) and [matrix](ablation-matrix.frozen.yml)
+encode the expanded revision. [Implementation traceability](IMPLEMENTATION.md)
+maps every scope section to components, tests and native outputs. Legacy ten-set
+aliases and approvals cannot execute the revision. Generated validation is
+engineering evidence only; scientific execution, G5 and merge require their
+separate authority.

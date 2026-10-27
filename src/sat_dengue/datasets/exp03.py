@@ -1,16 +1,16 @@
-"""Explicit EXP03 descriptor and canonical atomic output, accepting Kedro paths."""
+"""Protected native EXP03 evidence, atomically published without overwriting."""
 
 from __future__ import annotations
 
+import os
+import shutil
+import tempfile
+from pathlib import Path
 from typing import Any
 
 from kedro.io import AbstractDataset, DatasetError
 
-from sat_dengue.configuration import canonical_bytes
-from sat_dengue.datasets.legacy_preparation.persistence import publish_bundle
-from sat_dengue.experiments.exp01 import digest
 from sat_dengue.experiments.exp03_preflight import OUTPUT_ROOT, descriptor, safe_path
-from sat_dengue.training_preparation.serialization import bytes_record
 
 
 class Exp03SourcesDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
@@ -29,23 +29,54 @@ class Exp03BundleDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
         self._root = safe_path(filepath, OUTPUT_ROOT)
 
     def save(self, data: dict[str, Any]) -> None:
+        from sat_dengue.experiments.exp03 import load_protocol
+        from sat_dengue.experiments.exp03_reporting import validate_bundle, write_bundle
         from sat_dengue.tracking.exp03 import validate_result, verified_result
 
         tracker = data["tracker"]
         try:
             safe_path(str(self._root), OUTPUT_ROOT)
             validate_result(data["result"], data["provenance"])
-            payloads = {k + ".json": canonical_bytes(data[k]) for k in ("result", "provenance")}
-            body = {
-                "schema": "exp03-result-manifest-v1",
-                "files": {k: bytes_record(v) for k, v in payloads.items()},
-            }
-            manifest: dict[str, Any] = {**body, "bundle_id": digest(body)}
-            payloads["manifest.json"] = canonical_bytes(manifest)
-            folder = publish_bundle(
-                self._root, manifest["bundle_id"], payloads, existing_policy="error"
-            )
-            self._publication = {"path": str(folder), "manifest": manifest}
+            self._root.mkdir(parents=True, exist_ok=True, mode=0o700)
+            lock = self._root / ".publish.lock"
+            try:
+                lock_fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+            except FileExistsError as exc:
+                raise ValueError("Another EXP03 publisher holds the output lock") from exc
+            try:
+                os.close(lock_fd)
+                staging = Path(tempfile.mkdtemp(prefix=".staging-", dir=self._root))
+                try:
+                    artifacts = data.get("model_artifacts_path")
+                    if artifacts is not None:
+                        source = safe_path(str(artifacts))
+                        if not source.is_relative_to(Path.cwd().resolve() / "tmp"):
+                            raise ValueError("Model artifacts must be protected repository tmp")
+                        if any(p.is_symlink() for p in source.rglob("*")):
+                            raise ValueError("Symlink model artifact")
+                        shutil.copytree(source, staging / "model_artifacts")
+                    manifest = write_bundle(
+                        staging, data["result"], data["provenance"], load_protocol()["design"]
+                    )
+                    validate_bundle(staging)
+                    destination = self._root / manifest["bundle_id"]
+                    if destination.exists():
+                        raise ValueError("EXP03 output already exists; replacement is forbidden")
+                    # All nested evidence is closed by the manifest before visibility.
+                    for path in staging.rglob("*"):
+                        if path.is_file():
+                            path.chmod(0o600)
+                            with path.open("rb") as stream:
+                                os.fsync(stream.fileno())
+                        elif path.is_dir():
+                            path.chmod(0o700)
+                    os.rename(staging, destination)
+                    self._publication = {"path": str(destination), "manifest": manifest}
+                finally:
+                    if staging.exists():
+                        shutil.rmtree(staging)
+            finally:
+                lock.unlink()
             verified_result(self._publication)
             tracker.finish_ablation(self._publication)
         except BaseException:

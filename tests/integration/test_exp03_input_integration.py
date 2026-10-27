@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import builtins
+import copy
 import json
 from pathlib import Path
 from typing import Any
@@ -77,6 +78,14 @@ def bind_generated_sources(
         ),
     )
     monkeypatch.setattr(preparation, "PreparationConfig", lambda root: config)
+    # Admission-only generated fixture. No approval is written and execution is
+    # replaced below; the production pending-budget gate has a separate test.
+    protocol = copy.deepcopy(exp03.load_protocol())
+    protocol["design"].update(
+        B_primary=2.0,
+        budget_rationale="Generated raw-admission fixture only; no scientific authorization",
+    )
+    monkeypatch.setattr(runner, "load_protocol", lambda: protocol)
     return {"sources": checks.descriptor(), "data_version": record["sha256"]}
 
 
@@ -117,7 +126,7 @@ def test_exp03_admission_uses_raw_inputs_and_full_identity(
 
 
 def test_generated_catalog_admission_ablation_publication_and_tracking(
-    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch, exp03_generated_result: dict[str, Any]
 ) -> None:
     config = generated_sources(repo_tmp_path / "sources", full_history=True)
     bind_generated_sources(config, monkeypatch)
@@ -182,17 +191,9 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
         )
         trackers.append(tracker)
         assert sources["panel"].municipality_code.nunique() == 76
-        # Admission above validates all 76; retain PR31's two generated series for
-        # the synthetic connection probe to bound frontier computation in CI.
-        panel = sources["panel"].loc[sources["panel"].municipality_code.isin(["50001", "73001"])]
-        result = exp03.execute(
-            panel,
-            sources["contract"],
-            exp03.load_protocol()["design"],
-            fit=exp01.synthetic_fit,
-            calibrate=lambda scores, truth, seed: lambda values: values,
-            synthetic=True,
-        )
+        # The session-owned complete native-estimator generated fixture already
+        # validates all 408 cells; publication must not trigger a duplicate fit.
+        result = copy.deepcopy(exp03_generated_result)
         return {"result": result, "provenance": provenance, "tracker": tracker}
 
     monkeypatch.setattr(builtins, "open", guarded_open)
@@ -204,7 +205,7 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
     monkeypatch.setattr(runner, "authorize", authorize_fixture)
     monkeypatch.setattr(runner, "reserve_execution", forbidden)
     monkeypatch.setattr(runner, "native_fit", forbidden)
-    monkeypatch.setattr(runner, "native_calibration", forbidden)
+    monkeypatch.setattr(runner, "fit_calibration", forbidden)
     monkeypatch.setattr(exp03, "native_fit", forbidden)
     monkeypatch.setattr(exp01, "native_fit", forbidden)
     monkeypatch.setattr(exp01, "native_calibration", forbidden)
@@ -233,7 +234,9 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
         SequentialRunner().run(graph, catalog)
         publication = catalog.load("exp03_bundle")
     result = tracking.verified_result(publication)["result"]
-    assert len(result["children"]) == result["synthetic_interface_fits"] == 240
+    expected = exp03.load_protocol()["design"]["expected_children"]
+    assert len(result["children"]) == result["synthetic_interface_fits"] == expected
+    assert result["schema"] == "exp03-result-v2"
     assert all(c["status"] == "evaluable" for c in result["children"])
     assert all(
         result[k] == 0 for k in ("real_model_fits", "real_preparer_refits", "calibrator_fits")
@@ -241,9 +244,9 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
     assert result["G5"] == "NOT_APPROVED" and result["champion"] == "not_selected"
     tracker = trackers[0]
     runs = tracker.client.search_runs([tracker.experiment])
-    assert len(runs) == 241 and all(r.info.status == "FINISHED" for r in runs)
+    assert len(runs) == expected + 1 and all(r.info.status == "FINISHED" for r in runs)
     children = [r for r in runs if r.data.tags.get("mlflow.parentRunId") == tracker.parent]
-    assert len(children) == 240
+    assert len(children) == expected
     assert all(r.data.params["kind"] == "synthetic" for r in runs)
     artifacts = tracker.client.list_artifacts(tracker.parent)
     assert [a.path for a in artifacts] == [tracker.parent + ".json"]
@@ -255,5 +258,28 @@ def test_generated_catalog_admission_ablation_publication_and_tracking(
     tracking.validate_frontier_artifact(aggregate)
     assert aggregate["parameters"]["bundle_id"] == publication["manifest"]["bundle_id"]
     assert not {"municipality_code", "predictions"} & set(aggregate)
-    assert all(set(cell) == tracking.CELL_FIELDS for cell in aggregate["cells"])
+    assert all(set(cell) == tracking.AGGREGATE_CELL_FIELDS for cell in aggregate["cells"])
     assert not list(repo_tmp_path.rglob("*.reservation"))
+
+
+def test_pending_budget_blocks_before_authorization_or_any_raw_read(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """No private reader or approval/reservation side effect precedes B admission."""
+    from sat_dengue.experiments import exp01_inputs
+
+    events: list[str] = []
+
+    def forbidden(*args: Any, **kwargs: Any) -> Any:
+        events.append("forbidden")
+        raise AssertionError("Pending B_primary reached authorization or scientific source reader")
+
+    protocol = copy.deepcopy(exp03.load_protocol())
+    assert protocol["design"]["B_primary"] is None
+    monkeypatch.setattr(runner, "load_protocol", lambda: protocol)
+    monkeypatch.setattr(runner, "authorize", forbidden)
+    monkeypatch.setattr(exp01_inputs, "prepare_exp01_inputs", forbidden)
+    monkeypatch.setattr(runner, "reserve_execution", forbidden)
+    with pytest.raises(PermissionError, match="B_primary"):
+        runner.load_authorized_sources({})
+    assert events == []

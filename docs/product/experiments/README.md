@@ -3,7 +3,8 @@
 EXP01 is prioritized experiment 1. Prioritized experiment 2 (label sensitivity
 5/7/9) remains pending and is outside EXP03. EXP03 is prioritized experiment 3:
 [selective history/channel/climate ablation](EXP03_feature_ablation/DESIGN.md),
-with ten canonical predictor sets and eleven contrasts. Its real execution and
+with sixteen canonical predictor sets, four primary and twelve secondary ablations,
+two bounded T+2 objective controls, 408 fit cells and 102 terminal cells. Its real execution and
 scientific conclusions remain pending independent authorization.
 
 This directory is the authoritative index for planned, running and completed
@@ -25,7 +26,8 @@ conclusions.
    outcomes and material limitations.
 6. Historical baselines retain their original decisions. Retrospective MLflow
    registration does not turn replay into a new experiment or approve a model.
-7. Consumed 2025 evidence is replay-only and cannot be used for fitting,
+7. Consumed 2025 is replay-only for EXP00 and inference-only through EXP03’s
+   separately authorized frozen-artifact benchmark. It cannot be used for fitting,
    calibration, tuning, threshold selection or model selection.
 
 ## Registered experiments

@@ -878,12 +878,17 @@ The handoff owns the [future command and approval boundary](operations/exp01-run
 ## EXP03 guarded selective feature ablation
 
 [EXP03 design](product/experiments/EXP03_feature_ablation/DESIGN.md) owns the
-scientific definitions; its protocol/matrix freeze ten unique sets and eleven
-contrasts. EXP01 is prioritized experiment 1; label sensitivity 5/7/9 (experiment2)
+scientific definitions; the revised protocol/matrix derive sixteen unique sets,
+four primary/twelve secondary ablations, two bounded T+2 controls, 408 fits and
+102 terminal cells. [Implementation traceability](product/experiments/EXP03_feature_ablation/IMPLEMENTATION.md)
+maps the complete generated-only acceptance surface. EXP01 is prioritized experiment 1; label sensitivity 5/7/9 (experiment2)
 remains pending; EXP03 implements prioritized experiment3.
 
 Changed EXP03 preparation/contrasts/decisions/tracking map to `tests/unit/test_exp03.py`,
 `tests/integration/test_exp03_tracking.py` and `tests/integration/test_exp03_input_integration.py`.
+The revised feature/evaluation/persistence/benchmark/reporting suites are all
+selected by `tests/unit/test_exp03*.py`, with objective-aware tracking validation in
+`tests/integration/test_exp03_revision_tracking.py`.
 Use modified-file Ruff/format/mypy, relevant contracts, Markdown links and diff
 privacy checks. The full CI selection includes the new integration module.
 
@@ -907,7 +912,7 @@ KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp03.py 
 
 Future real execution remains **NOT AUTHORIZED**. Mauricio must separately provide
 `SAT_DENGUE_EXP03_APPROVAL`, a repository-tmp JSON record with exact schema
-`exp03-execution-approval-v1`, EXP03 identity, authority Mauricio, independent
+`exp03-execution-approval-v2`, EXP03 identity, authority Mauricio, independent
 reviewer, protocol/Git/data/configuration hashes and the four explicit execution,
 comparator-refit, variant-refit and retrospective-availability flags. It must bind
 a new clean reviewed commit/environment. Never reuse historical records or pins.
@@ -922,3 +927,18 @@ Results stay under `tmp/kedro-migration/exp03-runs`, disjoint from tracking. The
 single parent `exp03-frontier-mlflow-v1` artifact contains closed aggregate cells
 and contrasts, protocol/bundle/hash binding and canonical cell references. Native
 OOF audit rows/municipality strata never enter MLflow. G5/champion remain unchanged.
+
+
+Revised EXP03 focused acceptance (generated sources only):
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp03*.py tests/integration/test_exp03*.py -q
+.venv/bin/python -m sat_dengue.experiments.exp03_contract --check
+```
+
+`exp03_generated_result` is a session-owned generated native-estimator fixture.
+Its non-executable JSON/base64 cache is keyed by scientific source bytes under
+ignored `tmp/exp03-generated-fixtures`; no private-source or tracking cache is
+read. Bundle semantic reconstruction, privacy and tamper tests still execute.
+A missing `B_primary` blocks before scientific source reads, reservations or fits.
+Choosing that number and obtaining real-run authorization remain future tasks.
