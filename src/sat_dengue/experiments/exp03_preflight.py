@@ -150,7 +150,10 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
 def authorize(receipt: dict[str, Any]) -> dict[str, Any]:
     from sat_dengue.experiments.exp03_engine import require_budget
 
-    require_budget(load_protocol()["design"])
+    protocol = load_protocol()
+    require_budget(protocol["design"])
+    if receipt.get("protocol_sha256") != digest(protocol):
+        raise PermissionError("EXP03 authorization protocol mismatch")
     value = os.environ.get("SAT_DENGUE_EXP03_APPROVAL", "")
     if not value:
         raise PermissionError("EXP03 requires independent SAT_DENGUE_EXP03_APPROVAL")

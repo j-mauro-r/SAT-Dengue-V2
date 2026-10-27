@@ -1,7 +1,7 @@
 # EXP03 complete-scope implementation and traceability
 
 Engineering validation **PASS (generated data only)**. Scientific execution is **NOT_AUTHORIZED**;
-`B_primary` is pending, G5 is `NOT_APPROVED`, champion is `not_selected`.
+`B_primary=1.0` is human-approved before execution, G5 is `NOT_APPROVED`, champion is `not_selected`.
 The scope owner remains [alcance.md](alcance.md). Synthetic estimator fits and
 synthetic benchmark rows demonstrate software behavior, never scientific findings.
 

@@ -39,10 +39,15 @@ def require_budget(design: dict[str, Any], *, synthetic: bool = False) -> dict[s
         isinstance(value, bool)
         or not isinstance(value, (float, int))
         or not np.isfinite(value)
-        or value < 0
+        or value <= 0
     ):
-        raise ValueError("B_primary must be a finite nonnegative rate")
-    if design.get("budget_units") != BUDGET_UNITS or not design.get("budget_rationale"):
+        raise ValueError("B_primary must be a finite positive rate")
+    rationale = design.get("budget_rationale")
+    if (
+        design.get("budget_units") != BUDGET_UNITS
+        or not isinstance(rationale, str)
+        or not rationale.strip()
+    ):
         raise PermissionError("B_primary requires units and an explicit rationale")
     if not synthetic and design.get("synthetic_budget_fixture"):
         raise PermissionError("Synthetic budget fixture cannot authorize scientific execution")

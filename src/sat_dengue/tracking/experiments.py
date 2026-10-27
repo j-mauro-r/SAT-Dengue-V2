@@ -137,7 +137,7 @@ def resolve_experiment(experiment_id: str) -> dict[str, str]:
             not isinstance(protocol, dict)
             or protocol.get("schema") != "sat-dengue-experiment-protocol-v1"
             or protocol.get("version")
-            not in (("1.0.0", "2.0.0") if identifier == "EXP03" else ("1.0.0",))
+            not in (("1.0.0", "2.0.0", "2.0.1") if identifier == "EXP03" else ("1.0.0",))
         ):
             raise ValueError("Invalid experiment protocol schema")
         digest = hashlib.sha256(canonical_bytes(protocol)).hexdigest()

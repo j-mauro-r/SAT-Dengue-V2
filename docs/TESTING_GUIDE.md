@@ -960,4 +960,8 @@ Its non-executable JSON/base64 cache is keyed by scientific source bytes under
 ignored `tmp/exp03-generated-fixtures`; no private-source or tracking cache is
 read. Bundle semantic reconstruction, privacy and tamper tests still execute.
 A missing `B_primary` blocks before scientific source reads, reservations or fits.
-Choosing that number and obtaining real-run authorization remain future tasks.
+Protocol 2.0.1 fixes that number at 1.0; obtaining real-run authorization remains a future task.
+For the budget-only correction, use `tests/contracts/test_exp03_budget.py`, the
+non-fit budget/admission/preflight cases in `tests/unit/test_exp03.py`, and the
+pending-budget regression in `test_exp03_input_integration.py`. Do not invoke the
+generated native-estimator fixture, scientific runtime or operational preflight.

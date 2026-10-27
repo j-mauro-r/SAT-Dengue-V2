@@ -18,7 +18,7 @@ def test_exact_variants_and_fixed_identity() -> None:
     design = exp03.load_protocol()["design"]
     assert validate_design(design) == 408
     assert cell_counts(design) == dict(onset=384, excess=24, total=408, terminal=102)
-    assert design["B_primary"] is None
+    assert design["B_primary"] == 1.0
     assert len({frozenset(v) for v in design["variants"].values()}) == 16
     assert set(design["inventory"]) == set(design["predictors"])
     bad = copy.deepcopy(design)
@@ -71,6 +71,9 @@ def test_budget_blocks_before_any_sources_or_fits(monkeypatch: pytest.MonkeyPatc
     def forbidden(*a: Any, **kw: Any) -> Any:
         raise AssertionError("private reader reached")
 
+    protocol = exp03.load_protocol()
+    protocol["design"]["B_primary"] = None
+    monkeypatch.setattr(runner, "load_protocol", lambda: protocol)
     monkeypatch.setattr("sat_dengue.experiments.exp01_inputs.prepare_exp01_inputs", forbidden)
     with pytest.raises(PermissionError, match="B_primary"):
         runner.load_authorized_sources({})
@@ -88,11 +91,13 @@ def test_budget_blocks_before_any_sources_or_fits(monkeypatch: pytest.MonkeyPatc
 
 def test_foreign_generated_flag_does_not_bypass_budget() -> None:
     p, c, _ = exp01.synthetic_inputs()
+    design = exp03.load_protocol()["design"]
+    design["B_primary"] = None
     with pytest.raises(PermissionError, match="B_primary"):
         exp03.execute(
             p,
             c,
-            exp03.load_protocol()["design"],
+            design,
             fit=exp01.synthetic_fit,
             calibrate=lambda s, y, seed: lambda x: x,
             synthetic=True,
@@ -199,16 +204,13 @@ def test_preflight_no_private_reads_or_writes(
     )
 
 
-def test_invalid_approval(repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_invalid_approval(monkeypatch: pytest.MonkeyPatch) -> None:
     protocol = exp03.load_protocol()
     monkeypatch.setattr(pf, "load_protocol", lambda: protocol)
-    monkeypatch.chdir(repo_tmp_path)
-    (repo_tmp_path / "tmp").mkdir()
-    file = repo_tmp_path / "tmp/approval.json"
-    file.write_text("{}")
-    monkeypatch.setenv("SAT_DENGUE_EXP03_APPROVAL", str(file))
-    with pytest.raises(PermissionError, match="B_primary"):
-        pf.authorize({})
+    monkeypatch.setenv("SAT_DENGUE_EXP03_APPROVAL", "tmp/invalid-exp03-record.json")
+    monkeypatch.setattr(Path, "read_text", lambda *a, **kw: "{}")
+    with pytest.raises(PermissionError, match="Invalid EXP03 authorization"):
+        pf.authorize({"protocol_sha256": exp01.digest(protocol)})
 
 
 def test_reservation_survives_retry(repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

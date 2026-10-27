@@ -31,8 +31,9 @@ event-time lags alone do not prove historical publication availability or causal
 
 The revised planned maximum is **408 fits**. Every new fit must map to a declared
 variant/objective/family/horizon/cut. Contrasts and aliases reuse fitted cells.
-The numeric primary false-alert budget remains a pre-execution decision; it is
-not inferred from an assumed health-service capacity or favorable evaluation points.
+The primary false-alert budget is fixed at 1.0 before execution by human decision.
+Its experimental comparison meaning, frozen exposure formula and D=38 example
+are defined in [the budget policy](alcance.md#one-budget-explicit-exposure).
 
 Development uses rolling 2020, 2021 and 2022 OOF cuts with earlier calibration and
 selection roles. These overlap in training and are not independent replications.
@@ -59,3 +60,30 @@ maps every scope section to components, tests and native outputs. Legacy ten-set
 aliases and approvals cannot execute the revision. Generated validation is
 engineering evidence only; scientific execution, G5 and merge require their
 separate authority.
+
+## Primary-budget decision — 2026-10-27
+
+Mauricio approved the following rationale before any EXP03 execution:
+
+> A primary budget of 1.0 false onset alert per monitored municipality-year is fixed
+> to provide a common, interpretable and reproducible criterion for comparing variants.
+> The value is conservative and is established before executing EXP03. It does not
+> represent validated operational capacity, clinical equivalence or a deployment threshold.
+
+Protocol [2.0.0](protocol.v2.0.0.json) is immutable historical blocker evidence
+(canonical SHA-256 `f806f3897a8dbef2bea01333626ee943e45aec9892f91607ca899f003e55beaf`).
+Current [2.0.1](protocol.json) fixes only the approved budget decision and provenance
+(canonical SHA-256 `18ce612581d710245294f3966187178e697df1972d45b460f54be7cc2f4d1611`).
+Its registry and matrix use that new identity. Historical null/pending fields in
+2.0.0 intentionally remain evidence, not active instructions. Schema remains v1;
+the patch preserves the matrix, contrasts, exposure and temporal contracts.
+The frozen selection limit is `floor(B_primary × D)`; 76 municipalities over six
+covered months give `D=38` municipality-years and a limit of 38 false onset alerts.
+No retrospective budget optimization or automatic model/champion selection is allowed.
+G5 remains `NOT_APPROVED`; champion remains `not_selected`.
+
+PLAN_045 versions this decision separately because PLAN_044 covers operational
+preparation only. Its original failed readiness gate is preserved. After merge,
+restart operational preparation on the new commit: wheel, runtime, preflight,
+independent review, separate authorization, then deliver the manual command to
+Mauricio. No existing approval or runtime identity may be reused.

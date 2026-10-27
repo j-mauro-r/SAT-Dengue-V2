@@ -1,6 +1,6 @@
 # EXP03 scope revision — scientific specification and implementation handoff
 
-Status: **scope defined; executable revision pending; real execution not authorized**.
+Status: **scope implemented; primary budget fixed; real execution not authorized**.
 Review date: 2026-10-27 UTC. Reviewed implementation: PR #34, commit
 `52e13a4af73add8acd1c87b42d413e0e967235d3`.
 
@@ -245,12 +245,13 @@ OOF predictions themselves as a replacement fitted model. No post-calibration re
 
 ### One budget, explicit exposure
 
-`B_primary` is a fixed maximum false-onset-alert rate per monitored municipality-year
-used for threshold selection. Its **numeric value is pending**: neither the user
-nor local evidence establishes operational capacity. It must be recorded with
-units and rationale before new evaluation outputs are inspected. Do not invent
-capacity or optimize B on 2020-2022, 2024 or 2025. A thesis research budget can be
-chosen explicitly without claiming it represents a health service's measured capacity.
+`B_primary = 1.0` is the human-approved experimental comparison budget: one
+false onset alert per monitored municipality-year. It was fixed before executing
+EXP03 to provide a common, interpretable and reproducible comparison across variants.
+The value is conservative; it is not validated operational capacity, clinical
+equivalence, a deployment threshold or production authorization. It cannot be
+optimized retrospectively on 2020–2022, 2024 or 2025. No model or champion is
+selected or approved automatically.
 
 For a paired comparison and role, define monitored exposure D as distinct
 municipality-target months with governed source/outcome coverage and known current
@@ -259,6 +260,10 @@ state, after the role embargo, **before the Y(T)=0 eligibility filter**, divided
 ineligible covered months generate no onset alert. Also report eligible exposure
 and common complete-feature exposure separately. Never silently change the
 denominator to improve a burden rate or compare it to EXP01's eligible-exposure rate.
+
+For 76 municipalities observed over six months, D = 76 × 6 / 12 = 38
+municipality-years; floor(1.0 × 38) = 38 false onset alerts. This example assumes
+all those months meet the frozen monitored-exposure conditions above.
 
 Set selection cap to floor(B_primary * D_selection). Within each arm select the
 threshold maximizing selection onset detections within that cap, keeping whole
@@ -563,9 +568,9 @@ not_evaluable, but cannot justify silently dropping the benchmark implementation
 
 | Item | Current status | Rule |
 | --- | --- | --- |
-| Numeric B_primary and its research/operational interpretation | Pending human choice | Do not auto-select from outcomes; blocks scientific run, not documentation work |
+| Numeric B_primary and its research/operational interpretation | Human-approved 1.0 in protocol 2.0.1 | Experimental comparison only; fixed before execution, never outcome-selected |
 | Practical effect / noninferiority margins and actual capacity | Not established | Report effects and uncertainty; make no formal clinical-usefulness/equivalence claim |
 | 2025 coverage, consolidation and historical publication availability | Unverified | Validate under authorized access; missing evidence stays a limitation |
-| Executable revised protocol, counts, new hash and independent code review | Pending implementation | Old 94-test claim and old hash do not certify expanded scope |
+| Executable revised protocol, counts and identity | Implemented; 408/102 retained | See versioned validation/review; older evidence does not authorize execution |
 | Labels after EXP02 | Five-year reference retained provisionally | Changes require versioned replication, never silent relabeling |
 

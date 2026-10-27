@@ -9,7 +9,8 @@ refinements passed 19 focused checks without new estimator fits.
 No scientific experiment was executed for this delivery.
 
 - Scientific contribution, burden trade-offs and stability: **NOT_EVALUATED**.
-- Numeric `B_primary` and scientific execution authorization: **PENDING**.
+- Numeric `B_primary=1.0`: **HUMAN_APPROVED_BEFORE_EXECUTION**.
+- Scientific execution authorization: **PENDING**.
 - Real 2024 stress and consumed-2025 benchmark: **PENDING**.
 - Data coverage/maturity/publication-availability verification: **PENDING**.
 - G5: `NOT_APPROVED`; champion: `not_selected`.

@@ -1,7 +1,12 @@
 # EXP03 engineering validation and publication evidence
 
+Current protocol: 2.0.1; primary budget fixed by the [human decision](DESIGN.md#primary-budget-decision--2026-10-27).
+The earlier review/validation records below describe protocol 2.0.0 and remain historical evidence;
+their hashes and test counts do not certify the budget patch. Scientific execution remains unauthorized.
+
+
 **Engineering PASS on generated data; scientific results NOT_EVALUATED.**
-`B_primary` remains null in the scientific protocol; no new scientific execution,
+`B_primary=1.0` is fixed in scientific protocol 2.0.1; no new scientific execution,
 private-data exploration, permanent MLflow write, scientific reservation/approval,
 champion selection, G5 approval or merge was performed.
 
@@ -121,7 +126,8 @@ publication boundaries and re-signs altered synthetic artifacts to exercise
 semantic rejection. No private source, real scientific execution or permanent
 MLflow store was used. Models, features, labels, budget, windows, matrix and
 scientific methods are unchanged; the canonical protocol SHA above is unchanged.
-`B_primary` remains pending, G5 `NOT_APPROVED`, champion `not_selected`.
+At that validation of protocol 2.0.0, `B_primary` was pending (superseded by 2.0.1);
+G5 was `NOT_APPROVED`, champion `not_selected`.
 
 ## EXP02 integration conflict resolution — 2026-10-27
 
@@ -155,4 +161,5 @@ Focused integration evidence:
 
 Remote CI for the resulting merge commit must be observed separately. This bounded
 integration check is not a new independent scientific review or real-run approval.
-`B_primary`, scientific authorization and Mauricio's PR merge decision remain pending.
+At that integration check, the budget, scientific authorization and PR merge decision
+were pending. The budget is now resolved by protocol 2.0.1; authorization remains separate.

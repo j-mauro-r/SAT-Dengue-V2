@@ -1,5 +1,10 @@
 # EXP03 independent method and code review
 
+Current protocol: 2.0.1; primary budget fixed by the [human decision](DESIGN.md#primary-budget-decision--2026-10-27).
+The earlier review/validation records below describe protocol 2.0.0 and remain historical evidence;
+their hashes and test counts do not certify the budget patch. Scientific execution remains unauthorized.
+
+
 Source review: **PASS**. All fourteen concrete findings below are resolved in
 the reviewed candidate. Core combined validation is **PASS**, with supplemental
 validation for the final presentation-only correction;
@@ -108,7 +113,8 @@ Rendering reused the validated native predictions with zero additional fits.
 Recommendation: approve the reviewed source; the core combined gate and focused
 presentation checks passed. No remaining source blocker was found. This review supplies
 no merge approval, human execution authorization, G5 approval or champion
-selection. `B_primary` and scientific execution remain pending, G5 remains
+selection. At that review of protocol 2.0.0, `B_primary` and scientific execution were pending
+(the budget decision is superseded by 2.0.1), G5 remains
 `NOT_APPROVED`, and champion remains `not_selected`.
 
 ## PR #34 transport-period correction review

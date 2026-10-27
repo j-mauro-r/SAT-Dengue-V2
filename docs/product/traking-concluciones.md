@@ -1870,7 +1870,9 @@ The current [EXP03 scope](experiments/EXP03_feature_ablation/alcance.md) owns th
 sixteen-set information-value design. [Implementation traceability](experiments/EXP03_feature_ablation/IMPLEMENTATION.md)
 records the code, generated acceptance and independent-review evidence. The new
 executable protocol invalidates legacy EXP03 approvals without changing EXP00/EXP01
-scientific identities or EXP02 label-sensitivity ownership. Numeric B_primary,
-private-input coverage/maturity and scientific authorization remain pending.
+scientific identities or EXP02 label-sensitivity ownership. Mauricio fixed B_primary=1.0 before execution in protocol 2.0.1 on 2026-10-27;
+see the [decision and rationale](experiments/EXP03_feature_ablation/DESIGN.md#primary-budget-decision--2026-10-27).
+This is an experimental comparison budget, not validated operational capacity.
+Private-input coverage/maturity and scientific authorization remain pending.
 Synthetic fits and consumed-year fixtures are engineering evidence only;
 G5 remains NOT_APPROVED and champion not_selected.
