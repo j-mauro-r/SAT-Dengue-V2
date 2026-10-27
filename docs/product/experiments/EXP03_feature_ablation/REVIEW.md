@@ -133,3 +133,19 @@ This is engineering review by an independent agent lane on the same backend,
 not cross-vendor review, scientific authorization, formal orchestra approval or
 merge approval. The protocol and scientific sources are unchanged. See the
 [validation correction evidence](VALIDATION.md#consumed-2025-transport-validation-correction-pr-34).
+
+## Protocol 2.0.1 budget decision review — 2026-10-27
+
+An independent read-only agent applied the installed AI Diff Reviewer methodology
+and repository extension to the bounded diff against `4f43482c5fd25e64df73c0396c1fef183f95c39a`.
+Recommendation: approve the code change; no unresolved findings. A historical
+wording concern was corrected by distinguishing 2.0.0 evidence from current status.
+The reviewer independently verified the approved value/rationale, historical
+protocol byte preservation, both canonical hashes, registry/matrix agreement,
+unchanged 408/102 scope and EXP00–EXP02 identities, fail-closed admission and
+unchanged execution/G5/champion boundaries. All eight original EXP03 artifacts
+were inspected, including the SIR/climate and 2024/2025 limitations.
+
+This is engineering review, not scientific execution authorization or merge approval.
+No experiment, fit, calibration, private read, operational preflight, approval-file
+creation or MLflow write was performed for this patch.
