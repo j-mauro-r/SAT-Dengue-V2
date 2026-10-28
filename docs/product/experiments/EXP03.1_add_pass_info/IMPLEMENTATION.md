@@ -10,6 +10,7 @@
 | Metrics and persistence diagnosis | `exp03_1_evaluation.py` | integration tests | aggregate tables |
 | Safe reporting/tracking | `exp03_1_reporting.py`, `tracking/exp03_1.py` | privacy/no-write tests | protected native + aggregate projection |
 | Real-science denial | `exp03_1_preflight.py` | preflight integration tests | blocked receipt |
+| Complete source-free example | `exp03_1_demo.py` | integration generation test | ignored `tmp/exp03-1-synthetic-example` bundle, aggregate and marker |
 
 EXP03 functions are reused only as immutable references or pure helpers. EXP00–EXP03 protocols, matrices, bundles, and conclusions are not modified.
 

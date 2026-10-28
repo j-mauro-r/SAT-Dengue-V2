@@ -4683,9 +4683,9 @@
       "reason": "Current technical owner or unchanged historical/governance evidence; scientific decisions and dates retained."
     },
     "docs/product/traking-concluciones.md": {
-      "disposition": "KEEP",
-      "owner": "Owning documentation, harness or CI maintainer",
-      "reason": "Current technical owner or unchanged historical/governance evidence; scientific decisions and dates retained."
+      "disposition": "ADAPT",
+      "owner": "Scientific governance remains Mauricio; documentation maintainer records approved decisions",
+      "reason": "Active append-only scientific decision register; historical decisions and dates remain retained while explicit approved implementation-scope records are added."
     },
     "docs/research/colombia-dengue-outbreak-events.md": {
       "disposition": "KEEP",

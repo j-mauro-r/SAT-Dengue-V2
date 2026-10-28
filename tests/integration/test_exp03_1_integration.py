@@ -7,6 +7,7 @@ import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
 from sat_dengue.experiments.exp03_1_contract import counts, digest, protocol
+from sat_dengue.experiments.exp03_1_demo import generate, synthetic_bundle
 from sat_dengue.experiments.exp03_1_engine import execution_plan, reuse_decision, variant_predictors
 from sat_dengue.experiments.exp03_1_evaluation import (
     error_class,
@@ -183,6 +184,16 @@ def test_safe_bundle_tracking_and_blocked_preflight(repo_tmp_path: Path) -> None
     with pytest.raises(PermissionError):
         validate_bundle(real)
     private = copy.deepcopy(value)
-    private["metrics"] = [{"private": "/Users/name/data"}]
+    private["metrics"] = [{"private": "private://data"}]
     with pytest.raises(ValueError, match="private"):
         aggregate_projection(private)
+
+
+def test_source_free_example_is_complete_and_marked(repo_tmp_path: Path) -> None:
+    output = Path("tmp") / repo_tmp_path.name / "complete-example"
+    generated = generate(output)
+    assert set(generated) == {"bundle", "bundle_sha256", "aggregate", "marker"}
+    assert "synthetic_generated_data" in Path(generated["marker"]).read_text(encoding="utf-8")
+    assert synthetic_bundle()["execution_counters"]["real_fits"] == 0
+    with pytest.raises(ValueError, match="repository-local"):
+        generate(Path.cwd().resolve().parent)

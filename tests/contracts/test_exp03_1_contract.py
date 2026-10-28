@@ -4,7 +4,7 @@ import copy
 import json
 
 import pytest
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 from sat_dengue.experiments import exp03_1_contract as contract
 
