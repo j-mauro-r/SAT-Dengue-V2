@@ -21,4 +21,3 @@ M00 is a V09 reference, not a champion. Reuse is fail-closed across every declar
 Reports retain adverse, null, and unknown outcomes; distinguish FAR from FPR; separate onset, continuation, no excess, and T+1-prior onset for T+2; and keep 2024 outside development intervals. Absence of significance is not equivalence. Delay is a frozen-model conditional predictor stress and separately records strict inability to issue when Y(T) is unavailable.
 
 G5 remains `NOT_APPROVED`; champion remains `not_selected`. This implementation creates no scientific result.
-

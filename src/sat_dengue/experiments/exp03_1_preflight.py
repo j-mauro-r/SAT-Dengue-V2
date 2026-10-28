@@ -8,9 +8,15 @@ from sat_dengue.experiments.exp03_1_contract import counts, digest, protocol
 
 
 def preflight(parameters: dict[str, Any]) -> dict[str, Any]:
-    allowed = {"profile", "tracking", "experiment_id"}
-    if set(parameters) - allowed:
-        raise ValueError("Unknown EXP03.1 runtime parameter")
+    required = {"profile", "tracking", "experiment_id"}
+    if set(parameters) != required:
+        raise ValueError("EXP03.1 preflight requires the exact guarded parameter set")
+    if (
+        parameters["profile"] not in {"exp03_1", "exp03_1_preflight"}
+        or parameters["tracking"] != "disabled"
+        or parameters["experiment_id"] != "EXP031"
+    ):
+        raise PermissionError("EXP03.1 real execution and tracking remain unauthorized")
     p = protocol()
     return {
         "schema": "exp03-1-preflight-v1",

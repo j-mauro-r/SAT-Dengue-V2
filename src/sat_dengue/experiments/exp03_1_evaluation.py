@@ -14,7 +14,13 @@ def select_threshold(
     """Select one whole-tie threshold without consulting evaluation rows."""
     if not truth.index.equals(score.index) or truth.isna().any() or score.isna().any():
         raise ValueError("Threshold selection requires aligned complete rows")
-    if exposure < 0 or budget < 0 or not np.isfinite(score.to_numpy(dtype=float)).all():
+    if (
+        not np.isfinite(exposure)
+        or not np.isfinite(budget)
+        or exposure < 0
+        or budget < 0
+        or not np.isfinite(score.to_numpy(dtype=float)).all()
+    ):
         raise ValueError("Invalid threshold selection inputs")
     y = truth.astype(int).to_numpy()
     s = score.astype(float).to_numpy()
@@ -83,10 +89,17 @@ def metrics(frame: pd.DataFrame, *, exposure: float, bins: int = 10) -> dict[str
     positives = tp + fn
     negatives = fp + tn
     alerts = tp + fp
-    order = np.argsort(-score, kind="stable")
-    ranked = truth[order]
-    precision_curve = np.cumsum(ranked) / np.arange(1, len(ranked) + 1)
-    ap = float((precision_curve * ranked).sum() / positives) if positives else None
+    ap = None
+    if positives:
+        tp_previous = 0
+        ap_value = 0.0
+        for threshold in sorted(set(score), reverse=True):
+            selected = score >= threshold
+            tp_at_threshold = int((selected & (truth == 1)).sum())
+            precision_at_threshold = tp_at_threshold / int(selected.sum())
+            ap_value += (tp_at_threshold - tp_previous) / positives * precision_at_threshold
+            tp_previous = tp_at_threshold
+        ap = float(ap_value)
     edges = np.linspace(0, 1, bins + 1)
     ece = 0.0
     reliability = []
@@ -120,7 +133,13 @@ def metrics(frame: pd.DataFrame, *, exposure: float, bins: int = 10) -> dict[str
         "brier": float(np.mean((score - truth) ** 2)),
         "ece": ece,
         "reliability": reliability,
+        "coverage": len(known) / len(frame) if len(frame) else None,
         "abstentions": len(frame) - len(known),
+        "excluded_onsets": int(frame.attrs.get("excluded_onsets", 0)),
+        "persistence": {
+            name: int(known.error_class.eq(name).sum()) if "error_class" in known else None
+            for name in ("onset", "continuation", "onset_previously_at_t1", "no_excess")
+        },
         "support": {
             "municipalities": int(known.municipality_code.nunique()),
             "years": int(known.target_year.nunique()),
@@ -134,6 +153,24 @@ def paired_effect(left: pd.DataFrame, right: pd.DataFrame, keys: list[str]) -> p
         raise ValueError("Paired predictions require unique keys")
     if left[keys].to_records(index=False).tolist() != right[keys].to_records(index=False).tolist():
         raise ValueError("EXP03.1 contrasts require identical ordered rows")
+    shared = [
+        name
+        for name in (
+            "truth",
+            "family",
+            "horizon",
+            "target_year",
+            "department_code",
+            "transmission_profile",
+            "exposure",
+        )
+        if name in left or name in right
+    ]
+    if any(
+        name not in left or name not in right or not left[name].equals(right[name])
+        for name in shared
+    ):
+        raise ValueError("EXP03.1 contrasts require identical labels, strata and exposures")
     result = left[keys].copy()
     result["alert_delta"] = left.alert.astype(int).to_numpy() - right.alert.astype(int).to_numpy()
     result["score_delta"] = left.score.to_numpy(dtype=float) - right.score.to_numpy(dtype=float)
@@ -144,14 +181,48 @@ def grouped_metrics(
     frame: pd.DataFrame, *, exposure_column: str = "exposure"
 ) -> list[dict[str, Any]]:
     """Report every family/horizon/year/department/profile group, including adverse rows."""
-    groups = ["family", "horizon", "target_year", "department_code", "transmission_profile"]
+    groups = [
+        "contrast",
+        "family",
+        "horizon",
+        "target_year",
+        "department_code",
+        "transmission_profile",
+    ]
     if not {*groups, exposure_column}.issubset(frame):
         raise ValueError("EXP03.1 grouped metrics require all reporting dimensions")
     output = []
     for key, part in frame.groupby(groups, dropna=False, sort=True):
-        value = metrics(part, exposure=float(part[exposure_column].sum()))
+        exposure_keys = ["municipality_code", "target_year"]
+        exposure_rows = part[[*exposure_keys, exposure_column]].drop_duplicates()
+        if exposure_rows.duplicated(exposure_keys).any():
+            raise ValueError("EXP03.1 exposure differs within a municipality-year")
+        value = metrics(part, exposure=float(exposure_rows[exposure_column].sum()))
         output.append({**dict(zip(groups, key, strict=True)), **value})
     return output
+
+
+def reused_delay_diagnostic(conditional: dict[str, Any], strict: dict[str, Any]) -> dict[str, Any]:
+    """Validate reuse of EXP03 frozen delay evidence without any EXP03.1 fit."""
+    frozen = {"model", "preparer", "calibrator", "threshold"}
+    if (
+        conditional.get("diagnostic") != "conditional_stale_feature_stress"
+        or strict.get("diagnostic") != "strict_current_unavailable"
+        or strict.get("status") != "unable_to_issue"
+        or not conditional.get("effective_source_months")
+        or set(conditional.get("frozen_components", ())) != frozen
+        or conditional.get("new_fits") != 0
+        or strict.get("new_fits") != 0
+    ):
+        raise ValueError("Invalid reused EXP03 delay diagnostic")
+    return {
+        "schema": "exp03-1-reused-delay-diagnostic-v1",
+        "source_experiment": "EXP03",
+        "conditional_predictor_stress": conditional,
+        "strict_unable_to_issue": strict,
+        "new_fits": 0,
+        "interpretation": "retrospective_event_month_proxy_not_historical_availability",
+    }
 
 
 def paired_interval(frame: pd.DataFrame, *, repeats: int = 200, seed: int = 42) -> dict[str, Any]:

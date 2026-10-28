@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
+from sat_dengue.experiments.exp03 import load_protocol as load_exp03_protocol
 from sat_dengue.experiments.exp03_1_contract import counts, digest, protocol
 from sat_dengue.experiments.exp03_1_demo import generate, synthetic_bundle
 from sat_dengue.experiments.exp03_1_engine import execution_plan, reuse_decision, variant_predictors
@@ -15,6 +16,7 @@ from sat_dengue.experiments.exp03_1_evaluation import (
     metrics,
     paired_effect,
     paired_interval,
+    reused_delay_diagnostic,
     select_threshold,
 )
 from sat_dengue.experiments.exp03_1_preflight import preflight
@@ -80,9 +82,15 @@ def test_reuse_and_refit_paths_and_exact_v09_predictors() -> None:
         decision = reuse_decision(changed, same)
         assert decision["decision"] == "refitted" and field in decision["mismatched"]
         assert execution_plan(decision)["counts"] == {"total": 96, "reused": 0, "new_fits": 96}
-    assert variant_predictors(["v09_a", "v09_b"], "M00") == ["v09_a", "v09_b"]
-    assert len(variant_predictors(["v09_a", "v09_b"], "M01")) == 5
-    assert len(variant_predictors(["v09_a", "v09_b"], "M02")) == 8
+    malformed = copy.deepcopy(same)
+    malformed[protocol()["reuse_identity_fields"][0]] = "not-a-sha256"
+    assert reuse_decision(malformed, malformed)["decision"] == "refitted"
+    v09 = load_exp03_protocol()["design"]["variants"]["V09"]
+    assert variant_predictors(v09, "M00") == v09
+    assert len(variant_predictors(v09, "M01")) == len(v09) + 3
+    assert len(variant_predictors(v09, "M02")) == len(v09) + 6
+    with pytest.raises(ValueError, match="ordered V09"):
+        variant_predictors([*v09, "invented"], "M00")
     assert counts()["terminal_cells"] == 24
 
 
@@ -101,6 +109,12 @@ def test_metrics_reconstruct_alert_quality_and_distinguish_far_fpr() -> None:
     assert result["far"] == 0.5 and result["fpr"] == 0.5
     assert result["false_alerts_per_monitored_municipality_year"] == 0.5
     assert result["brier"] == pytest.approx(0.1875)
+    tied = frame.assign(score=[0.8, 0.8, 0.2, 0.2])
+    reordered = tied.iloc[[1, 0, 3, 2]].reset_index(drop=True)
+    assert (
+        metrics(tied, exposure=2.0)["average_precision"]
+        == metrics(reordered, exposure=2.0)["average_precision"]
+    )
     right = frame.assign(score=[0.8, 0.6, 0.2, 0.4], alert=[True, False, False, False])
     paired = paired_effect(
         frame.assign(year_month=["a", "b", "c", "d"]),
@@ -124,6 +138,7 @@ def test_budget_whole_ties_no_alert_and_group_reporting() -> None:
             "alert": [True, False],
             "municipality_code": ["50001", "73001"],
             "target_year": [2020, 2020],
+            "contrast": ["Q1", "Q1"],
             "family": ["gam", "gam"],
             "horizon": [1, 1],
             "department_code": ["50", "73"],
@@ -132,6 +147,11 @@ def test_budget_whole_ties_no_alert_and_group_reporting() -> None:
         }
     )
     assert len(grouped_metrics(frame)) == 2
+    duplicated_month = pd.concat([frame, frame.assign(score=[0.7, 0.3])], ignore_index=True)
+    assert all(
+        row["false_alerts_per_monitored_municipality_year"] == 0
+        for row in grouped_metrics(duplicated_month)
+    )
 
 
 def test_paired_development_interval_and_support_controls() -> None:
@@ -152,6 +172,24 @@ def test_paired_development_interval_and_support_controls() -> None:
         paired_interval(frame.loc[frame.municipality_code.eq("a")])["status"]
         == "insufficient_cluster_support"
     )
+
+
+def test_reused_delay_diagnostic_is_frozen_and_separates_strict_unavailability() -> None:
+    conditional = {
+        "diagnostic": "conditional_stale_feature_stress",
+        "effective_source_months": ["2023-12"],
+        "frozen_components": ["model", "preparer", "calibrator", "threshold"],
+        "new_fits": 0,
+    }
+    strict = {
+        "diagnostic": "strict_current_unavailable",
+        "status": "unable_to_issue",
+        "new_fits": 0,
+    }
+    result = reused_delay_diagnostic(conditional, strict)
+    assert result["new_fits"] == 0 and result["source_experiment"] == "EXP03"
+    with pytest.raises(ValueError, match="delay"):
+        reused_delay_diagnostic({**conditional, "new_fits": 1}, strict)
 
 
 @pytest.mark.parametrize(
@@ -187,6 +225,20 @@ def test_safe_bundle_tracking_and_blocked_preflight(repo_tmp_path: Path) -> None
     private["metrics"] = [{"private": "private://data"}]
     with pytest.raises(ValueError, match="private"):
         aggregate_projection(private)
+    post_2024 = copy.deepcopy(value)
+    post_2024["predictions"][0]["target_month"] = "2025-01"
+    with pytest.raises(ValueError, match="post-2024"):
+        validate_bundle(post_2024)
+    wrong_budget = copy.deepcopy(value)
+    wrong_budget["thresholds"][0]["budget"] = 2.0
+    with pytest.raises(ValueError, match="budget"):
+        validate_bundle(wrong_budget)
+    wrong_protocol = copy.deepcopy(value)
+    wrong_protocol["protocol_sha256"] = "f" * 64
+    with pytest.raises(ValueError, match="protocol"):
+        validate_bundle(wrong_protocol)
+    with pytest.raises(PermissionError, match="unauthorized"):
+        preflight({"profile": "exp03_1", "tracking": "enabled", "experiment_id": "EXP031"})
 
 
 def test_source_free_example_is_complete_and_marked(repo_tmp_path: Path) -> None:

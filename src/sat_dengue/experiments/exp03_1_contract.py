@@ -52,6 +52,7 @@ def protocol() -> dict[str, Any]:
             "experiment_id": "EXP03",
             "reference_variant": "V09",
             "protocol_version": "2.0.1",
+            "protocol_sha256": "18ce612581d710245294f3966187178e697df1972d45b460f54be7cc2f4d1611",
         },
         "question": (
             "Does recent endemic-channel trajectory improve future-onset detection over "

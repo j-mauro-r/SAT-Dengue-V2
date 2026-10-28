@@ -7,6 +7,8 @@ import pytest
 import yaml  # type: ignore[import-untyped]
 
 from sat_dengue.experiments import exp03_1_contract as contract
+from sat_dengue.experiments.exp01 import digest
+from sat_dengue.experiments.exp03 import load_protocol as load_exp03_protocol
 
 
 def test_canonical_protocol_matrix_and_counts() -> None:
@@ -33,6 +35,13 @@ def test_contract_has_no_redundant_predictors_or_2025() -> None:
     assert protocol["governance"]["year_2025"] == "REJECTED"
     assert protocol["governance"]["G5"] == "NOT_APPROVED"
     assert protocol["governance"]["champion"] == "not_selected"
+    parent = load_exp03_protocol()
+    assert protocol["parent_experiment"] == {
+        "experiment_id": "EXP03",
+        "reference_variant": "V09",
+        "protocol_version": parent["version"],
+        "protocol_sha256": digest(parent),
+    }
 
 
 def test_tampered_contract_changes_identity_and_matrix() -> None:

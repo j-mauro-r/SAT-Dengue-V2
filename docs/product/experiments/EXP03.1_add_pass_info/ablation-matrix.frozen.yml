@@ -1,5 +1,5 @@
 schema: sat-dengue-exp03-1-ablation-matrix-v1
-protocol_sha256: ecc9299d56169e7a95df29d02f189a607544f6385f8473c9536f342eb4e8e531
+protocol_sha256: 46f287468ace7cee7c67220b871cf85a7a9c0670a131d80838d3baf147da0075
 groups:
   recent:
   - channel_security_recent_6m_count

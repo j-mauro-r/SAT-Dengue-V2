@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +12,9 @@ from sat_dengue.configuration import canonical_bytes
 
 
 def validate_bundle(bundle: dict[str, Any]) -> None:
+    from sat_dengue.experiments.exp03_1_contract import counts, digest, protocol
+    from sat_dengue.experiments.exp03_1_engine import execution_plan
+
     required = {
         "schema",
         "experiment_id",
@@ -31,10 +35,38 @@ def validate_bundle(bundle: dict[str, Any]) -> None:
         raise ValueError("Invalid EXP03.1 bundle schema")
     if bundle["experiment_id"] != "EXP031" or bundle["scientific_id"] != "EXP03.1":
         raise ValueError("Invalid EXP03.1 identity")
+    if bundle["protocol_sha256"] != digest(protocol()):
+        raise ValueError("EXP03.1 protocol identity changed")
     if bundle["G5"] != "NOT_APPROVED" or bundle["champion"] != "not_selected":
         raise ValueError("EXP03.1 cannot approve G5 or select champion")
-    if not bundle["synthetic"]:
+    if bundle["synthetic"] is not True:
         raise PermissionError("Real EXP03.1 publication is not authorized")
+    decision = bundle["reuse_decision"].get("decision")
+    expected_counts = counts()
+    expected_execution = (
+        {
+            "total": expected_counts["maximum_refit_cells"],
+            "reused": expected_counts["maximum_reused_m00_cells"],
+            "new_fits": expected_counts["maximum_new_fit_cells_with_complete_reuse"],
+        }
+        if decision == "reused"
+        else {
+            "total": expected_counts["maximum_refit_cells"],
+            "reused": 0,
+            "new_fits": expected_counts["maximum_refit_cells"],
+        }
+        if decision == "refitted"
+        else None
+    )
+    execution = bundle["execution_plan"]
+    if (
+        expected_execution is None
+        or execution.get("counts") != expected_execution
+        or execution.get("searches") != 0
+        or len(execution.get("cells", ())) != expected_execution["total"]
+        or execution != execution_plan(bundle["reuse_decision"])
+    ):
+        raise ValueError("Invalid EXP03.1 execution plan")
     counters = bundle["execution_counters"]
     forbidden = (
         "real_private_reads",
@@ -46,9 +78,44 @@ def validate_bundle(bundle: dict[str, Any]) -> None:
     )
     if set(counters) != set(forbidden) or any(counters[name] != 0 for name in forbidden):
         raise ValueError("Real-science counters must remain zero")
+    prediction_keys = []
+    cell_ids = set()
     for row in bundle["predictions"]:
         if not {"cell_id", "municipality_code", "target_month", "score", "alert"} <= set(row):
             raise ValueError("Invalid native prediction row")
+        try:
+            year, month = (int(value) for value in row["target_month"].split("-"))
+            score = float(row["score"])
+        except (AttributeError, TypeError, ValueError) as error:
+            raise ValueError("Invalid native prediction values") from error
+        if (
+            year > 2024
+            or month not in range(1, 13)
+            or not math.isfinite(score)
+            or not 0 <= score <= 1
+        ):
+            raise ValueError("EXP03.1 predictions reject post-2024 or invalid values")
+        if not isinstance(row["alert"], bool):
+            raise ValueError("EXP03.1 alerts must be boolean")
+        key = (row["cell_id"], row["municipality_code"], row["target_month"])
+        prediction_keys.append(key)
+        cell_ids.add(row["cell_id"])
+    if len(prediction_keys) != len(set(prediction_keys)):
+        raise ValueError("Duplicate native EXP03.1 prediction key")
+    threshold_cells = []
+    for row in bundle["thresholds"]:
+        if not {"cell_id", "threshold", "budget"} <= set(row) or row["cell_id"] not in cell_ids:
+            raise ValueError("Invalid EXP03.1 threshold row")
+        if row["budget"] != protocol()["budget"]["B_primary"]:
+            raise ValueError("EXP03.1 threshold budget differs from the frozen protocol")
+        threshold = row["threshold"]
+        if threshold is not None and (
+            not isinstance(threshold, (int, float)) or not 0 <= threshold <= 1
+        ):
+            raise ValueError("Invalid EXP03.1 threshold")
+        threshold_cells.append(row["cell_id"])
+    if len(threshold_cells) != len(set(threshold_cells)):
+        raise ValueError("Duplicate EXP03.1 threshold cell")
 
 
 def write_bundle(bundle: dict[str, Any], path: Path) -> str:
