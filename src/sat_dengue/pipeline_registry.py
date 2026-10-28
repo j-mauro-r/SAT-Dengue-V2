@@ -4,10 +4,10 @@ from kedro.pipeline import Pipeline, node
 
 from sat_dengue.configuration import resolve_configuration
 from sat_dengue.experiments import exp03, exp03_preflight, exp03_runner
-from sat_dengue.experiments.exp03_1_preflight import preflight as exp03_1_preflight
 from sat_dengue.experiments.exp01 import synthetic_run
 from sat_dengue.experiments.exp01_preflight import preflight
 from sat_dengue.experiments.exp01_runner import execute_authorized, load_authorized_sources
+from sat_dengue.experiments.exp03_1_preflight import preflight as exp03_1_preflight
 from sat_dengue.pipelines.data.pipeline import create_pipeline
 from sat_dengue.pipelines.evaluation.pipeline import create_replay_pipeline as evaluation_replay
 from sat_dengue.pipelines.evaluation.pipeline import (
