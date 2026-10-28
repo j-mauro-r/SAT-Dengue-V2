@@ -46,8 +46,6 @@ def test_tampered_contract_changes_identity_and_matrix() -> None:
 @pytest.mark.parametrize("variant", ["M00", "M01", "M02"])
 def test_each_variant_has_exact_onset_grid(variant: str) -> None:
     rows = [
-        row
-        for row in contract.cells()
-        if row["variant"] == variant and row["objective"] == "onset"
+        row for row in contract.cells() if row["variant"] == variant and row["objective"] == "onset"
     ]
     assert len(rows) == 24

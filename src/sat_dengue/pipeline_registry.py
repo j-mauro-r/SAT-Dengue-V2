@@ -4,6 +4,7 @@ from kedro.pipeline import Pipeline, node
 
 from sat_dengue.configuration import resolve_configuration
 from sat_dengue.experiments import exp03, exp03_preflight, exp03_runner
+from sat_dengue.experiments.exp03_1_preflight import preflight as exp03_1_preflight
 from sat_dengue.experiments.exp01 import synthetic_run
 from sat_dengue.experiments.exp01_preflight import preflight
 from sat_dengue.experiments.exp01_runner import execute_authorized, load_authorized_sources
@@ -82,7 +83,19 @@ def register_pipelines() -> dict[str, Pipeline]:
             ),
         ]
     )
+    exp03_1_check = Pipeline(
+        [
+            node(
+                exp03_1_preflight,
+                inputs="parameters",
+                outputs="exp03_1_preflight_receipt",
+                name="exp03_1_preflight",
+            )
+        ]
+    )
     return {
+        "exp03_1": exp03_1_check,
+        "exp03_1_preflight": exp03_1_check,
         "exp03": exp03_real,
         "exp03_preflight": exp03_check,
         "exp03_synthetic": Pipeline(
