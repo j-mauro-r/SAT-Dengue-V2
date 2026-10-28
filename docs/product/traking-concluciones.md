@@ -241,6 +241,7 @@ El cribado también incluyó los demás documentos locales (índices, seguridad,
 | [DEC-133](#dec-133) | Recommend G5 NOT_APPROVED after the frozen 2025 evaluation | PROPOSED_FOR_HUMAN_G5_DECISION | No aplica |
 | [DEC-134](#dec-134) | Accept G5 NOT_APPROVED and centralize champion-decision policy | ACCEPTED_AND_CLOSED | No aplica |
 | [DEC-135](#dec-135) | Approve G2 data/target and G3 training preparation baselines | ACCEPTED_WITH_DOCUMENTED_LIMITS | No aplica |
+| [DEC-136](#dec-136) | Register EXP03.1 recent endemic-channel trajectory infrastructure | ACCEPTED_IMPLEMENTATION_SCOPE | No aplica |
 
 ## Registros detallados
 
@@ -1876,3 +1877,12 @@ This is an experimental comparison budget, not validated operational capacity.
 Private-input coverage/maturity and scientific authorization remain pending.
 Synthetic fits and consumed-year fixtures are engineering evidence only;
 G5 remains NOT_APPROVED and champion not_selected.
+<a id="dec-136"></a>
+### DEC-136 Register EXP03.1 recent endemic-channel trajectory infrastructure
+
+- **Status:** ACCEPTED_IMPLEMENTATION_SCOPE.
+- **Decision date:** 2026-10-27, explicit instruction from Mauricio.
+- **Decision:** Implement source-free scientific, contractual, Kedro, persistence, reporting, tracking and synthetic-test infrastructure for visible experiment `EXP03.1` (technical registry ID `EXP031`, Python ID `exp03_1`). Compare complete EXP03 V09 (M00), V09 plus six-month recent channel memory (M01), and M01 plus change from the preceding six months (M02) under the inherited fixed false-onset-alert budget.
+- **Scientific boundary:** H5, families, fixed configurations, temporal roles and budget remain inherited from EXP03. The primary cohort requires twelve known historical zones. V09 reuse is fail-closed on all applicable identities and otherwise refits on the paired intersection. No real execution, private-data read, permanent MLflow write, 2025 evaluation, champion selection, G5 approval or reinterpretation of EXP03 is authorized.
+- **Evidence owner:** `docs/product/experiments/EXP03.1_add_pass_info/`.
+

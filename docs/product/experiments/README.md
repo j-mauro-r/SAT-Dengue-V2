@@ -7,6 +7,8 @@ with sixteen canonical predictor sets, four primary and twelve secondary ablatio
 two bounded T+2 objective controls, 408 fit cells and 102 terminal cells. Its real execution and
 scientific conclusions remain pending independent authorization.
 
+EXP03.1 is the registered follow-up [recent endemic-channel trajectory experiment](EXP03.1_add_pass_info/DESIGN.md). Its technical registry identifier is `EXP031` because the closed registry requires `EXP` followed by digits; `EXP03.1` remains the visible scientific identifier and `exp03_1` the Python/pipeline identifier. Its infrastructure compares M00/M01/M02 under the inherited EXP03 budget and temporal design. Scientific execution remains unauthorized.
+
 This directory is the authoritative index for planned, running and completed
 scientific experiments in SAT-Dengue V2. It connects each experiment and
 hypothesis to its frozen protocol, Kedro pipeline, MLflow lineage and written
