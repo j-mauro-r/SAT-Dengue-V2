@@ -1011,6 +1011,26 @@ stops at the reservation boundary without reserving, creating runs or fitting.
 Use modified-file Ruff/format/mypy and changed-document links/diff privacy checks.
 Leave native-estimator fixtures, full suites and wheel checks to GitHub.
 
+## EXP03.1 recent endemic-channel trajectory
+
+[EXP03.1 design](product/experiments/EXP03.1_add_pass_info/DESIGN.md) owns the
+source-free contract for the recent endemic-state channel. Its focused acceptance
+uses only deterministic or generated inputs; it does not authorize private-source
+reads, model fits, reservations, permanent tracking, G5 approval or champion
+selection.
+
+```bash
+.venv/bin/python -m pytest tests/contracts/test_exp03_1_contract.py tests/unit/test_exp03_1_features.py tests/integration/test_exp03_1_integration.py -q
+.venv/bin/python -m sat_dengue.experiments.exp03_1_contract --check
+.venv/bin/python -m sat_dengue.experiments.exp03_1_demo --output tmp/exp03-1-synthetic-example
+```
+
+Run Ruff check/format and mypy over `exp03_1_*.py`, `tracking/exp03_1.py`, and
+the three focused test owners. Validate Markdown links and the changed diff. The
+example directory is ignored evidence explicitly marked `synthetic_generated_data`.
+The registered `exp03_1` and `exp03_1_preflight` names are additionally covered by
+`tests/unit/test_repository_bootstrap.py`; GitHub CI owns the complete public suite.
+
 Relocated generated graph/native-estimator owners are
 `tests/integration/test_full_{model_training,training_preparation,final_evaluation,kedro_data,xgboost_candidate}.py`,
 `test_exp03_generated_engine.py`, `test_exp03_benchmark.py` and

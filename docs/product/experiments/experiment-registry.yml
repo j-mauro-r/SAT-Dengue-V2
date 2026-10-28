@@ -63,3 +63,18 @@ experiments:
     champion: not_selected
     mlflow_registration: pending
     lifecycle_status: implemented_pending_execution_authorization
+  - experiment_id: EXP031
+    experiment_slug: recent_endemic_channel_trajectory
+    hypothesis_id: EXP031-H1
+    title: EXP03.1 — Recent endemic-channel trajectory
+    objective: Test recent channel memory and semester-over-semester trajectory change against EXP03 V09 under the same false-alert budget
+    experiment_type: paired_feature_trajectory_ablation
+    pipeline: exp03_1
+    protocol: docs/product/experiments/EXP03.1_add_pass_info/protocol.json
+    protocol_sha256: 46f287468ace7cee7c67220b871cf85a7a9c0670a131d80838d3baf147da0075
+    conclusions: docs/product/experiments/EXP03.1_add_pass_info/CONCLUSIONS.md
+    scientific_result: pending
+    scientific_gate: NOT_APPROVED
+    champion: not_selected
+    mlflow_registration: pending
+    lifecycle_status: implemented_pending_execution_authorization
