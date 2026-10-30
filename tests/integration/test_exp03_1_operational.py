@@ -71,9 +71,10 @@ def _approval(receipt: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _write_approval(monkeypatch: pytest.MonkeyPatch, receipt: dict[str, Any]) -> Path:
-    temp = tempfile.mkdtemp(prefix="exp03-1-approval-", dir=Path.cwd() / "tmp")
-    path = Path(temp) / "approval.json"
+def _write_approval(
+    monkeypatch: pytest.MonkeyPatch, receipt: dict[str, Any], repo_tmp_path: Path
+) -> Path:
+    path = repo_tmp_path / "approval.json"
     path.write_text(json.dumps(_approval(receipt)))
     monkeypatch.setenv(APPROVAL_ENV, str(path))
     return path
@@ -276,7 +277,7 @@ def _real_bundle() -> dict[str, Any]:
 
 
 def test_authorization_is_explicit_bound_and_separate_from_g5(
-    monkeypatch: pytest.MonkeyPatch,
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     receipt = {
         "git_dirty": False,
@@ -291,14 +292,11 @@ def test_authorization_is_explicit_bound_and_separate_from_g5(
     monkeypatch.chdir(Path.cwd())
     with pytest.raises(PermissionError):
         authorize(receipt, {})
-    approval_path = _write_approval(monkeypatch, receipt)
-    try:
-        assert authorize(receipt, {})["G5_approval"] is False
-        altered = {**receipt, "matrix_sha256": "0" * 64}
-        with pytest.raises(PermissionError):
-            authorize(altered, {})
-    finally:
-        shutil.rmtree(approval_path.parent)
+    _write_approval(monkeypatch, receipt, repo_tmp_path)
+    assert authorize(receipt, {})["G5_approval"] is False
+    altered = {**receipt, "matrix_sha256": "0" * 64}
+    with pytest.raises(PermissionError):
+        authorize(altered, {})
 
 
 def test_sources_are_not_admitted_before_authorization(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -341,20 +339,18 @@ def test_official_coverage_controls_zero_case_imputation() -> None:
     assert pd.isna(result.loc[("D", "2020-04"), "climate_value"])
 
 
-def test_source_manifest_payload_hash_tampering_is_rejected() -> None:
-    root = Path(tempfile.mkdtemp(prefix="exp03-1-source-hash-", dir=Path.cwd() / "tmp"))
-    path = root / "manifest.json"
+def test_source_manifest_payload_hash_tampering_is_rejected(
+    repo_tmp_path: Path,
+) -> None:
+    path = repo_tmp_path / "manifest.json"
     raw = b'{"fixture":"generated"}'
     path.write_bytes(raw)
     relative = path.relative_to(Path.cwd()).as_posix()
     expected = {"sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
-    try:
-        assert verified_file(relative, expected, read=True) == raw
-        path.write_bytes(b'{"fixture":"altered"}')
-        with pytest.raises(ValueError, match="fingerprint mismatch"):
-            verified_file(relative, expected)
-    finally:
-        shutil.rmtree(root)
+    assert verified_file(relative, expected, read=True) == raw
+    path.write_bytes(b'{"fixture":"altered"}')
+    with pytest.raises(ValueError, match="fingerprint mismatch"):
+        verified_file(relative, expected)
 
 
 def test_frozen_grid_and_m00_refit_fallback_are_exact() -> None:
