@@ -847,6 +847,36 @@ def test_exp03_1_preflight_pipeline_receives_its_source_descriptor() -> None:
     }
 
 
+def test_exp03_1_preflight_exposes_source_identity_without_source_reads(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from sat_dengue.experiments import exp03_1_preflight
+
+    tracking_root = (repo_tmp_path / "tracking").relative_to(Path.cwd()).as_posix()
+    monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", tracking_root)
+    receipt = exp03_1_preflight.preflight(
+        {
+            "profile": "exp03_1_preflight",
+            "tracking": "enabled",
+            "experiment_id": "EXP031",
+        },
+        exp03_1_preflight.source_descriptor(),
+    )
+
+    expected_source_sha256 = receipt["sources"]["expected_source_sha256"]
+    assert receipt["expected_source_sha256"] == expected_source_sha256
+    assert receipt["data_version"] == expected_source_sha256
+    assert receipt["source_identity_status"] == "pending_authorized_verification"
+    assert receipt["sources"]["private_reads"] == 0
+    assert receipt["real_private_reads"] == 0
+    assert receipt["real_reservations"] == 0
+    assert receipt["real_model_fits"] == 0
+    assert receipt["real_calibrator_fits"] == 0
+    assert receipt["real_threshold_selections"] == 0
+    assert receipt["mlflow_writes"] == 0
+    assert receipt["tracking"]["writes"] == 0
+
+
 @pytest.mark.parametrize(
     "root",
     [
