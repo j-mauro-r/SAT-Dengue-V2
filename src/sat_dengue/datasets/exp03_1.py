@@ -28,14 +28,19 @@ class Exp03_1SourcesDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
 class Exp03_1BundleDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
     def __init__(self, filepath: str) -> None:
         path = Path(filepath)
+        root = Path(OUTPUT_ROOT)
+        repository_root = Path.cwd()
         if (
-            path.is_absolute()
-            or ".." in path.parts
-            or path.as_posix() != OUTPUT_ROOT
-            or any(parent.is_symlink() for parent in (path, *path.parents))
+            ".." in path.parts
+            or (
+                path != repository_root / root
+                if path.is_absolute()
+                else path.as_posix() != OUTPUT_ROOT
+            )
+            or any(parent.is_symlink() for parent in (root, *root.parents))
         ):
             raise ValueError("EXP03.1 bundle output must be a protected repository tmp path")
-        self._root = path
+        self._root = root
         self._publication: dict[str, Any] | None = None
 
     def save(self, data: dict[str, Any]) -> None:
