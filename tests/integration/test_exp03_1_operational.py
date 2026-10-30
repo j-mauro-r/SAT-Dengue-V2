@@ -9,7 +9,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-import pandas as pd
+import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
 from sat_dengue.configuration import validate_parameters
@@ -200,7 +200,7 @@ def _real_bundle() -> dict[str, Any]:
         "files": files,
         **ZERO_EFFECTS,
     }
-    provenance = {
+    provenance: dict[str, Any] = {
         "source_admission": admission,
         "protocol_sha256": protocol_digest(p),
         "matrix_sha256": protocol_digest(matrix(p)),

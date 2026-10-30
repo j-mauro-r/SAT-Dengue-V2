@@ -418,7 +418,7 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
         )
     ):
         raise ValueError("Real EXP03.1 contrasts differ from the frozen protocol")
-    expected_effect_rows = set()
+    expected_effect_rows: set[tuple[str, str, str, int, str, str, str]] = set()
     for name, pair in expected_contrasts.items():
         left_cells = {
             (

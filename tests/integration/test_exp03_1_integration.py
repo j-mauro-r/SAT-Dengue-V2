@@ -19,7 +19,7 @@ from sat_dengue.experiments.exp03_1_evaluation import (
     reused_delay_diagnostic,
     select_threshold,
 )
-from sat_dengue.experiments.exp03_1_preflight import preflight
+from sat_dengue.experiments.exp03_1_preflight import preflight, source_descriptor
 from sat_dengue.experiments.exp03_1_reporting import read_bundle, validate_bundle, write_bundle
 from sat_dengue.tracking.exp03_1 import aggregate_projection
 
@@ -206,7 +206,9 @@ def test_persistence_error_classes(values: tuple, expected: str) -> None:
     assert error_class(*values) == expected
 
 
-def test_safe_bundle_tracking_and_blocked_preflight(repo_tmp_path: Path) -> None:
+def test_safe_bundle_tracking_and_blocked_preflight(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     value = bundle()
     validate_bundle(value)
     target = Path("tmp") / repo_tmp_path.name / "exp03-1-bundle.json"
@@ -214,8 +216,24 @@ def test_safe_bundle_tracking_and_blocked_preflight(repo_tmp_path: Path) -> None
     assert read_bundle(target, identity) == value
     aggregate = aggregate_projection(value)
     assert "municipality_code" not in repr(aggregate)
-    receipt = preflight({"profile": "exp03_1", "tracking": "disabled", "experiment_id": "EXP031"})
-    assert not receipt["execution_ready"] and not any(receipt["effects"].values())
+    monkeypatch.setenv("SAT_DENGUE_TRACKING_ROOT", "tmp/kedro-migration/exp03-1-mlflow")
+    receipt = preflight(
+        {"profile": "exp03_1", "tracking": "enabled", "experiment_id": "EXP031"},
+        source_descriptor(),
+    )
+    assert receipt["status"] == "structural_pass"
+    assert receipt["execution_ready"] is False
+    assert all(
+        receipt[key] == 0
+        for key in (
+            "real_private_reads",
+            "real_reservations",
+            "real_model_fits",
+            "real_calibrator_fits",
+            "real_threshold_selections",
+            "mlflow_writes",
+        )
+    )
     assert receipt["G5"] == "NOT_APPROVED" and receipt["champion"] == "not_selected"
     real = copy.deepcopy(value)
     real["synthetic"] = False
@@ -237,8 +255,11 @@ def test_safe_bundle_tracking_and_blocked_preflight(repo_tmp_path: Path) -> None
     wrong_protocol["protocol_sha256"] = "f" * 64
     with pytest.raises(ValueError, match="protocol"):
         validate_bundle(wrong_protocol)
-    with pytest.raises(PermissionError, match="unauthorized"):
-        preflight({"profile": "exp03_1", "tracking": "enabled", "experiment_id": "EXP031"})
+    with pytest.raises(ValueError, match="profile, tracking and experiment binding required"):
+        preflight(
+            {"profile": "exp03_1", "tracking": "disabled", "experiment_id": "EXP031"},
+            source_descriptor(),
+        )
 
 
 def test_source_free_example_is_complete_and_marked(repo_tmp_path: Path) -> None:
