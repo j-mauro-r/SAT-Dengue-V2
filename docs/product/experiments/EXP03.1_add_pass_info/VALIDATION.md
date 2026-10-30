@@ -21,3 +21,21 @@ Required final gates: focused contract/unit/integration tests; scoped Ruff check
 | Full public unit/contract/integration suite | FAIL (local private-inventory harness only) | 1,088 passed, 12 deselected; only `test_protected_inventory_when_locally_supplied` failed because the locally supplied private baseline pins the prior bytes of the explicitly updated active decision register `traking-concluciones.md`. The data-free CI path skips that private preservation assertion. The protected baseline was not edited or bypassed. |
 
 Independent diff/security review: **PASS AFTER FIXES** — five medium and one low finding resolved; no unresolved critical/high/medium finding. Remote CI remains **UNVERIFIED** until the PR runs complete.
+
+## New operational-path evidence
+
+The following checks cover only the new EXP03.1 operational boundary code and
+use in-memory fixtures, fit/calibration doubles, and a temporary SQLite
+tracking store under repository `tmp/`. They do not execute the experiment or
+read scientific input files.
+
+| Exact command | Result |
+| --- | --- |
+| `python -m py_compile src/sat_dengue/configuration.py src/sat_dengue/experiments/exp03_1_preflight.py src/sat_dengue/experiments/exp03_1_runner.py src/sat_dengue/experiments/exp03_1_reporting.py src/sat_dengue/experiments/exp03_1_evaluation.py src/sat_dengue/experiments/exp03_1_validate.py src/sat_dengue/tracking/exp03_1.py src/sat_dengue/datasets/exp03_1.py src/sat_dengue/pipeline_registry.py tests/integration/test_exp03_1_operational.py` | PASS |
+| `pytest -q tests/integration/test_exp03_1_operational.py` | PASS — 16 passed; one Kedro advisory about dataset names containing dots. The focused run exercises authorization accept/deny, pre-authorization admission barrier, source-manifest hash tampering, official-coverage zero/unknown semantics, both registered profiles and unknown-ID rejection, tracking-root separation, 96-cell executor with test doubles, controlled M00 reuse/refit planning, complete/incomplete real-bundle checks, bundle-manifest tamper rejection, and temporary-store parent/child correspondence. |
+| `git diff --check` | PASS |
+
+No experiment preflight command, scientific-source loader, real or synthetic
+experiment, fitted scientific estimator, calibration, permanent MLflow store,
+global suite, Ruff, Mypy, CI, DWP, or G5 gate was run during this operational
+implementation.
