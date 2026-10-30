@@ -101,9 +101,10 @@ class Exp03_1Tracking:
         from sat_dengue.experiments.exp03_1_contract import cells as frozen_cells
 
         expected = frozen_cells()
-        identity = lambda row: tuple(
-            row[name] for name in ("objective", "variant", "family", "horizon", "cut")
-        )
+
+        def identity(row: dict[str, Any]) -> tuple[Any, ...]:
+            return tuple(row[name] for name in ("objective", "variant", "family", "horizon", "cut"))
+
         if (
             len(cells) != len(expected)
             or {identity(row) for row in cells} != {identity(row) for row in expected}

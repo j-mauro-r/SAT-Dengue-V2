@@ -16,13 +16,16 @@ import yaml  # type: ignore[import-untyped]
 from sat_dengue.configuration import canonical_bytes
 from sat_dengue.experiments.exp01 import digest
 from sat_dengue.experiments.exp03 import load_protocol as load_exp03_protocol
+from sat_dengue.experiments.exp03_1_contract import MATRIX, PROTOCOL, counts, matrix, protocol
 from sat_dengue.experiments.exp03_preflight import (
-    OUTPUT_ROOT as EXP03_OUTPUT_ROOT,
     descriptor as exp03_descriptor,
+)
+from sat_dengue.experiments.exp03_preflight import (
     safe_path as exp03_safe_path,
+)
+from sat_dengue.experiments.exp03_preflight import (
     tracking_root as exp03_tracking_root,
 )
-from sat_dengue.experiments.exp03_1_contract import MATRIX, PROTOCOL, counts, matrix, protocol
 from sat_dengue.tracking.experiments import unique_object
 
 OUTPUT_ROOT = "tmp/kedro-migration/exp03-1-runs"
@@ -59,9 +62,7 @@ def _tracking_root() -> str:
 
 def _git_identity() -> dict[str, Any]:
     return {
-        "git_revision": subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], text=True
-        ).strip(),
+        "git_revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "git_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], text=True)),
     }
 

@@ -3,9 +3,6 @@
 from __future__ import annotations
 
 import json
-import os
-import shutil
-import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -51,9 +48,7 @@ class Exp03_1BundleDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
         tracker = data["tracker"]
         result = data["result"]
         try:
-            receipt = tracker.start_children(
-                result["cells"], result["protocol_sha256"]
-            )
+            receipt = tracker.start_children(result["cells"], result["protocol_sha256"])
             execution_id = Path(data["reservation"]).name.removesuffix(".reservation")
             destination = self._root / execution_id
             publication = write_real_bundle(

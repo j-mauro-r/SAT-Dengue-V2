@@ -10,6 +10,8 @@ from sat_dengue.experiments.exp01_runner import execute_authorized, load_authori
 from sat_dengue.experiments.exp03_1_preflight import preflight as exp03_1_preflight
 from sat_dengue.experiments.exp03_1_runner import (
     execute_authorized as execute_exp03_1_authorized,
+)
+from sat_dengue.experiments.exp03_1_runner import (
     load_authorized_sources as load_exp03_1_authorized_sources,
 )
 from sat_dengue.pipelines.data.pipeline import create_pipeline

@@ -151,6 +151,7 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
     """Close the real-result schema separately from the source-free demo schema."""
     import pandas as pd  # type: ignore[import-untyped]
 
+    from sat_dengue.experiments.exp03 import load_protocol as load_exp03_protocol
     from sat_dengue.experiments.exp03_1_contract import (
         cells,
         counts,
@@ -158,7 +159,6 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
         matrix,
         protocol,
     )
-    from sat_dengue.experiments.exp03 import load_protocol as load_exp03_protocol
     from sat_dengue.experiments.exp03_1_engine import variant_predictors
     from sat_dengue.experiments.exp03_1_evaluation import metrics
 
@@ -248,12 +248,11 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
     ):
         raise ValueError("Real EXP03.1 bundle does not retain its bound execution approval")
     expected_cells = cells()
-    expected_windows = {
-        row["id"]: row for row in load_exp03_protocol()["design"]["windows"]
-    }
-    identity = lambda row: tuple(
-        row[name] for name in ("objective", "variant", "family", "horizon", "cut")
-    )
+    expected_windows = {row["id"]: row for row in load_exp03_protocol()["design"]["windows"]}
+
+    def identity(row: dict[str, Any]) -> tuple[Any, ...]:
+        return tuple(row[name] for name in ("objective", "variant", "family", "horizon", "cut"))
+
     actual_cells = bundle["cells"]
     if (
         len(actual_cells) != counts()["maximum_refit_cells"]
@@ -283,9 +282,9 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
         )
     if any(len(values) != 1 for values in cohort_hashes.values()):
         raise ValueError("Real EXP03.1 variants do not share their objective/horizon cohort")
-    if len(bundle["thresholds"]) != 96 or {
-        row.get("cell_id") for row in bundle["thresholds"]
-    } != {row.get("cell_id") for row in actual_cells}:
+    if len(bundle["thresholds"]) != 96 or {row.get("cell_id") for row in bundle["thresholds"]} != {
+        row.get("cell_id") for row in actual_cells
+    }:
         raise ValueError("Real EXP03.1 threshold grid is incomplete")
     threshold_by_cell = {row["cell_id"]: row for row in bundle["thresholds"]}
     if any(
@@ -333,10 +332,8 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
             or float(row["exposure"]) < 0
             or pd.Period(row["target_month"], freq="M")
             != pd.Period(row["origin_month"], freq="M") + int(row["horizon"])
-            or not pd.Period(row["target_month"], freq="M").strftime("%Y-%m")
-            == row["target_month"]
-            or not pd.Period(row["origin_month"], freq="M").strftime("%Y-%m")
-            == row["origin_month"]
+            or not pd.Period(row["target_month"], freq="M").strftime("%Y-%m") == row["target_month"]
+            or not pd.Period(row["origin_month"], freq="M").strftime("%Y-%m") == row["origin_month"]
             or not expected_windows[row["cut"]]["evaluation"][0]
             <= row["target_month"]
             <= expected_windows[row["cut"]]["evaluation"][1]
@@ -346,9 +343,7 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
             )
         ):
             raise ValueError("Invalid real EXP03.1 prediction row")
-        prediction_keys.append(
-            (row["cell_id"], row["municipality_code"], row["target_month"])
-        )
+        prediction_keys.append((row["cell_id"], row["municipality_code"], row["target_month"]))
     if not prediction_keys or len(prediction_keys) != len(set(prediction_keys)):
         raise ValueError("Real EXP03.1 prediction rows are empty or duplicated")
     predictions_by_cell: dict[str, list[dict[str, Any]]] = {}
@@ -357,13 +352,10 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
     for row in actual_cells:
         cell_predictions = predictions_by_cell.get(row["cell_id"], [])
         threshold = threshold_by_cell[row["cell_id"]]["threshold"]
-        if (
-            len(cell_predictions) != row["rows"]
-            or any(
-                prediction["alert"]
-                != (False if threshold is None else prediction["score"] >= threshold)
-                for prediction in cell_predictions
-            )
+        if len(cell_predictions) != row["rows"] or any(
+            prediction["alert"]
+            != (False if threshold is None else prediction["score"] >= threshold)
+            for prediction in cell_predictions
         ):
             raise ValueError("Real EXP03.1 predictions do not match cell metrics or threshold")
         prediction_frame = pd.DataFrame(
@@ -504,7 +496,8 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
         if (
             left_prediction is None
             or right_prediction is None
-            or effect["alert_delta"] != int(left_prediction["alert"]) - int(right_prediction["alert"])
+            or effect["alert_delta"]
+            != int(left_prediction["alert"]) - int(right_prediction["alert"])
             or not math.isclose(
                 float(effect["score_delta"]),
                 float(left_prediction["score"]) - float(right_prediction["score"]),
@@ -515,10 +508,7 @@ def validate_real_bundle(bundle: dict[str, Any]) -> None:
             raise ValueError("Real EXP03.1 paired contrast differs from its predictions")
     plan = bundle["execution_plan"]
     reuse = bundle["reuse_decision"]
-    expected_plan = [
-        {**row, "origin": "new_fit"}
-        for row in expected_cells
-    ]
+    expected_plan = [{**row, "origin": "new_fit"} for row in expected_cells]
     if (
         reuse.get("schema") != "exp03-1-reuse-decision-v1"
         or reuse.get("decision") != "refitted"
@@ -627,9 +617,7 @@ def write_real_bundle(
         "matrix_sha256": bundle["matrix_sha256"],
         "configuration_sha256": provenance["configuration_sha256"],
         "tracking_receipt_sha256": hashlib.sha256(canonical_bytes(tracking_receipt)).hexdigest(),
-        "files": {
-            "bundle.json": {"sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
-        },
+        "files": {"bundle.json": {"sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}},
     }
     manifest = {**body, "bundle_id": hashlib.sha256(canonical_bytes(body)).hexdigest()}
     try:
@@ -785,10 +773,7 @@ def validate_real_mlflow(
         or parent_tags.get("protocol_sha256") != digest(p)
         or parent_tags.get("mlflow_receipt_sha256") != digest(receipt)
         or parent_tags.get("status") != expected_tag_status
-        or (
-            expected_bundle_id is not None
-            and parent_tags.get("bundle_id") != expected_bundle_id
-        )
+        or (expected_bundle_id is not None and parent_tags.get("bundle_id") != expected_bundle_id)
     ):
         raise ValueError("EXP03.1 MLflow parent tags differ from the bundle receipt")
     expected_tags = p["mlflow"]["required_conceptual_tags"]
@@ -810,17 +795,17 @@ def validate_real_mlflow(
             or run_statuses[run_id] != expected_run_status
             or any(actual.get(key) != value for key, value in expected_tags.items())
             or any(
-            actual.get(key) != str(value)
-            for key, value in {
-                "experiment_id": "EXP031",
-                "protocol_sha256": digest(p),
-                "cell_id": cell_id,
-                "variant": row["variant"],
-                "objective": row["objective"],
-                "family": row["family"],
-                "horizon": row["horizon"],
-                "cut": row["cut"],
-            }.items()
+                actual.get(key) != str(value)
+                for key, value in {
+                    "experiment_id": "EXP031",
+                    "protocol_sha256": digest(p),
+                    "cell_id": cell_id,
+                    "variant": row["variant"],
+                    "objective": row["objective"],
+                    "family": row["family"],
+                    "horizon": row["horizon"],
+                    "cut": row["cut"],
+                }.items()
             )
             or any(
                 actual_params.get(key) != str(value)

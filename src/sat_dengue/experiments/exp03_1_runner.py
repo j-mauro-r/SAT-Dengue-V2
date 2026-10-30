@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import hashlib
-import json
-import os
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
-import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 
 from sat_dengue.experiments.exp01 import digest
@@ -22,7 +20,6 @@ from sat_dengue.experiments.exp03_1_engine import (
 from sat_dengue.experiments.exp03_1_evaluation import metrics, paired_effect, select_threshold
 from sat_dengue.experiments.exp03_1_features import (
     KEYS,
-    PREDICTORS,
     paired_cohort,
     trajectory_features,
 )
@@ -73,9 +70,7 @@ def _apply_coverage(panel: pd.DataFrame, coverage: pd.DataFrame) -> pd.DataFrame
     return combined
 
 
-def load_authorized_sources(
-    receipt: dict[str, Any], parameters: dict[str, Any]
-) -> dict[str, Any]:
+def load_authorized_sources(receipt: dict[str, Any], parameters: dict[str, Any]) -> dict[str, Any]:
     """Authorize first, then admit and parse verified sources from isolated copies."""
     approval = authorize(receipt, parameters)
     from sat_dengue.datasets.legacy_preparation.contract import PreparationConfig
@@ -152,9 +147,7 @@ def execute_matrix(
         horizon = spec["horizon"]
         target = "onset_target" if spec["objective"] == "onset" else "excess_target"
         labels = (
-            ["onset_target"]
-            if spec["objective"] == "onset"
-            else ["onset_target", "excess_target"]
+            ["onset_target"] if spec["objective"] == "onset" else ["onset_target", "excess_target"]
         )
         common, _ledger = paired_cohort(
             prepared[horizon],
@@ -188,9 +181,7 @@ def execute_matrix(
         )
         selection_scores = calibrator(model.predict(selection[columns]))
         exposure = float(
-            exposure_table(parts)
-            .query("role == 'selection'")
-            .monitored_exposure.sum()
+            exposure_table(parts).query("role == 'selection'").monitored_exposure.sum()
         )
         threshold = select_threshold(
             selection.onset_target.astype(int),
@@ -215,9 +206,7 @@ def execute_matrix(
             }
         )
         evaluation_exposure = float(
-            exposure_table(parts)
-            .query("role == 'evaluation'")
-            .monitored_exposure.sum()
+            exposure_table(parts).query("role == 'evaluation'").monitored_exposure.sum()
         )
         exposure_rows = exposure_table(parts).query("role == 'evaluation'")
         exposure_by_municipality_year = {
@@ -365,8 +354,8 @@ def _reserve(provenance: dict[str, Any]) -> Path:
 
 def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
     """Revalidate approval and admission before opening tracking or fitting."""
-    from sat_dengue.experiments.exp03_admission import reverify
     from sat_dengue.experiments.exp03_1_contract import digest as protocol_digest
+    from sat_dengue.experiments.exp03_admission import reverify
     from sat_dengue.tracking.exp03_1 import Exp03_1Tracking
 
     receipt = sources["preflight"]
@@ -399,9 +388,7 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
         "mlflow_writes": 0,
     }
     reservation = _reserve(provenance)
-    tracker = Exp03_1Tracking(
-        digest(provenance), receipt["tracking_root"], protocol(), provenance
-    )
+    tracker = Exp03_1Tracking(digest(provenance), receipt["tracking_root"], protocol(), provenance)
     try:
         result = execute_matrix(sources["panel"], sources["contract"])
         reverify(sources["admission"])
@@ -410,16 +397,14 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
             real_calibrator_fits=result["execution_plan"]["counts"]["new_fits"],
             mlflow_writes=0,
         )
-        result["execution_counters"]["real_private_reads"] = len(
-            sources["admission"]["files"]
-        )
+        result["execution_counters"]["real_private_reads"] = len(sources["admission"]["files"])
         result["execution_counters"]["real_reservations"] = 1
-        result["execution_counters"]["real_model_fits"] = result["execution_plan"][
-            "counts"
-        ]["new_fits"]
-        result["execution_counters"]["real_calibrator_fits"] = result["execution_plan"][
-            "counts"
-        ]["new_fits"]
+        result["execution_counters"]["real_model_fits"] = result["execution_plan"]["counts"][
+            "new_fits"
+        ]
+        result["execution_counters"]["real_calibrator_fits"] = result["execution_plan"]["counts"][
+            "new_fits"
+        ]
         result["execution_counters"]["real_threshold_selections"] = 96
         return {
             "result": result,

@@ -13,15 +13,17 @@ import pandas as pd
 import pytest
 
 from sat_dengue.configuration import validate_parameters
+from sat_dengue.experiments import exp03_1_runner
 from sat_dengue.experiments.exp01 import digest
 from sat_dengue.experiments.exp03 import load_protocol as load_exp03_protocol
-from sat_dengue.experiments.exp03_admission import verified_file
 from sat_dengue.experiments.exp03_1_contract import (
     cells,
     counts,
-    digest as protocol_digest,
     matrix,
     protocol,
+)
+from sat_dengue.experiments.exp03_1_contract import (
+    digest as protocol_digest,
 )
 from sat_dengue.experiments.exp03_1_engine import execution_plan, reuse_decision, variant_predictors
 from sat_dengue.experiments.exp03_1_evaluation import metrics
@@ -37,7 +39,7 @@ from sat_dengue.experiments.exp03_1_reporting import (
     validate_real_mlflow,
     write_real_bundle,
 )
-from sat_dengue.experiments import exp03_1_runner
+from sat_dengue.experiments.exp03_admission import verified_file
 from sat_dengue.pipeline_registry import register_pipelines
 from sat_dengue.tracking.experiments import resolve_experiment
 
@@ -69,9 +71,7 @@ def _approval(receipt: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _write_approval(
-    monkeypatch: pytest.MonkeyPatch, receipt: dict[str, Any]
-) -> Path:
+def _write_approval(monkeypatch: pytest.MonkeyPatch, receipt: dict[str, Any]) -> Path:
     temp = tempfile.mkdtemp(prefix="exp03-1-approval-", dir=Path.cwd() / "tmp")
     path = Path(temp) / "approval.json"
     path.write_text(json.dumps(_approval(receipt)))
@@ -235,9 +235,7 @@ def _real_bundle() -> dict[str, Any]:
     provenance["approval_record"] = approval_record
     provenance["approval_sha256"] = digest(approval_record)
     reuse = reuse_decision({}, {})
-    cell_run_ids = {
-        row["cell_id"]: "child-" + row["cell_id"][:12] for row in cell_results
-    }
+    cell_run_ids = {row["cell_id"]: "child-" + row["cell_id"][:12] for row in cell_results}
     receipt = {
         "schema": "exp03-1-mlflow-receipt-v1",
         "parent_run_id": "parent-test",
@@ -547,7 +545,9 @@ def test_mlflow_lineage_is_read_only_verified_and_bound_to_results() -> None:
             }
             for key, value in parent_tags.items():
                 connection.execute("INSERT INTO tags VALUES (?, ?, ?)", ("parent-test", key, value))
-            connection.execute("INSERT INTO runs VALUES (?, ?, ?)", ("parent-test", "FINISHED", "1"))
+            connection.execute(
+                "INSERT INTO runs VALUES (?, ?, ?)", ("parent-test", "FINISHED", "1")
+            )
             for cell in bundle["cells"]:
                 run_id = receipt["cell_run_ids"][cell["cell_id"]]
                 connection.execute("INSERT INTO runs VALUES (?, ?, ?)", (run_id, "FINISHED", "1"))
@@ -608,9 +608,7 @@ def test_flat_cells_publish_and_finish_against_temporary_mlflow() -> None:
     from sat_dengue.tracking.exp03_1 import Exp03_1Tracking
 
     fixture = _real_bundle()
-    tracking_dir = Path(
-        tempfile.mkdtemp(prefix="exp03-1-finish-", dir=Path.cwd() / "tmp")
-    )
+    tracking_dir = Path(tempfile.mkdtemp(prefix="exp03-1-finish-", dir=Path.cwd() / "tmp"))
     tracking_root = tracking_dir.relative_to(Path.cwd()).as_posix()
     bundle_root = Path("tmp/kedro-migration/exp03-1-runs")
     execution_id = uuid.uuid4().hex
