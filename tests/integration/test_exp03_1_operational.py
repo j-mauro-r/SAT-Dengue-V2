@@ -340,6 +340,86 @@ def test_official_coverage_controls_zero_case_imputation() -> None:
     assert pd.isna(result.loc[("D", "2020-04"), "climate_value"])
 
 
+def test_read_coverage_excludes_post_reference_rows_before_parsing(
+    repo_tmp_path: Path,
+) -> None:
+    class Snapshot:
+        def resolve(self, _: str) -> Path:
+            return coverage_path
+
+    coverage_path = repo_tmp_path / "generated-coverage.csv"
+    pd.DataFrame(
+        {
+            "municipality_code": ["A", "A"],
+            "year_month": ["2024-12", "2025-01"],
+            "in_epi_coverage": ["True", "not-a-boolean"],
+        }
+    ).to_csv(coverage_path, index=False)
+    contract = {
+        "panel_path": "generated-coverage.csv",
+        "schema": [
+            {"name": "in_epi_coverage", "dtype": "bool", "nullable": True},
+        ],
+    }
+
+    coverage = exp03_1_runner._read_coverage(Snapshot(), contract)
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["A"],
+            "year_month": ["2024-12"],
+            "dengue_notifications_count": [pd.NA],
+            "dengue_grave_notifications_count": [pd.NA],
+        }
+    )
+    combined = exp03_1_runner._apply_coverage(panel, coverage)
+
+    assert coverage[["municipality_code", "year_month"]].to_dict("records") == [
+        {"municipality_code": "A", "year_month": "2024-12"}
+    ]
+    assert coverage.loc[0, "covered"]
+    assert combined.year_month.max() == "2024-12"
+    assert not combined.year_month.ge("2025-01").any()
+    assert combined.loc[0, "dengue_notifications_count"] == 0
+
+
+def test_load_authorized_sources_still_rejects_post_2024_rows(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from contextlib import nullcontext
+    from types import SimpleNamespace
+
+    from sat_dengue.experiments import exp01_inputs, exp03_admission
+
+    panel = pd.DataFrame(
+        {
+            "municipality_code": ["A"],
+            "year_month": ["2024-12"],
+            "dengue_notifications_count": [1.0],
+            "dengue_grave_notifications_count": [0.0],
+        }
+    )
+    coverage = pd.DataFrame(
+        {
+            "municipality_code": ["A"],
+            "year_month": ["2025-01"],
+            "covered": [True],
+        }
+    )
+    monkeypatch.setattr(exp03_1_runner, "authorize", lambda *_: {})
+    monkeypatch.setattr(exp03_admission, "admit_sources", lambda *_: {})
+    monkeypatch.setattr(exp03_admission, "reverify", lambda *_: None)
+    monkeypatch.setattr(exp03_admission, "verified_snapshot", lambda *_: nullcontext(None))
+    monkeypatch.setattr(
+        exp01_inputs,
+        "prepare_exp01_inputs",
+        lambda *_: SimpleNamespace(panel=panel, contract={}, report={}),
+    )
+    monkeypatch.setattr(exp03_1_runner, "_read_coverage", lambda *_: coverage)
+
+    with pytest.raises(ValueError, match="rejects source observations after 2024"):
+        exp03_1_runner.load_authorized_sources({}, {})
+
+
 def test_source_manifest_payload_hash_tampering_is_rejected(
     repo_tmp_path: Path,
 ) -> None:

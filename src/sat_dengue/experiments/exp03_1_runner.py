@@ -29,6 +29,7 @@ from sat_dengue.experiments.exp03_preflight import safe_path
 
 def _read_coverage(snapshot: Any, contract: dict[str, Any]) -> pd.DataFrame:
     from sat_dengue.datasets.legacy_preparation.pipeline import parse_fields
+    from sat_dengue.experiments.exp01_inputs import REFERENCE_END
 
     field = "in_epi_coverage"
     schema = [row for row in contract["schema"] if row["name"] == field]
@@ -41,6 +42,7 @@ def _read_coverage(snapshot: Any, contract: dict[str, Any]) -> pd.DataFrame:
         dtype="string",
         keep_default_na=False,
     )
+    coverage = coverage.loc[coverage.year_month.le(REFERENCE_END)].copy()
     coverage = parse_fields(coverage, {"schema": schema})
     if coverage.duplicated(KEYS).any():
         raise ValueError("EXP03.1 coverage keys must be unique")
