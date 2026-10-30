@@ -954,3 +954,87 @@ def test_training_tracking_still_uses_the_global_tracker(
     assert isinstance(hooks.tracker, FakeTracking)
     assert hooks.tracker.pipeline == "training_synthetic"
     assert hooks.tracker.run_id == "training-test"
+
+
+def test_exp03_1_bundle_dataset_accepts_exact_relative_root(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from sat_dengue.datasets.exp03_1 import Exp03_1BundleDataset
+    from sat_dengue.experiments.exp03_1_preflight import OUTPUT_ROOT
+
+    monkeypatch.chdir(tmp_path)
+
+    dataset = Exp03_1BundleDataset(OUTPUT_ROOT)
+
+    assert dataset._root == Path(OUTPUT_ROOT)
+
+
+def test_exp03_1_bundle_dataset_accepts_exact_repository_absolute_root(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from sat_dengue.datasets.exp03_1 import Exp03_1BundleDataset
+    from sat_dengue.experiments.exp03_1_preflight import OUTPUT_ROOT
+
+    monkeypatch.chdir(tmp_path)
+    absolute_root = tmp_path / OUTPUT_ROOT
+
+    dataset = Exp03_1BundleDataset(str(absolute_root))
+
+    assert dataset._root == Path(OUTPUT_ROOT)
+
+
+@pytest.mark.parametrize(
+    "filepath",
+    ["tmp/kedro-migration/exp03-1-runs/other", "/tmp/scientific-mlflow"],
+)
+def test_exp03_1_bundle_dataset_rejects_other_absolute_roots(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, filepath: str
+) -> None:
+    from sat_dengue.datasets.exp03_1 import Exp03_1BundleDataset
+
+    monkeypatch.chdir(tmp_path)
+    absolute_path = filepath if Path(filepath).is_absolute() else str(tmp_path / filepath)
+
+    with pytest.raises(ValueError, match="protected repository tmp path"):
+        Exp03_1BundleDataset(absolute_path)
+
+
+@pytest.mark.parametrize(
+    "symlink_component",
+    ["tmp", "tmp/kedro-migration", "tmp/kedro-migration/exp03-1-runs"],
+)
+def test_exp03_1_bundle_dataset_rejects_symlink_components(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, symlink_component: str
+) -> None:
+    from sat_dengue.datasets.exp03_1 import Exp03_1BundleDataset
+    from sat_dengue.experiments.exp03_1_preflight import OUTPUT_ROOT
+
+    repository_root = tmp_path / "repository"
+    repository_root.mkdir()
+    link = repository_root / symlink_component
+    link.parent.mkdir(parents=True, exist_ok=True)
+    target = tmp_path / f"target-{Path(symlink_component).name}"
+    target.mkdir()
+    link.symlink_to(target, target_is_directory=True)
+    monkeypatch.chdir(repository_root)
+
+    with pytest.raises(ValueError, match="protected repository tmp path"):
+        Exp03_1BundleDataset(str(repository_root / OUTPUT_ROOT))
+
+
+def test_exp03_1_bundle_dataset_materialized_kedro_filepath_constructs_without_writing(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from sat_dengue.datasets.exp03_1 import Exp03_1BundleDataset
+    from sat_dengue.experiments.exp03_1_preflight import OUTPUT_ROOT
+
+    monkeypatch.chdir(tmp_path)
+    filepath = str(tmp_path / OUTPUT_ROOT)
+
+    dataset = Exp03_1BundleDataset(filepath)
+
+    assert dataset._describe() == {
+        "filepath": OUTPUT_ROOT,
+        "mode": "atomic_no_overwrite_real_only",
+    }
+    assert not (tmp_path / OUTPUT_ROOT).exists()
