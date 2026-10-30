@@ -8,6 +8,12 @@ from sat_dengue.experiments.exp01 import synthetic_run
 from sat_dengue.experiments.exp01_preflight import preflight
 from sat_dengue.experiments.exp01_runner import execute_authorized, load_authorized_sources
 from sat_dengue.experiments.exp03_1_preflight import preflight as exp03_1_preflight
+from sat_dengue.experiments.exp03_1_runner import (
+    execute_authorized as execute_exp03_1_authorized,
+)
+from sat_dengue.experiments.exp03_1_runner import (
+    load_authorized_sources as load_exp03_1_authorized_sources,
+)
 from sat_dengue.pipelines.data.pipeline import create_pipeline
 from sat_dengue.pipelines.evaluation.pipeline import create_replay_pipeline as evaluation_replay
 from sat_dengue.pipelines.evaluation.pipeline import (
@@ -87,14 +93,30 @@ def register_pipelines() -> dict[str, Pipeline]:
         [
             node(
                 exp03_1_preflight,
-                inputs="parameters",
+                inputs=["parameters", "exp03_1_sources"],
                 outputs="exp03_1_preflight_receipt",
                 name="exp03_1_preflight",
             )
         ]
     )
+    exp03_1_real = exp03_1_check + Pipeline(
+        [
+            node(
+                load_exp03_1_authorized_sources,
+                inputs=["exp03_1_preflight_receipt", "parameters"],
+                outputs="exp03_1_authorized_sources",
+                name="exp03_1_authorize_and_load",
+            ),
+            node(
+                execute_exp03_1_authorized,
+                inputs="exp03_1_authorized_sources",
+                outputs="exp03_1_bundle",
+                name="exp03_1_execute_frozen_matrix",
+            ),
+        ]
+    )
     return {
-        "exp03_1": exp03_1_check,
+        "exp03_1": exp03_1_real,
         "exp03_1_preflight": exp03_1_check,
         "exp03": exp03_real,
         "exp03_preflight": exp03_check,

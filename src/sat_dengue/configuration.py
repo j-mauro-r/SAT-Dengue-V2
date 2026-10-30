@@ -62,6 +62,8 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "exp03",
         "exp03_preflight",
         "exp03_synthetic",
+        "exp03_1",
+        "exp03_1_preflight",
         "exp01_synthetic",
         "exp02_synthetic",
         "exp02",
@@ -87,6 +89,10 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         experiment_id != "EXP03" or value["tracking"] != "enabled"
     ):
         raise ValueError("EXP03 requires experiment_id=EXP03 and enabled tracking")
+    if value["profile"] in {"exp03_1", "exp03_1_preflight"} and (
+        experiment_id != "EXP031" or value["tracking"] != "enabled"
+    ):
+        raise ValueError("EXP03.1 requires experiment_id=EXP031 and enabled tracking")
     if value["profile"] == "exp03_synthetic" and (
         value["tracking"] != "disabled" or experiment_id != "EXP03"
     ):

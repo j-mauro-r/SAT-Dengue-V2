@@ -167,7 +167,9 @@ def paired_effect(left: pd.DataFrame, right: pd.DataFrame, keys: list[str]) -> p
         if name in left or name in right
     ]
     if any(
-        name not in left or name not in right or not left[name].equals(right[name])
+        name not in left
+        or name not in right
+        or not left[name].reset_index(drop=True).equals(right[name].reset_index(drop=True))
         for name in shared
     ):
         raise ValueError("EXP03.1 contrasts require identical labels, strata and exposures")

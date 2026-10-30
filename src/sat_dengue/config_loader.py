@@ -91,6 +91,11 @@ CATALOG["exp03_bundle"] = {
     "type": "sat_dengue.datasets.exp03.Exp03BundleDataset",
     "filepath": "tmp/kedro-migration/exp03-runs",
 }
+CATALOG["exp03_1_sources"] = {"type": "sat_dengue.datasets.exp03_1.Exp03_1SourcesDataset"}
+CATALOG["exp03_1_bundle"] = {
+    "type": "sat_dengue.datasets.exp03_1.Exp03_1BundleDataset",
+    "filepath": "tmp/kedro-migration/exp03-1-runs",
+}
 
 
 class ValidatedConfigLoader(OmegaConfigLoader):
