@@ -40,6 +40,7 @@ from sat_dengue.experiments.exp03_1_reporting import (
     write_real_bundle,
 )
 from sat_dengue.experiments.exp03_admission import verified_file
+from sat_dengue.hooks import TrackingHooks
 from sat_dengue.pipeline_registry import register_pipelines
 from sat_dengue.tracking.experiments import resolve_experiment
 
@@ -881,3 +882,75 @@ def test_exp03_1_parameters_are_registered_and_unknown_identities_rejected(
         resolve_experiment("EXP999")
     with pytest.raises(ValueError, match="Unknown profile"):
         validate_parameters({**params, "profile": "exp03_999"})
+
+
+@pytest.mark.parametrize("pipeline", ["exp03_1", "exp03_1_preflight"])
+def test_exp03_1_tracking_is_delegated_to_its_dedicated_infrastructure(
+    monkeypatch: pytest.MonkeyPatch, pipeline: str
+) -> None:
+    from kedro.io import DataCatalog, MemoryDataset
+
+    def reject_global_tracker(*_: Any, **__: Any) -> Any:
+        pytest.fail("EXP03.1 must not create the global tracker")
+
+    monkeypatch.setattr("sat_dengue.tracking.local.LocalTracking", reject_global_tracker)
+    catalog = DataCatalog(
+        {
+            "parameters": MemoryDataset(
+                {
+                    "profile": pipeline,
+                    "tracking": "enabled",
+                    "experiment_id": "EXP031",
+                }
+            )
+        }
+    )
+    hooks = TrackingHooks()
+    hooks.before_pipeline_run({"pipeline_name": pipeline}, catalog)
+
+    assert hooks.tracker is None
+
+
+def test_exp03_1_tracking_rejects_pipeline_profile_mismatch() -> None:
+    from kedro.io import DataCatalog, MemoryDataset
+
+    catalog = DataCatalog(
+        {
+            "parameters": MemoryDataset(
+                {
+                    "profile": "exp03_1_preflight",
+                    "tracking": "enabled",
+                    "experiment_id": "EXP031",
+                }
+            )
+        }
+    )
+
+    with pytest.raises(ValueError, match="EXP03.1 profile must match its exact pipeline"):
+        TrackingHooks().before_pipeline_run({"pipeline_name": "exp03_1"}, catalog)
+
+
+def test_training_tracking_still_uses_the_global_tracker(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from kedro.io import DataCatalog, MemoryDataset
+
+    class FakeTracking:
+        def __init__(self, pipeline: str, run_id: str, *, experiment_id: str | None = None) -> None:
+            self.pipeline = pipeline
+            self.run_id = run_id
+            self.experiment_id = experiment_id
+
+    monkeypatch.setattr("sat_dengue.tracking.local.LocalTracking", FakeTracking)
+    catalog = DataCatalog(
+        {"parameters": MemoryDataset({"profile": "training_synthetic", "tracking": "enabled"})}
+    )
+    hooks = TrackingHooks()
+    hooks.before_pipeline_run(
+        {"pipeline_name": "training_synthetic", "session_id": "training-test"},
+        catalog,
+    )
+
+    assert isinstance(hooks.tracker, FakeTracking)
+    assert hooks.tracker.pipeline == "training_synthetic"
+    assert hooks.tracker.run_id == "training-test"

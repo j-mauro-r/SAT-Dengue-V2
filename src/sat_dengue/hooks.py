@@ -48,6 +48,13 @@ class TrackingHooks:
                 raise ValueError("EXP02 profile must match its exact pipeline")
             # The EXP02 publication boundary owns tracking after authorization.
             return
+        if pipeline in {"exp03_1", "exp03_1_preflight"} or parameters["profile"] in {
+            "exp03_1",
+            "exp03_1_preflight",
+        }:
+            if pipeline != parameters["profile"]:
+                raise ValueError("EXP03.1 profile must match its exact pipeline")
+            return
         if parameters["tracking"] == "disabled":
             return
         if parameters["tracking"] != "enabled":
