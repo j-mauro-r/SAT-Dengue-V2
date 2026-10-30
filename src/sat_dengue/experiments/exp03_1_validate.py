@@ -15,9 +15,7 @@ from sat_dengue.experiments.exp03_1_reporting import (
 
 def validate(path: Path, expected_bundle_id: str, tracking_root: str) -> dict[str, Any]:
     publication = read_real_bundle(path, expected_bundle_id)
-    validate_real_mlflow(
-        publication["bundle"], tracking_root, publication["manifest"]["bundle_id"]
-    )
+    validate_real_mlflow(publication["bundle"], tracking_root, publication["manifest"]["bundle_id"])
     return {
         "status": "verified",
         "bundle_id": publication["manifest"]["bundle_id"],
