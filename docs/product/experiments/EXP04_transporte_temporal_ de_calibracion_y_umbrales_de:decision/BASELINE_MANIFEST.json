@@ -1,27 +1,40 @@
 {
-  "status": "BLOCKED_BASELINE",
+  "status": "VERIFIED_OBSERVABLE_REPLAY",
   "source_experiment": "EXP03.1",
   "source_variant": "M00",
   "original_identity": {
     "bundle_id": "afcb8b4a6cb512c1247fc52c5d9786a3f0d245663981a29f8f23ac76873a3e04",
     "bundle_sha256": "5b3f20a266c5e6aae7d2727a00a2213ea9cc3bc691bac5f02267a3e44edc5619",
     "manifest_sha256": "3315c0ab1349a404aca1e824d7d7527dfeaf22c9772fce2691700efcb3bbdd38",
-    "git_revision": "001911f1e45874f36b74922094be4eb32ae7256e"
+    "git_revision": "001911f1e45874f36b74922094be4eb32ae7256e",
+    "parent_run_id": "a37877c20dbd4b1382567e79e8d89e7b"
   },
-  "reconstruction_identity": null,
-  "equivalence": "NOT_VERIFIABLE_FROM_AVAILABLE_ARTIFACTS",
+  "reconstruction_identity": {
+    "kind": "observable_replay_not_original_intermediate_state_identity",
+    "bundle_path": "tmp/kedro-migration/exp03-1-runs/4fd644502e8fb2bb18155060bba68aedd7fc295cf66e16401b91c44af72781de",
+    "bundle_id": "732a9d7743b4c54d9252adf7095f2c4e2775cd4d6472446d2bd2e41a476927f4",
+    "bundle_sha256": "e6c6325dbc948fa0d0a654c3af13f2898f7697747ce19846766311392f76e155",
+    "manifest_sha256": "99807fc011228954ffbbda16bb7e7680ea066d44db5dd9c63ca124fd53f321cf",
+    "replay_manifest_sha256": "78f5764092fad8ec0825a3c35b72a4253c84c8982721a9f1ddf7ba517fdc9e41",
+    "parent_run_id": "2c932c4bcffa475280cec95f50e1533d",
+    "protocol_sha256": "46f287468ace7cee7c67220b871cf85a7a9c0670a131d80838d3baf147da0075",
+    "matrix_sha256": "967ce5facc06b9c27a41df98d990cdd703828621e3a6632151aa43388e43aaa7",
+    "git_revision": "1c5dfd23cb8ebf807c66f68898b61279d65c1cc5",
+    "code_sha256": "f0b82982c0d1fcb7042a1036c71ffb3a8426a005ac0e5ff872eb8b09019d6482",
+    "configuration_sha256": "af5be14909107ebbfca449dbfe63122122c686d06ce52c23ffc2c6403926301c",
+    "environment_sha256": "5f975b1547c0607cf407274526bf76a7cb6c8ee7d98241317070a2d0abc8b244",
+    "tracking_receipt_sha256": "5a982c0931f33132872dd7de9fe1e38a5c7d6d1c8d7470f836edd35154f7f17e",
+    "replay_protocol": "exp03-1-replay-persistence-v1"
+  },
+  "equivalence": "EXACT_OBSERVABLE_REPLAY",
   "missing_dependencies": [
-    "original_M00_fitted_predictor_and_preparer_with_output_identity",
-    "original_M00_fitted_calibrator_coefficients_with_output_identity",
-    "original_M00_raw_calibration_selection_and_evaluation_scores",
     "per_score_training_cutoff_label_maturity_and_role_membership",
-    "verified_prior_OOF_history_for_rolling_windows",
-    "original_runtime_native_library_and_numerical_environment_identity"
+    "verified_prior_OOF_history_for_rolling_windows"
   ],
   "private_source_reads": 0,
   "model_fits": 0,
   "mlflow_writes": 0,
-  "reason": "configuration_and_seed_are_not_original_fitted_state_evidence",
+  "reason": "verified_exact_replay_of_retained_observables_temporal_OOF_evaluability_is_independent",
   "source_reuse_decision": "refitted",
   "ordered_predictors": [
     "dengue_lag_1",
@@ -189,11 +202,302 @@
     "variant"
   ],
   "M00_cells": 36,
-  "fitted_calibrator_state": null,
-  "raw_score_artifacts": null,
+  "fitted_calibrator_state": {
+    "origin": "M00-REPLAY-v1",
+    "artifact": "replay/<M00_cell_id>/state.json#/calibrator",
+    "historical_original": "NOT_COMPARABLE"
+  },
+  "raw_score_artifacts": {
+    "origin": "M00-REPLAY-v1",
+    "artifact": "replay/<M00_cell_id>/state.json#/metadata/roles/<role>/frame",
+    "roles": [
+      "calibration",
+      "selection",
+      "evaluation"
+    ],
+    "columns": [
+      "raw_score",
+      "score"
+    ],
+    "historical_original": "NOT_COMPARABLE"
+  },
   "private_reads_discrepancy": {
     "execution_counters": 8,
     "provenance": 1,
     "resolution": "UNRESOLVED"
+  },
+  "baseline_id": "M00-REPLAY-v1",
+  "EXP04_status": "BLOCKED_TEMPORAL_OOF",
+  "validator_status": "verified",
+  "comparable_cells": 96,
+  "comparable_predictions": 60207,
+  "observable_differences": [],
+  "comparison_correction": "canonical_numeric_type_normalization_v1",
+  "stored_comparison_status": "REPLAY_MISMATCH",
+  "scientific_reference_replacement": false,
+  "artifact_ownership": {
+    "predictor": "replay/<M00_cell_id>/model.native",
+    "preparer": "replay/<M00_cell_id>/state.json#/preparer",
+    "calibrator": "replay/<M00_cell_id>/state.json#/calibrator",
+    "raw_scores": "replay/<M00_cell_id>/state.json#/metadata/roles/<role>/frame",
+    "origin": "M00-REPLAY-v1",
+    "integrity_inventory": "replay/manifest.json#files",
+    "original_intermediate_identity": "NOT_COMPARABLE"
+  },
+  "historical_intermediates": {
+    "calibration_scores": "NOT_COMPARABLE",
+    "calibrator": "NOT_COMPARABLE",
+    "observed_environment": "NOT_COMPARABLE",
+    "predictor": "NOT_COMPARABLE",
+    "preparer": "NOT_COMPARABLE",
+    "raw_scores": "NOT_COMPARABLE",
+    "score_temporal_provenance": "NOT_COMPARABLE",
+    "selection_scores": "NOT_COMPARABLE",
+    "selection_tie_groups": "NOT_COMPARABLE",
+    "threshold_selection_details": "NOT_COMPARABLE",
+    "training_and_role_membership": "NOT_COMPARABLE"
+  },
+  "baseline_dependency_disposition": {
+    "original_M00_fitted_predictor_and_preparer_with_output_identity": "replay_objects_available_original_intermediates_NOT_COMPARABLE",
+    "original_M00_fitted_calibrator_coefficients_with_output_identity": "replay_coefficients_available_original_calibrator_NOT_COMPARABLE",
+    "original_M00_raw_calibration_selection_and_evaluation_scores": "replay_raw_scores_available_original_raw_scores_NOT_COMPARABLE",
+    "original_runtime_native_library_and_numerical_environment_identity": "original_environment_NOT_COMPARABLE_replay_environment_recorded"
+  },
+  "remaining_dependency_details": {
+    "per_score_training_cutoff_label_maturity_and_role_membership": "role_membership_is_persisted_but_training_label_availability_cutoff_and_label_maturity_are_not",
+    "verified_prior_OOF_history_for_rolling_windows": "no_compatible_mature_nested_history_is_accredited_by_the_persisted_roles"
+  },
+  "activity_scope": "read_only_documentary_closure_no_new_scientific_execution",
+  "G5": "NOT_APPROVED",
+  "champion": "not_selected",
+  "oof_history_assessment": {
+    "status": "NOT_EVALUABLE",
+    "scope": "all_36_M00_cells_grouped_only_where_support_is_identical_across_families",
+    "families": ["gam","lightgbm","xgboost"],
+    "time_unit": "target_month",
+    "raw_scores_roles": ["calibration","selection","evaluation"],
+    "raw_score_origin": "frozen_EXP03.1_roles_no_additional_OOF",
+    "out_of_sample_by_disjoint_training_target_keys": true,
+    "raw_role_targets_after_training_targets": true,
+    "genuinely_temporal_OOF": "UNKNOWN",
+    "training_label_availability_cutoff": null,
+    "label_available_at": null,
+    "availability_status": "historical_availability_unverified",
+    "maturity": "UNKNOWN",
+    "available_mature_OOF_months": null,
+    "role_target_keys_pairwise_disjoint": true,
+    "chronological_nested_selection": "UNKNOWN",
+    "window_status_for_every_listed_cell": {
+      "12_months": "NOT_EVALUABLE",
+      "24_months": "NOT_EVALUABLE",
+      "36_months": "NOT_EVALUABLE",
+      "expanding": "UNKNOWN"
+    },
+    "window_reasons": {
+      "fixed_windows": "only_the_same_predictor_calibration_role_is_admissible_without_reassigning_roles_6_months_T+1_or_5_months_T+2_are_less_than_12_24_36",
+      "expanding": "both_classes_and_contiguous_observed_calibration_months_exist_but_no_last_mature_month_training_label_availability_or_nested_freeze_schedule_is_documented"
+    },
+    "separation": "target_event_roles_are_disjoint_but_maturity_and_decision_freeze_before_selection_and_evaluation_are_not_accredited",
+    "continuity": "support_arrays_report_observed_months_and_missing_months_against_each_declared_role_not_per_municipality_coverage",
+    "training_relation": "train_support_has_no_raw_scores_calibration_targets_follow_training_targets_but_first_calibration_issue_month_equals_the_last_training_target_month_in_every_cell_so_target_order_does_not_prove_label_availability_at_issue",
+    "pooling": "none_selection_and_evaluation_are_not_reused_as_calibration_training_rows_are_not_OOF_and_distinct_predictor_snapshots_are_not_pooled",
+    "stress_2024": "evaluation_only_no_policy_selection",
+    "year_2025": "NOT_EVALUABLE",
+    "support_columns": ["first_target","last_target","observed_months","rows","positives","negatives","missing_declared_target_months","first_origin","last_origin"],
+    "support_definition": "counts_are_persisted_role_labels_for_the_listed_objective_not_verified_mature_OOF_support",
+    "cell_groups": [
+      {
+        "cut": "development_2020",
+        "horizon": 1,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-07","2018-12",78,4081,665,3416,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2018-11"],
+          "calibration": ["2019-01","2019-06",6,227,71,156,[],"2018-12","2019-05"],
+          "selection": ["2019-07","2019-12",6,149,47,102,[],"2019-06","2019-11"],
+          "evaluation": ["2020-01","2020-12",12,661,69,592,[],"2019-12","2020-11"]
+        },
+        "cells": {
+          "gam": "246105165ff66b86d327580c6baa6ac5e57fc67faa8d6d9e30d1ae3415091eed",
+          "lightgbm": "ccf82ea8eba531ad4f486fa3725c794d18fac8862c3c55e418f63f0a025165ad",
+          "xgboost": "0dac632de38fc1e7074c291d7e186e3077224b6c02f99c2546e436f5426e3e9c"
+        }
+      },
+      {
+        "cut": "development_2021",
+        "horizon": 1,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-07","2019-12",90,4457,783,3674,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2019-11"],
+          "calibration": ["2020-01","2020-06",6,259,36,223,[],"2019-12","2020-05"],
+          "selection": ["2020-07","2020-12",6,402,33,369,[],"2020-06","2020-11"],
+          "evaluation": ["2021-01","2021-12",12,846,52,794,[],"2020-12","2021-11"]
+        },
+        "cells": {
+          "gam": "a69484d31b2dfbf5d53d0dc91ae14298f3d8930d2fb659a7bd7537f40bd2aac8",
+          "lightgbm": "ab02e11f6eb7690c6c668dbab4d0c689384500857c04f2807d3b45945c82f265",
+          "xgboost": "fa01694e92a2015e40de21966d11e3e4dd683bb642c2f77d1402db1b5514fb81"
+        }
+      },
+      {
+        "cut": "development_2022",
+        "horizon": 1,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-07","2020-12",102,5118,852,4266,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2020-11"],
+          "calibration": ["2021-01","2021-06",6,424,18,406,[],"2020-12","2021-05"],
+          "selection": ["2021-07","2021-12",6,422,34,388,[],"2021-06","2021-11"],
+          "evaluation": ["2022-01","2022-12",12,693,89,604,[],"2021-12","2022-11"]
+        },
+        "cells": {
+          "gam": "40e6a094f9fb749126d9e4bad85094722f43ae8d533e69a783b9020e244554f8",
+          "lightgbm": "7f1ffa1c5957ba34fbcf15ed5fab1ae84c955b4eee323bcbd978b5492bb30750",
+          "xgboost": "8fbcabb1338f5ac90ee3c90628ef3a53d3c88cc307c5058b3f6f022aa01cb9fd"
+        }
+      },
+      {
+        "cut": "stress_2024",
+        "horizon": 1,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-07","2022-12",126,6657,993,5664,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2022-11"],
+          "calibration": ["2023-01","2023-06",6,218,74,144,[],"2022-12","2023-05"],
+          "selection": ["2023-07","2023-12",6,192,51,141,[],"2023-06","2023-11"],
+          "evaluation": ["2024-01","2024-12",12,453,103,350,[],"2023-12","2024-11"]
+        },
+        "cells": {
+          "gam": "88da7a1a57b08780de1f8ee019ad4600959bfcbd5de11b6d0ccede829f26a522",
+          "lightgbm": "9d1e4b360ed923312e20d13e8630b2942f7222ca3750ea451b7392ff3e523ac0",
+          "xgboost": "bf74848a0dbbfea79794645f4d64ba1a2f0fd76677a0b98c52193769d4c52dd3"
+        }
+      },
+      {
+        "cut": "development_2020",
+        "horizon": 2,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-08","2018-12",77,4028,436,3592,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2018-10"],
+          "calibration": ["2019-02","2019-06",5,207,48,159,["2019-01"],"2018-12","2019-04"],
+          "selection": ["2019-08","2019-12",5,128,22,106,["2019-07"],"2019-06","2019-10"],
+          "evaluation": ["2020-02","2020-12",11,588,51,537,["2020-01"],"2019-12","2020-10"]
+        },
+        "cells": {
+          "gam": "a77f4aa404add5202aec5030aa5b07b05ed37d2f51ae8c01c788c6d5ac2cab32",
+          "lightgbm": "b5fff1cd93ec43903d32c52c644b3256d3dd4f21d0ae89d2c127e9333c7a4c97",
+          "xgboost": "adc4843651cd887fa719450bb17542c605243fde0d1b3caaa63df8473b6cde4b"
+        }
+      },
+      {
+        "cut": "development_2021",
+        "horizon": 2,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-08","2019-12",89,4436,518,3918,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2019-10"],
+          "calibration": ["2020-02","2020-06",5,202,24,178,["2020-01"],"2019-12","2020-04"],
+          "selection": ["2020-08","2020-12",5,329,21,308,["2020-07"],"2020-06","2020-10"],
+          "evaluation": ["2021-02","2021-12",11,779,45,734,["2021-01"],"2020-12","2021-10"]
+        },
+        "cells": {
+          "gam": "2af98fabfd716d75134695b389d6904fd9aaf701ffbea8e78c1ece16f1c950aa",
+          "lightgbm": "650a316aedbdd7d28c7add7b6b74586ce34c800e48e576ad8e6118243c61cf6e",
+          "xgboost": "5f2c29c3afd6837bf18535e067525527c2bc012e3747b648778a0e84d6f03f1d"
+        }
+      },
+      {
+        "cut": "development_2022",
+        "horizon": 2,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-08","2020-12",101,5045,571,4474,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2020-10"],
+          "calibration": ["2021-02","2021-06",5,355,14,341,["2021-01"],"2020-12","2021-04"],
+          "selection": ["2021-08","2021-12",5,355,30,325,["2021-07"],"2021-06","2021-10"],
+          "evaluation": ["2022-02","2022-12",11,641,62,579,["2022-01"],"2021-12","2022-10"]
+        },
+        "cells": {
+          "gam": "a196e08bf16b1a0d2de253bf4a412fc99b5c96640a3fd156ac089fb61dbac0a7",
+          "lightgbm": "02b3d50c99b5cfcce646b05af3731e75a41ed288959495b005f2fb0016b1011f",
+          "xgboost": "943b562314ab023678a33ea2fc9deca7495ec3942dd4a4f0d4e698f47d4bfb82"
+        }
+      },
+      {
+        "cut": "stress_2024",
+        "horizon": 2,
+        "objective": "onset",
+        "roles": {
+          "train": ["2012-08","2022-12",125,6605,687,5918,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2022-10"],
+          "calibration": ["2023-02","2023-06",5,193,43,150,["2023-01"],"2022-12","2023-04"],
+          "selection": ["2023-08","2023-12",5,153,25,128,["2023-07"],"2023-06","2023-10"],
+          "evaluation": ["2024-02","2024-12",11,414,61,353,["2024-01"],"2023-12","2024-10"]
+        },
+        "cells": {
+          "gam": "907a2dcd7239ed20a859923367de544e2b27536b66fc7c39c24f42a827236679",
+          "lightgbm": "2f22ef49415013376f1a8a6b7e33a2481eaa831fc7900322f5b94b68da9ce3f7",
+          "xgboost": "81a4e22d21cd66176e08ff1789e7f1ae3da8d2c6440e245a3893147c9b8a513f"
+        }
+      },
+      {
+        "cut": "development_2020",
+        "horizon": 2,
+        "objective": "excess_control",
+        "roles": {
+          "train": ["2012-08","2018-12",77,4028,739,3289,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2018-10"],
+          "calibration": ["2019-02","2019-06",5,207,87,120,["2019-01"],"2018-12","2019-04"],
+          "selection": ["2019-08","2019-12",5,128,50,78,["2019-07"],"2019-06","2019-10"],
+          "evaluation": ["2020-02","2020-12",11,588,72,516,["2020-01"],"2019-12","2020-10"]
+        },
+        "cells": {
+          "gam": "b3987d49834d41b378c3c2303ad731f85360e66183c4c9e5a6052cbef7f275ea",
+          "lightgbm": "afadd9d8158d874d8d2cae4d7a4838d5b22210e9ce1cd8f97d57b23ec9621efb",
+          "xgboost": "294a6883b6f0693b84c98ab52be691fc593b56842f14517e2b0aea8d31e2999b"
+        }
+      },
+      {
+        "cut": "development_2021",
+        "horizon": 2,
+        "objective": "excess_control",
+        "roles": {
+          "train": ["2012-08","2019-12",89,4436,895,3541,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2019-10"],
+          "calibration": ["2020-02","2020-06",5,202,37,165,["2020-01"],"2019-12","2020-04"],
+          "selection": ["2020-08","2020-12",5,329,29,300,["2020-07"],"2020-06","2020-10"],
+          "evaluation": ["2021-02","2021-12",11,779,56,723,["2021-01"],"2020-12","2021-10"]
+        },
+        "cells": {
+          "gam": "12f691eade1bc453bb8e0645fbba31976b348e440296e5431ea773aad0e0fbdd",
+          "lightgbm": "413214a212b424fa1675f0885f4451e79b36eb0eb8d89f6efebe632a11c98307",
+          "xgboost": "8c01108dc99a045e880bcb62c88c5469ea3ba4a2867c839dd5261be7ae4a0956"
+        }
+      },
+      {
+        "cut": "development_2022",
+        "horizon": 2,
+        "objective": "excess_control",
+        "roles": {
+          "train": ["2012-08","2020-12",101,5045,969,4076,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2020-10"],
+          "calibration": ["2021-02","2021-06",5,355,18,337,["2021-01"],"2020-12","2021-04"],
+          "selection": ["2021-08","2021-12",5,355,37,318,["2021-07"],"2021-06","2021-10"],
+          "evaluation": ["2022-02","2022-12",11,641,101,540,["2022-01"],"2021-12","2022-10"]
+        },
+        "cells": {
+          "gam": "25d3c567ba2d1302a13c4f14e3b1d5579f3d86115e8d4e75063de55f26b997ab",
+          "lightgbm": "36e6103048e03f1010449d75ee12d61b95fe8708aebf461ec53cba7007120604",
+          "xgboost": "d563be7bb4329acfb22bc2a0bcdfde869002784587140a46e2a0674c419adef9"
+        }
+      },
+      {
+        "cut": "stress_2024",
+        "horizon": 2,
+        "objective": "excess_control",
+        "roles": {
+          "train": ["2012-08","2022-12",125,6605,1142,5463,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2022-10"],
+          "calibration": ["2023-02","2023-06",5,193,82,111,["2023-01"],"2022-12","2023-04"],
+          "selection": ["2023-08","2023-12",5,153,45,108,["2023-07"],"2023-06","2023-10"],
+          "evaluation": ["2024-02","2024-12",11,414,119,295,["2024-01"],"2023-12","2024-10"]
+        },
+        "cells": {
+          "gam": "bbc3625fbd91f55c6dd34c5d3c32ce6c0eed7136021853f87b11a45eb9bab765",
+          "lightgbm": "72524fc5af93caefa4750c17fbaa32c4c091c4cf5c9c6e70d9f8d306d5441ad4",
+          "xgboost": "e0913d37d4445736420e5f291ef857ca0903b3b533c090add566e18a6f190caa"
+        }
+      }
+    ]
   }
 }
