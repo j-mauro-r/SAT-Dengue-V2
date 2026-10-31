@@ -99,3 +99,109 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 KEDRO_DISABLE_TELEMETRY=yes .venv/bin/p
 ```
 
 These cases use small generated tables and a deterministic fitter double; they do not read private data or fit native scientific models. Calibration/evaluation adapters are exercised on generated scores only. Modified-file Ruff, formatting, focused mypy and `git diff --check` supplement those five cases. No full suite or DWP check is part of this delivery.
+
+## Scientific policy runner — implemented, not executed
+
+Status: `EXP04_SCIENTIFIC_RUNNER_IMPLEMENTED_NOT_EXECUTED`. The additional
+`scientific-protocol.json` freezes the authorized scientific decisions without
+changing `protocol.json`, `DESING.md`, `experimentos.md`, the OOF bundle or M00.
+Its `protocol_sha256` hashes canonical JSON excluding that self-hash field;
+the loader also pins that identity in code. ECE keeps the existing ten equal-width
+bins and sigmoid keeps the existing logistic settings and seed.
+
+`exp04_scientific.py` reuses the existing calibrator, threshold, metric, paired
+support and frame serialization functions. `exp04_scientific_runner.py` reuses
+the OOF validator, reference reader, safe paths, exclusive reservation and
+`result.json`/checksum-manifest conventions. There is no predictor-fit or OOF
+regeneration call, native-model writer, private-panel reader or MLflow integration.
+A0 retains saved probabilities, alerts, calibrator and threshold; its original
+historical roles and exposure remain explicitly recorded. Candidates use common
+paired evaluation support. A0 is not refitted under the new temporal calendar.
+
+The six onset trajectories (three separate families × T+1/T+2) select A→B→C
+using only 2020–2022. Eligibility requires each evaluable development year's
+FA_rate <= 1 and pooled TP/positives sensitivity difference >= -0.02 against the
+phase control, on identical paired support. The prescribed deterministic tie
+orders are frozen in the protocol. Missing cell support is explicit; absent
+eligible selections disable dependent arms without fallback. B0 reuses the
+selected A fit; C arms share the selected B calibrator; D reuses the selected C
+stress policy. Actual calibration fits and threshold selections are counted,
+including zero additional operations for aliases. B0/B1 exact equality is recorded.
+Only after all six development choices are hashed does evaluation of 2024 begin.
+D is descriptive stress evidence; uncertainty remains `UNAVAILABLE` throughout.
+
+The separate T+2 excess report loads its frozen A0 control for all four cuts;
+it does not calibrate, select windows/thresholds, apply the onset budget or pool
+its metrics with onset. Meta and Tolima are reported for each evaluable cell and
+paired effect. Any lower sensitivity or higher FA_rate in a territory limits the
+interpretation to `PARCIAL / SIN APROBACIÓN`; territory never selects a policy.
+A4 and 2025 remain `NOT_EVALUABLE`; no confirmatory claim, G5 approval or champion
+selection is implemented.
+
+The expected source has 846 historical refits, 47,514 predictions, 36 groups,
+108 OOF A1/A2/A3 cells, 1,296 group-month uses and zero retained jobs. The scientific
+inventory has 264 onset A/B/C cells (including 24 unavailable A4 cells), six D
+stress cells and twelve separate frozen excess controls: 282 cells including
+conditional/unavailable entries. This inventory does not imply successful support
+or an observed scientific result.
+
+### Scientific runbook — future commands only
+
+Use the same clean reviewed commit and numerical environment for preflight,
+authorization, execution and validation. The supplied OOF path is only an example;
+`--oof` and `--oof-id` are mandatory arguments. The ID must match the scientific
+protocol. The target must be a fresh, disjoint repository-local `tmp/exp04-*`
+directory. Inputs are read-only. Receipt and approval writes use exclusive creation.
+
+```sh
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m sat_dengue.experiments.exp04_scientific_runner \
+  --preflight --oof tmp/exp04-oof-20261031-v2 \
+  --oof-id 3f4eecccbf793da6b2055508ec853e212d22d42aa322d53c7df5390e33513412 \
+  --destination tmp/exp04-scientific-NEW --receipt tmp/exp04-scientific-preflight/receipt.json
+```
+
+Preflight verifies OOF/native inventory integrity, frozen calendar/counts, historical
+reference, protocol, code and clean commit. It enumerates arms and conditional
+B2/C2 cells and produces a deterministic receipt, with zero predictor/calibrator
+fits, selections or MLflow writes. It does not execute any scientific phase.
+
+Only Mauricio and an independent reviewer may issue the future policy-only
+approval. This is an auditable local approval record, not cryptographic identity
+verification. The following explicit action binds the entire receipt, commit,
+scientific protocol, OOF identity, output path and environment. It authorizes only
+calibration, threshold selection and evaluation; predictor refits, OOF regeneration,
+G5 approval and champion selection are all false.
+
+```sh
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m sat_dengue.experiments.exp04_scientific_runner \
+  --authorize --receipt tmp/exp04-scientific-preflight/receipt.json \
+  --approval tmp/exp04-scientific-preflight/approval.json \
+  --authority Mauricio --reviewer INDEPENDENT_REVIEWER --permit-policy-only
+```
+
+The single scientific command consumes that exact approval. An exclusive
+reservation under `tmp/exp04-scientific-reservations` precedes calibration.
+Reservations survive interrupted/failed executions; retries cannot reuse the same
+scientific identity. Recheck all inputs and authorization before publication.
+Never delete a reservation to retry automatically.
+
+```sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m sat_dengue.experiments.exp04_scientific_runner \
+  --execute --receipt tmp/exp04-scientific-preflight/receipt.json \
+  --approval tmp/exp04-scientific-preflight/approval.json
+```
+
+Read-only validation verifies file hashes, identity, source/code/commit/protocol
+bindings, cell support, saved A0, calibrator application, thresholds, metrics,
+strata, deterministic development choices, frozen D, counters and descriptive
+contrasts. It never fits a calibrator or predictor. Preserve the returned ID:
+
+```sh
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m sat_dengue.experiments.exp04_scientific_runner \
+  --validate tmp/exp04-scientific-NEW --bundle-id RETURNED_SCIENTIFIC_BUNDLE_ID
+```
+
+Implementation validation is limited to the five generated-only cases in
+`tests/integration/test_exp04_scientific.py`, modified-file Ruff/format/mypy and
+`git diff --check`. No real preflight, approval, scientific execution or real-bundle
+validation was performed in this delivery. No scientific findings are reported.

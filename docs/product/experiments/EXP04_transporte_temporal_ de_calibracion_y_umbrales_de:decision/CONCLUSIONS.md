@@ -2,7 +2,7 @@
 
 Scientific status: **NOT EXECUTED / NOT EVALUATED**.
 
-Implementation status: **`EXP04_OOF_IMPLEMENTED_NOT_EXECUTED`**. Historical OOF generation and policy-input wiring are implemented. No scientific execution, policy choice or scientific approval is implied.
+Implementation status: **`EXP04_SCIENTIFIC_RUNNER_IMPLEMENTED_NOT_EXECUTED`**. The scientific policy runner, preflight, bound authorization and read-only bundle validator are implemented. This delivery did not execute EXP04, select a scientific policy or grant scientific approval.
 
 H1, H1a, H1b and H1c: `NOT_EVALUATED`. The generated functional exercise verifies implementation behavior and output structure only; its synthetic metrics are not scientific evidence. No scientific EXP04 evaluation, private-source training, M00 regeneration or MLflow write occurred.
 

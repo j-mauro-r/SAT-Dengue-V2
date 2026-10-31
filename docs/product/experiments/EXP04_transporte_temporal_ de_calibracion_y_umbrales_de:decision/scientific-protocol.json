@@ -1,0 +1,333 @@
+{
+  "schema": "exp04-scientific-protocol-v1",
+  "version": "1.0.0",
+  "experiment_id": "EXP04",
+  "design_sha256": "70df561506873161b76860b21c2932131fa207be7dd885cad716ef1886c1f792",
+  "experiment_scope_sha256": "db371495bac8255700b73aa38b619b4731955cc5ead776cc23d507d3434c885e",
+  "technical_protocol_sha256": "c9e9c891d187322fc1960761dab8e0893a79e4a8921881ffb4afacf1abfbe78b",
+  "oof": {
+    "bundle_id": "3f4eecccbf793da6b2055508ec853e212d22d42aa322d53c7df5390e33513412",
+    "status": "VERIFIED",
+    "counts": {
+      "historical_refits": 846,
+      "prediction_rows": 47514,
+      "groups": 36,
+      "A1_A2_A3_cells": 108,
+      "group_month_uses": 1296,
+      "retained_origin_jobs": 0,
+      "unique_score_origin_jobs": 846
+    }
+  },
+  "arms": {
+    "A0": {
+      "status": "EXECUTE",
+      "window": "original",
+      "method": "original",
+      "selector": "C0"
+    },
+    "A1": {
+      "status": "EXECUTE",
+      "window_months": 12,
+      "method": "original",
+      "selector": "C0"
+    },
+    "A2": {
+      "status": "EXECUTE",
+      "window_months": 24,
+      "method": "original",
+      "selector": "C0"
+    },
+    "A3": {
+      "status": "EXECUTE",
+      "window_months": 36,
+      "method": "original",
+      "selector": "C0"
+    },
+    "A4": {
+      "status": "NOT_EVALUABLE",
+      "window": "expanding",
+      "method": "original",
+      "selector": "C0"
+    },
+    "B0": {
+      "status": "EXECUTE",
+      "window": "development_selected",
+      "method": "original",
+      "selector": "C0"
+    },
+    "B1": {
+      "status": "EXECUTE",
+      "window": "development_selected",
+      "method": "sigmoid",
+      "selector": "C0"
+    },
+    "B2": {
+      "status": "CONDITIONAL_SUPPORT",
+      "window": "development_selected",
+      "method": "isotonic",
+      "selector": "C0"
+    },
+    "C0": {
+      "status": "EXECUTE",
+      "selector": "original",
+      "calibration": "development_selected_frozen"
+    },
+    "C1": {
+      "status": "EXECUTE",
+      "selector": "max_sensitivity_under_budget",
+      "calibration": "same_as_C0"
+    },
+    "C2": {
+      "status": "CONDITIONAL_SUPPORT",
+      "selector": "worst_block_budget",
+      "calibration": "same_as_C0"
+    },
+    "D": {
+      "status": "DESCRIPTIVE_STRESS_ONLY",
+      "composition": "one_nested_development_choice",
+      "without_support": "NOT_EVALUABLE"
+    }
+  },
+  "families": [
+    "gam",
+    "lightgbm",
+    "xgboost"
+  ],
+  "objectives": {
+    "onset": [
+      1,
+      2
+    ],
+    "excess_control": [
+      2
+    ]
+  },
+  "cuts": {
+    "development": [
+      2020,
+      2021,
+      2022
+    ],
+    "retrospective_stress": [
+      2024
+    ],
+    "not_evaluable": [
+      2025
+    ]
+  },
+  "B_primary": 1.0,
+  "sensitivity_noninferiority_margin": -0.02,
+  "selection": {
+    "years": [
+      2020,
+      2021,
+      2022
+    ],
+    "scope": "per_family_and_onset_horizon_no_family_selection",
+    "eligibility": [
+      "every_evaluable_development_year_FA_rate_at_most_1",
+      "pooled_TP_over_positives_minus_control_at_least_minus_0.02"
+    ],
+    "window_control": "A0",
+    "calibrator_control": "B0",
+    "selector_control": "C0",
+    "window_order": [
+      "minimum_maximum_annual_budget_excess",
+      "maximum_pooled_sensitivity",
+      "shortest_window"
+    ],
+    "calibrator_order": [
+      "minimum_maximum_annual_budget_excess",
+      "maximum_pooled_sensitivity",
+      "minimum_pooled_Brier",
+      "B0_B1_B2"
+    ],
+    "selector_order": [
+      "minimum_maximum_annual_budget_excess",
+      "maximum_pooled_sensitivity",
+      "C0_C1_C2"
+    ],
+    "missing_option": "dependent_arms_NOT_EVALUABLE_no_fallback",
+    "partial_support": "eligible_only_on_evaluable_years_with_paired_control_record_years_and_exclusions",
+    "stress": "2024_only_after_A_B_C_freeze_not_independent_confirmation"
+  },
+  "calibration": {
+    "reference_method": "sigmoid",
+    "sigmoid": {
+      "solver": "lbfgs",
+      "max_iter": 1000,
+      "C": 1.0,
+      "seed": 42
+    },
+    "isotonic": {
+      "minimum_positives": 20,
+      "minimum_negatives": 20,
+      "increasing": true,
+      "out_of_bounds": "clip",
+      "fallback": false
+    },
+    "B0_B1_identity": "record_exact_state_scores_alerts_and_metrics_equality_no_invented_effect"
+  },
+  "C2_issue_month_blocks": {
+    "1": [
+      [
+        6,
+        7,
+        8
+      ],
+      [
+        9,
+        10
+      ]
+    ],
+    "2": [
+      [
+        6,
+        7
+      ],
+      [
+        8,
+        9
+      ]
+    ]
+  },
+  "C2_support": "both_classes_in_each_of_exactly_two_predeclared_blocks",
+  "threshold": {
+    "comparison": ">=",
+    "candidates": "distinct_selection_scores_and_no_alert_extreme",
+    "ties": "max_TP_then_min_FP_then_min_alerts_then_highest_threshold",
+    "C2_minimum_blocks": 2,
+    "no_support": "NOT_EVALUABLE"
+  },
+  "metrics": [
+    "support",
+    "TP",
+    "FN",
+    "FP",
+    "TN",
+    "sensitivity",
+    "municipal_macro_sensitivity",
+    "precision",
+    "alerts",
+    "common_FA_rate",
+    "historical_FA_rate",
+    "FAR",
+    "FPR",
+    "budget_excess",
+    "selection_evaluation_drift",
+    "brier",
+    "ece",
+    "reliability",
+    "average_precision",
+    "score_distribution",
+    "prevalence",
+    "coverage",
+    "abstentions",
+    "paired_differences",
+    "year_department_strata",
+    "false_alerts_by_error_class"
+  ],
+  "ECE_bins": 10,
+  "exposure": {
+    "historical": "original_M00_monitored_months_divided_by_12",
+    "common": "same_eligible_observable_municipality_month_keys_divided_by_12",
+    "primary": "common",
+    "comparison": "identical_common_denominator_and_truth_in_every_paired_arm",
+    "historical_rate_is_not_primary": true,
+    "incomparable": "NOT_EVALUABLE"
+  },
+  "contrasts": {
+    "H1a": [
+      [
+        "A1",
+        "A0"
+      ],
+      [
+        "A2",
+        "A0"
+      ],
+      [
+        "A3",
+        "A0"
+      ],
+      [
+        "A4",
+        "A0"
+      ]
+    ],
+    "H1b": [
+      [
+        "B1",
+        "B0"
+      ],
+      [
+        "B2",
+        "B0"
+      ]
+    ],
+    "H1c": [
+      [
+        "C1",
+        "C0"
+      ],
+      [
+        "C2",
+        "C0"
+      ]
+    ],
+    "H1": [
+      [
+        "D",
+        "A0"
+      ]
+    ]
+  },
+  "A0": "saved_reference_calibrator_threshold_probabilities_and_alerts_no_refit_or_reselection",
+  "excess_control": "separate_frozen_reference_control_each_cut_no_onset_budget_or_policy_selection",
+  "territories": {
+    "50": "Meta",
+    "73": "Tolima"
+  },
+  "territorial_selection": false,
+  "territorial_deterioration": "any_lower_sensitivity_or_higher_FA_rate_vs_paired_control_limits_to_PARCIAL / SIN APROBACIÓN",
+  "transmission_profiles": "NOT_EVALUABLE_without_verified_historical_membership",
+  "uncertainty": "UNAVAILABLE",
+  "inference": "descriptive_only_no_bootstrap_p_values_intervals_or_confirmatory_claims",
+  "predictor_fits": 0,
+  "OOF_regeneration": false,
+  "G5": "NOT_APPROVED",
+  "champion": "not_selected",
+  "baseline": {
+    "original_identity": {
+      "bundle_id": "afcb8b4a6cb512c1247fc52c5d9786a3f0d245663981a29f8f23ac76873a3e04",
+      "bundle_sha256": "5b3f20a266c5e6aae7d2727a00a2213ea9cc3bc691bac5f02267a3e44edc5619",
+      "manifest_sha256": "3315c0ab1349a404aca1e824d7d7527dfeaf22c9772fce2691700efcb3bbdd38",
+      "git_revision": "001911f1e45874f36b74922094be4eb32ae7256e",
+      "parent_run_id": "a37877c20dbd4b1382567e79e8d89e7b"
+    },
+    "reconstruction_identity": {
+      "kind": "observable_replay_not_original_intermediate_state_identity",
+      "bundle_path": "tmp/kedro-migration/exp03-1-runs/4fd644502e8fb2bb18155060bba68aedd7fc295cf66e16401b91c44af72781de",
+      "bundle_id": "732a9d7743b4c54d9252adf7095f2c4e2775cd4d6472446d2bd2e41a476927f4",
+      "bundle_sha256": "e6c6325dbc948fa0d0a654c3af13f2898f7697747ce19846766311392f76e155",
+      "manifest_sha256": "99807fc011228954ffbbda16bb7e7680ea066d44db5dd9c63ca124fd53f321cf",
+      "replay_manifest_sha256": "78f5764092fad8ec0825a3c35b72a4253c84c8982721a9f1ddf7ba517fdc9e41",
+      "parent_run_id": "2c932c4bcffa475280cec95f50e1533d",
+      "protocol_sha256": "46f287468ace7cee7c67220b871cf85a7a9c0670a131d80838d3baf147da0075",
+      "matrix_sha256": "967ce5facc06b9c27a41df98d990cdd703828621e3a6632151aa43388e43aaa7",
+      "git_revision": "1c5dfd23cb8ebf807c66f68898b61279d65c1cc5",
+      "code_sha256": "f0b82982c0d1fcb7042a1036c71ffb3a8426a005ac0e5ff872eb8b09019d6482",
+      "configuration_sha256": "af5be14909107ebbfca449dbfe63122122c686d06ce52c23ffc2c6403926301c",
+      "environment_sha256": "5f975b1547c0607cf407274526bf76a7cb6c8ee7d98241317070a2d0abc8b244",
+      "tracking_receipt_sha256": "5a982c0931f33132872dd7de9fe1e38a5c7d6d1c8d7470f836edd35154f7f17e",
+      "replay_protocol": "exp03-1-replay-persistence-v1"
+    }
+  },
+  "scientific_inventory": {
+    "onset_A_B_C_cells_including_A4": 264,
+    "descriptive_D_cells": 6,
+    "separate_frozen_excess_controls": 12,
+    "total_including_not_evaluable": 282
+  },
+  "protocol_sha256": "3f53615740281522f7efb2f124e810366c738acd11611a0905dbf9c27e1a599d"
+}
