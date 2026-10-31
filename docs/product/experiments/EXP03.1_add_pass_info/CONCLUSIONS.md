@@ -8,6 +8,15 @@ G5: NOT_APPROVED
 
 champion: not_selected
 
+### Replay reproducibility note (2026-10-31)
+
+The validated replay establishes exact reproducibility of all retained
+observables (`EXACT_OBSERVABLE_REPLAY`), strengthening technical reproducibility.
+It does not change Q1, Q2, Q3 or their predictive conclusions, and does not
+establish identity with original intermediate states that were never saved
+(`NOT_COMPARABLE`). It neither approves G5 nor selects a champion. See the
+[validated replay evidence](VALIDATION.md).
+
 ## 2. Resumen ejecutivo
 
 La comparación de memoria reciente (Q1) muestra un incremento agregado pequeño de detecciones, acompañado por más falsas alertas y más alertas totales. La clasificación es `PARCIALMENTE_RESPALDADA`, no una demostración de ganancia robusta bajo el presupuesto congelado. La adición del cambio semestral (Q2) reduce la carga de alertas, pero también reduce detecciones y sensibilidad; Q2 queda `NO_RESPALDADA`. La trayectoria completa frente a la referencia (Q3) reduce detecciones y aumenta falsas alertas y alertas totales para onset; Q3 queda `NO_RESPALDADA`.
