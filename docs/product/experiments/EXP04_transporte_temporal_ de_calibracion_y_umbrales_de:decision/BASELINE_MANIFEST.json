@@ -1,0 +1,199 @@
+{
+  "status": "BLOCKED_BASELINE",
+  "source_experiment": "EXP03.1",
+  "source_variant": "M00",
+  "original_identity": {
+    "bundle_id": "afcb8b4a6cb512c1247fc52c5d9786a3f0d245663981a29f8f23ac76873a3e04",
+    "bundle_sha256": "5b3f20a266c5e6aae7d2727a00a2213ea9cc3bc691bac5f02267a3e44edc5619",
+    "manifest_sha256": "3315c0ab1349a404aca1e824d7d7527dfeaf22c9772fce2691700efcb3bbdd38",
+    "git_revision": "001911f1e45874f36b74922094be4eb32ae7256e"
+  },
+  "reconstruction_identity": null,
+  "equivalence": "NOT_VERIFIABLE_FROM_AVAILABLE_ARTIFACTS",
+  "missing_dependencies": [
+    "original_M00_fitted_predictor_and_preparer_with_output_identity",
+    "original_M00_fitted_calibrator_coefficients_with_output_identity",
+    "original_M00_raw_calibration_selection_and_evaluation_scores",
+    "per_score_training_cutoff_label_maturity_and_role_membership",
+    "verified_prior_OOF_history_for_rolling_windows",
+    "original_runtime_native_library_and_numerical_environment_identity"
+  ],
+  "private_source_reads": 0,
+  "model_fits": 0,
+  "mlflow_writes": 0,
+  "reason": "configuration_and_seed_are_not_original_fitted_state_evidence",
+  "source_reuse_decision": "refitted",
+  "ordered_predictors": [
+    "dengue_lag_1",
+    "dengue_lag_2",
+    "dengue_lag_3",
+    "grave_lag_1",
+    "grave_lag_2",
+    "dengue_mean_lagged_3m",
+    "dengue_difference_lagged_1m",
+    "mes_sin",
+    "mes_cos",
+    "municipality_code_feature",
+    "channel_target_p25",
+    "channel_target_p75",
+    "zona_canal_lag_1",
+    "channel_excess_lag_1",
+    "notification_log1p_oe_lag_1",
+    "expected_zero_lag_1",
+    "dengue_notifications_count",
+    "dengue_grave_notifications_count",
+    "dengue_cambio_1m",
+    "dengue_media_3m",
+    "zona_canal_t",
+    "channel_excess_t",
+    "notification_log1p_oe_t",
+    "expected_zero_t",
+    "rain_mm_month_sum__lag_1",
+    "temp_mean_c_month_mean__lag_1",
+    "dewpoint_mean_c_month_mean__lag_1",
+    "surface_runoff_mm_month_sum__lag_1",
+    "total_evaporation_mm_month_sum_ecmwf__lag_1",
+    "solar_radiation_mj_m2_month_sum__lag_1",
+    "soil_water_l1_month_mean__lag_1",
+    "wind_u_ms_month_mean__lag_1",
+    "wind_v_ms_month_mean__lag_1",
+    "rain_mm_month_sum__lag_2",
+    "rain_mm_month_sum__lag_3",
+    "temp_mean_c_month_mean__lag_2",
+    "temp_mean_c_month_mean__lag_3",
+    "dewpoint_mean_c_month_mean__lag_2",
+    "surface_runoff_mm_month_sum__lag_2"
+  ],
+  "family_parameters": {
+    "gam": {
+      "C": 0.1,
+      "n_knots": 4
+    },
+    "lightgbm": {
+      "lambda_l1": 0,
+      "lambda_l2": 1,
+      "learning_rate": 0.05,
+      "max_bin": 128,
+      "max_depth": 3,
+      "min_data_in_leaf": 20,
+      "n_estimators": 80,
+      "num_leaves": 7
+    },
+    "xgboost": {
+      "eta": 0.05,
+      "max_bin": 128,
+      "max_depth": 2,
+      "min_child_weight": 5,
+      "n_estimators": 80,
+      "reg_alpha": 0,
+      "reg_lambda": 1
+    }
+  },
+  "seed": 42,
+  "reference_temporal_roles": [
+    {
+      "id": "development_2020",
+      "train": [
+        "2012-01",
+        "2018-12"
+      ],
+      "calibration": [
+        "2019-01",
+        "2019-06"
+      ],
+      "selection": [
+        "2019-07",
+        "2019-12"
+      ],
+      "evaluation": [
+        "2020-01",
+        "2020-12"
+      ],
+      "evidence_type": "retrospective_development"
+    },
+    {
+      "id": "development_2021",
+      "train": [
+        "2012-01",
+        "2019-12"
+      ],
+      "calibration": [
+        "2020-01",
+        "2020-06"
+      ],
+      "selection": [
+        "2020-07",
+        "2020-12"
+      ],
+      "evaluation": [
+        "2021-01",
+        "2021-12"
+      ],
+      "evidence_type": "retrospective_development"
+    },
+    {
+      "id": "development_2022",
+      "train": [
+        "2012-01",
+        "2020-12"
+      ],
+      "calibration": [
+        "2021-01",
+        "2021-06"
+      ],
+      "selection": [
+        "2021-07",
+        "2021-12"
+      ],
+      "evaluation": [
+        "2022-01",
+        "2022-12"
+      ],
+      "evidence_type": "retrospective_development"
+    },
+    {
+      "id": "stress_2024",
+      "train": [
+        "2012-01",
+        "2022-12"
+      ],
+      "calibration": [
+        "2023-01",
+        "2023-06"
+      ],
+      "selection": [
+        "2023-07",
+        "2023-12"
+      ],
+      "evaluation": [
+        "2024-01",
+        "2024-12"
+      ],
+      "evidence_type": "retrospective_stress"
+    }
+  ],
+  "retained_fields": [
+    "alert",
+    "cell_id",
+    "cut",
+    "error_class",
+    "exposure",
+    "family",
+    "horizon",
+    "municipality_code",
+    "objective",
+    "origin_month",
+    "score",
+    "target_month",
+    "truth",
+    "variant"
+  ],
+  "M00_cells": 36,
+  "fitted_calibrator_state": null,
+  "raw_score_artifacts": null,
+  "private_reads_discrepancy": {
+    "execution_counters": 8,
+    "provenance": 1,
+    "resolution": "UNRESOLVED"
+  }
+}
