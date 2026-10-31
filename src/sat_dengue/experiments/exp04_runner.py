@@ -24,11 +24,15 @@ from sat_dengue.experiments.exp04 import (
     threshold_policy,
 )
 from sat_dengue.experiments.exp04_baseline import audit_baseline, paired_support
-from sat_dengue.experiments.exp04_contract import BASELINE, ROOT, digest, protocol
+from sat_dengue.experiments.exp04_contract import ROOT, digest, protocol
 
 
-def preflight(directory: Path = BASELINE) -> dict[str, Any]:
+def preflight(directory: Path | None = None) -> dict[str, Any]:
     """No training/calibration/threshold selection; unavailable arms stay explicit."""
+    if directory is None:
+        from sat_dengue.experiments.exp04_execution import preflight as oof_preflight
+
+        return oof_preflight()
     p = protocol()
     if json.loads((ROOT / "protocol.json").read_text()) != p:
         raise ValueError("EXP04 technical protocol changed")
@@ -128,6 +132,12 @@ def _provenance() -> dict[str, Any]:
         *Path("src/sat_dengue/experiments").glob("exp04*.py"),
         Path("src/sat_dengue/experiments/exp03_1_evaluation.py"),
         Path("src/sat_dengue/experiments/exp03_persistence.py"),
+        Path("src/sat_dengue/experiments/exp03_features.py"),
+        Path("src/sat_dengue/experiments/exp03_1_features.py"),
+        Path("src/sat_dengue/experiments/exp03_1_runner.py"),
+        Path("src/sat_dengue/experiments/exp03_1_reporting.py"),
+        Path("src/sat_dengue/model_training/candidate_families.py"),
+        Path("src/sat_dengue/training_preparation/preprocessing.py"),
         Path("src/sat_dengue/model_evaluation/calibration.py"),
         Path("src/sat_dengue/configuration.py"),
         Path("src/sat_dengue/hooks.py"),
@@ -335,13 +345,36 @@ def main() -> None:
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--dry-run", action="store_true")
     modes.add_argument("--functional", action="store_true")
+    modes.add_argument("--oof-execute", action="store_true")
+    modes.add_argument("--validate", type=Path, metavar="BUNDLE")
     parser.add_argument("--baseline", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--bundle-id", help="Expected identity for --validate")
     args = parser.parse_args()
-    if args.functional and args.baseline is not None:
+    if not args.dry_run and args.baseline is not None:
         parser.error("--baseline applies only to --dry-run; functional input is generated")
-    result = preflight(args.baseline or BASELINE) if args.dry_run else functional_run()
-    if args.output:
+    if args.bundle_id is not None and not args.validate:
+        parser.error("--bundle-id applies only to --validate")
+    if args.oof_execute:
+        from sat_dengue.experiments.exp04_execution import execute_oof
+
+        if args.output is None:
+            parser.error("--oof-execute requires a new --output tmp/exp04-* directory")
+        result = execute_oof(args.output)
+    elif args.validate:
+        from sat_dengue.experiments.exp04_oof import reload_bundle
+
+        if args.output is not None:
+            parser.error("--validate is read-only; --output does not apply")
+        checked = reload_bundle(args.validate, args.bundle_id)
+        result = {
+            "status": "VERIFIED",
+            "bundle_id": checked["bundle_id"],
+            "counts": checked["counts"],
+        }
+    else:
+        result = preflight(args.baseline) if args.dry_run else functional_run()
+    if args.output and not args.oof_execute:
         write_result(result, args.output)
     print(
         json.dumps(
@@ -349,6 +382,7 @@ def main() -> None:
                 "experiment_id": "EXP04",
                 "status": result.get("status", "FUNCTIONAL_ONLY"),
                 "bundle_id": result.get("bundle_id"),
+                "counts": result.get("counts", result.get("calendar", {}).get("counts")),
                 "output": str(args.output) if args.output else None,
                 "G5": "NOT_APPROVED",
                 "champion": "not_selected",

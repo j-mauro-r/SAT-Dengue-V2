@@ -1,111 +1,101 @@
 # EXP04 implementation
 
-The [scientific design](DESING.md) owns intent. The [technical protocol](protocol.json) records the independent implementation boundary. It is not a frozen scientific execution protocol. The [baseline manifest](BASELINE_MANIFEST.json) resolves the observable M00 reference as `M00-REPLAY-v1` and records preparation status `READY_FOR_OOF_IMPLEMENTATION`, with final disposition `EXP04_PARTIALLY_READY_FOR_OOF_IMPLEMENTATION`. Fixed-window coverage is already accredited; historical OOF generation is pending and A4's first valid OOF origin remains undefined. This is not scientific execution readiness or authorization. `G5: NOT_APPROVED`; `champion: not_selected`.
+Status: **`EXP04_OOF_IMPLEMENTED_NOT_EXECUTED`**. Historical OOF generation is implemented; no scientific EXP04 execution or evaluation is reported. G5 remains `NOT_APPROVED`; champion remains `not_selected`.
 
-M00 of EXP03.1 is mandatory, including its exact V09 predictors, fixed family parameters, H5 labels and paired twelve-state cohort. No M01/M02 feature enters EXP04. Development is retrospective 2020–2022; 2024 is retrospective stress after policy freeze; 2025 is `NOT_EVALUABLE`.
+The [scientific design](DESING.md) and [experiment scope](../experimentos.md) remain unchanged. The [baseline manifest](BASELINE_MANIFEST.json) preserves the pinned original and `M00-REPLAY-v1` identities and records the authorized EXP04 calendar. The [technical component protocol](protocol.json) remains the historical independent-component contract, not a newly frozen scientific execution protocol.
 
-The user's exposure decision preserves the original M00 monitored-month denominator for historical reproduction. EXP04's primary rate uses the same eligible observable municipality-month keys/12 for every compared arm. These rates are named and reported separately. Incompatible support or exposure makes a contrast `NOT_EVALUABLE`.
+## Scope and reference
 
-Independent components are implemented incrementally under local PLAN_052. Exactly five substantive controls cover design, baseline integrity, chronology, functional execution and reproducibility. Functional/generated results cannot validate H1/H1a/H1b/H1c. Scientific execution remains disabled while its prerequisites are unresolved.
+EXP04 uses consolidated retrospective SIVIGILA data, the approved canonical symptom-onset date, H5 and the exact ordered M00/EXP03 V09 predictor vector, transformations, family parameters and seed. GAM, LightGBM and XGBoost remain comparators. T+1 has one onset objective; T+2 has primary onset and a separate excess control. Development is 2020, 2021 and 2022; 2024 is stress-only after policy freeze; 2025 remains `NOT_EVALUABLE`.
 
-## Approved retrospective scope
+Actual historical notification availability and consolidation delays belong to EXP06. OOF provenance explicitly assumes consolidated target labels at target-month end; these dates do not assert observed operational availability. Full-horizon chronological exclusion remains mandatory. No operational dates are invented.
 
-EXP04 uses consolidated retrospective SIVIGILA downloads and the approved symptom-onset date as canonical. Labels are treated as consolidated retrospective outcomes ordered by target month and the full T+1/T+2 horizon; this is an explicit retrospective assumption, not a claim about when a notification was actually available. Actual notification dates, operational historical availability and consolidation delays belong to EXP06 and do not block EXP04.
+M00 remains `VERIFIED_OBSERVABLE_REPLAY`, with absent original intermediate states `NOT_COMPARABLE`. Existing replay observables and original identities are preserved; neither M00 nor EXP03.1 is refitted, replaced or overwritten. New EXP04 historical fits have their own predictor/preparer identities. The historical `real_private_reads` discrepancy remains recorded in the manifest; this implementation does not re-audit it.
 
-The documentary dependencies on real historical label-availability/maturity timestamps are removed. The null operational timestamps in the existing manifest remain unobserved metadata, not readiness blockers. Historical refits must still exclude scored targets and future information, preserve disjoint roles, and respect calibration → selection → freeze → evaluation order. The existing audit is reused without recalculation. No runtime, protocol, model state or historical result is changed by this correction.
+## Authorized calendar
 
-## Execution
+For each evaluation year E, calibration uses exactly 12/24/36 target months ending in May of E−1. Its start is June of E−2/E−3/E−4 respectively.
 
-The following commands document the existing tracking-disabled technical profiles; they are not authorized or run as part of this documentary correction:
+| Horizon | Last calibration target | Selection issues | Selection targets | First evaluation issue | Evaluation targets |
+|---|---|---|---|---|---|
+| T+1 | May E−1 | June–October E−1 | July–November E−1, 5 months | December E−1 | January–December E |
+| T+2 | May E−1 | June–September E−1 | August–November E−1, 4 months | December E−1 | February–December E |
+
+Calibration freezes on May 31 and selection on November 30. Issuance dates use the existing month-start convention. The unchanged `temporal_roles` validator enforces the strict May→June and November→December transitions, disjoint target events, full horizon and `training_cutoff < forecast_issue_date`. It never accepts equality.
+
+Historical `roles` support arrays in the manifest remain evidence about the original replay. `authorized_EXP04_roles` records the new calendar separately; new row/class counts are null until calculated from actual eligible support. No old row count is relabeled as support for a changed role.
+
+## OOF inventory and reuse
+
+Every row applies independently to all four authorized cuts and all three families. Values count target-month/origin jobs requiring generation or replacement, not municipality predictions.
+
+| Objective | Reusable original calibration months | For 12 months | For 24 months | For 36 months |
+|---|---|---|---|---|
+| T+1 onset | February–May E−1, 4 months | 8 | 20 | 32 |
+| T+2 onset | March–May E−1, 3 months | 9 | 21 | 33 |
+| T+2 excess control | March–May E−1, 3 months | 9 | 21 | 33 |
+
+The first original calibration score is replaced through a new historical fit: January E−1 for T+1, February E−1 for T+2. June calibration targets are excluded. Earlier missing months and the shifted window start are covered by the same OOF calendar. Windows overlap: never sum their deficits.
+
+`exp04_oof.calendar` produces one job per unique family/horizon/objective/origin and frozen training recipe, shared across windows and cuts where identical. Retained scores keep their original cell/predictor identity; distinct original predictor snapshots are never silently pooled. Reuse requires the exact M00 identity, keys, labels, predictor inputs, strict cutoff and an exact unrounded raw-score check against the reloaded predictor. A mismatch fails explicitly before historical refits; it does not trigger an unplanned fallback.
+
+Each new fit uses only eligible training targets strictly before its issuance month, starting at the frozen historical training boundary. The existing native fitter refits the preparer on those training rows only. M00 features, parameters, seed and H5/paired twelve-state eligibility remain unchanged. Missing training, class, key or window support fails explicitly; future rows never fill a gap.
+
+Configuration-derived expectations, checked by the focused synthetic cases:
+
+- 36 cut/family/horizon/objective groups and 108 A1/A2/A3 window cells.
+- 726 unique historical predictor/preparer refits after sharing identical origins across cuts and windows.
+- 120 retained origin jobs: 846 unique score-origin jobs in total, representing 1,296 group-month uses before window reuse.
+- Individual prediction rows equal the sum of actual eligible municipality rows over unique jobs. Preflight reports this count as unknown until preparation; no fixed 76-municipality multiplier is used. Positives and negatives are likewise calculated, not invented.
+
+A4/expanding remains `NOT_EVALUABLE`: its first valid OOF origin is undefined and no expanding generator is implemented. 2025 and unauthorized objectives, horizons or windows are rejected.
+
+## Existing components and wiring
+
+`exp04_execution.prepare` reuses EXP03.1 preparation, coverage and `paired_cohort`, including its twelve-state eligibility. `fit_native` supplies the existing family implementations and train-only preparer. Persisted replay frames use the existing lossless frame serializer. Native state uses `model.native` plus JSON preparer/feature state, under the existing protected `tmp` path and `result.json` publication convention.
+
+Each score records municipality, origin/target, family, horizon, objective, cut/window memberships, role, training-target cutoff, predictor/preparer/configuration identities, baseline identity, unrounded raw score, truth and a content hash. Per-job records retain key hashes, observed row counts and original-versus-refit provenance. Publication adds a checksummed manifest and native model inventory; reload checks file membership, hashes, score identities, dates, counts, predictor/preparer identities and complete window support. No pickle, tracker or second storage service is introduced.
+
+`policy_inputs` connects each OOF history and the shortened original raw selection/evaluation roles to the unchanged `temporal_roles` and `calibration_window` functions. `evaluate_policy` connects an explicitly predeclared policy to the existing calibrator, onset selector and frozen evaluator. Excess control stays separate and uses its frozen reference control threshold without onset-budget reselection. No window, calibrator or final composition is selected automatically. A0's original saved state/threshold remain historical reference artifacts, not silently regenerated states.
+
+C2 runs only if existing predeclared chronological blocks pass the unchanged two-block/class-support requirement. Without that partition/support, C2 is `NOT_EVALUABLE`; no dates are moved and no partition is invented to make it pass. Isotonic support, ECE bins, nested policy selection and confirmatory settings remain subject to the design's existing pre-execution protocol. D stays unavailable without independent nested selection. This OOF delivery does not choose those scientific inputs or classify H1.
+
+## Future commands — not executed in this delivery
+
+Source-free preflight reports the configuration-derived calendar and counts without opening scientific inputs, replay bundles or MLflow:
 
 ```sh
-KEDRO_DISABLE_TELEMETRY=yes .venv/bin/kedro run --pipelines=exp04_preflight --params=profile=exp04_preflight,tracking=disabled
-KEDRO_DISABLE_TELEMETRY=yes .venv/bin/kedro run --pipelines=exp04_functional --params=profile=exp04_functional,tracking=disabled
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m sat_dengue.experiments.exp04_runner --dry-run
 ```
 
-The Kedro outputs are in-memory `exp04_preflight_result` and `exp04_functional_result`. No new source dataset, storage service, tracking backend or catalog layer is introduced. Profiles must match the pipeline; enabled tracking and a registered experiment ID are rejected before tracker construction. The historical pipelines retain their bindings. EXP04's real scientific pipeline is intentionally unavailable while temporal/OOF support and the scientific protocol are unresolved.
-
-For inspectable local JSON output, the same runner exposes:
+After separate authorization for real source access and historical fitting, generate the OOF bundle in a fresh directory:
 
 ```sh
-.venv/bin/python -m sat_dengue.experiments.exp04_runner --dry-run --output tmp/exp04-readiness
-.venv/bin/python -m sat_dengue.experiments.exp04_runner --functional --output tmp/exp04-functional
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m sat_dengue.experiments.exp04_runner --oof-execute --output tmp/exp04-oof-NEW
 ```
 
-Choose a new output directory each time. Existing directories, external paths and symlinks are rejected. The unchanged original-only dry-run returns `BLOCKED_BASELINE`/`BLOCKED_DESIGN` and per-arm/cut `NOT_EVALUABLE` without fitting, calibrating or selecting thresholds; it does not consume the replay reference or the corrected OOF inventory. These legacy diagnostic outputs do not supersede the documentary manifest, which records `VERIFIED_OBSERVABLE_REPLAY` for M00 and `READY_FOR_OOF_IMPLEMENTATION` for EXP04. A nonzero exception reports altered identities or invalid input; a successfully reported blocked readiness status is not a scientific PASS.
+The same entry point is wired to the existing Kedro registry, with tracking disabled:
 
-The generated fixture exercises both horizons and all independent A/B/C factors over fixed input scores. Its A0/B0/C0 controls are explicitly generated fixtures, **not reproduced M00**. It uses a single generated score family; it does not claim GAM/LightGBM/XGBoost results. Isotonic minimum support, dates, ECE bins, fixed diagnostic threshold and known synthetic monitoring exposure are labeled functional-fixture settings, not approved scientific choices. D remains `NOT_EVALUABLE` without independent nested selection. The excess table is a separate fixed-threshold structural diagnostic with no onset-budget selection.
+```sh
+SAT_DENGUE_EXP04_OUTPUT=tmp/exp04-oof-NEW KEDRO_DISABLE_TELEMETRY=yes .venv/bin/kedro run --pipelines=exp04_oof --params=profile=exp04_oof,tracking=disabled
+```
 
-`result.json` contains unrounded predictions, date provenance, input/code/configuration/environment hashes, frozen calibrator and threshold records, paired contrasts, year/department metrics, reliability bins, score distributions and explicit unavailable uncertainty/profile/dispersion states. It retains both named exposure rates. Outputs remain ignored under `tmp/`; they are never historical experiment evidence or MLflow results.
+The command verifies the pinned replay and existing source admission/snapshot mechanism before preparation or fitting. It generates OOF scores and checks all policy-input windows before publication; it does not execute phases A/B/C/D or automatically fit calibrators/select policies. Full scientific policy execution still requires the existing scientific protocol freeze and separate authorization.
 
-## Reference reconstruction
+Read-only bundle validation, using the identity returned by publication:
 
-`exp04_baseline.audit_baseline` checks the exact EXP03.1 bundle and manifest hashes, canonical M00 predictor order, configuration, seed and temporal roles. It opens existing result artifacts read-only and never reads private source datasets. The bundle contains final calibrated evaluation probabilities and alerts, but no original fitted predictor/preparer, calibrator coefficients, or raw calibration/selection/evaluation scores. The EXP03.1 runner fitted these states locally without persisting them. M00's reuse decision is `refitted`; EXP03 native models cannot therefore be silently substituted.
+```sh
+.venv/bin/python -m sat_dengue.experiments.exp04_runner --validate tmp/exp04-oof-NEW --bundle-id RETURNED_BUNDLE_ID
+```
 
-Identity with absent original intermediate states remains `NOT_COMPARABLE`. The completed EXP03.1 replay supplies fitted predictor/preparer/calibrator states and raw scores, with `EXACT_OBSERVABLE_REPLAY` over all 96 cells and 60,207 predictions, including 36 M00 cells. Configuration/seed determinism alone cannot prove equality with an unsaved fitted state; inverse calibration is not used. No fit was executed for this documentary update. The `real_private_reads` discrepancy (8 versus 1) remains unresolved.
+The historical `--functional` mode remains a generated component fixture; `--dry-run --baseline PATH` retains the original-only baseline diagnosis. Neither substitutes for the new OOF bundle. No real pipeline, source loader, historical fit, permanent MLflow write or historical artifact modification occurred in this delivery.
 
-The [baseline manifest](BASELINE_MANIFEST.json) records the verified `M00-REPLAY-v1` identity, hashes and original-state limitations. M00 is `VERIFIED_OBSERVABLE_REPLAY`; EXP04 is `READY_FOR_OOF_IMPLEMENTATION` with partial disposition because A4's origin is undefined. The technical protocol retains the original scientific identity and its conditional equivalence requirement; its generated contract and original-only diagnostic are unchanged by this documentary update.
+## Focused validation
 
-The original parent tracking metadata also lacks an exact numerical runtime/native-library environment identity. Pinned dependency requirements and unchanged source parameters do not establish the original installed numerical environment. It remains `NOT_COMPARABLE`; the replay environment is recorded separately, and this historical limitation does not block the verified observable reference.
+Only five new synthetic cases cover strict boundaries and horizons, the authorized inventories without duplicate refits, valid reuse/invalid replacement, native state persistence and integrity, and expanding/2025 rejection:
 
-`paired_support` rejects changed truth or differing eligible keys with `NOT_EVALUABLE` and reports intersection support. `common_exposure` counts the supplied complete eligible observable municipality-month cohort/12, independent of alerts and scores. No fixed 76-municipality denominator is used. The historical M00 denominator is retained separately and never used to establish an EXP04 primary improvement.
+```sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/integration/test_exp04_oof.py -q
+```
 
-## Independent temporal policies
-
-The unchanged technical helper `exp04.temporal_roles` accepts explicit forecast/target/maturity dates and the latest training-label availability cutoff. It checks full T+1/T+2 month offsets, out-of-sample chronology, disjoint target-event roles and decision freeze before evaluation. Its generated-fixture timestamp requirements do not establish an EXP04 requirement to reconstruct real historical notification availability. Future OOF integration must record the approved retrospective label assumption explicitly rather than invent actual notification dates. Stress 2024 cannot select policies and 2025 is rejected.
-
-`calibration_window` selects contiguous mature 12/24/36-month or expanding histories with observed positive/negative support. Gaps return `NOT_EVALUABLE`; no future months are borrowed. `fit_calibrator` reuses the original fixed sigmoid implementation; isotonic uses installed sklearn and requires an explicitly supplied minimum class support, otherwise `NOT_EVALUABLE`. Identity calibration is diagnostic-only for probability scores. No fallback is fitted automatically.
-
-`threshold_policy` implements C0's existing whole-tie selector and C1 on common exposure; they coincide when all inputs match, which is an expected control rather than a claimed improvement. C2 requires at least two noninterleaved chronological blocks with both classes and enforces the budget in each block before maximizing joint detections. Null is the no-alert extreme. A0 historical replay uses the saved original threshold without reselection. These onset selectors reject excess-control use.
-
-`evaluate_frozen` applies supplied state and threshold without fitting, retains full probabilities, uses common exposure for the primary rate and reports historical exposure/rate separately. It reuses existing AP/Brier/ECE/reliability and classification metrics, reports municipal macro sensitivity and false alerts by class, and keeps uncertainty `UNAVAILABLE` without an approved resampling protocol. Excess metrics have their own positives and no onset-budget criterion. Undefined scientific settings remain explicit; no confirmatory H1 classification is generated.
-
-## Reused, adapted and new components
-
-| Disposition | Component | EXP04 role |
-|---|---|---|
-| REUSE_UNCHANGED | EXP03 canonical V09 protocol/family parameters/seed | Exact baseline configuration; no new predictors or native-family tuning |
-| REUSE_UNCHANGED | EXP03 native sigmoid and EXP03.1 metrics/selector | Fixed logistic correction, C0/C1 whole ties, AP/Brier/ECE and reliability |
-| ADAPT | Existing Kedro registry/configuration/tracking hook | Two small technical bindings with tracking disabled and lazy scientific imports |
-| ADAPT | Existing metric interfaces | Explicit common/historical exposure, municipal macro sensitivity and separate objective labels |
-| NEW | EXP04 baseline audit | Pin original bundle/manifest and report reconstruction dependencies without refitting |
-| NEW | EXP04 policy functions | Mature exact windows, chronology, isotonic adapter, C2 block constraint and paired-support rejection |
-| NEW | EXP04 functional runner | Deterministic generated fixture, provenance and structured local output |
-
-No historical experiment implementation or bundle is modified. Cohort construction, predictor fitting and original model reload are not duplicated: scientific integration with the replay artifacts remains unimplemented and gated by temporal/OOF evidence and the scientific protocol.
-
-## Pending OOF inventory
-
-The existing temporal audit has already accredited retrospective coverage. No source data or scores were read again. `GENERATABLE` means that implementing historical OOF generation is supported, not that scores are present, a calibrator can already be fitted, or scientific execution is ready.
-
-| Arm / window | Preparation status for every listed cut, family and objective | Pending work |
-|---|---|---|
-| A1 / 12 months | `GENERATABLE` | Historical-refit OOF scores in the inventory below |
-| A2 / 24 months | `GENERATABLE` | Historical-refit OOF scores in the inventory below |
-| A3 / 36 months | `GENERATABLE` | Historical-refit OOF scores in the inventory below |
-| A4 / expanding | `NOT_EVALUABLE` | `BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED`: the current contract does not determine the first valid OOF origin |
-
-Every row below applies **independently to each of GAM, LightGBM and XGBoost**. Numbers are missing target-month coverage, not counts of municipality predictions. The existing manifest's `cell_groups` retain each cut/horizon/objective and its three family-specific cell identities, with `pending_OOF` attached to that group.
-
-| Cut | Horizon | Objective | Retained calibration months | Missing for 12 | Missing for 24 | Missing for 36 |
-|---|---|---|---|---|---|---|
-| development_2020 | T+1 | onset (single T+1 objective) | 6 | 6 | 18 | 30 |
-| development_2021 | T+1 | onset (single T+1 objective) | 6 | 6 | 18 | 30 |
-| development_2022 | T+1 | onset (single T+1 objective) | 6 | 6 | 18 | 30 |
-| stress_2024 | T+1 | onset (single T+1 objective) | 6 | 6 | 18 | 30 |
-| development_2020 | T+2 | onset (primary) | 5 | 7 | 19 | 31 |
-| development_2021 | T+2 | onset (primary) | 5 | 7 | 19 | 31 |
-| development_2022 | T+2 | onset (primary) | 5 | 7 | 19 | 31 |
-| stress_2024 | T+2 | onset (primary) | 5 | 7 | 19 | 31 |
-| development_2020 | T+2 | excess_control (separate) | 5 | 7 | 19 | 31 |
-| development_2021 | T+2 | excess_control (separate) | 5 | 7 | 19 | 31 |
-| development_2022 | T+2 | excess_control (separate) | 5 | 7 | 19 | 31 |
-| stress_2024 | T+2 | excess_control (separate) | 5 | 7 | 19 | 31 |
-
-The windows overlap: **do not sum** the 12/24/36-month deficits. Each missing month requires genuinely OOF predictions through historical chronological refits with the exact fixed M00 features, family parameters and seed, under a new execution identity. Applying the retained predictor to months it already used for training cannot fill the gap. Selection/evaluation scores cannot be reassigned as calibration, and distinct predictor snapshots cannot be silently pooled. Preserve common paired keys/truth across arms. Generation has not started.
-
-2024 target outcomes remain stress-only after policy freeze and cannot select the window, calibrator, threshold or family; its pending calibration history is prior to that evaluation block. 2025 remains `NOT_EVALUABLE`. The expanding origin must remain null until the current-contract ambiguity is resolved; do not infer it from the first observed training row or initiate another audit here. This is the only residual blocker to declaring every window generatable.
-
-## Remaining scientific dependencies
-
-Replay raw scores and fitted states are preserved; absent original intermediates remain `NOT_COMPARABLE`. Historical OOF generation and nested chronological integration are implementation work still to do. The design's existing pre-execution requirements for territorial loss tolerance, material FA-increase definition, isotonic support and resampling settings remain pending without new choices. Confirmatory H1 and D remain unavailable. A future scientific execution still needs registration, source/authorization binding and a separately frozen protocol; none follows from `READY_FOR_OOF_IMPLEMENTATION`, a functional PASS or observable replay. M00, EXP03.1, bundles, MLflow and historical results remain intact.
+These cases use small generated tables and a deterministic fitter double; they do not read private data or fit native scientific models. Calibration/evaluation adapters are exercised on generated scores only. Modified-file Ruff, formatting, focused mypy and `git diff --check` supplement those five cases. No full suite or DWP check is part of this delivery.
