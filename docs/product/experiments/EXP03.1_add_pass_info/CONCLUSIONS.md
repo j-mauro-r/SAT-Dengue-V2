@@ -25,13 +25,13 @@ Los resultados varían por año, familia, horizonte y territorio. La cobertura e
 | Celdas / hijos vinculados | 96 / 96 |
 | Ejecución padre | `a37877c20dbd4b1382567e79e8d89e7b` |
 
-El validador oficial registró `status=verified`; el mapeo de 96 celdas coincide uno a uno con 96 ejecuciones hijas finalizadas bajo el padre indicado. Evidencia: [identidad y procedencia verificadas](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/identity.md).
+El validador oficial registró `status=verified`; el mapeo de 96 celdas coincide uno a uno con 96 ejecuciones hijas finalizadas bajo el padre indicado. Evidencia local reproducible: `analysis_results/identity.md`.
 
 ## 4. Procedencia y contadores
 
 Los contrastes proceden de `bundle.cells[].metrics` y de las filas emparejadas de `bundle.contrasts.paired_effects`; el seguimiento se consultó en modo solo lectura. El bundle registra 96 ajustes de modelo, 96 ajustes de calibrador, una reserva y 96 selecciones de umbral; `permanent_mlflow_writes=0`.
 
-Permanece sin resolver la diferencia entre `execution_counters.real_private_reads=8` y `provenance.real_private_reads=1`. El recibo de admisión enumera ocho registros de archivo, pero el protocolo no define el alcance de ambos contadores. No se normaliza ni se propone una explicación. Evidencia: [inventario](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/inventory/inventory.md) e [identidad](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/identity.md).
+Permanece sin resolver la diferencia entre `execution_counters.real_private_reads=8` y `provenance.real_private_reads=1`. El recibo de admisión enumera ocho registros de archivo, pero el protocolo no define el alcance de ambos contadores. No se normaliza ni se propone una explicación. Evidencia local reproducible: `analysis_results/inventory/inventory.md` y `analysis_results/identity.md`.
 
 ## 5. Pregunta científica
 
@@ -51,7 +51,7 @@ La memoria cubre T−1 a T−6; los cambios comparan ese semestre con T−7 a T�
 
 El bundle contiene 96 celdas evaluables, 60.207 filas de predicción y 52.941 pares emparejados de Q1–Q3. Hay 96 umbrales no nulos. Los años de destino son 2020 (14.769 filas), 2021 (19.299), 2022 (15.852) y 2024 (10.287); el mes máximo es `2024-12`. No hay predicciones posteriores a 2024.
 
-La cobertura por celda es 1,0 y las abstenciones son cero. Esto describe las filas de evaluación contenidas en el bundle; no demuestra por sí solo cobertura operativa ni disponibilidad activa del reporte en cada periodo. Evidencia: [inventario reproducible](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/inventory/inventory.md).
+La cobertura por celda es 1,0 y las abstenciones son cero. Esto describe las filas de evaluación contenidas en el bundle; no demuestra por sí solo cobertura operativa ni disponibilidad activa del reporte en cada periodo. Evidencia local reproducible: `analysis_results/inventory/inventory.md`.
 
 ## 9. Denominadores y convenciones de métricas
 
@@ -67,23 +67,23 @@ El presupuesto congelado `B_primary=1.0` representa falsas alertas de onset por 
 | Q2: M02−M01 | `NO_RESPALDADA` | 24 / 15.225 | 1.596 | 667→652 (−15) | 1.742→1.714 (−28) | 2.409→2.366 (−43) | 0,388783→0,379860 (−0,008923) |
 | Q3: M02−M00 | `NO_RESPALDADA` | 24 / 15.225 | 1.596 | 662→652 (−10) | 1.684→1.714 (+30) | 2.346→2.366 (+20) | 0,388014→0,379860 (−0,008154) |
 
-Los totales son sumas sobre evaluaciones de celdas emparejadas; no son conteos únicos. Sensibilidad es el promedio macro de celdas. Evidencia: [síntesis](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/synthesis/synthesis.md) y [clasificaciones Q](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/synthesis/q_classifications.csv).
+Los totales son sumas sobre evaluaciones de celdas emparejadas; no son conteos únicos. Sensibilidad es el promedio macro de celdas. Evidencia local reproducible: `analysis_results/synthesis/synthesis.md` y `analysis_results/synthesis/q_classifications.csv`.
 
 ## 11. Q1: memoria reciente
 
-Q1 detecta cinco onsets adicionales en 1.596 positivos y 15.225 pares de predicciones, pero añade 58 falsas alertas y 63 alertas totales. La sensibilidad macro aumenta 0,000769; la precisión macro pasa de 0,268815 a 0,263886 (Δ −0,004929). La tasa macro de falsas alertas por municipio-año pasa de 0,967105 a 0,999900. La dirección positiva agregada es pequeña y coexiste con carga mayor, estratos mixtos y discordancia de métricas de calibración; por ello la evidencia es parcial, no robusta. Evidencia: [resultado Q1](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q1/q1.md).
+Q1 detecta cinco onsets adicionales en 1.596 positivos y 15.225 pares de predicciones, pero añade 58 falsas alertas y 63 alertas totales. La sensibilidad macro aumenta 0,000769; la precisión macro pasa de 0,268815 a 0,263886 (Δ −0,004929). La tasa macro de falsas alertas por municipio-año pasa de 0,967105 a 0,999900. La dirección positiva agregada es pequeña y coexiste con carga mayor, estratos mixtos y discordancia de métricas de calibración; por ello la evidencia es parcial, no robusta. Evidencia local reproducible: `analysis_results/q1/q1.md`.
 
-El agregado Q1 cubre onset en T+1 y T+2. La evaluación de exceso no aplica a Q1 en la matriz congelada. Los soportes por horizonte están en [Q1 por par de celdas](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q1/q1_by_cell_pair.csv) y en [carga por estrato](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/load_by_stratum.csv).
+El agregado Q1 cubre onset en T+1 y T+2. La evaluación de exceso no aplica a Q1 en la matriz congelada. Los soportes por horizonte están en `analysis_results/q1/q1_by_cell_pair.csv` y `analysis_results/detection_load/load_by_stratum.csv`.
 
 ## 12. Q2: cambio semestral incremental
 
-Q2 compara M02 con M01 en 24 pares, 15.225 predicciones emparejadas y 1.596 onsets. Las detecciones bajan de 667 a 652 (−15), las falsas alertas de 1.742 a 1.714 (−28) y las alertas de 2.409 a 2.366 (−43); la sensibilidad macro baja 0,008923. La reducción de carga no respalda la hipótesis de mejora de detección de onset. La tasa macro de falsas alertas pasa de 0,999900 a 0,983702. Evidencia: [resultado Q2](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q2/q2.md).
+Q2 compara M02 con M01 en 24 pares, 15.225 predicciones emparejadas y 1.596 onsets. Las detecciones bajan de 667 a 652 (−15), las falsas alertas de 1.742 a 1.714 (−28) y las alertas de 2.409 a 2.366 (−43); la sensibilidad macro baja 0,008923. La reducción de carga no respalda la hipótesis de mejora de detección de onset. La tasa macro de falsas alertas pasa de 0,999900 a 0,983702. Evidencia local reproducible: `analysis_results/q2/q2.md`.
 
-Q2 no tiene un contraste de exceso-control: M01 carece de celdas para ese objetivo. No se sustituye por Q3. Evidencia desagregada: [Q2 por par de celdas](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q2/q2_by_cell_pair.csv).
+Q2 no tiene un contraste de exceso-control: M01 carece de celdas para ese objetivo. No se sustituye por Q3. Evidencia desagregada: `analysis_results/q2/q2_by_cell_pair.csv`.
 
 ## 13. Q3: trayectoria completa frente a referencia
 
-Q3 compara M02 con M00 en 24 pares de onset, 15.225 predicciones emparejadas y 1.596 onsets. Las detecciones bajan 10; las falsas alertas aumentan 30 y las alertas totales aumentan 20. La sensibilidad macro cae 0,008154. Este resultado no respalda una mejora de onset; el resultado de exceso-control se informa por separado en la sección 16. Evidencia: [resultado Q3](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q3/q3.md) y [Q3 por par de celdas](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q3/q3_by_cell_pair.csv).
+Q3 compara M02 con M00 en 24 pares de onset, 15.225 predicciones emparejadas y 1.596 onsets. Las detecciones bajan 10; las falsas alertas aumentan 30 y las alertas totales aumentan 20. La sensibilidad macro cae 0,008154. Este resultado no respalda una mejora de onset; el resultado de exceso-control se informa por separado en la sección 16. Evidencia local reproducible: `analysis_results/q3/q3.md` y `analysis_results/q3/q3_by_cell_pair.csv`.
 
 ## 14. Onset en T+1
 
@@ -93,7 +93,7 @@ Q3 compara M02 con M00 en 24 pares de onset, 15.225 predicciones emparejadas y 1
 | Q2: M01→M02 | 12 / 7.959 | 939 | 429→426 (−3) | 842→831 (−11) | 1.271→1.257 (−14) | 0,426185→0,424297 |
 | Q3: M00→M02 | 12 / 7.959 | 939 | 427→426 (−1) | 804→831 (+27) | 1.231→1.257 (+26) | 0,426969→0,424297 |
 
-En T+1, Q1 suma dos detecciones agrupadas, pero su sensibilidad macro disminuye 0,000784 y la carga aumenta. Q2 y Q3 también reducen la sensibilidad macro. Evidencia: [Q1 por celda](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q1/q1_by_cell_pair.csv), [Q2](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q2/q2.md), [Q3](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q3/q3.md) y [carga por estrato](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/load_by_stratum.csv).
+En T+1, Q1 suma dos detecciones agrupadas, pero su sensibilidad macro disminuye 0,000784 y la carga aumenta. Q2 y Q3 también reducen la sensibilidad macro. Evidencia local reproducible: `analysis_results/q1/q1_by_cell_pair.csv`, `analysis_results/q2/q2.md`, `analysis_results/q3/q3.md` y `analysis_results/detection_load/load_by_stratum.csv`.
 
 ## 15. Onset en T+2
 
@@ -103,41 +103,41 @@ En T+1, Q1 suma dos detecciones agrupadas, pero su sensibilidad macro disminuye 
 | Q2: M01→M02 | 12 / 7.266 | 657 | 238→226 (−12) | 900→883 (−17) | 1.138→1.109 (−29) | 0,351381→0,335424 |
 | Q3: M00→M02 | 12 / 7.266 | 657 | 235→226 (−9) | 880→883 (+3) | 1.115→1.109 (−6) | 0,349058→0,335424 |
 
-En T+2, Q1 mejora tres detecciones agrupadas y 0,002323 de sensibilidad macro, de nuevo con más carga; Q2 y Q3 pierden 12 y 9 detecciones, respectivamente. Estas cifras usan denominadores y soportes emparejados de onset y no se combinan con el objetivo de exceso-control. Evidencia: [Q1 por celda](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q1/q1_by_cell_pair.csv), [Q2](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q2/q2.md), [Q3](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q3/q3.md) y [carga por estrato](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/load_by_stratum.csv).
+En T+2, Q1 mejora tres detecciones agrupadas y 0,002323 de sensibilidad macro, de nuevo con más carga; Q2 y Q3 pierden 12 y 9 detecciones, respectivamente. Estas cifras usan denominadores y soportes emparejados de onset y no se combinan con el objetivo de exceso-control. Evidencia local reproducible: `analysis_results/q1/q1_by_cell_pair.csv`, `analysis_results/q2/q2.md`, `analysis_results/q3/q3.md` y `analysis_results/detection_load/load_by_stratum.csv`.
 
 ## 16. Exceso-control en T+2
 
 El único contraste aplicable es Q3, M00→M02: 12 pares de celdas, 7.266 pares de predicciones y 1.044 positivos del objetivo de exceso-control. Las detecciones de exceso bajan de 341 a 317 (−24), las falsas alertas de 589 a 556 (−33) y las alertas totales de 930 a 873 (−57). La tasa de detección de ese objetivo pasa de 0,326628 a 0,303640.
 
-Este resultado no es onset, no se usa para compensar Q3 onset y no se evalúa contra `B_primary`, que corresponde a falsas alertas de onset. T+1 exceso-control no está definido por la matriz congelada. Evidencia: [resultado Q3](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q3/q3.md), grupo `excess_control/T+2`.
+Este resultado no es onset, no se usa para compensar Q3 onset y no se evalúa contra `B_primary`, que corresponde a falsas alertas de onset. T+1 exceso-control no está definido por la matriz congelada. Evidencia local reproducible: `analysis_results/q3/q3.md`, grupo `excess_control/T+2`.
 
 ## 17. Desarrollo retrospectivo 2020–2022
 
 Los cortes 2020, 2021 y 2022 son historia retrospectiva OOF solapada, no validación prospectiva. Entre los cortes, familias y horizontes, las direcciones de sensibilidad fueron 21 favorables, 15 neutras y 27 adversas. Estas son comparaciones repetidas descriptivas, no probabilidades independientes.
 
-Por contraste, las direcciones favorable/neutra/adversa fueron Q1 7/1/10, Q2 3/11/4 y Q3 7/3/8. El promedio global favorable no elimina resultados adversos ni constituye inferencia. Evidencia: [estratos](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/strata/strata.md) y [síntesis](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/synthesis/synthesis.md).
+Por contraste, las direcciones favorable/neutra/adversa fueron Q1 7/1/10, Q2 3/11/4 y Q3 7/3/8. El promedio global favorable no elimina resultados adversos ni constituye inferencia. Evidencia local reproducible: `analysis_results/strata/strata.md` y `analysis_results/synthesis/synthesis.md`.
 
 ## 18. Estrés retrospectivo 2024
 
 2024 se conserva aparte del desarrollo y no se usa para seleccionar configuración. En las comparaciones de onset, los deltas agregados detecciones/falsas alertas/alertas fueron Q1 +6/+21/+27, Q2 −14/−42/−56 y Q3 −8/−21/−29. Son sumas de evaluaciones repetidas y descriptivas; no reemplazan la evaluación de desarrollo ni prueban desempeño futuro.
 
-No existe evidencia de desempeño de 2025: el bundle termina en `2024-12`, contiene cero predicciones posteriores a 2024 y la frontera 2025 está rechazada. Evidencia: [resumen de síntesis](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/synthesis/synthesis_summary.json) y [estratos](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/strata/strata.md).
+No existe evidencia de desempeño de 2025: el bundle termina en `2024-12`, contiene cero predicciones posteriores a 2024 y la frontera 2025 está rechazada. Evidencia local reproducible: `analysis_results/synthesis/synthesis_summary.json` y `analysis_results/strata/strata.md`.
 
 ## 19. Consistencia por familia y horizonte
 
 En las 21 combinaciones Q/objetivo/familia/horizonte con soporte de desarrollo, 14 cruzan cero entre años y se registraron 21 cambios de signo no neutros entre cortes adyacentes. La dirección también varía dentro de GAM, LightGBM y XGBoost; no se observa una dirección uniforme que justifique elegir una familia. Estos conteos dependen de los mismos municipios y periodos y no son pruebas de estabilidad inferencial.
 
-El detalle de cada estrato, soporte y delta está en [estratos por grupo](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/strata/strata_by_group.csv) y [resumen de estratos](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/strata/strata.md). Las combinaciones sin soporte se mantienen como no evaluables, no como efectos nulos.
+El detalle de cada estrato, soporte y delta está en `analysis_results/strata/strata_by_group.csv` y `analysis_results/strata/strata.md`. Las combinaciones sin soporte se mantienen como no evaluables, no como efectos nulos.
 
 ## 20. Detección y carga de alertas
 
 La lectura conjunta separa detecciones positivas de alertas emitidas. En Q1 onset hubo 44 alertas verdaderas solo en el candidato frente a 39 solo en la referencia; aun así, se emitieron 63 alertas más y 58 falsas alertas netas más. En Q2 hubo 14 alertas verdaderas solo en M02 frente a 29 solo en M01, con 43 alertas totales menos y 28 falsas alertas menos. En Q3 onset fueron 37 frente a 47 alertas verdaderas exclusivas, junto con 20 alertas totales más y 30 falsas alertas más.
 
-Las cuentas por clase, transiciones y exposiciones están en [transiciones por clase](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/alert_transitions_by_class.csv) y [carga por estrato](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/load_by_stratum.csv). Una alerta candidata no equivale automáticamente a una detección nueva.
+Las cuentas por clase, transiciones y exposiciones están en `analysis_results/detection_load/alert_transitions_by_class.csv` y `analysis_results/detection_load/load_by_stratum.csv`. Una alerta candidata no equivale automáticamente a una detección nueva.
 
 ## 21. Persistencia y clases de error
 
-Onset, continuación y no-exceso se conservan como clases distintas. Para Q1, las alertas exclusivas sobre onsets fueron 44 en M01 y 39 en M00 (ganancia neta de 5); sobre continuaciones fueron 16 y 13 (diferencia neta de 3), mientras que sobre no-exceso fueron 207 y 152 (55 de las 58 falsas alertas netas adicionales). Por tanto, EXP03.1 observa una señal incremental mínima sobre inicios, pero no demuestra anticipación robusta: la ganancia cambia de dirección según la métrica macro y los estratos, y está dominada operativamente por carga sobre no-exceso. Tampoco demuestra que el mecanismo sea principalmente persistencia; los campos de persistencia, incluido el historial de alerta T+1 para la evaluación T+2, están separados del endpoint y no identifican causalidad. Evidencia: [detección y carga](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/detection_load.md) y [transiciones por clase](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/alert_transitions_by_class.csv).
+Onset, continuación y no-exceso se conservan como clases distintas. Para Q1, las alertas exclusivas sobre onsets fueron 44 en M01 y 39 en M00 (ganancia neta de 5); sobre continuaciones fueron 16 y 13 (diferencia neta de 3), mientras que sobre no-exceso fueron 207 y 152 (55 de las 58 falsas alertas netas adicionales). Por tanto, EXP03.1 observa una señal incremental mínima sobre inicios, pero no demuestra anticipación robusta: la ganancia cambia de dirección según la métrica macro y los estratos, y está dominada operativamente por carga sobre no-exceso. Tampoco demuestra que el mecanismo sea principalmente persistencia; los campos de persistencia, incluido el historial de alerta T+1 para la evaluación T+2, están separados del endpoint y no identifican causalidad. Evidencia local reproducible: `analysis_results/detection_load/detection_load.md` y `analysis_results/detection_load/alert_transitions_by_class.csv`.
 
 ## 22. Calibración y discriminación
 
@@ -147,13 +147,13 @@ Onset, continuación y no-exceso se conservan como clases distintas. Para Q1, la
 | Q2 | −0,001179 | −0,000022 | +0,000213 | 1,000→1,000 | 5/8 |
 | Q3 | −0,000978 | +0,000265 | +0,000667 | 1,000→1,000 | 5/8 |
 
-AP es average precision; Brier y ECE son errores donde valores menores son favorables. En 19 de 28 grupos emparejados Q/objetivo/horizonte/corte, alguna métrica disponible se movió en dirección opuesta a la sensibilidad. Las direcciones son descriptivas; no se combinan en un ranking. Evidencia: [calibración](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/calibration/calibration.md).
+AP es average precision; Brier y ECE son errores donde valores menores son favorables. En 19 de 28 grupos emparejados Q/objetivo/horizonte/corte, alguna métrica disponible se movió en dirección opuesta a la sensibilidad. Las direcciones son descriptivas; no se combinan en un ranking. Evidencia local reproducible: `analysis_results/calibration/calibration.md`.
 
 ## 23. Cobertura, confiabilidad e incertidumbre
 
 Las 96 celdas tienen cobertura 1,0 y cero abstenciones. Hay 225 bins de confiabilidad no vacíos; sus 60.207 filas sumadas reconcilian con el soporte del bundle, con evaluaciones repetidas. La completitud de esas filas no prueba disponibilidad activa del reporte ni extrapolación a otros periodos.
 
-No hay intervalos de confianza, errores estándar ni valores p en el bundle o resúmenes autorizados. No se estimó incertidumbre mediante remuestreo posterior. Tampoco hay resultado de robustez a disponibilidad retrasada; el reconocimiento retrospectivo de disponibilidad no es evidencia de tal robustez. Evidencia: [calibración, cobertura e incertidumbre](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/calibration/calibration.md).
+No hay intervalos de confianza, errores estándar ni valores p en el bundle o resúmenes autorizados. No se estimó incertidumbre mediante remuestreo posterior. Tampoco hay resultado de robustez a disponibilidad retrasada; el reconocimiento retrospectivo de disponibilidad no es evidencia de tal robustez. Evidencia local reproducible: `analysis_results/calibration/calibration.md`.
 
 ## 24. Evidencia territorial: Meta y Tolima
 
@@ -165,7 +165,7 @@ El análisis agregado cubre 76 municipios del bundle: 29 en Meta y 47 en Tolima.
 | Q2 | 4/15/139 | 8/11/187 |
 | Q3 | 10/22/126 | 21/17/168 |
 
-Los conteos repiten comparaciones por grupo y no representan municipios únicos. El soporte territorial varía por periodo; las tasas regionales basadas en exposición de filas se mantienen separadas de las métricas globales por celda. La evidencia es heterogénea y descriptiva. Evidencia: [análisis territorial](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/territory/territory.md).
+Los conteos repiten comparaciones por grupo y no representan municipios únicos. El soporte territorial varía por periodo; las tasas regionales basadas en exposición de filas se mantienen separadas de las métricas globales por celda. La evidencia es heterogénea y descriptiva. Evidencia local reproducible: `analysis_results/territory/territory.md`.
 
 ## 25. Perfiles históricos de transmisión
 
@@ -201,16 +201,16 @@ La trazabilidad reproducible está en el bundle identificado en la sección 3 y 
 
 | Evidencia | Registros |
 |---|---|
-| Identidad y procedencia | [identity.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/identity.md) |
-| Inventario y denominadores | [inventory.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/inventory/inventory.md) |
-| Q1: memoria reciente | [q1.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q1/q1.md), [q1_by_cell_pair.csv](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q1/q1_by_cell_pair.csv) |
-| Q2: cambio semestral | [q2.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q2/q2.md), [q2_by_cell_pair.csv](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q2/q2_by_cell_pair.csv) |
-| Q3: trayectoria completa | [q3.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q3/q3.md), [q3_by_cell_pair.csv](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/q3/q3_by_cell_pair.csv) |
-| Estratos temporales y por familia | [strata.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/strata/strata.md), [strata_by_group.csv](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/strata/strata_by_group.csv) |
-| Carga y transiciones de alertas | [detection_load.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/detection_load.md), [alert_transitions_by_class.csv](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/alert_transitions_by_class.csv), [load_by_stratum.csv](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/detection_load/load_by_stratum.csv) |
-| Calibración, cobertura e incertidumbre | [calibration.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/calibration/calibration.md) |
-| Evidencia territorial agregada | [territory.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/territory/territory.md) |
-| Clasificación y síntesis | [synthesis.md](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/synthesis/synthesis.md), [q_classifications.csv](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/synthesis/q_classifications.csv), [synthesis_summary.json](../../../../.dwp/plans/PLAN_051_exp03_1_scientific_analysis/analysis_results/synthesis/synthesis_summary.json) |
+| Identidad y procedencia | `analysis_results/identity.md` |
+| Inventario y denominadores | `analysis_results/inventory/inventory.md` |
+| Q1: memoria reciente | `analysis_results/q1/q1.md`, `analysis_results/q1/q1_by_cell_pair.csv` |
+| Q2: cambio semestral | `analysis_results/q2/q2.md`, `analysis_results/q2/q2_by_cell_pair.csv` |
+| Q3: trayectoria completa | `analysis_results/q3/q3.md`, `analysis_results/q3/q3_by_cell_pair.csv` |
+| Estratos temporales y por familia | `analysis_results/strata/strata.md`, `analysis_results/strata/strata_by_group.csv` |
+| Carga y transiciones de alertas | `analysis_results/detection_load/detection_load.md`, `analysis_results/detection_load/alert_transitions_by_class.csv`, `analysis_results/detection_load/load_by_stratum.csv` |
+| Calibración, cobertura e incertidumbre | `analysis_results/calibration/calibration.md` |
+| Evidencia territorial agregada | `analysis_results/territory/territory.md` |
+| Clasificación y síntesis | `analysis_results/synthesis/synthesis.md`, `analysis_results/synthesis/q_classifications.csv`, `analysis_results/synthesis/synthesis_summary.json` |
 
 La metodología congelada está enlazada en la sección 7. Este cierre no volvió a ejecutar EXP03.1, no recalibró ni reentrenó y no escribió en MLflow.
 
