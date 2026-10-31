@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -212,12 +213,34 @@ def validate(
     validate_real_mlflow(bundle, tracking_root, publication["manifest"]["bundle_id"])
     replay = publication.get("replay")
     comparison = {"status": "NOT_COMPARABLE", "reason": "historical_bundle_has_no_replay_artifacts"}
+    correction: dict[str, str] = {}
     if replay is not None:
         original_path = original_path or Path(bundle["provenance"]["original_bundle_path"])
         original = read_original(original_path)
         comparison = compare_observables(original["bundle"], bundle)
-        if comparison != replay["comparison"]:
-            raise ValueError("Replay comparison evidence changed")
+        stored = replay["comparison"]
+        if comparison != stored:
+            differences = stored.get("differences")
+            # Package schema, protocol and hashes were verified by read_real_bundle.
+            # Only a threshold-type mismatch with exact persisted science is repairable.
+            if (
+                stored.get("status") != "REPLAY_MISMATCH"
+                or not isinstance(differences, list)
+                or not differences
+                or any(
+                    not isinstance(path, str)
+                    or re.fullmatch(r"cells/[0-9]+/threshold", path) is None
+                    for path in differences
+                )
+                or comparison.get("status") != "EXACT_OBSERVABLE_REPLAY"
+                or comparison.get("differences") != []
+                or comparison != {**stored, "status": "EXACT_OBSERVABLE_REPLAY", "differences": []}
+            ):
+                raise ValueError("Replay comparison evidence changed")
+            correction = {
+                "stored_comparison_status": stored["status"],
+                "comparison_correction": "canonical_numeric_type_normalization_v1",
+            }
     elif original_path is not None:
         raise ValueError("Original/replay validation requires a replay companion package")
     return {
@@ -228,6 +251,7 @@ def validate(
         "parent_run_id": bundle["mlflow_receipt"]["parent_run_id"],
         "child_runs": bundle["mlflow_receipt"]["child_count"],
         "replay": comparison,
+        **correction,
         "G5": bundle["G5"],
         "champion": bundle["champion"],
     }

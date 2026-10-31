@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import copy
+import json
 import shutil
 import uuid
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 from test_exp03_1_operational import _real_bundle
@@ -190,6 +192,151 @@ def test_comparison_enforces_numeric_and_discrete_contract() -> None:
     report = validation.compare_observables(original, original)
     assert set(report["historical_intermediates"].values()) == {"NOT_COMPARABLE"}
     assert validation.compare_observables(None, original)["status"] == "NOT_COMPARABLE"
+
+
+def test_publication_compares_canonical_numeric_thresholds(
+    repo_tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    original = _real_bundle()
+    bundle = copy.deepcopy(original)
+    bundle["cells"][0]["threshold"] = np.float64(original["cells"][0]["threshold"])
+    assert validation.compare_observables(original, bundle)["differences"] == ["cells/0/threshold"]
+    capture = repo_tmp_path / "capture"
+    capture.mkdir()
+    for row in bundle["cells"]:
+        (capture / row["cell_id"]).mkdir()
+    staging = repo_tmp_path / "staging"
+    staging.mkdir()
+    monkeypatch.setattr(validation, "read_original", lambda *_: {"bundle": original})
+    monkeypatch.setattr(reporting, "verify_replay_cell", lambda *_: {"status": "pass"})
+    provenance = {
+        "original_bundle_path": str(repo_tmp_path / "original"),
+        "replay_protocol": preflight.REPLAY_PROTOCOL,
+        "original": preflight.ORIGINAL,
+        "observed_environment": {},
+        "environment_sha256": digest({}),
+    }
+    raw = canonical_bytes(bundle)
+    reporting._publish_replay(
+        {"cells": bundle["cells"], "replay_capture_root": str(capture)},
+        provenance,
+        bundle,
+        staging,
+        raw,
+    )
+    package = json.loads((staging / "replay/manifest.json").read_bytes())
+    assert package["comparison"]["status"] == "EXACT_OBSERVABLE_REPLAY"
+    assert package["comparison"]["differences"] == []
+    assert type(bundle["cells"][0]["threshold"]) is np.float64
+    assert canonical_bytes(bundle) == raw == canonical_bytes(original)
+
+
+def _validate_generated_comparison(
+    monkeypatch: pytest.MonkeyPatch,
+    original: dict[str, Any],
+    bundle: dict[str, Any],
+    stored: dict[str, Any],
+) -> dict[str, Any]:
+    # Double only the verified reader/lineage boundary; compare real persisted JSON values.
+    persisted = json.loads(canonical_bytes(bundle))
+    persisted["provenance"]["original_bundle_path"] = "unused-original"
+    monkeypatch.setattr(
+        validation,
+        "read_real_bundle",
+        lambda *_: {
+            "bundle": persisted,
+            "manifest": {"bundle_id": "generated-only"},
+            "replay": {
+                "schema": "exp03-1-replay-package-v1",
+                "replay_protocol": preflight.REPLAY_PROTOCOL,
+                "comparison": stored,
+            },
+        },
+    )
+    monkeypatch.setattr(
+        validation, "read_original", lambda *_: {"bundle": json.loads(canonical_bytes(original))}
+    )
+    monkeypatch.setattr(validation, "validate_real_mlflow", lambda *_: None)
+    return validation.validate(Path("unused-replay"), "generated-only", "unused-tracking")
+
+
+def test_validator_records_canonical_threshold_type_correction(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    original = _real_bundle()
+    bundle = copy.deepcopy(original)
+    for row in bundle["cells"][:2]:
+        row["threshold"] = np.float64(row["threshold"])
+    stored = validation.compare_observables(original, bundle)
+    assert stored["status"] == "REPLAY_MISMATCH"
+    assert set(stored["differences"]) == {"cells/0/threshold", "cells/1/threshold"}
+    before = canonical_bytes(stored)
+    result = _validate_generated_comparison(monkeypatch, original, bundle, stored)
+    assert result["status"] == "verified"
+    assert result["stored_comparison_status"] == "REPLAY_MISMATCH"
+    assert result["comparison_correction"] == "canonical_numeric_type_normalization_v1"
+    assert result["replay"] == validation.compare_observables(original, original)
+    assert result["replay"]["status"] == "EXACT_OBSERVABLE_REPLAY"
+    assert result["replay"]["differences"] == []
+    assert canonical_bytes(stored) == before
+
+
+def test_validator_rejects_additional_stored_or_recalculated_differences(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    original = _real_bundle()
+    # Two close scores in one comparison cell isolate ranking/ties within numeric tolerance.
+    second = {**original["predictions"][0], "municipality_code": "01002", "score": 0.5 + 5e-13}
+    original["predictions"].insert(1, second)
+    stored = {
+        **validation.compare_observables(original, original),
+        "status": "REPLAY_MISMATCH",
+        "differences": ["cells/0/threshold"],
+    }
+    for extra in (
+        "predictions/0/alert",
+        "predictions/0/score",
+        "cell/ranking_bins_ties",
+        "thresholds",
+        "cells/0/metrics/false_alerts",
+        "cells/not-an-integer/threshold",
+        "cells/0/threshold/extra",
+    ):
+        changed = {**stored, "differences": [*stored["differences"], extra]}
+        with pytest.raises(ValueError, match="Replay comparison evidence changed"):
+            _validate_generated_comparison(monkeypatch, original, original, changed)
+    for case in ("alert", "score", "ranking", "threshold", "discrete", "numeric", "tie", "bin"):
+        bundle = copy.deepcopy(original)
+        if case == "alert":
+            bundle["predictions"][0]["alert"] = False
+        elif case in {"score", "numeric", "bin"}:
+            bundle["predictions"][0]["score"] += {
+                "score": 2e-12,
+                "numeric": 1e-13,
+                "bin": -5e-13,
+            }[case]
+        elif case == "ranking":
+            bundle["predictions"][0]["score"], bundle["predictions"][1]["score"] = (
+                bundle["predictions"][1]["score"],
+                bundle["predictions"][0]["score"],
+            )
+        elif case == "tie":
+            bundle["predictions"][1]["score"] = bundle["predictions"][0]["score"]
+        elif case == "threshold":
+            bundle["cells"][0]["threshold"] += 5e-13
+        else:
+            bundle["cells"][0]["metrics"]["false_alerts"] += 1
+        report = validation.compare_observables(original, bundle)
+        assert report["status"] != "EXACT_OBSERVABLE_REPLAY", case
+        if case in {"ranking", "tie", "bin"}:
+            assert any(path.endswith("/ranking_bins_ties") for path in report["differences"])
+        try:
+            result = _validate_generated_comparison(monkeypatch, original, bundle, stored)
+        except ValueError as error:
+            assert str(error) == "Replay comparison evidence changed"
+        else:
+            assert result["status"] == "REPLAY_MISMATCH", case
+            assert "comparison_correction" not in result
 
 
 def test_preflight_observes_environment_without_private_reads_or_writes(
