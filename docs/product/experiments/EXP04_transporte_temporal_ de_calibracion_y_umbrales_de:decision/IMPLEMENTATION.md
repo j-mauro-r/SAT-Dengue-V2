@@ -40,6 +40,8 @@ Reconstruction equivalence is **not verifiable from the available artifacts**. T
 
 The [partial baseline manifest](BASELINE_MANIFEST.json) records the read-only audit. Its blocked status is deliberate; no new execution identity or equivalence is invented.
 
+The original parent tracking metadata also lacks an exact numerical runtime/native-library environment identity. Pinned dependency requirements and unchanged source parameters do not establish the original installed numerical environment. This is an additional dependency for a defensible exact reconstruction.
+
 `paired_support` rejects changed truth or differing eligible keys with `NOT_EVALUABLE` and reports intersection support. `common_exposure` counts the supplied complete eligible observable municipality-month cohort/12, independent of alerts and scores. No fixed 76-municipality denominator is used. The historical M00 denominator is retained separately and never used to establish an EXP04 primary improvement.
 
 ## Independent temporal policies

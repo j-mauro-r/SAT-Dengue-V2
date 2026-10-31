@@ -261,6 +261,10 @@ def evaluate_frozen(
     validate_scores(frame)
     if objective not in ("onset", "excess_control"):
         raise ValueError("Unknown objective")
+    if "objective" in frame and not frame.objective.eq(objective).all():
+        raise ValueError("Objective differs from prediction provenance")
+    if objective == "excess_control" and ("horizon" not in frame or not frame.horizon.eq(2).all()):
+        raise ValueError("Excess control requires its separate T+2 support")
     if threshold is not None and (not np.isfinite(threshold) or not 0 <= threshold <= 1):
         raise ValueError("Threshold must be a finite probability or no-alert null")
     if historical_exposure is not None and (

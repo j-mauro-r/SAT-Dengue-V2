@@ -15,7 +15,8 @@
     "original_M00_fitted_calibrator_coefficients_with_output_identity",
     "original_M00_raw_calibration_selection_and_evaluation_scores",
     "per_score_training_cutoff_label_maturity_and_role_membership",
-    "verified_prior_OOF_history_for_rolling_windows"
+    "verified_prior_OOF_history_for_rolling_windows",
+    "original_runtime_native_library_and_numerical_environment_identity"
   ],
   "private_source_reads": 0,
   "model_fits": 0,

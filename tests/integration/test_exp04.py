@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
+from sat_dengue.configuration import canonical_bytes
 from sat_dengue.experiments.exp04 import (
     apply_calibrator,
     calibration_window,
@@ -16,6 +17,7 @@ from sat_dengue.experiments.exp04 import (
     threshold_policy,
 )
 from sat_dengue.experiments.exp04_baseline import audit_baseline, common_exposure, paired_support
+from sat_dengue.experiments.exp04_contract import digest
 from sat_dengue.experiments.exp04_runner import (
     compare_policies,
     functional_run,
@@ -60,6 +62,10 @@ def test_baseline(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     changed = frame.copy()
     changed.loc[0, "raw_score"] = 0.2
     assert paired_support(frame, changed)["reason"] == "base_predictor_scores_differ"
+    assert (
+        paired_support(frame.assign(horizon=1), frame.assign(horizon=2))["reason"]
+        == "paired_dimensions_differ"
+    )
     with pytest.raises(ValueError, match="duplicate"):
         common_exposure(pd.concat([frame, frame]))
     later = frame.copy()
@@ -248,3 +254,32 @@ def test_functional(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         write_result(result, Path("tmp/exp04-functional-test"))
     with pytest.raises(ValueError):
         write_result(result, Path("tmp/old-experiment"))
+
+
+def test_reproducibility(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Control 5: exact complete-output repeatability, identities and precision."""
+    from sat_dengue.experiments import exp04_runner
+
+    first, second = functional_run(), functional_run()
+    assert canonical_bytes(first) == canonical_bytes(second)
+    original_id = first["bundle_id"]
+    assert digest({k: v for k, v in first.items() if k != "bundle_id"}) == original_id
+    assert first["provenance"]["code_sha256"]
+    assert first["provenance"]["packages"]
+    assert set(first["input_sha256_by_horizon"]) == {"1", "2"}
+    assert first["input_sha256_by_horizon"]["1"] != first["input_sha256_by_horizon"]["2"]
+    assert canonical_bytes(json.loads(canonical_bytes(first))) == canonical_bytes(first)
+    original_generator = exp04_runner.generated_scores
+
+    def changed_scores(start: str, end: str, horizon: int) -> pd.DataFrame:
+        frame = original_generator(start, end, horizon)
+        frame.loc[0, "raw_score"] += 0.001
+        return frame
+
+    monkeypatch.setattr(exp04_runner, "generated_scores", changed_scores)
+    changed = functional_run()
+    assert changed["bundle_id"] != original_id
+    assert changed["input_sha256_by_horizon"] != first["input_sha256_by_horizon"]
+    monkeypatch.chdir(tmp_path)
+    write_result(first, Path("tmp/exp04-reproducibility"))
+    assert Path("tmp/exp04-reproducibility/result.json").read_bytes() == canonical_bytes(first)

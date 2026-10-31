@@ -25,6 +25,7 @@ MISSING = [
     "original_M00_raw_calibration_selection_and_evaluation_scores",
     "per_score_training_cutoff_label_maturity_and_role_membership",
     "verified_prior_OOF_history_for_rolling_windows",
+    "original_runtime_native_library_and_numerical_environment_identity",
 ]
 
 
@@ -115,6 +116,9 @@ def validate_scores(frame: pd.DataFrame) -> None:
         raise ValueError("Binary truth required")
     if not frame.error_class.isin(["onset", "continuation", "no_excess"]).all():
         raise ValueError("Unknown error class; do not shrink support silently")
+    for name in ("family", "horizon", "objective", "cut"):
+        if name in frame and (frame[name].isna().any() or frame[name].nunique() != 1):
+            raise ValueError("EXP04 scores must describe one family/horizon/objective/cut")
 
 
 def common_exposure(frame: pd.DataFrame) -> float:
@@ -139,6 +143,10 @@ def paired_support(left: pd.DataFrame, right: pd.DataFrame) -> dict[str, Any]:
         }
     if not a[["truth", "error_class"]].equals(b[["truth", "error_class"]]):
         return {"status": "NOT_EVALUABLE", "reason": "paired_labels_or_error_class_differ"}
+    for name in ("family", "horizon", "objective", "cut"):
+        if name in a or name in b:
+            if name not in a or name not in b or not a[name].equals(b[name]):
+                return {"status": "NOT_EVALUABLE", "reason": "paired_dimensions_differ"}
     if not a.raw_score.equals(b.raw_score):
         return {"status": "NOT_EVALUABLE", "reason": "base_predictor_scores_differ"}
     return {"status": "evaluable", "rows": len(a), "common_exposure": common_exposure(a)}

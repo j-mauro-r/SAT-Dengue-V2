@@ -19,10 +19,10 @@ class TrackingHooks:
         parameters = catalog.load("parameters")
         selected = run_params.get("pipeline_names") or [run_params.get("pipeline_name")]
         pipeline = selected[0] if len(selected) == 1 else None
-        if pipeline in {"exp04_preflight", "exp04_functional"} or parameters["profile"] in {
+        if pipeline in {"exp04_preflight", "exp04_functional"} or parameters.get("profile") in (
             "exp04_preflight",
             "exp04_functional",
-        }:
+        ):
             parameters = validate_parameters(parameters)
             if pipeline != parameters["profile"] or parameters["tracking"] != "disabled":
                 raise ValueError(

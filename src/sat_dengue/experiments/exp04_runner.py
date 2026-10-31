@@ -335,10 +335,12 @@ def main() -> None:
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--dry-run", action="store_true")
     modes.add_argument("--functional", action="store_true")
-    parser.add_argument("--baseline", type=Path, default=BASELINE)
+    parser.add_argument("--baseline", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    result = preflight(args.baseline) if args.dry_run else functional_run()
+    if args.functional and args.baseline is not None:
+        parser.error("--baseline applies only to --dry-run; functional input is generated")
+    result = preflight(args.baseline or BASELINE) if args.dry_run else functional_run()
     if args.output:
         write_result(result, args.output)
     print(
