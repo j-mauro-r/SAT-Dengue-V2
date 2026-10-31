@@ -81,6 +81,8 @@ def load_authorized_sources(receipt: dict[str, Any], parameters: dict[str, Any])
 
     config = PreparationConfig(Path.cwd())
     admission = admit_sources(receipt, config)
+    if admission["files"] != receipt["authorized_source_files"]:
+        raise PermissionError("Admitted files differ from the replay-authorized eight hashes")
     reverify(admission)
     try:
         with verified_snapshot(config, admission) as snapshot:
@@ -113,10 +115,22 @@ def _window_by_cut() -> dict[str, dict[str, Any]]:
     return result
 
 
-def _prepare(panel: pd.DataFrame, contract: dict[str, Any], horizon: int) -> pd.DataFrame:
+def _prepare(
+    panel: pd.DataFrame,
+    contract: dict[str, Any],
+    horizon: int,
+    source_audits: dict[int, dict[str, Any]] | None = None,
+) -> pd.DataFrame:
     from sat_dengue.experiments.exp03_features import prepare
 
     frame = prepare(panel, contract, horizon)
+    if source_audits is not None:
+        # The existing merge drops attrs. Retain their already computed audit
+        # tables separately; do not inject attrs/columns into scientific inputs.
+        source_audits[horizon] = {
+            "keys": frame[KEYS].copy(),
+            **{name: frame.attrs.get(name) for name in ("source_months", "source_event_months")},
+        }
     features = trajectory_features(panel, frame[KEYS])
     return frame.merge(features, on=KEYS, how="left", validate="one_to_one")
 
@@ -127,6 +141,7 @@ def execute_matrix(
     *,
     fit: Callable[..., Any] | None = None,
     calibrate: Callable[..., Any] | None = None,
+    capture: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     """Fit every frozen cell with one paired, twelve-state cohort per cut/objective."""
     from sat_dengue.experiments.exp03_features import exposure_table, role_parts
@@ -141,7 +156,15 @@ def execute_matrix(
     if len(grid) != counts()["maximum_refit_cells"] or len(grid) != 96:
         raise ValueError("EXP03.1 frozen cell grid is not exactly 96 cells")
     windows = _window_by_cut()
-    prepared = {horizon: _prepare(panel, contract, horizon) for horizon in p["horizons"]}
+    source_audits: dict[int, dict[str, Any]] = {}
+    prepared = {
+        horizon: (
+            _prepare(panel, contract, horizon, source_audits)
+            if capture is not None
+            else _prepare(panel, contract, horizon)
+        )
+        for horizon in p["horizons"]
+    }
     results: list[dict[str, Any]] = []
     predictions: list[dict[str, Any]] = []
     thresholds: list[dict[str, Any]] = []
@@ -176,12 +199,14 @@ def execute_matrix(
             parent_design["families"][spec["family"]],
             parent_design["seed"],
         )
+        calibration_raw = model.predict(calibration[columns])
         calibrator = calibrate(
-            model.predict(calibration[columns]),
+            calibration_raw,
             calibration[target].astype(int),
             parent_design["seed"],
         )
-        selection_scores = calibrator(model.predict(selection[columns]))
+        selection_raw = model.predict(selection[columns])
+        selection_scores = calibrator(selection_raw)
         exposure = float(
             exposure_table(parts).query("role == 'selection'").monitored_exposure.sum()
         )
@@ -191,7 +216,8 @@ def execute_matrix(
             exposure=exposure,
             budget=p["budget"]["B_primary"],
         )
-        scores = calibrator(model.predict(evaluation[columns]))
+        evaluation_raw = model.predict(evaluation[columns])
+        scores = calibrator(evaluation_raw)
         alerts = (
             pd.Series(False, index=evaluation.index)
             if threshold["threshold"] is None
@@ -237,6 +263,32 @@ def execute_matrix(
             ).hexdigest(),
             "predictors_sha256": digest({"predictors": columns}),
         }
+        if capture is not None:
+            capture(
+                {
+                    "result": result,
+                    "predictor": model,
+                    "calibrator": calibrator,
+                    "threshold_selection": threshold,
+                    "window": windows[spec["cut"]],
+                    "target": target,
+                    "parts": parts,
+                    "roles": selected_parts,
+                    "cohort_ledger": _ledger,
+                    "source_audit": source_audits.get(horizon, {}),
+                    "raw_scores": {
+                        "calibration": calibration_raw,
+                        "selection": selection_raw,
+                        "evaluation": evaluation_raw,
+                    },
+                    "scores": {
+                        "calibration": calibrator(calibration_raw),
+                        "selection": selection_scores,
+                        "evaluation": scores,
+                    },
+                    "alerts": alerts,
+                }
+            )
         results.append(result)
         thresholds.append(
             {
@@ -368,6 +420,17 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
     reverify(sources["admission"])
     provenance = {
         "experiment_id": "EXP031",
+        **{
+            name: receipt[name]
+            for name in (
+                "replay_protocol",
+                "original",
+                "original_bundle_path",
+                "authorized_source_files",
+                "observed_environment",
+                "environment_sha256",
+            )
+        },
         "protocol_sha256": protocol_digest(protocol()),
         "matrix_sha256": receipt["matrix_sha256"],
         "source_admission": sources["admission"],
@@ -389,10 +452,29 @@ def execute_authorized(sources: dict[str, Any]) -> dict[str, Any]:
         "real_calibrator_fits": 0,
         "mlflow_writes": 0,
     }
+    from sat_dengue.experiments.exp03_1_reporting import capture_replay_cell
+    from sat_dengue.experiments.exp03_1_validate import read_original
+
+    original = read_original(Path(receipt["original_bundle_path"]))
+    if (
+        original["bundle"]["provenance"]["source_admission"]["files"]
+        != sources["admission"]["files"]
+    ):
+        raise PermissionError("Original and replay source inventories differ")
+    original_tracking = original["bundle"]["provenance"].get("tracking_root")
+    if original_tracking and safe_path(receipt["tracking_root"]) == safe_path(original_tracking):
+        raise PermissionError("Replay tracking must be separate from the immutable original store")
     reservation = _reserve(provenance)
+    capture_root = safe_path(str(reservation.with_suffix(".replay-capture")))
+    capture_root.mkdir(exist_ok=False, mode=0o700)
     tracker = Exp03_1Tracking(digest(provenance), receipt["tracking_root"], protocol(), provenance)
     try:
-        result = execute_matrix(sources["panel"], sources["contract"])
+        result = execute_matrix(
+            sources["panel"],
+            sources["contract"],
+            capture=lambda payload: capture_replay_cell(payload, capture_root, provenance),
+        )
+        result["replay_capture_root"] = str(capture_root)
         reverify(sources["admission"])
         provenance.update(
             real_model_fits=result["execution_plan"]["counts"]["new_fits"],

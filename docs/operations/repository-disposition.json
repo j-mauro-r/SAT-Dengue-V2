@@ -9,14 +9,6 @@
       "reason": "Observed source-identity or calendar/provenance compatibility consumer; formulas remain in their existing single owner.",
       "retirement_condition": "Migrate every named source/readiness reader, retain complete input/code identity and pass full Stage2/preparation/private replay under a separately approved exact source scope."
     },
-    "scripts/stage2_manifest_traceability.py": {
-      "consumers": [
-        "tests/unit/test_stage2_manifest_traceability.py"
-      ],
-      "owner": "Stage2 data/native I/O maintainer",
-      "reason": "Observed source-identity or calendar/provenance compatibility consumer; formulas remain in their existing single owner.",
-      "retirement_condition": "Migrate every named source/readiness reader, retain complete input/code identity and pass full Stage2/preparation/private replay under a separately approved exact source scope."
-    },
     "scripts/stage2_notebook_visual_assets.py": {
       "consumers": [
         "src/sat_dengue/datasets/legacy_readiness.py",
@@ -934,14 +926,12 @@
     "tests/unit/test_candidate_families.py",
     "tests/unit/test_consolidated_dataset_pipeline.py",
     "tests/unit/test_final_evaluation.py",
-    "tests/unit/test_january_2020_climate_incorporation.py",
     "tests/unit/test_markdown_links.py",
     "tests/unit/test_model_assessment.py",
     "tests/unit/test_model_evaluation.py",
     "tests/unit/test_model_metrics.py",
     "tests/unit/test_model_training.py",
     "tests/unit/test_repository_bootstrap.py",
-    "tests/unit/test_stage2_manifest_traceability.py",
     "tests/unit/test_stage2_monthly_sensitivity_outputs.py",
     "tests/unit/test_stage2_notebook_visual_assets.py",
     "tests/unit/test_stage2_panel_review.py",
@@ -1668,17 +1658,14 @@
       "before_consumers": [
         "docs/TESTING_GUIDE.md",
         "docs/archive/experimental-eda/README.md",
-        "docs/operations/kedro-migration.md",
-        "tests/unit/test_january_2020_climate_incorporation.py"
+        "docs/operations/kedro-migration.md"
       ],
-      "current_consumers": [
-        "tests/unit/test_january_2020_climate_incorporation.py"
-      ],
+      "current_consumers": [],
       "disposition": "KEEP",
       "owner": "Stage2 acquisition provenance and data-integrity maintainer",
       "parity": "Identical facade/package object exports and preserved complete owning-stage/E2E parity; fresh cleanup regressions recorded in the session handoff.",
       "purpose": "Safely incorporate recovered January 2020 climate rows into raw source.\n\nThis script supports two modes:\n- precheck: baseline identity, disk space, backup, candidate validation, overlap analysis.\n- apply: precheck plus conditional append via same-filesystem temp file and atomic replace.",
-      "reason": "Final KEEP: unique original incorporation/precheck safeguards are exercised by tests/unit/test_january_2020_climate_incorporation.py. Kedro consumes the already-incorporated source; no acquisition/apply command is authorized.",
+      "reason": "Final KEEP: unique original incorporation/precheck safeguards. Kedro consumes the already-incorporated source; no acquisition/apply command is authorized.",
       "recovery": "861b36966cec26d1d2b36edee4d6ada6d5bc0930:scripts/january_2020_climate_incorporation.py",
       "writers": "No source/report mutation authorized; current Kedro publications are separate immutable bundles."
     },
@@ -2634,9 +2621,7 @@
         "docs/operations/kedro-migration.md",
         "scripts/stage2_panel_review.py"
       ],
-      "current_consumers": [
-        "tests/unit/test_stage2_manifest_traceability.py"
-      ],
+      "current_consumers": [],
       "disposition": "KEEP",
       "owner": "Historical scientific provenance/regression maintainer",
       "parity": "Identical facade/package object exports and preserved complete owning-stage/E2E parity; fresh cleanup regressions recorded in the session handoff.",
@@ -4913,7 +4898,7 @@
     "scripts/january_2020_climate_incorporation.py": {
       "disposition": "KEEP",
       "owner": "Stage2 acquisition provenance and data-integrity maintainer",
-      "reason": "Final KEEP: unique original incorporation/precheck safeguards are exercised by tests/unit/test_january_2020_climate_incorporation.py. Kedro consumes the already-incorporated source; no acquisition/apply command is authorized."
+      "reason": "Final KEEP: unique original incorporation/precheck safeguards. Kedro consumes the already-incorporated source; no acquisition/apply command is authorized."
     },
     "scripts/model_assessment/__init__.py": {
       "consumer_evidence": "PLAN_030/session8/retirement-decisions-before.json; no active live imports or CLI consumers; isolated historical replay imports verify recovered snapshot hashes.",
@@ -6465,11 +6450,6 @@
       "owner": "Validation maintainer",
       "reason": "Active synthetic/contract or explicit protected local acceptance control; no safeguard removed."
     },
-    "tests/unit/test_january_2020_climate_incorporation.py": {
-      "disposition": "KEEP",
-      "owner": "Validation maintainer",
-      "reason": "Active synthetic/contract or explicit protected local acceptance control; no safeguard removed."
-    },
     "tests/unit/test_kedro_data.py": {
       "disposition": "ADAPT",
       "owner": "Validation maintainer",
@@ -6501,11 +6481,6 @@
       "reason": "Active synthetic/contract or explicit protected local acceptance control; no safeguard removed."
     },
     "tests/unit/test_repository_bootstrap.py": {
-      "disposition": "KEEP",
-      "owner": "Validation maintainer",
-      "reason": "Active synthetic/contract or explicit protected local acceptance control; no safeguard removed."
-    },
-    "tests/unit/test_stage2_manifest_traceability.py": {
       "disposition": "KEEP",
       "owner": "Validation maintainer",
       "reason": "Active synthetic/contract or explicit protected local acceptance control; no safeguard removed."
