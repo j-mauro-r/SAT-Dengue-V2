@@ -1,9 +1,42 @@
 # EXP03.1 replay persistence runbook
 
-Status: `EXP031_REPLAY_PERSISTENCE_IMPLEMENTED_NOT_EXECUTED`.
-The replay has **not** been executed. The original execution remains the current
-scientific evidence. G5: `NOT_APPROVED`; champion: `not_selected`. EXP04 remains
+Status: `EXP031_REPLAY_COMPARISON_NORMALIZATION_FIXED_NOT_REEXECUTED`.
+The completed replay is preserved; this correction did not repeat science.
+G5: `NOT_APPROVED`; champion: `not_selected`. EXP04 remains
 outside this repair; no additional 12/24/36-month OOF history is generated.
+
+## Comparison normalization correction (2026-10-31)
+
+The stored `REPLAY_MISMATCH` arose from equal-valued NumPy versus Python float
+types in `cells/<integer>/threshold` before serialization. Canonical JSON restores
+both as Python floats; comparison of the persisted bundles is exact. This is no
+demonstrated scientific discrepancy. Future publication compares the canonical
+serialization round-trip without changing scientific contents or bundle format.
+
+The validator still verifies package schema/protocol, integrity, hashes, native
+reloads and MLflow lineage. It corrects only stored `REPLAY_MISMATCH` evidence
+with a nonempty list containing exclusively `cells/<integer>/threshold` paths,
+an exact recalculated `EXACT_OBSERVABLE_REPLAY` with no differences, and otherwise
+unchanged comparison metadata. Thresholds, alerts, ranking, ties, bins, discrete
+metrics and retained selection must match exactly; numeric tolerance alone cannot
+qualify. The result reports `stored_comparison_status: REPLAY_MISMATCH`,
+`comparison_correction: canonical_numeric_type_normalization_v1`, and
+`replay.status: EXACT_OBSERVABLE_REPLAY`. Other differences remain failures.
+
+The existing bundle, companion, manifests and produced artifacts remain immutable.
+No experiment, Kedro pipeline, model training, private-data read or permanent MLflow
+write was performed for this correction. Only rerun the read-only validator below
+with the preserved tracking root and original bundle path; do not repeat preflight
+or scientific execution. Validation of this existing bundle was not run during
+implementation.
+
+```sh
+python -m sat_dengue.experiments.exp03_1_validate \
+  --bundle tmp/kedro-migration/exp03-1-runs/4fd644502e8fb2bb18155060bba68aedd7fc295cf66e16401b91c44af72781de \
+  --bundle-id 732a9d7743b4c54d9252adf7095f2c4e2775cd4d6472446d2bd2e41a476927f4 \
+  --tracking-root "$SAT_DENGUE_TRACKING_ROOT" \
+  --original-bundle "$SAT_DENGUE_EXP03_1_ORIGINAL_BUNDLE"
+```
 
 ## Repair and unchanged science
 

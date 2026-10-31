@@ -1119,7 +1119,7 @@ def _publish_replay(
     shutil.copytree(source, root)
     reloads = [verify_replay_cell(root / cell_id) for cell_id in sorted(expected)]
     original = read_original(Path(provenance["original_bundle_path"]))
-    comparison = compare_observables(original["bundle"], bundle)
+    comparison = compare_observables(original["bundle"], json.loads(canonical_bytes(bundle)))
     if comparison["status"] == "REPLAY_MISMATCH":
         # Publish the mismatch evidence too; it never replaces the original reference.
         comparison["scientific_reference_replacement"] = False
