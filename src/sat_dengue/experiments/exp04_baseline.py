@@ -139,4 +139,6 @@ def paired_support(left: pd.DataFrame, right: pd.DataFrame) -> dict[str, Any]:
         }
     if not a[["truth", "error_class"]].equals(b[["truth", "error_class"]]):
         return {"status": "NOT_EVALUABLE", "reason": "paired_labels_or_error_class_differ"}
+    if not a.raw_score.equals(b.raw_score):
+        return {"status": "NOT_EVALUABLE", "reason": "base_predictor_scores_differ"}
     return {"status": "evaluable", "rows": len(a), "common_exposure": common_exposure(a)}
