@@ -16,11 +16,21 @@ def run(parameters: dict[str, Any]) -> dict[str, Any]:
         return preflight()
     if checked["profile"] == "exp04_functional":
         return functional_run()
+    if checked["profile"] == "exp04_oof":
+        import os
+        from pathlib import Path
+
+        from sat_dengue.experiments.exp04_execution import execute_oof
+
+        output = os.environ.get("SAT_DENGUE_EXP04_OUTPUT")
+        if not output:
+            raise ValueError("EXP04 OOF requires explicit SAT_DENGUE_EXP04_OUTPUT")
+        return execute_oof(Path(output))
     raise ValueError("EXP04 requires its explicit preflight or functional profile")
 
 
 def pipelines() -> dict[str, Pipeline]:
     return {
         name: Pipeline([node(run, "parameters", name + "_result", name=name)])
-        for name in ("exp04_preflight", "exp04_functional")
+        for name in ("exp04_preflight", "exp04_functional", "exp04_oof")
     }

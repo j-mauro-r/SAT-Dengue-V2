@@ -28,13 +28,13 @@
   },
   "equivalence": "EXACT_OBSERVABLE_REPLAY",
   "missing_dependencies": [
-    "per_score_training_cutoff_label_maturity_and_role_membership",
-    "verified_prior_OOF_history_for_rolling_windows"
+    "historical_refit_OOF_scores_for_12_24_36_month_windows",
+    "first_valid_OOF_origin_for_expanding_window"
   ],
   "private_source_reads": 0,
   "model_fits": 0,
   "mlflow_writes": 0,
-  "reason": "verified_exact_replay_of_retained_observables_temporal_OOF_evaluability_is_independent",
+  "reason": "verified_observable_M00_replay_fixed_windows_have_accredited_retrospective_coverage_OOF_implementation_pending",
   "source_reuse_decision": "refitted",
   "ordered_predictors": [
     "dengue_lag_1",
@@ -227,7 +227,18 @@
     "resolution": "UNRESOLVED"
   },
   "baseline_id": "M00-REPLAY-v1",
-  "EXP04_status": "BLOCKED_TEMPORAL_OOF",
+  "EXP04_status": "OOF_IMPLEMENTED_NOT_EXECUTED",
+  "disposition": "EXP04_OOF_IMPLEMENTED_NOT_EXECUTED",
+  "scientific_execution_authorized": false,
+  "retrospective_scope": {
+    "source": "consolidated_retrospective_SIVIGILA_downloads",
+    "canonical_date": "approved_symptom_onset_date",
+    "label_assumption": "consolidated_labels_ordered_by_canonical_target_month_and_full_forecast_horizon",
+    "operational_historical_availability": "NOT_ESTABLISHED",
+    "real_notification_dates_and_consolidation_delays_owner": "EXP06",
+    "operational_availability_blocks_EXP04": false,
+    "chronology": "historical_refits_must_exclude_the_scored_target_and_future_information_and_keep_calibration_selection_freeze_evaluation_order"
+  },
   "validator_status": "verified",
   "comparable_cells": 96,
   "comparable_predictions": 60207,
@@ -264,14 +275,15 @@
     "original_runtime_native_library_and_numerical_environment_identity": "original_environment_NOT_COMPARABLE_replay_environment_recorded"
   },
   "remaining_dependency_details": {
-    "per_score_training_cutoff_label_maturity_and_role_membership": "role_membership_is_persisted_but_training_label_availability_cutoff_and_label_maturity_are_not",
-    "verified_prior_OOF_history_for_rolling_windows": "no_compatible_mature_nested_history_is_accredited_by_the_persisted_roles"
+    "historical_refit_OOF_scores_for_12_24_36_month_windows": "coverage_already_accredited_by_existing_temporal_audit_scores_not_yet_generated_see_each_cell_group_pending_OOF",
+    "first_valid_OOF_origin_for_expanding_window": "current_contract_does_not_determine_first_valid_origin_do_not_infer_it_from_first_observed_row_or_repeat_audit"
   },
-  "activity_scope": "read_only_documentary_closure_no_new_scientific_execution",
+  "activity_scope": "OOF_implementation_and_synthetic_validation_no_real_scientific_execution",
   "G5": "NOT_APPROVED",
   "champion": "not_selected",
   "oof_history_assessment": {
-    "status": "NOT_EVALUABLE",
+    "status": "OOF_IMPLEMENTED_NOT_EXECUTED",
+    "evidence_basis": "existing_temporal_audit_and_explicit_human_retrospective_scope_decision_no_new_audit",
     "scope": "all_36_M00_cells_grouped_only_where_support_is_identical_across_families",
     "families": ["gam","lightgbm","xgboost"],
     "time_unit": "target_month",
@@ -279,37 +291,97 @@
     "raw_score_origin": "frozen_EXP03.1_roles_no_additional_OOF",
     "out_of_sample_by_disjoint_training_target_keys": true,
     "raw_role_targets_after_training_targets": true,
-    "genuinely_temporal_OOF": "UNKNOWN",
+    "genuinely_temporal_OOF": "historical_refit_generation_pending_not_inferred_from_disjoint_target_keys",
     "training_label_availability_cutoff": null,
     "label_available_at": null,
-    "availability_status": "historical_availability_unverified",
-    "maturity": "UNKNOWN",
+    "availability_status": "retrospective_consolidated_labels_real_historical_availability_deferred_to_EXP06",
+    "maturity": "explicit_retrospective_consolidated_label_assumption_not_observed_notification_availability",
     "available_mature_OOF_months": null,
+    "retained_calibration_months_by_horizon": {"1": 6, "2": 5},
+    "valid_reusable_calibration_months_by_horizon": {"1": 4, "2": 3},
+    "retained_months_are_not_completed_window_OOF_evidence": true,
     "role_target_keys_pairwise_disjoint": true,
     "chronological_nested_selection": "UNKNOWN",
     "window_status_for_every_listed_cell": {
-      "12_months": "NOT_EVALUABLE",
-      "24_months": "NOT_EVALUABLE",
-      "36_months": "NOT_EVALUABLE",
-      "expanding": "UNKNOWN"
+      "12_months": "GENERATABLE",
+      "24_months": "GENERATABLE",
+      "36_months": "GENERATABLE",
+      "expanding": "NOT_EVALUABLE"
     },
     "window_reasons": {
-      "fixed_windows": "only_the_same_predictor_calibration_role_is_admissible_without_reassigning_roles_6_months_T+1_or_5_months_T+2_are_less_than_12_24_36",
-      "expanding": "both_classes_and_contiguous_observed_calibration_months_exist_but_no_last_mature_month_training_label_availability_or_nested_freeze_schedule_is_documented"
+      "fixed_windows": "existing_audit_accredits_retrospective_coverage_missing_scores_require_historical_refits_not_scoring_months_used_to_train_the_retained_predictor",
+      "expanding": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED_current_contract_does_not_determine_first_valid_OOF_origin"
     },
-    "separation": "target_event_roles_are_disjoint_but_maturity_and_decision_freeze_before_selection_and_evaluation_are_not_accredited",
+    "separation": "retain_disjoint_target_event_roles_and_implement_nested_chronological_selection_and_freeze_under_the_explicit_retrospective_label_assumption",
     "continuity": "support_arrays_report_observed_months_and_missing_months_against_each_declared_role_not_per_municipality_coverage",
-    "training_relation": "train_support_has_no_raw_scores_calibration_targets_follow_training_targets_but_first_calibration_issue_month_equals_the_last_training_target_month_in_every_cell_so_target_order_does_not_prove_label_availability_at_issue",
+    "training_relation": "existing_training_rows_have_no_OOF_scores_historical_refits_must_exclude_scored_targets_and_respect_full_T+1_T+2_chronology_real_notification_availability_is_an_EXP06_question",
     "pooling": "none_selection_and_evaluation_are_not_reused_as_calibration_training_rows_are_not_OOF_and_distinct_predictor_snapshots_are_not_pooled",
     "stress_2024": "evaluation_only_no_policy_selection",
     "year_2025": "NOT_EVALUABLE",
     "support_columns": ["first_target","last_target","observed_months","rows","positives","negatives","missing_declared_target_months","first_origin","last_origin"],
-    "support_definition": "counts_are_persisted_role_labels_for_the_listed_objective_not_verified_mature_OOF_support",
+    "support_definition": "unchanged_existing_audit_counts_of_persisted_role_labels_not_new_OOF_scores_or_proof_of_operational_availability",
+    "pending_OOF_definition": {
+      "unit": "target_month_origins_to_generate_or_replace_not_prediction_rows",
+      "applies_to": "each_cut_horizon_objective_group_and_each_family_in_its_cells_independently",
+      "method": "historical_chronological_refits_with_fixed_M00_features_family_parameters_and_seed_new_execution_identity",
+      "forbidden_completion": "apply_a_predictor_to_months_it_already_used_for_training",
+      "overlap": "12_24_36_month_windows_overlap_do_not_sum_missing_month_counts",
+      "role_integrity": "do_not_reassign_selection_or_evaluation_scores_as_calibration_or_silently_pool_predictor_snapshots",
+      "generation_status": "IMPLEMENTED_NOT_EXECUTED",
+      "authorized_calendar": {
+        "calibration_last_target": "May_before_evaluation_year",
+        "calibration_windows": "12_24_36_exact_months_ending_in_May",
+        "T+1_selection_issues": "June_October",
+        "T+1_selection_targets": "July_November_5_months",
+        "T+2_selection_issues": "June_September",
+        "T+2_selection_targets": "August_November_4_months",
+        "first_evaluation_issue": "December_before_evaluation_year",
+        "ordering": "last_used_target_label_strictly_before_next_role_first_issue",
+        "boundary_replacement": "first_original_calibration_origin_is_refitted_without_changing_M00",
+        "reuse": "T+1_February_May_and_T+2_March_May_only_if_all_identity_support_precision_and_cutoff_checks_pass"
+      }
+    },
     "cell_groups": [
       {
         "cut": "development_2020",
         "horizon": 1,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2018-06",
+              "2019-05"
+            ],
+            "24": [
+              "2017-06",
+              "2019-05"
+            ],
+            "36": [
+              "2016-06",
+              "2019-05"
+            ]
+          },
+          "selection": [
+            "2019-07",
+            "2019-11"
+          ],
+          "evaluation": [
+            "2020-01",
+            "2020-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 6,
+          "valid_reusable_months": 4,
+          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-07","2018-12",78,4081,665,3416,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2018-11"],
           "calibration": ["2019-01","2019-06",6,227,71,156,[],"2018-12","2019-05"],
@@ -326,6 +398,42 @@
         "cut": "development_2021",
         "horizon": 1,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2019-06",
+              "2020-05"
+            ],
+            "24": [
+              "2018-06",
+              "2020-05"
+            ],
+            "36": [
+              "2017-06",
+              "2020-05"
+            ]
+          },
+          "selection": [
+            "2020-07",
+            "2020-11"
+          ],
+          "evaluation": [
+            "2021-01",
+            "2021-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 6,
+          "valid_reusable_months": 4,
+          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-07","2019-12",90,4457,783,3674,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2019-11"],
           "calibration": ["2020-01","2020-06",6,259,36,223,[],"2019-12","2020-05"],
@@ -342,6 +450,42 @@
         "cut": "development_2022",
         "horizon": 1,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2020-06",
+              "2021-05"
+            ],
+            "24": [
+              "2019-06",
+              "2021-05"
+            ],
+            "36": [
+              "2018-06",
+              "2021-05"
+            ]
+          },
+          "selection": [
+            "2021-07",
+            "2021-11"
+          ],
+          "evaluation": [
+            "2022-01",
+            "2022-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 6,
+          "valid_reusable_months": 4,
+          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-07","2020-12",102,5118,852,4266,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2020-11"],
           "calibration": ["2021-01","2021-06",6,424,18,406,[],"2020-12","2021-05"],
@@ -358,6 +502,42 @@
         "cut": "stress_2024",
         "horizon": 1,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2022-06",
+              "2023-05"
+            ],
+            "24": [
+              "2021-06",
+              "2023-05"
+            ],
+            "36": [
+              "2020-06",
+              "2023-05"
+            ]
+          },
+          "selection": [
+            "2023-07",
+            "2023-11"
+          ],
+          "evaluation": [
+            "2024-01",
+            "2024-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 6,
+          "valid_reusable_months": 4,
+          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-07","2022-12",126,6657,993,5664,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06"],"2012-06","2022-11"],
           "calibration": ["2023-01","2023-06",6,218,74,144,[],"2022-12","2023-05"],
@@ -374,6 +554,42 @@
         "cut": "development_2020",
         "horizon": 2,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2018-06",
+              "2019-05"
+            ],
+            "24": [
+              "2017-06",
+              "2019-05"
+            ],
+            "36": [
+              "2016-06",
+              "2019-05"
+            ]
+          },
+          "selection": [
+            "2019-08",
+            "2019-11"
+          ],
+          "evaluation": [
+            "2020-02",
+            "2020-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2018-12",77,4028,436,3592,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2018-10"],
           "calibration": ["2019-02","2019-06",5,207,48,159,["2019-01"],"2018-12","2019-04"],
@@ -390,6 +606,42 @@
         "cut": "development_2021",
         "horizon": 2,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2019-06",
+              "2020-05"
+            ],
+            "24": [
+              "2018-06",
+              "2020-05"
+            ],
+            "36": [
+              "2017-06",
+              "2020-05"
+            ]
+          },
+          "selection": [
+            "2020-08",
+            "2020-11"
+          ],
+          "evaluation": [
+            "2021-02",
+            "2021-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2019-12",89,4436,518,3918,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2019-10"],
           "calibration": ["2020-02","2020-06",5,202,24,178,["2020-01"],"2019-12","2020-04"],
@@ -406,6 +658,42 @@
         "cut": "development_2022",
         "horizon": 2,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2020-06",
+              "2021-05"
+            ],
+            "24": [
+              "2019-06",
+              "2021-05"
+            ],
+            "36": [
+              "2018-06",
+              "2021-05"
+            ]
+          },
+          "selection": [
+            "2021-08",
+            "2021-11"
+          ],
+          "evaluation": [
+            "2022-02",
+            "2022-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2020-12",101,5045,571,4474,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2020-10"],
           "calibration": ["2021-02","2021-06",5,355,14,341,["2021-01"],"2020-12","2021-04"],
@@ -422,6 +710,42 @@
         "cut": "stress_2024",
         "horizon": 2,
         "objective": "onset",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2022-06",
+              "2023-05"
+            ],
+            "24": [
+              "2021-06",
+              "2023-05"
+            ],
+            "36": [
+              "2020-06",
+              "2023-05"
+            ]
+          },
+          "selection": [
+            "2023-08",
+            "2023-11"
+          ],
+          "evaluation": [
+            "2024-02",
+            "2024-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2022-12",125,6605,687,5918,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2022-10"],
           "calibration": ["2023-02","2023-06",5,193,43,150,["2023-01"],"2022-12","2023-04"],
@@ -438,6 +762,42 @@
         "cut": "development_2020",
         "horizon": 2,
         "objective": "excess_control",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2018-06",
+              "2019-05"
+            ],
+            "24": [
+              "2017-06",
+              "2019-05"
+            ],
+            "36": [
+              "2016-06",
+              "2019-05"
+            ]
+          },
+          "selection": [
+            "2019-08",
+            "2019-11"
+          ],
+          "evaluation": [
+            "2020-02",
+            "2020-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2018-12",77,4028,739,3289,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2018-10"],
           "calibration": ["2019-02","2019-06",5,207,87,120,["2019-01"],"2018-12","2019-04"],
@@ -454,6 +814,42 @@
         "cut": "development_2021",
         "horizon": 2,
         "objective": "excess_control",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2019-06",
+              "2020-05"
+            ],
+            "24": [
+              "2018-06",
+              "2020-05"
+            ],
+            "36": [
+              "2017-06",
+              "2020-05"
+            ]
+          },
+          "selection": [
+            "2020-08",
+            "2020-11"
+          ],
+          "evaluation": [
+            "2021-02",
+            "2021-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2019-12",89,4436,895,3541,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2019-10"],
           "calibration": ["2020-02","2020-06",5,202,37,165,["2020-01"],"2019-12","2020-04"],
@@ -470,6 +866,42 @@
         "cut": "development_2022",
         "horizon": 2,
         "objective": "excess_control",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2020-06",
+              "2021-05"
+            ],
+            "24": [
+              "2019-06",
+              "2021-05"
+            ],
+            "36": [
+              "2018-06",
+              "2021-05"
+            ]
+          },
+          "selection": [
+            "2021-08",
+            "2021-11"
+          ],
+          "evaluation": [
+            "2022-02",
+            "2022-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2020-12",101,5045,969,4076,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2020-10"],
           "calibration": ["2021-02","2021-06",5,355,18,337,["2021-01"],"2020-12","2021-04"],
@@ -486,6 +918,42 @@
         "cut": "stress_2024",
         "horizon": 2,
         "objective": "excess_control",
+        "authorized_EXP04_roles": {
+          "calibration": {
+            "12": [
+              "2022-06",
+              "2023-05"
+            ],
+            "24": [
+              "2021-06",
+              "2023-05"
+            ],
+            "36": [
+              "2020-06",
+              "2023-05"
+            ]
+          },
+          "selection": [
+            "2023-08",
+            "2023-11"
+          ],
+          "evaluation": [
+            "2024-02",
+            "2024-12"
+          ],
+          "new_role_row_and_class_counts": null,
+          "counts_origin": "computed_from_actual_eligible_support_during_preparation_not_copied_from_historical_roles"
+        },
+        "pending_OOF": {
+          "applies_to": "each_family_in_cells",
+          "retained_calibration_months": 5,
+          "valid_reusable_months": 3,
+          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "fixed_window_status": "GENERATABLE",
+          "expanding_status": "NOT_EVALUABLE",
+          "expanding_first_valid_OOF_origin": null,
+          "expanding_blocker": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED"
+        },
         "roles": {
           "train": ["2012-08","2022-12",125,6605,1142,5463,["2012-01","2012-02","2012-03","2012-04","2012-05","2012-06","2012-07"],"2012-06","2022-10"],
           "calibration": ["2023-02","2023-06",5,193,82,111,["2023-01"],"2022-12","2023-04"],
