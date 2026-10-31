@@ -83,6 +83,7 @@ def fixture(horizon: int = 1, objective: str = "onset") -> tuple[dict[str, Any],
         "groups": 1,
         "historical_refits": sum(j["source"] == "historical_refit" for j in plan["jobs"]),
         "retained_origin_jobs": sum(j["source"] == "retained" for j in plan["jobs"]),
+        "unique_score_origin_jobs": len(plan["jobs"]),
         "group_month_uses": 36,
         "A1_A2_A3_cells": 3,
     }
@@ -151,10 +152,14 @@ def test_calibration_selection_boundary() -> None:
     assert selection.forecast_issue_date.min() == "2019-06-01"
     assert selection.target_month.nunique() == 5
     assert all(j["training_target_cutoff"] < j["origin_month"] for j in result["jobs"])
+    assert all(r["training_cutoff"] < r["forecast_issue_date"] for r in result["scores"])
     boundary = next(j for j in result["jobs"] if j["target_month"] == "2019-01")
     assert (
         boundary["source"] == "historical_refit" and boundary["training_target_cutoff"] == "2018-11"
     )
+    previously_retained = next(j for j in result["jobs"] if j["target_month"] == "2019-02")
+    assert previously_retained["source"] == "historical_refit"
+    assert previously_retained["training_target_cutoff"] == "2018-12"
     corrupt = cal.copy()
     corrupt.loc[corrupt.index[-1], "label_available_date"] = "2019-06-01"
     with pytest.raises(ValueError, match="Immature"):
@@ -184,6 +189,9 @@ def test_calibration_selection_boundary() -> None:
 def test_selection_evaluation_boundary(monkeypatch: pytest.MonkeyPatch) -> None:
     plan, frames, refs = fixture(2)
     result, _ = generate(frames, refs, plan, fit=tiny_fit)
+    previously_retained = next(j for j in result["jobs"] if j["target_month"] == "2019-03")
+    assert previously_retained["source"] == "historical_refit"
+    assert previously_retained["training_target_cutoff"] == "2018-12"
     group = plan["groups"][0]
     cal, selection, evaluation = policy_inputs(result, group, refs[group["reference_cell_id"]], 12)
     assert selection.target_month.min() == "2019-08"
@@ -240,8 +248,10 @@ def test_selection_evaluation_boundary(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_inventory_without_duplicate_origins() -> None:
     plan = calendar()
-    assert plan["counts"]["historical_refits"] == 726
-    assert plan["counts"]["retained_origin_jobs"] == 120
+    assert plan["counts"]["historical_refits"] == 846
+    assert plan["counts"]["retained_origin_jobs"] == 0
+    assert plan["counts"]["unique_score_origin_jobs"] == len(plan["jobs"]) == 846
+    assert plan["counts"]["groups"] == len(plan["groups"]) == 36
     assert plan["counts"]["group_month_uses"] == 1296
     assert plan["counts"]["A1_A2_A3_cells"] == 108
     assert {j["family"] for j in plan["jobs"]} == {"gam", "lightgbm", "xgboost"}
@@ -251,36 +261,69 @@ def test_inventory_without_duplicate_origins() -> None:
         (2, "excess_control"),
     }
     generated = [j for j in plan["jobs"] if j["source"] == "historical_refit"]
-    keys = [(j["family"], j["horizon"], j["objective"], j["origin_month"]) for j in generated]
-    assert len(keys) == len(set(keys))
+    keys = [
+        (j["family"], j["horizon"], j["objective"], j["origin_month"], j.get("reference_cell_id"))
+        for j in generated
+    ]
+    assert len(keys) == len(set(keys)) == 846
+    assert sum("reference_cell_id" in j for j in generated) == 120
     assert any(len(j["uses"]) > 1 for j in generated)
     for group in plan["groups"]:
-        assert group["generate_or_replace_by_window"] == dict(
-            zip(
-                ("12", "24", "36"),
-                (8, 20, 32) if group["horizon"] == 1 else (9, 21, 33),
-                strict=True,
-            )
-        )
+        assert group["generate_or_replace_by_window"] == {"12": 12, "24": 24, "36": 36}
         assert len(group["jobs"]) == len(set(group["jobs"])) == 36
-    assert preflight()["private_source_reads"] == preflight()["model_fits"] == 0
+        for size in (12, 24, 36):
+            assert (
+                sum(
+                    any(u["cut"] == group["cut"] and size in u["windows"] for u in job["uses"])
+                    for job in generated
+                    if job["job_id"] in group["jobs"]
+                )
+                == size
+            )
+    checked = preflight()
+    assert checked["calendar"] == plan
+    assert plan["expanding"] == plan["2025"] == "NOT_EVALUABLE"
+    assert checked["private_source_reads"] == checked["model_fits"] == checked["mlflow_writes"] == 0
 
 
-def test_reuse_and_replacement() -> None:
+def test_reuse_and_replacement(monkeypatch: pytest.MonkeyPatch) -> None:
+    import sat_dengue.experiments.exp04_oof as oof
+
     plan, frames, refs = fixture()
-    result, _ = generate(frames, refs, plan, fit=tiny_fit)
-    assert {r["target_month"] for r in result["scores"] if r["source"] == "retained"} == {
-        "2019-02",
-        "2019-03",
-        "2019-04",
-        "2019-05",
+    monkeypatch.setattr(
+        oof, "retained_scores", lambda *a: pytest.fail("Retained reuse during generation")
+    )
+    fits = []
+
+    def counted_fit(*args: Any) -> NativePredictor:
+        fits.append(args[1].index.tolist())
+        return tiny_fit(*args)
+
+    result, models = generate(frames, {}, plan, fit=counted_fit)
+    assert len(fits) == len({tuple(indices) for indices in fits}) == len(plan["jobs"]) == 36
+    assert result["counts"]["historical_refits"] == 36
+    assert result["counts"]["retained_origin_jobs"] == result["counts"]["retained_rows"] == 0
+    assert result["counts"]["generated_rows"] == result["counts"]["prediction_rows"] == 72
+    assert {r["source"] for r in result["scores"]} == {"historical_refit"}
+    assert len(models) == len({j["preparer_id"] for j in result["jobs"]}) == 36
+    for size in (12, 24, 36):
+        window = history(result, plan["groups"][0], size)
+        assert len(window) == size * 2
+        assert set(window.score_id) <= {r["score_id"] for r in result["scores"]}
+    rejected = deepcopy(plan)
+    rejected["jobs"][0]["source"] = "retained"
+    with pytest.raises(ValueError, match="requires historical_refit"):
+        generate(frames, refs, rejected, fit=lambda *a: pytest.fail("fit before rejection"))
+    # Keep the existing defensive historical checks, outside generation.
+    job = {
+        **next(j for j in plan["jobs"] if j["target_month"] == "2019-02"),
+        "source": "retained",
+        "reference_cell_id": plan["groups"][0]["reference_cell_id"],
     }
-    job = next(j for j in plan["jobs"] if j["source"] == "retained")
     expected = frames[1, "onset"].loc[frames[1, "onset"].target_month.eq(job["target_month"])]
     cell = refs[job["reference_cell_id"]]
     retained = retained_scores(job, expected, cell)
-    copied = [r for r in result["scores"] if r["job_id"] == job["job_id"]]
-    assert [r["raw_score"] for r in copied] == retained.raw_score.tolist()
+    assert len(retained) == len(expected)
     with pytest.raises(ValueError, match="strict training cutoff"):
         retained_scores({**job, "origin_month": "2018-12"}, expected, cell)
     corrupt = deepcopy(cell)
@@ -320,6 +363,37 @@ def test_persistence_and_rejections(repo_tmp_path: Path, monkeypatch: pytest.Mon
     restored = reload_bundle(destination)
     assert restored["scores"] == result["scores"]
     assert restored["jobs"] == result["jobs"]
+    assert restored["counts"]["historical_refits"] == 36
+    assert restored["counts"]["retained_origin_jobs"] == 0
+    assert json.loads((destination / "manifest.json").read_text())["counts"] == result["counts"]
+    for job in restored["jobs"]:
+        state = models[job["predictor_id"]]["state"]
+        assert state["historical_fit"] == {
+            "job_id": job["job_id"],
+            "configuration_id": plan["configuration_id"],
+            "training_keys_sha256": job["training_keys_sha256"],
+        }
+    for name in ("historical_refits", "retained_origin_jobs", "unique_score_origin_jobs"):
+        corrupt = deepcopy(result)
+        corrupt["counts"][name] += 1
+        rejected = Path("tmp/exp04-invalid-" + name)
+        publish(corrupt, models, rejected)
+        with pytest.raises(ValueError, match="counts differ"):
+            reload_bundle(rejected)
+    corrupt = deepcopy(result)
+    corrupt["jobs"][0]["source"] = "retained"
+    rejected = Path("tmp/exp04-invalid-source")
+    publish(corrupt, models, rejected)
+    with pytest.raises(ValueError, match="historical_refit job provenance"):
+        reload_bundle(rejected)
+    corrupt = deepcopy(result)
+    row = corrupt["scores"][0]
+    row["training_cutoff"] = row["forecast_issue_date"]
+    row["score_id"] = digest({k: v for k, v in row.items() if k != "score_id"})
+    rejected = Path("tmp/exp04-invalid-cutoff")
+    publish(corrupt, models, rejected)
+    with pytest.raises(ValueError, match="temporal leakage"):
+        reload_bundle(rejected)
     import sat_dengue.model_training.candidate_families as families
 
     monkeypatch.setattr(
