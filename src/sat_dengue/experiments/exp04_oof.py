@@ -75,8 +75,8 @@ def calendar(*, windows: tuple[int, ...] = (12, 24, 36)) -> dict[str, Any]:
             raise ValueError(
                 "EXP04 configured roles differ from the authorized May/November calendar"
             )
-        retained_start = pd.Period(original["roles"]["calibration"][0], freq="M")
-        old_cutoff = original["roles"]["train"][1]
+        original_calibration_start = pd.Period(original["roles"]["calibration"][0], freq="M")
+        original_cutoff = original["roles"]["train"][1]
         for family in protocol()["families"]:
             roles = {
                 "calibration": authorized["calibration"]["36"],
@@ -97,7 +97,6 @@ def calendar(*, windows: tuple[int, ...] = (12, 24, 36)) -> dict[str, Any]:
             }
             for month in pd.period_range(last - 35, last, freq="M"):
                 issue = str(month - horizon)
-                reuse = month >= retained_start and old_cutoff < issue
                 origin = {
                     "family": family,
                     "horizon": horizon,
@@ -105,11 +104,11 @@ def calendar(*, windows: tuple[int, ...] = (12, 24, 36)) -> dict[str, Any]:
                     "target_month": str(month),
                     "origin_month": issue,
                     "training_start": training_start,
-                    "source": "retained" if reuse else "historical_refit",
+                    "source": "historical_refit",
                 }
-                # Retained predictors differ across cuts. Historical refits share
-                # the same start, strict cutoff, cohort and frozen configuration.
-                if reuse:
+                # Preserve the original 120 job contexts when converting them
+                # to refits. This reference is provenance, never a score source.
+                if month >= original_calibration_start and original_cutoff < issue:
                     origin["reference_cell_id"] = original["cells"][family]
                 job_id = digest(origin)
                 membership = [n for n in windows if month >= last - (n - 1)]
@@ -123,7 +122,7 @@ def calendar(*, windows: tuple[int, ...] = (12, 24, 36)) -> dict[str, Any]:
                     and size in next(u for u in jobs[j]["uses"] if u["cut"] == cut)["windows"]
                     for j in group["jobs"]
                 )
-            expected = {str(n): n - (4 if horizon == 1 else 3) for n in windows}
+            expected = {str(n): n for n in windows}
             if group["generate_or_replace_by_window"] != expected:
                 raise ValueError("EXP04 authorized OOF inventory differs from calendar")
             declared = original["pending_OOF"]["generate_or_replace_months"]
@@ -147,6 +146,7 @@ def calendar(*, windows: tuple[int, ...] = (12, 24, 36)) -> dict[str, Any]:
             "groups": len(groups),
             "historical_refits": sum(j["source"] == "historical_refit" for j in jobs.values()),
             "retained_origin_jobs": sum(j["source"] == "retained" for j in jobs.values()),
+            "unique_score_origin_jobs": len(jobs),
             "group_month_uses": sum(len(g["jobs"]) for g in groups),
             "A1_A2_A3_cells": len(groups) * len(windows),
             "prediction_rows": None,
@@ -155,6 +155,11 @@ def calendar(*, windows: tuple[int, ...] = (12, 24, 36)) -> dict[str, Any]:
         "expanding": "NOT_EVALUABLE",
         "2025": "NOT_EVALUABLE",
     }
+    expected_counts = cfg["oof_history_assessment"]["pending_OOF_definition"]["expected_counts"]
+    if any(result["counts"][name] != value for name, value in expected_counts.items()):
+        raise ValueError(
+            f"EXP04 all-historical-refit inventory differs from manifest: {result['counts']}"
+        )
     result["calendar_id"] = digest(result)
     return result
 
@@ -242,18 +247,10 @@ def generate(
     fit: Callable[..., Any] = fit_native,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Compute each unique raw forecast once; preserve every cut/window membership."""
+    if any(j["source"] != "historical_refit" for j in plan["jobs"]):
+        raise ValueError("EXP04 generation requires historical_refit for every origin")
     cfg = configuration()
     admitted = support(prepared, plan)
-    # Reject an invalid retained artifact before fitting any new predictor.
-    reused = {
-        j["job_id"]: retained_scores(
-            j,
-            prepared[j["horizon"], j["objective"]].loc[admitted[j["job_id"]]["score_index"]],
-            references[j["reference_cell_id"]],
-        )
-        for j in plan["jobs"]
-        if j["source"] == "retained"
-    }
     rows: list[dict[str, Any]] = []
     models: dict[str, Any] = {}
     job_records: list[dict[str, Any]] = []
@@ -262,28 +259,26 @@ def generate(
         source = prepared[job["horizon"], job["objective"]]
         train, score = source.loc[inputs["train_index"]], source.loc[inputs["score_index"]]
         target = inputs["target"]
-        if job["source"] == "retained":
-            cell = references[job["reference_cell_id"]]
-            predictor = cell.predictor
-            scored = reused[job["job_id"]]
-            raw = scored.raw_score
-            cutoff = cell.metadata["window"]["train"][1]
-        else:
-            predictor = fit(
-                job["family"],
-                train[cfg["ordered_predictors"]],
-                train[target].astype(int),
-                cfg["family_parameters"][job["family"]],
-                cfg["seed"],
-            )
-            scored, raw, cutoff = (
-                score,
-                predictor.predict(score[cfg["ordered_predictors"]]),
-                str(train.target_month.max()),
-            )
+        predictor = fit(
+            job["family"],
+            train[cfg["ordered_predictors"]],
+            train[target].astype(int),
+            cfg["family_parameters"][job["family"]],
+            cfg["seed"],
+        )
+        scored, raw, cutoff = (
+            score,
+            predictor.predict(score[cfg["ordered_predictors"]]),
+            str(train.target_month.max()),
+        )
         if cutoff >= job["origin_month"]:
             raise ValueError("OOF training cutoff is not strictly before issue")
         state = {
+            "historical_fit": {
+                "job_id": job["job_id"],
+                "configuration_id": plan["configuration_id"],
+                "training_keys_sha256": digest(_key(train)),
+            },
             "family": predictor.family,
             "columns": predictor.columns,
             "envelope_columns": predictor.envelope_columns,
@@ -296,11 +291,11 @@ def generate(
         record = {
             **job,
             "predictor_id": predictor_id,
-            "preparer_id": digest(state["preparer"]),
+            "preparer_id": digest(
+                {"historical_fit": state["historical_fit"], "preparer": state["preparer"]}
+            ),
             "training_target_cutoff": cutoff,
-            "training_keys_sha256": digest(_key(train))
-            if job["source"] != "retained"
-            else digest(_key(_restore_frame(cell.metadata["roles"]["train"]["frame"]))),
+            "training_keys_sha256": state["historical_fit"]["training_keys_sha256"],
             "score_keys_sha256": digest(_key(scored)),
             "score_rows": len(scored),
             "positives": int(scored[target].sum()),
@@ -397,6 +392,7 @@ def publish(result: dict[str, Any], models: dict[str, Any], destination: Path) -
             {
                 "schema": "exp04-oof-manifest-v1",
                 "bundle_id": body["bundle_id"],
+                "counts": body["counts"],
                 "files": files,
             }
         )
@@ -435,6 +431,30 @@ def reload_bundle(destination: Path, expected_bundle_id: str | None = None) -> d
     jobs = {job["job_id"]: job for job in result["jobs"]}
     if len(jobs) != len(result["jobs"]) or set(jobs) != {j["job_id"] for j in plan["jobs"]}:
         raise ValueError("EXP04 job inventory differs")
+    expected_counts = {
+        "groups": len(plan["groups"]),
+        "historical_refits": len(jobs),
+        "retained_origin_jobs": 0,
+        "unique_score_origin_jobs": len(jobs),
+        "group_month_uses": sum(len(g["jobs"]) for g in plan["groups"]),
+        "A1_A2_A3_cells": len(plan["groups"]) * 3,
+    }
+    if (
+        any(
+            plan["counts"].get(name) != value or result["counts"].get(name) != value
+            for name, value in expected_counts.items()
+        )
+        or inventory.get("counts") != result["counts"]
+        or result["counts"].get("retained_rows") != 0
+        or result["counts"].get("generated_rows") != len(result["scores"])
+    ):
+        raise ValueError("EXP04 all-historical-refit counts differ")
+    for planned in plan["jobs"]:
+        job = jobs[planned["job_id"]]
+        if planned["source"] != "historical_refit" or any(
+            job[name] != value for name, value in planned.items()
+        ):
+            raise ValueError("EXP04 historical_refit job provenance differs")
     seen = set()
     counts: dict[str, int] = {}
     verified_models: set[str] = set()
@@ -476,7 +496,22 @@ def reload_bundle(destination: Path, expected_bundle_id: str | None = None) -> d
         state, native = (model / "state.json").read_bytes(), (model / "model.native").read_bytes()
         if hashlib.sha256(state + native).hexdigest() != row["predictor_id"]:
             raise ValueError("EXP04 predictor identity differs")
-        if digest(json.loads(state)["preparer"]) != row["preparer_id"]:
+        model_state = json.loads(state)
+        if model_state["historical_fit"] != {
+            "job_id": job["job_id"],
+            "configuration_id": plan["configuration_id"],
+            "training_keys_sha256": job["training_keys_sha256"],
+        }:
+            raise ValueError("EXP04 historical fit identity differs")
+        if (
+            digest(
+                {
+                    "historical_fit": model_state["historical_fit"],
+                    "preparer": model_state["preparer"],
+                }
+            )
+            != row["preparer_id"]
+        ):
             raise ValueError("EXP04 preparer identity differs")
         verified_models.add(row["predictor_id"])
     if any(counts.get(identity, 0) != job["score_rows"] for identity, job in jobs.items()):

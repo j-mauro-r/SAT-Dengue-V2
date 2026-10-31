@@ -1,6 +1,6 @@
 # EXP04 implementation
 
-Status: **`EXP04_OOF_IMPLEMENTED_NOT_EXECUTED`**. Historical OOF generation is implemented; no scientific EXP04 execution or evaluation is reported. G5 remains `NOT_APPROVED`; champion remains `not_selected`.
+Status: **`EXP04_ALL_HISTORICAL_REFITS_FIXED_NOT_EXECUTED`**. Historical OOF generation is implemented; no scientific EXP04 execution or evaluation is reported. G5 remains `NOT_APPROVED`; champion remains `not_selected`.
 
 The [scientific design](DESING.md) and [experiment scope](../experimentos.md) remain unchanged. The [baseline manifest](BASELINE_MANIFEST.json) preserves the pinned original and `M00-REPLAY-v1` identities and records the authorized EXP04 calendar. The [technical component protocol](protocol.json) remains the historical independent-component contract, not a newly frozen scientific execution protocol.
 
@@ -25,27 +25,27 @@ Calibration freezes on May 31 and selection on November 30. Issuance dates use t
 
 Historical `roles` support arrays in the manifest remain evidence about the original replay. `authorized_EXP04_roles` records the new calendar separately; new row/class counts are null until calculated from actual eligible support. No old row count is relabeled as support for a changed role.
 
-## OOF inventory and reuse
+## OOF inventory and historical refits
 
 Every row applies independently to all four authorized cuts and all three families. Values count target-month/origin jobs requiring generation or replacement, not municipality predictions.
 
-| Objective | Reusable original calibration months | For 12 months | For 24 months | For 36 months |
+| Objective | Retained origin jobs | For 12 months | For 24 months | For 36 months |
 |---|---|---|---|---|
-| T+1 onset | February–May E−1, 4 months | 8 | 20 | 32 |
-| T+2 onset | March–May E−1, 3 months | 9 | 21 | 33 |
-| T+2 excess control | March–May E−1, 3 months | 9 | 21 | 33 |
+| T+1 onset | 0 | 12 | 24 | 36 |
+| T+2 onset | 0 | 12 | 24 | 36 |
+| T+2 excess control | 0 | 12 | 24 | 36 |
 
-The first original calibration score is replaced through a new historical fit: January E−1 for T+1, February E−1 for T+2. June calibration targets are excluded. Earlier missing months and the shifted window start are covered by the same OOF calendar. Windows overlap: never sum their deficits.
+The previous real attempt stopped before any refit or publication because retained scores did not exactly reproduce their saved predictors' output. Exact reuse is now disabled for all calibration origins, including the 120 previously classified as retained. All origins use historical refits; numerical validation was not relaxed. The defensive `retained_scores()` checks, including `np.array_equal`, remain intact and are never called during generation. A0 and the original M00, M00-REPLAY-v1 and EXP03.1 artifacts remain intact and are not regenerated or overwritten.
 
-`exp04_oof.calendar` produces one job per unique family/horizon/objective/origin and frozen training recipe, shared across windows and cuts where identical. Retained scores keep their original cell/predictor identity; distinct original predictor snapshots are never silently pooled. Reuse requires the exact M00 identity, keys, labels, predictor inputs, strict cutoff and an exact unrounded raw-score check against the reloaded predictor. A mismatch fails explicitly before historical refits; it does not trigger an unplanned fallback.
+`exp04_oof.calendar` preserves the 846 jobs of the original inventory and marks all of them `historical_refit`. The 120 converted jobs retain their original reference-cell context as provenance only; their scores and fitted state come from new historical fits. Jobs remain shared across overlapping windows and, where the job context is identical, cuts. June calibration targets are excluded. Windows overlap: never sum their job counts. Every new predictor/preparer identity binds its historical job, configuration and training-key support as well as its fitted state.
 
 Each new fit uses only eligible training targets strictly before its issuance month, starting at the frozen historical training boundary. The existing native fitter refits the preparer on those training rows only. M00 features, parameters, seed and H5/paired twelve-state eligibility remain unchanged. Missing training, class, key or window support fails explicitly; future rows never fill a gap.
 
 Configuration-derived expectations, checked by the focused synthetic cases:
 
 - 36 cut/family/horizon/objective groups and 108 A1/A2/A3 window cells.
-- 726 unique historical predictor/preparer refits after sharing identical origins across cuts and windows.
-- 120 retained origin jobs: 846 unique score-origin jobs in total, representing 1,296 group-month uses before window reuse.
+- 846 unique historical predictor/preparer refits after sharing identical origins across cuts and windows.
+- Zero retained origin jobs: 846 unique score-origin jobs in total, representing 1,296 group-month uses before window reuse.
 - Individual prediction rows equal the sum of actual eligible municipality rows over unique jobs. Preflight reports this count as unknown until preparation; no fixed 76-municipality multiplier is used. Positives and negatives are likewise calculated, not invented.
 
 A4/expanding remains `NOT_EVALUABLE`: its first valid OOF origin is undefined and no expanding generator is implemented. 2025 and unauthorized objectives, horizons or windows are rejected.
@@ -54,7 +54,7 @@ A4/expanding remains `NOT_EVALUABLE`: its first valid OOF origin is undefined an
 
 `exp04_execution.prepare` reuses EXP03.1 preparation, coverage and `paired_cohort`, including its twelve-state eligibility. `fit_native` supplies the existing family implementations and train-only preparer. Persisted replay frames use the existing lossless frame serializer. Native state uses `model.native` plus JSON preparer/feature state, under the existing protected `tmp` path and `result.json` publication convention.
 
-Each score records municipality, origin/target, family, horizon, objective, cut/window memberships, role, training-target cutoff, predictor/preparer/configuration identities, baseline identity, unrounded raw score, truth and a content hash. Per-job records retain key hashes, observed row counts and original-versus-refit provenance. Publication adds a checksummed manifest and native model inventory; reload checks file membership, hashes, score identities, dates, counts, predictor/preparer identities and complete window support. No pickle, tracker or second storage service is introduced.
+Each score records municipality, origin/target, family, horizon, objective, cut/window memberships, role, training-target cutoff, predictor/preparer/configuration identities, baseline identity, unrounded raw score, truth and a content hash. Per-job records retain key hashes, observed row counts and historical-refit provenance. Publication adds a checksummed manifest and native model inventory; reload checks file membership, hashes, score identities, dates, counts, predictor/preparer identities and complete window support. No pickle, tracker or second storage service is introduced.
 
 `policy_inputs` connects each OOF history and the shortened original raw selection/evaluation roles to the unchanged `temporal_roles` and `calibration_window` functions. `evaluate_policy` connects an explicitly predeclared policy to the existing calibrator, onset selector and frozen evaluator. Excess control stays separate and uses its frozen reference control threshold without onset-budget reselection. No window, calibrator or final composition is selected automatically. A0's original saved state/threshold remain historical reference artifacts, not silently regenerated states.
 
@@ -92,7 +92,7 @@ The historical `--functional` mode remains a generated component fixture; `--dry
 
 ## Focused validation
 
-Only five new synthetic cases cover strict boundaries and horizons, the authorized inventories without duplicate refits, valid reuse/invalid replacement, native state persistence and integrity, and expanding/2025 rejection:
+The five existing synthetic cases cover strict boundaries and horizons, 846 refits and zero retained jobs without duplicate origins, generation without reuse, defensive historical checks, native state persistence and integrity, and expanding/2025 rejection:
 
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/integration/test_exp04_oof.py -q

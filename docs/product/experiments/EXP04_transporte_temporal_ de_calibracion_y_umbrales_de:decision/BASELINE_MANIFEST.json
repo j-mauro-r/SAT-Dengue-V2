@@ -298,7 +298,7 @@
     "maturity": "explicit_retrospective_consolidated_label_assumption_not_observed_notification_availability",
     "available_mature_OOF_months": null,
     "retained_calibration_months_by_horizon": {"1": 6, "2": 5},
-    "valid_reusable_calibration_months_by_horizon": {"1": 4, "2": 3},
+    "valid_reusable_calibration_months_by_horizon": {"1": 0, "2": 0},
     "retained_months_are_not_completed_window_OOF_evidence": true,
     "role_target_keys_pairwise_disjoint": true,
     "chronological_nested_selection": "UNKNOWN",
@@ -309,7 +309,7 @@
       "expanding": "NOT_EVALUABLE"
     },
     "window_reasons": {
-      "fixed_windows": "existing_audit_accredits_retrospective_coverage_missing_scores_require_historical_refits_not_scoring_months_used_to_train_the_retained_predictor",
+      "fixed_windows": "existing_audit_accredits_retrospective_coverage_all_origins_require_historical_refits_with_strict_training_cutoffs",
       "expanding": "BLOCKED_EXPANDING_OOF_ORIGIN_UNDEFINED_current_contract_does_not_determine_first_valid_OOF_origin"
     },
     "separation": "retain_disjoint_target_event_roles_and_implement_nested_chronological_selection_and_freeze_under_the_explicit_retrospective_label_assumption",
@@ -327,7 +327,16 @@
       "forbidden_completion": "apply_a_predictor_to_months_it_already_used_for_training",
       "overlap": "12_24_36_month_windows_overlap_do_not_sum_missing_month_counts",
       "role_integrity": "do_not_reassign_selection_or_evaluation_scores_as_calibration_or_silently_pool_predictor_snapshots",
-      "generation_status": "IMPLEMENTED_NOT_EXECUTED",
+      "generation_status": "ALL_HISTORICAL_REFITS_FIXED_NOT_EXECUTED",
+      "retained_reuse_decision": "disabled_exact_raw_score_reproduction_failed_before_any_refit_or_publication_no_numerical_validation_relaxed",
+      "expected_counts": {
+        "historical_refits": 846,
+        "retained_origin_jobs": 0,
+        "unique_score_origin_jobs": 846,
+        "group_month_uses": 1296,
+        "A1_A2_A3_cells": 108,
+        "groups": 36
+      },
       "authorized_calendar": {
         "calibration_last_target": "May_before_evaluation_year",
         "calibration_windows": "12_24_36_exact_months_ending_in_May",
@@ -338,7 +347,7 @@
         "first_evaluation_issue": "December_before_evaluation_year",
         "ordering": "last_used_target_label_strictly_before_next_role_first_issue",
         "boundary_replacement": "first_original_calibration_origin_is_refitted_without_changing_M00",
-        "reuse": "T+1_February_May_and_T+2_March_May_only_if_all_identity_support_precision_and_cutoff_checks_pass"
+        "reuse": "disabled_all_846_origins_use_historical_refits_A0_and_historical_artifacts_unchanged"
       }
     },
     "cell_groups": [
@@ -375,8 +384,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 6,
-          "valid_reusable_months": 4,
-          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -427,8 +436,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 6,
-          "valid_reusable_months": 4,
-          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -479,8 +488,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 6,
-          "valid_reusable_months": 4,
-          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -531,8 +540,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 6,
-          "valid_reusable_months": 4,
-          "generate_or_replace_months": {"12_months": 8, "24_months": 20, "36_months": 32},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -583,8 +592,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -635,8 +644,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -687,8 +696,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -739,8 +748,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -791,8 +800,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -843,8 +852,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -895,8 +904,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
@@ -947,8 +956,8 @@
         "pending_OOF": {
           "applies_to": "each_family_in_cells",
           "retained_calibration_months": 5,
-          "valid_reusable_months": 3,
-          "generate_or_replace_months": {"12_months": 9, "24_months": 21, "36_months": 33},
+          "valid_reusable_months": 0,
+          "generate_or_replace_months": {"12_months": 12, "24_months": 24, "36_months": 36},
           "fixed_window_status": "GENERATABLE",
           "expanding_status": "NOT_EVALUABLE",
           "expanding_first_valid_OOF_origin": null,
