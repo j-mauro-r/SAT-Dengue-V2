@@ -39,3 +39,53 @@ No experiment preflight command, scientific-source loader, real or synthetic
 experiment, fitted scientific estimator, calibration, permanent MLflow store,
 global suite, Ruff, Mypy, CI, DWP, or G5 gate was run during this operational
 implementation.
+
+
+## Replay persistence repair (2026-10-30)
+
+Status: `EXP031_REPLAY_PERSISTENCE_IMPLEMENTED_NOT_EXECUTED`.
+The original scientific execution remains the current evidence. G5:
+`NOT_APPROVED`; champion: `not_selected`. No EXP03.1 scientific execution,
+Kedro execution, real replay, private-source read or permanent MLflow write
+was performed. No dependencies, scientific protocol/matrix, EXP04 or scientific
+conclusions were changed. DWP was not invoked and no new plan was created.
+
+Validation is limited to five gate types, using generated data, native
+round-trips and temporary repository-local tracking stores:
+
+| Gate | Evidence |
+| --- | --- |
+| Focused EXP03.1 tests | PASS: 58 tests across `test_exp03_1_contract.py`, `test_exp03_1_integration.py`, `test_exp03_1_operational.py` and `test_exp03_1_replay.py`. After retaining source-month audits across the existing preparation merge, only the affected executor test and replay module were repeated: 7 passed. No full suite. |
+| Ruff check | PASS: the four touched EXP03.1 modules and two touched test modules. |
+| Ruff format check | PASS: the same six Python files. |
+| Focused mypy | PASS: the same six Python files; the initial four annotation/suppression findings were corrected. |
+| `git diff --check` | Recorded by the final pre-commit check below. |
+
+The native round-trip tests fit only small generated fixtures for GAM,
+LightGBM and XGBoost. Fit entry points are forbidden during reload. They cover
+raw and calibrated scores, null/whole-tie thresholds, exact alerts, precision,
+row order/dtypes, source and event-month provenance, tamper/overwrite/path
+rejection, all four comparison outcomes, discrete/bin/tie mismatches, the
+96-cell companion inventory, and historical v1 validation compatibility.
+The existing executor double confirms 96 model fits, 96 calibrator fits,
+96 threshold selections and exactly 288 predictor calls with capture enabled.
+These are synthetic test counters, not a scientific execution.
+
+The five reproducible validation commands are:
+
+```sh
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/contracts/test_exp03_1_contract.py tests/integration/test_exp03_1_integration.py tests/integration/test_exp03_1_operational.py tests/integration/test_exp03_1_replay.py -q
+.venv/bin/python -m ruff check src/sat_dengue/experiments/exp03_1_{runner,reporting,validate,preflight}.py tests/integration/test_exp03_1_{operational,replay}.py
+.venv/bin/python -m ruff format --check src/sat_dengue/experiments/exp03_1_{runner,reporting,validate,preflight}.py tests/integration/test_exp03_1_{operational,replay}.py
+.venv/bin/python -m mypy src/sat_dengue/experiments/exp03_1_{runner,reporting,validate,preflight}.py tests/integration/test_exp03_1_{operational,replay}.py
+git diff --check
+```
+
+The only targeted pytest retry after the temporal-audit instrumentation change
+selected `test_executor_walks_96_cells_with_fit_and_calibration_doubles` and
+`test_exp03_1_replay.py`. Ruff/format and mypy were checked on the final Python
+content. The initial full focused run had two dependency advisories (Kedro dataset
+names and SQLAlchemy's deprecated `noload` strategy), with no failures.
+Independent scientific replay equivalence and original intermediate-state
+identity remain unverified/not comparable. No new execution approval was created.
+Future commands and the exact new approval fields are owned by [RUNBOOK](RUNBOOK.md).

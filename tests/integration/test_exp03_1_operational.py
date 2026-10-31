@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import sqlite3
 import tempfile
@@ -30,6 +31,9 @@ from sat_dengue.experiments.exp03_1_evaluation import metrics
 from sat_dengue.experiments.exp03_1_preflight import (
     APPROVAL_ENV,
     APPROVAL_SCHEMA,
+    ORIGINAL,
+    REPLAY_BOUND,
+    REPLAY_PROTOCOL,
     _tracking_root,
     authorize,
 )
@@ -61,9 +65,11 @@ def _approval(receipt: dict[str, Any]) -> dict[str, Any]:
                 "configuration_sha256",
                 "data_version",
                 "git_revision",
+                *REPLAY_BOUND,
             )
         },
         "real_execution_authorized": True,
+        "replay_only_authorized": True,
         "m00_refit_authorized": True,
         "variant_refits_authorized": True,
         "retrospective_availability_acknowledged": True,
@@ -282,6 +288,11 @@ def test_authorization_is_explicit_bound_and_separate_from_g5(
 ) -> None:
     receipt = {
         "git_dirty": False,
+        "replay_protocol": REPLAY_PROTOCOL,
+        "original": dict(ORIGINAL),
+        "original_bundle_path": "tmp/kedro-migration/exp03-1-runs/original",
+        "authorized_source_files": {"synthetic": {"sha256": "e" * 64, "bytes": 1}},
+        "environment_sha256": "0" * 64,
         "protocol_sha256": "a" * 64,
         "matrix_sha256": "b" * 64,
         "source_descriptor_sha256": "c" * 64,
@@ -295,6 +306,12 @@ def test_authorization_is_explicit_bound_and_separate_from_g5(
         authorize(receipt, {})
     _write_approval(monkeypatch, receipt, repo_tmp_path)
     assert authorize(receipt, {})["G5_approval"] is False
+    path = Path(os.environ[APPROVAL_ENV])
+    legacy = _approval(receipt)
+    legacy["schema"] = "exp03-1-execution-approval-v1"
+    path.write_text(json.dumps(legacy))
+    with pytest.raises(PermissionError, match="execution approval"):
+        authorize(receipt, {})
     altered = {**receipt, "matrix_sha256": "0" * 64}
     with pytest.raises(PermissionError):
         authorize(altered, {})
@@ -406,7 +423,7 @@ def test_load_authorized_sources_still_rejects_post_2024_rows(
         }
     )
     monkeypatch.setattr(exp03_1_runner, "authorize", lambda *_: {})
-    monkeypatch.setattr(exp03_admission, "admit_sources", lambda *_: {})
+    monkeypatch.setattr(exp03_admission, "admit_sources", lambda *_: {"files": {}})
     monkeypatch.setattr(exp03_admission, "reverify", lambda *_: None)
     monkeypatch.setattr(exp03_admission, "verified_snapshot", lambda *_: nullcontext(None))
     monkeypatch.setattr(
@@ -417,7 +434,7 @@ def test_load_authorized_sources_still_rejects_post_2024_rows(
     monkeypatch.setattr(exp03_1_runner, "_read_coverage", lambda *_: coverage)
 
     with pytest.raises(ValueError, match="rejects source observations after 2024"):
-        exp03_1_runner.load_authorized_sources({}, {})
+        exp03_1_runner.load_authorized_sources({"authorized_source_files": {}}, {})
 
 
 def test_source_manifest_payload_hash_tampering_is_rejected(
@@ -473,7 +490,15 @@ def test_executor_walks_96_cells_with_fit_and_calibration_doubles(
             },
         }
     )
-    monkeypatch.setattr(exp03_1_runner, "_prepare", lambda *_: common.copy())
+
+    def prepare(*args: Any) -> pd.DataFrame:
+        args[3][args[2]] = {
+            "keys": common[["municipality_code", "year_month"]].copy(),
+            "source_months": pd.DataFrame({"fixture_feature": ["2019-10"] * 2}),
+        }
+        return common.copy()
+
+    monkeypatch.setattr(exp03_1_runner, "_prepare", prepare)
     monkeypatch.setattr(
         exp03_1_runner,
         "paired_cohort",
@@ -508,10 +533,11 @@ def test_executor_walks_96_cells_with_fit_and_calibration_doubles(
 
     monkeypatch.setattr("sat_dengue.experiments.exp03_features.role_parts", role_parts)
     monkeypatch.setattr("sat_dengue.experiments.exp03_features.exposure_table", exposure_table)
-    calls = {"fit": 0, "calibration": 0, "threshold": 0}
+    calls = {"fit": 0, "calibration": 0, "threshold": 0, "predict": 0}
 
     class Model:
         def predict(self, frame: pd.DataFrame) -> pd.Series:
+            calls["predict"] += 1
             return pd.Series([0.2, 0.8], index=frame.index)
 
     def fit(*_: Any) -> Model:
@@ -529,7 +555,10 @@ def test_executor_walks_96_cells_with_fit_and_calibration_doubles(
         return real_select(*args, **kwargs)
 
     monkeypatch.setattr(exp03_1_runner, "select_threshold", select)
-    result = exp03_1_runner.execute_matrix(common, {}, fit=fit, calibrate=calibrate)
+    captured: list[dict[str, Any]] = []
+    result = exp03_1_runner.execute_matrix(
+        common, {}, fit=fit, calibrate=calibrate, capture=captured.append
+    )
     assert len(result["cells"]) == 96
     assert result["execution_plan"]["counts"] == {
         "total": 96,
@@ -544,7 +573,17 @@ def test_executor_walks_96_cells_with_fit_and_calibration_doubles(
         "real_threshold_selections": 0,
         "permanent_mlflow_writes": 0,
     }
-    assert calls == {"fit": 96, "calibration": 96, "threshold": 96}
+    assert calls == {"fit": 96, "calibration": 96, "threshold": 96, "predict": 288}
+    assert len(captured) == 96
+    for payload in captured:
+        assert isinstance(payload["predictor"], Model)
+        assert payload["source_audit"]["source_months"].fixture_feature.tolist() == ["2019-10"] * 2
+        assert set(payload["roles"]) == {"train", "calibration", "selection", "evaluation"}
+        assert set(payload["raw_scores"]) == {"calibration", "selection", "evaluation"}
+        for role in payload["raw_scores"]:
+            assert payload["raw_scores"][role].tolist() == [0.2, 0.8]
+            assert payload["raw_scores"][role].index.equals(payload["roles"][role].index)
+        assert payload["threshold_selection"]["whole_score_ties"] is True
 
 
 def test_real_bundle_closes_grid_predictions_contrasts_and_manifest() -> None:
