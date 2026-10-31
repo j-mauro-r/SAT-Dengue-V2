@@ -14,6 +14,12 @@ scientific experiments in SAT-Dengue V2. It connects each experiment and
 hypothesis to its frozen protocol, Kedro pipeline, MLflow lineage and written
 conclusions.
 
+EXP04's [independent technical implementation](EXP04_transporte_temporal_%20de_calibracion_y_umbrales_de%3Adecision/IMPLEMENTATION.md)
+provides read-only readiness and generated functional execution for temporal
+calibration/threshold transport. Its mandatory EXP03.1 M00 baseline remains
+`BLOCKED_BASELINE`; no EXP04 scientific evaluation or MLflow registration has
+occurred. The technical protocol does not constitute a scientific protocol freeze.
+
 ## Rules
 
 1. Register the experiment before its first scientific execution.

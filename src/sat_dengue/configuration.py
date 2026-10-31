@@ -64,6 +64,8 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "exp03_synthetic",
         "exp03_1",
         "exp03_1_preflight",
+        "exp04_preflight",
+        "exp04_functional",
         "exp01_synthetic",
         "exp02_synthetic",
         "exp02",
@@ -77,6 +79,10 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"
         )
     experiment_id = value.get("experiment_id")
+    if value["profile"] in {"exp04_preflight", "exp04_functional"} and (
+        value["tracking"] != "disabled" or experiment_id is not None
+    ):
+        raise ValueError("EXP04 technical profiles require disabled tracking and no registered ID")
     if value["profile"] in {"exp01", "exp01_preflight"} and (
         experiment_id != "EXP01" or value["tracking"] != "enabled"
     ):

@@ -16,6 +16,12 @@ from sat_dengue.experiments.exp04 import (
     threshold_policy,
 )
 from sat_dengue.experiments.exp04_baseline import audit_baseline, common_exposure, paired_support
+from sat_dengue.experiments.exp04_runner import (
+    compare_policies,
+    functional_run,
+    preflight,
+    write_result,
+)
 
 
 def score_frame() -> pd.DataFrame:
@@ -168,3 +174,77 @@ def test_temporal() -> None:
         threshold_policy(interleaved, policy="C2")
     with pytest.raises(ValueError, match="excess-control"):
         threshold_policy(scored, policy="C1", objective="excess_control")
+
+
+def test_functional(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Control 4: minimal generated execution and dry-run with no real-data substitute."""
+    ready = preflight(Path("tmp/exp04-missing-baseline-fixture"))
+    assert ready["status"] == "BLOCKED_BASELINE"
+    assert all(a["status"] == "NOT_EVALUABLE" for a in ready["arms"].values())
+    assert ready["model_fits"] == ready["calibrator_fits"] == ready["threshold_selections"] == 0
+    result = functional_run()
+    from kedro.io import DataCatalog, MemoryDataset
+    from kedro.runner import SequentialRunner
+
+    from sat_dengue.configuration import validate_parameters
+    from sat_dengue.hooks import TrackingHooks
+    from sat_dengue.pipeline_registry import register_pipelines
+
+    parameters = {"profile": "exp04_functional", "tracking": "disabled"}
+    catalog = DataCatalog({"parameters": MemoryDataset(parameters)})
+    graph = register_pipelines()["exp04_functional"]
+    hooked = TrackingHooks()
+    hooked.before_pipeline_run({"pipeline_names": ["exp04_functional"]}, catalog)
+    assert hooked.tracker is None
+    runner_result = SequentialRunner().run(graph, catalog)
+    assert runner_result["exp04_functional_result"].load()["bundle_id"] == result["bundle_id"]
+    for changed_parameters in (
+        dict(parameters, tracking="enabled"),
+        dict(parameters, experiment_id="EXP04"),
+    ):
+        with pytest.raises(ValueError, match="EXP04"):
+            validate_parameters(changed_parameters)
+    with pytest.raises(ValueError, match="must match"):
+        hooked.before_pipeline_run({"pipeline_names": ["replay"]}, catalog)
+    assert result["evidence_type"] == "generated_functional_only"
+    assert result["reference_is_M00"] is False
+    assert len(result["metrics"]) == 22
+    assert len(result["contrasts"]) == 16
+    assert {r["horizon"] for r in result["metrics"]} == {1, 2}
+    assert len(result["thresholds"]) == len(result["calibrators"]) == 22
+    assert all(m["objective"] == "onset" for m in result["metrics"])
+    assert result["excess_control"]["metrics"]["objective"] == "excess_control"
+    assert result["excess_control"]["metrics"]["budget_excess"] is None
+    assert result["D"]["status"] == "NOT_EVALUABLE"
+    assert set(result["scientific_hypotheses"].values()) == {"NOT_EVALUATED"}
+    assert set(result["execution_counters"].values()) == {0}
+    assert result["strata"] and result["fixed_uncalibrated_diagnostics"]
+    assert {s["department"] for s in result["strata"]} == {"50", "73"}
+    frame = pd.DataFrame(result["predictions"])
+    assert frame.groupby(["horizon", "arm"]).size().nunique() == 1
+    assert not frame.duplicated(["horizon", "arm", "municipality_code", "target_month"]).any()
+    fields = {
+        "raw_score",
+        "forecast_issue_date",
+        "label_available_date",
+        "training_cutoff",
+        "calibration_cutoff",
+        "decision_date",
+    }
+    assert fields <= set(frame)
+    a = frame.loc[frame.arm.eq("C0") & frame.horizon.eq(2)].reset_index(drop=True)
+    b = frame.loc[frame.arm.eq("C1") & frame.horizon.eq(2)].reset_index(drop=True)
+    ma = next(m for m in result["metrics"] if m["arm"] == "C0" and m["horizon"] == 2)
+    mb = next(m for m in result["metrics"] if m["arm"] == "C1" and m["horizon"] == 2)
+    changed = dict(mb, common_exposure=999)
+    assert compare_policies(a, b, ma, changed)["status"] == "NOT_EVALUABLE"
+    monkeypatch.chdir(tmp_path)
+    write_result(result, Path("tmp/exp04-functional-test"))
+    assert (
+        json.loads(Path("tmp/exp04-functional-test/result.json").read_text())["bundle_id"]
+        == result["bundle_id"]
+    )
+    with pytest.raises(FileExistsError):
+        write_result(result, Path("tmp/exp04-functional-test"))
+    with pytest.raises(ValueError):
+        write_result(result, Path("tmp/old-experiment"))

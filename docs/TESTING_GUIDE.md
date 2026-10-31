@@ -758,6 +758,33 @@ missing annotations or install undeclared stub packages to conceal failures.
 
 ## Registered scientific experiment tracking
 
+### EXP04 independent technical components
+
+EXP04 has exactly five substantive controls: design conformity, M00 baseline
+integrity, temporal integrity, minimal functional execution, and reproducibility.
+They use the existing pytest mechanism, not a new validation framework:
+
+```sh
+.venv/bin/python -m pytest tests/contracts/test_exp04_contract.py tests/integration/test_exp04.py -q
+```
+
+`exp04_contract.py` maps to the design control. `exp04_baseline.py` maps to the
+baseline control (including absent/tampered reference and paired key/truth/raw-score
+integrity). `exp04.py` maps to the temporal control (maturity, window gaps, frozen
+state, ties and worst-block budget). `exp04_runner.py` and its minimal existing
+Kedro/configuration/hook bindings map to the functional control. Reproducibility
+checks deterministic complete outputs, provenance and persistence, with scoped
+Ruff/format/mypy and Markdown links as supporting quality steps within that fifth
+control. Existing bootstrap expectations include the two new technical pipeline
+names; maintain those consumer checks when the bindings change.
+
+The [EXP04 implementation](product/experiments/EXP04_transporte_temporal_%20de_calibracion_y_umbrales_de%3Adecision/IMPLEMENTATION.md)
+owns commands and limits. All test/functional inputs are generated and do not
+establish reconstruction equivalence or scientific success. Readiness remains
+`BLOCKED_BASELINE` without original M00 state; real science, MLflow writes and
+2025 evaluation are not validation gates. Full CI ownership follows the policy
+above; do not repeat the complete suite locally for this bounded implementation.
+
 `tracking/experiments.py`, experiment registry/protocols, configuration, hooks and
 replay parameter propagation map to the following permitted validation:
 
