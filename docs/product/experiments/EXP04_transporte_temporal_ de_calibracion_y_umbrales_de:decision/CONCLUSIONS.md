@@ -8,7 +8,7 @@ champion: not_selected
 
 ## Evidence and interpretation
 
-All empirical figures below come exclusively from [the authorized bundle](../../../../tmp/exp04-scientific-20261031-v1/result.json) (`result.json`), identified by [its manifest](../../../../tmp/exp04-scientific-20261031-v1/manifest.json):
+All empirical figures below come exclusively from the authorized bundle (`tmp/exp04-scientific-20261031-v1/result.json`), identified by its manifest (`tmp/exp04-scientific-20261031-v1/manifest.json`); both paths are relative to the repository root. These are local, unversioned scientific artifacts in temporary storage, not portable repository links or synthetic technical-validation outputs. The bundle identity below preserves the reported provenance; passing the Markdown link check does not verify the scientific bundle or establish its availability in a clean checkout:
 
 - Bundle ID: `bbf1069c3855fb202f34f961a06fac1c203e48e73f6b97adce1e96662b3c4873`.
 - Recorded execution: **282 cells, 72 calibrator fits, 72 threshold selections, 0 predictor fits, 0 MLflow writes**. This report reads existing results; it does not rerun or revalidate the experiment.
