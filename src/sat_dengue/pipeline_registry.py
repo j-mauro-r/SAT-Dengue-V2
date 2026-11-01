@@ -14,6 +14,7 @@ from sat_dengue.experiments.exp03_1_runner import (
 from sat_dengue.experiments.exp03_1_runner import (
     load_authorized_sources as load_exp03_1_authorized_sources,
 )
+from sat_dengue.pipelines.canonical.pipeline import create_pipeline as canonical_pipeline
 from sat_dengue.pipelines.data.pipeline import create_pipeline
 from sat_dengue.pipelines.evaluation.pipeline import create_replay_pipeline as evaluation_replay
 from sat_dengue.pipelines.evaluation.pipeline import (
@@ -117,6 +118,7 @@ def register_pipelines() -> dict[str, Pipeline]:
         ]
     )
     return {
+        "canonical_model_table_v1": canonical_pipeline(),
         **exp04_pipelines(),
         "exp03_1": exp03_1_real,
         "exp03_1_preflight": exp03_1_check,

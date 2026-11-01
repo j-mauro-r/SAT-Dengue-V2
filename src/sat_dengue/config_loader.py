@@ -98,6 +98,15 @@ CATALOG["exp03_1_bundle"] = {
 }
 
 
+CATALOG["canonical_stage2_sources"] = {
+    "type": "sat_dengue.datasets.canonical.CanonicalSourcesDataset"
+}
+CATALOG["canonical_model_table_v1"] = {
+    "type": "sat_dengue.datasets.canonical.CanonicalBundleDataset",
+    "filepath": "data/processed/canonical_model_table_v1",
+}
+
+
 class ValidatedConfigLoader(OmegaConfigLoader):
     """Allow only the operational catalog exercised by implemented pipelines."""
 
