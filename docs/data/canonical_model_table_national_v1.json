@@ -1,0 +1,788 @@
+{
+  "schema": "canonical-model-table-national-contract-v1",
+  "dataset": "canonical_model_table_national_v1",
+  "key": [
+    "municipality_code",
+    "year_month"
+  ],
+  "window": {
+    "start": "2011-06",
+    "end": "2024-12",
+    "municipalities": 1122,
+    "months": 163,
+    "rows": 182886
+  },
+  "sources": {
+    "step1_execution": "aa25e8cee5fd9cdaa4bf",
+    "step1_summary": "data/interim/canonical-nacional-data/aa25e8cee5fd9cdaa4bf/execution_summary.json",
+    "step2_manifest": "data/interim/canonical-nacional-data/climate_step2_v1/climate_union_manifest.json",
+    "beta_bundle": "ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+    "beta_manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8"
+  },
+  "predictors": [
+    "dengue_notifications_count",
+    "dengue_grave_notifications_count",
+    "total_notifications_count",
+    "rain_mm_month_sum",
+    "surface_runoff_mm_month_sum",
+    "total_evaporation_mm_month_sum_ecmwf",
+    "solar_radiation_mj_m2_month_sum",
+    "temp_mean_c_month_mean",
+    "dewpoint_mean_c_month_mean",
+    "soil_water_l1_month_mean",
+    "wind_u_ms_month_mean",
+    "wind_v_ms_month_mean",
+    "p25_canal_t",
+    "p50_canal_t",
+    "p75_canal_t",
+    "zona_canal_t",
+    "month_of_year",
+    "dengue_notifications_count_lag1",
+    "dengue_notifications_count_lag2",
+    "dengue_notifications_count_lag3",
+    "dengue_notifications_count_lag12",
+    "dengue_grave_notifications_count_lag1",
+    "dengue_grave_notifications_count_lag2",
+    "dengue_grave_notifications_count_lag3",
+    "dengue_grave_notifications_count_lag12",
+    "total_notifications_count_lag1",
+    "total_notifications_count_lag2",
+    "total_notifications_count_lag3",
+    "total_notifications_count_lag12",
+    "p25_h5_t1",
+    "p75_h5_t1",
+    "p25_h5_t2",
+    "p75_h5_t2"
+  ],
+  "climate_predictors": [
+    "rain_mm_month_sum",
+    "surface_runoff_mm_month_sum",
+    "total_evaporation_mm_month_sum_ecmwf",
+    "solar_radiation_mj_m2_month_sum",
+    "temp_mean_c_month_mean",
+    "dewpoint_mean_c_month_mean",
+    "soil_water_l1_month_mean",
+    "wind_u_ms_month_mean",
+    "wind_v_ms_month_mean"
+  ],
+  "columns": [
+    {
+      "name": "municipality_code",
+      "dtype": "string",
+      "role": "key",
+      "meaning": "Five-digit DIVIPOLA code",
+      "source": "Step 1",
+      "available_month_offset": null
+    },
+    {
+      "name": "year_month",
+      "dtype": "string",
+      "role": "key",
+      "meaning": "Origin month T, YYYY-MM",
+      "source": "Step 1",
+      "available_month_offset": null
+    },
+    {
+      "name": "department_code",
+      "dtype": "string",
+      "role": "metadata",
+      "meaning": "Two-digit DIVIPOLA department",
+      "source": "Step 1 / pinned BETA publication",
+      "available_month_offset": null
+    },
+    {
+      "name": "municipality_name",
+      "dtype": "string",
+      "role": "metadata",
+      "meaning": "Catalogue display name; never a join key",
+      "source": "Step 1 / pinned BETA publication",
+      "available_month_offset": null
+    },
+    {
+      "name": "historical_territory_applicability",
+      "dtype": "string",
+      "role": "metadata",
+      "meaning": "Historical boundary applicability remains UNVERIFIED",
+      "source": "Step 1 / pinned BETA publication",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_context",
+      "dtype": "string",
+      "role": "metadata",
+      "meaning": "BETA_V1_BEFORE_WINDOW for 76 municipalities; WINDOW_ONLY otherwise",
+      "source": "Step 1 / pinned BETA publication",
+      "available_month_offset": null
+    },
+    {
+      "name": "dengue_notifications_count",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Notification count at T; total is sum of both streams",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "dengue_grave_notifications_count",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Notification count at T; total is sum of both streams",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "total_notifications_count",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Notification count at T; total is sum of both streams",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "rain_mm_month_sum",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "surface_runoff_mm_month_sum",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "total_evaporation_mm_month_sum_ecmwf",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "solar_radiation_mj_m2_month_sum",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "temp_mean_c_month_mean",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "dewpoint_mean_c_month_mean",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "soil_water_l1_month_mean",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "wind_u_ms_month_mean",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "wind_v_ms_month_mean",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Complete-calendar monthly climate aggregate; original units and ECMWF sign",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "p25_canal_t",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Current H5 percentile / zone",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "p50_canal_t",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Current H5 percentile / zone",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "p75_canal_t",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Current H5 percentile / zone",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "zona_canal_t",
+      "dtype": "string",
+      "role": "feature",
+      "meaning": "Current H5 percentile / zone",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "month_of_year",
+      "dtype": "int64",
+      "role": "feature",
+      "meaning": "Notification count at T; total is sum of both streams",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "dengue_notifications_count_lag1",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -1
+    },
+    {
+      "name": "dengue_notifications_count_lag2",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -2
+    },
+    {
+      "name": "dengue_notifications_count_lag3",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -3
+    },
+    {
+      "name": "dengue_notifications_count_lag12",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -12
+    },
+    {
+      "name": "dengue_grave_notifications_count_lag1",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -1
+    },
+    {
+      "name": "dengue_grave_notifications_count_lag2",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -2
+    },
+    {
+      "name": "dengue_grave_notifications_count_lag3",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -3
+    },
+    {
+      "name": "dengue_grave_notifications_count_lag12",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -12
+    },
+    {
+      "name": "total_notifications_count_lag1",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -1
+    },
+    {
+      "name": "total_notifications_count_lag2",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -2
+    },
+    {
+      "name": "total_notifications_count_lag3",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -3
+    },
+    {
+      "name": "total_notifications_count_lag12",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Exact-calendar historical notification count",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": -12
+    },
+    {
+      "name": "p25_h5_t1",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Origin-safe target-month H5 threshold from five exact prior same-month years",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "p75_h5_t1",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Origin-safe target-month H5 threshold from five exact prior same-month years",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "p25_h5_t2",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Origin-safe target-month H5 threshold from five exact prior same-month years",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "p75_h5_t2",
+      "dtype": "float64",
+      "role": "feature",
+      "meaning": "Origin-safe target-month H5 threshold from five exact prior same-month years",
+      "source": "Step 1 / Step 2 / unchanged BETA calculation",
+      "available_month_offset": 0
+    },
+    {
+      "name": "in_epi_coverage",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Coverage/quality indicator; never inferred to be a predictor",
+      "source": "National calendar / climate valid days",
+      "available_month_offset": null
+    },
+    {
+      "name": "requires_record_review",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Coverage/quality indicator; never inferred to be a predictor",
+      "source": "National calendar / climate valid days",
+      "available_month_offset": null
+    },
+    {
+      "name": "dengue_notifications_count_zero_from_absence",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Coverage/quality indicator; never inferred to be a predictor",
+      "source": "National calendar / climate valid days",
+      "available_month_offset": null
+    },
+    {
+      "name": "dengue_grave_notifications_count_zero_from_absence",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Coverage/quality indicator; never inferred to be a predictor",
+      "source": "National calendar / climate valid days",
+      "available_month_offset": null
+    },
+    {
+      "name": "climate_eligible",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Coverage/quality indicator; never inferred to be a predictor",
+      "source": "National calendar / climate valid days",
+      "available_month_offset": null
+    },
+    {
+      "name": "epi_count_status",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "records_present or zero_in_coverage under D2/D3",
+      "source": "Step 1",
+      "available_month_offset": null
+    },
+    {
+      "name": "expected_days_in_month",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "climate_days_observed",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "rain_mm_month_sum_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "surface_runoff_mm_month_sum_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "total_evaporation_mm_month_sum_ecmwf_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "solar_radiation_mj_m2_month_sum_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "temp_mean_c_month_mean_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "dewpoint_mean_c_month_mean_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "soil_water_l1_month_mean_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "wind_u_ms_month_mean_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "wind_v_ms_month_mean_valid_days",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Calendar days / actual unique days / nonmissing days per variable",
+      "source": "Step 2 monthly aggregation",
+      "available_month_offset": null
+    },
+    {
+      "name": "target_period_t1",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Exact target month T+h",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "p75_t1",
+      "dtype": "float64",
+      "role": "control",
+      "meaning": "Legacy outcome-gated H5 percentile; never X",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_valid_years_t1",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Available five-year observations for target",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_periods_expected_t1",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Exact expected H5 months, pipe-separated",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_periods_used_t1",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Observed H5 months, pipe-separated",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_missing_periods_t1",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Unavailable H5 months, pipe-separated",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "y_evaluable_t1",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Future H5 outcome availability",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "y_status_t1",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Outcome missingness reason",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "y_t1",
+      "dtype": "Int64",
+      "role": "target",
+      "meaning": "Future H5 excess, strict count > P75",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": 1
+    },
+    {
+      "name": "history_valid_years_h5_t1",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Number of origin-safe historical values for independent threshold",
+      "source": "Unchanged build_table",
+      "available_month_offset": null
+    },
+    {
+      "name": "onset_T1",
+      "dtype": "Int64",
+      "role": "target",
+      "meaning": "Direct transition non-excess at T+h-1 to excess at T+h; unknown stays null",
+      "source": "Unchanged onset.labels",
+      "available_month_offset": 1
+    },
+    {
+      "name": "future_dengue_count_t1",
+      "dtype": "float64",
+      "role": "target",
+      "meaning": "Observed dengue notifications at T+h, only inside approved window",
+      "source": "Exact-calendar lookup",
+      "available_month_offset": 1
+    },
+    {
+      "name": "epidemiologically_eligible_t1",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    },
+    {
+      "name": "temporally_eligible_t1",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    },
+    {
+      "name": "g1_no_climate_t1",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    },
+    {
+      "name": "g1_with_climate_t1",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    },
+    {
+      "name": "target_period_t2",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Exact target month T+h",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "p75_t2",
+      "dtype": "float64",
+      "role": "control",
+      "meaning": "Legacy outcome-gated H5 percentile; never X",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_valid_years_t2",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Available five-year observations for target",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_periods_expected_t2",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Exact expected H5 months, pipe-separated",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_periods_used_t2",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Observed H5 months, pipe-separated",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "history_missing_periods_t2",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Unavailable H5 months, pipe-separated",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "y_evaluable_t2",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Future H5 outcome availability",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "y_status_t2",
+      "dtype": "string",
+      "role": "control",
+      "meaning": "Outcome missingness reason",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": null
+    },
+    {
+      "name": "y_t2",
+      "dtype": "Int64",
+      "role": "target",
+      "meaning": "Future H5 excess, strict count > P75",
+      "source": "Unchanged compute_y_labels",
+      "available_month_offset": 2
+    },
+    {
+      "name": "history_valid_years_h5_t2",
+      "dtype": "int64",
+      "role": "control",
+      "meaning": "Number of origin-safe historical values for independent threshold",
+      "source": "Unchanged build_table",
+      "available_month_offset": null
+    },
+    {
+      "name": "onset_T2",
+      "dtype": "Int64",
+      "role": "target",
+      "meaning": "Direct transition non-excess at T+h-1 to excess at T+h; unknown stays null",
+      "source": "Unchanged onset.labels",
+      "available_month_offset": 2
+    },
+    {
+      "name": "future_dengue_count_t2",
+      "dtype": "float64",
+      "role": "target",
+      "meaning": "Observed dengue notifications at T+h, only inside approved window",
+      "source": "Exact-calendar lookup",
+      "available_month_offset": 2
+    },
+    {
+      "name": "epidemiologically_eligible_t2",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    },
+    {
+      "name": "temporally_eligible_t2",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    },
+    {
+      "name": "g1_no_climate_t2",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    },
+    {
+      "name": "g1_with_climate_t2",
+      "dtype": "boolean",
+      "role": "control",
+      "meaning": "Technical eligibility for stated horizon; no authorization to train",
+      "source": "Positive predictor list, H5 outcome, coverage and fixed chronology",
+      "available_month_offset": null
+    }
+  ],
+  "H5": "Unchanged BETA V1: five exact prior years of same calendar month, type-7 quantiles, strict dengue count>P75; no substitution. Future threshold references must be <=T.",
+  "history": "Before 2011-06, only pinned BETA V1 counts/coverage for its 76 territories support current H5 and lags. No post-2024 rows enter calculations. Other territories retain unknown H5 until enough window history exists.",
+  "absence": "D1 preserves symptom-onset chronology; D2/D3 zero notification counts in fixed calendar; no duplicate removal; 5663 unresolved in-window territorial records remain unassigned in Step 1 reconciliation.",
+  "climate": "Consume pinned Step 2 UNION ALL declaratively, without executing data-local Python. Reuse aggregate_monthly_climate: sums for rain/runoff/evaporation/solar; means for temperature/dewpoint/soil/U/V; every variable requires all calendar days, else null. No imputation.",
+  "eligibility": "Per horizon: complete nonclimate predictors, current non-excess, known exact-calendar onset, no record-review flags, T and T+h inside fixed window, target<2025. WITH_CLIMATE additionally requires all nine complete climate variables. NO_CLIMATE and WITH_CLIMATE are logical masks, not duplicate physical tables. Same BETA role boundaries and origin embargo remain mandatory; paired climate contrasts must intersect cohorts.",
+  "comparison": "All common equivalent columns on shared keys for original 76 municipalities; exact counts/H5/states/lags/labels/coverage; report floating-point climate differences separately with strict numeric diagnostic tolerance 1e-10. Outcome-gated fields for post-window targets are intentionally unavailable and cannot admit training.",
+  "publication": "Existing content-addressed, atomic, no-overwrite publication; single national CSV plus contract, dictionary, provenance, comparison and eligibility summaries. No training authorized.",
+  "limitations": [
+    "Retrospective snapshots do not establish point-in-time operational availability.",
+    "Current DIVIPOLA does not certify historical boundary applicability.",
+    "Candidate duplicate identifiers are retained.",
+    "Climate geometry equivalence and immutable upstream snapshots remain unverified.",
+    "Insular climate missingness must remain null; national pre-2011 history is unavailable outside the 76 reference territories."
+  ]
+}

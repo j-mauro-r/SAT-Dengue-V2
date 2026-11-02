@@ -41,6 +41,15 @@ CANONICAL_AUTHORITY: dict[str, Any] = {
 }
 
 
+NATIONAL_AUTHORITY: dict[str, Any] = {
+    "path": "docs/data/canonical_model_table_national_v1.json",
+    "identity": {
+        "sha256": "1d9d006b6e17cf90644a2aacd421ceb51a0d1caa27e5ff4b341f914ab7d56faa",
+        "bytes": 28345,
+    },
+}
+
+
 def canonical_bytes(value: Any) -> bytes:
     """Serialize a configuration deterministically, rejecting NaN and infinity."""
     return (
@@ -66,6 +75,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "exp_beta02",
         "exp_beta01",
         "canonical_model_table_v1",
+        "canonical_model_table_national_v1",
         "foundation",
         "data",
         "preparation",
@@ -96,6 +106,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
     experiment_id = value.get("experiment_id")
     if value["profile"] in {
         "canonical_model_table_v1",
+        "canonical_model_table_national_v1",
         "exp_beta01",
         "exp_beta02",
         "exp_beta03",

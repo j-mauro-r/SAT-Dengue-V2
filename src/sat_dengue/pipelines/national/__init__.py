@@ -1,0 +1,1 @@
+"""Independent national canonical construction."""

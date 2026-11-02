@@ -267,3 +267,14 @@ No stable joint sensitivity/load improvement was established, no further model
 is automatically authorized, G5 remains NOT_APPROVED and champion not_selected.
 The next integration gate is Mauricio's personal PR review and green required CI;
 no merge or operational/product release approval is inferred from scientific closure.
+
+## Bounded national canonical construction
+
+Mauricio authorized the independent Step 3 national construction on
+`feature/canonical-nacional-data-v1`, using the explicitly identified local
+Step 1 notification calendar and Step 2 climate complement. The
+[construction owner](../data/canonical-national-table.md) defines the independent
+Kedro route, publication, comparison and technical eligibility gates. The scope
+is one national table; G1 fitting and all national BETA extensions remain future
+bounded work. Integration requires Mauricio's review and required CI, without
+automatic merge. Existing scientific gates and BETA publications are preserved.

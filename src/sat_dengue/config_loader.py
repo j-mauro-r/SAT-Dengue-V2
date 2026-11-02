@@ -98,6 +98,15 @@ CATALOG["exp03_1_bundle"] = {
 }
 
 
+CATALOG["national_canonical_sources"] = {
+    "type": "sat_dengue.datasets.national.NationalSourcesDataset"
+}
+CATALOG["canonical_model_table_national_v1"] = {
+    "type": "sat_dengue.datasets.national.NationalBundleDataset",
+    "filepath": "data/processed/canonical_model_table_national_v1",
+}
+
+
 CATALOG["canonical_stage2_sources"] = {
     "type": "sat_dengue.datasets.canonical.CanonicalSourcesDataset"
 }
