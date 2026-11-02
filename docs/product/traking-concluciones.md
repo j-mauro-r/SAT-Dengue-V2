@@ -1943,3 +1943,27 @@ G5 remains NOT_APPROVED and champion not_selected.
 - **Boundary:** no historic mutation, evaluation mining, 2025, automatic champion,
   statistical noninferiority, or independent confirmation claim. G5 remains
   NOT_APPROVED. Human review remains Mauricio's responsibility.
+
+## Bounded national diagnostic decisions — 2026-11-02
+
+Mauricio's `Canonical-nacional-data` request authorizes a new national diagnostic notebook,
+separate from the frozen Stage 2 notebook identities and BETA V1 experiments. The deliverable is
+[notebook 09](../../notebooks/09_canonical_nacional_data.ipynb); its task-specific helpers remain
+in the existing data module. It does not change the current canonical contract or authorize G1.
+
+- D1: accept occurrence/notification date differences for this retrospective analysis; preserve
+  original dates and aggregate by the existing `INI_SIN` rule without substitution or exclusion
+  based on date disagreement.
+- D2/D3: within the explicit territorial review calendar, no notification rows means zero counts.
+  Preserve separate 210/220 counts and source-row/absence indicators. Located rejected event rows
+  require review and are distinguished from absence. Climate missingness is never set to zero.
+- Territory and onset/event validity define conditional canonical-review eligibility. Zero-heavy
+  territories remain in the universe. Fixed review bounds follow BETA01's 2011-06 training start
+  and stop before the reserved 2025 block; neither source coverage nor historical boundary
+  applicability is established by those bounds or the current catalogue. Training admission,
+  climate availability, H5 and temporal feature safeguards remain unassessed.
+- Keep duplicate notifications, reconcile unresolved codes, and apply no unsupported territorial
+  crosswalk. Hash matches establish local integrity, not completeness of an official extraction.
+- Missing private CSVs yield `READY_FOR_LOCAL_EXECUTION`, without scientific results or a zero
+  calendar. Real diagnostics and private aggregate outputs stay under the ignored
+  `data/interim/canonical-nacional-data/` directory. BETA protocols and earlier sources are intact.
