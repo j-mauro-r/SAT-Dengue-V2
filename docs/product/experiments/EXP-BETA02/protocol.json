@@ -1,0 +1,75 @@
+{
+  "schema": "exp-beta02-protocol-v1",
+  "experiment_id": "EXP-BETA02",
+  "canonical_bundle_id": "ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+  "canonical_manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8",
+  "horizons": [1, 2],
+  "evaluation_years": [2020, 2021, 2022, 2024],
+  "training_start": "2011-06",
+  "reserved_target_start": "2025-01",
+  "roles": "target-year Y: train through Y-2; selection Y-1; evaluation Y; origins embargoed at the previous role target end",
+  "cohort": "Known non-excess at origin T, exact-calendar known onset labels, known count at T+h and complete canonical ON allowlist; identical OFF/ON and full R0 evaluation keys, no intersection substitution",
+  "predictors": [
+    "dengue_notifications_count", "dengue_grave_notifications_count", "total_notifications_count",
+    "rain_mm_month_sum", "surface_runoff_mm_month_sum", "total_evaporation_mm_month_sum_ecmwf",
+    "solar_radiation_mj_m2_month_sum", "temp_mean_c_month_mean", "dewpoint_mean_c_month_mean",
+    "soil_water_l1_month_mean", "wind_u_ms_month_mean", "wind_v_ms_month_mean",
+    "p25_canal_t", "p50_canal_t", "p75_canal_t", "zona_canal_t", "month_of_year",
+    "dengue_notifications_count_lag1", "dengue_notifications_count_lag2",
+    "dengue_notifications_count_lag3", "dengue_notifications_count_lag12",
+    "dengue_grave_notifications_count_lag1", "dengue_grave_notifications_count_lag2",
+    "dengue_grave_notifications_count_lag3", "dengue_grave_notifications_count_lag12",
+    "total_notifications_count_lag1", "total_notifications_count_lag2",
+    "total_notifications_count_lag3", "total_notifications_count_lag12",
+    "p25_h5_t1", "p75_h5_t1", "p25_h5_t2", "p75_h5_t2"
+  ],
+  "climate_predictors": [
+    "rain_mm_month_sum", "surface_runoff_mm_month_sum", "total_evaporation_mm_month_sum_ecmwf",
+    "solar_radiation_mj_m2_month_sum", "temp_mean_c_month_mean", "dewpoint_mean_c_month_mean",
+    "soil_water_l1_month_mean", "wind_u_ms_month_mean", "wind_v_ms_month_mean"
+  ],
+  "transforms": "Fixed EXITO/SEGURIDAD/ALERTA/EXCESO coding 0/1/2/3; log1p of count and P25/P50/P75 features; training-only population mean/std, constant scale 1; no imputation or future fitting",
+  "model": {
+    "family": "negative_binomial_NB2",
+    "link": "log",
+    "variance": "mu + alpha * mu^2",
+    "ridge_penalty_sum_likelihood": 1.0,
+    "alpha_bounds": [0.0001, 100.0],
+    "optimizer": "L-BFGS-B with analytic gradient",
+    "maxiter": 2000,
+    "ftol": 1e-10,
+    "gtol": 1e-6,
+    "maxls": 30,
+    "threads": 1,
+    "minimum_training_rows": 24,
+    "failure": "Nonconvergence or nonfinite distribution fails; no evaluation-driven retry or retuning",
+    "matrix": "One pooled direct marginal per horizon, year and climate OFF/ON: 16 unique fits; no search"
+  },
+  "distribution": {
+    "parameterization": "r=1/alpha; p=r/(r+mu)",
+    "excess_risk": "scipy.stats.nbinom.sf(floor(origin-safe P75 H5 for target month), r, p); strict count>P75",
+    "onset_t1": "excess risk on the observed non-excess-at-T cohort",
+    "onset_t2": "NO_EVALUABLE: direct marginals do not identify a coherent joint T+1/T+2 transition distribution; never substitute excess or observed future state",
+    "predictive_quantiles": [0.05, 0.95],
+    "interval_interpretation": "Discrete central predictive interval conditional on fitted parameters; not a parameter confidence interval"
+  },
+  "policy": {
+    "budget_false_alerts_per_municipality_year": 1.0,
+    "noninferiority_margin": 0.02,
+    "reference": "R0 on identical complete keys and truths",
+    "adoption": "Mauricio explicitly adopted application to EXP-BETA02 in the Phase 3 request before any fit",
+    "denominator": "observed eligible target-month rows / 12",
+    "selection": "Reuse whole-tie maximum detections under budget on previous selection-year scores only; prefer fewer false alerts and then higher threshold; no-alert fallback",
+    "guardrails": "Report every year and Meta/Tolima/all stratum; no evaluation-selected climate setting",
+    "inference": "Descriptive compliance is not statistical noninferiority; statistical NI UNAVAILABLE and superiority NOT_ESTABLISHED without independent support"
+  },
+  "secondary_beta01": {
+    "path": "tmp/kedro-migration/exp-beta01-runs/37a0cae62f4d3fa59cede281e032c9abd1b568a90933855b9eebd3b3d3fb5f4a",
+    "manifest_sha256": "4f6b86fcfcf46dbb47123b33ac29ecc9c23b62e65ac1c83ec460231f04816d7e",
+    "use": "Optional unchanged scores/alerts, exact full cohort pairing, secondary context only"
+  },
+  "neural_candidate": "NO_EVALUABLE: no predeclared independent sequential-model justification; limited reused evaluation years and no identified deficiency warranting a neural fit before this baseline",
+  "profiles": "NO_EVALUABLE: no validated canonical transmission-profile field",
+  "confirmation": "None. All years retrospective; 2024 consumed stress, no 2025 targets, fitting or evaluation; no champion selection",
+  "hypothesis_rule": "Any T1 year/department sensitivity/load failure rejects this fixed marginal approach for the joint objective. Otherwise NO_EVALUABLE because T2 onset and independent inferential support are unavailable. Better count error alone never establishes better outbreak detection."
+}
