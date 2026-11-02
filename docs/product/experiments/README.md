@@ -184,3 +184,5 @@ The independent [count-forecasting implementation](EXP-BETA02/README.md) and
 [frozen protocol](EXP-BETA02/protocol.json) own Phase 3. Direct marginal T+2
 forecasts do not supply a joint onset probability. This entry does not authorize
 Phase 4 or declare any scientific model superior.
+The [retrospective results](EXP-BETA02/RESULTS.md) reject the fixed marginal NB2
+approach under joint sensitivity/load controls; R0 remains the primary reference.

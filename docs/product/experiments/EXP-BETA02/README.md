@@ -1,7 +1,9 @@
 # EXP-BETA02 — probabilistic monthly dengue counts
 
-Status: **IMPLEMENTED_NOT_EXECUTED**. This is the separately authorized Phase 3
-of [the Beta design](../EXP-BETA/DESING.md), not a Phase 4 result.
+Status: **COMPLETED_WITH_LIMITATIONS**, locally executed on 2026-11-02. See
+[RESULTS.md](RESULTS.md) for the fixed negative/mixed findings, exact publication,
+32 real fits including reproduction, native-state checks and remaining limits.
+This is the separately authorized Phase 3 of [the Beta design](../EXP-BETA/DESING.md).
 
 ## Entry gate and frozen scope
 
