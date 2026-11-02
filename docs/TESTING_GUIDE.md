@@ -1117,3 +1117,17 @@ tamper and overwrite rejection. They are not performance evidence. The separate
 [real policy execution](product/experiments/EXP-BETA03/README.md) requires pinned
 private sources and native R0 states; it performs zero estimator fits. CI does
 not provision those inputs or authorize scientific extensions.
+
+## Bounded national notification diagnostics
+
+For `data/national_diagnostics.py` and notebook 09, run scoped Ruff/format/mypy and
+`pytest tests/unit/test_national_diagnostics.py -q`. These synthetic engineering fixtures cover
+count conservation, chunk-independent duplicates, rejected-row versus absent-row indicators,
+empty/missing streams, strict execution JSON, source preservation and future-density independence.
+They are not national epidemiological evidence.
+
+Validate notebook 09 with `nbformat` and execute it top-to-bottom with `nbclient` using the project
+kernel. Missing private CSVs must produce `READY_FOR_LOCAL_EXECUTION` and no calendar. Inspect real
+coverage/consistency conclusions locally only with the original CSVs. Preserve ignored private
+outputs under `data/interim/canonical-nacional-data/`; clear private notebook outputs before commit.
+No scientific pipeline, BETA run or model fit is part of this gate.
