@@ -2004,3 +2004,10 @@ G0_MATCHED is not required and no historical predictor is refitted. All eight
 cells have admissible additions; 2020 has only six/five additional origin months
 for T+1/T+2, a predeclared support limitation. This authorization ends at G1's
 comparison and does not authorize L1/NB2/policy V2, confirmation or champion.
+
+The [real V2 result](experiments/EXP-BETA01-V2/RESULTS.md) closes the national
+expansion hypothesis as `NO_RESPALDADA`: G1 loses five/one detections and adds
+eight/21 false alerts against frozen G0 in T+1/T+2. AP/Brier improvements do not
+rescue the joint criterion; T+2 loses 11.42 pp sensitivity against R0. Eight new
+G1 fits were replayed from saved models without additional fits; V1 artifacts
+and results remain intact. No further national experiment follows automatically.

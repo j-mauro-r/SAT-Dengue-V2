@@ -6,6 +6,14 @@ evaluation cohorts as BETA V1. The [protocol](protocol.json) is frozen in Git
 before any real fit; [results](RESULTS.md) and [conclusions](CONCLUSIONS.md) are
 updated only from the new real publication.
 
+Native execution is now `COMPLETED_WITH_LIMITATIONS`: eight G1 fits and eight
+global calibrations, no historical fits. The hypothesis is `NO_RESPALDADA`.
+Publication `a4fdd4d955f867c49a8142a334e989e084c30587262fac4e1940a2b8d9190d6e`
+was executed from the clean protocol-freeze commit identified in RESULTS.
+Reloading all saved models reproduced scores, policies, predictions and metrics
+byte for byte with zero additional fits; immutable publication/preservation
+controls passed. This scientific closure is separate from CI and merge approval.
+
 ## Inputs and comparability
 
 - [Original design](../EXP-BETA/DESING.md),

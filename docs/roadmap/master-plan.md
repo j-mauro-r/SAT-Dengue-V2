@@ -289,3 +289,10 @@ additional history is explicitly limited. The new independent route does not
 alter V1, default/replay or scientific gates. Results, uncertainty and any
 follow-up recommendation belong to V2; no further model is automatically
 authorized. Existing CI/preservation findings remain separately identified.
+
+The authorized native execution is now complete and reproduced: eight G1
+predictors, no historical refits, identical frozen evaluation cohorts and
+byte-identical prediction/metric replay. [V2 results](../product/experiments/EXP-BETA01-V2/RESULTS.md)
+classify expansion as `NO_RESPALDADA`; no national follow-up is automatically
+recommended. Review/integration and inherited CI disposition remain separate
+human/engineering gates; G5 and champion status are unchanged.
