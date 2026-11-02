@@ -1902,3 +1902,44 @@ G5 remains NOT_APPROVED and champion not_selected.
   The protocol explicitly defines monitored eligible target-month exposure, temporal
   roles, source identity and climate-paired cohorts. No new 2025 evaluation or
   automatic champion selection is authorized by this decision.
+
+### DEC-138 Freeze the bounded EXP-BETA02 count-forecasting protocol
+
+- **Date:** 2026-11-02; before any Beta02 fit.
+- **Authority:** Mauricio's explicit Phase 3 request and subsequent instruction to
+  complete EXP-BETA02 before continuing Phase 4.
+- **Decision:** apply the approved <=1 false alert/municipality-year budget and
+  -2 percentage-point descriptive sensitivity margin against R0 to exact matched
+  cohorts, with annual and department controls. Statistical noninferiority and
+  superiority require independent support; descriptive compliance is insufficient.
+- **Implementation freeze:** [EXP-BETA02 protocol](experiments/EXP-BETA02/protocol.json)
+  fixes a single parsimonious NB2 family, chronological roles, paired climate
+  contrasts and count/detection metrics. Direct marginal forecasts leave T+2
+  onset `NO_EVALUABLE`; no artificial joint law or observed future-state input.
+- **Boundary:** no 2025 evaluation, retrospective 2024 stress remains consumed,
+  no retuning on results, no historical retraining or champion selection. Neural
+  expansion is not justified in this bounded baseline.
+
+### DEC-139 Freeze EXP-BETA03 before policy evaluation
+
+- **Date:** 2026-11-02; before any new policy comparison.
+- **Authority:** Mauricio explicitly ratified both Beta03 criteria and authorized
+  integral closure on `experiment/EXP-BETA02`, PR #67, without merge.
+- **Decision:** [the frozen protocol](experiments/EXP-BETA03/protocol.json) keeps
+  <=1 false alert per eligible municipality-year, the -2 percentage-point
+  descriptive sensitivity margin against R0, and year/department controls.
+  R0 is chosen by mandatory-reference priority and verified development support,
+  without ranking candidates on already observed evaluation performance.
+- **Preflight:** canonical/Beta01/Beta02 identities and native score replay pass.
+  R0's captured native artifacts contain separate selection and evaluation
+  roles for both horizons and all four cuts. Selection is the previous year's
+  last six months; no new historical estimator fit is needed.
+- **Denominator:** preserve R0's original policy, which used broader monitored
+  exposure; new policy selection uses scored eligible exposure as in Beta01/02.
+  All new paired metrics use the same eligible denominator, explicitly.
+- **Conditional scope:** one supported, regularized department threshold arm;
+  additional learning needs independent development recurrence and a separate
+  policy block. A single selection block cannot establish that support.
+- **Boundary:** no historic mutation, evaluation mining, 2025, automatic champion,
+  statistical noninferiority, or independent confirmation claim. G5 remains
+  NOT_APPROVED. Human review remains Mauricio's responsibility.

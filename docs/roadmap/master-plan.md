@@ -255,3 +255,15 @@ registered real graph and metadata-only preflight from corrective PLAN_037 on
 PR #27. This infrastructure does not execute EXP01 or change its frozen protocol,
 EXP00, EXP03, G5 `NOT_APPROVED` or champion `not_selected`. Real execution requires
 a separate protocol-, commit- and data-bound human/reviewer authorization.
+
+## Bounded EXP-BETA retrospective program
+
+Mauricio authorized integral closure on `experiment/EXP-BETA02`, existing PR #67,
+without merge. The [scientific closure and four-phase compliance matrix](../product/experiments/EXP-BETA/CONCLUSIONS.md)
+record real canonical/Beta01/Beta02 verification and the independently identified
+EXP-BETA03 frozen-score policy execution/reproduction. Bounded scientific status
+is COMPLETED_WITH_LIMITATIONS; conditional/non-evaluable components remain explicit.
+No stable joint sensitivity/load improvement was established, no further model
+is automatically authorized, G5 remains NOT_APPROVED and champion not_selected.
+The next integration gate is Mauricio's personal PR review and green required CI;
+no merge or operational/product release approval is inferred from scientific closure.

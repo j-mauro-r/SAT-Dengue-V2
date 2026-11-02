@@ -104,3 +104,15 @@ exp_beta01_sources:
 exp_beta01_bundle:
   type: sat_dengue.datasets.exp_beta01.BetaBundleDataset
   filepath: tmp/kedro-migration/exp-beta01-runs
+
+exp_beta02_sources:
+  type: sat_dengue.datasets.exp_beta02.CountSourcesDataset
+exp_beta02_bundle:
+  type: sat_dengue.datasets.exp_beta02.CountBundleDataset
+  filepath: tmp/kedro-migration/exp-beta02-runs
+
+exp_beta03_sources:
+  type: sat_dengue.datasets.exp_beta03.PolicySourcesDataset
+exp_beta03_bundle:
+  type: sat_dengue.datasets.exp_beta03.PolicyBundleDataset
+  filepath: tmp/kedro-migration/exp-beta03-runs

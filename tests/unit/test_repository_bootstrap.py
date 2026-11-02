@@ -21,6 +21,8 @@ def test_repository_bootstrap() -> None:
         "__default__",
         "canonical_model_table_v1",
         "exp_beta01",
+        "exp_beta02",
+        "exp_beta03",
         "foundation",
         "data",
         "preparation",

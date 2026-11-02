@@ -177,3 +177,21 @@ and [retrospective results](EXP-BETA/RESULTS.md) supersede the local missing-inp
 blocker while retaining the [original Cloud entry-gate record](EXP-BETA/PHASE2.md).
 Code and aggregate reports are versioned; private inputs and native publications
 remain local. Updating the branch does not provision data in Cloud.
+
+## EXP-BETA02
+
+The independent [count-forecasting implementation](EXP-BETA02/README.md) and
+[frozen protocol](EXP-BETA02/protocol.json) own Phase 3. Direct marginal T+2
+forecasts do not supply a joint onset probability. This entry does not authorize
+Phase 4 or declare any scientific model superior.
+The [retrospective results](EXP-BETA02/RESULTS.md) reject the fixed marginal NB2
+approach under joint sensitivity/load controls; R0 remains the primary reference.
+
+## EXP-BETA03 and integral closure
+
+The separately authorized [frozen-score policy implementation](EXP-BETA03/README.md)
+and [real results](EXP-BETA03/RESULTS.md) complete the bounded fourth phase without
+new estimator fits. The [consolidated conclusions and compliance matrix](EXP-BETA/CONCLUSIONS.md)
+close the program as COMPLETED_WITH_LIMITATIONS. Neither global nor supported
+department thresholds satisfy the joint controls consistently. G5 remains
+NOT_APPROVED and champion not_selected; PR #67 still requires Mauricio's review.
