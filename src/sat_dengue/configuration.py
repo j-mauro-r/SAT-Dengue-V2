@@ -74,6 +74,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "exp_beta03",
         "exp_beta02",
         "exp_beta01",
+        "exp_beta01_v2",
         "canonical_model_table_v1",
         "canonical_model_table_national_v1",
         "foundation",
@@ -108,6 +109,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         "canonical_model_table_v1",
         "canonical_model_table_national_v1",
         "exp_beta01",
+        "exp_beta01_v2",
         "exp_beta02",
         "exp_beta03",
     } and (value["tracking"] != "disabled" or experiment_id is not None):

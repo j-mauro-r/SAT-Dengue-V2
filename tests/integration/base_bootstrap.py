@@ -33,6 +33,7 @@ def main() -> None:
         "canonical_model_table_v1",
         "canonical_model_table_national_v1",
         "exp_beta01",
+        "exp_beta01_v2",
         "exp_beta02",
         "exp_beta03",
         "foundation",

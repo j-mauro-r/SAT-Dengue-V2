@@ -117,6 +117,13 @@ CATALOG["canonical_model_table_v1"] = {
 
 
 CATALOG["exp_beta01_sources"] = {"type": "sat_dengue.datasets.exp_beta01.BetaSourcesDataset"}
+CATALOG["exp_beta01_v2_sources"] = {
+    "type": "sat_dengue.datasets.exp_beta01_v2.NationalBetaSourcesDataset"
+}
+CATALOG["exp_beta01_v2_bundle"] = {
+    "type": "sat_dengue.datasets.exp_beta01_v2.NationalBetaBundleDataset",
+    "filepath": "data/processed/exp_beta01_v2",
+}
 CATALOG["exp_beta01_bundle"] = {
     "type": "sat_dengue.datasets.exp_beta01.BetaBundleDataset",
     "filepath": "tmp/kedro-migration/exp-beta01-runs",

@@ -278,3 +278,14 @@ Kedro route, publication, comparison and technical eligibility gates. The scope
 is one national table; G1 fitting and all national BETA extensions remain future
 bounded work. Integration requires Mauricio's review and required CI, without
 automatic merge. Existing scientific gates and BETA publications are preserved.
+
+## Bounded EXP-BETA01 V2 national transfer
+
+The [V2 owner](../product/experiments/EXP-BETA01-V2/README.md) records Mauricio's
+authorization for the national G1 no-climate experiment, frozen before fitting.
+The original 76 municipalities' role populations and G0/R0 predictions remain
+fixed. Eight horizon/year cells passed the no-fit gate; 2020's restricted
+additional history is explicitly limited. The new independent route does not
+alter V1, default/replay or scientific gates. Results, uncertainty and any
+follow-up recommendation belong to V2; no further model is automatically
+authorized. Existing CI/preservation findings remain separately identified.

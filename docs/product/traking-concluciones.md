@@ -1990,3 +1990,17 @@ views; a paired comparison must use common cohorts. Preserved BETA role dates,
 origin embargo and the reserved 2025 boundary remain mandatory. The national
 table does not modify the frozen BETA protocol's historical `G1 NO_EVALUABLE`
 finding or authorize a new fit, independent confirmation, champion or release.
+
+### EXP-BETA01 V2 — pre-fit national transfer authorization
+
+Mauricio explicitly authorized the independent [V2 experiment](experiments/EXP-BETA01-V2/README.md)
+to fit national G1 without climate and compare it on the frozen Meta/Tolima G0/R0
+cohorts. The [V2 protocol](experiments/EXP-BETA01-V2/protocol.json) freezes the
+original XGBoost configuration, positive no-climate feature list, target-role
+dates, origin embargo, regional calibration/selection populations and adopted
+≤1 false alert per municipality-year / −2 pp descriptive R0 sensitivity criteria.
+The no-fit audit establishes exact regional support in all five roles;
+G0_MATCHED is not required and no historical predictor is refitted. All eight
+cells have admissible additions; 2020 has only six/five additional origin months
+for T+1/T+2, a predeclared support limitation. This authorization ends at G1's
+comparison and does not authorize L1/NB2/policy V2, confirmation or champion.
