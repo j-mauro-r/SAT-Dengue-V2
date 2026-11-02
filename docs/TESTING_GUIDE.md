@@ -1131,3 +1131,26 @@ kernel. Missing private CSVs must produce `READY_FOR_LOCAL_EXECUTION` and no cal
 coverage/consistency conclusions locally only with the original CSVs. Preserve ignored private
 outputs under `data/interim/canonical-nacional-data/`; clear private notebook outputs before commit.
 No scientific pipeline, BETA run or model fit is part of this gate.
+
+## National canonical construction
+
+For `canonical/national.py`, `datasets/national.py`, the independent national
+pipeline, its contract and additive configuration bindings, run:
+
+```sh
+KEDRO_DISABLE_TELEMETRY=1 .venv/bin/python -m pytest tests/unit/test_national_canonical.py tests/unit/test_national_diagnostics.py tests/unit/test_canonical_model_table.py tests/unit/test_exp_beta01.py tests/contracts/test_kedro_configuration.py -q
+```
+
+Use focused Ruff/format/mypy on changed Python files, the Markdown link checker
+for changed documentation and repo-only conformance. Fixtures cover climate
+chunk boundaries, missing-month sums, duplicate rejection, fixed calendar/count
+conservation, H5 warmup, future-mutation invariance, target/feature separation,
+reference discrepancy detection and route isolation. Existing canonical tests
+own atomic no-overwrite and payload tamper controls. They do not establish real
+national parity.
+
+The separate [private national acceptance](data/canonical-national-table.md)
+requires the pinned Step 1/2 evidence and BETA publication. Verify real row/hash
+reproduction, all original 76 municipalities on shared keys, climate missingness,
+per-horizon eligibility, original source preservation and overwrite rejection.
+No model fitting or BETA execution is part of this gate. Never commit its CSVs.

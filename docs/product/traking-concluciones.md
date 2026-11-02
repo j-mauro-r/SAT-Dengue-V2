@@ -1967,3 +1967,26 @@ in the existing data module. It does not change the current canonical contract o
 - Missing private CSVs yield `READY_FOR_LOCAL_EXECUTION`, without scientific results or a zero
   calendar. Real diagnostics and private aggregate outputs stay under the ignored
   `data/interim/canonical-nacional-data/` directory. BETA protocols and earlier sources are intact.
+
+### National canonical construction — bounded Step 3 authorization
+
+Mauricio authorized construction, validation and isolated publication of
+`canonical_model_table_national_v1`, without fitting or BETA execution. The
+[national contract](../data/canonical_model_table_national_v1.json) and
+[construction owner](../data/canonical-national-table.md) define the source-bound
+implementation; the original BETA V1 publication remains unchanged.
+
+The 1,122 × 163 review calendar retains approved D1/D2/D3, unresolved territorial
+notifications and candidate duplicate identifiers. Reuse BETA H5, exact-calendar
+lags and direct onset; do not redefine scientific labels. To preserve the 76
+original municipalities, their pinned pre-window BETA counts supply historical
+context only. Other municipalities have no approved pre-window history and
+remain ineligible until their H5/lag requirements are met. This source-support
+asymmetry must remain explicit in a future G1 comparison.
+
+Climate full-month coverage is required per variable; missing insular values
+remain missing. Separate no-climate/climate eligibility masks are technical
+views; a paired comparison must use common cohorts. Preserved BETA role dates,
+origin embargo and the reserved 2025 boundary remain mandatory. The national
+table does not modify the frozen BETA protocol's historical `G1 NO_EVALUABLE`
+finding or authorize a new fit, independent confirmation, champion or release.

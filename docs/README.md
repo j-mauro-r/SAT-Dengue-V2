@@ -33,6 +33,7 @@ Human-approved decisions and ADRs → governance → contracts → active requir
 | Scientific experiment registry, frozen protocols and conclusions | [Experiment registry](product/experiments/README.md) |
 | Stage 6 read-only academic E2E MVP product contract | [Product Contract v1](product/stage-6/product-contract-v1.md) |
 | Data boundaries | [Data policy](data/data-policy.md) |
+| National research table, fixed source executions and eligibility | [National canonical table](data/canonical-national-table.md) |
 | Security | [Security policy](SECURITY.md) |
 | Engineering and performance | [Engineering standards](standards/engineering-standards.md) |
 | Scientific rigor | [ML standards](standards/ml-scientific-standards.md) |
