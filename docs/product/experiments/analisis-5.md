@@ -192,7 +192,7 @@ The appropriate scientific response is not to select the least-bad isolated metr
 
 ## Sources
 
-- [Experiment plan](experimentos.md)
+- [Experiment plan](../experimentos.md)
 - [Cross-analysis through EXP01](analisis-1.md)
 - [Cross-analysis through EXP02](analisis-2.md)
 - [Cross-analysis through EXP03](analisis-3.md)

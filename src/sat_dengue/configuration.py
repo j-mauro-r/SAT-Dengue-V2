@@ -31,6 +31,16 @@ AUTHORITIES: dict[str, dict[str, str]] = {
 }
 
 
+# This additive authority belongs only to the canonical data route.
+CANONICAL_AUTHORITY: dict[str, Any] = {
+    "path": "docs/product/experiments/EXP-BETA01/canonical_model_table_v1.json",
+    "identity": {
+        "sha256": "093bc5329f7a47bfc0b1fee8e13e7ac4f421bc600f998394c951ff4478686e0a",
+        "bytes": 1990,
+    },
+}
+
+
 def canonical_bytes(value: Any) -> bytes:
     """Serialize a configuration deterministically, rejecting NaN and infinity."""
     return (
@@ -52,6 +62,8 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Only operational profile, tracking and experiment_id parameters are allowed"
         )
     if value["profile"] not in (
+        "exp_beta01",
+        "canonical_model_table_v1",
         "foundation",
         "data",
         "preparation",
@@ -80,6 +92,10 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"
         )
     experiment_id = value.get("experiment_id")
+    if value["profile"] in {"canonical_model_table_v1", "exp_beta01"} and (
+        value["tracking"] != "disabled" or experiment_id is not None
+    ):
+        raise ValueError("Canonical/Beta routes require disabled tracking and no experiment_id")
     if value["profile"] in {"exp04_preflight", "exp04_functional", "exp04_oof"} and (
         value["tracking"] != "disabled" or experiment_id is not None
     ):

@@ -1066,3 +1066,21 @@ Relocated generated graph/native-estimator owners are
 real-role isolation lives in `test_exp03_causal_flow.py`. The
 [scenario disposition and risk matrix](operations/test-suite-value-reduction.md)
 records each absorption.
+
+## EXP-BETA01 independent global/local comparison
+
+`experiments/exp_beta01*.py`, `datasets/exp_beta01.py`, `pipelines/exp_beta01/`,
+the pinned Beta protocol and additive catalog/profile bindings map to:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_beta01.py tests/unit/test_canonical_model_table.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py -q
+```
+
+Use scoped Ruff/format and mypy on changed Python files. The ten new tests run
+small generated inputs through the existing harness, including deterministic
+native-estimator checks; they are not evidence of real scientific performance.
+The [Beta implementation](product/experiments/EXP-BETA/PHASE2_IMPLEMENTATION.md)
+owns the separately authorized real command, exact canonical/R0 identities,
+chronology, scientific limitations and local native score-replay evidence.
+Do not run real Beta, rebuild Stage 2/canonical data, or evaluate 2025 as a routine
+CI gate. Full Python/contract validation remains owned by the CI surface matrix.

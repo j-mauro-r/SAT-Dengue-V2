@@ -65,7 +65,7 @@ The earlier generated-data acceptance (170 core checks, 25 disposition checks an
 
 ## Scientific question, design and reading keys
 
-Which information contributes to exact-onset detection, conditional on fixed H5 labels, a shared complete cohort, fixed model families, separate train/calibration/selection roles and a common selection-budget policy? Sources are [scope](alcance.md), [design](DESIGN.md), [matrix](ablation-matrix.frozen.yml), [protocol](protocol.json), [earlier analyses](../analisis-1.md), [EXP02 synthesis](../analisis-2.md) and [experiment roadmap](../experimentos.md).
+Which information contributes to exact-onset detection, conditional on fixed H5 labels, a shared complete cohort, fixed model families, separate train/calibration/selection roles and a common selection-budget policy? Sources are [scope](alcance.md), [design](DESIGN.md), [matrix](ablation-matrix.frozen.yml), [protocol](protocol.json), [earlier analyses](../analisis-1.md), [EXP02 synthesis](../analisis-2.md) and [experiment roadmap](../../experimentos.md).
 
 H5 uses strict count > historical same-calendar-month type-7 P75, retaining epidemic years. Eligibility is known Y(T)=0. T+1 onset and excess coincide there; T+2 onset requires Y(T+1)=0 and Y(T+2)=1, while excess only requires Y(T+2)=1. Y(T+1) never determines T+2 admission. The base B contains lagged counts, seasonality and municipality identity; A=U+Z+R0 contains current raw state, current channel and current notification ratio; K=F+L+R− is historical channel context; C− is lagged climate, Cm mixed current/lagged climate. Ratios describe notifications, not standardized incidence or causal risk.
 

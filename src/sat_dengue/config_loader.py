@@ -98,6 +98,22 @@ CATALOG["exp03_1_bundle"] = {
 }
 
 
+CATALOG["canonical_stage2_sources"] = {
+    "type": "sat_dengue.datasets.canonical.CanonicalSourcesDataset"
+}
+CATALOG["canonical_model_table_v1"] = {
+    "type": "sat_dengue.datasets.canonical.CanonicalBundleDataset",
+    "filepath": "data/processed/canonical_model_table_v1",
+}
+
+
+CATALOG["exp_beta01_sources"] = {"type": "sat_dengue.datasets.exp_beta01.BetaSourcesDataset"}
+CATALOG["exp_beta01_bundle"] = {
+    "type": "sat_dengue.datasets.exp_beta01.BetaBundleDataset",
+    "filepath": "tmp/kedro-migration/exp-beta01-runs",
+}
+
+
 class ValidatedConfigLoader(OmegaConfigLoader):
     """Allow only the operational catalog exercised by implemented pipelines."""
 

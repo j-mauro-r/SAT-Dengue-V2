@@ -12,7 +12,7 @@ All empirical figures below come exclusively from the authorized bundle (`tmp/ex
 
 - Bundle ID: `bbf1069c3855fb202f34f961a06fac1c203e48e73f6b97adce1e96662b3c4873`.
 - Recorded execution: **282 cells, 72 calibrator fits, 72 threshold selections, 0 predictor fits, 0 MLflow writes**. This report reads existing results; it does not rerun or revalidate the experiment.
-- Interpretation follows [DESING.md](DESING.md), the EXP04 entry in [experimentos.md](../experimentos.md), and the [frozen scientific protocol](scientific-protocol.json), whose recorded identity is `3f53615740281522f7efb2f124e810366c738acd11611a0905dbf9c27e1a599d`. The earlier [technical protocol](protocol.json) describes implementation boundaries; its pre-execution status is not the scientific outcome.
+- Interpretation follows [DESING.md](DESING.md), the EXP04 entry in [experimentos.md](../../experimentos.md), and the [frozen scientific protocol](scientific-protocol.json), whose recorded identity is `3f53615740281522f7efb2f124e810366c738acd11611a0905dbf9c27e1a599d`. The earlier [technical protocol](protocol.json) describes implementation boundaries; its pre-execution status is not the scientific outcome.
 
 `A0` denotes the saved frozen reference within EXP04, not a new analysis of an earlier experiment. A1/A2/A3 use moving windows of 12/24/36 months, respectively, with the reference sigmoid method and C0 selector. B compares reference/sigmoid/isotonic; C compares reference/budget sensitivity/worst-block budget. T+1 has one onset objective; T+2 onset is primary and `excess_control` is reported separately.
 

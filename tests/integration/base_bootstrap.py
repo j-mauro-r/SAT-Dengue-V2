@@ -30,6 +30,8 @@ def main() -> None:
     pipelines = register_pipelines()
     assert set(pipelines) == {
         "__default__",
+        "canonical_model_table_v1",
+        "exp_beta01",
         "foundation",
         "data",
         "preparation",
@@ -52,6 +54,7 @@ def main() -> None:
         "exp03_1_preflight",
         "exp04_preflight",
         "exp04_functional",
+        "exp04_oof",
     }
     assert pipelines["__default__"] is pipelines["foundation"]
     assert not OPTIONAL.intersection(sys.modules)

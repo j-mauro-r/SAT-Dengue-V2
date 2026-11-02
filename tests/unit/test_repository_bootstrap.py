@@ -19,6 +19,8 @@ def test_repository_bootstrap() -> None:
     assert importlib.metadata.version("sat-dengue-v2") == sat_dengue.__version__
     assert set(pipelines) == {
         "__default__",
+        "canonical_model_table_v1",
+        "exp_beta01",
         "foundation",
         "data",
         "preparation",

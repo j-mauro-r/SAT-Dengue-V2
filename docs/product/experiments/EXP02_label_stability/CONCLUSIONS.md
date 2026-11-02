@@ -4,13 +4,13 @@
 
 **Ejecución real completada y verificada. Clasificación propuesta: `MATERIAL_INSTABILITY` de la identidad de las etiquetas y episodios; `INCONCLUSIVE` respecto de sustituir cinco años por siete o nueve.** Se recomienda conservar cinco años para EXP03 por continuidad, parsimonia y trazabilidad, **no por superioridad demostrada**.
 
-La segunda fila del [plan de experimentos](../experimentos.md) pregunta si la definición del objetivo es estable y si las conclusiones predictivas resisten el cambio. La evidencia muestra sensibilidad que va más allá de pocos meses aislados: cambia qué inicios se consideran verdaderos, aparecen/desaparecen episodios y existen fragmentaciones y uniones. Las mejoras predictivas no son uniformes contra una verdad fija. No hay un umbral de materialidad previamente aprobado: esta clasificación es un juicio descriptivo sustentado en magnitudes y estructura, no un test estadístico, una regla nueva de aceptación ni una elección automática de H.
+La segunda fila del [plan de experimentos](../../experimentos.md) pregunta si la definición del objetivo es estable y si las conclusiones predictivas resisten el cambio. La evidencia muestra sensibilidad que va más allá de pocos meses aislados: cambia qué inicios se consideran verdaderos, aparecen/desaparecen episodios y existen fragmentaciones y uniones. Las mejoras predictivas no son uniformes contra una verdad fija. No hay un umbral de materialidad previamente aprobado: esta clasificación es un juicio descriptivo sustentado en magnitudes y estructura, no un test estadístico, una regla nueva de aceptación ni una elección automática de H.
 
 **Confirmado** identifica resultados verificables; **interpretación** identifica su lectura científica; **limitación** delimita lo que no se demuestra. G5 permanece `NOT_APPROVED`; champion `not_selected`. Esta ejecución cubre únicamente H=5/7/9 conservando todos los años históricos. El eje alternativo de años epidémicos continúa `pending_scientific_definition`.
 
 ## Integridad, procedencia y alcance de la auditoría
 
-Fuentes rectoras: [protocolo congelado](protocol.json), [diseño](DESIGN.md), [plan general](../experimentos.md) y [contexto de EXP01](../EXP01_direct_onset/CONCLUSIONS.md). Se leyeron únicamente resultados existentes, metadatos y código de su interpretación; no se cargaron fuentes crudas ni se volvió a ejecutar el experimento.
+Fuentes rectoras: [protocolo congelado](protocol.json), [diseño](DESIGN.md), [plan general](../../experimentos.md) y [contexto de EXP01](../EXP01_direct_onset/CONCLUSIONS.md). Se leyeron únicamente resultados existentes, metadatos y código de su interpretación; no se cargaron fuentes crudas ni se volvió a ejecutar el experimento.
 
 | Identidad | Valor |
 | --- | --- |

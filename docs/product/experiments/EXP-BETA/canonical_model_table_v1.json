@@ -1,0 +1,37 @@
+{
+  "schema": "canonical-model-table-contract-v1",
+  "dataset": "canonical_model_table_v1",
+  "row_unit": "DANE municipality and origin month T",
+  "key": [
+    "municipality_code",
+    "year_month"
+  ],
+  "source": "data/processed/panel_mensual_dengue_clima.csv",
+  "source_binding": "Pinned Stage 2 execution manifest and construction contract; panel hash and schema must match",
+  "reference": "H5: five exact prior years, same calendar month, no substitution",
+  "percentile_method": "hyndman_fan_type7_linear",
+  "target_horizons_months": [
+    1,
+    2
+  ],
+  "count_lags_months": [
+    1,
+    2,
+    3,
+    12
+  ],
+  "thresholds": "P25/P75 for each target month from H5 observations at or before T; require all five",
+  "missingness": "Preserve source zeros, nulls, coverage and per-variable valid days; no imputation",
+  "climate": "Preserve all nine Stage 2 aggregates, units, signs and full-calendar-month coverage rule",
+  "roles": {
+    "target": "Existing y_t1 and y_t2, when present",
+    "control": "All remaining source metadata, target status/evaluability, source p75_t1/t2, historical traces and coverage",
+    "key": "DANE municipality and origin period",
+    "metadata": "Department code and validated municipality/department names, when present",
+    "feature": "Explicit allowlist: current counts, nine climate aggregates, current H5 channel, month of year, count lags, origin-safe H5 target-month thresholds"
+  },
+  "future_availability": "Source p75_t1/t2 depend on future evaluability in Stage 2; always control. Independent p25_h5_t1/t2 and p75_h5_t1/t2 use history only",
+  "predictor_selection": "Use predictor_matrix(table, schema); never infer X by dropping only target columns",
+  "publication": "Single CSV plus contract, column dictionary, coverage, provenance and content-addressed manifest; atomic, no overwrite, no implicit latest",
+  "scope": "Retrospective consolidated engineering only; no training, admission filters, splits or national ingestion"
+}

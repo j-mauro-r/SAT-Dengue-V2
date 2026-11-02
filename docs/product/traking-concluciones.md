@@ -1885,3 +1885,20 @@ G5 remains NOT_APPROVED and champion not_selected.
 - **Decision:** Implement source-free scientific, contractual, Kedro, persistence, reporting, tracking and synthetic-test infrastructure for visible experiment `EXP03.1` (technical registry ID `EXP031`, Python ID `exp03_1`). Compare complete EXP03 V09 (M00), V09 plus six-month recent channel memory (M01), and M01 plus change from the preceding six months (M02) under the inherited fixed false-onset-alert budget.
 - **Scientific boundary:** H5, families, fixed configurations, temporal roles and budget remain inherited from EXP03. The primary cohort requires twelve known historical zones. V09 reuse is fail-closed on all applicable identities and otherwise refits on the paired intersection. No real execution, private-data read, permanent MLflow write, 2025 evaluation, champion selection, G5 approval or reinterpretation of EXP03 is authorized.
 - **Evidence owner:** `docs/product/experiments/EXP03.1_add_pass_info/`.
+
+### DEC-137 Adopt EXP-BETA01 sensitivity/load criteria before fitting
+
+- **Date:** 2026-11-01.
+- **Authority:** Mauricio's explicit instruction during the Phase 2 implementation request.
+- **Scope:** EXP-BETA01 only; historical experiment contracts remain unchanged.
+- **Decision:** adopt at most **1 false alert per municipality-year** and a
+  **−2 percentage-point sensitivity noninferiority margin against R0**, exclusively
+  on comparable cohorts and periods. Retain checks by evaluation year and department.
+- **Interpretation:** descriptive joint compliance is distinct from statistical
+  noninferiority. Insufficient support must be reported as uncertainty; descriptive
+  compliance cannot establish superiority. Freeze the criteria before observing
+  results; do not change them afterward.
+- **Implementation owner:** [Beta Phase 2 protocol](experiments/EXP-BETA/protocol.phase2.json).
+  The protocol explicitly defines monitored eligible target-month exposure, temporal
+  roles, source identity and climate-paired cohorts. No new 2025 evaluation or
+  automatic champion selection is authorized by this decision.
