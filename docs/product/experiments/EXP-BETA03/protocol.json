@@ -1,0 +1,35 @@
+{
+  "schema": "exp-beta03-protocol-v1",
+  "experiment_id": "EXP-BETA03",
+  "reference_path": "tmp/kedro-migration/exp03-1-runs/4fd644502e8fb2bb18155060bba68aedd7fc295cf66e16401b91c44af72781de",
+  "reference_manifest_sha256": "99807fc011228954ffbbda16bb7e7680ea066d44db5dd9c63ca124fd53f321cf",
+  "reference_bundle_id": "732a9d7743b4c54d9252adf7095f2c4e2775cd4d6472446d2bd2e41a476927f4",
+  "predictor_rule": "Select the mandatory R0 (M00/xgboost/onset) if its original native selection scores are verified, out of time after training/calibration, contain both classes and have exact paired evaluation keys/labels for both horizons. Otherwise BLOCKED. No performance ranking of Beta01/02 or evaluation-based substitution.",
+  "horizons": [1, 2],
+  "evaluation_years": [2020, 2021, 2022, 2024],
+  "roles": "Use each frozen R0 cell's original train/calibration/selection/evaluation roles with its original global origin embargo. Selection targets July-December of Y-1; evaluation Y. No new fits; calibration rows are excluded from policy selection and hard-negative diagnostics.",
+  "policy": {
+    "formal_adoption": "Mauricio explicitly ratified both criteria for EXP-BETA03 before implementation; reaffirmed in the integral closure request",
+    "budget_false_alerts_per_municipality_year": 1.0,
+    "noninferiority_margin": -0.02,
+    "exposure": "Exact scored eligible municipality-target-months divided by 12, identical to Beta01/02. Re-score frozen R0 alerts on this same denominator. Preserve its historical broader monitored-exposure selection cap separately; do not silently claim identical policy semantics.",
+    "global": "Reuse exp_beta01.thresholds: maximize detected onsets under floor(exposure*budget); whole score ties, fewer false positives then higher threshold; null means no alerts. Freeze independently on each original selection role, never evaluation.",
+    "department": {
+      "minimum_rows": 24,
+      "minimum_per_class": 3,
+      "minimum_false_alert_rate_gap": 0.5,
+      "pseudo_rows": 24,
+      "rule": "Evaluate one regularized department policy only when both departments meet support and the development global-policy false-alert-rate gap is at least 0.5 per eligible municipality-year. Reuse the same constrained selector locally; weight local threshold by n/(n+24), shrink toward global, then take max(local feasible threshold, blend) to retain the local development cap. A null local threshold remains no alerts; insufficient support returns global. No evaluation-based arm selection."
+    },
+    "fp_aware": {
+      "high_confidence_score": 0.8,
+      "minimum_independent_oof_blocks_per_frozen_predictor": 2,
+      "rule": "Diagnose high-confidence false positives and repeated municipal errors only in the original selection role. Learning intervention requires reproducible errors across at least two disjoint out-of-time blocks from the same frozen predictor, plus an untouched development block for policy selection. Original artifacts provide only one six-month selection block per fitted predictor; calibration scores were fitted by its calibrator and evaluation is forbidden for mining. Without that independent support, record CONDICIONAL_NO_JUSTIFICADO; do not construct new OOF fits or reuse evaluation to manufacture support."
+    }
+  },
+  "comparison": "Exact R0 origin/target/municipality/truth/score pairing; preserve reference alerts and compare GLOBAL and conditionally DEPARTMENT. Same direct H5 onset T1/T2, never NB2 marginal T2. Metrics all/year/department/horizon, sensitivity difference against R0, budget and descriptive margin jointly; no retuning after results.",
+  "confirmation": "2020-2022 reused retrospective development; 2024 consumed retrospective stress, excluded from every selection role; no 2025 or independent confirmation.",
+  "statistical_noninferiority": "UNAVAILABLE",
+  "G5": "NOT_APPROVED",
+  "champion": "not_selected"
+}
