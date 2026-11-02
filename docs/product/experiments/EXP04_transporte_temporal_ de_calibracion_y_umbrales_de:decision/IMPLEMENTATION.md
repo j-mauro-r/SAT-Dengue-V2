@@ -2,7 +2,7 @@
 
 Status: **`EXP04_ALL_HISTORICAL_REFITS_FIXED_NOT_EXECUTED`**. Historical OOF generation is implemented; no scientific EXP04 execution or evaluation is reported. G5 remains `NOT_APPROVED`; champion remains `not_selected`.
 
-The [scientific design](DESING.md) and [experiment scope](../experimentos.md) remain unchanged. The [baseline manifest](BASELINE_MANIFEST.json) preserves the pinned original and `M00-REPLAY-v1` identities and records the authorized EXP04 calendar. The [technical component protocol](protocol.json) remains the historical independent-component contract, not a newly frozen scientific execution protocol.
+The [scientific design](DESING.md) and [experiment scope](../../experimentos.md) remain unchanged. The [baseline manifest](BASELINE_MANIFEST.json) preserves the pinned original and `M00-REPLAY-v1` identities and records the authorized EXP04 calendar. The [technical component protocol](protocol.json) remains the historical independent-component contract, not a newly frozen scientific execution protocol.
 
 ## Scope and reference
 

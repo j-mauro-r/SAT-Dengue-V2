@@ -1898,7 +1898,7 @@ G5 remains NOT_APPROVED and champion not_selected.
   noninferiority. Insufficient support must be reported as uncertainty; descriptive
   compliance cannot establish superiority. Freeze the criteria before observing
   results; do not change them afterward.
-- **Implementation owner:** [Beta Phase 2 protocol](experiments/EXP-BETA01/protocol.phase2.json).
+- **Implementation owner:** [Beta Phase 2 protocol](experiments/EXP-BETA/protocol.phase2.json).
   The protocol explicitly defines monitored eligible target-month exposure, temporal
   roles, source identity and climate-paired cohorts. No new 2025 evaluation or
   automatic champion selection is authorized by this decision.

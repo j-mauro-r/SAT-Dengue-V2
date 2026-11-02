@@ -2,7 +2,7 @@
 
 ## Autoridad y alcance
 
-La segunda fila del [plan oficial](../experimentos.md) define EXP02. El [protocolo](protocol.json) y su hash canónico en el [registro](../experiment-registry.yml) fijan la comparación de ventanas de 5, 7 y 9 años. No se cambian las variables predictoras.
+La segunda fila del [plan oficial](../../experimentos.md) define EXP02. El [protocolo](protocol.json) y su hash canónico en el [registro](../experiment-registry.yml) fijan la comparación de ventanas de 5, 7 y 9 años. No se cambian las variables predictoras.
 
 G5 permanece en `NOT_APPROVED` y el champion en `not_selected`. Se excluye 2025 de toda operación científica; 2024 es estrés retrospectivo, no evidencia ciega. Esta implementación no autoriza lectura privada, ajustes reales ni ejecución del experimento.
 

@@ -172,8 +172,8 @@ Execution still requires separate operational preparation and authorization.
 
 ## EXP-BETA01
 
-The [Phase 2 implementation and local entry acceptance](EXP-BETA01/PHASE2_IMPLEMENTATION.md)
-and [retrospective results](EXP-BETA01/RESULTS.md) supersede the local missing-input
-blocker while retaining the [original Cloud entry-gate record](EXP-BETA01/PHASE2.md).
+The [Phase 2 implementation and local entry acceptance](EXP-BETA/PHASE2_IMPLEMENTATION.md)
+and [retrospective results](EXP-BETA/RESULTS.md) supersede the local missing-input
+blocker while retaining the [original Cloud entry-gate record](EXP-BETA/PHASE2.md).
 Code and aggregate reports are versioned; private inputs and native publications
 remain local. Updating the branch does not provision data in Cloud.
