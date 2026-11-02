@@ -177,3 +177,10 @@ and [retrospective results](EXP-BETA/RESULTS.md) supersede the local missing-inp
 blocker while retaining the [original Cloud entry-gate record](EXP-BETA/PHASE2.md).
 Code and aggregate reports are versioned; private inputs and native publications
 remain local. Updating the branch does not provision data in Cloud.
+
+## EXP-BETA02
+
+The independent [count-forecasting implementation](EXP-BETA02/README.md) and
+[frozen protocol](EXP-BETA02/protocol.json) own Phase 3. Direct marginal T+2
+forecasts do not supply a joint onset probability. This entry does not authorize
+Phase 4 or declare any scientific model superior.

@@ -32,6 +32,7 @@ def main() -> None:
         "__default__",
         "canonical_model_table_v1",
         "exp_beta01",
+        "exp_beta02",
         "foundation",
         "data",
         "preparation",

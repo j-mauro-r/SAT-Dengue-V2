@@ -1084,3 +1084,18 @@ owns the separately authorized real command, exact canonical/R0 identities,
 chronology, scientific limitations and local native score-replay evidence.
 Do not run real Beta, rebuild Stage 2/canonical data, or evaluate 2025 as a routine
 CI gate. Full Python/contract validation remains owned by the CI surface matrix.
+
+## EXP-BETA02 count forecast comparison
+
+The independent `exp_beta02` graph, NB2 estimator, identity reader, protocol and
+additive profile/catalog bindings map to:
+
+```sh
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_beta02.py tests/unit/test_exp_beta01.py tests/unit/test_canonical_model_table.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py -q
+```
+
+Use scoped Ruff/format/mypy on changed Python files. The new cases use generated
+counts and the existing harness; they are not scientific performance evidence.
+The [Beta02 implementation](product/experiments/EXP-BETA02/README.md) owns the
+separately authorized real command and its limitations. Real runs, private
+rebuilds and 2025 evaluation are not routine CI validation.
