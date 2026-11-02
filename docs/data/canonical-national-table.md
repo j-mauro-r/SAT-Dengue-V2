@@ -82,3 +82,7 @@ Snapshot identity does not establish official extraction completeness,
 historical boundary applicability, immutable upstream climate product versions
 or operational point-in-time availability. Preserve these limits in any future
 G1 protocol; the original EXP-BETA protocols and findings remain unchanged.
+
+The [2026-11-02 real local acceptance](canonical-national-validation.md) records
+the explicit final publication, exact parity scope, technical eligibility and
+reproduction/preservation evidence.
