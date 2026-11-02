@@ -1,6 +1,7 @@
 # EXP-BETA03 — frozen-score false-alert policy
 
-Implementation is separate from historical predictors and publications. This is
+Status: **COMPLETED_WITH_LIMITATIONS**, locally executed and reproduced; see
+[RESULTS.md](RESULTS.md). Implementation is separate from historical predictors and publications. This is
 Phase 4 of [DESING.md](../EXP-BETA/DESING.md), explicitly authorized on
 `experiment/EXP-BETA02`, existing PR #67, without merge. Human review remains
 pending. The [protocol](protocol.json) was committed at `8fc0a8e` before policy
@@ -18,9 +19,12 @@ See [DEC-139](../../traking-concluciones.md#dec-139-freeze-exp-beta03-before-pol
 | 3 | NB2 T2 onset | NO_EVALUABLE | Marginals do not identify a joint transition |
 | 3 | DeepAR/GRU | CONDICIONAL_NO_JUSTIFICADO | No identified sequence-remediable limitation with independent support; four reused years cannot justify model escalation |
 | 4 | R0 native development/evaluation sources | IMPLEMENTADO_Y_VALIDADO | Original native roles and zero-fit score reload pass for all 96 parent cells; mandatory eight M00/XGBoost/onset cells available |
-| 4 | Global constrained policy, paired evaluation and publication | PENDIENTE | Implemented four-node graph; real scientific acceptance required before completion |
-| 4 | Department policy | PENDIENTE | Execute only after predeclared development support/heterogeneity check |
+| 4 | Global constrained policy, paired evaluation and publication | IMPLEMENTADO_Y_VALIDADO | Real graph, 54 metric strata, exact paired inputs, nine byte-identical reproduced files; hypothesis not supported |
+| 4 | Department policy | IMPLEMENTADO_Y_VALIDADO / NO_EVALUABLE | Development trigger supports both 2020 horizons only; six matched strata fail jointly; fallback elsewhere |
 | 4 | Additional FP-aware learning | CONDICIONAL_NO_JUSTIFICADO | One original six-month selection block per frozen predictor; no independent recurrence plus untouched policy block |
+
+The checklist incorporates completed post-entry acceptance. Native development
+diagnostics also found zero false positives with score >=0.8 in all eight cells.
 
 ## Scientific boundary
 
