@@ -341,11 +341,43 @@ def test_real_publication_requires_observed_lineage(admitted_context: dict[str, 
 
 def test_other_experiment_contracts_and_scientific_protocol_unchanged() -> None:
     base = "ba2870bafd6888bb0c2628a06461d6cb52c36cd0"
+    # Authorized catalogue relocation changed only these three Markdown targets.
+    # Reconstruct exact approved bytes; every other byte and all JSON stay frozen.
+    link_migrations = {
+        "docs/product/experiments/EXP02_label_stability/DESIGN.md": 1,
+        "docs/product/experiments/EXP02_label_stability/CONCLUSIONS.md": 2,
+    }
     paths = [p for p in Path("docs/product/experiments").glob("EXP0[012]*/*") if p.is_file()]
     paths += list(Path("docs/product/experiments/EXP03_feature_ablation").glob("*.json"))
     paths += [Path("docs/product/experiments/EXP03_feature_ablation/ablation-matrix.frozen.yml")]
     for p in paths:
-        assert p.read_bytes() == subprocess.check_output(["git", "show", f"{base}:{p}"])
+        expected = subprocess.check_output(["git", "show", f"{base}:{p}"])
+        if str(p) in link_migrations:
+            assert expected.count(b"](../experimentos.md)") == link_migrations[str(p)]
+            expected = expected.replace(b"](../experimentos.md)", b"](../../experimentos.md)")
+        assert p.read_bytes() == expected
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "docs/product/experiments/EXP02_label_stability/DESIGN.md",
+        "docs/product/experiments/EXP02_label_stability/CONCLUSIONS.md",
+        "docs/product/experiments/EXP03_feature_ablation/protocol.json",
+    ],
+)
+def test_link_migration_does_not_allow_other_document_or_protocol_changes(
+    relative: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    original_read = Path.read_bytes
+
+    def altered(path: Path) -> bytes:
+        payload = original_read(path)
+        return payload + b"unapproved change" if str(path) == relative else payload
+
+    monkeypatch.setattr(Path, "read_bytes", altered)
+    with pytest.raises(AssertionError):
+        test_other_experiment_contracts_and_scientific_protocol_unchanged()
 
 
 def test_replace_and_restore_source_cannot_change_parser_bytes(
