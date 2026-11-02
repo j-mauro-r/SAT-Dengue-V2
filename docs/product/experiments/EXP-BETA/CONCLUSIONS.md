@@ -1,144 +1,167 @@
-# EXP-BETA — integral scientific closure
+# EXP-BETA V1 — cierre y conocimiento científico integrado
 
-**Status: COMPLETED_WITH_LIMITATIONS** for the approved bounded retrospective
-program, locally executed and verified on 2026-11-02. The four mandatory phases
-are implemented and scientifically checked; conditional exclusions and unresolved
-scientific questions remain explicit. This does not approve merge, deployment,
-G5 or a champion. Mauricio personally reviews PR #67; no merge was performed.
+**Estado científico: `COMPLETED_WITH_LIMITATIONS`.** Las cuatro fases obligatorias
+del programa retrospectivo acotado fueron implementadas y verificadas localmente
+al 2 de noviembre de 2026. Sus resultados se integraron mediante PR #67 en
+`a2f89110c84969f2ca2fb635532383e1271ec8b6`. Esta consolidación documental conserva
+las identidades y conclusiones de aquella ejecución; no constituye una nueva
+corrida, selección, confirmación ni aprobación de uso. **G5 `NOT_APPROVED`;
+`champion: not_selected`.**
 
-## Objective and valid comparisons
+## Resumen ejecutivo
 
-[DESING.md](DESING.md) asks whether pooled learning, count distributions and
-false-alert-aware decisions improve onset sensitivity while controlling load in
-Meta/Tolima. Its original pending-implementation notes are historical design
-metadata; explicit subsequent human instructions authorized these four phases.
+V1 evaluó predicción tabular compartida/adaptación territorial, conteos NB2 y
+políticas de umbral sobre evidencia de Meta y Tolima. Algunas variantes BETA01
+mejoran detección y carga agregadas en T+1; la adaptación local no muestra
+beneficio estable. NB2 aporta distribuciones reproducibles, pero falla el criterio
+conjunto de alertas T+1 y no identifica inicio T+2. BETA03 reduce falsas alertas
+con pérdidas excesivas de sensibilidad. **No se demostró una mejora operativa
+general ni una política que cumpla consistentemente por horizonte, año y territorio.**
 
-The canonical table preserves climate and legacy source semantics. EXP-BETA01
-tests pooled G0 and regularized department adaptation L1, with/without climate.
-EXP-BETA02 tests one fixed pooled NB2 count family, with/without climate.
-EXP-BETA03 tests a constrained global decision policy and a development-supported
-regularized department policy on frozen R0 scores. Each experiment owns its
-protocol, graph, publication and conclusions; no historical output was rewritten.
+El [diseño original](DESING.md) conserva sus notas históricas de implementación
+pendiente: las autorizaciones y ejecuciones posteriores están documentadas en
+los protocolos y resultados. Los registros [PHASE1](PHASE1.md) y
+[PHASE2](PHASE2.md) describen bloqueos originales en Cloud; la aceptación real
+local posterior figura en [PHASE2_IMPLEMENTATION](PHASE2_IMPLEMENTATION.md).
+No se sustituyen esos registros por evidencia sintética ni se reescribe su historia.
 
-Primary comparisons use unchanged R0 and identical H5 onset labels, municipalities,
-origins/targets and eligible exposure. The paired evaluation cohorts contain
-2,653 T1 rows/313 onsets and 2,422 T2 rows/219 onsets over 2020/2021/2022/2024.
-Climate ON/OFF share keys and truth. R0 already pools the 76 municipalities:
-G0 is not evidence of national transfer. Beta01/02 fitting/calibration roles differ
-from R0, so those comparisons concern full procedures; they do not isolate a
-causal effect of one model component. Beta03 isolates threshold changes on the
-same probabilities. Never compare metrics from different cohorts as equivalent.
+Las conclusiones individuales son las propietarias del detalle científico:
+[BETA01](../EXP-BETA01/CONCLUSIONS.md), [BETA02](../EXP-BETA02/CONCLUSIONS.md) y
+[BETA03](../EXP-BETA03/CONCLUSIONS.md). La comparación con EXP00–EXP04 está en
+[Análisis científico 6](../analisis-6.md).
 
-All decisions retain <=1 false alert per eligible municipality-year and a
--2 percentage-point **descriptive** sensitivity margin against R0, with annual
-and department controls. R0's original broader monitored-exposure selection
-contract remains intact; new paired rates use the common eligible denominator.
+## Comparabilidad y criterios comunes
 
-## Findings
+La tabla canónica conserva 17.936 filas × 70 columnas de 76 municipios
+(29 Meta, 47 Tolima), desde 2006-06 hasta 2026-01. La población de evaluación
+es más estrecha: no exceso conocido en T, predictores completos y etiquetas
+observables, con iguales claves y verdad frente a R0. Los cortes 2020/2021/2022/2024
+suman 2.653 filas/313 inicios en T+1 y 2.422/219 en T+2; exposición exacta
+2.653/12 y 2.422/12 municipio-años elegibles. No se suman horizontes como episodios
+independientes. Los agregados de cuatro años incluyen estrés conocido y no
+son un nuevo bloque de selección o confirmación.
 
-| Fixed procedure | Horizon | Detected / onsets | False alerts | FA / eligible municipality-year | Sensitivity difference vs R0 |
-|---|---|---:|---:|---:|---:|
-| R0 | T1 | 142 / 313 | 231 | 1.044855 | reference |
-| Beta01 G0, climate OFF | T1 | 146 / 313 | 179 | 0.809649 | +1.28 pp |
-| Beta01 G0, climate ON | T1 | 152 / 313 | 204 | 0.922729 | +3.19 pp |
-| Beta01 L1, climate OFF | T1 | 138 / 313 | 175 | 0.791557 | -1.28 pp |
-| Beta01 L1, climate ON | T1 | 152 / 313 | 210 | 0.949868 | +3.19 pp |
-| Beta02 NB2, climate OFF | T1 | 135 / 313 | 212 | 0.958914 | -2.24 pp |
-| Beta02 NB2, climate ON | T1 | 152 / 313 | 222 | **1.004146** | +3.19 pp |
-| Beta03 GLOBAL | T1 | 96 / 313 | 136 | 0.615153 | -14.70 pp |
-| R0 | T2 | 86 / 219 | 256 | 1.268373 | reference |
-| Beta03 GLOBAL | T2 | 57 / 219 | 175 | 0.867052 | -13.24 pp |
+Se mantuvo H5: inicio T+1 equivale a exceso dentro de la cohorte; T+2 exige
+no exceso T+1 seguido de exceso T+2. La probabilidad marginal de exceso T+2
+no equivale a inicio. Los criterios adoptados antes de ejecutar fueron
+**≤1 FA/municipio-año y Δ sensibilidad ≥−2 pp frente a R0**, con controles por
+año y departamento. Cumplir descriptivamente no establece no inferioridad
+estadística. R0 conserva su selección original sobre exposición monitoreada;
+las comparaciones BETA recalculan tasas sobre exposición elegible común.
 
-Positive findings are limited: some Beta01 T1 pooled procedures improve observed
-detection and load together, and NB2 supplies reproducible count distributions.
-They do not establish a stable accepted improvement. Beta01 L1 fails joint controls
-in **43/48** horizon/year/department/climate strata; its local-adaptation hypothesis
-is **NO_RESPALDADA**. All new Beta01 T2 sensitivities lose 8.68-10.96 pp versus R0.
-National/global-transfer evidence remains **NO_EVALUABLE**, not negative.
+R0 ya agrupa municipios. Las ventanas de ajuste/calibración y representación
+BETA01/02 difieren de R0: se comparan procedimientos completos, sin atribuir
+causalmente el efecto a una sola pieza. BETA03 sí mantiene probabilidades y
+cambia la política. [Protocolos y resultados individuales](../EXP-BETA01/CONCLUSIONS.md#trazabilidad).
 
-The fixed NB2 onset approach is **NO_RESPALDADA**: climate OFF loses 2.24 pp at T1;
-ON exceeds the pooled budget, even though rounding to 1.00 would hide the failure.
-It fails **19/24** T1 year/department/climate strata jointly. Count MAE/RMSE and
-predictive coverage are secondary; 97.3-97.8% coverage of nominal 90% intervals
-with wide widths is not proof of useful sharpness. No R0 count distribution exists
-for a direct count-error comparison. NB2 T2 marginal excess is available, but
-onset is **NO_EVALUABLE** because no valid joint transition distribution was fitted.
-No independence assumption or observed future state was substituted.
+## Matriz de cumplimiento de las cuatro fases
 
-Beta03 reduces pooled false alerts by 95 at T1 and 81 at T2, at the cost of 46
-and 29 additional missed onsets. Only **8/24** GLOBAL strata jointly pass; its
-policy hypothesis is **NO_RESPALDADA**. Development-supported department adjustment
-was evaluated only for both 2020 horizons; **0/6** matched strata jointly pass.
-Brier/AP remain unchanged because thresholding does not change probabilities.
-
-Temporal and territorial failures prevent pooled compliance from selecting a
-champion. In Beta03 the 2021/2022 global decisions equal R0; 2020 and consumed
-2024 stress lose substantial sensitivity. Despite its pooled budget, GLOBAL
-exceeds 1 FA/year in Meta T1/2022, Tolima T1/2024 and both departments T2/2022.
-The per-experiment aggregate tables retain every evaluated year/territory;
-partial department totals must never be compared to full-program totals.
-
-## Design compliance matrix
-
-| Phase | Component | State | Real evidence | Limitations |
+| Fase de DESING.md | Componente | Estado | Evidencia real | Límite científico |
 |---|---|---|---|---|
-| 1 | Canonical Model Table / independent Kedro route | IMPLEMENTADO_Y_VALIDADO | Pinned 17,936 x 70 table; 76 municipalities; CSV, contract, columns and coverage reproduced byte for byte from identified Stage 2 | Consolidated notifications; 608 climate-missing municipality-months; no national source |
-| 2 | G0/L1 and climate ON/OFF vs R0 | IMPLEMENTADO_Y_VALIDADO | [Beta01 results](RESULTS.md); 16 unique saved models, 20,300 scores replayed and 120 strata reconciled again | Same geographic pooling as R0; local gain not supported jointly |
-| 2 | National transfer / transmission profiles | NO_EVALUABLE | Only Meta 29 and Tolima 47 municipalities; no validated time-safe profile | Cannot test national-transfer or profile hypotheses |
-| 3 | Parsimonious NB2 and H5 risk vs R0 | IMPLEMENTADO_Y_VALIDADO | [Beta02 results](../EXP-BETA02/RESULTS.md); 16 unique models; 10,150 native forecasts; 48 count and 84 onset strata reconciled again | Fixed marginal family; T1 joint decision rejected |
-| 3 | Joint NB2 T2 onset | NO_EVALUABLE | Marginal T2 forecasts retained separately from missing onset | A joint trajectory is not identified; explicit allowed limitation, not a fabricated negative |
-| 3 | DeepAR/GRU | CONDICIONAL_NO_JUSTIFICADO | No independently demonstrated sequence-remediable limitation or additional unconsumed evaluation support | Four reused temporal blocks do not warrant escalation; no conclusion against all neural methods |
-| 4 | Global constrained frozen-score policy | IMPLEMENTADO_Y_VALIDADO | [Beta03 results](../EXP-BETA03/RESULTS.md); real four-node graph, 30 paired contrasts, nine byte-identical reproduced files | Negative joint result; future load can exceed development cap |
-| 4 | Regularized department rule | IMPLEMENTADO_Y_VALIDADO / NO_EVALUABLE | Triggered on development only for 2020 T1/T2; six paired strata; global fallback elsewhere | Other cuts lack predeclared heterogeneity/support; profiles unavailable |
-| 4 | Additional FP-aware learning | CONDICIONAL_NO_JUSTIFICADO | Zero development false positives >=0.8 in eight cells; only one independent policy block per frozen predictor | No hard-negative/asymmetric refit; no second classifier or DRL |
-| All | Independent confirmation / statistical noninferiority | NO_EVALUABLE | 2024 explicitly consumed stress; no 2025 claim | Statistical uncertainty UNAVAILABLE; no superiority |
+| 1 | Canonical Model Table y ruta Kedro independiente | `IMPLEMENTADO_Y_VALIDADO` | Tabla, contrato, columnas y cobertura reproducidos desde Stage 2 identificado; identidad abajo | Solo Meta–Tolima; 608 municipio-meses sin clima; datos consolidados |
+| 2 | G0/L1, clima OFF/ON y R0 | `IMPLEMENTADO_Y_VALIDADO` | [Resultados BETA01](RESULTS.md): 16 modelos únicos, 20.300 puntuaciones nativas verificadas y 120 estratos | Adaptación local `NO_RESPALDADA`; T+2 pierde sensibilidad |
+| 2 | G1 nacional / perfiles de transmisión | `NO_EVALUABLE` | Fuente canónica admitida solo de 76 municipios; sin perfil validado temporalmente | Los originales nacionales conservados no son una tabla nacional elegible ni un entrenamiento G1 |
+| 3 | NB2 parsimoniosa, conteos y riesgo H5 | `IMPLEMENTADO_Y_VALIDADO` | [Resultados BETA02](../EXP-BETA02/RESULTS.md): 16 modelos, 10.150 pronósticos, 48 estratos de conteos y 84 de inicio/referencia | Criterio conjunto T+1 incumplido |
+| 3 | Inicio T+2 NB2 conjunto | `NO_EVALUABLE` | Pronósticos marginales preservados, inicio ausente explícitamente | No se identificó distribución conjunta de transición |
+| 3 | DeepAR/GRU | `CONDICIONAL_NO_JUSTIFICADO` | Sin limitación remediable por secuencias demostrada independientemente ni soporte temporal nuevo | No se ejecutó; no es resultado negativo de todas las redes |
+| 4 | Política global restringida sobre R0 | `IMPLEMENTADO_Y_VALIDADO` | [Resultados BETA03](../EXP-BETA03/RESULTS.md): 30 contrastes, grafo de cuatro nodos y nueve archivos reproducidos | Hipótesis conjunta `NO_RESPALDADA`; el límite en desarrollo no garantiza carga futura |
+| 4 | Política departamental regularizada | `IMPLEMENTADO_Y_VALIDADO / NO_EVALUABLE` | Activación en desarrollo solo para ambos horizontes 2020; seis estratos emparejados | 0/6 cumplen conjuntamente; retorno global en otros cortes; perfiles no disponibles |
+| 4 | Aprendizaje adicional consciente de falsos positivos | `CONDICIONAL_NO_JUSTIFICADO` | Cero FP con puntuación ≥0,8 en ocho cortes; un bloque de selección por predictor | Sin hard-negative mining, ajuste asimétrico, segundo clasificador ni DRL |
+| Todas | Confirmación independiente / no inferioridad estadística | `NO_EVALUABLE` | 2024 consumido; ningún objetivo 2025 evaluado en BETA | Incertidumbre inferencial `UNAVAILABLE`; superioridad `NOT_ESTABLISHED` |
 
-## Reproduction and preservation
+## Hallazgos comparados e hipótesis
 
-Canonical bundle ID:
-`ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98`.
-The individual result owners record full protocol hashes, source identities,
-native publication IDs, execution commits, commands and aggregate reports:
-[Beta01](PHASE2_IMPLEMENTATION.md), [Beta02](../EXP-BETA02/README.md),
-[Beta03](../EXP-BETA03/README.md).
+Las cifras son observaciones agrupadas de las cohortes BETA indicadas; FA significa
+falsa alerta de inicio. Las tablas completas, Brier/AP y controles territoriales
+permanecen en las conclusiones individuales y sus CSV originales.
 
-Real execution, zero-fit native rechecks and deterministic reproduction are
-distinct evidence. Beta01 performed 64 actual historical fits across its documented
-execution/reproduction/correction sequence, with 16 unique model identities per
-publication; Beta02 performed 32 including reproduction, with 16 unique models;
-Beta03 performed zero. This closure did not repeat earlier fits or alter old
-protocols, manifests, data, results, models, replay/default or Stage 2/3.
+| Experimento | Hallazgo favorable observado | Resultado negativo y límite | Disposición científica |
+|---|---|---|---|
+| [BETA01](../EXP-BETA01/CONCLUSIONS.md) | G0 OFF/ON T+1: 146/152 detecciones de 313 frente a 142 de R0, con 179/204 FA frente a 231 | Todos los brazos T+2 pierden 8,68–10,96 pp; L1 falla 43/48 estratos conjuntos | Adaptación `NO_RESPALDADA`; pooling nuevo/G1 `NO_EVALUABLE` |
+| [BETA02](../EXP-BETA02/CONCLUSIONS.md) | NB2 ON T+1: 152/313 frente a 142/313 de R0, Brier 0,091055; distribuciones de conteos reproducibles | OFF pierde 2,2364 pp; ON carga **1,004146 > 1**; 19/24 estratos T+1 fallan; inicio T+2 no identificado | NB2 marginal `NO_RESPALDADA`; inicio T+2 `NO_EVALUABLE` |
+| [BETA03](../EXP-BETA03/CONCLUSIONS.md) | GLOBAL reduce FA de 231→136 T+1 y 256→175 T+2; carga 0,615153/0,867052 | Detecciones 142→96 y 86→57: −14,70/−13,24 pp; solo 8/24 estratos cumplen; DEPARTMENT 0/6 | Política congelada `NO_RESPALDADA`; aprendizaje adicional no ejecutado |
 
-The final preservation check validates all 437 original inventoried files with
-their hashes/sizes/modes plus all 27 Beta02 payloads. Native R0 replay checks 96
-parent cells; exact canonical labels and frozen R0 scores pair in all eight
-Beta03 cuts. All nine Beta03 files reproduce identically, and overwrite is rejected.
-The focused technical batch passes 70 tests; CI #67 owns full public validation.
-Private data are intentionally absent from GitHub; code checkout alone cannot
-reproduce these scientific metrics without the exact authorized inputs.
+**Respaldado como observación descriptiva:** existen ganancias agregadas T+1 de
+G0, pronósticos NB2 identificados y reducción de FA con umbrales más restrictivos.
+No hay hipótesis principal de mejora general que reciba `RESPALDADA`. Las
+hipótesis de adaptación L1, NB2 marginal como mejora de alertas y política BETA03
+no están respaldadas bajo sus criterios. G1, perfiles, inicio NB2 T+2 y confirmación
+permanecen sin evaluar; no deben convertirse en rechazos científicos.
 
-The separately supplied legacy private migration inventory still rejects the
-decision register that changed before these experiments. That inherited mismatch
-was not reset or waived; it is distinct from current source/output preservation.
-Repository-only DWP conformance passes; the all-plan audit has two inherited
-failures (PLAN_012 unresolved review and legacy Stage 2 lifecycle), neither silently
-treated as a current code defect or waived. Human independent review remains open.
+## Interpretación transversal
 
-## Scientific closure and future work
+La sensibilidad y la carga deben leerse juntas: en BETA01 algunas mejoras T+1
+son compatibles con señal aprovechable, pero no se transportan a T+2. NB2 OFF
+ahorra falsas alertas con una pérdida de sensibilidad superior al margen; ON
+conserva mayor detección sin satisfacer el presupuesto. Cobertura predictiva
+NB2 de 97,3–97,8% para intervalos nominales del 90%, con amplitud elevada, no
+prueba precisión útil ni una mejor decisión. R0 no ofrece conteos para comparar
+MAE/RMSE directamente. [BETA02](../EXP-BETA02/CONCLUSIONS.md).
 
-The mandatory bounded comparisons are complete and reproducible, with legitimate
-non-evaluable/conditional components documented. The program does **not** establish
-a procedure that preserves the joint sensitivity/load criteria consistently across
-time and territory. Maintain **G5 NOT_APPROVED** and **champion: not_selected**.
+La heterogeneidad no desaparece al agrupar. BETA03 mantiene las decisiones R0
+en 2021/2022, pierde sensibilidad en 2020/2024 y excede la carga en Meta T+1/2022,
+Tolima T+1/2024 y ambos departamentos T+2/2022. Sus Brier/AP no cambian al mover
+umbrales. La política departamental solo tiene evidencia de 2020; compararla
+con R0 de cuatro años sería cambiar denominadores. [BETA03](../EXP-BETA03/CONCLUSIONS.md).
 
-H5 is a frozen retrospective proxy; consolidated notifications, selected complete
-cohorts and reused years limit transfer. Few independent temporal events leave
-statistical noninferiority **UNAVAILABLE** and superiority **NOT_ESTABLISHED**.
-No causal, clinical, prospective, operational or deployment claim follows.
+El clima se conserva como información y contraste, sin presumir utilidad universal:
+G0 ON mejora detecciones respecto a OFF con efectos de carga diferentes por
+horizonte; NB2 ON reduce MAE pero empeora RMSE T+2. Ninguno de esos resultados
+atribuye causalidad epidemiológica ni acredita desempeño en tiempo real.
 
-Future separately authorized work should first obtain mature independent time
-blocks, validated wider sources/profiles and reporting-availability evidence.
-A coherent joint count trajectory or targeted learning intervention would need
-its own development justification and untouched validation. The current negative
-results do not authorize another model, automatic champion selection or an
-unlimited sequence of experiments.
+## Identidades y preservación del cierre original
+
+Tabla canónica: `ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98`;
+manifiesto SHA-256 `037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8`.
+Ruta local: `data/processed/canonical_model_table_v1/<bundle_id>/`.
+Los documentos individuales identifican los bundles nativos, manifiestos,
+protocolos, commits y tablas de cada experimento; [BETA01 implementación](PHASE2_IMPLEMENTATION.md),
+[BETA02 implementación](../EXP-BETA02/README.md) y
+[BETA03 implementación](../EXP-BETA03/README.md) conservan sus recibos de ejecución.
+
+La evidencia histórica distingue ejecución real, reproducción y replay nativo
+sin ajustes. BETA01 registra 64 ajustes reales entre su secuencia inicial,
+corrección de disposición L1 y reproducciones, con 16 identidades únicas por
+publicación; predicciones, políticas y criterios no cambiaron en esa corrección.
+BETA02 registra 32 ajustes incluyendo reproducción, con 16 modelos únicos;
+BETA03 registra cero. La consolidación actual no repitió esos ajustes.
+
+El cierre original verificó 437 archivos inventariados (hash, tamaño y permisos),
+los 27 payloads BETA02, 96 celdas nativas R0 y correspondencia exacta de H5 y
+puntuaciones en ocho cortes BETA03. Sus nueve archivos se reprodujeron idénticos
+y se rechazó sobrescritura. El lote técnico de cierre pasó 70 tests; son evidencia
+histórica de ingeniería, distinta de las métricas científicas. Los originales
+privados y modelos no se publican en GitHub: un checkout no proporciona esos datos.
+
+La discrepancia heredada del inventario privado de migración sobre el registro
+de decisiones ya modificado sigue abierta, sin reiniciar hashes ni omitir controles.
+Conformidad DWP del repositorio: PASS; auditoría de todos los planes: dos fallos
+heredados (PLAN_012, revisión pendiente, y ciclo de vida Stage 2 legado).
+No se presentan como fallos nuevos de código ni se declaran resueltos.
+
+Para esta consolidación se leyeron los manifiestos y se verificaron todos sus
+payloads BETA01/02/03 (25/27/8), además de cotejar numéricamente las tablas públicas
+con las nativas. Se recalcularon agregados a partir de métricas persistidas.
+Esto no repite ni sustituye las comprobaciones científicas históricas anteriores.
+
+## Estado final de V1 y límites para una posible V2
+
+V1 queda cerrada con resultados mixtos/negativos y componentes no evaluables,
+sin champion. H5 sigue siendo un proxy retrospectivo; cuatro años reutilizados,
+cohortes completas seleccionadas y notificaciones consolidadas no acreditan
+no inferioridad estadística, causalidad, beneficio sanitario ni anticipación
+operativa. Los criterios y las fuentes originales permanecen intactos.
+
+La [auditoría local de conservación](../analisis-6.md#f-limitaciones-de-exp-beta-v1)
+confirma fuentes epidemiológicas nacionales conservadas y verificadas por identidad,
+pero ninguna tabla canónica nacional elegible ni entrenamiento G1 de V1.
+No hubo pérdida demostrada de los originales. La brecha climática nacional,
+la homologación geográfica/temporal y la disponibilidad histórica requieren
+validación propia; más registros no crean periodos independientes nuevos.
+
+Una V2 nacional es una hipótesis futura: conservaría V1 y R0 como referencias
+identificadas, contrastes pareados y controles de carga, sensibilidad y territorio.
+Ampliar fuentes, definir perfiles o trayectorias conjuntas y obtener evidencia
+independiente requiere una autorización y un protocolo nuevos. Este documento
+no crea ese plan ni autoriza otra ejecución. La revisión de este PR documental
+corresponde a Mauricio; no se realiza merge automático.
