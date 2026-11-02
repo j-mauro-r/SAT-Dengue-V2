@@ -31,6 +31,7 @@ def main() -> None:
     assert set(pipelines) == {
         "__default__",
         "canonical_model_table_v1",
+        "exp_beta01",
         "foundation",
         "data",
         "preparation",

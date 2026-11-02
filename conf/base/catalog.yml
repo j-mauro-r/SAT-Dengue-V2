@@ -98,3 +98,9 @@ canonical_stage2_sources:
 canonical_model_table_v1:
   type: sat_dengue.datasets.canonical.CanonicalBundleDataset
   filepath: data/processed/canonical_model_table_v1
+
+exp_beta01_sources:
+  type: sat_dengue.datasets.exp_beta01.BetaSourcesDataset
+exp_beta01_bundle:
+  type: sat_dengue.datasets.exp_beta01.BetaBundleDataset
+  filepath: tmp/kedro-migration/exp-beta01-runs

@@ -1,5 +1,9 @@
 # EXP-BETA01 Phase 1 — canonical data route
 
+Current local status (2026-11-01): **PASS_WITH_LIMITATIONS** with real data; see
+[Phase 2 entry acceptance](PHASE2_IMPLEMENTATION.md#authority-and-phase-1-gate).
+The original Cloud engineering status and limitations below remain historical evidence.
+
 Status: **COMPLETED_WITH_LIMITATIONS** for engineering. Real publication and
 coverage acceptance are **BLOCKED** by missing private Stage 2 artifacts.
 This does not authorize Phase 2 or any model fitting.

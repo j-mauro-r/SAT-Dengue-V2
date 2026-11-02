@@ -169,3 +169,11 @@ EXP03 protocol 2.0.1 fixes the primary experimental comparison budget at 1.0 fal
 onset alert per monitored municipality-year before execution. See the
 [decision and historical identity](EXP03_feature_ablation/DESIGN.md#primary-budget-decision--2026-10-27).
 Execution still requires separate operational preparation and authorization.
+
+## EXP-BETA01
+
+The [Phase 2 implementation and local entry acceptance](EXP-BETA01/PHASE2_IMPLEMENTATION.md)
+and [retrospective results](EXP-BETA01/RESULTS.md) supersede the local missing-input
+blocker while retaining the [original Cloud entry-gate record](EXP-BETA01/PHASE2.md).
+Code and aggregate reports are versioned; private inputs and native publications
+remain local. Updating the branch does not provision data in Cloud.

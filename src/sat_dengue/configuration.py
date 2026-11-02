@@ -62,6 +62,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Only operational profile, tracking and experiment_id parameters are allowed"
         )
     if value["profile"] not in (
+        "exp_beta01",
         "canonical_model_table_v1",
         "foundation",
         "data",
@@ -91,10 +92,10 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"
         )
     experiment_id = value.get("experiment_id")
-    if value["profile"] == "canonical_model_table_v1" and (
+    if value["profile"] in {"canonical_model_table_v1", "exp_beta01"} and (
         value["tracking"] != "disabled" or experiment_id is not None
     ):
-        raise ValueError("Canonical table requires disabled tracking and no experiment_id")
+        raise ValueError("Canonical/Beta routes require disabled tracking and no experiment_id")
     if value["profile"] in {"exp04_preflight", "exp04_functional", "exp04_oof"} and (
         value["tracking"] != "disabled" or experiment_id is not None
     ):
