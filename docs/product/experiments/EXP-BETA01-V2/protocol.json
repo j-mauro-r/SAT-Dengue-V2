@@ -1,0 +1,70 @@
+{
+  "schema": "exp-beta01-v2-protocol-v1",
+  "experiment_id": "EXP-BETA01-V2",
+  "evidence_type": "authorized_retrospective",
+  "authorization": "Mauricio's explicit Step 4 request: G1 no-climate only, preserve frozen V1, no automatic follow-up experiments.",
+  "sources": {
+    "national_bundle": "c2267f61c7624f19ea7056c2d891512b12e85d81214145df1d31815d28fc3c29",
+    "national_manifest_sha256": "e801cf9b36b84ff0e0c8f336a88799d47f6e6bce9a6d1b155a1a37e20594afb4",
+    "regional_bundle": "ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+    "g0_bundle": "37a0cae62f4d3fa59cede281e032c9abd1b568a90933855b9eebd3b3d3fb5f4a",
+    "g0_manifest_sha256": "4f6b86fcfcf46dbb47123b33ac29ecc9c23b62e65ac1c83ec460231f04816d7e"
+  },
+  "horizons": [
+    1,
+    2
+  ],
+  "evaluation_years": [
+    2020,
+    2021,
+    2022,
+    2024
+  ],
+  "training_start": "2011-06",
+  "reserved_target_start": "2025-01",
+  "roles": "Unchanged BETA V1 target windows: train through Y-4; calibration Y-3; unused adaptation Y-2; selection Y-1; evaluation Y. Unchanged origin embargo.",
+  "training_population": "G1: all eligible national municipalities, including original Meta/Tolima, strictly inside the original training role. National observations in all other roles are forbidden.",
+  "calibration_population": "Exactly frozen V1 regional calibration keys, truths and predictors; same regularized pooled intercept penalty 1.",
+  "selection_population": "Exactly frozen V1 regional selection keys and truths; unchanged tie-preserving budget threshold rule.",
+  "evaluation_population": "Exactly frozen V1 regional evaluation keys/truths for OFF and R0; no intersection or post-result cohort substitution.",
+  "predictor_rule": "Exactly the frozen BETA V1 positive predictor list minus its nine named climate variables; current zone encoded identically 0/1/2/3. No quality/geography/target field enters X.",
+  "cohort": "Current non-excess, complete no-climate predictors, known exact-calendar onset T1/T2, approved horizon-specific national mask; original regional ON-complete cohort must equal its national no-climate projection in every role.",
+  "model": {
+    "family": "xgboost",
+    "n_estimators": 80,
+    "max_depth": 2,
+    "learning_rate": 0.05,
+    "max_bin": 128,
+    "min_child_weight": 5,
+    "reg_alpha": 0,
+    "reg_lambda": 1,
+    "subsample": 1,
+    "colsample_bytree": 1,
+    "random_state": 1729,
+    "n_jobs": 1,
+    "tree_method": "hist",
+    "objective": "binary:logistic"
+  },
+  "calibration": {
+    "method": "regularized pooled intercept",
+    "penalty": 1
+  },
+  "policy": {
+    "budget_false_alerts_per_municipality_year": 1,
+    "noninferiority_margin": 0.02,
+    "denominator": "Observed eligible target-month rows / 12; identical per paired comparison.",
+    "threshold": "Selection only; unchanged maximize detected onsets subject to budget, full ties, fewer false alerts, no-alert option.",
+    "formal_adoption": "Explicit Step 4 request before any V2 training; same adopted BETA V1 criteria."
+  },
+  "support_rule": "Each horizon/year needs two classes in pooled training and regional calibration, nonempty exact regional selection/evaluation, and at least one eligible nonregional training observation and municipality. Otherwise NO_EVALUABLE; never move dates. Count and disclose additional national classes, municipalities and first/last origin. 2020's limited June-2016-onward history is explicitly retrospective/seasonally incomplete support, not independent confirmation.",
+  "matched_control": "Before training compare all regional role keys, no-climate X and onset truths exactly to V1 and frozen G0/R0 evaluation predictions. If identical, historical G0 is the exact regional control and G0_MATCHED is not needed. Any discrepancy blocks fitting until an explicitly identified matched-control protocol is frozen; no silent substitution.",
+  "hypothesis_rule": "RESPALDADA requires descriptive joint compliance against R0 in every supported horizon/year/department and pooled horizon, with pooled G1 sensitivity strictly above G0 and FA load no higher in both horizons, plus no negative G1 sensitivity difference against G0 in any annual/department stratum. PARCIALMENTE_RESPALDADA requires at least one pooled horizon with strictly higher G1 sensitivity and no higher FA load against G0 but fails some joint guardrail. NO_RESPALDADA otherwise when paired cells are supported. NO_EVALUABLE if no paired admissible G1 cell. Do not rank by averages or declare statistical superiority.",
+  "publication": "Separate immutable data/processed/exp_beta01_v2 bundle; models, predictions, metrics, policies, cells, preflight, protocol and provenance; no overwrite.",
+  "reproduction": "Reload saved native models and fixed offsets; reproduce selection/evaluation probabilities, thresholds, alerts and metrics without fitting historical controls or refitting G1.",
+  "restrictions": [
+    "No L1, climate ON, NB2, neural model, feature search, new alert policy or BETA02/03 V2.",
+    "2024 is consumed retrospective stress; 2025 is forbidden.",
+    "History support differs outside the 76 reference municipalities; adding eligible observations is not a causal estimate of municipality count alone.",
+    "Noninferiority statistical evidence UNAVAILABLE; superiority NOT_ESTABLISHED; G5 NOT_APPROVED; champion not_selected."
+  ]
+}

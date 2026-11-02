@@ -23,6 +23,7 @@ from sat_dengue.pipelines.evaluation.pipeline import (
 from sat_dengue.pipelines.exp02.pipeline import pipelines as exp02_pipelines
 from sat_dengue.pipelines.exp04.pipeline import pipelines as exp04_pipelines
 from sat_dengue.pipelines.exp_beta01.pipeline import create_pipeline as beta_pipeline
+from sat_dengue.pipelines.exp_beta01_v2.pipeline import create_pipeline as beta_v2_pipeline
 from sat_dengue.pipelines.exp_beta02.pipeline import create_pipeline as beta02_pipeline
 from sat_dengue.pipelines.exp_beta03.pipeline import create_pipeline as beta03_pipeline
 from sat_dengue.pipelines.national.pipeline import create_pipeline as national_pipeline
@@ -125,6 +126,7 @@ def register_pipelines() -> dict[str, Pipeline]:
         "canonical_model_table_national_v1": national_pipeline(),
         "canonical_model_table_v1": canonical_pipeline(),
         "exp_beta01": beta_pipeline(),
+        "exp_beta01_v2": beta_v2_pipeline(),
         "exp_beta02": beta02_pipeline(),
         "exp_beta03": beta03_pipeline(),
         **exp04_pipelines(),

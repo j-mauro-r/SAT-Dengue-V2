@@ -1,5 +1,11 @@
 # Scientific Experiment Registry
 
+The separate [EXP-BETA01 V2 national-transfer experiment](EXP-BETA01-V2/README.md)
+is explicitly authorized for G1 without climate. Its frozen protocol preserves
+V1's regional evaluation cohorts, model configuration and chronological roles;
+national observations enter training only. V1 results and later BETA experiments
+remain unchanged.
+
 EXP01 is prioritized experiment 1. Prioritized experiment 2 (label sensitivity
 5/7/9) remains pending and is outside EXP03. EXP03 is prioritized experiment 3:
 [selective history/channel/climate ablation](EXP03_feature_ablation/DESIGN.md),

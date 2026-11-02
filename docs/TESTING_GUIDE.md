@@ -1154,3 +1154,18 @@ requires the pinned Step 1/2 evidence and BETA publication. Verify real row/hash
 reproduction, all original 76 municipalities on shared keys, climate missingness,
 per-horizon eligibility, original source preservation and overwrite rejection.
 No model fitting or BETA execution is part of this gate. Never commit its CSVs.
+
+## EXP-BETA01 V2 national transfer
+
+The independent V2 route, source adapter and protocol map to
+`tests/unit/test_exp_beta01_v2.py`, the existing BETA01/canonical tests,
+`tests/contracts/test_kedro_configuration.py` and repository/base bootstrap tests.
+Run scoped Ruff/format/mypy on touched Python files, Markdown links and repo-only
+conformance. Fixtures cover exact role/cohort pairing, training-only expansion,
+no-evaluable support, fixed model parameters, evaluation-independent policies,
+native-model replay without fits, strict Arrow boolean parsing and protocol
+tamper refusal. Scientific acceptance additionally requires pinned private input
+verification, exact frozen G0/R0 evaluation pairing, actual G1 execution and
+byte-identical prediction/metric replay. Do not rerun V1 fits for reproduction.
+Keep the inherited data-diagnostics architecture test and local legacy private
+preservation failure explicit; do not modify tests or old baselines to hide them.
