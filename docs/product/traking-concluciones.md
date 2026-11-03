@@ -2063,3 +2063,28 @@ owner. No new DELTA or retrospective relaxation follows automatically. G5 stays
   admit spatial inputs automatically. Consumed years remain retrospective;
   point-in-time reporting availability is unverified. Preserve Phase A and all
   previous publications. G5 `NOT_APPROVED`; `champion: not_selected`.
+
+## DEC-141 — Close authorized EXP-DELTA02 at historical spatial admission
+
+- **Date:** 2026-11-03.
+- **Authority:** Mauricio's explicit EXP-DELTA02 request authorizes official
+  geography retrieval, one T−1 neighbor-count mean, conditional G0_OFF T+1 fitting
+  and an independent PR to `main` without merge. It requires scientific closure
+  without fitting when historical spatial relations cannot be admitted.
+- **Pre-result choices:** the [frozen protocol](experiments/EXP-DELTA02/PROTOCOL.md)
+  retains the academic contract, 76 targets, H5/P75, positive-length boundary
+  adjacency, outside-region neighbors, missingness and frozen comparators. No
+  alternate hypothesis, geometry repair, subset selection or evaluation tuning.
+- **Recorded outcome:** [EXP-DELTA02 results](experiments/EXP-DELTA02/RESULTS.md)
+  verify official MGN 2005/2018/2021 municipal archives and national count coverage.
+  Nine target-related edge memberships differ across vintages, affecting six
+  targets. No dated correspondence resolves them against canonical historical
+  notification units. Spatial feasibility and scientific disposition are
+  `NOT_EVALUABLE`; execution is `COMPLETED_WITH_LIMITATIONS`. No spatial feature,
+  model fit, calibration, threshold selection or candidate prediction occurred.
+- **Consequence:** close this bounded experiment with reproducible evidence;
+  do not treat map/code coverage as historical admission or report unavailable
+  candidate metrics as zero. This implementing scientific disposition is pending
+  independent review, not human acceptance of a feature/model. No EXP-DELTA03,
+  automatic G5 approval or champion selection. Prior decisions/publications
+  remain preserved; G5 `NOT_APPROVED`; `champion: not_selected`.

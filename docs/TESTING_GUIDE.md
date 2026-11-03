@@ -1,5 +1,25 @@
 # Testing and Validation Guide
 
+## EXP-DELTA02 spatial feasibility closure
+
+The bounded `scripts/audit_exp_delta02_feasibility.py` reproduces the observed
+geography stop condition from the [frozen protocol](product/experiments/EXP-DELTA02/PROTOCOL.md)
+and exact [source specification](product/experiments/EXP-DELTA02/sources.json).
+It is an offline research audit, with no training/feature/prediction entrypoint.
+Generated input-tampering checks map to `tests/unit/test_exp_delta02_feasibility.py`.
+Run that module, script `--self-check` for synthetic geometric boundary cases,
+changed-file Ruff/format and `MYPYPATH=src` mypy with `--explicit-package-bases`.
+Real reproduction requires the private pinned sources and audit-only Shapely/
+PyShp dependencies described in the experiment owner. Verify exact targets and
+external-code coverage, native-CRS validity/edge/point/self-exclusion, canonical
+calendar/count/zero semantics, original comparator reconciliation, before/after
+source identities and byte-identical publication reuse. Run Markdown links,
+changed-file privacy scans, the focused disposition-directory and script-import
+boundary checks and repo-only conformance. Candidate temporal-role/feature-prefix,
+cohort/label and A/B/C checks are blocked when historical geography admission
+fails; no model tests, notebook replay, dashboard or full local suite is required.
+Remote CI owns integral gates. Independent scientific review is a separate gate.
+
 ## EDA-EXP02 anticipatory-signal notebook
 
 The explicitly authorized `notebooks/eda_epidemiological_signals.ipynb` is a new

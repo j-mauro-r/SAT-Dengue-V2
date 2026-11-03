@@ -1,0 +1,25 @@
+{
+  "geography": {
+    "manifest_sha256": "51cf68153abc51c80b4ed48fdae5c4cb50bfdb108608f30ede1abe2321fc86a6",
+    "path": "data/processed/exp_delta02/sources/9d6ad24d1d1f3bb534deb8a44de446fb22859d29f6e8ce355980932be809c96b"
+  },
+  "schema": "exp-delta02-source-spec-v1",
+  "sources": {
+    "benchmark": {
+      "manifest_sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f",
+      "path": "data/processed/benchmark/6cfc7bcf565ebdf7ff11ab3ff79d6d91ce7d2f392958c76aa55d310ba27b6c48"
+    },
+    "eda_admission": {
+      "manifest_sha256": "7d8ddd1024e8d17fdd675d1ba34891bccdc68bbc5c16df1452ad17ab040d3f88",
+      "path": "data/processed/eda_exp02/source_admission/9f95e52f87a6b97d9a92cc7f3f4e26ad5d50062bc93deab3b492ef75b3a091c1"
+    },
+    "national": {
+      "manifest_sha256": "e801cf9b36b84ff0e0c8f336a88799d47f6e6bce9a6d1b155a1a37e20594afb4",
+      "path": "data/processed/canonical_model_table_national_v1/c2267f61c7624f19ea7056c2d891512b12e85d81214145df1d31815d28fc3c29"
+    },
+    "regional": {
+      "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8",
+      "path": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98"
+    }
+  }
+}
