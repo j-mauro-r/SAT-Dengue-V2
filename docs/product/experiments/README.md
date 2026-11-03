@@ -1,5 +1,14 @@
 # Scientific Experiment Registry
 
+[EDA-EXP01 — `COMPLETED_WITH_LIMITATIONS`](EDA-EXP01/README.md) is scientifically
+closed as a read-only, seven-chapter analysis of identified results. Its climate
+chapter concludes `INSUFFICIENT_EVIDENCE`. The
+[closure](EDA-EXP01/CONCLUSIONS.md#scientific-closure--eda-exp01) preserves eight
+original and five climate findings, lessons and open hypotheses without authorizing
+a successor experiment, adopting a policy/model or changing scientific gates.
+PR #74 integration remains separate from scientific closure. No other experiment
+state or closed registry schema is changed by this entry.
+
 The separate [EXP-BETA01 V2 national-transfer experiment](EXP-BETA01-V2/README.md)
 is explicitly authorized for G1 without climate. Its frozen protocol preserves
 V1's regional evaluation cohorts, model configuration and chronological roles;

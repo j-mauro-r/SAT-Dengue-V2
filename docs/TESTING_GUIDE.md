@@ -1,5 +1,21 @@
 # Testing and Validation Guide
 
+## EDA-EXP01 published-result notebook
+
+The explicitly authorized `notebooks/eda_experimental_results.ipynb` is an active
+read-only analysis of frozen publications, separate from the historical notebooks
+retained by the Kedro migration. It is not a production entrypoint or CI data job.
+The [EDA owner](product/experiments/EDA-EXP01/README.md) defines private identities,
+execution, privacy, descriptive methods and evidence. Validate with `nbformat`,
+execute top-to-bottom using the project environment and exact private sources,
+reconcile all 180 benchmark/60 DELTA strata and pairing, reproduce derived payloads,
+and inspect the eight aggregate figures. Run notebook-scoped Ruff/format, Markdown
+links, changed-file privacy checks and repo-only conformance. Register its document
+directory in the existing disposition inventory and run that focused directory
+contract check. No model fitting, replay, dashboard checks or new validation
+infrastructure is required. Missing private sources are a real local execution
+blocker; data-free GitHub CI owns its usual repository-quality gates.
+
 ## EXP-DELTA01 controlled score recovery
 
 The bounded `scripts/recover_exp_delta01_selection.py` recovery maps to
