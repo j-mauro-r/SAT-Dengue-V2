@@ -9,8 +9,8 @@ as one fixed retrospective approximation. Its sole intervention is
 R1 protocol/source fences, feature graph and joins, candidate temporal roles,
 paired metrics, immutable publication and runner to
 `tests/unit/test_exp_delta02_r1.py` and
-`tests/integration/test_exp_delta02_r1.py`. Before push, run the focused tests
-for the touched behavior, scoped Ruff/format/mypy, Markdown links and changed-
+`tests/integration/test_exp_delta02_r1_integration.py`. Before push, run the
+focused tests for the touched behavior, scoped Ruff/format/mypy, Markdown links and changed-
 diff privacy/security scans. Real execution additionally requires exact pinned
 private sources, MGN 2018 graph/self/point/positive-edge checks, prefix invariance,
 complete-neighbor missingness, 76/2,653/313 cohort reconciliation, H5/P75 and
