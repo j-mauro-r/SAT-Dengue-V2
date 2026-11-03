@@ -176,3 +176,108 @@ The climate findings and their support are in the separate
 [Chapter 7 findings](FINDINGS.md#chapter-7--climate-findings); source/publication
 identity and preservation replay are in [README](README.md).
 G5 `NOT_APPROVED`; `champion: not_selected`.
+
+## Scientific closure — EDA-EXP01
+
+### Scientific state
+
+| Scope / gate | Final scientific state |
+| --- | --- |
+| Main exploratory analysis, Chapters 1–6 | `COMPLETED_WITH_LIMITATIONS` |
+| Chapter 7 climate extension | `INSUFFICIENT_EVIDENCE` |
+| G5 | `NOT_APPROVED` |
+| Champion | `not_selected` |
+
+EDA-EXP01 is scientifically concluded for its authorized exploratory questions.
+The eight original findings and five climate findings remain the quantitative
+record. Closure consolidates their interpretation and limits; it does not authorize
+adoption of a model, alert policy, climatic feature or new experiment. PR #74
+integration, independent review and Mauricio's merge decision are separate gates.
+
+### Key conclusions
+
+1. **Territorial composition matters.** For G0_OFF T+1 the Tolima–Meta excess-FAR
+   gap is **13.94 pp**. Symmetric accounting attributes **9.28 pp** to prevalence;
+   common-prevalence standardization leaves **4.69 pp**. At T+2 the standardized
+   gap reverses to **−4.28 pp**. This describes rate composition, not its causes.
+   [F1–F2](FINDINGS.md).
+2. **Predictors contain signal but share failures.** Annual G0_OFF onset AUROC
+   is **0.775–0.830** at T+1 and **0.713–0.763** at T+2. In 2022 all four
+   predictors miss **32/89** and **29/62** onsets, respectively. Complementary
+   G0_OFF/CHANNEL detections and shared errors preclude a single-component or
+   uniform-dominance explanation. [F3 and F8](FINDINGS.md).
+3. **Temporal transport is unresolved.** Calibration-in-the-large gaps change
+   from **+11.19/+7.81 pp** in 2022 to **−12.26/−7.53 pp** in 2024 (T+1/T+2).
+   Only **3/6** available DELTA P1 policies retain the academic FAR margin in
+   evaluation; two mandatory cells have no feasible policy. The complete primary
+   P1 comparison remains `NO_EVALUABLE`, not an approving or rejecting result
+   for every alternative policy. [F4–F5](FINDINGS.md),
+   [DELTA quantitative owner](../EXP-DELTA01/RESULTS.md).
+4. **The data do not justify 76 independent municipal thresholds.**
+   **273/300** T+1 and **294/298** T+2 observed municipality-years contain fewer
+   than three onsets. Sparse events, undefined rates and unvalidated transmission
+   profiles prevent translating geographic heterogeneity into stable municipal
+   policies. [F6](FINDINGS.md).
+5. **P75 proximity is shared by errors and useful detections.** At T+1,
+   **107/118** G0-only false alerts and **62/71** G0-only true detections lie
+   within one case of target P75. The boundary does not justify eliminating these
+   alerts or changing H5. [F7](FINDINGS.md).
+6. **Climate supplies no sufficiently supported, consistent separator here.**
+   Nine variables were examined at T; temperature, precipitation and soil water
+   additionally used the predefined T−1/T−2/T−3 lags. Temperature at T has a weak
+   positive T+1 association in **7/8** year/department cells, but no variable/lag
+   has a uniform direction across all eight. Near-P75 comparison has **32/14**
+   common T+1/T+2 strata, with ≥3 observations per group in only **1/0** strata.
+   Distributional overlap and this limited support yield `INSUFFICIENT_EVIDENCE`
+   for a climatic follow-up recommendation, not proof of no possible climate value.
+   [C7.1–C7.5](FINDINGS.md#chapter-7--climate-findings),
+   [EXP03 context under its distinct protocol](../EXP03_feature_ablation/CONCLUSIONS.md).
+
+### Lessons to retain in future work
+
+- Distinguish excess-FAR, onset false alerts, FPR, event prevalence and exposure;
+  retain their numerators, denominators and undefined values.
+- Assess discrimination, calibration and alert-policy performance separately;
+  better ranking or probability calibration alone does not establish useful alerts.
+- Evaluate T+1 and T+2 independently, including the distinction between onset
+  and continuation at T+2.
+- Control temporal, territorial and seasonal composition descriptively before
+  interpreting pooled contrasts; such controls do not establish causality.
+- Report municipal event support and uncertainty before using municipal rates
+  to motivate a policy; extreme rates with few events are not stable profiles.
+- Do not infer incremental predictive value from a climate variable's biological
+  plausibility or an observed alert-group association.
+- Preserve consumed-year status. Repeated analysis of 2020/2021/2022/2024, or
+  previously consumed 2025 elsewhere, cannot supply new independent confirmation.
+
+### Hypotheses and research decisions
+
+| Hypothesis investigated | Evidence obtained | Scientific state | Consequence for future research |
+| --- | --- | --- | --- |
+| Prevalence contributes to territorial FAR differences | T+1 prevalence contribution 9.28 pp; standardization leaves 4.69 pp; T+2 reversal | Descriptively supported; causal mechanism unidentified | Retain composition controls and event-specific denominators |
+| Existing scores contain useful but incomplete onset separation | Annual AUROC above 0.5, shared missed onsets and overlapping outcomes | Descriptively supported; a unique bottleneck is not identified | Examine ranking, composition and policy jointly before choosing an intervention |
+| An aligned scalar-threshold policy provides complete, stable academic compliance | Two DELTA cells infeasible; only 3/6 available policies transport C | Complete P1 comparison `NO_EVALUABLE`; general adoption unsupported | Preserve failed cells; do not relax constraints or recycle evaluation for selection |
+| Seventy-six independent municipal thresholds are justified | Few annual events and no validated transmission profiles | Insufficient support | Do not recommend independent municipal thresholds |
+| Near-P75 alerts can be eliminated as an error-specific group | Boundary context occurs in both false alerts and additional detections | Not supported by this EDA | Preserve these alerts and H5; no boundary filter is justified |
+| Additional climate features are a supported next intervention | Weak, variable associations; overlapping distributions and sparse common cells | `INSUFFICIENT_EVIDENCE` | Do not automatically execute a climatic EXP-DELTA02; retain the hypothesis without feature or lag selection |
+| Additional anticipatory information could resolve some shared missed signal | Shared misses and conditional historical information contributions leave an unresolved question | Open; incremental value untested | Any epidemiological-signal audit is a separate investigation requiring explicit authorization and a predeclared scope |
+
+No new experiment, data reconstruction, feature selection or signal audit is
+created or authorized by this closure. The earlier research-priority matrix
+remains unchanged; no expected gain is established for a specific intervention.
+
+### Limits retained at closure
+
+The analysis reuses previously consumed retrospective years, with no independent
+temporal confirmation. Consolidated epidemiological and climate observations do
+not demonstrate availability at the historical forecast origin. Annual models
+and calibrators have different identities, so between-year changes do not isolate
+drift of a fixed predictor. Repeated municipal months and shared temporal shocks
+limit inferential uncertainty; the reported Wilson intervals remain descriptive
+binomial references.
+
+Near-P75 climate comparisons have reduced common-cell support and do not remove
+municipal or alert-selection confounding. No historically validated transmission
+profile is available. H5 remains an experimental definition without external
+outbreak adjudication. These limitations remain part of the scientific result,
+not unresolved instructions to repeat this EDA or approval to adopt a new method.

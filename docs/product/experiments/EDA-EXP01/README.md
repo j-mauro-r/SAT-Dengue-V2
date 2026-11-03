@@ -1,11 +1,21 @@
 # EDA-EXP01 — exploratory analysis of experimental results
 
-**Status: `COMPLETED_WITH_LIMITATIONS`.** The six-chapter
-[notebook](../../../../notebooks/eda_experimental_results.ipynb) executed on real
-private artifacts. [Findings](FINDINGS.md) quantify the evidence;
-[conclusions](CONCLUSIONS.md) prioritize the remaining research question.
-This is exploratory reuse of consumed observations, not a predictive experiment
-or independent validation. G5 `NOT_APPROVED`; `champion: not_selected`.
+**Scientifically closed:** main analysis `COMPLETED_WITH_LIMITATIONS`;
+Chapter 7 climate extension `INSUFFICIENT_EVIDENCE`.
+The seven-chapter [notebook](../../../../notebooks/eda_experimental_results.ipynb)
+was executed on identified private artifacts. [Findings](FINDINGS.md) preserve
+F1–F8 and C7.1–C7.5; the final
+[scientific closure](CONCLUSIONS.md#scientific-closure--eda-exp01) consolidates
+conclusions, lessons and hypothesis dispositions. Scientific closure does not
+approve PR integration, model adoption or a new experiment.
+G5 `NOT_APPROVED`; `champion: not_selected`.
+
+The original question was whether the principal observed limitations concern
+predictive separation, temporal calibration, alert policy or epidemiological
+differences between municipalities. Chapter 7 separately asked whether existing
+climate variables and predefined lags distinguish true detections from false
+alerts, particularly near P75. Both questions are concluded within their stated
+exploratory limits; the evidence does not identify a unique causal bottleneck.
 
 ## Chapter index
 
@@ -25,10 +35,13 @@ The [academic contract](../contrato.md) controls events and denominators.
 No inference, fitting, recalibration, threshold optimization, H5 change, new
 Kedro pipeline or dashboard occurs. Historical sources remain untouched.
 
-Acceptance is a fully executed six-chapter notebook, exact cohort/metric
-reconciliation, deterministic derived publication, at most eight useful figures,
-source preservation and conclusions with explicit uncertainty. The bounded
-request is implemented directly; no DWP plan or stage approval is inferred.
+The original six-chapter acceptance covered exact cohort/metric reconciliation,
+deterministic publication and eight figures. The separately authorized Chapter 7
+added four climate analyses and four figures while preserving all 35 original
+complete cells, original findings/conclusions and the original publication.
+The final notebook contains seven chapters and 12 figures. This closure is a
+documentation-only consolidation of that completed work; no DWP plan or stage
+approval is inferred.
 
 ## Identified inputs
 
@@ -47,8 +60,10 @@ The notebook selects explicit identities, never the newest directory.
 The benchmark contains frozen G0_OFF, G0_ON, G1_OFF and R0 probabilities and
 decisions plus CHANNEL/PERSISTENCE. All 506 recorded inputs, including parent
 artifact records and documentary context, are hashed before/after analysis.
-The canonical table supplies only the prior epidemiological state; no labels,
-predictors or cohort are reconstructed. Missing/changed required inputs fail closed.
+In Chapters 1–6 the canonical table supplies only the prior epidemiological state;
+Chapter 7 also reads its existing climate aggregates and coverage metadata. No
+labels, predictors or cohort are reconstructed. Missing/changed required inputs
+fail closed.
 
 [Analyses 1](../analisis-1.md), [2](../analisis-2.md), [3](../analisis-3.md),
 [4](../analisis-4.md), [5](../analisis-5.md), [6](../analisis-6.md) and
@@ -71,14 +86,15 @@ a data-free checkout cannot reproduce the real-data results. Run from the root:
 bash .agents/skills/deepworkplan/verify/conformance.sh --repo-only
 ```
 
-Execution preserves aggregate outputs in the notebook, writes eight figure
-previews under ignored `tmp/eda-exp01/figures/`, and atomically publishes 21 derived
-tables plus settings/manifest under ignored `data/processed/eda_exp01/`.
+The original Chapters 1–6 replay preserves aggregate outputs in the notebook,
+writes eight figure previews under ignored `tmp/eda-exp01/figures/`, and reuses
+21 derived tables plus settings/manifest under ignored `data/processed/eda_exp01/`.
+Chapter 7 publishes its 12 new tables separately, as described below.
 It does not duplicate historical predictions. Only aggregate notebook outputs
 and narrative documents enter Git; municipality-origin keys, individual scores
 and named municipal tables do not.
 
-Final derived identity:
+Original Chapters 1–6 publication identity:
 `3d0803788eab1bbc92f29410540b184ff11b07ab921b611b5fd5965ed05e356e`.
 Manifest SHA-256:
 `6c3ff1a8a2c5a97b7306a28b30f0f8f305dbdbb87209025be8b16150dbbc8002`.
@@ -256,3 +272,29 @@ To inspect the current saved presentation without execution:
 ```bash
 .venv/bin/python -m jupyter nbconvert --to html --output-dir tmp/eda-exp01/chapter7 notebooks/eda_experimental_results.ipynb
 ```
+
+## Scientific closure and PR integration
+
+The documentation closure on 3 November 2026 reads saved notebook outputs,
+published tables and quantitative owners only. It does not execute the notebook,
+Kedro, model training or test suites, and changes no scientific evidence. Both
+publication identities above remain authoritative; the findings record is intact.
+Reproduction commands are retained for an explicitly authorized preservation
+replay, not as standing instructions to refresh already consumed results.
+
+[PR #74](https://github.com/j-mauro-r/SAT-Dengue-V2/pull/74) remains the independent
+integration vehicle on `analysis/EDA-EXP01`; no merge or integration approval is
+part of scientific closure. The closure audit inspected analyzed head `a48ac6d`:
+Repository Quality, Python Quality, base-wheel validation and CodeQL passed;
+Unit Tests were still running. The preceding head's
+[CI run](https://github.com/j-mauro-r/SAT-Dengue-V2/actions/runs/41672426715)
+reported 831 passing tests and one existing architecture-test failure,
+`test_data_domain_has_no_filesystem_or_framework_dependencies`, concerning a
+disallowed `pathlib` import. That source/test is unchanged by this closure and
+no unrelated repair is authorized here.
+
+No independent review or approval was recorded on the PR when inspected.
+Full CI approval and the independent review remain outstanding integration
+evidence; consult the [live PR checks](https://github.com/j-mauro-r/SAT-Dengue-V2/pull/74/checks)
+for subsequent results, including the documentation closure commit. These states
+do not reopen the completed exploratory analysis or waive its limitations.
