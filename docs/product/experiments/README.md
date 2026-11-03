@@ -1,5 +1,14 @@
 # Scientific Experiment Registry
 
+[EXP-DELTA02-R1 — fixed-MGN spatial candidate `NOT_SUPPORTED`](EXP-DELTA02-R1/README.md)
+is the independently authorized revision that treats DANE MGN 2018 as one
+fixed retrospective approximation. The sole G0_OFF-plus-neighbor feature gains
+one onset and seven false excess alerts on the frozen T+1 cohort; pooled A/B
+pass but C fails. The byte-identical private publication and aggregate reports
+preserve honest 81.9% feature missingness. This result does not rewrite the
+original EXP-DELTA02 closure, promote a candidate, change G5/champion, or
+authorize another experiment.
+
 [EXP-DELTA02 — spatial feasibility `NOT_EVALUABLE`](EXP-DELTA02/README.md) closes
 the explicitly authorized T+1 neighbor-signal hypothesis at its geography gate.
 Three retrieved official DANE municipal archives expose nine unresolved changes

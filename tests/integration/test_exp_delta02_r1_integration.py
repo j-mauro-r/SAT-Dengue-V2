@@ -21,6 +21,8 @@ from sat_dengue.experiments.exp_delta02_r1 import (
     fit_candidate,
     metric_tables,
     publish_real,
+    verified_publication,
+    verify_source_spec,
 )
 
 
@@ -176,3 +178,33 @@ def test_publication_is_deterministic_and_rejects_changed_existing_bytes(
     (target / "metrics.csv").write_bytes(b"changed")
     with pytest.raises(PreparationError, match="stale or corrupted"):
         publish_real(second)
+
+
+def test_real_publication_reconciles_exact_private_execution() -> None:
+    spec = json.loads(Path("docs/product/experiments/EXP-DELTA02-R1/sources.json").read_bytes())
+    private_paths = [
+        Path(spec["dependency"]["original_result_path"]),
+        *(Path(record["path"]) for record in spec["sources"].values()),
+    ]
+    if any(not path.exists() for path in private_paths):
+        pytest.skip("pinned private sources are unavailable on this host")
+
+    verify_source_spec(spec)
+    target, manifest = verified_publication(
+        {
+            "path": (
+                "data/processed/exp_delta02_r1/"
+                "1d2665c4a348ddcf9aa270336cb89f27b490d6292c393f8ef88b4c98c84a57d8"
+            ),
+            "manifest_sha256": ("33a8b2d21cb7b97aa7015a1ffcf419528a327127b648cb3bcaefbc4325f01975"),
+        }
+    )
+    assert manifest["bundle_id"] == (
+        "1d2665c4a348ddcf9aa270336cb89f27b490d6292c393f8ef88b4c98c84a57d8"
+    )
+    conclusions = json.loads((target / "conclusions.json").read_bytes())
+    predictions = pd.read_csv(target / "predictions.csv")
+    candidate = predictions.loc[predictions.arm.eq("R1_SPATIAL")]
+    assert conclusions["scientific_disposition"] == "NOT_SUPPORTED"
+    assert len(candidate) == 2653
+    assert int(candidate.truth.sum()) == 313

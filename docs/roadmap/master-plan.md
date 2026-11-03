@@ -345,3 +345,17 @@ preserved. This resolves the authorized scope without changing the academic
 contract or opening another hypothesis. Required CI, independent review and
 Mauricio's merge decision remain integration gates; no merge is authorized.
 G5 `NOT_APPROVED`; `champion: not_selected`.
+
+### EXP-DELTA02-R1 — fixed-MGN spatial candidate closure, 2026-11-03
+
+Mauricio explicitly authorized a separate revision using only DANE MGN 2018 as
+the retrospective topology decision. [EXP-DELTA02-R1](../product/experiments/EXP-DELTA02-R1/README.md)
+appended the single T−1 neighbor notification mean to G0_OFF, executed the
+frozen 2,653-row/313-onset T+1 cohort, and reproduced its immutable private
+publication byte-for-byte. It gains one onset over G0_OFF and adds seven false
+excess alerts. Pooled A/B pass but C fails (55.86% FAR-excess versus a 52.49%
+ceiling), so the scientific disposition is `NOT_SUPPORTED`. Complete feature
+coverage exists for 481 rows; 2,172 remain honestly missing. The original
+EXP-DELTA02 `NOT_EVALUABLE` record is unchanged. No promotion, T+2,
+EXP-DELTA03, new spatial search, G5/champion change, deployment, or merge is
+authorized by this closure.

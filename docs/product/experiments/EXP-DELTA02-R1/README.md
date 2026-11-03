@@ -1,6 +1,6 @@
 # EXP-DELTA02-R1 — recent neighboring epidemiological activity
 
-Status: `PROTOCOL_FROZEN`; no R1 feature, fit, prediction, or result exists yet.
+Status: `COMPLETED`; scientific disposition: `NOT_SUPPORTED`.
 
 This independent revision tests one controlled intervention: append the mean of
 MGN 2018 neighbors' general-dengue notifications at T−1 to the inherited
@@ -17,22 +17,24 @@ commit `b3c982f` as an explicit dependency. The original
 full. Its cross-vintage uncertainty is not erased: R1 records Mauricio's new
 methodological decision to use MGN 2018 as one fixed retrospective approximation.
 
-## Planned execution
+## Execution and result
 
-The maintained R1 entrypoint will verify the exact source bundle before fitting,
-construct only `neighbor_dengue_mean_lag1`, train one candidate, perform the
-paired T+1 evaluation, and write one immutable private publication. No dataset
-download or geography research is part of reproduction.
+The maintained R1 entrypoint verified the exact source bundle before fitting,
+constructed only `neighbor_dengue_mean_lag1`, trained one candidate, performed
+the paired T+1 evaluation, and wrote one immutable private publication. No
+dataset download or renewed geography research entered execution.
 
 ```bash
 PYTHONPATH=tmp/exp-delta02/vendor KEDRO_DISABLE_TELEMETRY=yes \
   .venv/bin/python scripts/run_exp_delta02_r1.py --publish
 ```
 
-This command is intentionally unavailable until the feature/candidate tasks
-implement and validate the entrypoint. The testing map owns proportional gates.
-Final aggregate evidence will be published in `RESULTS.md` and
-`CONCLUSIONS.md`; neither file is created before real execution.
+The byte-identical reproduction uses `--reproduce`. See the quantitative
+[results](RESULTS.md), scientific [conclusions](CONCLUSIONS.md), and aggregate
+[provenance](PROVENANCE.json). The candidate gains one onset over G0_OFF but
+adds seven false excess alerts and fails pooled academic condition C. The
+feature is honestly missing for 2,172/2,653 rows because complete fixed-neighbor
+counts are unavailable. This evidence does not support promotion.
 
 ## Boundaries
 
