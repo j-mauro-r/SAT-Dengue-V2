@@ -101,3 +101,78 @@ EXP03/EXP04/BETA summaries are context, not additional paired replications.
 The contribution of EDA-EXP01 is a more precise evidential diagnosis, particularly
 prevalence accounting and municipal support, while preserving every prior result
 and all scientific approval boundaries.
+
+## Chapter 7 — conclusions of the climate analysis
+
+This appendix addresses the separately authorized climate question; the six
+original answers, research ordering and limits above remain unchanged.
+
+### 1. Are climatic differences observable between real onsets and false alerts?
+
+Yes, some descriptive medians and distributions differ, but direction and magnitude
+depend on year, horizon, department and season. At T+1, G0_OFF detected-onset versus
+false-excess temperature median differences range **−0.45 to +3.09 °C** across
+the eight year/department cells, with positive direction in **5/8**. Precipitation
+differences range **−109.93 to +26.23 mm/month**, with positive direction in **4/8**.
+Conditional percentile distributions overlap for TP, FP, FN and TN in G0_OFF and
+CHANNEL. T+2 continuation alerts are retained separately from onset detections
+and excess errors. These are alert-selected groups, not evidence that climate
+adds discrimination to a fitted predictor.
+
+### 2. Does any lag associate consistently across years and territories?
+
+No variable/lag has a common sign across all eight year/department cells in either
+horizon under the raw Spearman or month-centered rank diagnostic. Temperature at
+T has a weak positive T+1 tendency in 7/8 cells; the four predefined temperature
+lags share a similar weak centered tendency. This does not identify a winning lag
+or four independent replications. Rainfall and soil water vary more strongly in
+direction across cells; conditioning on origin month changes some raw patterns.
+All T/T−1/T−2/T−3 results remain visible without significance filtering or selection.
+
+### 3. Does climate distinguish near-P75 outcomes descriptively?
+
+There is substantial overlap after balancing year, department and origin month.
+At T+1 the balanced near-boundary true/false temperature medians differ by only
+**+0.058 °C**, and precipitation by **−7.15 mm/month**. At T+2 the differences
+are **+2.661 °C** and **−46.30 mm/month**, but wide interquartile ranges overlap,
+and only 14 common cells contain 15 true detections and 29 false alerts.
+These distributions do not validate a climate filter or a decision cutoff.
+The original ±1-case proximity, H5, scores, policies and populations are preserved.
+
+### 4. What prevents claiming a new feature would improve the model?
+
+All climate observations are retrospectively consolidated; coverage does not prove
+origin-time availability. The same consumed years and municipalities are reused,
+lags are correlated and outcomes are experimental H5 labels. Department/season
+controls do not remove municipal climatology, altitude, surveillance or other
+confounding. Common-cell support is sparse: only one T+1 cell and zero T+2 cells
+have at least three true detections and three false alerts. Conditioning on alert
+status can itself create associations. No predictive incremental comparison,
+independent confirmation, recalibration or feature experiment was performed.
+
+EXP03 provides a further caution under its different protocol: lagged climate's
+T+2 boosting detection gains were accompanied by additional false-alert burden
+and reversed under 2024 stress. Those historical results are context, not a
+quantitative effect pooled with this EDA and not proof that every climatic
+representation is ineffective.
+
+### 5. Is there sufficient basis for a controlled climate experiment?
+
+**Scientific disposition: `INSUFFICIENT_EVIDENCE`.**
+
+The extension leaves a weak temperature-related hypothesis open but does not
+establish a stable lag, useful near-boundary separation or expected incremental
+benefit sufficient to recommend a climatic EXP-DELTA02 as the next intervention.
+This disposition concerns support for that recommendation; it is not a test of
+the null hypothesis that climate is unrelated to dengue or has no predictive value.
+
+If humans later authorize a controlled climate study, it would require a predeclared
+representation/lag, origin-time availability evidence, sufficient events and an
+independent evaluation opportunity with detection and false-alert burden assessed
+together. Those prerequisites are unfulfilled here. No new experiment is registered
+or executed, and the original Chapters 1–6 priority is unchanged.
+
+The climate findings and their support are in the separate
+[Chapter 7 findings](FINDINGS.md#chapter-7--climate-findings); source/publication
+identity and preservation replay are in [README](README.md).
+G5 `NOT_APPROVED`; `champion: not_selected`.

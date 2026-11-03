@@ -147,3 +147,117 @@ Horizon populations are not combined. Rates are descriptive on consumed years.
   differ by horizon and have unequal exposure. They are not prospective groups.
 - **Consequence:** retain paired gains/losses and exposure in future protocols;
   no municipal exclusion, profile selection or ensemble is inferred.
+
+## Chapter 7 — climate findings
+
+This independent appendix adds five findings without changing F1–F8. Sources are
+the pinned regional canonical table, original EDA publication and frozen benchmark
+keys, with EXP03 as documentary context. Only descriptive climate derivatives are
+published under the new identity recorded in [README](README.md).
+
+### C7.1 — Complete observed climate coverage on the frozen cohorts
+
+- **Observation:** missing climate does not distinguish the compared groups here.
+- **Quantitative evidence:** all nine T variables are observed on all **2,653**
+  T+1 and **2,422** T+2 rows. Temperature, precipitation and soil water are also
+  observed on every row at each exact T/T−1/T−2/T−3 lag: **0 missing values**,
+  **0 missing calendar keys**, without imputation. The horizon cohorts overlap
+  in origin keys and are not independent samples.
+- **Method:** exact municipality/calendar reindexing; preserve all cohort keys;
+  verify per-variable valid days against expected days. `coverage.csv` and
+  `lag_coverage.csv` retain year/department/lag counts and denominators.
+- **Interpretation:** observed differences are not explained by differential
+  climate missingness within these admitted cohorts.
+- **Limitations:** this is conditional coverage in selected retrospective cohorts,
+  not proof of canonical-wide completeness or historical operational availability.
+- **Scientific implication:** coverage permits this descriptive comparison; it
+  does not establish the utility or timely availability of a new predictor.
+
+### C7.2 — Territory and season are substantial composition factors
+
+- **Observation:** the two departments have different climate distributions.
+- **Quantitative evidence:** at T+1, Meta/Tolima medians are **24.41/22.29 °C**
+  for temperature, **251.45/153.10 mm/month** for precipitation and
+  **0.4386/0.3742 m³/m³** for soil water (n=1,024/1,629). Temperature IQRs are
+  **20.76–25.87/16.67–24.73 °C**; precipitation IQRs
+  **159.87–369.87/109.93–222.34 mm/month**.
+- **Method:** empirical quantiles in physical units, separate horizon/department
+  populations, year-specific and origin-month summaries for all nine variables;
+  Figure 12 uses T+1 only for seasonal curves, avoiding cross-horizon duplication.
+  Sources: `distribution.csv` and `seasonality.csv`.
+- **Interpretation:** a pooled true/false-alert climate difference could reflect
+  geography or seasonal composition. These differences motivate conditioning.
+- **Limitations:** pooled departmental summaries mix years and municipalities;
+  conditioning on department does not remove altitude or municipal climatology.
+- **Scientific implication:** retain year, territory, season and coverage controls
+  rather than interpreting pooled climatic contrasts as onset discrimination.
+
+### C7.3 — Weak temperature direction, but no consistently signed variable/lag
+
+- **Observation:** weak associations exist; no predefined lag transports a uniform
+  direction across all year/department cells.
+- **Quantitative evidence:** temperature at T has positive Spearman correlation
+  in **7/8** T+1 cells, ranging **−0.0186 to +0.1743**. The origin-month-centered
+  rank diagnostic is positive in **7/8**, ranging **−0.0185 to +0.1416**.
+  At T+2 these counts are **5/8** and **6/8**. None of the 24 horizon/variable/lag
+  combinations has a uniform raw or centered sign across all eight cells.
+  For T+1 precipitation at T, raw signs are negative in **7/8**, while the
+  month-centered signs split **4 positive/4 negative**.
+- **Method:** all four calendar lags of temperature/precipitation/soil water,
+  presented in fixed order; eight year/department cells per horizon. All 192
+  cells meet the declared descriptive support convention (≥20 observed rows,
+  ≥3 of each onset class). Raw Spearman and the explicitly defined month-centered
+  rank correlation are different statistics; no p-values or winning-lag search.
+  Sources: `lag_associations.csv` and `lag_sign_summary.csv`.
+- **Interpretation:** some raw association reflects seasonal composition, while
+  temperature retains a weak T+1 tendency. Its four lagged views are correlated
+  observations of the same history, not four independent confirmations.
+- **Limitations:** repeated municipal months, four consumed years, varying cohorts,
+  unresolved municipal confounding and the custom seasonal diagnostic preclude
+  causal or incremental-prediction claims.
+- **Scientific implication:** keep the weak temperature question open without
+  selecting a lag or recommending additional model features from this evidence.
+
+### C7.4 — Near-P75 true and false alerts retain substantial climate overlap
+
+- **Observation:** climate does not provide a demonstrated separator of the
+  near-P75 errors and additional G0_OFF detections.
+- **Quantitative evidence:** after balancing common year/department/origin-month
+  cells, T+1 true/false temperature medians are **24.074/24.016 °C** and
+  precipitation medians **152.54/159.69 mm/month**. Temperature IQRs
+  **20.05–25.52/21.79–25.79 °C** and precipitation IQRs
+  **100.68–234.39/91.20–275.51 mm/month** overlap widely.
+  T+2 medians are **23.862/21.201 °C** and **173.35/219.65 mm/month**, with
+  temperature IQRs **15.94–24.85/13.19–24.38 °C** also overlapping widely.
+- **Method:** original ±1 case proximity, G0_OFF alerts absent from CHANNEL,
+  true onset versus false excess; equal total weight per common year/department/
+  origin-month cell in each group. Quantiles invert the empirical CDF using exact
+  rational weights, avoiding rounding at cumulative-probability boundaries.
+  Weighted empirical distributions are descriptive
+  and use only T or earlier climate. Sources: `near_weighted_quantiles.csv`,
+  `near_cell_contrasts.csv` and Figure 11.
+- **Interpretation:** observed median shifts coexist with broad overlap; a favorable
+  pooled climatic difference is not an alert filter or incremental feature effect.
+- **Limitations:** comparisons are between different municipalities within common
+  cells, not paired outcomes for the same observation. Cell support is thin (C7.5).
+- **Scientific implication:** no climatic alert rule, cutoff, H5 change or additional
+  predictive feature is justified by these conditional distributions.
+
+### C7.5 — Sparse common-cell support limits the climate conclusion
+
+- **Observation:** strict composition control leaves little information per cell.
+- **Quantitative evidence:** near-P75 G0-only comparison retains **46/62** true
+  detections and **63/107** false alerts in **32** common T+1 cells; T+2 retains
+  **15/28** and **29/74** in **14** cells. Only **1/32** and **0/14** cells have
+  at least three observations in each group. True-detection groups are singletons
+  in **21/32** and **13/14** cells; false-alert groups in **17/32** and **6/14**.
+- **Method:** exact common-cell membership with group-specific counts, missingness
+  and discarded noncommon counts retained in `near_balance.csv`. All original
+  evaluation rows remain in their cohorts; this subset is only a descriptive view.
+- **Interpretation:** the apparently larger T+2 median shifts are especially fragile.
+- **Limitations:** composition balancing changes the descriptive population and
+  cannot supply independent years, external outbreak truth or stable uncertainty.
+  No inferential interval, model, feature search or significance test is added.
+- **Scientific implication:** the climate extension receives
+  **`INSUFFICIENT_EVIDENCE`** for justifying additional features as a supported
+  next intervention. This does not prove that climate has no possible predictive value.

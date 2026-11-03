@@ -7,6 +7,15 @@ private artifacts. [Findings](FINDINGS.md) quantify the evidence;
 This is exploratory reuse of consumed observations, not a predictive experiment
 or independent validation. G5 `NOT_APPROVED`; `champion: not_selected`.
 
+## Chapter index
+
+Chapters 1–6 are the preserved original analysis: integrity/comparability;
+false-alert distribution; probability separability; temporal calibration;
+territorial heterogeneity; epidemiological boundary and synthesis.
+Chapter 7 appends four climate analyses: availability/distributions;
+climate by frozen alert outcome; predefined calendar lags; near-P75 comparisons.
+Its findings and conclusions are independent appendices in the existing documents.
+
 ## Scope and authority
 
 The human EDA-EXP01 request authorizes read-only analysis of published results,
@@ -55,7 +64,7 @@ Execution needs the exact private publications and their recorded parent files;
 a data-free checkout cannot reproduce the real-data results. Run from the root:
 
 ```bash
-JUPYTER_RUNTIME_DIR="$PWD/tmp/eda-exp01/jupyter" IPYTHONDIR="$PWD/tmp/eda-exp01/ipython" .venv/bin/python -m jupyter nbconvert --execute --to notebook --inplace notebooks/eda_experimental_results.ipynb --ExecutePreprocessor.timeout=600
+# Execute the current extended notebook using the preservation wrapper below.
 .venv/bin/python -m ruff check notebooks/eda_experimental_results.ipynb
 .venv/bin/python -m ruff format --check notebooks/eda_experimental_results.ipynb
 .venv/bin/python scripts/check_markdown_links.py
@@ -131,3 +140,119 @@ Repository-only, scoped-plan and all-plan DWP states are distinct: repo-only is
 checked for this change; scoped-plan is not applicable; the initial all-plan gate
 retains inherited PLAN_012 unresolved-review and legacy Stage 2 lifecycle findings.
 Those historical findings neither pass silently nor become EDA code failures.
+
+## Chapter 7 sources and preservation replay
+
+Chapter 7 reuses the identified regional canonical publication above for all nine
+monthly climate variables and their valid-day metadata. The original EDA publication
+is an immutable dependency, not a replacement target. Benchmark, diagnosis and
+DELTA sources are unchanged. The only documentary climate antecedent is
+[EXP03](../EXP03_feature_ablation/CONCLUSIONS.md). No external data are downloaded.
+
+Original notebook identity before this extension:
+SHA-256 `77d7d5b765150dbc3fc929ddc992a6f7848d7fd801f13406bfa1f9a8a619ec62`,
+first **35 complete cells**, source revision
+`80b1561b279c3ce7523ed6bc06aad5cedc146933`.
+The original publication identity and manifest SHA-256 above remain unchanged.
+
+The first publisher hashes the complete notebook file on disk. Appending cells
+and running plain `nbconvert --execute` would therefore change that original
+source identity. The preservation wrapper below executes all cells in a fresh
+kernel while temporarily materializing the pinned original file for Chapters 1–6.
+It restores the extended source at Chapter 7, verifies equal original sources,
+outputs and execution counts, then preserves even original cell timing metadata.
+A guarded execution path restores the extension if execution fails. Run with no
+concurrent notebook editor or second writer. The pinned Git revision must exist
+locally; a shallow checkout without it needs that history supplied before replay.
+
+```bash
+JUPYTER_RUNTIME_DIR="$PWD/tmp/eda-exp01/jupyter" IPYTHONDIR="$PWD/tmp/eda-exp01/ipython" .venv/bin/python - <<'PY'
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+import nbformat
+from nbclient import NotebookClient
+
+root = Path.cwd()
+path = root / "notebooks/eda_experimental_results.ipynb"
+revision = "80b1561b279c3ce7523ed6bc06aad5cedc146933"
+original_bytes = subprocess.check_output([
+    "git", "show", f"{revision}:notebooks/eda_experimental_results.ipynb"
+])
+assert hashlib.sha256(original_bytes).hexdigest() == (
+    "77d7d5b765150dbc3fc929ddc992a6f7848d7fd801f13406bfa1f9a8a619ec62"
+)
+original = nbformat.reads(original_bytes.decode(), as_version=4)
+extended_bytes = path.read_bytes()
+extended = nbformat.reads(extended_bytes.decode(), as_version=4)
+assert extended.cells[:35] == original.cells
+bundle = root / (
+    "data/processed/eda_exp01/"
+    "3d0803788eab1bbc92f29410540b184ff11b07ab921b611b5fd5965ed05e356e"
+)
+before = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in bundle.iterdir()}
+assert before["manifest.json"] == (
+    "6c3ff1a8a2c5a97b7306a28b30f0f8f305dbdbb87209025be8b16150dbbc8002"
+)
+
+def restore_extension(cell, cell_index, **kwargs):
+    if cell_index == 35:
+        path.write_bytes(extended_bytes)
+
+path.write_bytes(original_bytes)
+try:
+    NotebookClient(
+        extended, timeout=600, kernel_name="python3",
+        resources={"metadata": {"path": str(root)}},
+        on_cell_start=restore_extension,
+    ).execute()
+    for i in range(35):
+        assert extended.cells[i].source == original.cells[i].source
+        assert extended.cells[i].get("outputs", []) == original.cells[i].get("outputs", [])
+        assert extended.cells[i].get("execution_count") == original.cells[i].get("execution_count")
+    assert before == {
+        p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in bundle.iterdir()
+    }
+    extended.cells[:35] = original.cells
+    nbformat.validate(extended)
+    nbformat.write(extended, path)
+except BaseException:
+    path.write_bytes(extended_bytes)
+    raise
+print("PASS: full execution; 35 original cells and 23 original files unchanged")
+print("Chapter 7 publication:", extended.cells[-1].outputs[0].text)
+PY
+```
+
+The extension publishes only 12 new aggregate climate tables plus settings and
+manifest, under a distinct identity in `data/processed/eda_exp01/`. No original
+dataset, prediction file or Chapters 1–6 table is copied into it. Four new figures
+are embedded in the notebook and previewed under ignored
+`tmp/eda-exp01/chapter7/figures/`; all eight original embedded figures are unchanged.
+Every joined climate month is at or before its origin; lags use exact calendar
+keys, not positional shifts. Missing values are never imputed.
+
+Chapter 7 publication:
+`75a1b9e36a4d1792f3dbec72e0ac9013f0918f5115c66deb19832e26c977d2ce`.
+Manifest SHA-256:
+`5b15e3ef3904383e2774606ac56b8472f6d45b51eb0d6cf16503520b9bd86e20`.
+Its source record binds the original publication, canonical climate data/metadata,
+academic/diagnostic/DELTA identities, contract, EXP03 antecedent and Chapter 7 cells.
+NumPy/pandas/SciPy and the original numerical environment are recorded.
+
+Validation: full fresh-kernel preservation replay, all 35 original complete cells
+and 23 original publication files unchanged; 192 raw and 192 season-centered rank
+calculations independently reconciled; all 1,008 weighted quantiles checked using
+integer replication, separate from the notebook's exact rational CDF calculation;
+calendar-gap refusal checked without imputation. The four new PNG figures were
+inspected directly. Repeated execution reuses identical derived bytes and cannot
+overwrite the original. Receipts remain under ignored `tmp/eda-exp01/chapter7/`.
+Full browser page inspection remains unverified; the available browser host was
+unavailable in the original delivery. No current browser layout check is claimed.
+
+To inspect the current saved presentation without execution:
+
+```bash
+.venv/bin/python -m jupyter nbconvert --to html --output-dir tmp/eda-exp01/chapter7 notebooks/eda_experimental_results.ipynb
+```
