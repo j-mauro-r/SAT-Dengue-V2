@@ -1,5 +1,11 @@
 # Scientific Experiment Registry
 
+[EDA-EXP01](EDA-EXP01/README.md) is a read-only, six-chapter analysis of identified
+benchmark/diagnostic/DELTA publications. It adds territorial prevalence accounting,
+annual probability diagnostics and municipal support evidence without new model
+execution, policy selection or scientific approval. Its conclusions do not register
+a successor predictive experiment or change the closed experiment registry schema.
+
 The separate [EXP-BETA01 V2 national-transfer experiment](EXP-BETA01-V2/README.md)
 is explicitly authorized for G1 without climate. Its frozen protocol preserves
 V1's regional evaluation cohorts, model configuration and chronological roles;

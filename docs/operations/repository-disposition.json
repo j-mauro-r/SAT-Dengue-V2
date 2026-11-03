@@ -3093,7 +3093,12 @@
     "src/sat_dengue_v2.egg-info",
     "tests/contracts",
     "tests/integration",
-    "tests/unit"
+    "tests/unit",
+    "docs/product/experiments/EDA-EXP01",
+    "docs/product/experiments/benchmark",
+    "docs/product/experiments/benchmark/diagnostico",
+    "docs/product/experiments/EXP-DELTA01",
+    "src/sat_dengue/pipelines/exp_delta01"
   ],
   "documentation_correction": {
     "authority": "Mauricio",
