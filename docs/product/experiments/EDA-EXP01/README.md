@@ -83,7 +83,9 @@ identical bytes and cannot overwrite prior results.
   and 60 DELTA metric strata reconcile, including AP/Brier and unavailable P1.
 - Counts, exposure, contingency tables, annual score histograms, real-class
   quantiles/ECDFs, saved-threshold margins, AP/AUROC/Brier and supported reliability
-  bins. Probability scales are not pooled across separately fitted annual models.
+  bins. Score distributions and ranking interpretations remain within annual
+  model/horizon cells. Pooled AP is recomputed only for published-metric parity;
+  it is not interpreted as ranking by a single fixed predictor.
 - Excess-FAR decomposition uses excess prevalence/sensitivity/FPR. Common-prevalence
   standardization uses the horizon's pooled prevalence. Three-factor Shapley
   contributions average all six substitution orders and sum to the observed gap.
