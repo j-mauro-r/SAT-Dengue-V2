@@ -1,0 +1,90 @@
+{
+  "schema": "exp-delta02-r1-protocol-v1",
+  "experiment_id": "EXP-DELTA02-R1",
+  "evidence_type": "exploratory_retrospective",
+  "frozen_on": "2026-11-03",
+  "dependency_commit": "b3c982f16f938baae885b299544459db80445fbe",
+  "geography": {
+    "source": "DANE MGN 2018",
+    "vintage": 2018,
+    "retrospective_fixed_approximation": true,
+    "predicate": "shared boundary length > 0 in native CRS",
+    "exclude_point_contacts": true,
+    "exclude_self": true,
+    "include_external_neighbors": true,
+    "retain_nine_conflicting_relations_by_2018": true
+  },
+  "feature": {
+    "name": "neighbor_dengue_mean_lag1",
+    "source_column": "dengue_notifications_count",
+    "lag_months": 1,
+    "aggregation": "arithmetic_mean",
+    "denominator": "all fixed MGN 2018 neighbors",
+    "require_complete_neighbor_coverage": true,
+    "absence_is_zero": false,
+    "alternatives": []
+  },
+  "cohort": {
+    "horizon": 1,
+    "target_municipalities": 76,
+    "rows": 2653,
+    "onsets": 313,
+    "evaluation_years": [2020, 2021, 2022, 2024],
+    "origin": "non-excess at T",
+    "reference": "H5 with target-month P75"
+  },
+  "roles": {
+    "train": "through Y-4",
+    "calibration": "Y-3",
+    "gap": "Y-2 unused",
+    "selection": "Y-1",
+    "evaluation": "Y",
+    "origin_embargo": true
+  },
+  "model": {
+    "base": "G0_OFF",
+    "family": "xgboost",
+    "only_added_predictor": "neighbor_dengue_mean_lag1",
+    "n_estimators": 80,
+    "max_depth": 2,
+    "learning_rate": 0.05,
+    "max_bin": 128,
+    "min_child_weight": 5,
+    "reg_alpha": 0,
+    "reg_lambda": 1,
+    "subsample": 1.0,
+    "colsample_bytree": 1.0,
+    "random_state": 1729,
+    "n_jobs": 1,
+    "tree_method": "hist",
+    "objective": "binary:logistic",
+    "calibration": "regularized pooled intercept, penalty 1.0",
+    "policy": "selection-only G0_OFF budget objective with whole score ties",
+    "hyperparameter_search": false
+  },
+  "comparators": ["CHANNEL", "PERSISTENCE", "R0", "G0_OFF"],
+  "academic_acceptance": {
+    "A": "candidate detected onsets > CHANNEL detected onsets",
+    "B": "candidate detected onsets > PERSISTENCE detected onsets",
+    "C": "candidate FAR-excess <= CHANNEL FAR-excess + 0.05",
+    "far_definition": "false excess alerts / all alerts",
+    "pooled_historical_limit": 0.5249
+  },
+  "reporting": [
+    "pooled",
+    "year",
+    "department",
+    "year_department",
+    "paired_g0_off_changes",
+    "feature_missingness"
+  ],
+  "dispositions": ["EXPLORATORY_IMPROVEMENT", "NOT_SUPPORTED", "NOT_EVALUABLE"],
+  "forbidden": [
+    "new geography research or downloads",
+    "alternative features, windows, lags, transforms, weights or models",
+    "evaluation-driven adaptation",
+    "T+2 or EXP-DELTA03",
+    "champion selection or G5 change",
+    "automatic merge"
+  ]
+}
