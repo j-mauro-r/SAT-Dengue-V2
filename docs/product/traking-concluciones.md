@@ -2037,3 +2037,29 @@ model inference, fits or recalibration. Detailed artifacts remain private under
 `data/processed/exp_delta01/`; exact identities and limits belong to the experiment
 owner. No new DELTA or retrospective relaxation follows automatically. G5 stays
 `NOT_APPROVED`; champion `not_selected`.
+
+
+## DEC-140 — Register authorized EDA-EXP02 Phase B and its exploratory disposition
+
+- **Date:** 2026-11-03.
+- **Authority:** Mauricio's explicit Phase B request authorizes one new EDA
+  notebook, verified canonical/benchmark reads, official geography admission
+  attempts, immutable derived publications and PR #75 update without merge.
+  This is analysis authority, not a new data/feature contract or scientific gate.
+- **Pre-result choices:** primary months since the last excess month of the latest
+  fully observed completed H5 episode, with clearance strictly before T; fixed
+  recency bands/support; exact frozen cohorts and separate T+1/T+2. Start-recency
+  is a redundant episode/duration audit. No outcome-driven window selection.
+  O1 requires positive-length shared boundaries and historical geography admission;
+  its single proposed context is mean log1p neighbor count at T−1 with full coverage.
+- **Recorded outcome:** [Phase B conclusions](experiments/EDA-EXP02/PHASE_B_CONCLUSIONS.md)
+  classify O2 `EXPLORATORY_SIGNAL_FOUND` for weak descriptive association and
+  representation variation; conditional additional usefulness is insufficiently
+  supported. O1 `NOT_EVALUABLE`: official service and 76 codes verified, historical
+  adjacency correspondence unresolved. This is the implementing analysis's
+  disposition, pending independent review, not Mauricio's predictive acceptance.
+- **Consequence:** consider only a separately authorized, single-feature paired O2
+  ablation design; do not start EXP-DELTA02, train models, change alert policy or
+  admit spatial inputs automatically. Consumed years remain retrospective;
+  point-in-time reporting availability is unverified. Preserve Phase A and all
+  previous publications. G5 `NOT_APPROVED`; `champion: not_selected`.
