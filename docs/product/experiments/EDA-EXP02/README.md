@@ -1,4 +1,19 @@
-# EDA-EXP02 — Phase A: anticipatory signal and source audit
+# EDA-EXP02 — Anticipatory epidemiological signals
+
+**Phase B: `COMPLETED_WITH_LIMITATIONS` (2026-11-03).**
+O2 `EXPLORATORY_SIGNAL_FOUND`: weak descriptive episode-recency association,
+with substantial existing-memory overlap and insufficient conditional support
+for incremental performance. O1 `NOT_EVALUABLE`: historical geography admission
+is unresolved. See [findings](PHASE_B_FINDINGS.md),
+[conclusions](PHASE_B_CONCLUSIONS.md) and
+[Phase B design and reproduction](#phase-b--authorized-exploratory-execution).
+No training or EXP-DELTA02; G5 `NOT_APPROVED`; `champion: not_selected`.
+
+## Phase A — preserved audit snapshot
+
+The following sections retain the Phase A scope, findings and validation at its
+closure. Statements that Phase B had not started describe that historical audit;
+the authorized Phase B execution is recorded separately below.
 
 **Audit date: 2026-11-03. Phase A: `READY_WITH_LIMITATIONS`.**
 The [inventory of 45 signals and prerequisites](SIGNAL_INVENTORY.csv) and
@@ -237,3 +252,141 @@ gate failed on two historical records, `PLAN_012_retire_experimental_eda`
 (unresolved critical-review record) and
 `PLAN_stage2_data_understanding_initial_recognition` (mixed legacy lifecycle).
 These records were not changed or waived. Scoped-plan conformance is N/A.
+
+## Phase B — authorized exploratory execution
+
+Mauricio's 2026-11-03 request authorizes this new five-chapter
+[notebook](../../../../notebooks/eda_epidemiological_signals.ipynb), derived
+publications and scientific synthesis on the existing PR #75. The Phase A
+sections above, inventory and conclusions remain historical source-audit evidence.
+The new notebook is an explicitly authorized EDA, separate from frozen migration
+notebooks and production Kedro execution. No pipeline, training or policy changes.
+
+### Design fixed before signal calculation
+
+- Use all frozen benchmark keys, separately for T+1 and T+2; 2020/2021/2022/2024
+  are consumed retrospective years. Retain the 76 municipalities and original H5
+  onset/continuation/no-excess labels. Regional observations after 2024 are not used.
+- O2 primary: months from T to the **last excess month of the latest fully
+  observed completed episode**, with clearance confirmed strictly before T.
+  H5 episodes are contiguous EXCESO runs preceded and followed by known non-excess;
+  a run touching unknown history is censored. Scan only states through T−1.
+  Unknown/no completed history is missing, never recency zero. A clearance at T
+  cannot complete an episode for this signal yet. Earlier completed episodes can
+  still supply history; this is explicitly time since last *known completed* episode.
+- O2 secondary audit: time since the start of that same completed episode. It
+  equals primary recency + completed duration −1; use primary alone for all
+  substantive comparisons, avoiding duplicate representations/duration selection.
+  This does not use the future end of a currently active episode.
+- Fixed recency bands: 1–3, 4–6, 7–12, 13–24, ≥25 months, plus unknown. Full
+  contiguous known history back to episode start is required; no window search.
+- Descriptive strata are horizon, target year and department, with origin calendar
+  month as a seasonality control. Flag a comparison as supported only at n≥30,
+  ≥5 onsets and ≥5 non-onsets; this is a readability/support rule, not power or
+  statistical significance. Keep sparse cells and denominators. No municipal effects.
+- Compare medians/quantiles, fixed-band contingency tables and Spearman associations.
+  Report rank associations after centering within year×department×calendar-month
+  cells as descriptive composition controls, never as fitted predictors or causal
+  effects. Compare against local counts/lags and the exact six EXP03.1 state summaries;
+  test whether equal summaries retain different recencies. No feature selection.
+- For missed events retain frozen G0_OFF decisions and the exact intersection of
+  R0/G0_OFF/G0_ON/G1_OFF; CHANNEL/PERSISTENCE remain references, not extra models.
+- O1 planned definition: positive-length shared municipal boundary, no self-neighbor,
+  including outside-region neighbors. Single signal: mean log1p general-dengue
+  notifications across all neighbors at exact T−1; require all neighbor observations.
+  It is not population-standardized risk. No substitute departmental relation.
+  Calculation requires admitted historical geometry/crosswalk/topology first.
+- All observation dates must precede T for new signals. Consolidated snapshots do
+  not establish actual operational availability at historical T. No p-value search,
+  model fitting, forecast, threshold optimization or EXP-DELTA02 is authorized.
+
+
+### Phase B sources, admission and publication
+
+Regional/national publications and hashes are the Phase A identities above.
+The benchmark is `data/processed/benchmark/6cfc7bcf565ebdf7ff11ab3ff79d6d91ce7d2f392958c76aa55d310ba27b6c48/`,
+manifest SHA-256 `4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f`.
+Its diagnosis is `874ef99634db44e0e71a3aba9b7195f8762ff5f9327ef0394d27ce77fc8e116c`.
+The original EDA-EXP01 publication is
+`data/processed/eda_exp01/3d0803788eab1bbc92f29410540b184ff11b07ab921b611b5fd5965ed05e356e/`,
+manifest SHA-256 `6c3ff1a8a2c5a97b7306a28b30f0f8f305dbdbb87209025be8b16150dbbc8002`.
+It supplies prior shared-error and support context; it is not re-executed.
+All direct payloads and the benchmark's recorded upstream sources are verified
+before/after analysis. The regional/national 12,388-row shared count/state slice
+matches exactly. All six benchmark arms retain exactly 5,075 paired keys.
+
+The O1 official admission attempt is pinned under
+`data/processed/eda_exp02/source_admission/9f95e52f87a6b97d9a92cc7f3f4e26ad5d50062bc93deab3b492ef75b3a091c1/`,
+manifest SHA-256 `7d8ddd1024e8d17fdd675d1ba34891bccdc68bbc5c16df1452ad17ab040d3f88`.
+It contains the DANE service/layer metadata, successful attribute query, URLs,
+access date, version and admission decision. Geometry is **not admitted**;
+self-exclusion/topology and all spatial association checks are blocked/N/A.
+The query verifies codes, not historical adjacency. No geospatial dependency added.
+
+Final Phase B publication:
+`data/processed/eda_exp02/de2062498abb6e309fc01ea28f10d73a283ce6f8507958f1d1c0a9b63591f605/`.
+Manifest SHA-256:
+`bb67e6551fca23220129f763f80070a2e66c8591f2b5c3cb7d0425598dfe58b0`.
+The manifest binds exact inputs, calculation/source-reader code, numerical package
+versions, notebook code cells and the fixed methodology cell. Settings are stored
+with outputs. Publication uses the existing atomic, content-addressed publisher;
+reuse requires identical bytes and cannot overwrite any prior identity.
+Earlier development identities remain local and are not the final evidence.
+
+The publication contains only new signal/episode audits, 14 aggregate tables,
+settings, summary and manifest. `signal_rows.csv` and `completed_episodes.csv`
+are private municipality-level audits; no original scores/predictions are copied.
+All derived data stay under ignored `data/processed/eda_exp02/`. Only aggregates,
+plots and narratives enter Git. There is no public download of private inputs;
+a data-free checkout cannot reproduce the real-data analysis.
+
+### Phase B reproduction and validation
+
+Use the existing project `.venv` with notebook/Matplotlib dependencies and all
+exact sources, including recorded benchmark parents and the admission receipt.
+From the repository root:
+
+```bash
+mkdir -p tmp/eda-exp02/jupyter tmp/eda-exp02/ipython
+JUPYTER_RUNTIME_DIR="$PWD/tmp/eda-exp02/jupyter" IPYTHONDIR="$PWD/tmp/eda-exp02/ipython" .venv/bin/python -m jupyter nbconvert --execute --to notebook --inplace --ExecutePreprocessor.timeout=600 notebooks/eda_epidemiological_signals.ipynb
+.venv/bin/python -m ruff check notebooks/eda_epidemiological_signals.ipynb
+.venv/bin/python -m ruff format --check notebooks/eda_epidemiological_signals.ipynb
+.venv/bin/python scripts/check_markdown_links.py
+bash .agents/skills/deepworkplan/verify/conformance.sh --repo-only
+```
+
+This executes the new notebook only; it does not refresh historical notebooks,
+Kedro publications, models or experiments. Six aggregate figures are embedded;
+previews are disposable under `tmp/eda-exp02/figures/`. Execution validates exact
+joins/outcomes, zero-imputation refusal, 3,648 municipality-origin prefix-invariance
+checks across every distinct evaluation origin, complete episode start/end bounds,
+clearance-at-T refusal, active/left-censored histories, unknown states/calendar
+gaps, original EDA multiplicity and unchanged source hashes. Early unknown H5
+states total 4,560; 15 initial boundary runs are left-censored and 26 runs are
+active at the 2024-12 boundary. They are not counted as completed episodes.
+
+Scoped gates and full reproduction evidence are recorded in PR #75. Required
+checks follow the [testing guide](../../../TESTING_GUIDE.md). Independent review
+is pending; arithmetic validation by the implementer does not satisfy that gate.
+Repo-only conformance is reported separately; scoped-plan is N/A (direct bounded
+request, no DWP plan). The historical all-plan failures recorded above are retained
+without rewriting their lifecycle or critical-review records.
+
+Final local evidence: **PASS** fresh-kernel execution and repeated execution with
+all **19 publication files byte-identical**; independent vectorized run segmentation
+reproduces all 1,326 completed episodes and every one of the 5,075 recency/start/end/
+clearance records. Separate SciPy ranks, explicit integer-band predicates and keyed
+shared-miss intersections reconcile the main arithmetic. These are implementer
+checks, not independent review. **PASS** notebook format/Ruff/format, Markdown links,
+changed-file secret/aggregate-output scans, both focused disposition tests and
+repo-only conformance (17 checks). **FAIL, inherited all-plan conformance:** the
+same PLAN_012 critical-review record and legacy Stage 2 mixed lifecycle (465 checks
+pass; 60 advisory); scoped-plan remains N/A. No historical record is waived.
+
+All six PNG figures were visually inspected; association labels/legend and temporal
+comparison scales were corrected and the final notebook re-executed. HTML export
+succeeds under `tmp/eda-exp02/`. Full browser-page layout inspection is
+**UNVERIFIED** because the browser access host is unavailable; direct figure
+inspection and saved table/output review are completed. Data-free CI does not
+execute the private notebook. Live head-specific CI and independent review remain
+separate PR evidence; do not carry earlier-head successes forward as current checks.

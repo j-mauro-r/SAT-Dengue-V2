@@ -1,5 +1,23 @@
 # Testing and Validation Guide
 
+## EDA-EXP02 anticipatory-signal notebook
+
+The explicitly authorized `notebooks/eda_epidemiological_signals.ipynb` is a new
+EDA of frozen benchmark/canonical publications, separate from historical migration
+notebooks. The [Phase B owner](product/experiments/EDA-EXP02/README.md#phase-b--authorized-exploratory-execution)
+fixes exact private inputs, episode/censoring rules, support, geography admission
+and reproduction. Validate with `nbformat`, fresh-kernel top-to-bottom execution,
+exact municipality/month and outcome reconciliation, prefix-invariant signals,
+censored/active episode and missing-calendar cases, source preservation and
+identical derived payload reuse. Inspect the six aggregate figures. Run notebook
+Ruff/format, Markdown links, changed-file privacy scans, the two focused directory/
+historical-notebook boundary checks in `tests/contracts/test_repository_disposition.py`
+and repo-only conformance. Spatial self-exclusion/topology checks are blocked/N/A
+when no graph is admitted, never reported as passed. Missing pinned sources block
+real reproduction. No new pipeline, model tests, historical notebook replay,
+training, dashboard validation or full local suite is required; CI owns integral
+repository gates. Independent scientific review remains a separate merge gate.
+
 ## EDA-EXP01 published-result notebook
 
 The explicitly authorized `notebooks/eda_experimental_results.ipynb` is an active

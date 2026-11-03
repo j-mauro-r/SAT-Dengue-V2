@@ -312,3 +312,20 @@ do not establish general academic-policy improvement or territorial stability.
 The source-admission blocker is resolved; these policy-feasibility limits remain
 scientific results. Independent review, required CI and Mauricio's PR #73 review
 remain integration gates. No merge, new experiment, G5 approval or champion follows.
+
+
+### EDA-EXP02 Phase B — bounded exploratory closure, 2026-11-03
+
+Mauricio authorized and the agent executed the new five-chapter
+[anticipatory-signal EDA](../product/experiments/EDA-EXP02/README.md), preserving
+Phase A and all original benchmark cohorts. O2 `EXPLORATORY_SIGNAL_FOUND` records
+weak completed-episode recency association and representation variation, with
+substantial existing-memory overlap and sparse conditional support. O1
+`NOT_EVALUABLE` records the unresolved historical geography admission, despite a
+verified official DANE service and matching regional codes. The
+[conclusions](../product/experiments/EDA-EXP02/PHASE_B_CONCLUSIONS.md) delimit both.
+No predictive experiment, training, policy change or EXP-DELTA02 was started.
+Any later O2 ablation needs a separate human authorization and protocol; O1 first
+needs historical geometry/crosswalk/topology evidence. PR #75 carries reproduction,
+CI and pending independent-review integration evidence; no merge is authorized.
+G5 `NOT_APPROVED`; `champion: not_selected`.
