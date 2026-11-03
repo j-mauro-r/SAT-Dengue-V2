@@ -20,6 +20,17 @@ annual/departmental denominators. It does **not** classify incremental usefulnes
 as established: evidence for that narrower claim is insufficient. No matching
 six-summary/year/department group meets the fixed support rule.
 
+## Common comparison
+
+| Dimension | O1: neighbor activity | O2: completed-episode recency |
+| --- | --- | --- |
+| Novelty | Different municipalities' observations, conditional on valid adjacency | Ordering varies within equal state-summary groups; substantial overlap remains |
+| Association | Not evaluable: no admitted spatial signal | Weak raw/calendar-centered association; sparse exact-summary conditional evidence |
+| Consistency | Not evaluable | Raw negative in 7/8 territorial-year cells per horizon; Meta 2021 reverses |
+| Support | 76 codes matched; event/neighbor support unmeasured | 313/219 onsets with history; zero exact-summary matched groups meet support rule |
+| Temporality | Planned T−1 counts; historical boundary correspondence and operational timing unverified | Clearance strictly before T; prefix invariance passes; operational timing unverified |
+| Feasibility | Blocked on historical geometry/crosswalk/topology | One scalar, simple scan; any future predictive integration needs a feature contract |
+
 ## Answers to the scientific questions
 
 1. **Does episode recency add information?** It adds an explicit ordering
