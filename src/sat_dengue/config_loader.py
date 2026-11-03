@@ -144,6 +144,13 @@ CATALOG["exp_beta03_bundle"] = {
 }
 
 
+CATALOG["exp_delta01_sources"] = {"type": "sat_dengue.datasets.exp_delta01.DeltaSourcesDataset"}
+CATALOG["exp_delta01_bundle"] = {
+    "type": "sat_dengue.datasets.exp_delta01.DeltaBundleDataset",
+    "filepath": "data/processed/exp_delta01",
+}
+
+
 class ValidatedConfigLoader(OmegaConfigLoader):
     """Allow only the operational catalog exercised by implemented pipelines."""
 

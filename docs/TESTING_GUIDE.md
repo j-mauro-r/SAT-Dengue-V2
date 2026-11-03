@@ -1,6 +1,36 @@
 # Testing and Validation Guide
 
+## EXP-DELTA01 controlled score recovery
+
+The bounded `scripts/recover_exp_delta01_selection.py` recovery maps to
+`tests/unit/test_exp_delta01_recovery.py`. Its generated-only tests check strict
+numerical rejection, source tampering, prohibited fit/calibration/policy calls and
+publication overwrite/corruption refusal. Run this module plus scoped Ruff/format
+and mypy for changes to that script. Real inference is a separately authorized
+local task, never a routine CI gate or permission to execute P0/P1. The
+[recovery report](product/experiments/EXP-DELTA01/SCORE_RECOVERY.md) owns the pinned
+publication, numerical reproduction and original-cohort/private readback evidence.
+
 ## Validation Policy
+
+### EXP-DELTA01 frozen-score policy comparison
+
+The independent `exp_delta01` graph and its experiment/dataset modules map to
+`tests/unit/test_exp_delta01.py`, the recovery tests,
+`tests/contracts/test_kedro_configuration.py` and
+`tests/unit/test_repository_bootstrap.py`. The latter exercises
+`tests/integration/base_bootstrap.py`; both inventories retain the new graph.
+
+```bash
+KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_delta01.py tests/unit/test_exp_delta01_recovery.py tests/contracts/test_kedro_configuration.py tests/unit/test_repository_bootstrap.py -q
+```
+
+Use changed-file Ruff/format/mypy, Markdown links and privacy checks. Real acceptance
+requires the pinned private sources and explicit authorization; it uses frozen
+scores without model or reconstruction calls. Verify complete primary cohorts,
+persisted historical selection, original P0 equality, exhaustive threshold arithmetic,
+paired counts, byte reproduction and no-overwrite. It is not routine CI execution.
+The [DELTA owner](product/experiments/EXP-DELTA01/README.md) records the real evidence.
 
 Validation is mapped by touched surface and reported using explicit evidence states. The
 goal is the smallest safe gate, not the fewest checks. Unknown paths, changes to the CI

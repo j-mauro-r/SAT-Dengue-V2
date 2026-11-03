@@ -2011,3 +2011,29 @@ eight/21 false alerts against frozen G0 in T+1/T+2. AP/Brier improvements do not
 rescue the joint criterion; T+2 loses 11.42 pp sensitivity against R0. Eight new
 G1 fits were replayed from saved models without additional fits; V1 artifacts
 and results remain intact. No further national experiment follows automatically.
+
+### EXP-DELTA01 — academic alert policy on frozen regional probabilities
+
+Mauricio explicitly adopted revision 2 and authorized the bounded P0/P1 comparison
+on 2026-11-03. The [authorized protocol](experiments/EXP-DELTA01/protocol.revision-2.json)
+admits only the separately recovered G0_OFF selection scores; the original protocol,
+models/calibrators, H5, cohorts, probabilities and P0 policy remain unchanged.
+
+The [reproduced result](experiments/EXP-DELTA01/RESULTS.md) is `NO_EVALUABLE` for
+both complete primary horizons: no admissible historical threshold exists in
+T+1/2022 (minimum positive-detection FAR 60% versus ceiling 59.5454545%) or T+2/2024
+(33.3333% versus 30.4902%). Do not replace those cells with zero alerts or pool only
+available years. P0 fails pooled T+1 through FAR, while pooled T+2 already meets A/B/C.
+
+P1 sacrifices T+1 detections in each evaluable year. It gains 15/six detections in
+T+2/2021/2022, but 2022 still fails C and Meta/Tolima diverge: both gain three
+onsets, while only Meta meets all academic conditions. Three of six available
+thresholds fail evaluation C despite development compliance. No general policy
+improvement or territorial stability is established. The hypothesis remains
+`NO_EVALUABLE`, not an automatically supported or rejected primary claim.
+
+The four-node Kedro run and identical in-memory result reproduction use no new
+model inference, fits or recalibration. Detailed artifacts remain private under
+`data/processed/exp_delta01/`; exact identities and limits belong to the experiment
+owner. No new DELTA or retrospective relaxation follows automatically. G5 stays
+`NOT_APPROVED`; champion `not_selected`.
