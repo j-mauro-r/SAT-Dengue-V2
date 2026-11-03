@@ -1,0 +1,161 @@
+{
+  "schema": "sat-dengue-academic-benchmark-v1",
+  "experiment_id": "ACADEMIC-BENCHMARK",
+  "evidence_type": "authorized_retrospective",
+  "authority": {
+    "path": "docs/product/experiments/contrato.md",
+    "identity": {
+      "sha256": "e966bdecac08b2b54e597391cb716a20195ea1a09abacf9ad737f8cd063d4607",
+      "bytes": 5276
+    },
+    "clarification": "Mauricio explicitly selected CHANNEL = cases(T) > target-month P75, including P75=0; the approved local academic contract is authoritative and missing original report does not block. Recorded before benchmark metrics."
+  },
+  "arms": [
+    "CHANNEL",
+    "PERSISTENCE",
+    "R0",
+    "G0_OFF",
+    "G0_ON",
+    "G1_OFF"
+  ],
+  "sources": {
+    "G0": {
+      "path": "tmp/kedro-migration/exp-beta01-runs/37a0cae62f4d3fa59cede281e032c9abd1b568a90933855b9eebd3b3d3fb5f4a",
+      "manifest_sha256": "4f6b86fcfcf46dbb47123b33ac29ecc9c23b62e65ac1c83ec460231f04816d7e"
+    },
+    "G1": {
+      "path": "data/processed/exp_beta01_v2/a4fdd4d955f867c49a8142a334e989e084c30587262fac4e1940a2b8d9190d6e",
+      "manifest_sha256": "9fc80bfc0fae23f73f49c9e87afb3704a8fc5e19f8c7c924fe89505b94305e60"
+    },
+    "R0": {
+      "path": "tmp/kedro-migration/exp03-1-runs/4fd644502e8fb2bb18155060bba68aedd7fc295cf66e16401b91c44af72781de",
+      "manifest_sha256": "99807fc011228954ffbbda16bb7e7680ea066d44db5dd9c63ca124fd53f321cf"
+    },
+    "canonical": {
+      "path": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+      "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8"
+    }
+  },
+  "cohort": {
+    "departments": [
+      "50",
+      "73"
+    ],
+    "evaluation_target_years": [
+      2020,
+      2021,
+      2022,
+      2024
+    ],
+    "horizons": [
+      1,
+      2
+    ],
+    "expected": {
+      "1": {
+        "rows": 2653,
+        "onsets": 313
+      },
+      "2": {
+        "rows": 2422,
+        "onsets": 219
+      }
+    },
+    "rule": "Exactly frozen BETA common ON/OFF evaluation roles and ordered keys; current non-excess, known exact-calendar outcome, complete original predictors and original embargo. No intersection or row removal."
+  },
+  "events": {
+    "excess": "general dengue count > H5 P75; equality is non-excess",
+    "onset": "state(T+h-1)=0 AND state(T+h)=1, conditional on state(T)=0; exact calendar; unknown is unavailable",
+    "H5": "Five same-calendar-month observations in years target_year-5 through target_year-1; type-7 percentile; every historical period <= origin T; no epidemic-year removal."
+  },
+  "comparators": {
+    "CHANNEL": "count(T) > P75_H5(target month); no future target counts; strict > even when P75=0",
+    "PERSISTENCE": "existing persistence_reference: zona_canal_t == EXCESO; zero alerts on current-non-excess cohort",
+    "models": "Copy original persisted score and alert exactly. Verify saved policy application, never select a threshold, calibrate or infer."
+  },
+  "metrics": {
+    "sensitivity": "TP_onset / onsets",
+    "missed": "onsets - TP_onset",
+    "FAR_excess": "FP_excess / alerts; undefined when alerts=0",
+    "FP_excess": "alert AND target_excess=0",
+    "FP_onset": "alert AND onset=0 (includes alerted continuations)",
+    "precision_onset": "TP_onset / alerts; undefined when alerts=0",
+    "FA_per_eligible_municipality_year": "FP_onset / (rows/12)",
+    "FPR_excess": "FP_excess / count(target_excess=0)",
+    "FPR_onset": "FP_onset / count(onset=0)",
+    "Brier": "mean((frozen onset probability - onset)^2); model arms only",
+    "AP": "existing sklearn average_precision_score(onset, frozen onset probability); model arms only",
+    "AUROC": "not added; AP and Brier suffice without changing ranking criteria"
+  },
+  "acceptance": {
+    "A": "TP_model > TP_CHANNEL",
+    "B": "TP_model > TP_PERSISTENCE",
+    "C": "FAR_excess_model - FAR_excess_CHANNEL <= 0.05",
+    "FAR_margin": 0.05,
+    "joint": "All three; undefined required denominator => NOT_EVALUABLE; no statistical claim",
+    "primary": "Pooled per horizon; report all year/department combinations separately without redefining primary acceptance",
+    "beta_complementary": {
+      "budget": 1.0,
+      "sensitivity_margin_vs_R0": -0.02,
+      "never_replaces_academic": true
+    }
+  },
+  "strata": {
+    "years": [
+      "all",
+      2020,
+      2021,
+      2022,
+      2024
+    ],
+    "departments": [
+      "all",
+      "50",
+      "73"
+    ],
+    "cross_product": true
+  },
+  "temporal_limits": [
+    "Retrospective consolidated data, not historical operational availability.",
+    "2024 stress and 2025 EXP00 already consumed; no 2025 evaluation or independent confirmation.",
+    "Future states are outcome-only; comparator alerts depend only on origin count/state and pre-origin history."
+  ],
+  "publication": {
+    "private_root": "data/processed/benchmark",
+    "atomic_no_overwrite": true,
+    "public": "Only aggregate metrics/comparisons, protocol and documentation; no municipality-month predictions in docs/GitHub."
+  },
+  "forbidden": [
+    "fitting",
+    "inference",
+    "recalibration",
+    "threshold search",
+    "new models",
+    "historical artifact changes",
+    "new Kedro graph",
+    "champion selection"
+  ],
+  "governance": {
+    "G5": "NOT_APPROVED",
+    "champion": "not_selected"
+  },
+  "historical_discrepancy": {
+    "V1_repository_head": "b63257c17f3064a0dcda6fcf4e7028fae4a43078",
+    "CHANNEL": "V1 zona_objetivo==2 uses >= for P75>0 and no alerts at P75=0. Deliberately NOT the newly clarified academic strict rule. Original code untouched.",
+    "metric": "V1 tasa_falsas_alarmas uses FPR. Academic contract explicitly uses FAR_excess instead. No historical metrics relabeled.",
+    "source_identities": {
+      "src/models/baseline.py": {
+        "sha256": "4199b614cd03ecd8903cad0522e16ac716c5edefdfc8a88b080ebba6bcb7c5e4",
+        "bytes": 10685
+      },
+      "src/features/build_features.py": {
+        "sha256": "7dc99f958bcce70d82d9d00bcdf36cb108bb4c403ba1b485228c2a22355ed2df",
+        "bytes": 12880
+      },
+      "src/evaluation/metrics.py": {
+        "sha256": "687eeea4023e0b51e9b6a48b11ddf5bd402dcd19d41191456a50791899afe3c3",
+        "bytes": 6626
+      }
+    }
+  }
+}
