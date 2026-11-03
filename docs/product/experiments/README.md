@@ -1,5 +1,15 @@
 # Scientific Experiment Registry
 
+[EXP-DELTA02 — spatial feasibility `NOT_EVALUABLE`](EXP-DELTA02/README.md) closes
+the explicitly authorized T+1 neighbor-signal hypothesis at its geography gate.
+Three retrieved official DANE municipal archives expose nine unresolved changes
+in positive-boundary membership affecting six target municipalities. Counts and
+target codes are covered, but historical spatial correspondence is not admitted.
+Execution is `COMPLETED_WITH_LIMITATIONS`; no feature, candidate or model fit was
+produced. The frozen protocol, source identities and reproducible stop evidence
+are separate from previous experiments. No technical model/pipeline registration,
+new experiment family, G5 approval or champion selection follows.
+
 [EDA-EXP01 — `COMPLETED_WITH_LIMITATIONS`](EDA-EXP01/README.md) is scientifically
 closed as a read-only, seven-chapter analysis of identified results. Its climate
 chapter concludes `INSUFFICIENT_EVIDENCE`. The

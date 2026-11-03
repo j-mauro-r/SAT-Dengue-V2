@@ -1,0 +1,263 @@
+{
+  "access_date": "2026-11-03",
+  "alternate_topology_check": [
+    {
+      "method": "DE-9IM F***1****, disjoint interiors and one-dimensional boundary contact",
+      "pairs": 288,
+      "year": 2018
+    },
+    {
+      "method": "DE-9IM F***1****, disjoint interiors and one-dimensional boundary contact",
+      "pairs": 289,
+      "year": 2021
+    }
+  ],
+  "base_commit": "bfc10b5",
+  "execution_provenance": {
+    "code": {
+      "bytes": 13454,
+      "sha256": "03043eb8e32de088e650e1a1fc86e05b8e475112c680229b7e2b2d734ef46331"
+    },
+    "packages": {
+      "geos": "3.13.1",
+      "pandas": "3.0.6",
+      "pyshp": "2.3.1",
+      "shapely": "2.1.2"
+    },
+    "protocol": {
+      "bytes": 6319,
+      "sha256": "759f5c1c9a3070b2449439d31eceecb76708df8e8b9f99aed88c6607b5795402"
+    },
+    "python": "3.12.11",
+    "source_spec": {
+      "geography": {
+        "manifest_sha256": "51cf68153abc51c80b4ed48fdae5c4cb50bfdb108608f30ede1abe2321fc86a6",
+        "path": "data/processed/exp_delta02/sources/9d6ad24d1d1f3bb534deb8a44de446fb22859d29f6e8ce355980932be809c96b"
+      },
+      "schema": "exp-delta02-source-spec-v1",
+      "sources": {
+        "benchmark": {
+          "manifest_sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f",
+          "path": "data/processed/benchmark/6cfc7bcf565ebdf7ff11ab3ff79d6d91ce7d2f392958c76aa55d310ba27b6c48"
+        },
+        "eda_admission": {
+          "manifest_sha256": "7d8ddd1024e8d17fdd675d1ba34891bccdc68bbc5c16df1452ad17ab040d3f88",
+          "path": "data/processed/eda_exp02/source_admission/9f95e52f87a6b97d9a92cc7f3f4e26ad5d50062bc93deab3b492ef75b3a091c1"
+        },
+        "national": {
+          "manifest_sha256": "e801cf9b36b84ff0e0c8f336a88799d47f6e6bce9a6d1b155a1a37e20594afb4",
+          "path": "data/processed/canonical_model_table_national_v1/c2267f61c7624f19ea7056c2d891512b12e85d81214145df1d31815d28fc3c29"
+        },
+        "regional": {
+          "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8",
+          "path": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98"
+        }
+      }
+    },
+    "source_spec_identity": {
+      "bytes": 1249,
+      "sha256": "3ae153ecc6378adf84382b5fa554c1450976130bbcbcfb7122ffeddc9fe32d7a"
+    }
+  },
+  "geographic_retrieval": {
+    "access_date": "2026-11-03",
+    "archives": [
+      {
+        "archive_bytes": 2965733281,
+        "members": {
+          "ADMINISTRATIVO/MGN_ADM_MPIO_GRAFICO.CPG": {
+            "bytes": 5,
+            "file": "mgn2005.CPG",
+            "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824",
+            "zip_crc": 243350608
+          },
+          "ADMINISTRATIVO/MGN_ADM_MPIO_GRAFICO.dbf": {
+            "bytes": 257820,
+            "file": "mgn2005.dbf",
+            "sha256": "f976171c630bc91a8e612eee257b1278eda04aabe32d56ff900ea7b4589e8f73",
+            "zip_crc": 1680127755
+          },
+          "ADMINISTRATIVO/MGN_ADM_MPIO_GRAFICO.prj": {
+            "bytes": 145,
+            "file": "mgn2005.prj",
+            "sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+            "zip_crc": 2940436309
+          },
+          "ADMINISTRATIVO/MGN_ADM_MPIO_GRAFICO.shp": {
+            "bytes": 66666272,
+            "file": "mgn2005.shp",
+            "sha256": "28df829e2f3f569dc3bfde40831e526060e6e59c30f5babd0d4c295339644049",
+            "zip_crc": 4159729973
+          },
+          "ADMINISTRATIVO/MGN_ADM_MPIO_GRAFICO.shp.xml": {
+            "bytes": 8450,
+            "file": "mgn2005.shp.xml",
+            "sha256": "8d92c1e0ba6b4fb145e30735d47c435446fc6adfd94a3472462ead40279d63e9",
+            "zip_crc": 3647352918
+          },
+          "ADMINISTRATIVO/MGN_ADM_MPIO_GRAFICO.shx": {
+            "bytes": 9052,
+            "file": "mgn2005.shx",
+            "sha256": "5f8be96d3adb63c3b7bbbed8ab7e6736b09e902c660376647ad95e360b75dca1",
+            "zip_crc": 3578849300
+          }
+        },
+        "url": "https://www.dane.gov.co/files/geoportal-provisional/SHP_MGN2005_COLOMBIA.zip",
+        "vintage": 2005
+      },
+      {
+        "archive_bytes": 3267921125,
+        "members": {
+          "MGN2018_00_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.cpg": {
+            "bytes": 5,
+            "file": "mgn2018.cpg",
+            "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824",
+            "zip_crc": 243350608
+          },
+          "MGN2018_00_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.dbf": {
+            "bytes": 497400,
+            "file": "mgn2018.dbf",
+            "sha256": "e102a096a5598d62e1e5b089ba54323d0810e6eb0884c44c91914de9d74fddea",
+            "zip_crc": 3996496493
+          },
+          "MGN2018_00_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.prj": {
+            "bytes": 145,
+            "file": "mgn2018.prj",
+            "sha256": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+            "zip_crc": 2940436309
+          },
+          "MGN2018_00_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.shp": {
+            "bytes": 91869332,
+            "file": "mgn2018.shp",
+            "sha256": "aa0cf972d04880e6d2296b18cd3ecdc67239d80d31aeda757a734c54f16e5480",
+            "zip_crc": 592270211
+          },
+          "MGN2018_00_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.shp.xml": {
+            "bytes": 25003,
+            "file": "mgn2018.shp.xml",
+            "sha256": "79d23bb9213e481c9306c0ddfa16d8ab38c9937110966f4e87f83463e31430a7",
+            "zip_crc": 2306988507
+          },
+          "MGN2018_00_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.shx": {
+            "bytes": 9076,
+            "file": "mgn2018.shx",
+            "sha256": "0e0aeaa9cb95922aec80cc605c7d6a5b05c73cd023f4a6dc2221734e1851f489",
+            "zip_crc": 1627635008
+          }
+        },
+        "url": "https://www.dane.gov.co/files/geoportal-provisional/SHP_MGN2018_COLOMBIA.zip",
+        "vintage": 2018
+      },
+      {
+        "archive_bytes": 2957395130,
+        "members": {
+          "MGN_2021_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.cpg": {
+            "bytes": 5,
+            "file": "mgn2021.cpg",
+            "sha256": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824",
+            "zip_crc": 243350608
+          },
+          "MGN_2021_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.dbf": {
+            "bytes": 814264,
+            "file": "mgn2021.dbf",
+            "sha256": "d6c113bf3dcb45b502740413ce62db0481f6da9fe5ebcaa2106841af7adae758",
+            "zip_crc": 441737539
+          },
+          "MGN_2021_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.prj": {
+            "bytes": 139,
+            "file": "mgn2021.prj",
+            "sha256": "62f0af93ee13e5aa7aef6ca23a95be44c65f6822a293d47c32ea77b401673d0b",
+            "zip_crc": 3234205293
+          },
+          "MGN_2021_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.shp": {
+            "bytes": 92803800,
+            "file": "mgn2021.shp",
+            "sha256": "cf359b31c6d1f1f583e1a54a57836017f786e08abc9fd7219f40d83afa743ccb",
+            "zip_crc": 2762086332
+          },
+          "MGN_2021_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.shp.xml": {
+            "bytes": 70246,
+            "file": "mgn2021.shp.xml",
+            "sha256": "eb587a53df99af0ebc2be83ca8c88dca1650e4dcf98b6d32da760dd059666ef9",
+            "zip_crc": 309221268
+          },
+          "MGN_2021_COLOMBIA/ADMINISTRATIVO/MGN_MPIO_POLITICO.shx": {
+            "bytes": 9068,
+            "file": "mgn2021.shx",
+            "sha256": "98ad04ba3b50e97b55cfc30d5bf2aeeb4d7f1d4977062bf09c41822765489918",
+            "zip_crc": 1853740094
+          }
+        },
+        "url": "https://www.dane.gov.co/files/geoportal-provisional/SHP_MGN2021_COLOMBIA.zip",
+        "vintage": 2021
+      }
+    ],
+    "catalog_url": "https://www.dane.gov.co/files/geoportal-provisional/",
+    "method": "HTTP range extraction of municipal members only; ZipFile CRC verification; no geometry modification"
+  },
+  "preservation_check": {
+    "expected_source_records": 420,
+    "mismatches": [],
+    "model_binaries": 120,
+    "pinned_benchmark_manifest": {
+      "bytes": 108428,
+      "sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f"
+    },
+    "verified": 420
+  },
+  "result": {
+    "manifest": {
+      "bytes": 781,
+      "sha256": "bee83fc689ff009d68adaf38b055420c5a50653b412c5fc9a5056549ad08e24b"
+    },
+    "path": "data/processed/exp_delta02/7052ca8a259eb68ecc0c09f8d939399f6e098556a3f4492dfef7ea68c1b0ee8e",
+    "payloads": {
+      "baseline_t1.csv": {
+        "bytes": 11318,
+        "sha256": "90f29e692e731e167247b29c06884a2cad1aeef467a8ba3b7d422c235f7b0b43"
+      },
+      "graph_changes.csv": {
+        "bytes": 301,
+        "sha256": "db3f84c4e302e6fec2e4cd6d902bccee0a91f39d1b76e35cfd72de7aa150d43c"
+      },
+      "provenance.json": {
+        "bytes": 1824,
+        "sha256": "53aaee53d165bae323e0c5b9f291b1b0d529eeb0b8dd885d1bb30e05c274c979"
+      },
+      "relations.csv": {
+        "bytes": 70247,
+        "sha256": "7e1df0670be6b45459aaaf3124aca9431dadeac351c012dd2c9d1019344ef6dd"
+      },
+      "summary.json": {
+        "bytes": 2556,
+        "sha256": "756422c1052500dd5f4a667715565a56d5329d00128cb1c2cc26c8ab2f339bc6"
+      }
+    }
+  },
+  "schema": "exp-delta02-evidence-v1",
+  "source_spec": {
+    "geography": {
+      "manifest_sha256": "51cf68153abc51c80b4ed48fdae5c4cb50bfdb108608f30ede1abe2321fc86a6",
+      "path": "data/processed/exp_delta02/sources/9d6ad24d1d1f3bb534deb8a44de446fb22859d29f6e8ce355980932be809c96b"
+    },
+    "schema": "exp-delta02-source-spec-v1",
+    "sources": {
+      "benchmark": {
+        "manifest_sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f",
+        "path": "data/processed/benchmark/6cfc7bcf565ebdf7ff11ab3ff79d6d91ce7d2f392958c76aa55d310ba27b6c48"
+      },
+      "eda_admission": {
+        "manifest_sha256": "7d8ddd1024e8d17fdd675d1ba34891bccdc68bbc5c16df1452ad17ab040d3f88",
+        "path": "data/processed/eda_exp02/source_admission/9f95e52f87a6b97d9a92cc7f3f4e26ad5d50062bc93deab3b492ef75b3a091c1"
+      },
+      "national": {
+        "manifest_sha256": "e801cf9b36b84ff0e0c8f336a88799d47f6e6bce9a6d1b155a1a37e20594afb4",
+        "path": "data/processed/canonical_model_table_national_v1/c2267f61c7624f19ea7056c2d891512b12e85d81214145df1d31815d28fc3c29"
+      },
+      "regional": {
+        "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8",
+        "path": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98"
+      }
+    }
+  }
+}

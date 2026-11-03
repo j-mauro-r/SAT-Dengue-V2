@@ -329,3 +329,19 @@ Any later O2 ablation needs a separate human authorization and protocol; O1 firs
 needs historical geometry/crosswalk/topology evidence. PR #75 carries reproduction,
 CI and pending independent-review integration evidence; no merge is authorized.
 G5 `NOT_APPROVED`; `champion: not_selected`.
+
+### EXP-DELTA02 — bounded spatial admission closure, 2026-11-03
+
+Mauricio subsequently authorized the single T+1 neighbor-signal experiment,
+including conditional fitting and a mandatory stop for invalid historical
+spatial admission. [EXP-DELTA02](../product/experiments/EXP-DELTA02/README.md)
+retrieved official national MGN 2005/2018/2021 municipal archives, verified the
+76 target codes and potential-neighbor count coverage, and found nine unresolved
+cross-vintage adjacency changes affecting six targets. Feasibility/scientific
+disposition: `NOT_EVALUABLE`; execution: `COMPLETED_WITH_LIMITATIONS`.
+No spatial feature, candidate fit or prediction was produced. The protocol,
+quantitative topology, source identities and deterministic closure evidence are
+preserved. This resolves the authorized scope without changing the academic
+contract or opening another hypothesis. Required CI, independent review and
+Mauricio's merge decision remain integration gates; no merge is authorized.
+G5 `NOT_APPROVED`; `champion: not_selected`.
