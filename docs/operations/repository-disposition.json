@@ -3095,6 +3095,7 @@
     "tests/integration",
     "tests/unit",
     "docs/product/experiments/EDA-EXP01",
+    "docs/product/experiments/EDA-EXP02",
     "docs/product/experiments/benchmark",
     "docs/product/experiments/benchmark/diagnostico",
     "docs/product/experiments/EXP-DELTA01",
