@@ -1,0 +1,194 @@
+{
+  "schema": "exp-delta01-protocol-revision-proposal-v1",
+  "revision": 2,
+  "status": "PROPOSED_NOT_APPROVED",
+  "initial_protocol": {
+    "path": "docs/product/experiments/EXP-DELTA01/protocol.json",
+    "sha256": "c182fbe062faed58100548a43c70cc2a95df05aa86df4532344addb956a3003b",
+    "schema": "exp-delta01-design-v1"
+  },
+  "proposed_target": "protocol.revision-2.json (materialize only after explicit adoption)",
+  "reason": "The original G0_OFF selection arrays were not persisted. Mauricio separately authorized frozen-model inference. All eight evaluation cells reproduced exactly and 4386 selection probabilities were recovered without fitting, recalibration or policy selection. Admit the reviewed reconstructed source explicitly while preserving the frozen initial protocol and all P0/P1 rules.",
+  "recovery": {
+    "report": "SCORE_RECOVERY.md",
+    "path": "data/processed/exp_delta01/recovered_selection/b2e8256c9c37f8ecdb5f895ccd6d936cfb11f3896adc654ecab3c386bf57acc1",
+    "bundle_id": "b2e8256c9c37f8ecdb5f895ccd6d936cfb11f3896adc654ecab3c386bf57acc1",
+    "manifest": {
+      "bytes": 2655,
+      "sha256": "9261b170ba059ca81d4409f30a4fd08e377f2e1e6debf64b9d337d7f3a1bb4b6"
+    }
+  },
+  "approval_required": "Mauricio must explicitly adopt revision 2; this proposal does not authorize DELTA implementation/execution, select thresholds, approve G5 or select a champion.",
+  "patch_format": "RFC 6902 JSON Patch, applied only after verifying the initial protocol SHA-256",
+  "patch": [
+    {
+      "op": "test",
+      "path": "/schema",
+      "value": "exp-delta01-design-v1"
+    },
+    {
+      "op": "replace",
+      "path": "/schema",
+      "value": "exp-delta01-design-v2"
+    },
+    {
+      "op": "test",
+      "path": "/status",
+      "value": "BLOCKED"
+    },
+    {
+      "op": "replace",
+      "path": "/status",
+      "value": "BLOCKED_PENDING_SEPARATE_IMPLEMENTATION_AND_EXECUTION_AUTHORIZATION"
+    },
+    {
+      "op": "test",
+      "path": "/implementation_status",
+      "value": "NOT_STARTED_ESSENTIAL_SOURCE_PREREQUISITE"
+    },
+    {
+      "op": "replace",
+      "path": "/implementation_status",
+      "value": "NOT_STARTED_PENDING_SEPARATE_AUTHORIZATION"
+    },
+    {
+      "op": "test",
+      "path": "/sources/G0_OFF_selection",
+      "value": {
+        "path": null,
+        "manifest_sha256": null,
+        "status": "MISSING_VERIFIABLE_PERSISTED_PROBABILITIES",
+        "required_cells": 8,
+        "required": "Original complete selection keys, target months, onset labels and calibrated probabilities, bound to the original G0_OFF model, global intercept, calibration and selection memberships; independent export provenance and payload hashes must be verified before implementation.",
+        "substitution": "G1 scores, R0 scores, aggregates, partial intersections and newly computed probabilities are inadmissible."
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/sources/G0_OFF_selection",
+      "value": {
+        "path": "data/processed/exp_delta01/recovered_selection/b2e8256c9c37f8ecdb5f895ccd6d936cfb11f3896adc654ecab3c386bf57acc1",
+        "bundle_id": "b2e8256c9c37f8ecdb5f895ccd6d936cfb11f3896adc654ecab3c386bf57acc1",
+        "manifest_sha256": "9261b170ba059ca81d4409f30a4fd08e377f2e1e6debf64b9d337d7f3a1bb4b6",
+        "status": "RECOVERED_VERIFIED_PROPOSED_ADMISSION",
+        "required_cells": 8,
+        "available_cells": 8,
+        "scores": 4386,
+        "evidence_type": "reconstructed_from_original_frozen_G0_OFF_not_original_export",
+        "required": "Complete original selection membership, target months, onset labels, raw and calibrated probabilities; exact parent G0/canonical source pins and original predictor/global intercept; passing eight-cell evaluation reproduction and byte-identical recovery; verify all payload hashes.",
+        "substitution": "G1, R0, L1, aggregates, partial intersections, refitted predictors and recalibrated probabilities remain inadmissible."
+      }
+    },
+    {
+      "op": "test",
+      "path": "/admission",
+      "value": {
+        "original_publisher_inspected": true,
+        "original_publisher_selection_scores_serialized": false,
+        "independent_export_exists": "UNKNOWN",
+        "private_source_folders_available": false,
+        "real_cohort_verified": false,
+        "real_selection_score_provenance_verified": false,
+        "rule": "Fail closed before implementation/results when persisted G0_OFF selection scores cannot be verified. A reviewed source identity revision is required before resumption; never overwrite historical publications."
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/admission",
+      "value": {
+        "original_publisher_inspected": true,
+        "original_publisher_selection_scores_serialized": false,
+        "independent_original_export_found": false,
+        "private_source_folders_available": true,
+        "real_cohort_verified": true,
+        "reconstructed_selection_score_provenance_verified": true,
+        "original_selection_array_equality": "UNVERIFIABLE_NO_ORIGINAL_DIGEST",
+        "evaluation_score_reproduction": "EXACT_ALL_5075_ROWS_IN_EIGHT_CELLS",
+        "rule": "Proposed admission requires this exact reviewed recovery manifest, all eight complete original cohorts, original model and global-intercept identities, and successful reproduction checks. Scores are explicitly reconstructed. No new inference during DELTA. Human adoption of this revision and later implementation/execution authorization are separate prerequisites."
+      }
+    },
+    {
+      "op": "test",
+      "path": "/cohort/verification",
+      "value": "Committed benchmark protocol/report only; private rows not verified in this delivery."
+    },
+    {
+      "op": "replace",
+      "path": "/cohort/verification",
+      "value": "Local recovery verified exact private evaluation keys, labels, probabilities and P0 alerts against the pinned benchmark: T+1 2653/313 and T+2 2422/219 rows/onsets. Complete selection cohorts verified against original role audits and embargo; recovery manifest records ordered membership hashes."
+    },
+    {
+      "op": "test",
+      "path": "/chronology/verification",
+      "value": "Require exact original role membership and model/calibrator lineage for every cell; code chronology alone cannot verify absent scores."
+    },
+    {
+      "op": "replace",
+      "path": "/chronology/verification",
+      "value": "Per-cell roles reconstructed using pinned original code/canonical data and matched to original cells; selection disjoint from train/calibration/adaptation/evaluation within each cell. This is lineage-based verification, not independent attestation of historical fit calls."
+    },
+    {
+      "op": "test",
+      "path": "/forbidden",
+      "value": [
+        "Training",
+        "New model inference to fill missing scores",
+        "Recalibration",
+        "New predictors",
+        "Third policy",
+        "Territorial threshold variants",
+        "Evaluation-based optimization",
+        "Partial cohort substitution",
+        "Historical modifications",
+        "Changes to replay or __default__",
+        "New global hooks",
+        "Dashboard",
+        "New experiment framework",
+        "Automatic merge",
+        "Champion selection"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/forbidden",
+      "value": [
+        "Training",
+        "New inference during DELTA; only the separately authorized, completed frozen-model recovery may supply the pinned selection artifact",
+        "Recalibration",
+        "New predictors",
+        "Third policy",
+        "Territorial threshold variants",
+        "Evaluation-based optimization",
+        "Partial cohort substitution",
+        "Historical modifications",
+        "Changes to replay or __default__",
+        "New global hooks",
+        "Dashboard",
+        "New experiment framework",
+        "Automatic merge",
+        "Champion selection"
+      ]
+    },
+    {
+      "op": "test",
+      "path": "/limits",
+      "value": [
+        "All historical evaluation years have been analyzed previously; descriptive retrospective comparison only.",
+        "2024 is consumed stress, not independent confirmation; 2025 is excluded and is not a fresh reserve.",
+        "H5 is experimental; consolidated data do not establish historical operational availability.",
+        "Missing verified selection data is an admission blocker, not a negative hypothesis result."
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/limits",
+      "value": [
+        "All historical evaluation years have been analyzed previously; descriptive retrospective comparison only.",
+        "2024 is consumed stress, not independent confirmation; 2025 is excluded and is not a fresh reserve.",
+        "H5 is experimental; consolidated data do not establish historical operational availability.",
+        "Missing verified selection data is an admission blocker, not a negative hypothesis result.",
+        "Selection probabilities are explicitly reconstructed, not independently persisted historical arrays. No original selection digest exists; exact evaluation reproduction and repeated output equality provide consistency evidence only."
+      ]
+    }
+  ]
+}

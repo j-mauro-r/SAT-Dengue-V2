@@ -296,3 +296,19 @@ byte-identical prediction/metric replay. [V2 results](../product/experiments/EXP
 classify expansion as `NO_RESPALDADA`; no national follow-up is automatically
 recommended. Review/integration and inherited CI disposition remain separate
 human/engineering gates; G5 and champion status are unchanged.
+
+## Bounded EXP-DELTA01 academic alert policy
+
+Mauricio authorized revision 2 and the independent four-responsibility `exp_delta01`
+Kedro comparison, using the existing recovered G0_OFF selection scores and original
+frozen evaluation predictions. [The experiment owner](../product/experiments/EXP-DELTA01/README.md)
+records execution, source identities, validation and scientific disposition.
+
+The run completed and all result payloads reproduced identically without new
+inference, fitting or recalibration. The primary hypothesis is `NO_EVALUABLE`:
+no feasible historical P1 threshold exists in T+1/2022 or T+2/2024, so neither
+complete horizon may be replaced with partial pooling. Available annual results
+do not establish general academic-policy improvement or territorial stability.
+The source-admission blocker is resolved; these policy-feasibility limits remain
+scientific results. Independent review, required CI and Mauricio's PR #73 review
+remain integration gates. No merge, new experiment, G5 approval or champion follows.

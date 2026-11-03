@@ -1,0 +1,272 @@
+{
+  "schema": "exp-delta01-design-v2",
+  "experiment_id": "EXP-DELTA01",
+  "name": "Constrained optimization of the academic alert policy",
+  "status": "AUTHORIZED_RETROSPECTIVE_COMPARISON",
+  "design_frozen_before_results": true,
+  "execution_ready": true,
+  "implementation_status": "AUTHORIZED_MINIMAL_KEDRO_PIPELINE",
+  "evidence_type": "proposed_retrospective_comparison_not_executed",
+  "base_commit": "447ef9fd85303de61848d2b01733d25c8ad8a935",
+  "branch": "experiment/EXP-DELTA01",
+  "authority": {
+    "path": "docs/product/experiments/contrato.md",
+    "sha256": "e966bdecac08b2b54e597391cb716a20195ea1a09abacf9ad737f8cd063d4607"
+  },
+  "benchmark_protocol": {
+    "path": "docs/product/experiments/benchmark/protocol.json",
+    "sha256": "6eb69f14ab19c04d844fe0aaac1c298c6f77c8f718ce965329632b2510453e05"
+  },
+  "beta_protocol": {
+    "path": "docs/product/experiments/EXP-BETA01/protocol.phase2.json",
+    "sha256": "88e05dc69a64fa443f60ab29a135216c300b82e8efd8715d450a6787a55964da"
+  },
+  "hypothesis": {
+    "id": "EXP-DELTA01-H1",
+    "statement": "Selecting a threshold under development CHANNEL excess-FAR plus 0.05 may improve G0_OFF academic compliance versus the original BETA policy without unacceptable detection loss.",
+    "disposition": "NO_EVALUABLE",
+    "expected_improvement": null
+  },
+  "sources": {
+    "G0": {
+      "path": "tmp/kedro-migration/exp-beta01-runs/37a0cae62f4d3fa59cede281e032c9abd1b568a90933855b9eebd3b3d3fb5f4a",
+      "manifest_sha256": "4f6b86fcfcf46dbb47123b33ac29ecc9c23b62e65ac1c83ec460231f04816d7e"
+    },
+    "canonical": {
+      "path": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+      "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8"
+    },
+    "benchmark": {
+      "path": "data/processed/benchmark/6cfc7bcf565ebdf7ff11ab3ff79d6d91ce7d2f392958c76aa55d310ba27b6c48",
+      "manifest_sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f"
+    },
+    "G0_OFF_selection": {
+      "path": "data/processed/exp_delta01/recovered_selection/b2e8256c9c37f8ecdb5f895ccd6d936cfb11f3896adc654ecab3c386bf57acc1",
+      "bundle_id": "b2e8256c9c37f8ecdb5f895ccd6d936cfb11f3896adc654ecab3c386bf57acc1",
+      "manifest_sha256": "9261b170ba059ca81d4409f30a4fd08e377f2e1e6debf64b9d337d7f3a1bb4b6",
+      "status": "RECOVERED_VERIFIED_ADMITTED",
+      "required_cells": 8,
+      "available_cells": 8,
+      "scores": 4386,
+      "evidence_type": "reconstructed_from_original_frozen_G0_OFF_not_original_export",
+      "required": "Complete original selection membership, target months, onset labels, raw and calibrated probabilities; exact parent G0/canonical source pins and original predictor/global intercept; passing eight-cell evaluation reproduction and byte-identical recovery; verify all payload hashes.",
+      "substitution": "G1, R0, L1, aggregates, partial intersections, refitted predictors and recalibrated probabilities remain inadmissible."
+    }
+  },
+  "admission": {
+    "original_publisher_inspected": true,
+    "original_publisher_selection_scores_serialized": false,
+    "independent_original_export_found": false,
+    "private_source_folders_available": true,
+    "real_cohort_verified": true,
+    "reconstructed_selection_score_provenance_verified": true,
+    "original_selection_array_equality": "UNVERIFIABLE_NO_ORIGINAL_DIGEST",
+    "evaluation_score_reproduction": "EXACT_ALL_5075_ROWS_IN_EIGHT_CELLS",
+    "rule": "Admit only the exact authorized recovered selection manifest, all eight complete original cohorts, original model/global-intercept identities and successful existing recovery audits. No new inference during DELTA. Revision 2 and bounded implementation/execution are explicitly authorized by Mauricio; merge and scientific gate approval remain separate."
+  },
+  "cohort": {
+    "departments": [
+      "50",
+      "73"
+    ],
+    "horizons": [
+      1,
+      2
+    ],
+    "evaluation_target_years": [
+      2020,
+      2021,
+      2022,
+      2024
+    ],
+    "expected": {
+      "1": {
+        "rows": 2653,
+        "onsets": 313
+      },
+      "2": {
+        "rows": 2422,
+        "onsets": 219
+      }
+    },
+    "verification": "Local recovery verified exact private evaluation keys, labels, probabilities and P0 alerts against the pinned benchmark: T+1 2653/313 and T+2 2422/219 rows/onsets. Complete selection cohorts verified against original role audits and embargo; recovery manifest records ordered membership hashes.",
+    "rule": "Exact frozen BETA common ON/OFF evaluation cohorts, current non-excess, known H5 onset, original complete predictors and origin embargo; no intersections or removed rows."
+  },
+  "policies": {
+    "P0": {
+      "predictor": "G0_OFF",
+      "probabilities": "Copy frozen original probabilities exactly.",
+      "alerts": "Copy verified original persisted alerts exactly.",
+      "thresholds": "Original frozen BETA thresholds; do not reselect.",
+      "original_selection_rule": "Maximize onset detections subject to at most one false onset alert per eligible municipality-year."
+    },
+    "P1": {
+      "predictor": "Same G0_OFF cell as P0; same original global calibrator.",
+      "probabilities": "Exactly P0 probabilities; no training, inference or calibration.",
+      "selection": "One threshold per horizon/evaluation year; pooled original selection population, without territorial policies.",
+      "objective": "Maximize detected development onsets subject to FAR_excess_P1 <= FAR_excess_CHANNEL_development + 0.05.",
+      "search": "Only unique persisted development scores; alerts use score >= threshold, whole ties indivisible. Include no-alert as a candidate with undefined FAR; it is never automatically feasible.",
+      "tie_break": [
+        "Fewer false excess alerts",
+        "Fewer emitted alerts",
+        "Higher threshold"
+      ],
+      "support": "Both onset classes and both target-excess classes, defined CHANNEL FAR, at least one emitted P1 alert and one detected development onset; otherwise NO_EVALUABLE. No feasible threshold also yields NO_EVALUABLE, without fallback or evaluation-based reselection.",
+      "margin_arithmetic": "Use integer cross-products for the inclusive absolute 0.05 boundary, avoiding rounded FAR comparisons.",
+      "freeze": "Persist selected threshold, development counts and source identities before evaluating Y.",
+      "unevaluable_application": "Preserve all evaluation rows and P0; mark P1 unavailable for that cell, never as zero alerts. A horizon missing a P1 cell is NO_EVALUABLE for the full primary comparison; do not pool a partial cohort."
+    }
+  },
+  "chronology": {
+    "owner": "src/sat_dengue/experiments/exp_beta01.py:role_parts",
+    "train": "Through target December Y-4, starting 2011-06.",
+    "calibration": "Target year Y-3; original fitted global intercept only.",
+    "adaptation": "Target year Y-2; unused by G0_OFF.",
+    "selection": "Target year Y-1; original BETA common eligibility and origin embargo.",
+    "evaluation": "Target year Y; original BETA common eligibility and origin embargo.",
+    "year_mapping": [
+      {
+        "evaluation": 2020,
+        "selection": 2019,
+        "calibration": 2017,
+        "train_end": "2016-12"
+      },
+      {
+        "evaluation": 2021,
+        "selection": 2020,
+        "calibration": 2018,
+        "train_end": "2017-12"
+      },
+      {
+        "evaluation": 2022,
+        "selection": 2021,
+        "calibration": 2019,
+        "train_end": "2018-12"
+      },
+      {
+        "evaluation": 2024,
+        "selection": 2023,
+        "calibration": 2021,
+        "train_end": "2020-12"
+      }
+    ],
+    "verification": "Per-cell roles reconstructed using pinned original code/canonical data and matched to original cells; selection disjoint from train/calibration/adaptation/evaluation within each cell. This is lineage-based verification, not independent attestation of historical fit calls.",
+    "selection_budget": "CHANNEL FAR on that cell's development block only; evaluation CHANNEL FAR is used only for final acceptance.",
+    "forbidden": "No threshold reselection after evaluation, future inputs or tuning on evaluation outcomes."
+  },
+  "comparators": {
+    "CHANNEL": "cases(T) > H5 P75(target month), including P75=0; five same-month observations from target_year-5 through target_year-1, type-7 percentile, all history <= origin T.",
+    "PERSISTENCE": "Known excess at origin T, projected to the horizon; zero alerts on the required current-non-excess cohort.",
+    "H5_onset": "T+1: non-excess at T then excess at T+1. T+2: non-excess at T and transition from non-excess at T+1 to excess at T+2; continuations are not new onsets. Future states are outcomes only."
+  },
+  "metrics": {
+    "primary": [
+      "onsets",
+      "detected",
+      "missed",
+      "sensitivity",
+      "alerts",
+      "false_alerts_excess",
+      "far_excess",
+      "far_difference_CHANNEL",
+      "academic_A",
+      "academic_B",
+      "academic_C",
+      "academic_joint"
+    ],
+    "complementary": [
+      "false_alerts_onset",
+      "precision_onset",
+      "false_alerts_per_eligible_municipality_year",
+      "paired_detection_difference_P1_minus_P0",
+      "paired_false_excess_difference_P1_minus_P0",
+      "paired_false_onset_difference_P1_minus_P0",
+      "gained_and_lost_onset_detections",
+      "added_and_removed_false_alerts",
+      "development_to_evaluation_FAR_transport"
+    ],
+    "FAR_excess": "count(alert AND target_excess=0) / count(alert)",
+    "exposure": "Eligible observed rows / 12; complementary load uses false onset alerts.",
+    "zero_alerts": "FAR and precision undefined, not zero; unavailable required denominator yields NO_EVALUABLE.",
+    "probability_control": "Verify exact ordered probability/label equality, calculate AP and Brier once per shared cohort, attach to both policies without independent redundant calculations.",
+    "strata": "Each horizon independently; cross product of pooled/all four years and pooled/Meta/Tolima. Never infer stability from pooled compliance."
+  },
+  "acceptance": {
+    "A": "TP_policy > TP_CHANNEL",
+    "B": "TP_policy > TP_PERSISTENCE",
+    "C": "FAR_excess_policy - FAR_excess_CHANNEL_evaluation <= 0.05",
+    "primary": "All A/B/C, independently for pooled T+1 and pooled T+2; undefined required denominator or missing P1 cell yields NO_EVALUABLE.",
+    "interpretation": "Lower FAR without preserved onset detection is not automatically an improvement; report paired gains/losses, 2022 and every temporal/territorial control.",
+    "statistical_superiority": "NOT_ESTABLISHED"
+  },
+  "implementation_after_admission": {
+    "pipeline": "exp_delta01",
+    "responsibilities": [
+      "Verify and prepare identified sources",
+      "Select P1 on development only",
+      "Apply frozen P0/P1 to identical evaluation rows",
+      "Compute metrics and publish immutable results"
+    ],
+    "reuse": "Compatible existing readers, academic_benchmark comparator/metric functions and atomic no-overwrite publication.",
+    "registration": "Add only necessary pipeline_registry.py, conf/base/catalog.yml, config_loader.py and configuration.py bindings; preserve strict validation.",
+    "validation": [
+      "Source and role provenance",
+      "Exact cohorts/labels/probabilities/P0 alerts",
+      "Selection isolation from evaluation mutation",
+      "Whole score ties and exact threshold application",
+      "Correct excess-FAR denominator",
+      "No-alert and insufficient-support cases",
+      "Paired changes and probability consistency",
+      "Reproducibility and immutable publication",
+      "Historical preservation",
+      "Focused Ruff/format/mypy and relevant technical tests"
+    ],
+    "private_output": "data/processed/exp_delta01/<content-addressed-bundle-id>/",
+    "publication": "Source/code/protocol-bound manifest; detailed selection scores and municipality-month decisions only in data/, public compact aggregates only after verified real execution."
+  },
+  "limits": [
+    "All historical evaluation years have been analyzed previously; descriptive retrospective comparison only.",
+    "2024 is consumed stress, not independent confirmation; 2025 is excluded and is not a fresh reserve.",
+    "H5 is experimental; consolidated data do not establish historical operational availability.",
+    "Missing verified selection data is an admission blocker, not a negative hypothesis result.",
+    "Selection probabilities are explicitly reconstructed, not independently persisted historical arrays. No original selection digest exists; exact evaluation reproduction and repeated output equality provide consistency evidence only."
+  ],
+  "forbidden": [
+    "Training",
+    "New inference during DELTA; only the separately authorized, completed frozen-model recovery may supply the pinned selection artifact",
+    "Recalibration",
+    "New predictors",
+    "Third policy",
+    "Territorial threshold variants",
+    "Evaluation-based optimization",
+    "Partial cohort substitution",
+    "Historical modifications",
+    "Changes to replay or __default__",
+    "New global hooks",
+    "Dashboard",
+    "New experiment framework",
+    "Automatic merge",
+    "Champion selection"
+  ],
+  "governance": {
+    "G5": "NOT_APPROVED",
+    "champion": "not_selected"
+  },
+  "revision": 2,
+  "revision_lineage": {
+    "initial": {
+      "path": "docs/product/experiments/EXP-DELTA01/protocol.json",
+      "sha256": "c182fbe062faed58100548a43c70cc2a95df05aa86df4532344addb956a3003b"
+    },
+    "approved_proposal": {
+      "path": "docs/product/experiments/EXP-DELTA01/protocol.revision-2.proposed.json",
+      "sha256": "79f331dd5f09c34d5fb1611a78ff631ee321b5350f492620ee4e0c9136cc12b0"
+    },
+    "authorization": {
+      "path": "docs/product/experiments/EXP-DELTA01/AUTHORIZATION.md",
+      "sha256": "85b1265404c7c387cdc8196b27fe51628d3b97d521f6039fcca5270dc198520e"
+    },
+    "authority": "Mauricio, explicit completion request 2026-11-03",
+    "scope": "Admit the pinned reconstructed selection source; authorize original P0/P1 comparison only."
+  }
+}

@@ -36,6 +36,7 @@ def main() -> None:
         "exp_beta01_v2",
         "exp_beta02",
         "exp_beta03",
+        "exp_delta01",
         "foundation",
         "data",
         "preparation",

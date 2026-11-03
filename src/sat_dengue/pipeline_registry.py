@@ -26,6 +26,7 @@ from sat_dengue.pipelines.exp_beta01.pipeline import create_pipeline as beta_pip
 from sat_dengue.pipelines.exp_beta01_v2.pipeline import create_pipeline as beta_v2_pipeline
 from sat_dengue.pipelines.exp_beta02.pipeline import create_pipeline as beta02_pipeline
 from sat_dengue.pipelines.exp_beta03.pipeline import create_pipeline as beta03_pipeline
+from sat_dengue.pipelines.exp_delta01.pipeline import create_pipeline as delta_pipeline
 from sat_dengue.pipelines.national.pipeline import create_pipeline as national_pipeline
 from sat_dengue.pipelines.preparation.pipeline import create_pipeline as preparation_pipeline
 from sat_dengue.pipelines.replay.pipeline import create_pipeline as replay_pipeline
@@ -129,6 +130,7 @@ def register_pipelines() -> dict[str, Pipeline]:
         "exp_beta01_v2": beta_v2_pipeline(),
         "exp_beta02": beta02_pipeline(),
         "exp_beta03": beta03_pipeline(),
+        "exp_delta01": delta_pipeline(),
         **exp04_pipelines(),
         "exp03_1": exp03_1_real,
         "exp03_1_preflight": exp03_1_check,
