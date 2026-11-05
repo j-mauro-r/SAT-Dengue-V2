@@ -399,6 +399,9 @@ def run_analysis(root: Path | None = None, config: AnalysisConfig | None = None)
         )
     # Content-derived folders keep missing-source runs separate from earlier private tables.
     summary["code_sha256"] = fingerprint(Path(__file__))["sha256"]
+    summary["domain_code_sha256"] = fingerprint(
+        Path(__file__).parents[1] / "data/national_diagnostics.py"
+    )["sha256"]
     summary["calculation_code_sha256"] = fingerprint(
         Path(__file__).parents[1] / "data/consolidation.py"
     )["sha256"]
