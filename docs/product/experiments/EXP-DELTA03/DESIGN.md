@@ -12,10 +12,12 @@
 | Scientific executions / MLflow writes for this experiment | **0 / 0** |
 | G5 / champion | `NOT_APPROVED` / `not_selected` |
 
-Mauricio's 2026-11-05 request authorizes this documentation and its PR only.
-No pipeline, node, catalog dataset, model, training test, operational runtime or
-execution authorization is created. The three future phases below are proposals;
-none starts through approval of this document. No result or conclusions exist.
+The initial 2026-11-05 request authorized design documentation only. Mauricio's
+subsequent Phase 1 request authorizes the guarded no-fit preparation described in
+[the Phase 1 handoff](PHASE1.md), on the same branch and PR #78. Scientific source
+admission remains blocked; no final matrix, training executor, model fit,
+calibration, permanent tracking or execution authorization is created. Phase 1 is
+not scientifically complete, and Phases 2/3 remain unauthorized.
 2025 is already consumed and cannot provide independent confirmation. The proposed
 2020/2021/2022/2024 comparisons are also consumed retrospective evidence.
 
@@ -281,16 +283,18 @@ as an evaluated demographic ablation.
 Never input all ten original fractions. Proposed exhaustive aggregates are:
 
 - Natural vegetation: forest + shrub + savanna/grassland + wetland fractions.
-- Agriculture: crop + crop/natural mosaic fractions (all mosaic allocated here,
-  no double counting; this allocation needs final scientific acceptance).
+- Agriculture: crop fraction only in the current Phase 1 audit. Keep the mixed
+  crop/natural mosaic as a separate unresolved group. The original proposal to
+  allocate all mosaic to agriculture was not approved and is not implemented.
 - Urban: urban fraction.
 - Bare/other: bare soil + snow/ice + MODIS water fractions. This residual includes
   water and is not equivalent to the monthly JRC surface-water measure.
 
 All use the corresponding `fraccion_*_modis_pct` source names in the protocol.
-Check bounds and compositional sum within declared tolerance. Keep all four in
-the prepared matrix for audit; use three predictors, with bare/other the reference,
-to avoid a closed 100% predictor vector. Missing inputs produce missing aggregates.
+Check bounds and compositional sum within declared tolerance. Phase 1 keeps five
+audit groups including unassigned mosaic; the final predictive composition and
+reference remain unresolved. No final land-cover predictor vector is published.
+Missing inputs produce missing aggregates.
 Select annual observations by their actual release date before origin; a nominal
 year−1 shift is insufficient without publication evidence. No 2025 imputation or
 extrapolation; annual version/release evidence remains `UNVERIFIED`.
@@ -331,7 +335,9 @@ and missingness by role/year/department without optimizing exclusions.
 
 ## Proposed Kedro architecture
 
-The following pipeline identifiers are **proposals**, not registered graphs:
+These pipeline identifiers were proposed in the original design. Phase 1 now
+registers preflight, preparation and synthetic graphs as documented in the
+[handoff](PHASE1.md); the real training executor remains unregistered:
 
 | Pipeline | Future responsibility | Boundary |
 | --- | --- | --- |
@@ -475,7 +481,8 @@ a champion, grants G5, proves prospective availability or authorizes deployment.
 | **2 — Training and ablation implementation** | Implement national XGBoost and matrix; separated training/calibration/selection; generated synthetic/integration checks; isolated temporary MLflow tracking | Technically ready pipeline; **zero permanent scientific execution before explicit authorization**; counts of models/calibrators/runs documented; generated fits cannot masquerade as scientific evidence |
 | **3 — Scientific execution and evaluation** | Freeze runtime; preflight; independent review; authorization bound to clean commit, final protocol/matrix, input hashes, environment and isolated MLflow store; **manual execution by Mauricio**; contract evaluation and traceable MLflow registration; then conclusions/registry updates | Reproducible traceable results; scientific conclusions separated from technical results. G5/champion unchanged unless a later independent human decision changes them |
 
-No phase is executed now. Phase 2 must not use the real training dataset as a
+Only the bounded Phase 1 preparation infrastructure is now exercised; scientific
+admission still blocks its completion. Phase 2 must not use the real dataset as a
 synthetic fixture. Phase 3 cannot reuse another experiment's authorization/store
 identity or treat a preflight receipt as execution approval.
 

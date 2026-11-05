@@ -359,3 +359,16 @@ coverage exists for 481 rows; 2,172 remain honestly missing. The original
 EXP-DELTA02 `NOT_EVALUABLE` record is unchanged. No promotion, T+2,
 EXP-DELTA03, new spatial search, G5/champion change, deployment, or merge is
 authorized by this closure.
+
+### EXP-DELTA03 — bounded Phase 1 engineering and blocked scientific admission
+
+Mauricio authorized preparation and EDA on the existing PR #78 without model
+training or merge. The [Phase 1 handoff](../product/experiments/EXP-DELTA03/PHASE1.md)
+records strict real-source admission, reusable transformations, deterministic
+selectors, generated and real Kedro preparation, and the two bounded CI repairs.
+New/historical notification correspondence differs materially; H5/cohort parity
+and historical value vintages remain unresolved. Final matrices are withheld and
+Phase 1 is not scientifically complete. The next bounded decision is source-
+semantics/cohort reconciliation plus release/vintage evidence, not Phase 2.
+Protocol remains draft, execution not_authorized, G5 NOT_APPROVED and champion
+not_selected; no training, calibration or permanent MLflow writes occurred.

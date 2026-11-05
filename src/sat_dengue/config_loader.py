@@ -154,6 +154,7 @@ CATALOG["exp_delta01_bundle"] = {
 CATALOG.update(
     {
         "exp_delta03_context": {"type": "MemoryDataset", "copy_mode": "assign"},
+        "exp_delta03_quality": {"type": "MemoryDataset", "copy_mode": "assign"},
         "exp_delta03_sources": {"type": "sat_dengue.datasets.exp_delta03.Delta03SourcesDataset"},
         "exp_delta03_admission": {
             "type": "sat_dengue.datasets.exp_delta03.Delta03PublicationDataset",

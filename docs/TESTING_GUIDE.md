@@ -1,5 +1,36 @@
 # Testing and Validation Guide
 
+## EXP-DELTA03 Phase 1 preparation
+
+The [Phase 1 handoff](product/experiments/EXP-DELTA03/PHASE1.md) owns real source
+admission, descriptive EDA, unavailable historical vintages, H5/count/cohort
+correspondence and withheld final matrices. Pure `data/exp_delta03*.py`, the
+`datasets/exp_delta03.py` adapter and the three explicitly selected Kedro profiles
+map to generated admission/identity/path, temporal/release/vintage, label/cohort,
+block/pairing/transfer, deterministic publication and real Kedro-session tests:
+
+```bash
+mkdir -p tmp/exp-delta03-phase1/pytest
+PYTEST_DEBUG_TEMPROOT="$PWD/tmp/exp-delta03-phase1/pytest" KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_delta03_preparation.py tests/integration/test_exp_delta03_preparation_integration.py -q
+```
+
+Run changed-file Ruff/format/mypy and changed-document links/privacy checks.
+The real preflight/preparation commands in the handoff perform no estimator fits,
+calibration, policy selection or MLflow writes. They may publish diagnostic
+reports while withholding affected matrices. Reproduction must verify identical
+payload identities without source modification or overwrite; a successful
+preparation command does not establish scientific admission or Phase 1 completion.
+
+The inherited Shapely correction adds only `shapely==2.1.2` to the dev extra, which
+CI already installs; base runtime dependencies are unchanged. Generated geography
+and prefix-invariance tests run with that extra, while an explicit test covers the
+controlled missing-dependency error. Private MGN tests still require private
+sources/optional readers and do not become generated evidence. Validate the
+existing diagnostic/domain tests and current engineering metadata/constraints
+when touching those repairs; preserve original scientific identities and tests.
+GitHub owns the full required suite; no full local suite or notebook execution.
+
+
 ## EXP-DELTA02-R1 fixed-MGN spatial candidate
 
 The independent EXP-DELTA02-R1 revision preserves the original EXP-DELTA02
@@ -1225,17 +1256,23 @@ not provision those inputs or authorize scientific extensions.
 
 ## Bounded national notification diagnostics
 
-For `data/national_diagnostics.py` and notebook 09, run scoped Ruff/format/mypy and
+For pure `data/national_diagnostics.py` and its `datasets/national_diagnostics.py`
+adapter, run scoped Ruff/format/mypy and
 `pytest tests/unit/test_national_diagnostics.py -q`. These synthetic engineering fixtures cover
 count conservation, chunk-independent duplicates, rejected-row versus absent-row indicators,
 empty/missing streams, strict execution JSON, source preservation and future-density independence.
 They are not national epidemiological evidence.
 
-Validate notebook 09 with `nbformat` and execute it top-to-bottom with `nbclient` using the project
-kernel. Missing private CSVs must produce `READY_FOR_LOCAL_EXECUTION` and no calendar. Inspect real
-coverage/consistency conclusions locally only with the original CSVs. Preserve ignored private
-outputs under `data/interim/canonical-nacional-data/`; clear private notebook outputs before commit.
-No scientific pipeline, BETA run or model fit is part of this gate.
+The maintained entrypoint is `sat_dengue.datasets.national_diagnostics.run_analysis`;
+`AnalysisConfig` and calculations remain in the pure domain. Source identity now
+includes the adapter, pure diagnostic module and consolidation module. Generated
+tests verify that pure-code identity changes the execution key. Missing private
+CSVs produce `READY_FOR_LOCAL_EXECUTION`, never a fake calendar. Notebook 09 is
+frozen historical identity evidence: its old import is recovered in its historical
+Git checkout, not executed against the current package or repaired with a domain-
+to-infrastructure shim. Private outputs remain under
+`data/interim/canonical-nacional-data/`. No scientific pipeline, BETA run or model
+fit is part of this gate.
 
 ## National canonical construction
 

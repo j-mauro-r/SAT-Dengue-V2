@@ -1,14 +1,14 @@
 # Scientific Experiment Registry
 
-[EXP-DELTA03 — design only](EXP-DELTA03/DESIGN.md) proposes national climate
-XGBoost block ablation at T+1/T+2 with Meta/Tolima evaluation. Its protocol and
-matrix remain drafts; execution is `not_authorized`, with zero training,
-calibration or MLflow writes. Admission/preparation, training implementation and
-manual scientific execution are three separate future phases. Surface water is
-a secondary common-coverage contrast through 2021; unverified vintages and
-scientific choices remain explicit blockers. G5 remains `NOT_APPROVED` and
-champion `not_selected`. This narrative design entry does not add a closed-schema
-runtime registration or authorize Phase 1.
+[EXP-DELTA03 — Phase 1 engineering handoff](EXP-DELTA03/PHASE1.md) records the
+implemented no-fit admission/EDA/Kedro preparation on the identified dataset.
+H5/count/cohort correspondence and historical vintages remain unresolved, so all
+final matrices are withheld and Phase 1 is not scientifically complete. The
+[design](EXP-DELTA03/DESIGN.md), protocol and matrix remain draft; scientific
+execution is `not_authorized`. Water remains secondary with honest coverage
+through 2021; MODIS mosaic stays separate. No training, calibration or MLflow
+writes occurred. G5 remains `NOT_APPROVED`, champion `not_selected`; Phase 2
+and merge require separate authority.
 
 [EXP-DELTA02-R1 — fixed-MGN spatial candidate `NOT_SUPPORTED`](EXP-DELTA02-R1/README.md)
 is the independently authorized revision that treats DANE MGN 2018 as one

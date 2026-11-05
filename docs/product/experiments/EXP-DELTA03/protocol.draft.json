@@ -17,7 +17,7 @@
   "governance": {
     "G5": "NOT_APPROVED",
     "champion": "not_selected",
-    "authorization": "documentation and PR only; separate authority required for each future phase"
+    "authorization": "Bounded Phase 1 preparation and existing PR update authorized; training, Phase 2/3 and merge remain unauthorized."
   },
   "question": "Which climatic, environmental, territorial and demographic groups add incremental H5 onset prediction at T+1/T+2 with national pooled XGBoost applied to Meta/Tolima on identical cohorts and false-alert budgets?",
   "hypotheses": {
@@ -303,8 +303,7 @@
           "fraccion_humedal_modis_pct"
         ],
         "agriculture": [
-          "fraccion_cultivo_modis_pct",
-          "fraccion_mosaico_cultivo_natural_modis_pct"
+          "fraccion_cultivo_modis_pct"
         ],
         "urban": [
           "fraccion_urbana_modis_pct"
@@ -313,15 +312,14 @@
           "fraccion_suelo_desnudo_modis_pct",
           "fraccion_nieve_hielo_modis_pct",
           "fraccion_agua_modis_pct"
+        ],
+        "mosaic_unassigned": [
+          "fraccion_mosaico_cultivo_natural_modis_pct"
         ]
       },
-      "predictors": [
-        "natural_vegetation",
-        "agriculture",
-        "urban"
-      ],
+      "predictors": [],
       "reference": "bare_other retained for audit; omitted as predictor to avoid exact compositional closure",
-      "mosaic_allocation": "all to agriculture, pending scientific acceptance",
+      "mosaic_allocation": "unresolved; retained separately, no final predictor vector authorized",
       "availability": "UNVERIFIED",
       "join": "annual observation with actual release date <= origin; not automatic previous calendar year",
       "impute_2025": false
@@ -558,7 +556,8 @@
     "configuration": "separate catalog and profiles/matrices, no duplicated variant pipelines or absolute paths",
     "learned_features": "role-aware fit_reference and transform separation before matrix assembly",
     "publication": "atomic content-addressed no-overwrite bundle; hashes for input/output/code/runtime/model/calibrator/policy/cohort",
-    "mlflow": "aggregate-only isolated mirror, only after verified native bundle; no row-level data or private paths"
+    "mlflow": "aggregate-only isolated mirror, only after verified native bundle; no row-level data or private paths",
+    "registration_scope": "only preflight/preparation/synthetic registered; scientific exp_delta03 executor not registered"
   },
   "future_phases": [
     {
@@ -576,7 +575,8 @@
         "no future predictors",
         "zero real fits"
       ],
-      "authorized": false
+      "authorized": true,
+      "scope_status": "preparation implementation authorized; scientific completion blocked on H5/cohort/vintage correspondence"
     },
     {
       "phase": 2,
@@ -636,17 +636,17 @@
     "historical transmission-profile identity/vintage/mapping and training-only derivation; exact horizon-specific onset target freeze"
   ],
   "execution_prohibition": {
-    "until": "final protocol/matrix freeze, independent review, admitted data/runtime and explicit phase-specific human authority",
+    "until": "Final protocol/matrix freeze, independent review, admitted data/runtime and explicit authority before scientific model execution; bounded Phase 1 preparation separately authorized.",
     "create_execution_authorization_now": false,
-    "start_phase_1_now": false,
     "forbidden_now": [
-      "production code/catalog/pipeline implementation",
       "fits/calibrations/inference",
       "scientific experiment execution",
       "MLflow writes",
       "source or historical experiment mutation",
       "merge",
       "operational runtime creation"
-    ]
+    ],
+    "phase1_preparation_authorized": true,
+    "start_scientific_training_now": false
   }
 }

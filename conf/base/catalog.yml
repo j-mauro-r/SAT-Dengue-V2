@@ -149,3 +149,7 @@ exp_delta03_synthetic_receipt:
 exp_delta03_context:
   type: MemoryDataset
   copy_mode: assign
+
+exp_delta03_quality:
+  type: MemoryDataset
+  copy_mode: assign
