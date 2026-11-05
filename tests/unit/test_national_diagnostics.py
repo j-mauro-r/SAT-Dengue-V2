@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from sat_dengue.data import national_diagnostics as diagnostics
+from sat_dengue.datasets import national_diagnostics as diagnostics
 
 
 def catalog() -> pd.DataFrame:
