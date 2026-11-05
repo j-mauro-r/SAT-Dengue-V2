@@ -84,7 +84,10 @@ def profile(
                         }
                     )
                 bad = pd.Series(False, index=frame.index)
-                if info["unidad"] == "%" or name.startswith(("porcentaje_", "fraccion_")):
+                if (
+                    name.startswith(("porcentaje_", "fraccion_"))
+                    or name == "humedad_relativa_media_pct"
+                ):
                     bad |= values.lt(0) | values.gt(100)
                 if name in {"ndvi_medio", "ndvi_mediana"}:
                     bad |= values.lt(-1) | values.gt(1)

@@ -349,3 +349,16 @@ def test_transport_anomaly_uses_training_national_reference_without_target_fit()
     after = seasonal_anomaly(f, changed, training, national_reference=True, exclude_targets=True)
     pd.testing.assert_series_equal(before[~training], after[~training])
     assert before[~training].notna().all()
+
+
+def test_negative_growth_is_valid_and_h5_rejects_misaligned_counts() -> None:
+    f, c, d = fixture()
+    f["tasa_crecimiento_anual_pct"] = -3.0
+    f = normalize(f)
+    report = profile(f, d, c)
+    assert not any(
+        v["variable"] == "tasa_crecimiento_anual_pct" and v["issue"] == "physical_domain"
+        for v in report["quality"]
+    )
+    with pytest.raises(ValueError, match="align"):
+        h5_labels(f, pd.Series(1.0, index=f.index[::-1]))

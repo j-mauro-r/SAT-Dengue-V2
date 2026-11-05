@@ -26,7 +26,7 @@ def normalize(frame: pd.DataFrame) -> pd.DataFrame:
         ("divipola_municipio", "municipio"),
         ("divipola_departamento", "departamento"),
     ]:
-        if name in result and result[name].dtype == object:
+        if name in result and pd.api.types.is_string_dtype(result[name]):
             if result.groupby(code)[name].nunique(dropna=True).gt(1).any():
                 raise ValueError("Contradictory identifier descriptions")
     raw = result.periodo_mes.astype(str)
@@ -96,7 +96,7 @@ def available_mask(
 
 def h5_labels(frame: pd.DataFrame, counts: pd.Series) -> pd.DataFrame:
     """Construct conditional H5 labels; caller must separately admit count semantics/parity."""
-    if len(frame) != len(counts):
+    if len(frame) != len(counts) or not frame.index.equals(counts.index):
         raise ValueError("Counts must align to keys")
     values = frame[KEYS].copy()
     values["count"] = counts.to_numpy()
