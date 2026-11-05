@@ -1,0 +1,418 @@
+{
+  "schema": "exp-delta03-phase1-contract-v1",
+  "experiment_id": "EXP-DELTA03",
+  "execution": "not_authorized",
+  "phase": "preparation_only",
+  "source": {
+    "path": "data/sources/dataset_v3/mart_dengue_colombia_canonico_municipio_mes_v1_1_0.csv",
+    "producer_manifest_path": "data/curated/mart_dengue_colombia_canonico_municipio_mes_v1_1_0.csv",
+    "expected_sha256": "1b4d3873f401cb7947b49f0c26023d843823d047aeb433b175de078daa6be486",
+    "expected_bytes": 446274685,
+    "expected_rows": 255816,
+    "expected_columns": 142,
+    "expected_municipalities": 1122,
+    "expected_months": 228,
+    "coverage": [
+      "2007-01",
+      "2025-12"
+    ],
+    "key": [
+      "divipola_municipio",
+      "periodo_mes"
+    ],
+    "metadata_sha256": {
+      "guia_uso_v1.1.0.md": "33c419283470cf08aef9055576690beab741956099148002b639da179c6d850e",
+      "v1.1.0_manifest.csv": "2eb97b1464d84771197eea71ba5d4e179e291b09543a7b6696e7f563c4dcde85",
+      "diccionario_datos_v1.1.0.md": "8554bcff2a64d5616cbb1c6040921f409e5b3a647626589d5ae7427fe4e5b298",
+      "source_registry.csv": "7504462aef3dae266c6248a384f436350f8e37f61bfae91a14ca5b57a54df1ff",
+      "v1.1.0.md": "edfe3e834856e9def3f56c0ededa472e4d44a00b98fbdcdfed7525d15438fbc4",
+      "validacion_final_v1.1.0.md": "392572312db6d9dc03d932934b796659eda0c035203b87e743440befe0197414",
+      "data_dictionary_v1.1.0.csv": "1831804f932fefc94312e4421ceaac1443e2c7cf8bb9dce7453c150532f874da"
+    },
+    "observed_raw_period_format": "YYYY-MM-DD, month-start day 01",
+    "expected_canonical_period_format": "YYYY-MM",
+    "verification_scope": "actual hash/bytes, header/dictionary agreement, keys and calendar metadata only; not scientific quality or availability approval",
+    "full_producer_manifest_verified": false,
+    "mutations_allowed": false
+  },
+  "ordered_columns": [
+    "divipola_departamento",
+    "divipola_municipio",
+    "periodo_mes",
+    "anio",
+    "mes",
+    "notificados_210",
+    "notificados_220",
+    "retenidos_210",
+    "retenidos_220",
+    "descartados_210",
+    "descartados_220",
+    "errores_digitacion_210",
+    "errores_digitacion_220",
+    "hospitalizados_210",
+    "hospitalizados_220",
+    "fallecidos_notificados_210",
+    "fallecidos_notificados_220",
+    "clasificacion_no_determinada_210",
+    "clasificacion_no_determinada_220",
+    "registros_fecha_inicio",
+    "registros_fecha_consulta",
+    "registros_fecha_notificacion",
+    "registros_con_equivalencia_divipola",
+    "fuente",
+    "version_proceso",
+    "poblacion_total",
+    "fuente_poblacion",
+    "estado_union_poblacion",
+    "incidencia_retenidos_210_100k",
+    "incidencia_retenidos_220_100k",
+    "estado_observacion_dengue",
+    "poblacion_disponible",
+    "incidencia_calculable",
+    "departamento",
+    "municipio",
+    "dias_esperados",
+    "dias_disponibles_era5",
+    "porcentaje_cobertura_temporal",
+    "temp_media_c",
+    "temp_min_media_c",
+    "temp_max_media_c",
+    "temp_min_absoluta_c",
+    "temp_max_absoluta_c",
+    "amplitud_termica_media_c",
+    "punto_rocio_medio_c",
+    "humedad_relativa_media_pct",
+    "humedad_absoluta_media_g_m3",
+    "vpd_medio_kpa",
+    "precipitacion_total_mm",
+    "dias_lluviosos_promedio",
+    "precipitacion_max_diaria_mm",
+    "racha_seca_max_dias",
+    "evaporacion_total_mm_signo_era5",
+    "evap_potencial_total_mm_signo_era5",
+    "transpiracion_vegetacion_total_mm_signo_era5",
+    "radiacion_total_mj_m2",
+    "viento_medio_ms",
+    "viento_max_diario_ms",
+    "presion_media_hpa",
+    "humedad_suelo_capa1_media_m3_m3",
+    "escorrentia_total_mm",
+    "fuente_clima",
+    "escala_m",
+    "metodo_espacial",
+    "clima_disponible",
+    "dias_disponibles_chirps",
+    "porcentaje_cobertura_temporal_chirps",
+    "precipitacion_chirps_total_mm",
+    "dias_lluviosos_chirps_promedio",
+    "precipitacion_chirps_max_diaria_mm",
+    "racha_seca_chirps_max_dias_promedio",
+    "estado_calidad_chirps",
+    "fuente_precipitacion",
+    "escala_chirps_m",
+    "metodo_espacial_chirps",
+    "fuente_precipitacion_principal",
+    "precipitacion_principal_disponible",
+    "nino34_anomalia_c",
+    "oni_3m_c",
+    "temporada_oni",
+    "enso_fase_mensual",
+    "enso_evento_persistente",
+    "fuente_enso",
+    "version_fuente_enso",
+    "altitud_media_m",
+    "altitud_mediana_m",
+    "altitud_minima_negativa",
+    "estado_calidad_altitud",
+    "fuente_altitud",
+    "escala_srtm_m",
+    "metodo_espacial_srtm",
+    "poblacion_cabecera",
+    "poblacion_rural",
+    "porcentaje_urbanizacion",
+    "porcentaje_rural",
+    "tasa_crecimiento_anual_pct",
+    "area_municipal_km2",
+    "densidad_poblacional_hab_km2",
+    "anio_geografia_referencia",
+    "area_es_estatica_referencia",
+    "fuente_demografia",
+    "estado_calidad_demografia",
+    "poblacion_hombres",
+    "poblacion_mujeres",
+    "porcentaje_hombres",
+    "porcentaje_mujeres",
+    "poblacion_0_4",
+    "poblacion_5_14",
+    "poblacion_15_64",
+    "poblacion_65_mas",
+    "porcentaje_0_4",
+    "porcentaje_5_14",
+    "porcentaje_15_64",
+    "porcentaje_65_mas",
+    "razon_dependencia_demografica",
+    "estado_reconciliacion_demografica",
+    "fuente_demografia_detallada",
+    "ndvi_medio",
+    "ndvi_mediana",
+    "ndvi_desviacion",
+    "ndvi_disponible",
+    "pendiente_media_grados",
+    "pendiente_mediana_grados",
+    "porcentaje_area_pendiente_mayor_15",
+    "porcentaje_area_pendiente_mayor_30",
+    "pendiente_disponible",
+    "fraccion_bosque_modis_pct",
+    "fraccion_matorral_modis_pct",
+    "fraccion_sabana_pastizal_modis_pct",
+    "fraccion_humedal_modis_pct",
+    "fraccion_cultivo_modis_pct",
+    "fraccion_urbana_modis_pct",
+    "fraccion_mosaico_cultivo_natural_modis_pct",
+    "fraccion_nieve_hielo_modis_pct",
+    "fraccion_suelo_desnudo_modis_pct",
+    "fraccion_agua_modis_pct",
+    "cobertura_suelo_modis_disponible",
+    "area_agua_superficial_m2",
+    "area_observada_m2",
+    "fraccion_agua_superficial_pct_area_observada",
+    "agua_superficial_disponible",
+    "estado_cobertura_agua_superficial"
+  ],
+  "dictionary_sha256": "1831804f932fefc94312e4421ceaac1443e2c7cf8bb9dce7453c150532f874da",
+  "evaluation_years": [
+    2020,
+    2021,
+    2022,
+    2024
+  ],
+  "horizons": [
+    1,
+    2
+  ],
+  "history_lags": [
+    1,
+    2,
+    3,
+    12
+  ],
+  "history_source_mapping": null,
+  "historical_equivalence": "UNRESOLVED",
+  "availability_evidence": [],
+  "mosaic_assignment": "UNRESOLVED_keep_separate",
+  "blocks": {
+    "HISTORY": {
+      "sources": [],
+      "feature_list_status": "pending_contract_mapping",
+      "rules": [
+        "Only previously authorized epidemiological lags; freeze exact ordered list and 210/220 count mapping.",
+        "No contemporaneous notifications, retained counts, hospitalizations, deaths, incidence or date registers.",
+        "No missing epidemiological outcome imputation; no automatic zero from absent records."
+      ]
+    },
+    "CALENDAR": {
+      "sources": [
+        "periodo_mes"
+      ],
+      "predictors": [
+        "month_sin",
+        "month_cos"
+      ],
+      "transform": "sin(2*pi*month/12), cos(2*pi*month/12); derive year/month for roles only; no year predictor"
+    },
+    "THERMAL_HUMIDITY": {
+      "sources": [
+        "temp_media_c",
+        "amplitud_termica_media_c",
+        "vpd_medio_kpa",
+        "radiacion_total_mj_m2",
+        "viento_medio_ms"
+      ],
+      "lag1": "all sources",
+      "mean3": [
+        "temp_media_c",
+        "vpd_medio_kpa",
+        "radiacion_total_mj_m2",
+        "viento_medio_ms"
+      ]
+    },
+    "RAINFALL_HYDROLOGY": {
+      "sources": [
+        "humedad_suelo_capa1_media_m3_m3",
+        "precipitacion_chirps_total_mm",
+        "precipitacion_chirps_max_diaria_mm",
+        "racha_seca_chirps_max_dias_promedio"
+      ],
+      "lag1": "all sources",
+      "mean3": [
+        "humedad_suelo_capa1_media_m3_m3"
+      ],
+      "sum3": [
+        "precipitacion_chirps_total_mm"
+      ],
+      "max3": [
+        "racha_seca_chirps_max_dias_promedio"
+      ],
+      "precipitation_primary": "CHIRPS"
+    },
+    "ENSO": {
+      "sources": [
+        "oni_3m_c"
+      ],
+      "excluded": [
+        "nino34_anomalia_c",
+        "enso_fase_mensual",
+        "enso_evento_persistente"
+      ],
+      "central_month_lag_proposed": 2,
+      "event_window": "ONI central month T-2 covers T-3 through T-1",
+      "publication_delay": "additional delay if needed; final lag pending release/vintage evidence",
+      "availability": "UNVERIFIED"
+    },
+    "NDVI": {
+      "sources": [
+        "ndvi_medio",
+        "ndvi_desviacion",
+        "ndvi_disponible"
+      ],
+      "excluded": [
+        "ndvi_mediana"
+      ],
+      "lag1": [
+        "ndvi_medio",
+        "ndvi_desviacion",
+        "ndvi_disponible"
+      ],
+      "mean3": [
+        "ndvi_medio"
+      ],
+      "change": "ndvi_medio(T-1)-ndvi_medio(T-2)",
+      "seasonal_anomaly": "lag1 mean minus training-only municipality/calendar-month mean; missing reference stays missing",
+      "holdout_reference": "training-national month mean for BOTH matched members; no fit of target municipal references",
+      "support_rule": "pending_before_execution",
+      "already_scaled": true
+    },
+    "TERRAIN": {
+      "sources": [
+        "altitud_media_m",
+        "pendiente_media_grados"
+      ],
+      "frequency": "static",
+      "rules": [
+        "No medians or redundant slope fractions.",
+        "Record SRTM and geometry identity; admit historical correspondence."
+      ]
+    },
+    "DEMOGRAPHY": {
+      "sources": [
+        "poblacion_total",
+        "densidad_poblacional_hab_km2",
+        "porcentaje_urbanizacion",
+        "porcentaje_0_4",
+        "porcentaje_65_mas"
+      ],
+      "log1p": [
+        "poblacion_total",
+        "densidad_poblacional_hab_km2"
+      ],
+      "availability": "UNVERIFIED",
+      "interpretation": "secondary",
+      "join": "latest demonstrably published vintage before origin; no present-vintage backcast",
+      "density_caveat": "denominator uses static MGN 2021 area; historical correspondence unverified",
+      "rules": [
+        "Reject invalid negative log1p inputs.",
+        "No equivalent counts and percentages together.",
+        "FULL_COMMON blocked until admitted or explicitly revised; no null placeholder."
+      ]
+    },
+    "LAND_COVER": {
+      "sources": [
+        "fraccion_bosque_modis_pct",
+        "fraccion_matorral_modis_pct",
+        "fraccion_sabana_pastizal_modis_pct",
+        "fraccion_humedal_modis_pct",
+        "fraccion_cultivo_modis_pct",
+        "fraccion_urbana_modis_pct",
+        "fraccion_mosaico_cultivo_natural_modis_pct",
+        "fraccion_nieve_hielo_modis_pct",
+        "fraccion_suelo_desnudo_modis_pct",
+        "fraccion_agua_modis_pct"
+      ],
+      "aggregates": {
+        "natural_vegetation": [
+          "fraccion_bosque_modis_pct",
+          "fraccion_matorral_modis_pct",
+          "fraccion_sabana_pastizal_modis_pct",
+          "fraccion_humedal_modis_pct"
+        ],
+        "agriculture": [
+          "fraccion_cultivo_modis_pct"
+        ],
+        "urban": [
+          "fraccion_urbana_modis_pct"
+        ],
+        "bare_other": [
+          "fraccion_suelo_desnudo_modis_pct",
+          "fraccion_nieve_hielo_modis_pct",
+          "fraccion_agua_modis_pct"
+        ],
+        "mosaic_unassigned": [
+          "fraccion_mosaico_cultivo_natural_modis_pct"
+        ]
+      },
+      "predictors": [],
+      "reference": "bare_other retained for audit; omitted as predictor to avoid exact compositional closure",
+      "mosaic_allocation": "unresolved; retained separately, no final predictor vector authorized",
+      "availability": "UNVERIFIED",
+      "join": "annual observation with actual release date <= origin; not automatic previous calendar year",
+      "impute_2025": false
+    },
+    "SURFACE_WATER": {
+      "sources": [
+        "fraccion_agua_superficial_pct_area_observada",
+        "area_agua_superficial_m2",
+        "area_observada_m2",
+        "agua_superficial_disponible",
+        "estado_cobertura_agua_superficial"
+      ],
+      "predictor": "fraccion_agua_superficial_pct_area_observada lag1, subject to actual availability",
+      "quality_only": [
+        "area_agua_superficial_m2",
+        "area_observada_m2",
+        "agua_superficial_disponible",
+        "estado_cobertura_agua_superficial"
+      ],
+      "coverage_end": "2021-12",
+      "requirement": "observed area > 0 and genuine observation; observed zero water remains valid",
+      "availability": "UNVERIFIED",
+      "impute_2022_2025": false,
+      "structural_flag_predictors": false
+    }
+  },
+  "variants": [
+    "HISTORY",
+    "FULL_COMMON",
+    "FULL_MINUS_THERMAL_HUMIDITY",
+    "FULL_MINUS_RAINFALL_HYDROLOGY",
+    "FULL_MINUS_NDVI",
+    "FULL_MINUS_TERRAIN",
+    "FULL_MINUS_DEMOGRAPHY",
+    "FULL_MINUS_LAND_COVER",
+    "FULL_PLUS_SURFACE_WATER",
+    "FULL_ERA5_PRECIPITATION",
+    "TRANSFER_EXCLUDE_META_TOLIMA"
+  ],
+  "matrix_publication": "deny affected matrices until source mapping, exact H5/cohort parity, approved composition and historical release evidence pass",
+  "near_constant_fraction": 0.995,
+  "high_correlation_abs": 0.98,
+  "output_root": "tmp/exp-delta03-phase1/products",
+  "governance": {
+    "G5": "NOT_APPROVED",
+    "champion": "not_selected",
+    "authorization": "documentation and PR only; separate authority required for each future phase"
+  },
+  "baseline": {
+    "root": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+    "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8"
+  }
+}

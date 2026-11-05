@@ -71,6 +71,9 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Only operational profile, tracking and experiment_id parameters are allowed"
         )
     if value["profile"] not in (
+        "exp_delta03_preflight",
+        "exp_delta03_preparation",
+        "exp_delta03_synthetic",
         "exp_delta01",
         "exp_beta03",
         "exp_beta02",
@@ -107,6 +110,9 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
         )
     experiment_id = value.get("experiment_id")
     if value["profile"] in {
+        "exp_delta03_preflight",
+        "exp_delta03_preparation",
+        "exp_delta03_synthetic",
         "exp_delta01",
         "canonical_model_table_v1",
         "canonical_model_table_national_v1",
