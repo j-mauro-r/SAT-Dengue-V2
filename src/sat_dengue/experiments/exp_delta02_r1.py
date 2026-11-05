@@ -52,6 +52,18 @@ MGN2018_CONFLICT_RESOLUTION: dict[tuple[str, str], bool] = {
 }
 
 
+def _geometry_dependency(name: str) -> Any:
+    """Keep geometry optional in base installs; the declared dev extra owns generated tests."""
+    try:
+        return import_module(name)
+    except ModuleNotFoundError as error:
+        if error.name and (error.name == "shapely" or error.name.startswith("shapely.")):
+            raise RuntimeError(
+                "Geometry operations require sat-dengue-v2[dev] (shapely)"
+            ) from error
+        raise
+
+
 def _municipal_code(value: Any) -> str:
     code = str(value)
     if len(code) != 5 or not code.isdigit():
@@ -73,7 +85,7 @@ def graph_from_geometries(
     ):
         raise ValueError("MGN 2018 polygons must be nonempty, valid and positive-area")
 
-    tree_type = import_module("shapely.strtree").STRtree
+    tree_type = _geometry_dependency("shapely.strtree").STRtree
     tree = tree_type(geometries)
     rows: list[dict[str, Any]] = []
     for index, target_code in enumerate(normalized):
@@ -109,7 +121,7 @@ def load_mgn2018_graph(root: Path, targets: set[str]) -> pd.DataFrame:
     if len(targets) != 76:
         raise ValueError("EXP-DELTA02-R1 requires exactly 76 target municipalities")
     shapefile = import_module("shapefile")
-    shape = import_module("shapely.geometry").shape
+    shape = _geometry_dependency("shapely.geometry").shape
     reader = shapefile.Reader(str(root / "mgn2018.shp"))
     records = list(reader.iterShapeRecords())
     codes = [_municipal_code(record.record.as_dict()["MPIO_CCNCT"]) for record in records]
@@ -224,7 +236,7 @@ def neighbor_feature(
 
 def feature_self_check() -> None:
     """Exercise edge, point, self-exclusion, exact-lag and missing-zero semantics."""
-    geometry = import_module("shapely.geometry")
+    geometry = _geometry_dependency("shapely.geometry")
     graph = graph_from_geometries(
         ["50001", "50002", "05001"],
         [geometry.box(0, 0, 1, 1), geometry.box(1, 0, 2, 1), geometry.box(1, 1, 2, 2)],

@@ -268,3 +268,16 @@ def test_feature_prefix_invariance_rejects_future_information() -> None:
     second = neighbor_feature(origins, changed, graph)
     pd.testing.assert_frame_equal(first, second)
     feature_self_check()
+
+
+def test_missing_geometry_dependency_fails_with_install_contract(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from sat_dengue.experiments import exp_delta02_r1 as module
+
+    def absent(name: str) -> None:
+        raise ModuleNotFoundError("missing optional geometry", name="shapely")
+
+    monkeypatch.setattr(module, "import_module", absent)
+    with pytest.raises(RuntimeError, match=r"sat-dengue-v2\[dev\]"):
+        module._geometry_dependency("shapely.geometry")
