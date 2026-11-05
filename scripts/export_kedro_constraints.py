@@ -24,6 +24,15 @@ def preserved_lines(raw: bytes, baseline: str) -> list[str]:
     for text in declared:
         requirement = Requirement(text)
         key = requirement.name.lower().replace("_", "-")
+        specs = list(requirement.specifier)
+        if (
+            requirement.extras
+            or requirement.url
+            or len(specs) != 1
+            or specs[0].operator != "=="
+            or "*" in specs[0].version
+        ):
+            raise ValueError("Preserve mode requires exact direct pins without extras or URLs")
         if key in pins:
             if pins[key].specifier != requirement.specifier:
                 raise ValueError("Changed existing pin requires a clean full resolution")

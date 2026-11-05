@@ -236,3 +236,18 @@ def test_isolated_constraint_addition_preserves_baseline_and_rejects_new_transit
         exporter.preserved_lines(raw, baseline)
     with pytest.raises(ValueError, match="existing pin"):
         exporter.preserved_lines(raw.replace(b"2.5.4", b"2.5.5"), baseline)
+
+
+@pytest.mark.parametrize(
+    "requirement", ["shapely[feature]==2.1.2", "shapely>=2.1.2", "shapely==2.*"]
+)
+def test_preserved_constraints_reject_unverified_extras_or_nonexact_pins(requirement: str) -> None:
+    from scripts.export_kedro_constraints import preserved_lines
+
+    raw = (
+        '[project]\ndependencies=["numpy==2.5.4"]\n[project.optional-dependencies]\ndev=["'
+        + requirement
+        + '"]\n'
+    ).encode()
+    with pytest.raises(ValueError, match="exact direct pins"):
+        preserved_lines(raw, "numpy==2.5.4\n")
