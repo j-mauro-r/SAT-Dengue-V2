@@ -12,16 +12,16 @@
 | Scientific executions / MLflow writes for this experiment | **0 / 0** |
 | G5 / champion | `NOT_APPROVED` / `not_selected` |
 
-The initial 2026-11-05 request authorized design documentation only. Mauricio's
-subsequent Phase 1 request authorizes the guarded no-fit preparation described in
-[the Phase 1 handoff](PHASE1.md), on the same branch and PR #78. Scientific source
-admission remains blocked; no final matrix, training executor, model fit,
-calibration, permanent tracking or execution authorization is created. Phase 1 is
-not scientifically complete, and Phases 2/3 remain unauthorized. The subsequent
-[scientific reconciliation](SCIENTIFIC-RECONCILIATION.md) reproduces the historical
-residence-based counts/H5/cohorts but disproves direct equivalence with the new
-occurrence fields. Its proposed retrospective amendment is not adopted; current
-PIT admission leaves only calendar controls and cannot support climate ablation.
+Mauricio approved [proposal A](PHASE1-AUTHORIZATION.md) for consolidated-data
+retrospective Phase 1 preparation on the same branch and PR #78. Historical V2
+residence/INI_SIN labels, approved calendar assumptions, H5/cohorts/roles, temporal
+controls,2025 exclusion and separate consumed2024 stress remain fixed. The
+[handoff](PHASE1.md) owns actual matrices, reproduction and gates. No model fit,
+calibration, threshold/HPO, predictive execution, permanent tracking, Phase2/3 or
+merge is authorized. The protocol remains draft. Historical release/value vintages
+and operational E(T) availability remain unproved; no PIT or deployment inference
+may follow. The [reconciliation](SCIENTIFIC-RECONCILIATION.md) disproves aliasing
+new-mart occurrence fields as historical residence counts.
 2025 is already consumed and cannot provide independent confirmation. The proposed
 2020/2021/2022/2024 comparisons are also consumed retrospective evidence.
 
@@ -29,7 +29,7 @@ The [academic contract](../contrato.md) controls H5, geography, comparators and
 acceptance. [Governance](../../../governance/ai-developer-first.md),
 [ADR 0001](../../../decisions/adr-0001-foundation-boundaries.md), the
 [master plan](../../../roadmap/master-plan.md) and
-[testing guide](../../../TESTING_GUIDE.md) remain unchanged. The requested legacy
+[testing guide](../../../TESTING_GUIDE.md) retain their respective ownership. The requested legacy
 `docs/governance.md` does not exist; the [documentation map](../../../README.md)
 identifies the current governance owner above.
 
@@ -95,7 +95,8 @@ already precede or equal origin T. Define `E(t)` as the evaluable H5 excess stat
 Future states are outcomes only; a continuation is never another onset. H5 is
 experimental, not an externally validated epidemiological outbreak identity.
 Eligible rows have known non-excess at T and an evaluable exact-calendar outcome.
-No absent epidemiological record is automatically a zero. Missing labels,
+The original approved D2/D3 historical calendar zeros are retained; no new-mart
+absent record is automatically a zero. Missing labels,
 insufficient five-year H5 history or unresolved source correspondence cannot be
 imputed into cohort membership.
 
@@ -175,31 +176,27 @@ admission report and require a field-level resolved mapping before a final
 protocol; never rewrite source metadata or infer feature availability from the
 incorrect dictionary references.
 
-## Proposed point-in-time transformations
+## Authorized retrospective transformations
 
-Every feature has event interval, publication/available-at time, source vintage,
-origin, role and transformation identity. Event-time lags alone do not establish
-historical publication availability. Require `available_at <= origin cutoff`;
-unknown vintages remain `UNVERIFIED` and cannot pass operational admission.
-Any consolidated-data retrospective approximation needs an explicit scientific
-disposition in the final protocol; it cannot silently claim point-in-time status.
-No global imputers, climatologies or learned aggregates. Fit any learned statistic
-on that cell's training partition only, freeze it and apply it to later roles.
-Raw past observations can be reused causally without fitting on later labels.
+The [Phase 1 contract](phase1-contract.json) and
+[source ledger](RETROSPECTIVE-SOURCES.json) bind the approved preparation regime.
+Consolidated snapshots preserve event observation windows and training-only
+references; event-time lags do not establish historical publication availability.
+Original ledger statuses remain unchanged: calendar2 PIT,33 RETROSPECTIVE_ONLY,
+terrain2 UNVERIFIED. Operational use would require separate released-value,
+origin-state and boundary evidence. No release date is fabricated by approval.
 
 ### HISTORY and calendar controls
 
-Exclude contemporaneous notifications, retained/hospitalized/death counts,
-incidences and date-register counts from predictors. This includes all 210/220
-contemporaneous result columns and their proxies. Build only the lagged history
-already permitted by the current preparation/feature contract. Before Phase 1
-implementation, freeze the exact approved lag names, count definition and mapping
-from the new 210/220 source semantics; no automatic sum, use of retained counts
-as notifications, extra severity feature or forward fill is allowed. This mapping
-is **pending**, because the new mart's observation semantics do not prove parity
-with the [national research table](../../../data/canonical-national-table.md).
-`E(T)` is an eligibility/comparator dependency, not permission to add a current
-predictor. Exclude spatial-neighbor features: R1's feature is not inherited.
+Use only pinned historical `dengue_notifications_count`,
+`dengue_grave_notifications_count` and `total_notifications_count` at exact
+lags1,2,3,12. Verify total count identity; use the original approved residence/
+INI_SIN and D2/D3 calendar assumptions. The new mart epidemiological fields remain
+audit-only. No contemporaneous count/result, retained count, death/incidence,
+date-register, spatial-neighbor, identifier, year or target enters X. `E(T)` is
+retrospective eligibility, not a contemporaneous predictor or proven operational
+state. National expansion applies to main training only; main calibration,
+selection and evaluation retain the exact frozen regional Meta/Tolima keys.
 
 ### Compact monthly climate
 
@@ -219,9 +216,9 @@ an areal mean of pixel daily maxima, not a municipal extreme-event maximum.
 These definitions avoid ambiguity about summing daily maxima.
 
 ONI is assigned to its **central** month: ONI(m) includes m+1. Do not treat
-ONI(T−1) as ending in T−1. Initial conservative proposal is central month T−2
-(window T−3…T−1), then an additional publication delay if required. Exact lag and
-ERSST revision/vintage availability remain pending evidence. No current/future
+ONI(T−1) as ending in T−1. Approved retrospective lag is central month T−2
+(window T−3…T−1). Publication delay and ERSST revision/vintage availability
+remain unproved; this event-time window is not a release-time claim. No current/future
 ENSO phase or persistent-event labels; no recomputation using future windows.
 
 CHIRPS is primary. `FULL_ERA5_PRECIPITATION` replaces, never concatenates, CHIRPS
@@ -246,14 +243,15 @@ Retain `ndvi_medio`, `ndvi_desviacion`, `ndvi_disponible`; omit `ndvi_mediana`.
 Use lag1 mean and deviation, strict mean3 of `ndvi_medio`,
 `ndvi_medio(T−1) − ndvi_medio(T−2)`, and seasonal anomaly of lag1 mean relative
 to the training-only municipality/calendar-month mean. Require a documented
-training support rule; no available reference yields a missing anomaly, not a
-national full-data fallback. In territorial holdout, held-out municipal
+training support rule: at least one finite training observation per group;
+absent reference stays missing, with group support counts published. This is
+a preparation rule, not a claim of statistical robustness or class support. In territorial holdout, held-out municipal
 climatologies cannot be fitted on target data: use a training-national month
 reference for **both members** of the transport contrast and label that estimand
 change. Freeze support/reference choice before execution.
 
-Use `ndvi_disponible(T−1)` only after confirming it is legitimate observation
-availability known by T. Keep native missing values; no global interpolation or
+Use `ndvi_disponible(T−1)` as a genuine observation flag in the approved
+retrospective snapshot; no historical release-time claim follows. Keep native missing values; no global interpolation or
 imputation. NDVI is already scaled in the mart; do not multiply again by 0.0001.
 Removing NDVI removes all descendants and its availability flag.
 
@@ -262,7 +260,8 @@ Removing NDVI removes all descendants and its availability flag.
 Use only `altitud_media_m` and `pendiente_media_grados`; record SRTM source,
 static nature, geometry vintage and spatial lineage. Omit medians, slope-fraction
 thresholds and redundant statistics. Static measurement does not prove historical
-boundary correspondence; freeze the admitted crosswalk/disposition first.
+boundary correspondence. Approval permits the fixed retrospective measurement/
+current geometry only; the historical correspondence limitation remains explicit.
 
 ### Demography (secondary interpretation)
 
@@ -273,40 +272,32 @@ population/density rather than transform silently. Do not add equivalent age
 counts or complementary percentages. Demographic effects are secondary even
 when the admitted block is in the proposed full vector.
 
-Use only the last version demonstrably published before origin. Historical
-vintages remain **`UNVERIFIED`**. Annual reference year is not publication date;
-the MGN 2021 area used for density is an additional historical limitation.
-Do not backcast today's projection tables or copy present versions into past
-origins. Proposed `FULL_COMMON` includes this block **conditionally**: execution
-is blocked until vintages are admitted or Mauricio approves a separately frozen
-revised scope. An all-missing placeholder or silent block removal cannot count
-as an evaluated demographic ablation.
+Use the exact previous calendar observation year from the admitted consolidated
+snapshot. Verify within-year consistency and use its December row; a missing year
+stays missing, with no older-year fallback. This explicitly approved retrospective
+join is not a historical published projection vintage. Density's MGN2021 area
+remains a boundary limitation. Keep native missing values and unchanged cohorts.
 
 ### Annual MODIS land cover
 
-Never input all ten original fractions. Proposed exhaustive aggregates are:
+Audit five parts: natural vegetation (forest+shrub+savanna/grassland+wetland),
+agriculture (crop), urban, bare/other (bare soil+snow/ice+MODIS water), and the
+separate mixed crop/natural mosaic. The five parts close to100 within1e-4 percentage
+points; centered rank4 and many exact zeros preclude choosing log-ratios without
+a material zero-handling decision. **Approved predictors are natural, agriculture,
+urban and mosaic; bare/other is the omitted reference.** No mosaic redistribution,
+pseudocount or monthly-JRC equivalence is implied.
 
-- Natural vegetation: forest + shrub + savanna/grassland + wetland fractions.
-- Agriculture: crop fraction only in the current Phase 1 audit. Keep the mixed
-  crop/natural mosaic as a separate unresolved group. The original proposal to
-  allocate all mosaic to agriculture was not approved and is not implemented.
-- Urban: urban fraction.
-- Bare/other: bare soil + snow/ice + MODIS water fractions. This residual includes
-  water and is not equivalent to the monthly JRC surface-water measure.
-
-All use the corresponding `fraccion_*_modis_pct` source names in the protocol.
-Check bounds and compositional sum within declared tolerance. Phase 1 keeps five
-audit groups including unassigned mosaic; the final predictive composition and
-reference remain unresolved. No final land-cover predictor vector is published.
-Missing inputs produce missing aggregates.
-Select annual observations by their actual release date before origin; a nominal
-year−1 shift is insufficient without publication evidence. No 2025 imputation or
-extrapolation; annual version/release evidence remains `UNVERIFIED`.
+Use the exact previous complete observation year, with native missing aggregates,
+no missing-year fallback and no2025 imputation. This is consolidated retrospective
+use; historical release/value availability remains unverified. All five audit
+parts and source composition diagnostics remain preserved in the reconciliation.
 
 ### Surface water (retained secondary contrast)
 
 Retain the block for a specific covered-period experiment. JRC monthly coverage
-ends in **2021**. Never impute, extrapolate or carry water into **2022–2025**.
+ends in **2021**. Never impute, extrapolate or fill a later source observation.
+A January2022 origin may use the genuine December2021 lagged observation.
 `fuera_cobertura_temporal` and structural availability flags cannot be predictors
 or hidden year encodings. `FULL_COMMON` never depends on water for eligibility.
 
@@ -314,16 +305,17 @@ Propose only `fraccion_agua_superficial_pct_area_observada(T−1)` as the water
 predictor; retain `area_agua_superficial_m2`, `area_observada_m2` and coverage
 states for quality control, not additional redundant inputs. Require observed
 area >0 and genuine water observation (zero observed water is valid). Use an
-availability-safe month only; release/vintage evidence is still pending.
+genuine event-time lag under the approved retrospective regime; historical
+release/vintage evidence remains unproved.
 
 Contrast `FULL_COMMON` versus `FULL_COMMON + SURFACE_WATER`
 (`FULL_PLUS_SURFACE_WATER`). Restrict **both** models' training, calibration,
 selection and evaluation to the same genuinely covered feature rows, target
-periods and observation keys. Conservatively propose Y=2020/2021 only, with
-feature/target coverage wholly within the admitted period; definitive years and
-support must be frozen. No 2022 endpoint via December-2021 lag and no 2024 missing
-water arm. Refit the restricted FULL reference rather than reuse its unrestricted
-primary fit. If any role lacks class/coverage support, mark the pair unavailable.
+periods and observation keys. Prepared water pairs have support in2020/2021 and
+partial2022 (including January origins with December2021 observations). Both2024
+water comparisons are explicitly unavailable; the main2024 stress fold remains.
+No missing water metrics are emitted as zero. A future model phase must separately
+freeze class/calibration support and refit both restricted arms under authorization.
 Water results remain secondary and cannot substitute for general contract results.
 
 ## Frozen missingness safeguards
@@ -481,16 +473,17 @@ a champion, grants G5, proves prospective availability or authorizes deployment.
 
 | Phase | Future scope | Exit condition |
 | --- | --- | --- |
-| **1 — Data admission and preparation** | Freeze/admit the dataset and feature mapping; Kedro catalog; normalization; origin-safe transformations/blocks; schema, key, coverage and leakage checks; H5/frozen-cohort parity | Reproducible prepared matrices and identities, demonstrated absence of future predictor information, **zero real fits**. Unresolved vintages/parity block admission |
+| **1 — Data admission and preparation** | Freeze/admit the dataset and feature mapping; Kedro catalog; normalization; origin-safe transformations/blocks; schema, key, coverage and leakage checks; H5/frozen-cohort parity | Reproducible prepared matrices and identities, demonstrated absence of future predictor information, **zero real fits**. Approved retrospective provenance, exact parity and reproduced matrices required; no operational PIT claim |
 | **2 — Training and ablation implementation** | Implement national XGBoost and matrix; separated training/calibration/selection; generated synthetic/integration checks; isolated temporary MLflow tracking | Technically ready pipeline; **zero permanent scientific execution before explicit authorization**; counts of models/calibrators/runs documented; generated fits cannot masquerade as scientific evidence |
 | **3 — Scientific execution and evaluation** | Freeze runtime; preflight; independent review; authorization bound to clean commit, final protocol/matrix, input hashes, environment and isolated MLflow store; **manual execution by Mauricio**; contract evaluation and traceable MLflow registration; then conclusions/registry updates | Reproducible traceable results; scientific conclusions separated from technical results. G5/champion unchanged unless a later independent human decision changes them |
 
-Only the bounded Phase 1 preparation infrastructure is now exercised; scientific
-admission still blocks its completion. Phase 2 must not use the real dataset as a
+Only the approved retrospective Phase 1 preparation is exercised; actual matrix
+and gate evidence is recorded in the handoff. No predictive results are produced. Phase 2 must not use the real dataset as a
 synthetic fixture. Phase 3 cannot reuse another experiment's authorization/store
 identity or treat a preflight receipt as execution approval.
 
-Provisional upper planning count, **not a reservation or execution budget**:
+Historical initial estimate (water2020/2021 only), **not the current prepared-view
+count, a reservation or an execution budget**:
 8 common arms × 4 years × 2 horizons = 64 model fits and 64 calibrators;
 water pair × 2 years × 2 horizons = 8+8; ERA5 pair × 4×2 = 16+16; territorial
 holdout plus matched national-reference pair × 4×2 = 16+16. Total up to
@@ -505,14 +498,14 @@ after definitive years, support and reference choices; zero are created here.
 
 | Decision | Required resolution |
 | --- | --- |
-| Epidemiological source mapping, history features and H5 | Approved count definition/lag list, observed-zero semantics, warmup/training start, exact national and frozen Meta/Tolima role parity |
-| Availability | Historical publication/vintages for demography (including density geometry), annual MODIS, centered/revised ONI, climate, NDVI and JRC; geography correspondence and metadata contradictions |
-| Primary block admission | Admit every intended block, or obtain approval for an explicitly revised FULL vector; no silent exclusion or null placeholders |
+| Historical source/H5/cohorts | Resolved for preparation through proposal A and exact native parity; preserve the pinned sources and original admission masks |
+| Operational availability | Unproved; proposal A permits retrospective preparation only. Any operational PIT/deployment inference requires new evidence and authority |
+| Retrospective block admission | Resolved for preparation: FULL_COMMON48, HISTORY14, four-part MODIS; preserve missingness and closed selectors |
 | Years and pair populations | Finalize 2020/2021/2022/2024, covered water years/rows and matched ERA5/transport populations before scientific results |
 | Model/calibration | Pin remaining parameters, dependency/runtime version, row weights, calibrator method and class/support failure rules |
 | Alert policy/comparators | Freeze B, tie/support/no-alert handling and compatibility of frozen comparators or a separately approved score-only matching procedure |
 | Statistical interpretation | Freeze paired uncertainty design, historical transmission-profile identity/mapping, materiality/stability thresholds, pooled/stratum rules and multiplicity interpretation |
-| Composition and references | Accept MODIS mosaic allocation/residual and predictive reference; define NDVI training support and holdout reference |
+| Composition/references | Resolved for preparation: separate mosaic, bare/other reference, finite training-group support, matched national-month transfer references; future modeling support remains pending |
 | Publication/tracking | Resolve technical registration identity/schema without changing the closed registry now; freeze native bundle/store and exact counts later |
 | Authority | Final protocol freeze, independent review and phase-specific authorization; execution authorization tied to all immutable identities |
 

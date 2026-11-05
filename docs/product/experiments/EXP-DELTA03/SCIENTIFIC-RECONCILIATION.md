@@ -1,23 +1,25 @@
 # EXP-DELTA03 — scientific source reconciliation
 
-## Current decision
+## Current decision — approved proposal A
 
-Source outcome: **`HISTORICAL_ESTIMAND_RECONCILABLE`**, not equivalence of the
-new mart fields. Phase 1 remains incomplete. No final matrix, target-source
-substitution, retrospective protocol amendment or predictive MODIS encoding has
-been adopted. Scientific execution remains `not_authorized`.
+Source outcome remains **HISTORICAL_ESTIMAND_RECONCILABLE**, with direct equivalence
+of new occurrence fields to historical residence counts disproved. Mauricio
+explicitly approved [proposal A](PHASE1-AUTHORIZATION.md): retain historical V2
+labels/cohorts and prepare a consolidated-data retrospective ablation, with four
+separate MODIS fractions and bare/other reference. The [Phase 1 handoff](PHASE1.md)
+records actual matrices, exact frozen parity, reproduction and engineering gates.
 
-The historical residence-based outcome can be reproduced exactly from the same
-immutable microdata. The current mart instead measures notifications assigned to
-occurrence geography, with a different date/absence policy. Choosing which target
-source EXP-DELTA03 will consume is a material contract binding. Calendar controls
-are the only presently demonstrable point-in-time predictors; they cannot support
-the intended climate ablation. Current excess `E(T)` also comes from consolidated
-notifications, whose operational availability at T is unverified.
+Approval does not establish historical release/value vintages, operational E(T)
+availability or boundary correspondence. Calendar-only operational PIT admission
+remains inadequate for climate ablation; all other uses are explicitly retrospective.
+No training, Phase2 or merge is authorized. Protocol remains draft and predictive
+execution not_authorized. PLAN054 and original scientific results remain preserved.
 
-This report supplements [the Phase 1 handoff](PHASE1.md). It preserves the
-[academic contract](../contrato.md), original predictive results and PLAN_054.
-PLAN_055 continues at `T-final-review`, with scientific readiness unsatisfied.
+The remaining sections record the **pre-approval investigation checkpoint** and
+its immutable8d19d095 bundle. References below to a pending proposal, withheld
+matrices or failing strict-PIT readiness describe that historical checkpoint;
+they are superseded for current preparation by the approved authorization and
+DWP revision3, without rewriting the old failures or claiming PIT success.
 
 ## Evidence and reproducibility
 
@@ -197,7 +199,7 @@ Water remains secondary and genuine observations end in 2021. Both 2024 folds
 have **zero** observed lag-one water support in selection and evaluation. Do not
 impute, interpret this as zero observed water, or remove the 2024 primary fold.
 
-## MODIS composition and bounded proposal A
+## MODIS composition and bounded proposal A — pre-approval checkpoint
 
 There are 20,196 complete municipality-years (1,122 × 2007–2024), with all 2025
 annual values missing. Five separate audit parts sum to 100 within 1e−4 percentage

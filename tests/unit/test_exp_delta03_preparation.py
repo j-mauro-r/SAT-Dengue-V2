@@ -33,6 +33,11 @@ def fixture() -> tuple[pd.DataFrame, dict, list[dict[str, str]]]:
     contract = json.loads(
         (ROOT / "docs/product/experiments/EXP-DELTA03/phase1-contract.json").read_text()
     )
+    # Preserve the original unapproved-PIT guard scenarios independently of the
+    # newly approved retrospective production contract.
+    contract["preparation_regime"] = "STRICT_POINT_IN_TIME"
+    contract["history_source_mapping"] = None
+    contract["historical_equivalence"] = "UNRESOLVED"
     rows = []
     for code in ["05001", "50001", "73001"]:
         for i, month in enumerate(pd.period_range("2007-01", "2014-12", freq="M")):

@@ -1,5 +1,5 @@
 {
-  "schema": "exp-delta03-phase1-contract-v1",
+  "schema": "exp-delta03-phase1-contract-v2",
   "experiment_id": "EXP-DELTA03",
   "execution": "not_authorized",
   "phase": "preparation_only",
@@ -196,14 +196,18 @@
     3,
     12
   ],
-  "history_source_mapping": null,
-  "historical_equivalence": "UNRESOLVED",
+  "history_source_mapping": {
+    "dengue_notifications_count": "historical:dengue_notifications_count",
+    "dengue_grave_notifications_count": "historical:dengue_grave_notifications_count",
+    "total_notifications_count": "historical:total_notifications_count"
+  },
+  "historical_equivalence": "APPROVED_PINNED_V2_RESIDENCE_SOURCE_not_new_occurrence_alias",
   "availability_evidence": [],
-  "mosaic_assignment": "UNRESOLVED_keep_separate",
+  "mosaic_assignment": "APPROVED_SEPARATE_MOSAIC_FRACTION_bare_other_reference",
   "blocks": {
     "HISTORY": {
       "sources": [],
-      "feature_list_status": "pending_contract_mapping",
+      "feature_list_status": "approved_historical_source_12_lags",
       "rules": [
         "Only previously authorized epidemiological lags; freeze exact ordered list and 210/220 count mapping.",
         "No contemporaneous notifications, retained counts, hospitalizations, deaths, incidence or date registers.",
@@ -266,8 +270,9 @@
       ],
       "central_month_lag_proposed": 2,
       "event_window": "ONI central month T-2 covers T-3 through T-1",
-      "publication_delay": "additional delay if needed; final lag pending release/vintage evidence",
-      "availability": "UNVERIFIED"
+      "publication_delay": "Not established; retrospective use only, no release-time claim.",
+      "availability": "RETROSPECTIVE_ONLY",
+      "central_month_lag": 2
     },
     "NDVI": {
       "sources": [
@@ -289,7 +294,7 @@
       "change": "ndvi_medio(T-1)-ndvi_medio(T-2)",
       "seasonal_anomaly": "lag1 mean minus training-only municipality/calendar-month mean; missing reference stays missing",
       "holdout_reference": "training-national month mean for BOTH matched members; no fit of target municipal references",
-      "support_rule": "pending_before_execution",
+      "support_rule": "At least one finite value per training group; absent group stays missing. Group counts and cell/population identities published; no claim of minimum robustness.",
       "already_scaled": true
     },
     "TERRAIN": {
@@ -299,8 +304,8 @@
       ],
       "frequency": "static",
       "rules": [
-        "No medians or redundant slope fractions.",
-        "Record SRTM and geometry identity; admit historical correspondence."
+        "Fixed admitted measurement/current geometry retained for authorized retrospective preparation only.",
+        "No claim of historical boundary correspondence; no medians or redundant slope fractions."
       ]
     },
     "DEMOGRAPHY": {
@@ -315,14 +320,14 @@
         "poblacion_total",
         "densidad_poblacional_hab_km2"
       ],
-      "availability": "UNVERIFIED",
+      "availability": "RETROSPECTIVE_ONLY",
       "interpretation": "secondary",
-      "join": "latest demonstrably published vintage before origin; no present-vintage backcast",
+      "join": "Exact previous observation year, using that year December row; missing year stays missing. Consolidated snapshot, not a released historical vintage.",
       "density_caveat": "denominator uses static MGN 2021 area; historical correspondence unverified",
       "rules": [
         "Reject invalid negative log1p inputs.",
         "No equivalent counts and percentages together.",
-        "FULL_COMMON blocked until admitted or explicitly revised; no null placeholder."
+        "Authorized retrospective inclusion; native feature missingness retained without changing primary cohorts."
       ]
     },
     "LAND_COVER": {
@@ -360,11 +365,16 @@
           "fraccion_mosaico_cultivo_natural_modis_pct"
         ]
       },
-      "predictors": [],
+      "predictors": [
+        "natural_vegetation",
+        "agriculture",
+        "urban",
+        "mosaic_unassigned"
+      ],
       "reference": "bare_other retained for audit; omitted as predictor to avoid exact compositional closure",
-      "mosaic_allocation": "unresolved; retained separately, no final predictor vector authorized",
-      "availability": "UNVERIFIED",
-      "join": "annual observation with actual release date <= origin; not automatic previous calendar year",
+      "mosaic_allocation": "APPROVED separate fourth fraction; no redistribution; bare_other omitted reference",
+      "availability": "RETROSPECTIVE_ONLY",
+      "join": "Exact previous complete observation year, no missing-year fallback; consolidated snapshot, not historical release evidence.",
       "impute_2025": false
     },
     "SURFACE_WATER": {
@@ -375,7 +385,7 @@
         "agua_superficial_disponible",
         "estado_cobertura_agua_superficial"
       ],
-      "predictor": "fraccion_agua_superficial_pct_area_observada lag1, subject to actual availability",
+      "predictor": "Genuine observed T-1 fraction, observation <=2021-12, observed area >0. Jan2022 origin may use Dec2021; no later-source fill.",
       "quality_only": [
         "area_agua_superficial_m2",
         "area_observada_m2",
@@ -384,7 +394,7 @@
       ],
       "coverage_end": "2021-12",
       "requirement": "observed area > 0 and genuine observation; observed zero water remains valid",
-      "availability": "UNVERIFIED",
+      "availability": "RETROSPECTIVE_ONLY",
       "impute_2022_2025": false,
       "structural_flag_predictors": false
     }
@@ -402,7 +412,7 @@
     "FULL_ERA5_PRECIPITATION",
     "TRANSFER_EXCLUDE_META_TOLIMA"
   ],
-  "matrix_publication": "deny affected matrices until source mapping, exact H5/cohort parity, approved composition and historical release evidence pass",
+  "matrix_publication": "authorized retrospective shared base and exact frozen cohort views; preserve no-fit boundaries and explicit unsupported water cells",
   "near_constant_fraction": 0.995,
   "high_correlation_abs": 0.98,
   "output_root": "tmp/exp-delta03-phase1/products",
@@ -414,5 +424,53 @@
   "baseline": {
     "root": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
     "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8"
+  },
+  "previous_contract_sha256": "fd7296175c62c3db235ccebbe8e779e3c65c5b1badc5a6c7345acf295f44f93a",
+  "preparation_regime": "RETROSPECTIVE_CONSOLIDATED",
+  "retrospective_preparation": {
+    "status": "APPROVED",
+    "authority": "Mauricio",
+    "document": "docs/product/experiments/EXP-DELTA03/PHASE1-AUTHORIZATION.md",
+    "document_sha256": "b570261ddb9291c3a33f3d8ca89659e1fc26859527891b5eaba1baabd5a5720b",
+    "human_reply_sha256": "3b0380c21e112631865c043ac840899db8b662cb0c679ff585706914c2d30724",
+    "scope": "phase1_preparation_only",
+    "operational_PIT": false,
+    "training_authorized": false,
+    "phase2_authorized": false,
+    "merge_authorized": false
+  },
+  "historical_sources": {
+    "regional": {
+      "root": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+      "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8"
+    },
+    "national": {
+      "root": "data/processed/canonical_model_table_national_v1/c2267f61c7624f19ea7056c2d891512b12e85d81214145df1d31815d28fc3c29",
+      "manifest_sha256": "e801cf9b36b84ff0e0c8f336a88799d47f6e6bce9a6d1b155a1a37e20594afb4"
+    },
+    "benchmark": {
+      "root": "data/processed/benchmark/6cfc7bcf565ebdf7ff11ab3ff79d6d91ce7d2f392958c76aa55d310ba27b6c48",
+      "manifest_sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f"
+    },
+    "recovered_selection": {
+      "root": "data/processed/exp_delta01/recovered_selection/b2e8256c9c37f8ecdb5f895ccd6d936cfb11f3896adc654ecab3c386bf57acc1",
+      "manifest_sha256": "9261b170ba059ca81d4409f30a4fd08e377f2e1e6debf64b9d337d7f3a1bb4b6"
+    },
+    "G1": {
+      "root": "data/processed/exp_beta01_v2/a4fdd4d955f867c49a8142a334e989e084c30587262fac4e1940a2b8d9190d6e",
+      "manifest_sha256": "9fc80bfc0fae23f73f49c9e87afb3704a8fc5e19f8c7c924fe89505b94305e60"
+    }
+  },
+  "cohort_role_geography": {
+    "train": "all admitted national territories including Meta/Tolima",
+    "calibration": "exact frozen Meta/Tolima regional",
+    "embargo": "unused regional audit",
+    "selection": "exact frozen Meta/Tolima regional",
+    "evaluation": "exact frozen Meta/Tolima;2024 separate stress",
+    "transfer": "all learned roles outside Meta/Tolima, same target evaluation keys; explicit geographic exception"
+  },
+  "retrospective_source_ledger": {
+    "path": "docs/product/experiments/EXP-DELTA03/RETROSPECTIVE-SOURCES.json",
+    "sha256": "a2a62b205027155b9cce38fcb426f225c8ca6ba4ca63d00e2cb400fa40f5ba37"
   }
 }

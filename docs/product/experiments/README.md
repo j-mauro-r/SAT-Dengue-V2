@@ -1,14 +1,14 @@
 # Scientific Experiment Registry
 
-[EXP-DELTA03 — Phase 1 engineering handoff](EXP-DELTA03/PHASE1.md) records the
-implemented no-fit admission/EDA/Kedro preparation on the identified dataset.
-H5/count/cohort correspondence and historical vintages remain unresolved, so all
-final matrices are withheld and Phase 1 is not scientifically complete. The
-[design](EXP-DELTA03/DESIGN.md), protocol and matrix remain draft; scientific
-execution is `not_authorized`. Water remains secondary with honest coverage
-through 2021; MODIS mosaic stays separate. No training, calibration or MLflow
-writes occurred. G5 remains `NOT_APPROVED`, champion `not_selected`; Phase 2
-and merge require separate authority.
+[EXP-DELTA03 — approved retrospective Phase 1 preparation](EXP-DELTA03/PHASE1.md)
+records source reconciliation, exact historical V2 H5/cohort preservation and
+reproducible no-fit Kedro matrices. [Proposal A approval](EXP-DELTA03/PHASE1-AUTHORIZATION.md)
+permits consolidated retrospective snapshots and four separate MODIS fractions;
+it does not prove operational PIT availability or deployment. The design/protocol
+and modeling matrix remain draft; predictive execution is not_authorized.
+Water uses genuine observations through2021 only;2024 stress stays separate and
+2025 excluded. Zero training/calibration/permanent MLflow; G5 NOT_APPROVED,
+champion not_selected. Phase2 and merge remain unauthorized.
 
 [EXP-DELTA02-R1 — fixed-MGN spatial candidate `NOT_SUPPORTED`](EXP-DELTA02-R1/README.md)
 is the independently authorized revision that treats DANE MGN 2018 as one

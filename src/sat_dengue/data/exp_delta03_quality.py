@@ -65,6 +65,22 @@ def profile(
         if name == "fraccion_mosaico_cultivo_natural_modis_pct":
             decision = "unresolved"
             reason = "Mixed composition retained separately; no scientific allocation"
+        if contract.get("preparation_regime") == "RETROSPECTIVE_CONSOLIDATED":
+            if decision == "conditional":
+                reason = (
+                    "Only the declared retrospective transformation/QC use "
+                    "is approved; no PIT claim"
+                )
+            if decision == "target_or_future":
+                reason = (
+                    "New-mart epidemiology is audit-only; labels/history bind frozen V2 residence"
+                )
+            if name == "fraccion_mosaico_cultivo_natural_modis_pct":
+                decision = "conditional"
+                reason = "Approved separate retrospective mosaic fraction; never redistributed"
+            if name in contract["blocks"]["LAND_COVER"]["aggregates"]["bare_other"]:
+                decision = "descriptive_only"
+                reason = "Omitted compositional reference, retained in the five-part audit only"
         values = pd.to_numeric(series, errors="coerce").astype(float)
         invalid = int((series.notna() & values.isna()).sum())
         if info["tipo_dato"] in {"entero", "decimal"}:

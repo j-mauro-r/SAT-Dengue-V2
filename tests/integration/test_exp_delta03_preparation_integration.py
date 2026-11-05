@@ -95,3 +95,35 @@ def test_real_kedro_preparation_on_generated_source(
     ready = json.loads((products[0].parent / "readiness.json").read_text())
     assert ready["matrix_files_published"] == 0 and ready["phase1_complete"] is False
     assert (products[0].parent / "quality.json").is_file()
+
+
+def test_real_kedro_authorized_retrospective_matrix_and_immutable_repeat(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "delta03_retrospective_support", ROOT / "tests/unit/test_exp_delta03_retrospective.py"
+    )
+    assert spec and spec.loader
+    support = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(support)
+    sources = support.retrospective_fixture()
+    monkeypatch.setattr(adapter.Delta03SourcesDataset, "load", lambda self: sources)
+    original = adapter.publish
+    monkeypatch.setattr(
+        adapter, "publish", lambda root, relative, payloads: original(tmp_path, relative, payloads)
+    )
+    bootstrap_project(ROOT)
+    for _ in range(2):
+        with KedroSession.create(
+            project_path=ROOT,
+            runtime_params={"profile": "exp_delta03_preparation", "tracking": "disabled"},
+        ) as session:
+            cast(KedroSession, session).run(pipeline_names=["exp_delta03_preparation"])
+    products = list((tmp_path / "tmp/exp-delta03-phase1/products").glob("*/manifest.json"))
+    assert len(products) == 1
+    ready = json.loads((products[0].parent / "readiness.json").read_text())
+    assert ready["scientific_preparation_ready"] and not ready["operational_PIT"]
+    assert ready["matrix_files_published"] == 1 and ready["fits"] == 0
+    assert (products[0].parent / "prepared_features.csv").is_file()

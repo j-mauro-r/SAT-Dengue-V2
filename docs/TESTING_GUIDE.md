@@ -4,14 +4,14 @@
 
 The [Phase 1 handoff](product/experiments/EXP-DELTA03/PHASE1.md) owns real source
 admission, descriptive EDA, unavailable historical vintages, H5/count/cohort
-correspondence and withheld final matrices. Pure `data/exp_delta03*.py`, the
+correspondence and the explicitly approved retrospective matrices. Pure `data/exp_delta03*.py`, the
 `datasets/exp_delta03.py` adapter and the three explicitly selected Kedro profiles
 map to generated admission/identity/path, temporal/release/vintage, label/cohort,
 block/pairing/transfer, deterministic publication and real Kedro-session tests:
 
 ```bash
 mkdir -p tmp/exp-delta03-phase1/pytest
-PYTEST_DEBUG_TEMPROOT="$PWD/tmp/exp-delta03-phase1/pytest" KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_delta03_preparation.py tests/integration/test_exp_delta03_preparation_integration.py -q
+PYTEST_DEBUG_TEMPROOT="$PWD/tmp/exp-delta03-phase1/pytest" KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_delta03_preparation.py tests/unit/test_exp_delta03_reconciliation.py tests/unit/test_exp_delta03_retrospective.py tests/integration/test_exp_delta03_preparation_integration.py -q
 ```
 
 The focused scientific companion `data/exp_delta03_reconciliation.py` maps to
@@ -23,6 +23,19 @@ and its generated manifest-tampering regressions remain under
 `tmp/exp-delta03-phase1/`; they never run producer entry points or fit models.
 The [scientific report](product/experiments/EXP-DELTA03/SCIENTIFIC-RECONCILIATION.md)
 owns reproduction, frozen identity pins and current scientific gates.
+
+The authorized pure `data/exp_delta03_retrospective.py` maps to
+`tests/unit/test_exp_delta03_retrospective.py`: complete frozen cohort parity,
+training-only national expansion, transfer reference isolation,2025 invariance,
+prior-year annual observations, genuine water through2021, closed X selectors
+(including cross-fold cache renaming and removed-block reintroduction), and actual
+CSV readback/tampering. The generated authorized Kedro integration runs twice and
+verifies one immutable feature publication. The original strict-PIT negative
+fixtures remain separate; retrospective approval does not make them operational.
+Actual private preparation runs twice through the maintained Kedro route; the
+outer reproduction receipt binds current input/code/contract and all logical X,
+key/label hashes. `check_readiness.py` verifies the approved retrospective contract,
+never pretends historical release evidence was established.
 
 Run changed-file Ruff/format/mypy and changed-document links/privacy checks.
 The real preflight/preparation commands in the handoff perform no estimator fits,

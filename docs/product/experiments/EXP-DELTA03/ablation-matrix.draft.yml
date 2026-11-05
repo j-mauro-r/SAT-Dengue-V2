@@ -6,11 +6,16 @@ primary_reference: FULL_COMMON
 scientific_reconciliation:
   owner: SCIENTIFIC-RECONCILIATION.md
   state: HISTORICAL_ESTIMAND_RECONCILABLE
-  proposed_amendment: A; not adopted
-  verified_PIT_candidates: [month_sin, month_cos]
-  current_climate_ablation_evaluable: false
+  proposed_amendment: A;APPROVED only retrospective Phase1 preparation
+  verified_PIT_candidates:
+  - month_sin
+  - month_cos
+  current_climate_ablation_evaluable: Retrospective matrix prepared; predictive utility untested; no model
+    execution authorized
   rule: Do not emit identical calendar-only FULL_COMMON and HISTORY as climate evidence
-  MODIS_primary: excluded for unverified vintage; separate mosaic retained in audit
+  MODIS_primary: four separate natural/agriculture/urban/mosaic fractions;bare_other omitted reference
+  regime: RETROSPECTIVE_CONSOLIDATED
+  operational_PIT: false
 global_rules:
   same_primary_rows_labels_weights: true
   same_model_parameters: true
@@ -21,7 +26,8 @@ global_rules:
   evaluation_budget_transport: realized false alerts may differ; report them, never retune on evaluation
   remove_block: remove all descendants and associated availability flags
   individual_column_stage: not included; only separately frozen follow-up inside material blocks
-  unverified_blocks: block execution; do not silently omit or insert all-missing blocks
+  unverified_blocks: Approval permits declared consolidated snapshots only. Preserve evidence status,
+    event-time controls and training-only references; no operational PIT/deployment claim.
 block_definitions: protocol.draft.json#/variable_blocks
 variants:
 - id: HISTORY
@@ -143,10 +149,13 @@ variants:
   reference: FULL_COMMON
   reference_fit: refit both arms on WATER_COMMON in every role
   cohort: WATER_COMMON
-  evaluation_years_proposed:
+  evaluation_years_prepared:
   - 2020
   - 2021
-  max_target_year: 2021
+  - 2022
+  max_source_observation: 2021-12
+  '2022': partial genuine T-1 support;Jan2022 may use Dec2021;no fill
+  '2024': UNAVAILABLE_GENUINE_SOURCE_COVERAGE;retain primary stress fold
 - id: FULL_ERA5_PRECIPITATION
   blocks: *id001
   role: secondary_precipitation
@@ -179,4 +188,6 @@ planning_counts:
   maximum_models: 104
   maximum_calibrators: 104
   proposed_parent_plus_children_runs: 105
-  counts_status: provisional; recalculate before final freeze; zero created
+  counts_status: provisional later-phase planning only;recalculate including partial water2022 and class-support
+    rules before authorization;zero models/calibrators/runs created
+  basis: Historical initial estimate using water2020/2021 only;not108 prepared views or an execution budget

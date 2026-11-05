@@ -360,22 +360,27 @@ EXP-DELTA02 `NOT_EVALUABLE` record is unchanged. No promotion, T+2,
 EXP-DELTA03, new spatial search, G5/champion change, deployment, or merge is
 authorized by this closure.
 
-### EXP-DELTA03 — bounded Phase 1 engineering and blocked scientific admission
+### EXP-DELTA03 — approved retrospective Phase 1 preparation
 
-Mauricio authorized preparation and EDA on the existing PR #78 without model
-training or merge. The [Phase 1 handoff](../product/experiments/EXP-DELTA03/PHASE1.md)
-records strict real-source admission, reusable transformations, deterministic
-selectors, generated and real Kedro preparation, and the two bounded CI repairs.
-The [scientific reconciliation](../product/experiments/EXP-DELTA03/SCIENTIFIC-RECONCILIATION.md)
-reproduces both source aggregations, historical H5 and complete frozen cohort sets.
-Current mart occurrence counts are not equivalent to V2 residence counts; the
-historical estimand is reconcilable through the pinned historical source. Actual
-historical release/value vintages and operational E(T) availability are unproven.
-Only calendar controls pass current predictor PIT admission, so climate ablation
-is not evaluable. Final matrices remain withheld and Phase 1 incomplete. The next
-bounded human decision is proposal A: preserve historical targets and explicitly
-amend preparation to a consolidated-data retrospective ablation with a separate
-mosaic/reference encoding. It is not adopted; strict PIT completion instead needs
-historical archives. No Phase 2 follows.
+Mauricio approved [proposal A](../product/experiments/EXP-DELTA03/PHASE1-AUTHORIZATION.md)
+on existing PR #78: preserve historical V2 residence/INI_SIN labels and cohorts,
+prepare consolidated-data retrospective matrices, and use four separate MODIS
+fractions with bare/other reference. Main national expansion is training only;
+regional development/evaluation and explicit transfer boundaries remain fixed.
+The [handoff](../product/experiments/EXP-DELTA03/PHASE1.md) owns actual publications,
+reproduction, focused validation and final CI evidence. PLAN055 revision3 records
+the bounded acceptance amendment; PLAN054 and prior failures remain preserved.
+
+The [reconciliation](../product/experiments/EXP-DELTA03/SCIENTIFIC-RECONCILIATION.md)
+explains all observed source differences and reproduces historical H5/cohort keys.
+Current occurrence counts are audit-only. Historical release/value vintages and
+operational E(T) availability remain unproved; results cannot imply PIT or
+deployment readiness.2024 remains consumed retrospective stress;2025 excluded.
+Water uses genuine observations through2021 without later-source fill; unsupported
+2024 water pairs remain unavailable. No predictive experiment has run.
+
+Next bounded human gate is a separately requested Phase2 scope/protocol decision,
+including model/calibration support, false-alert budget/comparator matching,
+uncertainty and runtime/tracking freeze. No Phase2 work is authorized here.
 Protocol remains draft, execution not_authorized, G5 NOT_APPROVED and champion
-not_selected; no training, calibration or permanent MLflow writes occurred.
+not_selected. No training/calibration/permanent MLflow or merge is authorized.

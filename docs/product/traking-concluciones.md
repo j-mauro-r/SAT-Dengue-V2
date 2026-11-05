@@ -2088,3 +2088,27 @@ owner. No new DELTA or retrospective relaxation follows automatically. G5 stays
   independent review, not human acceptance of a feature/model. No EXP-DELTA03,
   automatic G5 approval or champion selection. Prior decisions/publications
   remain preserved; G5 `NOT_APPROVED`; `champion: not_selected`.
+
+
+## EXP-DELTA03 — approved retrospective Phase 1 preparation (2026-11-05)
+
+Mauricio explicitly approved [proposal A](experiments/EXP-DELTA03/PHASE1-AUTHORIZATION.md)
+for preparation only. Preserve historical V2 residence/INI_SIN labels, approved
+calendar-zero assumptions, exact H5/cohorts/roles, temporal controls,2025 exclusion
+and separate consumed2024 stress. Main national expansion is training only;
+regional calibration/selection/evaluation and the explicit geographic-transfer
+exception retain their original boundaries. Current occurrence notifications are
+audit-only and are not an alias of historical residence counts.
+
+Use consolidated environmental/demographic snapshots explicitly as retrospective
+inputs. Unknown release/value vintages, operational E(T) availability and historical
+boundary correspondence remain unproved. No result may imply operational PIT
+availability or deployment. MODIS uses four separate natural/agricultural/urban/
+mosaic fractions, omitting bare/other as reference; no redistribution. Secondary
+water uses genuine observations through2021 only, without later-source fill.
+
+The [Phase 1 handoff](experiments/EXP-DELTA03/PHASE1.md) owns actual preparation,
+reproduction and engineering evidence. This decision grants no training, fit,
+calibration, threshold/HPO, predictive scientific execution, permanent MLflow,
+Phase2 or merge authority. Draft protocol/execution restrictions and G5/champion
+remain unchanged. Prior decisions and predictive results remain historical evidence.
