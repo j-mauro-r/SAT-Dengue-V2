@@ -14,6 +14,16 @@ mkdir -p tmp/exp-delta03-phase1/pytest
 PYTEST_DEBUG_TEMPROOT="$PWD/tmp/exp-delta03-phase1/pytest" KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_delta03_preparation.py tests/integration/test_exp_delta03_preparation_integration.py -q
 ```
 
+The focused scientific companion `data/exp_delta03_reconciliation.py` maps to
+`tests/unit/test_exp_delta03_reconciliation.py`: independent observed-event key
+unions, complete-key/null-sensitive parity, residence/INI_SIN-only aggregation,
+annual MODIS closure/zeros/roundoff and rejection of within-year changes. Combine
+that file with the preparation suites above. The local private-data companion
+and its generated manifest-tampering regressions remain under
+`tmp/exp-delta03-phase1/`; they never run producer entry points or fit models.
+The [scientific report](product/experiments/EXP-DELTA03/SCIENTIFIC-RECONCILIATION.md)
+owns reproduction, frozen identity pins and current scientific gates.
+
 Run changed-file Ruff/format/mypy and changed-document links/privacy checks.
 The real preflight/preparation commands in the handoff perform no estimator fits,
 calibration, policy selection or MLflow writes. They may publish diagnostic

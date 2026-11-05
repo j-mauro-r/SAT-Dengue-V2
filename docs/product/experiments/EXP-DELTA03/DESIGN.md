@@ -17,7 +17,11 @@ subsequent Phase 1 request authorizes the guarded no-fit preparation described i
 [the Phase 1 handoff](PHASE1.md), on the same branch and PR #78. Scientific source
 admission remains blocked; no final matrix, training executor, model fit,
 calibration, permanent tracking or execution authorization is created. Phase 1 is
-not scientifically complete, and Phases 2/3 remain unauthorized.
+not scientifically complete, and Phases 2/3 remain unauthorized. The subsequent
+[scientific reconciliation](SCIENTIFIC-RECONCILIATION.md) reproduces the historical
+residence-based counts/H5/cohorts but disproves direct equivalence with the new
+occurrence fields. Its proposed retrospective amendment is not adopted; current
+PIT admission leaves only calendar controls and cannot support climate ablation.
 2025 is already consumed and cannot provide independent confirmation. The proposed
 2020/2021/2022/2024 comparisons are also consumed retrospective evidence.
 

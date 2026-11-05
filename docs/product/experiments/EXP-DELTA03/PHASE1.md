@@ -3,9 +3,10 @@
 ## State
 
 Preparation infrastructure is implemented and exercised with generated sources and
-the real identified CSV. **Phase 1 is not scientifically complete.** H5/count/cohort
-correspondence and historical vintages remain unresolved; every final training
-matrix is withheld. This is a preparation/data-quality execution, not a predictive
+the real identified CSV. **Phase 1 is not scientifically complete.** The [scientific reconciliation](SCIENTIFIC-RECONCILIATION.md) now reproduces
+historical counts, H5 and frozen cohorts exactly. Binding that separate target
+source into EXP-DELTA03 and choosing the availability regime remain unapproved;
+every final training matrix is withheld. This is a preparation/data-quality execution, not a predictive
 experiment. Protocol stays `draft`, execution `not_authorized`, G5 `NOT_APPROVED`
 and champion `not_selected`. There were zero estimator fits, calibrations,
 threshold selections, scientific model executions or MLflow writes.
@@ -82,18 +83,25 @@ municipality-month keys**:
 | `notificados_210` | `dengue_notifications_count` | 10,337 | 5,613 / 0 |
 | `notificados_220` | `dengue_grave_notifications_count` | 5,982 | 5,613 / 0 |
 
-No equivalence follows. The older national diagnostic uses the approved absence-
+The follow-up independently reconstructs both products with zero residual and
+classifies the historical estimand as `HISTORICAL_ESTIMAND_RECONCILABLE`. Direct
+field equivalence is false: producer geography is occurrence, historical V2 uses
+residence. The older national diagnostic uses the approved absence-
 as-zero assumption and INI_SIN-only date handling; this new product distinguishes
-absence from observed zero and documents date-source fallbacks. These are known
-semantic differences, not an approved reconciliation or a proven causal explanation
-for every discrepancy. No 210+220 sum, retained-count substitution, zero fill or
+absence from observed zero and documents date-source fallbacks. These are now reproducibly traced
+semantic differences, with exact reconstruction of both complete sources. Their
+ordered numerical decomposition is not causal attribution or authorization to
+alias occurrence counts as residence counts. No 210+220 sum, retained-count substitution, zero fill or
 new cohort is silently adopted.
 
 H5's five exact preceding same-month years, type-7 P75 and strict excess are
 implemented and checked on generated inputs. Conditional diagnostic labels use
 `notificados_210` only as a clearly unapproved candidate mapping; they are not
 historical H5 correspondence evidence and are not published as final labels.
-Primary cohort keys/class support consequently remain **UNRESOLVED**.
+Historical controls now match all 16 complete selection/evaluation key/label/role
+sets and all 182,886 national H5/onset rows. Final **EXP-DELTA03 target binding and
+cohort admission remain UNAPPROVED**. This follow-up constructed no new-mart H5
+labels; historical control hashes do not authorize a replacement source.
 
 No supplied metadata demonstrates origin-specific release dates plus exact value
 vintages for environmental/demographic sources. Production release evidence is
@@ -108,13 +116,16 @@ MODIS audit aggregation retains natural vegetation, crop, urban, bare/other and
 original proposed three-predictor composition is not frozen; no mosaic allocation
 or final predictive vector is approved.
 
-The minimum next scientific decision is a bounded source-correspondence study:
-identify an approved notification/date/absence mapping, reconcile exact historical
-H5/cohort memberships, and supply identifiable historical source/value releases.
-Alternatively, explicitly approve a revised retrospective estimand/cohort and its
-limits in a new protocol revision. Either route needs review before final matrix
-publication. Neither grants Phase 2, training, a budget, calibration method or
-model/hyperparameter approval.
+The source-correspondence investigation is complete. The next material decision
+is [proposal A](SCIENTIFIC-RECONCILIATION.md#modis-composition-and-bounded-proposal-a):
+preserve the pinned historical residence/INI_SIN labels, explicitly amend the
+preparation to a consolidated-data retrospective ablation, and retain four
+separate MODIS fractions with bare/other as reference. This proposal is not
+adopted. Current conservative PIT admission permits only the two calendar
+controls; neither meaningful climate ablation nor operational `E(T)` eligibility
+is demonstrated. Alternatively, strict PIT completion needs actual historical
+release/value archives. No source binding alone resolves this availability gap.
+No training, Phase 2 or merge follows from this investigation.
 
 ## Implemented route and consumers
 
@@ -246,3 +257,26 @@ recommended the bounded PR update only. Source readiness remains unapproved.
 Required CI is observed on the final PR head and recorded in the PR/evidence;
 local tests and this technical handoff do not substitute for it. Mauricio retains
 the merge decision. Phase 2 is not started.
+
+
+## Scientific reconciliation follow-up
+
+[The scientific report](SCIENTIFIC-RECONCILIATION.md) owns the new findings,
+reviewable alternatives, required decision and reproducible artifact names.
+The original engineering bundle above remains immutable. A separate diagnostic
+publication under `tmp/exp-delta03-phase1/scientific-reconciliation/` binds the
+correspondence, 280 historical role/scope hash controls, 37-entry vintage ledger,
+MODIS audit and readiness decision. The local pointer is
+`tmp/exp-delta03-phase1/reconciliation-publication.json`.
+
+No final EXP-DELTA03 cohort or matrix was silently substituted. MODIS is excluded
+from current primary PIT admission under the explicit conservative rule; its
+four-part retrospective encoding is a pending proposal. The original matrix
+selectors remain draft/withheld: calendar-only FULL_COMMON and HISTORY would be
+identical and would not test climate utility. Scientific readiness still fails.
+
+The scientific follow-up passed 48 focused checks (including generated Kedro
+sessions and manifest/payload-tampering controls), with no full local suite.
+Independent final re-review has no unresolved critical/high/medium findings.
+The companion computation repeated with identical payloads and immutable reuse;
+readiness still exits1 for the explicit scientific gates.

@@ -3,6 +3,14 @@ experiment_id: EXP-DELTA03
 status: draft
 execution: not_authorized
 primary_reference: FULL_COMMON
+scientific_reconciliation:
+  owner: SCIENTIFIC-RECONCILIATION.md
+  state: HISTORICAL_ESTIMAND_RECONCILABLE
+  proposed_amendment: A; not adopted
+  verified_PIT_candidates: [month_sin, month_cos]
+  current_climate_ablation_evaluable: false
+  rule: Do not emit identical calendar-only FULL_COMMON and HISTORY as climate evidence
+  MODIS_primary: excluded for unverified vintage; separate mosaic retained in audit
 global_rules:
   same_primary_rows_labels_weights: true
   same_model_parameters: true

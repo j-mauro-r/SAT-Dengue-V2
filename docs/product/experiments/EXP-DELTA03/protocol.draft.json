@@ -648,5 +648,21 @@
     ],
     "phase1_preparation_authorized": true,
     "start_scientific_training_now": false
+  },
+  "scientific_reconciliation": {
+    "owner": "docs/product/experiments/EXP-DELTA03/SCIENTIFIC-RECONCILIATION.md",
+    "source_state": "HISTORICAL_ESTIMAND_RECONCILABLE",
+    "new_mart_fields_equivalent_to_historical": false,
+    "historical_control_parity": "exact regional/national counts, H5 and full frozen selection/evaluation key-label-role sets",
+    "EXP3_target_source_binding": "pending_human_decision",
+    "verified_PIT_predictor_candidates": [
+      "month_sin",
+      "month_cos"
+    ],
+    "origin_state_availability": "UNVERIFIED_consolidated_E_T_is_not_a_historical_snapshot",
+    "MODIS_current_primary_disposition": "excluded_unverified_vintage; mosaic audit separate",
+    "proposal_A": "historical V2 target + explicit retrospective availability amendment + four separate MODIS fractions; not adopted",
+    "matrices_published": 0,
+    "phase1_complete": false
   }
 }
