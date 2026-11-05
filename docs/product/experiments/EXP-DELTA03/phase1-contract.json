@@ -409,7 +409,7 @@
   "governance": {
     "G5": "NOT_APPROVED",
     "champion": "not_selected",
-    "authorization": "documentation and PR only; separate authority required for each future phase"
+    "authorization": "Bounded Phase 1 preparation and existing PR update authorized; training, Phase 2/3 and merge remain unauthorized."
   },
   "baseline": {
     "root": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",

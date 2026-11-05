@@ -208,6 +208,22 @@ class Delta03SourcesDataset(AbstractDataset[dict[str, Any], dict[str, Any]]):
             file = safe_path(ROOT, "data/sources/dataset_v3/" + name, "data/sources/dataset_v3")
             if identity(file)["sha256"] != digest:
                 raise DatasetError("Source metadata identity changed")
+        with (ROOT / "data/sources/dataset_v3/v1.1.0_manifest.csv").open(
+            newline=""
+        ) as manifest_stream:
+            entries = list(csv.DictReader(manifest_stream))
+        primary = [entry for entry in entries if entry["tipo_artefacto"] == "producto_principal"]
+        if len(primary) != 1:
+            raise DatasetError("Ambiguous producer manifest")
+        main = primary[0]
+        if (
+            main["ruta_relativa"] != source["producer_manifest_path"]
+            or main["sha256"] != source["expected_sha256"]
+            or int(main["tamano_bytes"]) != source["expected_bytes"]
+            or int(main["filas"]) != source["expected_rows"]
+            or int(main["columnas"]) != source["expected_columns"]
+        ):
+            raise DatasetError("Contradictory producer manifest identity")
         dictionary = list(
             csv.DictReader(
                 io.StringIO(
