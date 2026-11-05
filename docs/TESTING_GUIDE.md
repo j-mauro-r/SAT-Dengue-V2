@@ -1,5 +1,26 @@
 # Testing and Validation Guide
 
+## EXP-DELTA02-R1 fixed-MGN spatial candidate
+
+The independent EXP-DELTA02-R1 revision preserves the original EXP-DELTA02
+`NOT_EVALUABLE` publication and adopts the already-pinned DANE MGN 2018 geometry
+as one fixed retrospective approximation. Its sole intervention is
+`neighbor_dengue_mean_lag1` appended to the inherited G0_OFF procedure. Map the
+R1 protocol/source fences, feature graph and joins, candidate temporal roles,
+paired metrics, immutable publication and runner to
+`tests/unit/test_exp_delta02_r1.py` and
+`tests/integration/test_exp_delta02_r1_integration.py`. Before push, run the
+focused tests for the touched behavior, scoped Ruff/format/mypy, Markdown links and changed-
+diff privacy/security scans. Real execution additionally requires exact pinned
+private sources, MGN 2018 graph/self/point/positive-edge checks, prefix invariance,
+complete-neighbor missingness, 76/2,653/313 cohort reconciliation, H5/P75 and
+role preservation, frozen comparator identities, academic FAR/A/B/C arithmetic,
+byte-identical publication reproduction and aggregate-only committed evidence.
+No geography download/search, alternative feature/model/window, historical
+suite, notebook, dashboard, T+2 or evaluation tuning is required or authorized.
+CI owns the complete model/metric gate selected from the final diff; independent
+scientific/local review remains a separate PR gate.
+
 ## EXP-DELTA02 spatial feasibility closure
 
 The bounded `scripts/audit_exp_delta02_feasibility.py` reproduces the observed

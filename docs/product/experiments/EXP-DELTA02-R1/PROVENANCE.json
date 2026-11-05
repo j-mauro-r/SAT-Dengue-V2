@@ -1,0 +1,33 @@
+{
+  "schema": "exp-delta02-r1-aggregate-provenance-v1",
+  "experiment_id": "EXP-DELTA02-R1",
+  "executed_on": "2026-11-03",
+  "code_commit": "5ee3bb4964ae12e68dbc9ba501b841448533d49d",
+  "bundle_id": "1d2665c4a348ddcf9aa270336cb89f27b490d6292c393f8ef88b4c98c84a57d8",
+  "bundle_manifest_sha256": "33a8b2d21cb7b97aa7015a1ffcf419528a327127b648cb3bcaefbc4325f01975",
+  "protocol_sha256": "d9c392db5564bdebea6315802fc0e80e2eae4d83d43984cae94d7c26a5d528d0",
+  "source_spec_sha256": "48b3330defa76f8e3bc58190dd79c6ad303d8f5eda8d0b6f8a239db53da89ea1",
+  "dependency_commit": "b3c982f16f938baae885b299544459db80445fbe",
+  "cohort": {
+    "horizon": 1,
+    "rows": 2653,
+    "onsets": 313,
+    "target_municipalities": 76,
+    "years": [2020, 2021, 2022, 2024]
+  },
+  "graph": {
+    "vintage": 2018,
+    "directed_target_neighbor_edges": 460,
+    "external_neighbor_municipalities": 66
+  },
+  "feature_coverage": {
+    "available": 481,
+    "missing": 2172,
+    "missing_reason": "unknown_neighbor_count"
+  },
+  "scientific_disposition": "NOT_SUPPORTED",
+  "reproduction": "BYTE_IDENTICAL",
+  "private_rows_committed": false,
+  "G5": "NOT_APPROVED",
+  "champion": "not_selected"
+}

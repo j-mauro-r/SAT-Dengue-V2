@@ -1,0 +1,46 @@
+{
+  "schema": "exp-delta02-r1-source-spec-v1",
+  "experiment_id": "EXP-DELTA02-R1",
+  "dependency": {
+    "commit": "b3c982f16f938baae885b299544459db80445fbe",
+    "original_provenance_path": "docs/product/experiments/EXP-DELTA02/PROVENANCE.json",
+    "original_provenance_sha256": "87229d626013b36c01413cd86cdae922fc6a50a15bcaead488ab2fafa1fbf23c",
+    "original_source_spec_path": "docs/product/experiments/EXP-DELTA02/sources.json",
+    "original_source_spec_sha256": "3ae153ecc6378adf84382b5fa554c1450976130bbcbcfb7122ffeddc9fe32d7a",
+    "original_result_path": "data/processed/exp_delta02/7052ca8a259eb68ecc0c09f8d939399f6e098556a3f4492dfef7ea68c1b0ee8e",
+    "original_result_manifest_sha256": "bee83fc689ff009d68adaf38b055420c5a50653b412c5fc9a5056549ad08e24b"
+  },
+  "authority": {
+    "academic_contract_path": "docs/product/experiments/contrato.md",
+    "academic_contract_sha256": "e966bdecac08b2b54e597391cb716a20195ea1a09abacf9ad737f8cd063d4607",
+    "beta_protocol_path": "docs/product/experiments/EXP-BETA01/protocol.phase2.json",
+    "beta_protocol_sha256": "88e05dc69a64fa443f60ab29a135216c300b82e8efd8715d450a6787a55964da",
+    "benchmark_protocol_path": "docs/product/experiments/benchmark/protocol.json",
+    "benchmark_protocol_sha256": "6eb69f14ab19c04d844fe0aaac1c298c6f77c8f718ce965329632b2510453e05"
+  },
+  "sources": {
+    "geography": {
+      "path": "data/processed/exp_delta02/sources/9d6ad24d1d1f3bb534deb8a44de446fb22859d29f6e8ce355980932be809c96b",
+      "manifest_sha256": "51cf68153abc51c80b4ed48fdae5c4cb50bfdb108608f30ede1abe2321fc86a6",
+      "allowed_members": ["mgn2018.shp", "mgn2018.shx", "mgn2018.dbf", "mgn2018.prj", "mgn2018.cpg", "mgn2018.shp.xml"]
+    },
+    "regional": {
+      "path": "data/processed/canonical_model_table_v1/ddf4d3be23f7ce2cd874bbdc73fdf0f7b9ae5e6f7055b2761ec23bd31fc15c98",
+      "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8"
+    },
+    "national": {
+      "path": "data/processed/canonical_model_table_national_v1/c2267f61c7624f19ea7056c2d891512b12e85d81214145df1d31815d28fc3c29",
+      "manifest_sha256": "e801cf9b36b84ff0e0c8f336a88799d47f6e6bce9a6d1b155a1a37e20594afb4"
+    },
+    "benchmark": {
+      "path": "data/processed/benchmark/6cfc7bcf565ebdf7ff11ab3ff79d6d91ce7d2f392958c76aa55d310ba27b6c48",
+      "manifest_sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f"
+    },
+    "g0_off": {
+      "path": "tmp/kedro-migration/exp-beta01-runs/37a0cae62f4d3fa59cede281e032c9abd1b568a90933855b9eebd3b3d3fb5f4a",
+      "manifest_sha256": "4f6b86fcfcf46dbb47123b33ac29ecc9c23b62e65ac1c83ec460231f04816d7e"
+    }
+  },
+  "fit_requires_verified_sources": true,
+  "publication_root": "data/processed/exp_delta02_r1"
+}
