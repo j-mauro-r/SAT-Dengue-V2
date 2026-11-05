@@ -179,3 +179,25 @@ def resolve_configuration(inputs: dict[str, Any], parameters: dict[str, Any]) ->
             raise ValueError("Invalid scientific document schema")
     body = {"schema": "sat-dengue-resolved-configuration-v1", "operational": operational, **inputs}
     return {**body, "configuration_sha256": hashlib.sha256(canonical_bytes(body)).hexdigest()}
+
+
+def matches_frozen_authority(relative: str, raw: bytes, expected: str) -> bool:
+    """Verify exact frozen bytes or the single reviewed dev-only Shapely addition.
+
+    This engineering amendment preserves every byte outside its exact added line;
+    it never rewrites protocol pins or permits scientific/runtime dependency drift.
+    Execution receipts still bind the actual current configuration/code/environment.
+    """
+    actual = hashlib.sha256(raw).hexdigest()
+    if actual == expected:
+        return True
+    frozen = "92ab435ccad1e0844c433d82d54ffb7b5374f029c5895a9bca80ddbc97e9e123"
+    amended = "64243055f4a06e97b2f372232f86a1d4af6da668b2e99ce105960dd34e08bdd1"
+    addition = b'    "shapely==2.1.2",\n'
+    return (
+        relative == "pyproject.toml"
+        and expected == frozen
+        and actual == amended
+        and raw.count(addition) == 1
+        and hashlib.sha256(raw.replace(addition, b"", 1)).hexdigest() == frozen
+    )

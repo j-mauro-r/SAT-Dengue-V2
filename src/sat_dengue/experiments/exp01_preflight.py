@@ -5,7 +5,6 @@ Private input contents and MLflow writers are never opened by preflight.
 
 from __future__ import annotations
 
-import hashlib
 import importlib.metadata
 import json
 import os
@@ -18,7 +17,12 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import quote
 
-from sat_dengue.configuration import AUTHORITIES, canonical_bytes, validate_parameters
+from sat_dengue.configuration import (
+    AUTHORITIES,
+    canonical_bytes,
+    matches_frozen_authority,
+    validate_parameters,
+)
 from sat_dengue.datasets.stage2 import NATIVE_IDENTITIES, NATIVE_MANIFEST
 from sat_dengue.experiments.exp01 import digest, load_protocol
 from sat_dengue.tracking.experiments import MLFLOW_EXPERIMENT_NAME, unique_object
@@ -191,7 +195,7 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
         )
     protocol = load_protocol()
     for relative, expected in protocol["reproducibility"]["authority_sha256"].items():
-        if hashlib.sha256(safe_path(relative).read_bytes()).hexdigest() != expected:
+        if not matches_frozen_authority(relative, safe_path(relative).read_bytes(), expected):
             raise ValueError("EXP01 frozen authority changed: " + relative)
     if sources != source_metadata():
         raise ValueError("EXP01 source descriptor changed")

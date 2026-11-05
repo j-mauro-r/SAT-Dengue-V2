@@ -28,6 +28,12 @@ controlled missing-dependency error. Private MGN tests still require private
 sources/optional readers and do not become generated evidence. Validate the
 existing diagnostic/domain tests and current engineering metadata/constraints
 when touching those repairs; preserve original scientific identities and tests.
+The exact dev-only authority amendment in `configuration.matches_frozen_authority`
+and the three frozen preflights map to `tests/contracts/test_kedro_configuration.py`,
+`tests/integration/test_exp01_catalog.py::test_real_context_preflight_is_structural_and_creates_no_output`,
+`tests/integration/test_exp02_catalog.py` and
+`tests/integration/test_exp03_admission.py`. These check structural admission and
+strict hash drift without estimator execution; frozen protocol pins stay unchanged.
 GitHub owns the full required suite; no full local suite or notebook execution.
 
 

@@ -204,6 +204,15 @@ is unchanged; historical execution requires its historical checkout, not the
 current adapter import path. Existing original metadata identities are preserved;
 only the current pyproject engineering identity and generated constraints change.
 
+The first integral CI run exposed an additional regression: frozen EXP01–EXP03
+preflights rejected the dev-only pyproject addition. This was introduced by this
+change and was investigated, not classified as inherited. The bounded engineering
+amendment in the migration owner accepts only the exact reviewed new hash and
+single literal Shapely line whose removal restores the exact original hash. Frozen
+protocol pins and all other dependency bytes remain unchanged. Any other authority
+edit fails closed. The focused structural/catalog/admission regression selection
+passed 63 tests without fitting, calibrating or opening private source contents.
+
 
 ## Focused validation and independent review
 
@@ -212,7 +221,7 @@ Kedro preparation/synthetic sessions, new admission/EDA/temporal/block contracts
 bootstrap/configuration, both inherited repairs and the exact directory contract.
 The generated geography repair separately passed 12 tests; one private MGN test
 requires the unavailable shapefile reader and is not generated evidence. Changed-
-file Ruff/format/mypy passed for 20 Python files; JSON, changed Markdown links,
+file Ruff/format/mypy passed for 23 Python files; JSON, changed Markdown links,
 diff whitespace and privacy scans passed. Isolated Shapely/NumPy installation and
 geometry calculation passed. No full local suite or predictive run was invoked.
 

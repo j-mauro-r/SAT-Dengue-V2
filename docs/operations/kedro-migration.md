@@ -1183,3 +1183,16 @@ publications remain authoritative. Scientific limitations, consumed 2025, G5
 NOT_APPROVED, champion not_selected, the 13 historical exceptions and 17 immutable
 KEEP / UNVERIFIED bundles remain unchanged. Session 7 stops before cleanup or Final
 Review; no runtime model approval, deployment or release follows from this replay.
+
+### EXP-DELTA03 test-dependency engineering amendment
+
+Mauricio's bounded Phase 1 CI-repair request authorizes the single dev-extra
+addition `shapely==2.1.2`. EXP01–EXP03 retain their immutable protocol authority
+pin `92ab435c…9e123` for the original pyproject. Structural validation accepts
+only the exact current engineering pyproject (`64243055…8bdd1`) whose removal of
+that one literal added line reproduces the frozen bytes exactly. All other bytes,
+including every base/modeling/tracking/notebook dependency, remain unchanged;
+any other edit, duplicated line, version change or unrelated authority path fails.
+This is not a general dev-field exemption or a frozen-protocol hash update.
+Actual runtime/configuration/code identities and fresh human execution approvals
+remain required; no historical authorization or scientific result changes.

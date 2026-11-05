@@ -251,3 +251,25 @@ def test_preserved_constraints_reject_unverified_extras_or_nonexact_pins(require
     ).encode()
     with pytest.raises(ValueError, match="exact direct pins"):
         preserved_lines(raw, "numpy==2.5.4\n")
+
+
+def test_reviewed_dev_addition_preserves_exact_scientific_authority() -> None:
+    from sat_dengue.configuration import matches_frozen_authority
+
+    old = "92ab435ccad1e0844c433d82d54ffb7b5374f029c5895a9bca80ddbc97e9e123"
+    raw = (ROOT / "pyproject.toml").read_bytes()
+    line = b'    "shapely==2.1.2",\n'
+    assert hashlib.sha256(raw.replace(line, b"", 1)).hexdigest() == old
+    assert matches_frozen_authority("pyproject.toml", raw, old)
+    assert not matches_frozen_authority("other/pyproject.toml", raw, old)
+    for changed in [
+        raw + b"\n",
+        raw.replace(b"xgboost==3.0.5", b"xgboost==3.0.6"),
+        raw.replace(b"shapely==2.1.2", b"shapely==2.1.3"),
+        raw + line,
+    ]:
+        assert not matches_frozen_authority("pyproject.toml", changed, old)
+    assert matches_frozen_authority("ordinary.json", b"{}", hashlib.sha256(b"{}").hexdigest())
+    assert not matches_frozen_authority(
+        "ordinary.json", b"changed", hashlib.sha256(b"{}").hexdigest()
+    )
