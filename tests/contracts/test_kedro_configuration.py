@@ -210,3 +210,29 @@ def test_metadata_amendment_has_exact_scope(
     path.write_text(json.dumps(ledger))
     with pytest.raises(AssertionError):
         verify_preservation_records(tmp_path, records)
+
+
+def test_isolated_constraint_addition_preserves_baseline_and_rejects_new_transitives(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from scripts import export_kedro_constraints as exporter
+
+    raw = (
+        b'[project]\ndependencies=["numpy==2.5.4"]\n'
+        b'[project.optional-dependencies]\ndev=["shapely==2.1.2"]\n'
+    )
+    baseline = "numpy==2.5.4\ncachetools==7.2.4\n"
+    monkeypatch.setattr(exporter.importlib.metadata, "version", lambda name: "2.1.2")
+    monkeypatch.setattr(exporter.importlib.metadata, "requires", lambda name: ["numpy>=1.21"])
+    assert set(exporter.preserved_lines(raw, baseline)) == {
+        "numpy==2.5.4",
+        "cachetools==7.2.4",
+        "shapely==2.1.2",
+    }
+    monkeypatch.setattr(
+        exporter.importlib.metadata, "requires", lambda name: ["unresolved-dependency>=1"]
+    )
+    with pytest.raises(ValueError, match="transitive"):
+        exporter.preserved_lines(raw, baseline)
+    with pytest.raises(ValueError, match="existing pin"):
+        exporter.preserved_lines(raw.replace(b"2.5.4", b"2.5.5"), baseline)

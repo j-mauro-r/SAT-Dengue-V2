@@ -638,8 +638,15 @@ kedro run --pipeline=foundation
 For an intentional dependency update, edit the canonical pyproject, resolve all
 extras in a *new* isolated environment, run
 `python scripts/export_kedro_constraints.py`, then validate the regenerated
-constraints through a clean install. Update the engineering metadata ledger and
-re-run acceptance. Do not hand-maintain divergent requirements pins. The observed
+constraints through a clean install. For an isolated new direct dependency whose
+runtime requirements are already satisfied by every preserved baseline pin,
+`python scripts/export_kedro_constraints.py --preserve-baseline` retains all
+existing versions and verifies the new installed pin against its declared
+requirements. Its header records the baseline identity and explicitly does not
+claim a new full-environment freeze. Validate the new dependency in isolated
+storage; changed existing pins or new transitive requirements still require the
+full clean resolution above. Update the engineering metadata ledger and re-run
+its focused acceptance. Do not hand-maintain divergent requirements pins. The observed
 constraints target Python 3.12.11/macOS arm64; Linux CI resolves the canonical
 direct pins and still requires its own platform/native validation.
 
