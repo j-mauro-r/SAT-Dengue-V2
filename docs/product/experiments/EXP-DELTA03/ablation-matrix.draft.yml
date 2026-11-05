@@ -1,0 +1,174 @@
+schema: exp-delta03-ablation-draft-v1
+experiment_id: EXP-DELTA03
+status: draft
+execution: not_authorized
+primary_reference: FULL_COMMON
+global_rules:
+  same_primary_rows_labels_weights: true
+  same_model_parameters: true
+  recalibrate_each_arm_on_authorized_calibration_only: true
+  threshold_selection: Y-1 only
+  false_onset_budget: same B and floor(B * eligible_rows / 12) within each comparison; B pending freeze
+  whole_score_ties: true
+  evaluation_budget_transport: realized false alerts may differ; report them, never retune on evaluation
+  remove_block: remove all descendants and associated availability flags
+  individual_column_stage: not included; only separately frozen follow-up inside material blocks
+  unverified_blocks: block execution; do not silently omit or insert all-missing blocks
+block_definitions: protocol.draft.json#/variable_blocks
+variants:
+- id: HISTORY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  role: secondary_joint_addition_control
+  cohort: PRIMARY_COMMON
+- id: FULL_COMMON
+  blocks: &id001
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  role: primary_reference
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_THERMAL_HUMIDITY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: THERMAL_HUMIDITY
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_RAINFALL_HYDROLOGY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: RAINFALL_HYDROLOGY
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_NDVI
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: NDVI
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_TERRAIN
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: TERRAIN
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_DEMOGRAPHY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - LAND_COVER
+  remove_all_descendants_and_flags: DEMOGRAPHY
+  role: secondary_demography_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_LAND_COVER
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  remove_all_descendants_and_flags: LAND_COVER
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_PLUS_SURFACE_WATER
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  - SURFACE_WATER
+  role: secondary_water
+  reference: FULL_COMMON
+  reference_fit: refit both arms on WATER_COMMON in every role
+  cohort: WATER_COMMON
+  evaluation_years_proposed:
+  - 2020
+  - 2021
+  max_target_year: 2021
+- id: FULL_ERA5_PRECIPITATION
+  blocks: *id001
+  role: secondary_precipitation
+  reference: FULL_COMMON
+  reference_fit: refit both arms on ERA5_COMMON in every role
+  cohort: ERA5_COMMON
+  replace_sources:
+    precipitacion_chirps_total_mm: precipitacion_total_mm
+    precipitacion_chirps_max_diaria_mm: precipitacion_max_diaria_mm
+    racha_seca_chirps_max_dias_promedio: racha_seca_max_dias
+  same_temporal_operators: true
+  concatenate_precipitation_sources: false
+- id: TRANSFER_EXCLUDE_META_TOLIMA
+  blocks: *id001
+  role: secondary_geographic_transfer
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON_EVALUATION
+  exclude_departments_all_learned_roles:
+  - '50'
+  - '73'
+  target_past_features: allowed if available; no fitting/calibration/selection on target rows
+  reference_fit: paired national FULL reference; training-national month NDVI climatology for both members;
+    same evaluation keys
+  replace_primary_comparison: false
+planning_counts:
+  common_models: 64
+  water_pair_models: 8
+  era5_pair_models: 16
+  transfer_pair_models: 16
+  maximum_models: 104
+  maximum_calibrators: 104
+  proposed_parent_plus_children_runs: 105
+  counts_status: provisional; recalculate before final freeze; zero created

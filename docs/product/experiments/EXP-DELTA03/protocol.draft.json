@@ -1,0 +1,652 @@
+{
+  "schema": "exp-delta03-protocol-draft-v1",
+  "experiment_id": "EXP-DELTA03",
+  "hypothesis_id": "EXP-DELTA03-H1",
+  "status": "design",
+  "execution": "not_authorized",
+  "protocol_status": "draft",
+  "frozen": false,
+  "execution_ready": false,
+  "evidence_type": "design_and_schema_metadata_only",
+  "activity_counters": {
+    "real_training_fits": 0,
+    "real_calibrations": 0,
+    "scientific_executions": 0,
+    "mlflow_writes": 0
+  },
+  "governance": {
+    "G5": "NOT_APPROVED",
+    "champion": "not_selected",
+    "authorization": "documentation and PR only; separate authority required for each future phase"
+  },
+  "question": "Which climatic, environmental, territorial and demographic groups add incremental H5 onset prediction at T+1/T+2 with national pooled XGBoost applied to Meta/Tolima on identical cohorts and false-alert budgets?",
+  "hypotheses": {
+    "H1": "FULL_COMMON adds detections over existing learning comparators under a verified common false-alert budget.",
+    "H2": "Removing a material block consistently reduces paired utility across years/departments.",
+    "H3": "Surface water adds value only on its genuine coverage cohort.",
+    "status": "untested"
+  },
+  "authority": {
+    "academic_contract": "docs/product/experiments/contrato.md",
+    "academic_contract_raw_sha256": "e966bdecac08b2b54e597391cb716a20195ea1a09abacf9ad737f8cd063d4607",
+    "governance": "docs/governance/ai-developer-first.md",
+    "legacy_governance_path": "docs/governance.md absent; current owner resolved through docs/README.md",
+    "architectural_reference_only": "docs/product/experiments/EXP03_feature_ablation/DESIGN.md"
+  },
+  "source": {
+    "path": "data/sources/dataset_v3/mart_dengue_colombia_canonico_municipio_mes_v1_1_0.csv",
+    "producer_manifest_path": "data/curated/mart_dengue_colombia_canonico_municipio_mes_v1_1_0.csv",
+    "expected_sha256": "1b4d3873f401cb7947b49f0c26023d843823d047aeb433b175de078daa6be486",
+    "expected_bytes": 446274685,
+    "expected_rows": 255816,
+    "expected_columns": 142,
+    "expected_municipalities": 1122,
+    "expected_months": 228,
+    "coverage": [
+      "2007-01",
+      "2025-12"
+    ],
+    "key": [
+      "divipola_municipio",
+      "periodo_mes"
+    ],
+    "metadata_sha256": {
+      "guia_uso_v1.1.0.md": "33c419283470cf08aef9055576690beab741956099148002b639da179c6d850e",
+      "v1.1.0_manifest.csv": "2eb97b1464d84771197eea71ba5d4e179e291b09543a7b6696e7f563c4dcde85",
+      "diccionario_datos_v1.1.0.md": "8554bcff2a64d5616cbb1c6040921f409e5b3a647626589d5ae7427fe4e5b298",
+      "source_registry.csv": "7504462aef3dae266c6248a384f436350f8e37f61bfae91a14ca5b57a54df1ff",
+      "v1.1.0.md": "edfe3e834856e9def3f56c0ededa472e4d44a00b98fbdcdfed7525d15438fbc4",
+      "validacion_final_v1.1.0.md": "392572312db6d9dc03d932934b796659eda0c035203b87e743440befe0197414",
+      "data_dictionary_v1.1.0.csv": "1831804f932fefc94312e4421ceaac1443e2c7cf8bb9dce7453c150532f874da"
+    },
+    "observed_raw_period_format": "YYYY-MM-DD, month-start day 01",
+    "expected_canonical_period_format": "YYYY-MM",
+    "verification_scope": "actual hash/bytes, header/dictionary agreement, keys and calendar metadata only; not scientific quality or availability approval",
+    "full_producer_manifest_verified": false,
+    "mutations_allowed": false
+  },
+  "geography": {
+    "primary": "pooled admitted national training; Meta/Tolima historical rows permitted only in authorized roles",
+    "evaluation_departments": [
+      "50",
+      "73"
+    ],
+    "evaluation_only": "Meta and Tolima",
+    "evaluation_period_rows_forbidden_in_any_learning_role_nationwide": true,
+    "secondary": "TRANSFER_EXCLUDE_META_TOLIMA; exclude both departments from all learned transformations, training, calibration, threshold selection",
+    "nationwide_evaluation_claim": false
+  },
+  "horizons": [
+    1,
+    2
+  ],
+  "H5": {
+    "history_years": 5,
+    "quantile": 0.75,
+    "quantile_method": "type-7",
+    "history": "exact previous five same-calendar-month years; reference dates used as predictors <= origin",
+    "excess": "observed count > P75",
+    "onset_T1": "E(T)=0 and E(T+1)=1",
+    "onset_T2": "E(T)=0 and E(T+1)=0 and E(T+2)=1",
+    "future_states": "outcomes only",
+    "epidemiological_validation": "experimental, not externally validated",
+    "source_count_mapping": "pending approved 210/220 observation/count correspondence; no automatic sum or zero"
+  },
+  "cohort": {
+    "eligibility": "known non-excess at T and evaluable exact-calendar H5 outcome",
+    "primary": "same ordered observations, labels and weights in every role for all common arms; no arm-specific complete-case filtering",
+    "identity": "freeze per-role/horizon/year ordered key and label hashes before arm construction",
+    "historical_control_counts": {
+      "T1": {
+        "rows": 2653,
+        "onsets": 313
+      },
+      "T2": {
+        "rows": 2422,
+        "onsets": 219
+      },
+      "status": "reconciliation controls only; new source parity UNVERIFIED"
+    },
+    "comparator_parity_failure": "block primary comparator claim; no silent intersections, substitutions or historical refits"
+  },
+  "roles": {
+    "index": "target year Y with inherited horizon-aware origin embargo",
+    "training": "through Y-4",
+    "calibration": "Y-3",
+    "embargo": "Y-2 unused for learning/adaptation; causally available raw history may serve future features",
+    "threshold_selection": "Y-1",
+    "evaluation": "Y",
+    "years_proposed": [
+      2020,
+      2021,
+      2022,
+      2024
+    ],
+    "year_mapping": [
+      {
+        "evaluation": 2020,
+        "training_end_year": 2016,
+        "calibration": 2017,
+        "embargo": 2018,
+        "selection": 2019
+      },
+      {
+        "evaluation": 2021,
+        "training_end_year": 2017,
+        "calibration": 2018,
+        "embargo": 2019,
+        "selection": 2020
+      },
+      {
+        "evaluation": 2022,
+        "training_end_year": 2018,
+        "calibration": 2019,
+        "embargo": 2020,
+        "selection": 2021
+      },
+      {
+        "evaluation": 2024,
+        "training_end_year": 2020,
+        "calibration": 2021,
+        "embargo": 2022,
+        "selection": 2023
+      }
+    ],
+    "training_start": "pending H5 warmup/source parity freeze",
+    "final_years_status": "pending_final_protocol_freeze",
+    "boundary_rule": "origins and label endpoints respect original embargo; reject target overlap across learned/evaluation roles",
+    "cross_cut_overlap": "predeclared rolling roles are not independent replications; no result-driven revisions"
+  },
+  "variable_blocks": {
+    "HISTORY": {
+      "sources": [],
+      "feature_list_status": "pending_contract_mapping",
+      "rules": [
+        "Only previously authorized epidemiological lags; freeze exact ordered list and 210/220 count mapping.",
+        "No contemporaneous notifications, retained counts, hospitalizations, deaths, incidence or date registers.",
+        "No missing epidemiological outcome imputation; no automatic zero from absent records."
+      ]
+    },
+    "CALENDAR": {
+      "sources": [
+        "periodo_mes"
+      ],
+      "predictors": [
+        "month_sin",
+        "month_cos"
+      ],
+      "transform": "sin(2*pi*month/12), cos(2*pi*month/12); derive year/month for roles only; no year predictor"
+    },
+    "THERMAL_HUMIDITY": {
+      "sources": [
+        "temp_media_c",
+        "amplitud_termica_media_c",
+        "vpd_medio_kpa",
+        "radiacion_total_mj_m2",
+        "viento_medio_ms"
+      ],
+      "lag1": "all sources",
+      "mean3": [
+        "temp_media_c",
+        "vpd_medio_kpa",
+        "radiacion_total_mj_m2",
+        "viento_medio_ms"
+      ]
+    },
+    "RAINFALL_HYDROLOGY": {
+      "sources": [
+        "humedad_suelo_capa1_media_m3_m3",
+        "precipitacion_chirps_total_mm",
+        "precipitacion_chirps_max_diaria_mm",
+        "racha_seca_chirps_max_dias_promedio"
+      ],
+      "lag1": "all sources",
+      "mean3": [
+        "humedad_suelo_capa1_media_m3_m3"
+      ],
+      "sum3": [
+        "precipitacion_chirps_total_mm"
+      ],
+      "max3": [
+        "racha_seca_chirps_max_dias_promedio"
+      ],
+      "precipitation_primary": "CHIRPS"
+    },
+    "ENSO": {
+      "sources": [
+        "oni_3m_c"
+      ],
+      "excluded": [
+        "nino34_anomalia_c",
+        "enso_fase_mensual",
+        "enso_evento_persistente"
+      ],
+      "central_month_lag_proposed": 2,
+      "event_window": "ONI central month T-2 covers T-3 through T-1",
+      "publication_delay": "additional delay if needed; final lag pending release/vintage evidence",
+      "availability": "UNVERIFIED"
+    },
+    "NDVI": {
+      "sources": [
+        "ndvi_medio",
+        "ndvi_desviacion",
+        "ndvi_disponible"
+      ],
+      "excluded": [
+        "ndvi_mediana"
+      ],
+      "lag1": [
+        "ndvi_medio",
+        "ndvi_desviacion",
+        "ndvi_disponible"
+      ],
+      "mean3": [
+        "ndvi_medio"
+      ],
+      "change": "ndvi_medio(T-1)-ndvi_medio(T-2)",
+      "seasonal_anomaly": "lag1 mean minus training-only municipality/calendar-month mean; missing reference stays missing",
+      "holdout_reference": "training-national month mean for BOTH matched members; no fit of target municipal references",
+      "support_rule": "pending_before_execution",
+      "already_scaled": true
+    },
+    "TERRAIN": {
+      "sources": [
+        "altitud_media_m",
+        "pendiente_media_grados"
+      ],
+      "frequency": "static",
+      "rules": [
+        "No medians or redundant slope fractions.",
+        "Record SRTM and geometry identity; admit historical correspondence."
+      ]
+    },
+    "DEMOGRAPHY": {
+      "sources": [
+        "poblacion_total",
+        "densidad_poblacional_hab_km2",
+        "porcentaje_urbanizacion",
+        "porcentaje_0_4",
+        "porcentaje_65_mas"
+      ],
+      "log1p": [
+        "poblacion_total",
+        "densidad_poblacional_hab_km2"
+      ],
+      "availability": "UNVERIFIED",
+      "interpretation": "secondary",
+      "join": "latest demonstrably published vintage before origin; no present-vintage backcast",
+      "density_caveat": "denominator uses static MGN 2021 area; historical correspondence unverified",
+      "rules": [
+        "Reject invalid negative log1p inputs.",
+        "No equivalent counts and percentages together.",
+        "FULL_COMMON blocked until admitted or explicitly revised; no null placeholder."
+      ]
+    },
+    "LAND_COVER": {
+      "sources": [
+        "fraccion_bosque_modis_pct",
+        "fraccion_matorral_modis_pct",
+        "fraccion_sabana_pastizal_modis_pct",
+        "fraccion_humedal_modis_pct",
+        "fraccion_cultivo_modis_pct",
+        "fraccion_urbana_modis_pct",
+        "fraccion_mosaico_cultivo_natural_modis_pct",
+        "fraccion_nieve_hielo_modis_pct",
+        "fraccion_suelo_desnudo_modis_pct",
+        "fraccion_agua_modis_pct"
+      ],
+      "aggregates": {
+        "natural_vegetation": [
+          "fraccion_bosque_modis_pct",
+          "fraccion_matorral_modis_pct",
+          "fraccion_sabana_pastizal_modis_pct",
+          "fraccion_humedal_modis_pct"
+        ],
+        "agriculture": [
+          "fraccion_cultivo_modis_pct",
+          "fraccion_mosaico_cultivo_natural_modis_pct"
+        ],
+        "urban": [
+          "fraccion_urbana_modis_pct"
+        ],
+        "bare_other": [
+          "fraccion_suelo_desnudo_modis_pct",
+          "fraccion_nieve_hielo_modis_pct",
+          "fraccion_agua_modis_pct"
+        ]
+      },
+      "predictors": [
+        "natural_vegetation",
+        "agriculture",
+        "urban"
+      ],
+      "reference": "bare_other retained for audit; omitted as predictor to avoid exact compositional closure",
+      "mosaic_allocation": "all to agriculture, pending scientific acceptance",
+      "availability": "UNVERIFIED",
+      "join": "annual observation with actual release date <= origin; not automatic previous calendar year",
+      "impute_2025": false
+    },
+    "SURFACE_WATER": {
+      "sources": [
+        "fraccion_agua_superficial_pct_area_observada",
+        "area_agua_superficial_m2",
+        "area_observada_m2",
+        "agua_superficial_disponible",
+        "estado_cobertura_agua_superficial"
+      ],
+      "predictor": "fraccion_agua_superficial_pct_area_observada lag1, subject to actual availability",
+      "quality_only": [
+        "area_agua_superficial_m2",
+        "area_observada_m2",
+        "agua_superficial_disponible",
+        "estado_cobertura_agua_superficial"
+      ],
+      "coverage_end": "2021-12",
+      "requirement": "observed area > 0 and genuine observation; observed zero water remains valid",
+      "availability": "UNVERIFIED",
+      "impute_2022_2025": false,
+      "structural_flag_predictors": false
+    }
+  },
+  "normalization": {
+    "strict_dates": true,
+    "unique_normalized_key": true,
+    "divipola_text_width": 5,
+    "derive_year_month": true,
+    "source_year_month": "reconcile only, not year predictor",
+    "source_manifest": "bind original producer entry to local copy by bytes; do not assert other producer paths verified",
+    "outputs": "record raw/normalized/prepared hashes and source/transform/role lineage; no source overwrite"
+  },
+  "point_in_time": {
+    "min_monthly_lag": 1,
+    "lag1": "x(T-1) by exact monthly key within municipality",
+    "window3": "exact T-3,T-2,T-1; require all 3 observed; no partial windows",
+    "publication_guard": "available_at <= origin cutoff; event-time lag insufficient",
+    "learned_statistics": "fit climatologies/aggregates/imputers on training only, then freeze",
+    "vintages_status": "UNVERIFIED until admitted; retrospective approximation requires explicit final disposition",
+    "excluded_predictors": [
+      "year",
+      "municipality/department identifiers",
+      "source/version strings",
+      "structural coverage flags",
+      "future outcome availability",
+      "all contemporaneous epidemiological results",
+      "transpiracion_vegetacion_total_mm_signo_era5"
+    ],
+    "signed_era5_fluxes": "not initially included; source meaning/units/distribution validated before any future conversion magnitude=-signed, explicit renaming and checks; never blind abs"
+  },
+  "missingness": {
+    "global_imputation": false,
+    "xgboost": "native missing-value treatment",
+    "availability_flags": "legitimate observation flags only, known by origin; remove with their block",
+    "structural_year_flags": false,
+    "epidemiological_outcome_imputation": false,
+    "water_out_of_coverage_imputation": false,
+    "dense_alternative": "outside matrix; if separately authorized, training-only imputer"
+  },
+  "ablation_matrix": {
+    "path": "docs/product/experiments/EXP-DELTA03/ablation-matrix.draft.yml",
+    "primary_reference": "FULL_COMMON",
+    "variants": [
+      "HISTORY",
+      "FULL_COMMON",
+      "FULL_MINUS_THERMAL_HUMIDITY",
+      "FULL_MINUS_RAINFALL_HYDROLOGY",
+      "FULL_MINUS_NDVI",
+      "FULL_MINUS_TERRAIN",
+      "FULL_MINUS_DEMOGRAPHY",
+      "FULL_MINUS_LAND_COVER",
+      "FULL_PLUS_SURFACE_WATER",
+      "FULL_ERA5_PRECIPITATION",
+      "TRANSFER_EXCLUDE_META_TOLIMA"
+    ],
+    "conditional_full_admission": "demography/land-cover/vintage evidence must pass or human-approved new scope must be frozen",
+    "individual_ablations": "separate second stage only within material blocks; no evaluation-driven feature selection"
+  },
+  "model": {
+    "family": "xgboost",
+    "base": "new national climate candidate; not G0_OFF",
+    "parameters_provisional": {
+      "objective": "binary:logistic",
+      "n_estimators": 80,
+      "max_depth": 2,
+      "learning_rate": 0.05,
+      "tree_method": "hist",
+      "random_state": 1729,
+      "n_jobs": 1
+    },
+    "same_parameters_all_arms": true,
+    "hyperparameter_search": false,
+    "remaining_defaults_runtime_weights": "pending_explicit_freeze",
+    "calibration": "one arm/horizon/year authorized Y-3 partition only; method/support pending freeze",
+    "early_stopping_on_evaluation": false,
+    "target_proposed": {
+      "1": "onset_T1: E(T)=0 and E(T+1)=1",
+      "2": "onset_T2: E(T)=0 and E(T+1)=0 and E(T+2)=1",
+      "status": "freeze exact horizon-specific H5 onset assignment in final protocol; not monthly excess"
+    }
+  },
+  "policy": {
+    "selection_role": "Y-1 only",
+    "budget_event": "false onset alerts",
+    "exposure": "eligible rows / 12 municipality-years",
+    "B": null,
+    "B_status": "pending_human_freeze; EXP03 numerical budget not inherited",
+    "limit": "floor(B * exposure), same within paired comparison",
+    "objective_proposed": "maximize detected selection onsets within budget",
+    "ties": "score >= threshold, whole ties indivisible",
+    "tie_break_proposed": [
+      "fewer false onset alerts",
+      "fewer emitted alerts",
+      "higher threshold"
+    ],
+    "no_alert": "FAR/precision undefined; support/infeasibility rule must be frozen; never silently zero",
+    "freeze": "persist policy and identities before evaluation",
+    "evaluation": "report realized burden drift; no evaluation-based retuning or enforced equal alert counts"
+  },
+  "comparators": [
+    "CHANNEL",
+    "PERSISTENCE",
+    "R0",
+    "G0_OFF",
+    "G0_ON",
+    "G1"
+  ],
+  "comparator_rules": {
+    "CHANNEL": "known cases(T) > origin-safe H5 target-month P75, including P75=0",
+    "PERSISTENCE": "project known E(T); no alerts on non-excess cohort",
+    "R0_G0_G1": "read-only frozen scores/policies; exact comparable observations only; no refit/calibration",
+    "budget_matching": "verify B/exposure/selection-population parity; otherwise budget-matched learning claim blocked pending separately frozen score-only procedure and admitted Y-1 scores",
+    "G0_OFF": "comparator only, never candidate base"
+  },
+  "metrics": {
+    "strata": [
+      "horizon",
+      "year",
+      "department",
+      "year_department",
+      "complete_pooled_horizon",
+      "secondary_transmission_profile"
+    ],
+    "outputs": [
+      "onset_sensitivity",
+      "onsets_observed_detected_missed",
+      "paired_onsets_gained_lost_shared",
+      "onset_precision",
+      "academic_FAR_excess",
+      "false_excess_alerts",
+      "false_onset_alerts",
+      "false_onset_alerts_per_eligible_municipality_year",
+      "emitted_alerts",
+      "AP_onset",
+      "Brier_onset",
+      "calibration_reliability",
+      "coverage",
+      "class_support",
+      "undefined_denominators",
+      "paired_difference_from_FULL_COMMON",
+      "realized_load_difference"
+    ],
+    "academic_FAR": "count(alert AND target_excess=0) / count(alert)",
+    "zero_alerts": "FAR and precision undefined, not zero",
+    "uncertainty": "paired resampling by municipality and temporal blocks with shared draws; length/count/clustering/interval and multiplicity pending freeze",
+    "importance_SHAP_replaces_ablation": false,
+    "transmission_profiles": {
+      "status": "historical mapping/identity pending freeze",
+      "scope": "secondary descriptive detection/load/coverage; preserve primary cohort",
+      "classification": "inherited classification frozen from permitted historical data before evaluation; training-only derivation if needed",
+      "evaluation_defined_profiles": false,
+      "profile_models_or_thresholds": false,
+      "missing_mapping": "report pending/not evaluable; no invented classification or cohort filtering"
+    }
+  },
+  "success": {
+    "contract_per_horizon": {
+      "A": "TP_candidate > TP_CHANNEL",
+      "B": "TP_candidate > TP_PERSISTENCE",
+      "C": "FAR_excess_candidate - FAR_excess_CHANNEL <= 0.05 absolute"
+    },
+    "experimental": [
+      "FULL_COMMON adds detections over existing learning comparators under verified common budget with realized load disclosed.",
+      "Result not exclusively dependent on one year or department.",
+      "Removing a valuable block consistently reduces paired utility.",
+      "Water inference limited to covered population."
+    ],
+    "materiality_stability_thresholds": "pending_before_results",
+    "missing_required_cells": "not evaluable; no partial pooling substitution",
+    "champion_selection": false
+  },
+  "water_special": {
+    "coverage_end": "2021-12",
+    "never_impute_years": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "comparison": [
+      "FULL_COMMON",
+      "FULL_PLUS_SURFACE_WATER"
+    ],
+    "secondary": true,
+    "proposed_years": [
+      2020,
+      2021
+    ],
+    "common_coverage": "same real observed lagged-water rows in ALL roles, feature and target coverage within admitted period; refit both models",
+    "quality_gate": "area_observada_m2 > 0; distinguish real zero from no observation",
+    "forbidden_predictor": "fuera_cobertura_temporal or structural availability encoding",
+    "primary_depends_on_water": false,
+    "replaces_general_contract_decision": false
+  },
+  "consumed_years": {
+    "all_proposed_years": "retrospective, already used; not independent confirmation",
+    "2025": "excluded from this design development/evaluation; no fits, calibration, selection, feature selection or new confirmation; not an untouched reserve",
+    "2025_imputation": {
+      "water": false,
+      "land_cover": false
+    }
+  },
+  "kedro_proposal": {
+    "registered": false,
+    "pipelines": {
+      "exp_delta03_preflight": "metadata/admission/auth checks; no fits/reservations/tracking",
+      "exp_delta03_synthetic": "generated-only checks and isolated temporary tracking",
+      "exp_delta03": "manual frozen scientific run by Mauricio after separate authorization"
+    },
+    "domain": "pure Kedro-independent functions; one transformation implementation; small cohesive nodes; SOLID/DRY",
+    "configuration": "separate catalog and profiles/matrices, no duplicated variant pipelines or absolute paths",
+    "learned_features": "role-aware fit_reference and transform separation before matrix assembly",
+    "publication": "atomic content-addressed no-overwrite bundle; hashes for input/output/code/runtime/model/calibrator/policy/cohort",
+    "mlflow": "aggregate-only isolated mirror, only after verified native bundle; no row-level data or private paths"
+  },
+  "future_phases": [
+    {
+      "phase": 1,
+      "name": "Data admission and preparation",
+      "scope": [
+        "dataset contract/catalog",
+        "normalization",
+        "point-in-time blocks",
+        "schema/key/coverage/leakage checks",
+        "H5 and historical cohort parity"
+      ],
+      "exit": [
+        "reproducible matrices",
+        "no future predictors",
+        "zero real fits"
+      ],
+      "authorized": false
+    },
+    {
+      "phase": 2,
+      "name": "Training and ablation implementation",
+      "scope": [
+        "national XGBoost and matrix",
+        "separate chronological fit/calibration/selection",
+        "generated synthetic/integration checks",
+        "isolated MLflow tracking"
+      ],
+      "exit": [
+        "technical readiness",
+        "zero permanent scientific execution until explicit authorization",
+        "model/calibrator/run counts documented"
+      ],
+      "authorized": false
+    },
+    {
+      "phase": 3,
+      "name": "Scientific execution and evaluation",
+      "scope": [
+        "frozen runtime and preflight",
+        "independent review",
+        "authorization tied to commit/protocol/matrix/data/environment/store",
+        "manual Mauricio execution",
+        "academic evaluation and MLflow registration",
+        "post-execution conclusions/registry"
+      ],
+      "exit": [
+        "traceable reproducible results",
+        "scientific conclusions distinct from technical results",
+        "G5/champion unchanged absent later independent decision"
+      ],
+      "authorized": false
+    }
+  ],
+  "planning_counts": {
+    "common_models": 64,
+    "water_pair_models": 8,
+    "era5_pair_models": 16,
+    "transfer_pair_models": 16,
+    "maximum_models": 104,
+    "maximum_calibrators": 104,
+    "proposed_parent_plus_children_runs": 105,
+    "counts_status": "provisional; recalculate before final freeze; zero created"
+  },
+  "pending_scientific_decisions": [
+    "epidemiological source/lag mapping, H5 warmup and historical key/label parity",
+    "historical release/vintage evidence and field-level metadata contradictions",
+    "conditional FULL_COMMON admission or explicit revised scope",
+    "definitive evaluation/water years and matched pair populations",
+    "remaining model defaults, versions, weights, calibrator method/support",
+    "numerical B and full tie/no-alert/support policy; frozen comparator budget matching",
+    "uncertainty and utility materiality/stability rules",
+    "MODIS mosaic/reference acceptance; NDVI support/holdout reference",
+    "technical registry identity and final native/tracking layout/counts",
+    "historical transmission-profile identity/vintage/mapping and training-only derivation; exact horizon-specific onset target freeze"
+  ],
+  "execution_prohibition": {
+    "until": "final protocol/matrix freeze, independent review, admitted data/runtime and explicit phase-specific human authority",
+    "create_execution_authorization_now": false,
+    "start_phase_1_now": false,
+    "forbidden_now": [
+      "production code/catalog/pipeline implementation",
+      "fits/calibrations/inference",
+      "scientific experiment execution",
+      "MLflow writes",
+      "source or historical experiment mutation",
+      "merge",
+      "operational runtime creation"
+    ]
+  }
+}

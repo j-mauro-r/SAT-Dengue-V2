@@ -3101,6 +3101,7 @@
     "docs/product/experiments/EXP-DELTA01",
     "docs/product/experiments/EXP-DELTA02",
     "docs/product/experiments/EXP-DELTA02-R1",
+    "docs/product/experiments/EXP-DELTA03",
     "src/sat_dengue/pipelines/exp_delta01"
   ],
   "documentation_correction": {
