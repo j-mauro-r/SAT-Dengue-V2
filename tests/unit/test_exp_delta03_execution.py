@@ -139,3 +139,16 @@ def test_real_authorization_identity_caps_scope_and_expiry_are_checked_before_ou
     context["contract"]["decision_status"] = "PENDING_HUMAN_FREEZE"
     with pytest.raises(ValueError, match="freeze"):
         authorize(tmp_path, context, current, authorization_relative=relative, now=now)
+
+
+def test_completed_publication_and_closed_store_cannot_be_replaced(tmp_path):
+    with ExecutionStore(
+        tmp_path, "tmp/exp-delta03-phase2/synthetic", {"generated": True}, synthetic=True
+    ) as store:
+        original = store.publish({"result.json": b"generated"})
+        before = set(store.path.iterdir())
+        with pytest.raises(ValueError, match="different payloads"):
+            store.publish({"result.json": b"changed"})
+        assert set(store.path.iterdir()) == before and store.state["publication"] == original
+    with pytest.raises(ValueError, match="active execution lock"):
+        store.publish({"result.json": b"generated"})

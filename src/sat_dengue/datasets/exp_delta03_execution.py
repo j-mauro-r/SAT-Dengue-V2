@@ -249,6 +249,14 @@ class ExecutionStore:
         manifest_raw = self._path(key, "stage-manifest.json").read_bytes()
         if hashlib.sha256(manifest_raw).hexdigest() != record["stage_manifest_sha256"]:
             raise ValueError("Checkpoint manifest changed")
+        parsed = json.loads(manifest_raw)
+        if (
+            parsed["identity_sha256"] != digest(self.identity)
+            or parsed["cell"] != cell
+            or parsed["stage"] != stage
+            or parsed["files"] != record["files"]
+        ):
+            raise ValueError("Checkpoint identity/record changed")
         if {p.name for p in self._path(key).iterdir()} != {"stage-manifest.json", *record["files"]}:
             raise ValueError("Checkpoint inventory changed")
         folder = self._path(key)
@@ -315,6 +323,8 @@ class ExecutionStore:
                 shutil.rmtree(staging)
 
     def publish(self, payloads: dict[str, bytes]) -> dict[str, Any]:
+        if self.closed or self.fd is None:
+            raise ValueError("Publication requires an active execution lock")
         if not payloads or any(
             Path(n).name != n or n in {"manifest.json", ".", ".."} for n in payloads
         ):
@@ -332,6 +342,16 @@ class ExecutionStore:
                 "files": records,
             }
         )
+        if self.state["status"] == "COMPLETE":
+            recorded = self.state["publication"]
+            if recorded is None or recorded["bundle_id"] != bundle:
+                raise ValueError("Completed execution cannot publish different payloads")
+            actual = verify_publication(
+                self.root, recorded, synthetic=self.prefix.startswith("tmp/")
+            )
+            if actual != payloads:
+                raise ValueError("Completed publication differs")
+            return dict(recorded)
         destination = self._path(bundle)
         complete = {**payloads, "manifest.json": manifest}
         if destination.exists():
@@ -346,6 +366,7 @@ class ExecutionStore:
             "path": str(destination.relative_to(self.root)),
             "bundle_id": bundle,
             "manifest_sha256": hashlib.sha256(manifest).hexdigest(),
+            "execution_identity_sha256": digest(self.identity),
         }
         self.state.update(status="COMPLETE", publication=publication)
         self._save_state()
