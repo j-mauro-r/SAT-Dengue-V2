@@ -1361,3 +1361,16 @@ zero-fit synthetic probe is tested by node selection, while the new integration
 test owns the complete generated learning graph. GitHub owns the full suite.
 No real matrix reads for fitting, real scientific adjustments/predictions or
 permanent MLflow writes are part of Phase 2 tests.
+
+Phase 2 scientific freeze and bounded annex preparation use
+`tests/unit/test_exp_delta03_annex.py` (generated cohorts/tampering and public
+approval boundaries), the affected contract/learning/evaluation/execution tests,
+and the `real_registered_graph` / `generated_annex` selections from
+`test_exp_delta03_training_integration.py`. No complete synthetic fit/reload
+rerun is required for metadata/approval-only changes. The native delivery gate
+also verifies the actual protected annex bytes, exact Phase 1 identities and
+seven final-head CI checks; it never parses private feature or score rows.
+The annex source-read allowlist is keys, onset/eligibility/evaluability cohort
+columns and Phase 1 membership. Its preparation script and receipt are local
+under `tmp/exp-delta03-phase2`; public aggregates/identities and pending inputs
+are owned by EXP-DELTA03 `ANNEX-PREPARATION.json` and `ANNEX.md`.

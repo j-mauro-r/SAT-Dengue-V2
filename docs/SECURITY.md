@@ -44,7 +44,7 @@ project tracking calls from emitting SDK events when MLflow was already imported
 A normal-process regression removes pytest/CI opt-outs, blocks network egress and
 checks that a fresh import creates no SDK installation-identifier file.
 
-Only approved aggregate metrics, zero real-adjustment counters, contract/input/code/
+Replay and generated-only tracking permit approved aggregate metrics, zero real-adjustment counters, contract/input/code/
 environment hashes, version tokens, operational profiles and verified relative
 engineering pointers may be logged. Raw rows, X/Y, epidemiological records, personal
 identifiers, credentials, full environment variables, absolute private paths, native
@@ -86,3 +86,14 @@ success publication use an advisory local file lock; this does not authorize
 concurrent scientific replay writers. Retried registrations verify existing parent
 and child lineage and return the existing parent rather than publishing a second
 success. The lock requires POSIX `fcntl` (the supported local macOS/Linux runtimes).
+
+## EXP-DELTA03 dedicated tracking boundary
+
+Phase 2 permits generated-only isolated tracking with zero real adjustments and
+zero permanent writes. The separate future EXP-DELTA03 mirror accepts real
+adjustment counts only after a complete pinned native publication and an exact
+manual Phase 3 grant. Aggregate-only lineage and sensitive-data exclusions above
+still apply. Native result counters describe the pre-tracking snapshot; the final
+delivery receipt takes permanent writes from the verified mirror receipt.
+Implementation approval and annex preparation grant no real execution or
+permanent tracking authority.

@@ -5,12 +5,14 @@ records source reconciliation, exact historical V2 H5/cohort preservation and
 reproducible no-fit Kedro matrices. [Proposal A approval](EXP-DELTA03/PHASE1-AUTHORIZATION.md)
 permits consolidated retrospective snapshots and four separate MODIS fractions;
 it does not prove operational PIT availability or deployment. The design/protocol
-and modeling matrix remain draft; predictive execution is not_authorized.
+and modeling matrix are approved for Phase 2 implementation only; predictive
+execution is not_authorized.
 Water uses genuine observations through2021 only;2024 stress stays separate and
 2025 excluded. Zero training/calibration/permanent MLflow; G5 NOT_APPROVED,
 champion not_selected. [Phase 2 implementation](EXP-DELTA03/PHASE2.md) is now
-explicitly authorized for generated-only validation under PLAN_056. Scientific
-freeze and the additive national/outcome-source decision remain pending. Real
+explicitly authorized for generated-only validation under PLAN_056. Mauricio approved the full [scientific freeze](EXP-DELTA03/PHASE2-AUTHORIZATION.md)
+and separate [annex preparation](EXP-DELTA03/ANNEX.md); pending executable inputs
+remain explicit. Real
 execution, Phase 3, permanent MLflow and merge remain unauthorized.
 
 [EXP-DELTA02-R1 — fixed-MGN spatial candidate `NOT_SUPPORTED`](EXP-DELTA02-R1/README.md)

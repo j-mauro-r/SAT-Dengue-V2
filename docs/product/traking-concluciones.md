@@ -2112,3 +2112,30 @@ reproduction and engineering evidence. This decision grants no training, fit,
 calibration, threshold/HPO, predictive scientific execution, permanent MLflow,
 Phase2 or merge authority. Draft protocol/execution restrictions and G5/champion
 remain unchanged. Prior decisions and predictive results remain historical evidence.
+
+## EXP-DELTA03 — bounded Phase 2 implementation freeze (2026-11-06)
+
+Mauricio explicitly approves the complete proposal in
+[Phase 2 authority](experiments/EXP-DELTA03/PHASE2-AUTHORIZATION.md), recorded by
+PLAN_056 revision 2 and linked to T-final-review. Preserve the earlier Phase 1
+approval and every original label/cohort/matrix. Freeze XGBoost (80 trees, depth2,
+learning rate0.05, hist, seed1729, one thread, no HPO and all explicit defaults),
+calibration-only regularized intercept penalty1, selection-only B=1 false onset
+alert per eligible municipality-year (floor, whole ties), and paired municipality/
+episode-connected annual-block uncertainty (1000 draws,95%CI,min2 municipalities,
+min2 blocks,min80%valid,no IID-row fallback). Report eligible and monitored
+exposure separately; no evaluation retuning. Interpret estimates descriptively.
+
+Authorize only separate national evaluation/excess/comparator/exposure annex
+preparation in addition to generated implementation validation. The
+[annex inventory](experiments/EXP-DELTA03/ANNEX-PREPARATION.json) preserves exact
+regional key/label identities and distinguishes prepared cohort/calendar metadata
+from pending executable X, coverage, excess/episode and comparator joins. Existing
+national frozen learned comparator predictions are unavailable; no new predictions
+are authorized. Keep 2024 separate consumed stress and 2025 excluded.
+
+Status is APPROVED_FOR_PHASE2_IMPLEMENTATION; execution not_authorized,
+training_authorized=false, phase3_authorized=false, operational_PIT=false,
+preparation_regime=RETROSPECTIVE_CONSOLIDATED. No real fits/calibrations/scientific
+predictions, permanent MLflow, Phase3, G5/champion, causal/operational/deployment
+claim or merge follows. G5 NOT_APPROVED; champion not_selected.

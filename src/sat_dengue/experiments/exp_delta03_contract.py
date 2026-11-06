@@ -9,6 +9,7 @@ from typing import Any
 REGIME = "RETROSPECTIVE_CONSOLIDATED"
 ROLES = ("train", "calibration", "selection", "evaluation")
 PENDING = "PENDING_HUMAN_FREEZE"
+APPROVED_PHASE2 = "APPROVED_FOR_PHASE2_IMPLEMENTATION"
 
 
 def canonical(value: Any) -> bytes:
@@ -149,7 +150,7 @@ def validate_freeze(contract: dict[str, Any], *, synthetic: bool) -> None:
     """Synthetic decisions are explicit fixtures, never a grant for private fitting."""
     if contract["regime"] != REGIME or contract["operational_PIT"] is not False:
         raise ValueError("Invalid availability regime")
-    if not synthetic and contract.get("decision_status") != "APPROVED":
+    if not synthetic and contract.get("decision_status") != APPROVED_PHASE2:
         raise ValueError("Scientific contract awaits explicit human freeze")
     if synthetic and contract.get("evidence_type") != "generated_only":
         raise ValueError("Synthetic execution requires generated-only contract")

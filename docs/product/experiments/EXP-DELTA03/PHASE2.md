@@ -2,16 +2,17 @@
 
 ## Authority and current boundary
 
-The [training contract](training-contract.json) owns the proposed model, calibration,
-selection budget and uncertainty settings. Its `PENDING_HUMAN_FREEZE` state is a
-real gate: synthetic success does not approve these choices. The original
+The [training contract](training-contract.json) owns the approved model, calibration,
+selection budget and uncertainty settings. Mauricio approved the full bundled
+proposal under [Phase 2 authority](PHASE2-AUTHORIZATION.md):
+`APPROVED_FOR_PHASE2_IMPLEMENTATION`. Execution remains separately gated. The original
 [Phase 1 handoff](PHASE1.md), labels, roles and matrix bytes remain unchanged.
 Execution remains `not_authorized`; Phase 3, real training, deployment and G5
 approval remain outside this implementation.
 
 The original bundle contains national training but Meta/Tolima calibration,
-selection and evaluation. National evaluation therefore requires a separately
-approved additive annex. It must preserve exact original regional key/label/X
+selection and evaluation. National evaluation is approved for separate additive
+annex preparation only; executable national inputs remain explicitly pending. It must preserve exact original regional key/label/X
 correspondence and have its own complete national cohort identity. It cannot
 reclassify existing training roles or present regional metrics as national.
 A distinct pinned H5 excess/comparator/exposure join is also required: onset
@@ -77,7 +78,7 @@ alert policy is not asserted to share a new experimental budget.
 
 Paired contrasts report absolute/relative differences and gained/lost/shared
 onsets. Development years and consumed 2024 stress are reported separately.
-The proposed uncertainty method shares municipality and connected calendar-year
+The approved uncertainty method shares municipality and connected calendar-year
 block draws across arms and preserves episodes spanning years. Insufficient
 independent blocks remain non-evaluable; no independent-row fallback is used.
 Missing inherited transmission-profile mapping is explicitly non-evaluable and
@@ -94,12 +95,14 @@ evaluation and publication gates pass; changed-file Ruff/format/mypy pass. The
 independent review resolved every critical/high/medium finding in its focused
 passes. Final range review and remote final-head CI are recorded in PLAN_056 and
 PR #78; consult their current evidence rather than treating this document as a
-CI receipt. Phase 2 remains open pending the human scientific decision, bounded
-annex preparation, final review and final-head CI.
+CI receipt. Final closure requires the bounded annex verification, clean independent review
+and seven passing final-head checks; the DWP delivery gate owns that observation.
 
-## Concrete pending human freeze proposal
+## Approved scientific freeze and preserved proposal
 
-The recommended bundled decision is:
+Mauricio approved the following complete proposal on 2026-11-06. Its prior
+PROPOSED revision remains preserved at `3957bce`; the recorded approval changes
+implementation maturity only. The approved decision is:
 
 1. Preserve the complete Phase 1 core and authorize preparation of a **separate
    additive national evaluation/excess/comparator/monitored-calendar annex**.
@@ -120,7 +123,7 @@ The recommended bundled decision is:
    whole-score ties and the explicit lexicographic policy in the contract.
    No-alert uses a null threshold; no selection positives is non-evaluable.
    This carries the V2 matched-cohort experimental convention into the new
-   comparison, subject to approval; it is not measured operational capacity.
+   comparison, approved for implementation; it is not measured operational capacity.
    The academic five-percentage-point excess-FAR margin is a different rule.
 5. Use paired municipality and episode-preserving connected calendar-year block
    resampling: 1,000 draws, 95% intervals, seed 1729, at least two municipalities
@@ -130,8 +133,29 @@ The recommended bundled decision is:
    Report descriptive estimates only; no formal superiority/materiality,
    champion or deployment conclusion is authorized.
 
-This decision would freeze design choices and permit the bounded annex
-preparation only. Phase 3 and every real model/calibrator fit or scientific
-prediction still require separate authorization. Without the additive annex
-choice, the national-evaluation acceptance criterion cannot be met by the
-original regional-only evaluation bundle.
+This decision freezes design choices and permits bounded annex preparation only.
+No Phase 3, real model/calibrator fit, scientific prediction, permanent tracking,
+G5/champion decision or merge is authorized.
+
+## Separate annex preparation
+
+The [annex record](ANNEX.md) and [inspectable inventory](ANNEX-PREPARATION.json)
+identify an immutable protected publication with national primary eligible keys,
+frozen onset labels and an independently observed monitored calendar. All eight
+horizon/year slices preserve exact Meta/Tolima evaluation key/label identities.
+The annex copies existing eligibility/labels; no Phase 1 matrix or role changes.
+
+There are 77,094 eligible cohort rows and 103,224 observed calendar rows across
+the eight slices. These count slice membership, not distinct people or unique
+municipality-months across horizons. Exposure is reported separately per slice.
+Source manifests and payload bytes for excess/comparators are hash-verified;
+score/prediction rows are never parsed. No national model-input matrices, new
+predictions or comparator-policy adjustment are created by this preparation.
+National per-cell X/coverage, complete excess/episode joins and exact frozen
+comparator joins remain explicit pending inputs before any Phase 3 proposal.
+This bounded preparation is verified; the executable annex is not ready.
+
+Counts derive from the immutable matrix descriptor: 112 descriptors, 108
+supported future model/calibrator cells, four unsupported water2024 descriptors,
+78 paired contrasts and 109 future tracking runs (one parent plus 108 children).
+No real model, calibrator or tracking run was created.

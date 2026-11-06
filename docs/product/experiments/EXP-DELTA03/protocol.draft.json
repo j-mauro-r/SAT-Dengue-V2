@@ -4,8 +4,8 @@
   "hypothesis_id": "EXP-DELTA03-H1",
   "status": "design",
   "execution": "not_authorized",
-  "protocol_status": "draft",
-  "frozen": false,
+  "protocol_status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
+  "frozen": true,
   "execution_ready": false,
   "evidence_type": "authorized_retrospective_preparation_only; no predictive results",
   "activity_counters": {
@@ -17,7 +17,7 @@
   "governance": {
     "G5": "NOT_APPROVED",
     "champion": "not_selected",
-    "authorization": "Mauricio approved proposal A: consolidated-data retrospective Phase 1 preparation only; no operational PIT/deployment inference, training, Phase 2/3 or merge."
+    "authorization": "Mauricio approves Phase2 scientific implementation freeze and separate additive no-fit annex preparation; PHASE2-AUTHORIZATION.md. No real execution, Phase3, permanent MLflow, deployment or merge."
   },
   "question": "Which climatic, environmental, territorial and demographic groups add incremental H5 onset prediction at T+1/T+2 with national pooled XGBoost applied to Meta/Tolima on identical cohorts and false-alert budgets?",
   "hypotheses": {
@@ -421,43 +421,60 @@
   "model": {
     "family": "xgboost",
     "base": "new national climate candidate; not G0_OFF",
-    "parameters_provisional": {
+    "same_parameters_all_arms": true,
+    "hyperparameter_search": false,
+    "remaining_defaults_runtime_weights": "All explicit defaults approved in training-contract.json; exact future runtime versions/identity require separate Phase3 authorization.",
+    "calibration": "regularized_intercept, penalty1, minimum_per_class1; calibration-only; independent evaluation",
+    "early_stopping_on_evaluation": false,
+    "target_proposed": {
+      "1": "onset_T1: E(T)=0 and E(T+1)=1",
+      "2": "onset_T2: E(T)=0 and E(T+1)=0 and E(T+2)=1",
+      "status": "APPROVED historical horizon-specific H5 onset assignment; original Phase1 source/labels unchanged; distinct from excess"
+    },
+    "parameters_approved": {
       "objective": "binary:logistic",
       "n_estimators": 80,
       "max_depth": 2,
       "learning_rate": 0.05,
       "tree_method": "hist",
       "random_state": 1729,
-      "n_jobs": 1
-    },
-    "same_parameters_all_arms": true,
-    "hyperparameter_search": false,
-    "remaining_defaults_runtime_weights": "pending_explicit_freeze",
-    "calibration": "one arm/horizon/year authorized Y-3 partition only; method/support pending freeze",
-    "early_stopping_on_evaluation": false,
-    "target_proposed": {
-      "1": "onset_T1: E(T)=0 and E(T+1)=1",
-      "2": "onset_T2: E(T)=0 and E(T+1)=0 and E(T+2)=1",
-      "status": "freeze exact horizon-specific H5 onset assignment in final protocol; not monthly excess"
+      "n_jobs": 1,
+      "max_bin": 128,
+      "min_child_weight": 5,
+      "reg_alpha": 0,
+      "reg_lambda": 1,
+      "subsample": 1,
+      "colsample_bytree": 1,
+      "colsample_bylevel": 1,
+      "colsample_bynode": 1,
+      "gamma": 0,
+      "max_delta_step": 0,
+      "scale_pos_weight": 1,
+      "base_score": 0.5,
+      "grow_policy": "depthwise",
+      "max_leaves": 0,
+      "sampling_method": "uniform",
+      "device": "cpu",
+      "verbosity": 0
     }
   },
   "policy": {
     "selection_role": "Y-1 only",
     "budget_event": "false onset alerts",
     "exposure": "eligible rows / 12 municipality-years",
-    "B": null,
-    "B_status": "pending_human_freeze; EXP03 numerical budget not inherited",
+    "B": 1.0,
+    "B_status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
     "limit": "floor(B * exposure), same within paired comparison",
-    "objective_proposed": "maximize detected selection onsets within budget",
     "ties": "score >= threshold, whole ties indivisible",
-    "tie_break_proposed": [
+    "no_alert": "null threshold; FAR/precision undefined; no selection positives is NO_EVALUABLE",
+    "freeze": "persist policy and identities before evaluation",
+    "evaluation": "report realized burden drift; no evaluation-based retuning or enforced equal alert counts",
+    "objective": "maximize detected selection onsets within budget",
+    "tie_break": [
       "fewer false onset alerts",
       "fewer emitted alerts",
       "higher threshold"
-    ],
-    "no_alert": "FAR/precision undefined; support/infeasibility rule must be frozen; never silently zero",
-    "freeze": "persist policy and identities before evaluation",
-    "evaluation": "report realized burden drift; no evaluation-based retuning or enforced equal alert counts"
+    ]
   },
   "comparators": [
     "CHANNEL",
@@ -504,7 +521,7 @@
     ],
     "academic_FAR": "count(alert AND target_excess=0) / count(alert)",
     "zero_alerts": "FAR and precision undefined, not zero",
-    "uncertainty": "paired resampling by municipality and temporal blocks with shared draws; length/count/clustering/interval and multiplicity pending freeze",
+    "uncertainty": "Approved paired municipality/episode-connected annual blocks:1000 draws,95%CI,min2 municipalities/min2 blocks,min80%valid;no IID-row fallback;2024 separate. See training-contract.json.",
     "importance_SHAP_replaces_ablation": false,
     "transmission_profiles": {
       "status": "historical mapping/identity pending freeze",
@@ -527,7 +544,7 @@
       "Removing a valuable block consistently reduces paired utility.",
       "Water inference limited to covered population."
     ],
-    "materiality_stability_thresholds": "pending_before_results",
+    "materiality_stability_thresholds": "descriptive estimates only; no formal superiority/materiality/champion conclusion authorized",
     "missing_required_cells": "not evaluable; no partial pooling substitution",
     "champion_selection": false
   },
@@ -576,7 +593,7 @@
     "learned_features": "role-aware fit_reference and transform separation before matrix assembly",
     "publication": "Atomic immutable single shared base + separate labels/membership + closed logical selectors; per-view X/key/label identities and CSV roundtrip verified. No model/calibrator/policy outputs.",
     "mlflow": "aggregate-only isolated mirror, only after verified native bundle; no row-level data or private paths",
-    "registration_scope": "only preflight/preparation/synthetic registered; scientific exp_delta03 executor not registered"
+    "registration_scope": "Preflight/preparation/synthetic and guarded exp_delta03 registered; real graph requires separate Phase3 grant before private row loading."
   },
   "future_phases": [
     {
@@ -611,7 +628,8 @@
         "zero permanent scientific execution until explicit authorization",
         "model/calibrator/run counts documented"
       ],
-      "authorized": false
+      "authorized": true,
+      "authorization_scope": "implementation/generated-only validation and separate no-fit annex preparation"
     },
     {
       "phase": 3,
@@ -633,24 +651,17 @@
     }
   ],
   "planning_counts": {
-    "common_models": 64,
-    "water_pair_models": 8,
-    "era5_pair_models": 16,
-    "transfer_pair_models": 16,
-    "maximum_models": 104,
-    "maximum_calibrators": 104,
-    "proposed_parent_plus_children_runs": 105,
-    "counts_status": "Provisional later-phase planning only; water2022 partial support now exists. Recalculate all model/calibrator/run counts and class-support rules before future authorization; zero created.",
-    "basis": "Historical initial design estimate using water2020/2021 only; not the108 prepared views or an execution budget."
+    "basis": "Derived from verified Phase1 matrices.json; see ANNEX-PREPARATION.json derived_counts; never an execution grant.",
+    "counts_status": "108 supported model/calibrator cells,4 unsupported descriptors,78 comparisons,109 future parent+child runs; no real models/runs created.",
+    "maximum_models": 108,
+    "maximum_calibrators": 108,
+    "proposed_parent_plus_children_runs": 109
   },
   "pending_scientific_decisions": [
-    "Final protocol freeze and explicit future phase authorization; no execution authority created by preparation.",
-    "Remaining model defaults, versions, weights, calibrator method and class-support rules.",
-    "Numerical B and full tie/no-alert/support policy; frozen comparator budget matching.",
-    "Paired uncertainty and utility materiality/stability rules.",
-    "Historical transmission-profile identity/mapping and permitted derivation.",
-    "Future model/calibrator/tracking layout and exact counts, including partial water2022 support.",
-    "Operational PIT or deployment claims would require separate historical release/value and origin-state evidence, plus human decision."
+    "Exact future execution identity, runtime/dependency versions, resource envelope and explicit manual Phase3 human authorization.",
+    "Complete executable additive national/excess/comparator/exposure annex and admission of all pending inputs; no new scientific predictions are authorized.",
+    "Historical transmission-profile identity/mapping remains optional secondary non-evaluable until admitted.",
+    "Operational PIT/deployment and any later G5/champion decision remain separately gated."
   ],
   "execution_prohibition": {
     "until": "Final protocol/matrix freeze, independent review, admitted data/runtime and explicit authority before scientific model execution; bounded Phase 1 preparation separately authorized.",
@@ -700,13 +711,24 @@
     "sha256": "a2a62b205027155b9cce38fcb426f225c8ca6ba4ca63d00e2cb400fa40f5ba37"
   },
   "phase2_implementation": {
-    "status": "IMPLEMENTED_PENDING_SCIENTIFIC_FREEZE_AND_FINAL_VALIDATION",
-    "authority": "Mauricio explicit Phase2 implementation request, preserved in PLAN_056 HUMAN_REQUEST.md",
+    "status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
+    "authority": "Mauricio; PHASE2-AUTHORIZATION.md and PLAN_056 revision2",
     "scope": "generated-only fitting/calibration/prediction; isolated temporary tracking; original Phase1 bundle unchanged",
     "owner": "docs/product/experiments/EXP-DELTA03/PHASE2.md",
     "training_contract": "docs/product/experiments/EXP-DELTA03/training-contract.json",
-    "national_evaluation": "PENDING separate additive annex decision; original regional cohorts unchanged"
+    "national_evaluation": "APPROVED separate additive no-fit annex preparation; executable inputs remain explicitly pending",
+    "scientific_decisions": "Frozen in training-contract.json; no real execution authorization",
+    "annex_preparation": "ANNEX-PREPARATION.json: prepared bounded cohort/calendar + source inventory; execution_ready=false with pending inputs."
   },
   "phase3_authorized": false,
-  "training_authorized": false
+  "training_authorized": false,
+  "phase2_scientific_approval": {
+    "authority": "Mauricio",
+    "scope": "phase2_implementation_and_separate_no_fit_annex_preparation_only",
+    "document": "docs/product/experiments/EXP-DELTA03/PHASE2-AUTHORIZATION.md",
+    "document_sha256": "1dc67cd1a35e9febf4968ed6a6d61b5d631396a2c5dfe2d5d9f5b8fcfcb526d9",
+    "human_request_sha256": "2b517c65c579836da1bd68d3dea05fb56899b29745094c4e5e3cae26acd90579"
+  },
+  "freeze_scope": "scientific implementation parameters only; executable annex/runtime and Phase3 remain unapproved",
+  "operational_PIT": false
 }

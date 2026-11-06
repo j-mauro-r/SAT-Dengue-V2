@@ -965,6 +965,7 @@ def publish_bundle(context: dict[str, Any]) -> dict[str, Any]:
         )
     counts = context["plan"]["counts"]
     synthetic = context["synthetic"]
+    # Native counters are a pre-tracking snapshot; delivery incorporates the mirror receipt.
     activity = {
         "real_model_fits": 0 if synthetic else len(cells),
         "real_calibrations": 0 if synthetic else len(cells),
@@ -1036,7 +1037,10 @@ def track_results(context: dict[str, Any]) -> dict[str, Any]:
         "native_publication": context["publication"],
         "tracking": tracking,
         "execution_identity_sha256": digest(context["identity"]),
-        "activity_counters": context["result"]["activity_counters"],
+        "activity_counters": {
+            **context["result"]["activity_counters"],
+            "permanent_mlflow_writes": tracking["permanent_writes"],
+        },
         "invocation": context["invocation"],
         "status": "GENERATED_E2E_COMPLETE"
         if context["synthetic"]
@@ -1111,3 +1115,57 @@ class Delta03Phase2ReceiptDataset(AbstractDataset[dict[str, Any], dict[str, Any]
 
     def _describe(self) -> dict[str, Any]:
         return {"root": self.relative, "mode": "immutable_metadata_or_generated_delivery_receipt"}
+
+
+def verify_annex_preparation(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
+    """Verify preparation bytes/metadata only; never admit missing scientific inputs."""
+    descriptor = contract["annex_preparation"]
+    report_path = safe_path(root, descriptor["path"], "docs/product/experiments/EXP-DELTA03")
+    raw = report_path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != descriptor["sha256"]:
+        raise ValueError("Annex preparation inventory changed")
+    report = json.loads(raw)
+    if (
+        report["schema"] != "exp-delta03-annex-preparation-v1"
+        or report["status"] != "PREPARED_WITH_EXPLICIT_PENDING_INPUTS"
+        or report["execution_ready"] is not False
+        or not report["pending_inputs"]
+        or report["phase1_manifest_sha256"] != contract["matrix_bundle"]["manifest_sha256"]
+        or report["activity_counters"]
+        != {
+            k: 0
+            for k in [
+                "real_model_fits",
+                "real_calibrations",
+                "real_predictions",
+                "permanent_mlflow_writes",
+            ]
+        }
+    ):
+        raise ValueError("Invalid bounded annex preparation")
+    prefix = "data/processed/exp_delta03-inputs"
+    publication = report["protected_preparation"]
+    folder = safe_path(root, publication["path"], prefix)
+    manifest_path = safe_path(root, publication["path"] + "/manifest.json", prefix)
+    manifest_raw = manifest_path.read_bytes()
+    if hashlib.sha256(manifest_raw).hexdigest() != publication["manifest_sha256"]:
+        raise ValueError("Annex preparation manifest changed")
+    manifest = json.loads(manifest_raw)
+    if (
+        manifest["files"] != report["files"]
+        or hashlib.sha256(canonical(manifest["files"])).hexdigest() != folder.name
+        or manifest["bundle_id"] != folder.name
+        or publication["bundle_id"] != folder.name
+        or {p.name for p in folder.iterdir()} != {*manifest["files"], "manifest.json"}
+    ):
+        raise ValueError("Annex preparation content identity changed")
+    for name, expected in manifest["files"].items():
+        if Path(name).name != name:
+            raise ValueError("Unsafe annex member")
+        path = safe_path(root, publication["path"] + "/" + name, prefix)
+        if identity(path) != expected:
+            raise ValueError("Annex preparation member changed")
+    payload = json.loads((folder / "preparation.json").read_bytes())
+    if payload != {k: v for k, v in report.items() if k not in {"files", "protected_preparation"}}:
+        raise ValueError("Public/protected annex correspondence changed")
+    return report

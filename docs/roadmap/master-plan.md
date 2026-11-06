@@ -386,10 +386,13 @@ PLAN055 and the Phase 1 native matrix bundle remain unchanged. The
 [Phase 3 handoff](../product/experiments/EXP-DELTA03/PHASE3-HANDOFF.md) are the
 current consumers. Technical synthetic runs do not grant a scientific freeze.
 
-The remaining bundled human decision covers model/calibration parameters,
-experimental false-alert budget, uncertainty/materiality and a separate additive
-national evaluation/excess/comparator/exposure annex. Original main learned
-nontraining roles and regional evaluation remain frozen. Phase 2 cannot close
-without that decision and final validation. Protocol execution remains
-not_authorized; no Phase 3, real training/calibration/prediction, permanent MLflow,
-merge, G5 approval or champion selection is authorized.
+Mauricio approved the complete bundled scientific proposal on 2026-11-06,
+recorded in [Phase 2 authority](../product/experiments/EXP-DELTA03/PHASE2-AUTHORIZATION.md)
+and PLAN_056 revision 2. Model/calibration, experimental B=1 and paired block
+uncertainty are `APPROVED_FOR_PHASE2_IMPLEMENTATION`. The separate
+[annex preparation](../product/experiments/EXP-DELTA03/ANNEX.md) preserves the
+Phase 1 core and copies national primary cohort/calendar keys with explicit
+pending executable inputs. Original learned roles and regional evaluation remain
+frozen. Final closure requires independent review and final-head green CI.
+Protocol execution remains not_authorized; no Phase 3, real training/calibration/
+prediction, permanent MLflow, merge, G5 approval or champion selection is authorized.

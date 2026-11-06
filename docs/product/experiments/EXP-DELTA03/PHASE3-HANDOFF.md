@@ -5,8 +5,10 @@ an authorization. `execution=not_authorized`, `phase3_authorized=false` and
 `training_authorized=false` remain mandatory in the protocol and training
 contract. G5 remains `NOT_APPROVED`.
 
-Before proposing a real execution, resolve the human scientific freeze and
-separately approved national/excess/comparator/exposure annex. Pin every annex
+The scientific implementation choices are now approved under
+[Phase 2 authority](PHASE2-AUTHORIZATION.md). The [bounded annex preparation](ANNEX.md)
+is separate from the still-pending executable national/excess/comparator/exposure
+annex. Before proposing a real execution, complete and verify those pending inputs. Pin every annex
 table's repository-relative canonical path, SHA256 and byte size. National cells
 also require full row count, key/label hash and feature-value hash. The original
 Phase 1 bundle must remain byte-identical. Annex files belong under

@@ -1,6 +1,6 @@
 schema: exp-delta03-ablation-draft-v1
 experiment_id: EXP-DELTA03
-status: draft
+status: APPROVED_FOR_PHASE2_IMPLEMENTATION
 execution: not_authorized
 primary_reference: FULL_COMMON
 scientific_reconciliation:
@@ -21,7 +21,7 @@ global_rules:
   same_model_parameters: true
   recalibrate_each_arm_on_authorized_calibration_only: true
   threshold_selection: Y-1 only
-  false_onset_budget: same B and floor(B * eligible_rows / 12) within each comparison; B pending freeze
+  false_onset_budget: same B and floor(B * eligible_rows / 12) within each comparison; B=1 approved for Phase2 implementation
   whole_score_ties: true
   evaluation_budget_transport: realized false alerts may differ; report them, never retune on evaluation
   remove_block: remove all descendants and associated availability flags
@@ -188,15 +188,21 @@ planning_counts:
   maximum_models: 104
   maximum_calibrators: 104
   proposed_parent_plus_children_runs: 105
-  counts_status: provisional later-phase planning only;recalculate including partial water2022 and class-support
-    rules before authorization;zero models/calibrators/runs created
-  basis: Historical initial estimate using water2020/2021 only;not108 prepared views or an execution budget
+  counts_status: historical initial estimate above preserved; superseded by verified derived counts below
+  basis: Historical initial estimate using water2020/2021 only; not an execution budget
+  verified_derived_counts:
+    descriptors: 112
+    supported_model_calibrator_cells: 108
+    unsupported_water2024: 4
+    paired_comparisons: 78
+    future_parent_plus_children_runs: 109
+  derived_owner: ANNEX-PREPARATION.json; no real models/calibrators/runs created
 
 phase2_implementation:
   owner: PHASE2.md
   training_contract: training-contract.json
-  status: generated implementation; scientific freeze pending
+  status: APPROVED_FOR_PHASE2_IMPLEMENTATION
   phase3_authorized: false
   training_authorized: false
-  national_evaluation: separate additive annex decision pending; original regional roles unchanged
+  national_evaluation: separate additive annex preparation approved; executable inputs pending; original regional roles unchanged
   derived_counts: computed from verified matrices.json; never copied into execution configuration

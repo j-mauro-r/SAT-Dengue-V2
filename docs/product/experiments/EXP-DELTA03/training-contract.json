@@ -6,7 +6,7 @@
   "execution": "not_authorized",
   "phase3_authorized": false,
   "training_authorized": false,
-  "decision_status": "PENDING_HUMAN_FREEZE",
+  "decision_status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
   "seed": 1729,
   "evidence_type": "implementation_only",
   "source_contract": {
@@ -106,12 +106,13 @@
     "device": "cpu",
     "verbosity": 0
   },
-  "model_status": "PROPOSED explicit core DESIGN values; remaining defaults anchored to V2, awaiting bundled decision",
+  "model_status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
   "calibration": {
     "method": "regularized_intercept",
     "penalty": 1,
     "minimum_per_class": 1,
-    "status": "PROPOSED V2 pooled-intercept practice; no new subgroup adaptation"
+    "status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
+    "fit_role": "calibration_only"
   },
   "policy": {
     "B": 1.0,
@@ -122,7 +123,8 @@
     "objective": "maximum detected onset; fewer false onset alerts; fewer total alerts; higher threshold",
     "no_alert_threshold": null,
     "no_selection_positives": "NO_EVALUABLE",
-    "status": "PROPOSED; V2 matched unit/cohorts precedent, not automatic authorization or operational capacity"
+    "status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
+    "selection_role": "selection_only"
   },
   "uncertainty": {
     "method": "paired municipality and episode-preserving connected calendar-year blocks",
@@ -133,13 +135,14 @@
     "minimum_temporal_blocks": 2,
     "stress2024": "separate descriptive stratum; no mixing with development2020-2022",
     "materiality": "descriptive estimates only; no formal superiority/materiality or champion decision",
-    "status": "PROPOSED; short year support must remain explicit",
-    "minimum_valid_fraction": 0.8
+    "status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
+    "minimum_valid_fraction": 0.8,
+    "iid_row_fallback": false
   },
   "national_evaluation": {
-    "status": "PENDING_SCOPE_DECISION",
+    "status": "APPROVED_ADDITIVE_ANNEX_PREPARATION",
     "original_population": "Meta_Tolima",
-    "rule": "No relabeling of existing cohort roles; national evaluation requires separately approved additive preparation with original bundle unchanged"
+    "rule": "Separate additive preparation only; original regional key/label/X correspondence and every learned role remain unchanged; execution readiness requires complete pinned input admission."
   },
   "excess_comparators": {
     "status": "REQUIRED_SEPARATE_PINNED_JOIN",
@@ -164,5 +167,25 @@
     "adjustment_caps": "derived from matrix execution plan",
     "deadline": "cooperative checks at node/loop boundaries and around adjustments, publication and tracking; no process-killing CPU quota",
     "status": "PROPOSED Phase3 execution envelope; requires exact separate authorization"
+  },
+  "preparation_regime": "RETROSPECTIVE_CONSOLIDATED",
+  "G5": "NOT_APPROVED",
+  "champion": "not_selected",
+  "approval": {
+    "authority": "Mauricio",
+    "scope": "phase2_implementation_and_separate_no_fit_annex_preparation_only",
+    "document": "docs/product/experiments/EXP-DELTA03/PHASE2-AUTHORIZATION.md",
+    "document_sha256": "1dc67cd1a35e9febf4968ed6a6d61b5d631396a2c5dfe2d5d9f5b8fcfcb526d9",
+    "human_request_sha256": "2b517c65c579836da1bd68d3dea05fb56899b29745094c4e5e3cae26acd90579",
+    "dwp_contract_id": "1b39cc49e6e73afed3ebbfea227571ea688b741bfac8db66d7aa63b592520158",
+    "task": "T-final-review",
+    "prior_proposal_git_revision": "3957bce29b3462d553d5ab3d47de7c0042c06522"
+  },
+  "model_search": "none",
+  "annex_preparation": {
+    "path": "docs/product/experiments/EXP-DELTA03/ANNEX-PREPARATION.json",
+    "status": "PREPARED_WITH_EXPLICIT_PENDING_INPUTS",
+    "execution_ready": false,
+    "sha256": "033b89757788152701aafa6ccb4229f4a40d838b46573b90f67ba11681b83a0a"
   }
 }

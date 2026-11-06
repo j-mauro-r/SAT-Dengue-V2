@@ -58,7 +58,7 @@ def authorization_fixture(tmp_path):
     contract = {
         "regime": "RETROSPECTIVE_CONSOLIDATED",
         "operational_PIT": False,
-        "decision_status": "APPROVED",
+        "decision_status": "APPROVED_FOR_PHASE2_IMPLEMENTATION",
         "phase3_authorized": False,
         "training_authorized": False,
         "seed": 1729,
@@ -174,3 +174,32 @@ def test_unknown_interrupted_adjustment_and_resource_deadline_fail_closed(tmp_pa
         monkeypatch.setattr(execution.time, "monotonic", lambda: store.started + 61)
         with pytest.raises(TimeoutError):
             store.check_deadline()
+
+
+@pytest.mark.parametrize("synthetic,permanent_writes", [(True, 0), (False, 3)])
+def test_delivery_counters_include_tracking_snapshot_without_store_access(
+    monkeypatch, synthetic, permanent_writes
+):
+    from types import SimpleNamespace
+
+    from sat_dengue.datasets import exp_delta03_training as engine
+    from sat_dengue.tracking import exp_delta03 as tracking
+
+    monkeypatch.setattr(engine, "_assert_identity", lambda context: None)
+    mirror_receipt = {"permanent_writes": permanent_writes, "runs": 3}
+    monkeypatch.setattr(tracking, "mirror", lambda *args, **kwargs: mirror_receipt)
+    closed = []
+    context = {
+        "publication": {"generated_stub": True},
+        "roots": {"tracking": "generated_stub_never_opened"},
+        "synthetic": synthetic,
+        "permission": None,
+        "identity": {"generated_stub": True},
+        "result": {"activity_counters": {"permanent_mlflow_writes": 0}},
+        "invocation": {},
+        "store": SimpleNamespace(__exit__=lambda *args: closed.append(True)),
+    }
+    receipt = engine.track_results(context)
+    assert receipt["activity_counters"]["permanent_mlflow_writes"] == permanent_writes
+    assert context["result"]["activity_counters"]["permanent_mlflow_writes"] == 0
+    assert closed == [True]

@@ -7,7 +7,7 @@
 | Experiment | `EXP-DELTA03` |
 | Status | `design` |
 | Execution | `not_authorized` |
-| Protocol | `draft`, not frozen |
+| Protocol | `APPROVED_FOR_PHASE2_IMPLEMENTATION`; real execution unapproved |
 | Real training / calibration performed for this experiment | **0 / 0** |
 | Real scientific executions / permanent MLflow writes | **0 / 0** |
 | G5 / champion | `NOT_APPROVED` / `not_selected` |
@@ -19,9 +19,9 @@ controls,2025 exclusion and separate consumed2024 stress remain fixed. The
 [handoff](PHASE1.md) owns actual matrices, reproduction and gates. Mauricio
 subsequently authorized [Phase 2 implementation](PHASE2.md) and generated-only
 validation under PLAN_056. The [training contract](training-contract.json) owns
-the concrete pending bundled freeze; it does not change the original Phase 1
+the approved bundled freeze under [Phase 2 authority](PHASE2-AUTHORIZATION.md); it preserves the original Phase 1
 scope. Real model/calibrator fits, scientific predictions, permanent tracking,
-Phase 3 and merge remain unauthorized. The protocol remains draft. Historical release/value vintages
+Phase 3 and merge remain unauthorized. The [separate annex](ANNEX.md) records prepared cohorts and pending executable inputs. Historical release/value vintages
 and operational E(T) availability remain unproved; no PIT or deployment inference
 may follow. The [reconciliation](SCIENTIFIC-RECONCILIATION.md) disproves aliasing
 new-mart occurrence fields as historical residence counts.
@@ -43,8 +43,9 @@ preserved. This experiment proposes a newly trained national climate XGBoost;
 it does not extend that candidate. [EXP03](../EXP03_feature_ablation/DESIGN.md)
 informs architecture (finite group matrices, common budgets, immutable bundles),
 without importing its execution authorization, numerical budget or model grid.
-The [draft protocol](protocol.draft.json) and
-[draft matrix](ablation-matrix.draft.yml) encode this proposal and pending gates.
+The [protocol](protocol.draft.json) and
+[matrix](ablation-matrix.draft.yml) encode the approved Phase 2 implementation
+choices and remaining execution gates; filenames retain their historical identity.
 They are documentary schemas, not accepted runtime configuration.
 
 ## Scientific question and estimands
@@ -381,16 +382,17 @@ No tracking writes occur in this documentation session.
 
 The experimental base is **national climate XGBoost**, not G0_OFF. Propose one
 binary classifier per horizon targeting its exact H5 onset label (`onset_T1` or
-`onset_T2` above), not monthly excess; freeze this target assignment in the final
-protocol. Provisionally fix `objective=binary:logistic`, `n_estimators=80`, `max_depth=2`,
+`onset_T2` above), not monthly excess; preserve the approved historical target assignment.
+The approved implementation fixes `objective=binary:logistic`, `n_estimators=80`, `max_depth=2`,
 `learning_rate=0.05`, `tree_method=hist`, `random_state=1729`, `n_jobs=1`.
 No hyperparameter search, early stopping on evaluation or arm-specific parameters.
 All arms use exactly the same explicit estimator configuration and row weights;
-freeze remaining library defaults/version before any fit. Each arm/horizon/year
-is recalibrated on its own authorized calibration partition only. Calibration
-method/support, weighting and remaining parameters await final protocol approval.
+All explicit defaults and row-weight rules are frozen in training-contract.json;
+exact dependency/runtime versions remain part of separate future execution admission. Each arm/horizon/year
+is recalibrated on its own authorized calibration partition only. Calibration uses the approved regularized intercept, penalty1 and minimum one
+observation per class. No evaluation-dependent calibration or tuning is permitted.
 
-The [matrix](ablation-matrix.draft.yml) proposes 8 common-cohort arms (`HISTORY`,
+The [matrix](ablation-matrix.draft.yml) defines 8 common-cohort arms (`HISTORY`,
 `FULL_COMMON` and six removals), plus three secondary sensitivities: restricted
 water pair, restricted ERA5 precipitation pair and territorial holdout with its
 matched FULL reference. `ENSO` and calendar stay common within the six removals;
@@ -401,11 +403,11 @@ not isolated mechanisms.
 
 For each removal measure arm minus `FULL_COMMON` at the **same false-onset-alert
 budget**, with eligible municipality-years `D = eligible rows / 12` and common
-selection limit `floor(B × D)`. The numerical B is **pending human freeze**;
-EXP03's B=1 is precedent, not authorization here. Propose maximizing selection
+selection limit `floor(B × D)`. The approved numerical **B=1** is frozen for implementation under
+PHASE2-AUTHORIZATION.md. Maximize selection
 onset detections subject to that limit; keep full score ties (`score >= threshold`),
-then fewer false onset alerts, fewer total alerts, higher threshold. Freeze support,
-no-alert and infeasible-cell handling before execution. FAR/precision with zero
+then fewer false onset alerts, fewer total alerts, higher threshold. The approved
+training contract fixes support, null no-alert and no-selection-positive handling. FAR/precision with zero
 alerts are undefined, never zero. Unsupported cells cannot be pooled away.
 
 Thresholds are selected only in Y−1, persisted before evaluation, and never
@@ -466,8 +468,8 @@ For **each T+1 and T+2**, preserve simultaneous contractual A/B/C:
 Experimental utility additionally requires detections over the existing learning
 comparators under a verified common budget, consistent evidence across years and
 both departments, and honest realized-load differences. A block adds value when
-removing it consistently reduces paired utility; materiality and stability rules
-are pending before execution, not chosen from Y. The water result applies only
+removing it consistently reduces paired utility. The approved analysis is
+descriptive only; no formal superiority/materiality or champion conclusion. The water result applies only
 to its coverage population. Failed/undefined required cells remain visible;
 partial pooling cannot replace the complete primary horizon. No result selects
 a champion, grants G5, proves prospective availability or authorizes deployment.
@@ -496,6 +498,10 @@ A proposed one-parent/one-child-per-cell tracking layout would yield up to
 may be deduplicated only by identity, never by favorable results. All counts,
 calibration multiplicity and tracking shape must be recalculated/frozen in Phase 2
 after definitive years, support and reference choices; zero are created here.
+This paragraph preserves the historical initial104/105 estimate. The verified
+Phase 2 derivation supersedes it:108 supported future predictors/calibrators,
+four unsupported water2024 descriptors and109 parent/child runs; see
+[annex inventory](ANNEX-PREPARATION.json).
 
 ## Pending decisions before final protocol or execution
 
@@ -504,14 +510,14 @@ after definitive years, support and reference choices; zero are created here.
 | Historical source/H5/cohorts | Resolved for preparation through proposal A and exact native parity; preserve the pinned sources and original admission masks |
 | Operational availability | Unproved; proposal A permits retrospective preparation only. Any operational PIT/deployment inference requires new evidence and authority |
 | Retrospective block admission | Resolved for preparation: FULL_COMMON48, HISTORY14, four-part MODIS; preserve missingness and closed selectors |
-| Years and pair populations | Finalize 2020/2021/2022/2024, covered water years/rows and matched ERA5/transport populations before scientific results |
-| Model/calibration | Pin remaining parameters, dependency/runtime version, row weights, calibrator method and class/support failure rules |
-| Alert policy/comparators | Freeze B, tie/support/no-alert handling and compatibility of frozen comparators or a separately approved score-only matching procedure |
-| Statistical interpretation | Freeze paired uncertainty design, historical transmission-profile identity/mapping, materiality/stability thresholds, pooled/stratum rules and multiplicity interpretation |
+| Years and pair populations | Phase 1 descriptors frozen for 2020/2021/2022/2024; executable national coverage-restricted annex inputs remain pending |
+| Model/calibration | APPROVED_FOR_PHASE2_IMPLEMENTATION in training-contract.json; pin exact future dependency/runtime versions before Phase 3 |
+| Alert policy/comparators | B=1, ties/support/no-alert handling approved; exact comparator joins and verified budget equivalence remain required |
+| Statistical interpretation | Paired municipality/episode-connected annual-block uncertainty approved; descriptive only,2024 separate,no IID rows; missing historical profile mapping remains non-evaluable |
 | Composition/references | Resolved for preparation: separate mosaic, bare/other reference, finite training-group support, matched national-month transfer references; future modeling support remains pending |
-| Publication/tracking | Resolve technical registration identity/schema without changing the closed registry now; freeze native bundle/store and exact counts later |
-| Authority | Final protocol freeze, independent review and phase-specific authorization; execution authorization tied to all immutable identities |
+| Publication/tracking | Implemented native/isolated tracking;108 supported cells/109 runs derived; exact future commit/runtime/store/resource identity requires separate approval |
+| Authority | Phase 2 implementation freeze approved; independent final review/CI and separate exact-identity Phase 3 grant remain required |
 
-Pending scientific decisions are intentionally not invented. This design is
-discoverable through the experiment index; it does not add a closed-schema runtime
-registry entry, a final protocol, conclusions, operational commands or approval.
+The Phase 2 approval is explicit and bounded by PHASE2-AUTHORIZATION.md. Missing
+scientific inputs and future execution authority are never inferred from technical
+validation. No conclusions, real execution, permanent tracking or merge follows.
