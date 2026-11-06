@@ -1,26 +1,22 @@
 # Scientific Experiment Registry
 
-[EXP-DELTA03 — Phase 3 manual operational preparation](EXP-DELTA03/PHASE3.md)
-starts from merged PR78/e266b9c under PLAN_057. Existing Phase 1/2 architecture and
-scientific settings are preserved; PLAN056 remains recorded7/8 without invented
-CI evidence. Complete executable input connections, an isolated installed wheel
-and independent no-fit admission prepare Mauricio's manual command. The agent
-does not run the experiment. No real results, G5/champion or deployment follow.
+[EXP-DELTA03 — verified manual Phase 3 execution](EXP-DELTA03/PHASE3.md)
+records Mauricio's completed run: 108 models, 108 calibrators, 109 FINISHED MLflow runs,
+no HPO. The [scientific conclusion](EXP-DELTA03/CONCLUSIONS.md) is
+**NOT_SUPPORTED**: FULL_COMMON fails academic A/C at both horizons on frozen
+regional development support; 2024 remains separate consumed retrospective stress.
+History-only and block/transfer sensitivities remain descriptive, without promotion.
+Operational_PIT=false, G5 NOT_APPROVED, champion not_selected; no deployment or
+merge authorization. PLAN_057 final acceptance still requires its independent
+Final Review and green final-head CI; its ledger owns closure status.
 
-[EXP-DELTA03 — approved retrospective Phase 1 preparation](EXP-DELTA03/PHASE1.md)
-records source reconciliation, exact historical V2 H5/cohort preservation and
-reproducible no-fit Kedro matrices. [Proposal A approval](EXP-DELTA03/PHASE1-AUTHORIZATION.md)
-permits consolidated retrospective snapshots and four separate MODIS fractions;
-it does not prove operational PIT availability or deployment. The design/protocol
-and modeling matrix are approved for Phase 2 implementation only; predictive
-execution is not_authorized.
-Water uses genuine observations through2021 only;2024 stress stays separate and
-2025 excluded. Zero training/calibration/permanent MLflow; G5 NOT_APPROVED,
-champion not_selected. [Phase 2 implementation](EXP-DELTA03/PHASE2.md) is now
-explicitly authorized for generated-only validation under PLAN_056. Mauricio approved the full [scientific freeze](EXP-DELTA03/PHASE2-AUTHORIZATION.md)
-and separate [annex preparation](EXP-DELTA03/ANNEX.md); pending executable inputs
-remain explicit. Real
-execution, Phase 3, permanent MLflow and merge remain unauthorized.
+[Phase 1](EXP-DELTA03/PHASE1.md), [Phase 2](EXP-DELTA03/PHASE2.md), the
+[approved freeze](EXP-DELTA03/PHASE2-AUTHORIZATION.md) and
+[annex](EXP-DELTA03/ANNEX.md) retain their historical scope and evidence. The
+[final executed protocol](EXP-DELTA03/protocol.json) stays byte-identical to the
+run-bound input; its preparation-time flags are not current outcome counters.
+PLAN_056 remains historically 7/8; no missing CI evidence is inferred from merge.
+Water uses genuine coverage through 2021 only; 2025 remains excluded.
 
 [EXP-DELTA02-R1 — fixed-MGN spatial candidate `NOT_SUPPORTED`](EXP-DELTA02-R1/README.md)
 is the independently authorized revision that treats DANE MGN 2018 as one

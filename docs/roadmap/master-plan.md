@@ -398,13 +398,15 @@ Protocol execution remains not_authorized; no Phase 3, real training/calibration
 prediction, permanent MLflow, merge, G5 approval or champion selection is authorized.
 
 
-### EXP-DELTA03 — bounded manual Phase 3 preparation
+### EXP-DELTA03 — verified manual Phase 3 execution
 
-Mauricio requests PLAN_057 with three substantive tasks: operational preparation,
-verification after his manual execution, and analysis/documentary closure with
-Final Review. [PHASE3.md](../product/experiments/EXP-DELTA03/PHASE3.md) owns this
-scope from merged PR78/e266b9c. PLAN056 remains recorded7/8; merge is not CI evidence.
-The agent completes missing executable connections and installed-runtime no-fit
-admission using the existing graph and architecture, then stops at the manual
-handoff. No scientific execution, automatic champion/G5, deployment or merge is
-performed. Later tasks require Mauricio's actual completion report.
+Mauricio reported successful execution under PLAN_057. Artifact verification
+completed task2: 108 models, 108 calibrators, 109 FINISHED runs; no agent refit or pipeline
+rerun. [PHASE3.md](../product/experiments/EXP-DELTA03/PHASE3.md) owns exact execution
+identity, outputs and verification; [CONCLUSIONS.md](../product/experiments/EXP-DELTA03/CONCLUSIONS.md)
+owns the **NOT_SUPPORTED** primary result and descriptive ablation/geography
+interpretation. 2024 remains separate; 2025 excluded; PIT=false; G5 NOT_APPROVED;
+champion not_selected; no deployment/merge approval. Frozen executed inputs and
+Phase 1 remains preserved. PLAN_056 remains recorded 7/8. PLAN_057 task3 requires
+independent Final Review and green final-head CI before its ledger can close;
+Mauricio decides merge. No subsequent experiment or phase is started.
