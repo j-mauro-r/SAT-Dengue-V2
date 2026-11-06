@@ -133,7 +133,8 @@
     "minimum_temporal_blocks": 2,
     "stress2024": "separate descriptive stratum; no mixing with development2020-2022",
     "materiality": "descriptive estimates only; no formal superiority/materiality or champion decision",
-    "status": "PROPOSED; short year support must remain explicit"
+    "status": "PROPOSED; short year support must remain explicit",
+    "minimum_valid_fraction": 0.8
   },
   "national_evaluation": {
     "status": "PENDING_SCOPE_DECISION",
@@ -151,5 +152,9 @@
     "future_protected_root": "data/processed/exp_delta03",
     "future_authorization": "tmp/exp-delta03-phase3/authorization.json",
     "tracking": "isolated aggregate-only mirror after verified native publication"
+  },
+  "exposure_contract": {
+    "eligible": "verified eligible prediction rows/12",
+    "monitored": "separate pinned observed calendar ledger, never inferred from eligible rows"
   }
 }
