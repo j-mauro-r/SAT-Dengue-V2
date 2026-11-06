@@ -1374,3 +1374,17 @@ The annex source-read allowlist is keys, onset/eligibility/evaluability cohort
 columns and Phase 1 membership. Its preparation script and receipt are local
 under `tmp/exp-delta03-phase2`; public aggregates/identities and pending inputs
 are owned by EXP-DELTA03 `ANNEX-PREPARATION.json` and `ANNEX.md`.
+
+### EXP-DELTA03 operational connections
+
+`tests/unit/test_exp_delta03_operational_adapters.py` owns the newly admitted
+result/preparation roots, immutable real-mode reuse under tmp, episode-start
+invariants, hash-only executable-annex admission and altered installed-runtime
+rejection. Run only these and the affected existing execution/annex seam selections;
+no complete local suite or generated training E2E is required. Modified-file Ruff,
+format and mypy cover the changed adapters. Installed-wheel structural preflight
+uses the existing exp_delta03_preflight graph; authorized read-only admission uses
+the same input validators without ExecutionStore, fitting or tracking. Exact
+receipts and the manual-only command are owned by EXP-DELTA03 PHASE3.md and its
+local handoff. GitHub owns integral validation. After Mauricio's manual execution,
+validate native/tracking artifacts; do not rerun training to produce evidence.

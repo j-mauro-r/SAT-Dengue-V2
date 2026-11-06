@@ -28,6 +28,8 @@ CODE_FILES = (
     "src/sat_dengue/model_training/exp_delta03_adapter.py",
     "src/sat_dengue/experiments/exp_beta01.py",
     "src/sat_dengue/data/exp_delta03.py",
+    "src/sat_dengue/datasets/legacy_training/contract.py",
+    "src/sat_dengue/model_training/contract.py",
     "src/sat_dengue/data/exp_delta03_retrospective.py",
     "src/sat_dengue/experiments/exp_delta03_synthetic.py",
     "src/sat_dengue/experiments/exp_delta03_inputs.py",
@@ -56,6 +58,36 @@ CODE_FILES = (
 )
 
 
+REAL_PUBLICATION_ROOTS = ("data/processed/exp_delta03", "tmp/kedro-migration/exp-delta03-runs")
+
+
+def publication_prefix(relative: str, *, synthetic: bool) -> str:
+    """Accept only the existing synthetic namespace or the two explicit real roots."""
+    allowed = ("tmp/exp-delta03-phase2",) if synthetic else REAL_PUBLICATION_ROOTS
+    for prefix in allowed:
+        if relative == prefix or relative.startswith(prefix + "/"):
+            return prefix
+    raise ValueError("Unapproved execution publication root")
+
+
+def verify_installed_runtime(root: Path, receipt: dict[str, Any], *, full: bool) -> None:
+    """Verify current runtime bytes; full dependency admission precedes private loading."""
+    for descriptor in [receipt["wheel"], receipt["dependencies"]]:
+        path = safe_path(root, descriptor["path"], "tmp/exp-delta03-runtime")
+        if identity(path) != {k: descriptor[k] for k in ["sha256", "bytes"]}:
+            raise ValueError("Installed runtime wheel/dependency snapshot changed")
+    files = receipt["installed_files"]
+    if not files or digest(files) != receipt["installed_files_sha256"]:
+        raise ValueError("Installed runtime file inventory changed")
+    for relative, expected in files.items():
+        # Recheck project byte content on every graph identity boundary. All frozen
+        # dependency bytes are additionally checked on each full admission.
+        if full or "/sat_dengue/" in relative:
+            path = safe_path(root, relative, "tmp/exp-delta03-runtime")
+            if identity(path) != expected:
+                raise ValueError("Installed runtime file changed: " + relative)
+
+
 def fingerprint(root: Path, context: dict[str, Any], roots: dict[str, str]) -> dict[str, Any]:
     def git(*args):
         return subprocess.check_output(["git", *args], cwd=root, text=True).strip()
@@ -69,7 +101,7 @@ def fingerprint(root: Path, context: dict[str, Any], roots: dict[str, str]) -> d
             versions[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:
             versions[name] = "UNAVAILABLE"
-    return {
+    result: dict[str, Any] = {
         "commit": git("rev-parse", "HEAD"),
         "dirty": bool(git("status", "--porcelain")),
         "code": {p: identity(root / p) for p in CODE_FILES},
@@ -77,7 +109,10 @@ def fingerprint(root: Path, context: dict[str, Any], roots: dict[str, str]) -> d
         "training_contract_sha256": context["training_contract_sha256"],
         "effective_contract_sha256": digest(context["contract"]),
         "protocol_sha256": identity(
-            root / "docs/product/experiments/EXP-DELTA03/protocol.draft.json"
+            root
+            / context["contract"].get(
+                "protocol", "docs/product/experiments/EXP-DELTA03/protocol.draft.json"
+            )
         )["sha256"],
         "matrix_manifest_sha256": context["contract"]["matrix_bundle"]["manifest_sha256"],
         "execution_plan_sha256": digest(context["plan"]),
@@ -85,6 +120,22 @@ def fingerprint(root: Path, context: dict[str, Any], roots: dict[str, str]) -> d
         "input_source": context["input_source"],
         "limits": json.loads(canonical(context["limits"])),
     }
+
+    runtime_receipt = context["contract"].get("runtime_receipt")
+    if not context["synthetic"] and runtime_receipt:
+        path = safe_path(root, runtime_receipt, "tmp/exp-delta03-runtime")
+        raw = path.read_bytes()
+        receipt = json.loads(raw)
+        if receipt["commit"] != result["commit"]:
+            raise ValueError("Installed runtime commit differs from checkout")
+        verify_installed_runtime(root, receipt, full=False)
+        result["installed_runtime"] = {
+            "receipt": {"sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)},
+            "wheel": receipt["wheel"],
+            "dependencies": receipt["dependencies"],
+            "installed_files_sha256": receipt["installed_files_sha256"],
+        }
+    return result
 
 
 def authorize(
@@ -100,12 +151,22 @@ def authorize(
     path = safe_path(root, authorization_relative, "tmp/exp-delta03-phase3")
     if not path.is_file():
         raise PermissionError("Separate explicit Phase3 authorization is required")
+    runtime_receipt = context["contract"].get("runtime_receipt")
+    if runtime_receipt:
+        installed = safe_path(root, runtime_receipt, "tmp/exp-delta03-runtime")
+        verify_installed_runtime(root, json.loads(installed.read_bytes()), full=True)
     authorization_bytes = path.read_bytes()
     grant = json.loads(authorization_bytes)
     if grant.get("schema") != "exp-delta03-phase3-authorization-v1" or grant.get("phase") != 3:
         raise PermissionError("Unexpected scientific authorization")
     if grant.get("approved_by") != "Mauricio" or current["dirty"]:
         raise PermissionError("Human approval and a clean frozen commit are required")
+    if "phase3_preparation" in context["contract"] and (
+        grant.get("execution_mode") != "manual_only"
+        or grant.get("executor") != "Mauricio"
+        or grant.get("agent_execution_authorized") is not False
+    ):
+        raise PermissionError("Phase3 authorization permits only Mauricio manual execution")
     if grant.get("identity") != current or grant.get("identity_sha256") != digest(current):
         raise PermissionError("Scientific execution identity mismatch")
     now = now or datetime.now(UTC)
@@ -134,7 +195,11 @@ def authorize(
         raise PermissionError("Scientific scope acknowledgements missing")
     if any(value == "UNAVAILABLE" for value in current["runtime"].values()):
         raise PermissionError("Scientific runtime extras unavailable")
-    safe_path(root, current["roots"]["publication"], "data/processed/exp_delta03")
+    safe_path(
+        root,
+        current["roots"]["publication"],
+        publication_prefix(current["roots"]["publication"], synthetic=False),
+    )
     safe_path(root, current["roots"]["tracking"], "tmp")
     return {
         "identity": current,
@@ -179,8 +244,9 @@ class ExecutionStore:
             or (resume and permission is not None and not permission["allow_resume"])
         ):
             raise PermissionError("Publication root/resume differs from authorization")
-        prefix = "tmp/exp-delta03-phase2" if synthetic else "data/processed/exp_delta03"
+        prefix = publication_prefix(relative, synthetic=synthetic)
         self.root, self.prefix, self.relative = root, prefix, relative
+        self.synthetic = synthetic
         self.identity = json.loads(canonical(execution_identity))
         self.execution = digest(execution_identity)
         self.parent = safe_path(root, relative, prefix)
@@ -394,9 +460,7 @@ class ExecutionStore:
             recorded = self.state["publication"]
             if recorded is None or recorded["bundle_id"] != bundle:
                 raise ValueError("Completed execution cannot publish different payloads")
-            actual = verify_publication(
-                self.root, recorded, synthetic=self.prefix.startswith("tmp/")
-            )
+            actual = verify_publication(self.root, recorded, synthetic=self.synthetic)
             if actual != payloads:
                 raise ValueError("Completed publication differs")
             return dict(recorded)
@@ -424,7 +488,7 @@ class ExecutionStore:
 def verify_publication(
     root: Path, publication: dict[str, Any], *, synthetic: bool
 ) -> dict[str, Any]:
-    prefix = "tmp/exp-delta03-phase2" if synthetic else "data/processed/exp_delta03"
+    prefix = publication_prefix(publication["path"], synthetic=synthetic)
     folder = safe_path(root, publication["path"], prefix)
     raw = safe_path(root, publication["path"] + "/manifest.json", prefix).read_bytes()
     if hashlib.sha256(raw).hexdigest() != publication["manifest_sha256"]:

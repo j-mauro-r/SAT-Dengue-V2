@@ -1,6 +1,11 @@
 # EXP-DELTA03 — National climate and environmental block ablation
 
-## State and authority
+Current execution and scientific outcome: [PHASE3.md](PHASE3.md) and
+[CONCLUSIONS.md](CONCLUSIONS.md). The state table and authorization statements
+below are the historical design/Phase2 snapshot; subsequent manual authority and
+completion are recorded by those owners. No scientific design is revised here.
+
+## Historical design state and authority
 
 | Field | Value |
 | --- | --- |

@@ -140,7 +140,7 @@
     "iid_row_fallback": false
   },
   "national_evaluation": {
-    "status": "APPROVED_ADDITIVE_ANNEX_PREPARATION",
+    "status": "APPROVED_ADDITIVE_ANNEX",
     "original_population": "Meta_Tolima",
     "rule": "Separate additive preparation only; original regional key/label/X correspondence and every learned role remain unchanged; execution readiness requires complete pinned input admission."
   },
@@ -152,10 +152,10 @@
   "artifact_schema": "docs/product/experiments/EXP-DELTA03/artifact-schemas.json",
   "outputs": {
     "synthetic_root": "tmp/exp-delta03-phase2/synthetic",
-    "future_protected_root": "data/processed/exp_delta03",
-    "future_authorization": "tmp/exp-delta03-phase3/authorization.json",
+    "future_protected_root": "tmp/kedro-migration/exp-delta03-runs",
+    "future_authorization": "tmp/exp-delta03-phase3/approval.json",
     "tracking": "isolated aggregate-only mirror after verified native publication",
-    "future_tracking_root": "tmp/kedro-migration/mlflow"
+    "future_tracking_root": "tmp/kedro-migration/replay-mlflow"
   },
   "exposure_contract": {
     "eligible": "verified eligible prediction rows/12",
@@ -166,7 +166,7 @@
     "threads_per_model": 1,
     "adjustment_caps": "derived from matrix execution plan",
     "deadline": "cooperative checks at node/loop boundaries and around adjustments, publication and tracking; no process-killing CPU quota",
-    "status": "PROPOSED Phase3 execution envelope; requires exact separate authorization"
+    "status": "Bound for manual-only operational admission; exact grant required; cooperative21600second deadline."
   },
   "preparation_regime": "RETROSPECTIVE_CONSOLIDATED",
   "G5": "NOT_APPROVED",
@@ -187,5 +187,19 @@
     "status": "PREPARED_WITH_EXPLICIT_PENDING_INPUTS",
     "execution_ready": false,
     "sha256": "033b89757788152701aafa6ccb4229f4a40d838b46573b90f67ba11681b83a0a"
+  },
+  "evaluation_annex": {
+    "path": "data/processed/exp_delta03-inputs/dc694fb76c2e7bfbef65d345913020948e79194704d25e8fd048ca98a2169584/annex.json",
+    "sha256": "9515e62d1387280ff151640e6270c55ea96236a630d47460b60102405791d27e",
+    "bytes": 193054
+  },
+  "protocol": "docs/product/experiments/EXP-DELTA03/protocol.json",
+  "runtime_receipt": "tmp/exp-delta03-runtime/runtime-receipt.json",
+  "phase3_preparation": {
+    "authority": "Mauricio explicit current request preserved in PLAN_057 HUMAN_REQUEST.txt",
+    "scope": "operational preparation and no-fit admission; scientific launch exclusively manual by Mauricio",
+    "request_sha256": "dbdd4b5a159bbdab9fc439d9939da6de2c6b7fac64c1b9e89c730eb15dd128b6",
+    "owner": "docs/product/experiments/EXP-DELTA03/PHASE3.md",
+    "execution_by_agent": false
   }
 }

@@ -2139,3 +2139,22 @@ training_authorized=false, phase3_authorized=false, operational_PIT=false,
 preparation_regime=RETROSPECTIVE_CONSOLIDATED. No real fits/calibrations/scientific
 predictions, permanent MLflow, Phase3, G5/champion, causal/operational/deployment
 claim or merge follows. G5 NOT_APPROVED; champion not_selected.
+
+
+## EXP-DELTA03 — verified retrospective execution and negative primary result (2026-11-06)
+
+Mauricio reported COMPLETE manual execution. [PHASE3.md](experiments/EXP-DELTA03/PHASE3.md)
+owns verified execution/bundle/manifest/MLflow identities and metrics;
+[CONCLUSIONS.md](experiments/EXP-DELTA03/CONCLUSIONS.md) owns scientific interpretation.
+The primary conclusion is **NOT_SUPPORTED**: FULL_COMMON fails academic A/C at
+both horizons in 2020–2022. The separate consumed 2024 stress does not rescue it.
+Ablations, history-only, genuine-water, ERA5 and transfer remain descriptive;
+no feature deletion, retuning, new champion or causal inference is approved.
+
+Retain operational_PIT=false, G5 NOT_APPROVED, champion not_selected and no
+deployment authority. Frozen executed input bytes preserve their preparation-time
+flags; actual manual execution is recorded in PHASE3, not retroactively inserted
+into the input identity. This agent analysis is not independent human model
+acceptance. PLAN057 Final Review/final-head CI and Mauricio's merge decision remain
+separate. PLAN_056 remains 7/8; no prior acceptance is fabricated. Any later
+experiment requires a new bounded, human-approved question and evidence design.

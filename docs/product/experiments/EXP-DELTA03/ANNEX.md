@@ -49,3 +49,9 @@ All evidence is retrospective consolidated and descriptive. 2025 is excluded;
 2024 remains a separate consumed stress stratum. No real fitting, calibration,
 scientific prediction or permanent MLflow write occurred. No operational PIT,
 causal, deployment, Phase 3, G5, champion or merge authorization follows.
+
+
+The bounded Phase 2 record above remains preserved. PLAN_057 completes its
+executable input connections under [Phase 3](PHASE3.md), with a separately pinned
+annex in training-contract.json. That admission does not modify the original core
+or retroactively make the Phase 2 preparation record an executable annex.
