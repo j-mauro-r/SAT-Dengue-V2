@@ -36,6 +36,9 @@ def parts_fixture():
         )
         rows["target_month"] = (pd.PeriodIndex(rows.periodo_mes, freq="M") + 1).astype(str)
         x = pd.DataFrame({"signal": np.arange(8, dtype=float)})
+        order = rows.sort_values(["divipola_municipio", "periodo_mes"]).index
+        rows = rows.loc[order].reset_index(drop=True)
+        x = x.loc[order].reset_index(drop=True)
         parts[role] = {"rows": rows, "X": x}
         role_ids[role] = {
             "key_sha256": row_hash(rows, ["divipola_municipio", "periodo_mes"]),
@@ -134,3 +137,10 @@ def test_whole_ties_budget_rounding_no_alert_and_zero_support():
     evaluation = np.array([0, 1, 1, 1])
     evaluation[:] = 1 - evaluation
     assert digest(p) == before
+
+
+def test_rows_only_permutation_is_not_a_valid_key_to_X_alignment():
+    cell, parts = parts_fixture()
+    parts["train"]["rows"] = parts["train"]["rows"].iloc[::-1].reset_index(drop=True)
+    with pytest.raises(ValueError, match="alignment"):
+        validate_parts(cell, parts, 1)

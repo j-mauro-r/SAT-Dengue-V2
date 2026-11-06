@@ -34,6 +34,12 @@ def validate_parts(cell: dict[str, Any], parts: dict[str, Any], minimum_per_clas
         rows, x = parts[role]["rows"], parts[role]["X"]
         if rows.empty or rows.duplicated(KEYS).any() or not rows.index.equals(x.index):
             raise ValueError("Empty, duplicate or misaligned role")
+        if (
+            not rows[KEYS]
+            .reset_index(drop=True)
+            .equals(rows[KEYS].sort_values(KEYS).reset_index(drop=True))
+        ):
+            raise ValueError("Noncanonical row/feature alignment")
         keys = set(rows[KEYS].itertuples(index=False, name=None))
         if seen & keys:
             raise ValueError("Overlapping temporal roles")
