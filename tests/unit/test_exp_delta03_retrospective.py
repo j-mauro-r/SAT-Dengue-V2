@@ -263,6 +263,11 @@ def test_cross_fold_and_identifier_selectors_are_rejected():
     with pytest.raises(ValueError, match="variant contract"):
         view_projection(result["base"], view, result["feature_manifest"])
 
+    view = copy.deepcopy(descriptor(result))
+    view["variant"] = "FULL_MINUS_ENSO"
+    with pytest.raises(ValueError, match="Undeclared ablation"):
+        view_projection(result["base"], view, result["feature_manifest"])
+
 
 def test_actual_csv_roundtrip_and_member_corruption(tmp_path, monkeypatch):
     sources = retrospective_fixture()

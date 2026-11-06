@@ -266,7 +266,6 @@ def view_projection(
             for b in [
                 "THERMAL_HUMIDITY",
                 "RAINFALL_HYDROLOGY",
-                "ENSO",
                 "NDVI",
                 "TERRAIN",
                 "LAND_COVER",

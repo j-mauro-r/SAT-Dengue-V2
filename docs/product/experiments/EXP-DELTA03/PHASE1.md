@@ -121,8 +121,8 @@ CSVs. All108 materializable view values/key/label identities are rechecked after
 actual CSV serialization and immutable readback. Four unsupported2024 water
 reference/addition descriptors remain visible, for112 total descriptors.
 
-- Root: `tmp/exp-delta03-phase1/products/913660025fff48be24103ed335e259bd5ad801bc34a6bf98ad889eb16062b756/`.
-- Manifest SHA-256: `b362e6548e94585debb1ae3b65a7c1f0cfa372efba8f79aaf28afedb10151d3c`.
+- Root: `tmp/exp-delta03-phase1/products/7c0af9d13c6ec53aae094c177162434b549370d8adc8fd98b56dca974e6cc6a7/`.
+- Manifest SHA-256: `ddaea8041eb2299e2f3926c3e5941c172a233f86f58765d3dce963e473844c03`.
 - `prepared_features.csv`:86,231 rows ×93 columns; SHA-256 `7ad651adf588d58051f7e6955ae46b94c2353473a412809a60570d9d2e66186e`.
 - `labels.csv`:168,893 rows; SHA-256 `c6fcb78680810be27fb9b8b8769af3cb848f6c307bbc8a5998579bd69b51e7ff`.
 - `cohort_membership.csv`:484,344 role records; SHA-256 `8d15e3c5c51d794b3618352a33bd6038526686404a1379a6ad5a19051243a5da`.
