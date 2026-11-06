@@ -71,6 +71,7 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Only operational profile, tracking and experiment_id parameters are allowed"
         )
     if value["profile"] not in (
+        "exp_delta03",
         "exp_delta03_preflight",
         "exp_delta03_preparation",
         "exp_delta03_synthetic",
@@ -109,6 +110,12 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"
         )
     experiment_id = value.get("experiment_id")
+    if value["profile"] == "exp_delta03" and (
+        value["tracking"] != "enabled" or experiment_id is not None
+    ):
+        raise ValueError(
+            "EXP-DELTA03 real graph requires bound Phase3 authorization and enabled tracking"
+        )
     if value["profile"] in {
         "exp_delta03_preflight",
         "exp_delta03_preparation",

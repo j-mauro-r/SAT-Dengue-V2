@@ -44,7 +44,16 @@ def derive_plan(metadata: dict[str, Any], *, metadata_sha256: str) -> dict[str, 
         if view["status"] != "MATERIALIZABLE_RETROSPECTIVE":
             if view["reference"] != "water":
                 raise ValueError("Unexpected unsupported primary cell")
-            unsupported.append({"id": ident, "status": view["status"], "reason": view["reason"]})
+            unsupported.append(
+                {
+                    "id": ident,
+                    "variant": view["variant"],
+                    "horizon": view["horizon"],
+                    "year": view["year"],
+                    "status": view["status"],
+                    "reason": view["reason"],
+                }
+            )
             continue
         columns = view["columns"]
         if not columns or len(columns) != len(set(columns)) or not set(columns) <= features:

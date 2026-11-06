@@ -20,6 +20,7 @@ def metrics(
     monitored_exposure: float | None = None,
     expected_rows: int | None = None,
     weights: np.ndarray | None = None,
+    probabilities_available: bool = True,
 ) -> dict[str, Any]:
     if frame.duplicated(KEYS).any():
         raise ValueError("Duplicate prediction key")
@@ -36,7 +37,12 @@ def metrics(
         }
     if frame.horizon.nunique() != 1:
         raise ValueError("Report horizons separately")
-    p = probabilities(frame.score, frame.truth)
+    if probabilities_available:
+        p = probabilities(frame.score, frame.truth)
+    else:
+        if not frame.truth.isin([0, 1]).all():
+            raise ValueError("Invalid deterministic-rule truth")
+        p = np.zeros(len(frame), dtype=float)
     if not frame.alert.isin([0, 1]).all():
         raise ValueError("Nonbinary alert")
     y, a = frame.truth.to_numpy(dtype=int), frame.alert.to_numpy(dtype=bool)
@@ -98,7 +104,7 @@ def metrics(
     )
     if not np.array_equal(lead, frame.horizon.to_numpy()) or (lead < 1).any():
         raise ValueError("Invalid prediction anticipation")
-    result = {
+    result: dict[str, Any] = {
         "status": "EVALUABLE",
         "rows": n,
         "positive_support": positive,
@@ -146,12 +152,12 @@ def metrics(
             fp / monitored_exposure if monitored_exposure else None
         ),
         "average_precision": float(average_precision_score(y[live], p[live], sample_weight=w[live]))
-        if positive and negative
+        if positive and negative and probabilities_available
         else None,
         "auroc_secondary": float(roc_auc_score(y[live], p[live], sample_weight=w[live]))
-        if positive and negative
+        if positive and negative and probabilities_available
         else None,
-        "brier": float(np.average((p - y) ** 2, weights=w)),
+        "brier": float(np.average((p - y) ** 2, weights=w)) if probabilities_available else None,
         "calibration": {
             "reliability": reliability,
             "expected_calibration_error": sum(
@@ -170,6 +176,10 @@ def metrics(
         if tp
         else None,
     }
+    if not probabilities_available:
+        result["calibration"] = {"status": "NO_EVALUABLE_NO_PROBABILITIES"}
+        for metric in ("brier", "average_precision", "auroc_secondary"):
+            result["metric_status"][metric] = "NO_EVALUABLE_NO_PROBABILITIES"
     return result
 
 
@@ -183,7 +193,16 @@ def paired(left: pd.DataFrame, right: pd.DataFrame) -> tuple[pd.DataFrame, pd.Da
             raise ValueError("Paired outcome schema differs")
         if optional in a:
             columns.append(optional)
-    if not a[columns].equals(b[columns]):
+    left_values, right_values = a[columns].copy(), b[columns].copy()
+    for values in [left_values, right_values]:
+        for column in ["horizon", "truth", "target_excess"]:
+            if column in values:
+                if column != "horizon" and not values[column].isin([0, 1]).all():
+                    raise ValueError("Invalid paired binary outcome")
+                values[column] = values[column].astype("Int64")
+        if "episode_id" in values:
+            values["episode_id"] = values.episode_id.astype("string")
+    if not left_values.equals(right_values):
         raise ValueError("Paired keys/outcomes differ; no convenient intersection")
     return a, b
 

@@ -151,10 +151,18 @@
     "synthetic_root": "tmp/exp-delta03-phase2/synthetic",
     "future_protected_root": "data/processed/exp_delta03",
     "future_authorization": "tmp/exp-delta03-phase3/authorization.json",
-    "tracking": "isolated aggregate-only mirror after verified native publication"
+    "tracking": "isolated aggregate-only mirror after verified native publication",
+    "future_tracking_root": "tmp/kedro-migration/mlflow"
   },
   "exposure_contract": {
     "eligible": "verified eligible prediction rows/12",
     "monitored": "separate pinned observed calendar ledger, never inferred from eligible rows"
+  },
+  "resources": {
+    "wall_seconds": 21600,
+    "threads_per_model": 1,
+    "adjustment_caps": "derived from matrix execution plan",
+    "deadline": "cooperative checks at node/loop boundaries and around adjustments, publication and tracking; no process-killing CPU quota",
+    "status": "PROPOSED Phase3 execution envelope; requires exact separate authorization"
   }
 }

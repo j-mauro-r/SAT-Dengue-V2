@@ -18,6 +18,10 @@ from sat_dengue.experiments.exp_delta03_contract import canonical, digest
 from sat_dengue.tracking.experiments import MLFLOW_EXPERIMENT_NAME
 
 METRICS = {
+    "brier_before",
+    "brier_after",
+    "ece_before",
+    "ece_after",
     "rows",
     "positive_support",
     "negative_support",

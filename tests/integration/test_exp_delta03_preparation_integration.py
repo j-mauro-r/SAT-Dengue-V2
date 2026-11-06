@@ -30,7 +30,9 @@ def test_real_kedro_synthetic_catalog_and_repeat(
             project_path=ROOT,
             runtime_params={"profile": "exp_delta03_synthetic", "tracking": "disabled"},
         ) as session:
-            cast(KedroSession, session).run(pipeline_names=["exp_delta03_synthetic"])
+            cast(KedroSession, session).run(
+                pipeline_names=["exp_delta03_synthetic"], node_names=["exp_delta03_generated_probe"]
+            )
     products = list((tmp_path / "tmp/exp-delta03-phase1/synthetic").glob("*/manifest.json"))
     assert len(products) == 1
     receipt = json.loads((products[0].parent / "synthetic.json").read_text())
@@ -48,7 +50,8 @@ def test_tracking_and_scientific_ids_are_rejected(profile: str) -> None:
 
 def test_historical_graphs_and_source_boundaries_preserved() -> None:
     graphs = register_pipelines()
-    assert "exp_delta03" not in graphs
+    assert "exp_delta03" in graphs
+    assert graphs["exp_delta03"].inputs() == {"parameters"}
     assert graphs["__default__"] is graphs["foundation"]
     assert not any(
         "exp_delta03" in n.name

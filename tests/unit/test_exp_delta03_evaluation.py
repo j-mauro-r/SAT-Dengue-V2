@@ -146,3 +146,11 @@ def test_uncertainty_method_and_parameter_identity_cannot_lie(key, value):
     config[key] = value
     with pytest.raises(ValueError):
         uncertainty(f, f, exposures(f), config)
+
+
+def test_deterministic_comparators_do_not_invent_probability_metrics():
+    f = predictions().drop(columns="score")
+    result = metrics(f, probabilities_available=False)
+    assert result["onsets_detected"] == 6 and result["sensitivity"] == 1
+    assert result["brier"] is None and result["average_precision"] is None
+    assert result["calibration"]["status"] == "NO_EVALUABLE_NO_PROBABILITIES"

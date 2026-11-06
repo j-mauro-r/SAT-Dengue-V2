@@ -30,6 +30,10 @@ def test_reservation_resume_checkpoints_tampering_and_atomic_reuse(tmp_path):
         assert store.read_stage("cell", "trained") == {"model.ubj": b"generated"}
         publication = store.publish({"result.json": canonical({"generated_only": True})})
     assert verify_publication(tmp_path, publication, synthetic=True)["result.json"]
+    with pytest.raises(ValueError, match="execution identity"):
+        verify_publication(
+            tmp_path, {**publication, "execution_identity_sha256": "changed"}, synthetic=True
+        )
     with ExecutionStore(tmp_path, relative, identity, synthetic=True) as store:
         assert store.state["status"] == "COMPLETE"
         assert store.publish({"result.json": canonical({"generated_only": True})}) == publication
@@ -107,6 +111,8 @@ def authorization_fixture(tmp_path):
             "manual_execution",
         ],
     }
+    current["limits"] = copy.deepcopy(grant["limits"])
+    grant["identity_sha256"] = digest(current)
     relative = "tmp/exp-delta03-phase3/generated-authorization.json"
     path = tmp_path / relative
     path.parent.mkdir(parents=True)
@@ -152,3 +158,19 @@ def test_completed_publication_and_closed_store_cannot_be_replaced(tmp_path):
         assert set(store.path.iterdir()) == before and store.state["publication"] == original
     with pytest.raises(ValueError, match="active execution lock"):
         store.publish({"result.json": b"generated"})
+
+
+def test_unknown_interrupted_adjustment_and_resource_deadline_fail_closed(tmp_path, monkeypatch):
+    from sat_dengue.datasets import exp_delta03_execution as execution
+
+    current = {"limits": {"max_models": 1, "max_calibrators": 1, "wall_seconds": 60}}
+    relative = "tmp/exp-delta03-phase2/synthetic"
+    with ExecutionStore(tmp_path, relative, current, synthetic=True) as store:
+        store.reserve_adjustment("first", "model")
+        with pytest.raises(ValueError, match="budget exhausted"):
+            store.reserve_adjustment("second", "model")
+        with pytest.raises(ValueError, match="Interrupted adjustment"):
+            store.reserve_adjustment("first", "model")
+        monkeypatch.setattr(execution.time, "monotonic", lambda: store.started + 61)
+        with pytest.raises(TimeoutError):
+            store.check_deadline()

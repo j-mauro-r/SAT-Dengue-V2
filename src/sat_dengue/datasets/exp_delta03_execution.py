@@ -7,6 +7,7 @@ import hashlib
 import importlib.metadata
 import json
 import os
+import platform
 import re
 import shutil
 import subprocess
@@ -25,16 +26,33 @@ CODE_FILES = (
     "src/sat_dengue/experiments/exp_delta03_learning.py",
     "src/sat_dengue/experiments/exp_delta03_evaluation.py",
     "src/sat_dengue/model_training/exp_delta03_adapter.py",
+    "src/sat_dengue/experiments/exp_beta01.py",
+    "src/sat_dengue/data/exp_delta03.py",
+    "src/sat_dengue/data/exp_delta03_retrospective.py",
+    "src/sat_dengue/experiments/exp_delta03_synthetic.py",
+    "src/sat_dengue/experiments/exp_delta03_inputs.py",
+    "src/sat_dengue/experiments/exp_delta03_artifacts.py",
+    "src/sat_dengue/experiments/onset.py",
+    "src/sat_dengue/data/consolidation.py",
+    "src/sat_dengue/tracking/exp_delta03.py",
+    "src/sat_dengue/tracking/artifacts.py",
+    "src/sat_dengue/tracking/experiments.py",
+    "src/sat_dengue/tracking/local.py",
     "src/sat_dengue/datasets/exp_delta03_training.py",
     "src/sat_dengue/datasets/exp_delta03_execution.py",
     "src/sat_dengue/pipelines/exp_delta03/pipeline.py",
     "src/sat_dengue/configuration.py",
     "src/sat_dengue/config_loader.py",
     "src/sat_dengue/settings.py",
+    "src/sat_dengue/hooks.py",
     "src/sat_dengue/pipeline_registry.py",
     "conf/base/catalog.yml",
     "conf/base/parameters.yml",
     "pyproject.toml",
+    "docs/product/experiments/EXP-DELTA03/training-contract.json",
+    "docs/product/experiments/EXP-DELTA03/phase1-contract.json",
+    "docs/product/experiments/EXP-DELTA03/RETROSPECTIVE-SOURCES.json",
+    "docs/product/experiments/EXP-DELTA03/artifact-schemas.json",
 )
 
 
@@ -42,7 +60,10 @@ def fingerprint(root: Path, context: dict[str, Any], roots: dict[str, str]) -> d
     def git(*args):
         return subprocess.check_output(["git", *args], cwd=root, text=True).strip()
 
-    versions = {}
+    versions = {
+        "python": platform.python_version(),
+        "platform": platform.system() + "_" + platform.machine(),
+    }
     for name in ("kedro", "numpy", "pandas", "xgboost", "scipy", "scikit-learn", "mlflow"):
         try:
             versions[name] = importlib.metadata.version(name)
@@ -54,12 +75,15 @@ def fingerprint(root: Path, context: dict[str, Any], roots: dict[str, str]) -> d
         "code": {p: identity(root / p) for p in CODE_FILES},
         "runtime": versions,
         "training_contract_sha256": context["training_contract_sha256"],
+        "effective_contract_sha256": digest(context["contract"]),
         "protocol_sha256": identity(
             root / "docs/product/experiments/EXP-DELTA03/protocol.draft.json"
         )["sha256"],
         "matrix_manifest_sha256": context["contract"]["matrix_bundle"]["manifest_sha256"],
         "execution_plan_sha256": digest(context["plan"]),
         "roots": roots,
+        "input_source": context["input_source"],
+        "limits": json.loads(canonical(context["limits"])),
     }
 
 
@@ -92,7 +116,8 @@ def authorize(
     counts = context["plan"]["counts"]
     limits = grant["limits"]
     if (
-        limits["max_models"] != counts["models"]
+        limits != current.get("limits")
+        or limits["max_models"] != counts["models"]
         or limits["max_calibrators"] != counts["calibrators"]
         or limits["threads_per_model"] != 1
         or limits["wall_seconds"] <= 0
@@ -156,12 +181,13 @@ class ExecutionStore:
             raise PermissionError("Publication root/resume differs from authorization")
         prefix = "tmp/exp-delta03-phase2" if synthetic else "data/processed/exp_delta03"
         self.root, self.prefix, self.relative = root, prefix, relative
-        self.identity = execution_identity
+        self.identity = json.loads(canonical(execution_identity))
         self.execution = digest(execution_identity)
         self.parent = safe_path(root, relative, prefix)
         self.resume = resume
         self.closed = False
         self.started = time.monotonic()
+        self.limits = self.identity.get("limits", {})
         self.fd: int | None = None
         self.path = self.parent / self.execution
 
@@ -220,6 +246,28 @@ class ExecutionStore:
             os.replace(scratch, target)
         finally:
             scratch.unlink(missing_ok=True)
+
+    def check_deadline(self) -> None:
+        if self.limits and time.monotonic() - self.started > self.limits["wall_seconds"]:
+            raise TimeoutError("Frozen execution wall budget exhausted")
+
+    def reserve_adjustment(self, cell: str, kind: str) -> None:
+        if self.closed or self.fd is None or self.state["status"] == "COMPLETE":
+            raise ValueError("Adjustment requires an active incomplete execution")
+        if kind not in {"model", "calibrator"}:
+            raise ValueError("Unknown adjustment kind")
+        attempts = self.state.setdefault("adjustment_attempts", {})
+        key = token(cell) + "." + kind
+        if key in attempts:
+            raise ValueError(
+                "Interrupted adjustment lacks a verified checkpoint; inspect before recovery"
+            )
+        cap = self.limits["max_models" if kind == "model" else "max_calibrators"]
+        if sum(v == kind for v in attempts.values()) >= cap:
+            raise ValueError("Frozen adjustment budget exhausted")
+        self.check_deadline()
+        attempts[key] = kind
+        self._save_state()
 
     def read_stage(self, cell: str, stage: str) -> dict[str, bytes] | None:
         key = token(cell) + "." + stage
@@ -382,6 +430,8 @@ def verify_publication(
     if hashlib.sha256(raw).hexdigest() != publication["manifest_sha256"]:
         raise ValueError("Native publication manifest changed")
     manifest = json.loads(raw)
+    if manifest["execution_identity_sha256"] != publication["execution_identity_sha256"]:
+        raise ValueError("Native publication execution identity changed")
     if (
         digest(manifest["files"]) != publication["bundle_id"]
         or folder.name != publication["bundle_id"]
