@@ -18,8 +18,13 @@ Prepare the pinned modeling/tracking runtime using the repository's
 permanent local tracking root explicitly; never infer it from a synthetic run.
 Freeze a clean commit, protocol, training contract, catalogue, parameters,
 publication/tracking roots, dependencies and derived model/calibrator caps.
-Run `kedro run --pipeline=exp_delta03_preflight` with its matching profile and
-tracking disabled. Preflight hashes real payload bytes and reads JSON metadata
+Run the metadata-only preflight:
+
+```sh
+kedro run --pipeline=exp_delta03_preflight --params=profile=exp_delta03_preflight,tracking=disabled
+```
+
+ Preflight hashes real payload bytes and reads JSON metadata
 only. It does not permit a fit or guarantee historical operational availability.
 
 A distinct human-signed `exp-delta03-phase3-authorization-v1` JSON file under

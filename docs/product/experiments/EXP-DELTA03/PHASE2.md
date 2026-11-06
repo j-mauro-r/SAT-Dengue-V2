@@ -86,10 +86,16 @@ comparisons only, without causal, operational or champion claims.
 
 ## Validation status
 
-A development Kedro CLI run completed all 12 generated nodes, including native
-publication and temporary MLflow. Focused automated E2E, replay, admission and
-review evidence is being completed in PLAN_056. Phase 2 remains open until the
-human scientific decision, final independent review and final-head CI pass.
+The development Kedro CLI and observed PLAN_056 gate 32 complete all 12 generated
+nodes, native publication and temporary MLflow. Three focused integration tests
+pass, including exact reload/repeat with zero new adjustments and no duplicate
+runs, full annex admission and unauthorized real-graph refusal. Refreshed contract,
+evaluation and publication gates pass; changed-file Ruff/format/mypy pass. The
+independent review resolved every critical/high/medium finding in its focused
+passes. Final range review and remote final-head CI are recorded in PLAN_056 and
+PR #78; consult their current evidence rather than treating this document as a
+CI receipt. Phase 2 remains open pending the human scientific decision, bounded
+annex preparation, final review and final-head CI.
 
 ## Concrete pending human freeze proposal
 
