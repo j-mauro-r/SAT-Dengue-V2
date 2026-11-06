@@ -1,0 +1,514 @@
+{
+  "schema": "exp-delta03-annex-preparation-v1",
+  "status": "PREPARED_WITH_EXPLICIT_PENDING_INPUTS",
+  "execution_ready": false,
+  "scope": "cohort/observed-calendar preparation and hash-only source inventory; no scientific execution",
+  "phase1_manifest_sha256": "ddaea8041eb2299e2f3926c3e5941c172a233f86f58765d3dce963e473844c03",
+  "derived_counts": {
+    "descriptors": 112,
+    "models": 108,
+    "calibrators": 108,
+    "unsupported": 4,
+    "comparisons": 78,
+    "parent_runs": 1,
+    "child_runs": 108,
+    "runs": 109
+  },
+  "primary_national_cohorts": [
+    {
+      "horizon": 1,
+      "year": 2020,
+      "stratum": "development",
+      "eligible_rows": 10463,
+      "eligible_municipality_years": 871.9166666666666,
+      "monitored_rows": 13464,
+      "monitored_municipality_years": 1122.0,
+      "municipalities": 1113,
+      "key_label_sha256": "1a247bb740ca8be05788fbfd2655e5cb11961e02a43952bed967045bce72c462",
+      "monitored_keys_sha256": "15ec7e5293845ea92b548c789231cad754a9072cd46b93ef5a3b8d5871522cea",
+      "regional_key_label_sha256": "85f118a73c8a65eccf8596764a3c9cb5ca36b22f603b83ed719c31b434db955c",
+      "regional_correspondence": "EXACT"
+    },
+    {
+      "horizon": 1,
+      "year": 2021,
+      "stratum": "development",
+      "eligible_rows": 11982,
+      "eligible_municipality_years": 998.5,
+      "monitored_rows": 13464,
+      "monitored_municipality_years": 1122.0,
+      "municipalities": 1121,
+      "key_label_sha256": "e554f1bd8c024747d3efb78a156f057030fdd9eb1b67f60dd36958519925eee8",
+      "monitored_keys_sha256": "e9b7ed1358c8608d5b31eb39ca5a17ebcef8903770b14eb9853d658d2445e8e9",
+      "regional_key_label_sha256": "ca32aa83050f874e6e7616d7b5e3b89a69cf2f8f8b5d324ab24ea72c449a5b66",
+      "regional_correspondence": "EXACT"
+    },
+    {
+      "horizon": 1,
+      "year": 2022,
+      "stratum": "development",
+      "eligible_rows": 10896,
+      "eligible_municipality_years": 908.0,
+      "monitored_rows": 13464,
+      "monitored_municipality_years": 1122.0,
+      "municipalities": 1111,
+      "key_label_sha256": "f695033fa38f50457f324b2dd0bc1aff51c6a001cb87b72544521ca69ed3c85c",
+      "monitored_keys_sha256": "48ba4dd1c603468a3fd8b58e567ba0cd96ec17b28e5d41a048a6884f6778f405",
+      "regional_key_label_sha256": "f7eb152cc6ec2ed34d4895c953f798cfd86034948a496bd16517143c794ad4d5",
+      "regional_correspondence": "EXACT"
+    },
+    {
+      "horizon": 1,
+      "year": 2024,
+      "stratum": "stress2024",
+      "eligible_rows": 6957,
+      "eligible_municipality_years": 579.75,
+      "monitored_rows": 13464,
+      "monitored_municipality_years": 1122.0,
+      "municipalities": 1033,
+      "key_label_sha256": "474a89dac32effd4caf05a2cb3b75f06c1daa981809ea7a205dcf2d78e6a9fa5",
+      "monitored_keys_sha256": "b58010ffef02d7d3ee3455bebd751f0db1c7f088e21e68012ebe6f6719fa3c6b",
+      "regional_key_label_sha256": "5e19a8e7a15421ef773f5012c34048969cd2d68f8464926fef7d60e05ab0bb08",
+      "regional_correspondence": "EXACT"
+    },
+    {
+      "horizon": 2,
+      "year": 2020,
+      "stratum": "development",
+      "eligible_rows": 9477,
+      "eligible_municipality_years": 789.75,
+      "monitored_rows": 12342,
+      "monitored_municipality_years": 1028.5,
+      "municipalities": 1109,
+      "key_label_sha256": "c3f1e0ff12e54a866f355e23b50041fd51b528d5cf48082e9706a0183ac966e4",
+      "monitored_keys_sha256": "ac59781d19f42d79d53d14ed2e63b19bfcefe3f979b136ae68c945646bd3c504",
+      "regional_key_label_sha256": "d18c99fd46a7fc94c12e83fa701c5da88b9d43a600c3bd57bf60867db42ebe71",
+      "regional_correspondence": "EXACT"
+    },
+    {
+      "horizon": 2,
+      "year": 2021,
+      "stratum": "development",
+      "eligible_rows": 11059,
+      "eligible_municipality_years": 921.5833333333334,
+      "monitored_rows": 12342,
+      "monitored_municipality_years": 1028.5,
+      "municipalities": 1121,
+      "key_label_sha256": "09a2ff61d91180c7ea5765e90db6319c88c5e21e3b8e94206e58398975fb6455",
+      "monitored_keys_sha256": "ea9dc10b866ec047b50c8e0be89f7e422512b99c3cc1dd8628e6d910ab0b1646",
+      "regional_key_label_sha256": "10439e4aba2029e4ecd8a424ae0fcbc9798e995a549ca3f7fed3a4b7edae54a9",
+      "regional_correspondence": "EXACT"
+    },
+    {
+      "horizon": 2,
+      "year": 2022,
+      "stratum": "development",
+      "eligible_rows": 9977,
+      "eligible_municipality_years": 831.4166666666666,
+      "monitored_rows": 12342,
+      "monitored_municipality_years": 1028.5,
+      "municipalities": 1106,
+      "key_label_sha256": "8c2222e6962bec65505f9a847c6d46ff2eaffd5e9565abcbead27c09ebb2226b",
+      "monitored_keys_sha256": "bd5a53edefc8b9b5dbed473ba727f3f76689b3cfc81b2f08437406c5f9ad5c97",
+      "regional_key_label_sha256": "f80360029d57201bc8ee2c127f8b1523bf5081da745d437bd6668466de6f40f2",
+      "regional_correspondence": "EXACT"
+    },
+    {
+      "horizon": 2,
+      "year": 2024,
+      "stratum": "stress2024",
+      "eligible_rows": 6283,
+      "eligible_municipality_years": 523.5833333333334,
+      "monitored_rows": 12342,
+      "monitored_municipality_years": 1028.5,
+      "municipalities": 1010,
+      "key_label_sha256": "f9461da1839575de33f1e857081a7d5f01a69153e78283faef81c49b6c94e601",
+      "monitored_keys_sha256": "24a12f70909088d15980efda2f14c2af3a7874d21d9ed00397a5b4c9b2ff899e",
+      "regional_key_label_sha256": "4bea9ae1351179226b46230e33cbc39f9269691b89ee3321d8a875b117bc4d90",
+      "regional_correspondence": "EXACT"
+    }
+  ],
+  "existing_sources": {
+    "regional": {
+      "manifest_sha256": "037445487086f7123ee2bf4b97b9af06b96716e2f24e9ff5160177c59da261d8",
+      "files": {
+        "canonical_model_table_v1.csv": {
+          "bytes": 9574421,
+          "sha256": "d1c3d0d28bd3ee1b51e6e2975b69d9f617077f7f4036b5422c4dc1585289cf47"
+        },
+        "columns.json": {
+          "bytes": 9437,
+          "sha256": "4b7fbe595e67d984582654db1ffead25dd9cccf47753e755c156fd349d1987e2"
+        },
+        "contract.json": {
+          "bytes": 1835,
+          "sha256": "877c15abbd0622d9fce7bdf587dcc8ef1369da8872989aa2f52697c6b0e3651b"
+        },
+        "coverage.json": {
+          "bytes": 2922,
+          "sha256": "854a813d7a3e107e04a7f21ad171a05d1d7319467598bca7bc9540d1aaaf569c"
+        },
+        "provenance.json": {
+          "bytes": 3098,
+          "sha256": "d0e947f1b7997afef6a5a9aeceef160f6b13cf2437957bfb7cd3dd3db56d4c6f"
+        }
+      },
+      "status": "EXISTS_HASH_VERIFIED",
+      "rows_read": "none"
+    },
+    "national": {
+      "manifest_sha256": "e801cf9b36b84ff0e0c8f336a88799d47f6e6bce9a6d1b155a1a37e20594afb4",
+      "files": {
+        "canonical_model_table_national_v1.csv": {
+          "bytes": 116008632,
+          "sha256": "66c58d862f397b7953f7b32cfb6399330acc86e0acab1b5e3a6e809ea4b392d0"
+        },
+        "columns.json": {
+          "bytes": 22636,
+          "sha256": "3591e6b56548f8553e24073207695ccbaacf66fb33fa91d4361d025bdb251eea"
+        },
+        "comparison.csv": {
+          "bytes": 24220,
+          "sha256": "86af3e70a8ae1d7726af99763ba3bc564a692ad6a12b71ef7a56e3c7be08a1da"
+        },
+        "contract.json": {
+          "bytes": 22850,
+          "sha256": "531ce45e60b67202a34dccb1e45a2df7ec2c6567c44a2334f17f30befbc0d6af"
+        },
+        "coverage.json": {
+          "bytes": 3450,
+          "sha256": "4a35412867cb53c678e4fd4957d4b3a80c95d8c8dcd9abd3a1160704ded1157d"
+        },
+        "eligibility_by_department_year.csv": {
+          "bytes": 14528,
+          "sha256": "ae111567a3061b4928f05a56b10107d4ce097a464bfdcbeb94e3c68ee2848089"
+        },
+        "provenance.json": {
+          "bytes": 11813,
+          "sha256": "2c07190e085e705d4ea67eedf6574b23b78794f2a66bf369acdefcfe4911f92d"
+        },
+        "temporal_roles.csv": {
+          "bytes": 6313,
+          "sha256": "67b23d29df6f264ee821827789752271e5d98f231d0df6b72c22753bbe7209a8"
+        }
+      },
+      "status": "EXISTS_HASH_VERIFIED",
+      "rows_read": "cohort columns only"
+    },
+    "benchmark": {
+      "manifest_sha256": "4ca5b8359c914fc080c80ebf538d7d11bf1c76aa783d9434c1832d478ff15f2f",
+      "files": {
+        "comparisons.csv": {
+          "bytes": 43572,
+          "sha256": "d016472440033693aae12f3f7674774e881517aea597cffe17cbc8d3a5974c95"
+        },
+        "metrics.csv": {
+          "bytes": 36054,
+          "sha256": "5167e55db82165f55624ab61304b7cc6e0d391a5756a03f8400c5f99592ac802"
+        },
+        "predictions.csv": {
+          "bytes": 10498467,
+          "sha256": "98b557a6d673c7ead6471e9bada24869701b458304068671d3c9ffa6ecaf28d2"
+        },
+        "preflight.json": {
+          "bytes": 676,
+          "sha256": "d5534b3b74be687158f4b3d57d5a3e82173947a2158b5081526546ef90b13d72"
+        },
+        "protocol.json": {
+          "bytes": 6203,
+          "sha256": "6eb69f14ab19c04d844fe0aaac1c298c6f77c8f718ce965329632b2510453e05"
+        },
+        "provenance.json": {
+          "bytes": 107559,
+          "sha256": "1981cb432ac80374132fd4c8c1c1f78d323d7c8b880220cdbbfe6a1030bc53fe"
+        }
+      },
+      "status": "EXISTS_HASH_VERIFIED",
+      "rows_read": "none"
+    },
+    "recovered_selection": {
+      "manifest_sha256": "9261b170ba059ca81d4409f30a4fd08e377f2e1e6debf64b9d337d7f3a1bb4b6",
+      "files": {
+        "acceptance.json": {
+          "bytes": 909,
+          "sha256": "a9c4be06b12c01fdb04e6c09eb853cf4c6c36c770df65f49d0e680abf8815b8e"
+        },
+        "cells.json": {
+          "bytes": 36794,
+          "sha256": "2dcc8acf048ab39ef5a8950d5b7fdc4d0a3fe54111ec9ee04b3edfa3a2a0fae2"
+        },
+        "evaluation_reproduction.json": {
+          "bytes": 1452,
+          "sha256": "e2ae368683a8db721cb6e7a23f94e8a2f39a5767ef515aa902f6eb760dd08697"
+        },
+        "limitations.json": {
+          "bytes": 702,
+          "sha256": "f535b84a5822d7ca457fe02b00458f32da053c8610712c55d1cff3fc8a29c9f9"
+        },
+        "provenance.json": {
+          "bytes": 109401,
+          "sha256": "323c9af576529f8e100dca31c2c85a61704df5d2f350e50772feb567db2ad8e4"
+        },
+        "recovery_script.py": {
+          "bytes": 20638,
+          "sha256": "d2263e94b18b849d43b9e3787e91ca1d54141eeda70de14027d249272fe06eab"
+        },
+        "selection-h1-2020.csv": {
+          "bytes": 31819,
+          "sha256": "04e8feb4c6f054ac8b2b3d5fed6f8bd96bc4326e7185bc71794583f58f5603ca"
+        },
+        "selection-h1-2021.csv": {
+          "bytes": 55945,
+          "sha256": "f4a260bac7a00b8cc13d194567f28f994488c57d6610a472b676960abfafebd8"
+        },
+        "selection-h1-2022.csv": {
+          "bytes": 71589,
+          "sha256": "7a1b181ba87a372cf4a1e0ed444e6560778c0fe7ec2031330c5938fe2e141422"
+        },
+        "selection-h1-2024.csv": {
+          "bytes": 34798,
+          "sha256": "31d5efe8e1e100cf728761b393bb9260d52fa68e31cfab658422ae993d348084"
+        },
+        "selection-h2-2020.csv": {
+          "bytes": 30216,
+          "sha256": "7ac8c0b444bbb4b953b4aba8c9bc3e3ed8c15bf72d7f413d8774ffb195c0aa7c"
+        },
+        "selection-h2-2021.csv": {
+          "bytes": 49946,
+          "sha256": "c3adbc4491c702dd7d542381c1f73e32950423332c0680d9222e3a07e9ee7d40"
+        },
+        "selection-h2-2022.csv": {
+          "bytes": 66001,
+          "sha256": "a11b95c51888a2f3b6be783c243365a7253226c7db3b709123d8d9f06a1736fa"
+        },
+        "selection-h2-2024.csv": {
+          "bytes": 31648,
+          "sha256": "c91da993aa85e6ada5b4607231a535bfd62f3a4a08cf87799dcd0c98e63d90ad"
+        }
+      },
+      "status": "EXISTS_HASH_VERIFIED",
+      "rows_read": "none"
+    },
+    "G1": {
+      "manifest_sha256": "9fc80bfc0fae23f73f49c9e87afb3704a8fc5e19f8c7c924fe89505b94305e60",
+      "files": {
+        "G1-h1-2020-OFF.ubj": {
+          "bytes": 73490,
+          "sha256": "b7620e325d195bb05e8dfa81bed78a7f411a369df6fff233e2b1714aa1dafd10"
+        },
+        "G1-h1-2021-OFF.ubj": {
+          "bytes": 73490,
+          "sha256": "82fe6c00b9bb6933fe136a99b276dd6ac71ab5c20c550f23b7fe99ace8719919"
+        },
+        "G1-h1-2022-OFF.ubj": {
+          "bytes": 73491,
+          "sha256": "d7d1527062bd0d07bdb648b6dbe6d2f6cec51971e6ad0cfb48ab86bacc2a6b16"
+        },
+        "G1-h1-2024-OFF.ubj": {
+          "bytes": 73490,
+          "sha256": "0e3d8b712cd4912bed65fcfcf67de6c7fd3fb73097a48181154053ba9c0acb1f"
+        },
+        "G1-h2-2020-OFF.ubj": {
+          "bytes": 73490,
+          "sha256": "0f39ce9b87275d1d7e9525aec3bf9167d8c4121f46de2f55a8de051c3f610811"
+        },
+        "G1-h2-2021-OFF.ubj": {
+          "bytes": 73490,
+          "sha256": "b92fdbb1eaf0af95269e6557551163659ec24d2f5a8078be0069f9519684cf6d"
+        },
+        "G1-h2-2022-OFF.ubj": {
+          "bytes": 73491,
+          "sha256": "d965c1973ecb15030ca4dc67e31a71345ed7c0f8691d07af32ff1949c2fd05f2"
+        },
+        "G1-h2-2024-OFF.ubj": {
+          "bytes": 73491,
+          "sha256": "933c8266220c11a5e34c7b98d9b73abd8d8dc24a764e7d822f798bfcb3c381e1"
+        },
+        "cells.json": {
+          "bytes": 18830,
+          "sha256": "e37d589f55db371910a75bcf703972402e8d1fe2fb2889e845f0001c121e79d0"
+        },
+        "comparisons.csv": {
+          "bytes": 6582,
+          "sha256": "759cc9aed717674d0070565f4352c94c384038df63cfeab7b432737b68f7c12b"
+        },
+        "conclusions.json": {
+          "bytes": 188,
+          "sha256": "6f3fed886b94ecd703cad31f74e105260b5edc2bf4d605b8f2aab121b91943a4"
+        },
+        "metrics.csv": {
+          "bytes": 13094,
+          "sha256": "835d8dd612444121f0da6a18f1a4038087bcd8416bfa35c2b09c61cdf8354b0c"
+        },
+        "predictions.csv": {
+          "bytes": 1135378,
+          "sha256": "dac7ad9bde7e51257846f8de673a425add198bf10b682cbc252475f8b0db62f3"
+        },
+        "preflight.json": {
+          "bytes": 10626,
+          "sha256": "41998f9149cad6253250781c10dcf10fff8fbc4fee8842dbf97e3d35eef48254"
+        },
+        "protocol.json": {
+          "bytes": 5025,
+          "sha256": "c89c440cd1c32408ef7971cfe9e710adf04c8dff1b90619602793a2e2bdc6613"
+        },
+        "provenance.json": {
+          "bytes": 20134,
+          "sha256": "d9e30ffb7aa1c9179ad180032e0bb2a766e06b2af690712e00a82ba52675ea40"
+        },
+        "scores-h1-2020-calibration.csv": {
+          "bytes": 28661,
+          "sha256": "6146352cf1f71c9ebd0e65f9aeebc0c06ef8a6290bf035a21784d0f0ff2787ab"
+        },
+        "scores-h1-2020-evaluation.csv": {
+          "bytes": 24108,
+          "sha256": "15fc3834781d05a8ab1d01510ab239f0f91f9cc68154992705cbd77383248a1d"
+        },
+        "scores-h1-2020-selection.csv": {
+          "bytes": 13650,
+          "sha256": "ac69891379244536149b0c2cac3c35671a111c6089bdab6dfd7fd7e14c62d184"
+        },
+        "scores-h1-2021-calibration.csv": {
+          "bytes": 27617,
+          "sha256": "78e3905895d0fb705eb02c78eab90176af4d45739c01139be9445415fd6034ac"
+        },
+        "scores-h1-2021-evaluation.csv": {
+          "bytes": 31066,
+          "sha256": "6fa1f3416bd42f3fddb4d1d517a6b75f9c542dd10b01a7ae5dac5fabdcca1d9d"
+        },
+        "scores-h1-2021-selection.csv": {
+          "bytes": 24152,
+          "sha256": "8f05a4d0688a0de860e51c516ffcc0e6a57047bd0997ce32f8bf4fcc8417af47"
+        },
+        "scores-h1-2022-calibration.csv": {
+          "bytes": 13771,
+          "sha256": "4459afbb4a2b83cc448c1cce8af398593fb920aac108204dfbf6cb695b05e1f2"
+        },
+        "scores-h1-2022-evaluation.csv": {
+          "bytes": 25410,
+          "sha256": "d226c796bcce7ec261ace161cc1004f9c34cfb68be088a9f60fe3c0a5f41fb06"
+        },
+        "scores-h1-2022-selection.csv": {
+          "bytes": 31085,
+          "sha256": "cd531ea7b56d8f26b77ef1d59ca8e9041e1c6a6e0bf5ac4aba8a7e5263e77212"
+        },
+        "scores-h1-2024-calibration.csv": {
+          "bytes": 31060,
+          "sha256": "b7f88262f7a21353da1ab92b64cb1c7194e2750909a4436afa2ce933a343ed85"
+        },
+        "scores-h1-2024-evaluation.csv": {
+          "bytes": 16514,
+          "sha256": "ca69969703f92df4b6be867850f4cf868eef6bb8dd0149bfaba29465a9662824"
+        },
+        "scores-h1-2024-selection.csv": {
+          "bytes": 14966,
+          "sha256": "c5ce8f93363007a5891c587650e75582f5bb27538aec87d88580b7e9fa99e203"
+        },
+        "scores-h2-2020-calibration.csv": {
+          "bytes": 26321,
+          "sha256": "ec0d1b6d95c57673725fa00db44d7e6787a11ef09235fadedcd217c1e78f0432"
+        },
+        "scores-h2-2020-evaluation.csv": {
+          "bytes": 21552,
+          "sha256": "5e9877e1a673c9266119587274d6b8563f9d7ad46de330ccc884910931e50574"
+        },
+        "scores-h2-2020-selection.csv": {
+          "bytes": 12987,
+          "sha256": "f91473d66302ed8877dac2c3475429b6f1a91648b05b080f0f6f9dcacf7fbceb"
+        },
+        "scores-h2-2021-calibration.csv": {
+          "bytes": 25812,
+          "sha256": "da4cfb71b58a81fffc3863f225dbd9fd44b66cf6cebec15e7f0673e90d308086"
+        },
+        "scores-h2-2021-evaluation.csv": {
+          "bytes": 28740,
+          "sha256": "a22ef8d33ecf06160d57fe7257f969cded3f6f62c593c08d7adfaee8c253e7a4"
+        },
+        "scores-h2-2021-selection.csv": {
+          "bytes": 21621,
+          "sha256": "fcf211a7835b2c1182a6d4d86405018b54617ca624b019a20499f0110f69dcd8"
+        },
+        "scores-h2-2022-calibration.csv": {
+          "bytes": 13051,
+          "sha256": "cd7661f96dbeb33e79c4e760c9c669b83d1f58d49516a3d66173c8b4f837b91b"
+        },
+        "scores-h2-2022-evaluation.csv": {
+          "bytes": 23611,
+          "sha256": "784b4a81418c91a0363c56c7a1f75a882ae12f790c47a426037357c5478376dc"
+        },
+        "scores-h2-2022-selection.csv": {
+          "bytes": 28728,
+          "sha256": "5fe933fb3b08fcd5fde362a29776187d6a60891ef321e31002f5266c1a29f18e"
+        },
+        "scores-h2-2024-calibration.csv": {
+          "bytes": 28711,
+          "sha256": "63199fe68cf416c47efda9055660dc1fa80d032d34ba03f21658c563e50bf7c5"
+        },
+        "scores-h2-2024-evaluation.csv": {
+          "bytes": 15182,
+          "sha256": "d5b3f02b74a4b90b6fd1921aa5072a5dd81afc81a2066a6967d27efe5aec21a7"
+        },
+        "scores-h2-2024-selection.csv": {
+          "bytes": 13627,
+          "sha256": "a5a7039bffbdca300ee1451eb5929b75179ed048f81f43d9584cc4d7106a04dd"
+        }
+      },
+      "status": "EXISTS_HASH_VERIFIED",
+      "rows_read": "none"
+    }
+  },
+  "excess": {
+    "status": "SOURCE_EXISTS_JOIN_PENDING",
+    "rule": "H5 target excess is distinct from onset; never infer target_excess=0 from onset_truth=0. Episode and origin/comparator correspondence require admission before execution."
+  },
+  "comparators": {
+    "status": "FROZEN_SOURCES_EXIST_EXACT_PAIRING_PENDING",
+    "arms": [
+      "R0",
+      "G0_OFF",
+      "G0_ON",
+      "G1"
+    ],
+    "national_scores": "NOT_AVAILABLE; do not create predictions or substitute regional controls",
+    "budget": "Original immutable policies; common B equivalence must be verified or explicitly non-evaluable."
+  },
+  "pending_inputs": [
+    "Full national per-cell X and X_sha256 with exact original regional value correspondence; no new train/calibration/selection roles.",
+    "Coverage-specific national water/ERA5 cohorts and independent monitored calendars, including explicit unsupported water2024 cells.",
+    "Pinned H5 excess/episode/origin comparator inputs for every required role with exact frozen onset correspondence.",
+    "Exact per-cell regional frozen comparator key/outcome/score/alert joins; national frozen learned comparator scores unavailable, report non-evaluable unless separately authorized.",
+    "Executable exp-delta03-evaluation-annex-v1 with every descriptor/hash/byte size and verified scientific-input admission."
+  ],
+  "operational_PIT": false,
+  "preparation_regime": "RETROSPECTIVE_CONSOLIDATED",
+  "training_authorized": false,
+  "phase3_authorized": false,
+  "execution": "not_authorized",
+  "G5": "NOT_APPROVED",
+  "champion": "not_selected",
+  "activity_counters": {
+    "real_model_fits": 0,
+    "real_calibrations": 0,
+    "real_predictions": 0,
+    "permanent_mlflow_writes": 0
+  },
+  "protected_preparation": {
+    "bundle_id": "48227e6350adb3ba9ee27f6a9e2e8e76dbb9f27d7c44f1cf7acbfd847f3655fd",
+    "path": "data/processed/exp_delta03-inputs/48227e6350adb3ba9ee27f6a9e2e8e76dbb9f27d7c44f1cf7acbfd847f3655fd",
+    "manifest_sha256": "87cec61c5bc88961cdfbb06205977089037849d84bc454d3249e0d7b72a70add"
+  },
+  "files": {
+    "national-primary-cohorts.csv": {
+      "sha256": "018e1f4a10f1ea14269d88495d740421b1999f52a2cfec54a133f27ee9d08465",
+      "bytes": 2775469
+    },
+    "national-primary-monitored-calendar.csv": {
+      "sha256": "be40d0a77e050c559c156fe66ded2981ab1c25b905297c2e1c6344ad3a5f2bc7",
+      "bytes": 3303247
+    },
+    "preparation.json": {
+      "sha256": "62ede6ab0aab5de067ccfcb0c54ba3a2b0f89df48212091ae9bce20365b7acc9",
+      "bytes": 15369
+    }
+  }
+}

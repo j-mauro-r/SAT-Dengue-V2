@@ -210,3 +210,66 @@ def test_metadata_amendment_has_exact_scope(
     path.write_text(json.dumps(ledger))
     with pytest.raises(AssertionError):
         verify_preservation_records(tmp_path, records)
+
+
+def test_isolated_constraint_addition_preserves_baseline_and_rejects_new_transitives(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from scripts import export_kedro_constraints as exporter
+
+    raw = (
+        b'[project]\ndependencies=["numpy==2.5.4"]\n'
+        b'[project.optional-dependencies]\ndev=["shapely==2.1.2"]\n'
+    )
+    baseline = "numpy==2.5.4\ncachetools==7.2.4\n"
+    monkeypatch.setattr(exporter.importlib.metadata, "version", lambda name: "2.1.2")
+    monkeypatch.setattr(exporter.importlib.metadata, "requires", lambda name: ["numpy>=1.21"])
+    assert set(exporter.preserved_lines(raw, baseline)) == {
+        "numpy==2.5.4",
+        "cachetools==7.2.4",
+        "shapely==2.1.2",
+    }
+    monkeypatch.setattr(
+        exporter.importlib.metadata, "requires", lambda name: ["unresolved-dependency>=1"]
+    )
+    with pytest.raises(ValueError, match="transitive"):
+        exporter.preserved_lines(raw, baseline)
+    with pytest.raises(ValueError, match="existing pin"):
+        exporter.preserved_lines(raw.replace(b"2.5.4", b"2.5.5"), baseline)
+
+
+@pytest.mark.parametrize(
+    "requirement", ["shapely[feature]==2.1.2", "shapely>=2.1.2", "shapely==2.*"]
+)
+def test_preserved_constraints_reject_unverified_extras_or_nonexact_pins(requirement: str) -> None:
+    from scripts.export_kedro_constraints import preserved_lines
+
+    raw = (
+        '[project]\ndependencies=["numpy==2.5.4"]\n[project.optional-dependencies]\ndev=["'
+        + requirement
+        + '"]\n'
+    ).encode()
+    with pytest.raises(ValueError, match="exact direct pins"):
+        preserved_lines(raw, "numpy==2.5.4\n")
+
+
+def test_reviewed_dev_addition_preserves_exact_scientific_authority() -> None:
+    from sat_dengue.configuration import matches_frozen_authority
+
+    old = "92ab435ccad1e0844c433d82d54ffb7b5374f029c5895a9bca80ddbc97e9e123"
+    raw = (ROOT / "pyproject.toml").read_bytes()
+    line = b'    "shapely==2.1.2",\n'
+    assert hashlib.sha256(raw.replace(line, b"", 1)).hexdigest() == old
+    assert matches_frozen_authority("pyproject.toml", raw, old)
+    assert not matches_frozen_authority("other/pyproject.toml", raw, old)
+    for changed in [
+        raw + b"\n",
+        raw.replace(b"xgboost==3.0.5", b"xgboost==3.0.6"),
+        raw.replace(b"shapely==2.1.2", b"shapely==2.1.3"),
+        raw + line,
+    ]:
+        assert not matches_frozen_authority("pyproject.toml", changed, old)
+    assert matches_frozen_authority("ordinary.json", b"{}", hashlib.sha256(b"{}").hexdigest())
+    assert not matches_frozen_authority(
+        "ordinary.json", b"changed", hashlib.sha256(b"{}").hexdigest()
+    )

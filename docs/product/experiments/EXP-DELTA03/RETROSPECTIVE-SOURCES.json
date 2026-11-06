@@ -1,0 +1,936 @@
+{
+  "admissible_primary_predictors": [
+    "month_sin",
+    "month_cos"
+  ],
+  "origin_state_availability": "UNVERIFIED_CONSOLIDATED_E_T_IS_NOT_AN_ORIGIN_SNAPSHOT",
+  "point_in_time_primary_matrix": "NO_OPERATIONAL_PIT_CLAIM",
+  "primary_environmental_or_history_blocks": [],
+  "primary_exclusion_authority": "Latest explicit human request authorizes conservative exclusion when historical vintage evidence is absent",
+  "records": [
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ucsb_chg/chirps/CHIRPS_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "CHIRPS",
+      "field": "precipitacion_chirps_total_mm",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "UCSB_CHG_CHIRPS_DAILY_GEE_MUNICIPAL_2025",
+      "source_identity": {
+        "bytes": 48379191,
+        "sha256": "f351c7de7ebfe1a181032e371b731ae11a2274b1d5c242563958e09d2cb0726f"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "CHIRPS Daily|UCSB-CHG/CHIRPS/DAILY|extraccion_GEE_2026-11-04",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ucsb_chg/chirps/CHIRPS_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "CHIRPS",
+      "field": "precipitacion_chirps_max_diaria_mm",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "UCSB_CHG_CHIRPS_DAILY_GEE_MUNICIPAL_2025",
+      "source_identity": {
+        "bytes": 48379191,
+        "sha256": "f351c7de7ebfe1a181032e371b731ae11a2274b1d5c242563958e09d2cb0726f"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "CHIRPS Daily|UCSB-CHG/CHIRPS/DAILY|extraccion_GEE_2026-11-04",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ucsb_chg/chirps/CHIRPS_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "CHIRPS",
+      "field": "racha_seca_chirps_max_dias_promedio",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "UCSB_CHG_CHIRPS_DAILY_GEE_MUNICIPAL_2025",
+      "source_identity": {
+        "bytes": 48379191,
+        "sha256": "f351c7de7ebfe1a181032e371b731ae11a2274b1d5c242563958e09d2cb0726f"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "CHIRPS Daily|UCSB-CHG/CHIRPS/DAILY|extraccion_GEE_2026-11-04",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "ERA5 precipitation",
+      "field": "precipitacion_total_mm",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "ERA5 precipitation",
+      "field": "precipitacion_max_diaria_mm",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "ERA5 precipitation",
+      "field": "racha_seca_max_dias",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Temperature",
+      "field": "temp_media_c",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Temperature",
+      "field": "amplitud_termica_media_c",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Soil moisture",
+      "field": "humedad_suelo_capa1_media_m3_m3",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "VPD",
+      "field": "vpd_medio_kpa",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Radiation",
+      "field": "radiacion_total_mj_m2",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/ecmwf/era5_land/ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Wind",
+      "field": "viento_medio_ms",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "ECMWF_ERA5_LAND_DAILY_AGGR_COLOMBIA_2007_2025",
+      "source_identity": {
+        "bytes": 140097527,
+        "sha256": "739332f43cba367a92577b3dc8ce3dcfd1acfd5af67deba1b68549f10a9e010e"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERA5_LAND/DAILY_AGGR; exportación ERA5Land_Colombia_DIVIPOLA_mensual_2007_2025; tarea GEE VQ4AJOI6MCLNVM2M36TCAFDQ; solicitud 2026-11-03",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/climate/noaa/enso/NOAA_CPC_ONI_ERSSTv6_seasonal_1950_present.txt",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "ONI",
+      "field": "oni_3m_c",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NOAA_CPC_ONI_ERSSTV6_SEASONAL",
+      "source_identity": {
+        "bytes": 23050,
+        "sha256": "118c563331335c8649cdc2677e6be7ae89d1259d901345fcddbc2857af280f7f"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "ERSSTv6",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "No disponible; identificador de tarea Earth Engine no documentado",
+      "evidence": [
+        "producer:data/raw/environment/vegetation/modis_ndvi/MODIS_NDVI_Colombia_DIVIPOLA_mensual_2007_2025_v2.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "NDVI",
+      "field": "ndvi_medio",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MOD13Q1_NDVI_MUNICIPIO_MES_V2_2026",
+      "source_identity": {
+        "bytes": 69321778,
+        "sha256": "dd8d0e7d0db6951ca9d3965520b2e860721afe397ae169c3681baee49cf289c1"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MOD13Q1 Collection 6.1; exportación v2",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "No disponible; identificador de tarea Earth Engine no documentado",
+      "evidence": [
+        "producer:data/raw/environment/vegetation/modis_ndvi/MODIS_NDVI_Colombia_DIVIPOLA_mensual_2007_2025_v2.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "NDVI",
+      "field": "ndvi_desviacion",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MOD13Q1_NDVI_MUNICIPIO_MES_V2_2026",
+      "source_identity": {
+        "bytes": 69321778,
+        "sha256": "dd8d0e7d0db6951ca9d3965520b2e860721afe397ae169c3681baee49cf289c1"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MOD13Q1 Collection 6.1; exportación v2",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2025-12",
+      "download_or_consultation_metadata": "No disponible; identificador de tarea Earth Engine no documentado",
+      "evidence": [
+        "producer:data/raw/environment/vegetation/modis_ndvi/MODIS_NDVI_Colombia_DIVIPOLA_mensual_2007_2025_v2.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "NDVI",
+      "field": "ndvi_disponible",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MOD13Q1_NDVI_MUNICIPIO_MES_V2_2026",
+      "source_identity": {
+        "bytes": 69321778,
+        "sha256": "dd8d0e7d0db6951ca9d3965520b2e860721afe397ae169c3681baee49cf289c1"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MOD13Q1 Collection 6.1; exportación v2",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2017",
+      "download_or_consultation_metadata": "2026-11-03",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/DCD-area-proypoblacion-Mun-2005-2017_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Demography",
+      "field": "poblacion_total",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": "2025-08-08",
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_MUN_2005_2017_2025",
+      "source_identity": {
+        "bytes": 1600037,
+        "sha256": "0d7e6b896955f37e030e1d4d07389b8db96dc2731fe04095639e036d0ebf579b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "publicacion_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2017",
+      "download_or_consultation_metadata": "2026-11-03",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/DCD-area-proypoblacion-Mun-2005-2017_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Demography",
+      "field": "densidad_poblacional_hab_km2",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": "2025-08-08",
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_MUN_2005_2017_2025",
+      "source_identity": {
+        "bytes": 1600037,
+        "sha256": "0d7e6b896955f37e030e1d4d07389b8db96dc2731fe04095639e036d0ebf579b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "publicacion_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2018/2025",
+      "download_or_consultation_metadata": "2026-11-03",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/PPED-AreaMun-2018-2042_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Demography",
+      "field": "poblacion_total",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": "2025-08-08",
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_MUN_2018_2042_2025",
+      "source_identity": {
+        "bytes": 3948350,
+        "sha256": "1ea83594ad308becff39934a3977c102919c25740f60439be95d797396d11283"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "publicacion_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2018/2025",
+      "download_or_consultation_metadata": "2026-11-03",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/PPED-AreaMun-2018-2042_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Demography",
+      "field": "densidad_poblacional_hab_km2",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": "2025-08-08",
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_MUN_2018_2042_2025",
+      "source_identity": {
+        "bytes": 3948350,
+        "sha256": "1ea83594ad308becff39934a3977c102919c25740f60439be95d797396d11283"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "publicacion_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2017",
+      "download_or_consultation_metadata": "2026-11-03",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/DCD-area-proypoblacion-Mun-2005-2017_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Urbanization",
+      "field": "porcentaje_urbanizacion",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": "2025-08-08",
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_MUN_2005_2017_2025",
+      "source_identity": {
+        "bytes": 1600037,
+        "sha256": "0d7e6b896955f37e030e1d4d07389b8db96dc2731fe04095639e036d0ebf579b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "publicacion_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2018/2025",
+      "download_or_consultation_metadata": "2026-11-03",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/PPED-AreaMun-2018-2042_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Urbanization",
+      "field": "porcentaje_urbanizacion",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": "2025-08-08",
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_MUN_2018_2042_2025",
+      "source_identity": {
+        "bytes": 3948350,
+        "sha256": "1ea83594ad308becff39934a3977c102919c25740f60439be95d797396d11283"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "publicacion_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2017",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/DCD-area-sexo-edad-proypoblacion-Mun-2005-2017_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Age groups",
+      "field": "porcentaje_0_4",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_SEXO_EDAD_2005_2017",
+      "source_identity": {
+        "bytes": 55969926,
+        "sha256": "f804eb4408d2714c722b4031f6bc5af55efab55c6b32bdce4607e6dacb9dcb41"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "archivo_modificado_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2017",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/DCD-area-sexo-edad-proypoblacion-Mun-2005-2017_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Age groups",
+      "field": "porcentaje_65_mas",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_SEXO_EDAD_2005_2017",
+      "source_identity": {
+        "bytes": 55969926,
+        "sha256": "f804eb4408d2714c722b4031f6bc5af55efab55c6b32bdce4607e6dacb9dcb41"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "archivo_modificado_2025-08-08",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2018/2025",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/PPED-AreaSexoEdadMun-2018-2042_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Age groups",
+      "field": "porcentaje_0_4",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_SEXO_EDAD_2018_2042",
+      "source_identity": {
+        "bytes": 131609579,
+        "sha256": "7e461635315664d44ba52cc7f951947085a0ea6f2dda72fe2efed11a76880516"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "actualizado_2025-07-30",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2018/2025",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/demography/dane/population/PPED-AreaSexoEdadMun-2018-2042_VP.xlsx",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Age groups",
+      "field": "porcentaje_65_mas",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "DANE_POB_SEXO_EDAD_2018_2042",
+      "source_identity": {
+        "bytes": 131609579,
+        "sha256": "7e461635315664d44ba52cc7f951947085a0ea6f2dda72fe2efed11a76880516"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "actualizado_2025-07-30",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "static observation, current geometry",
+      "download_or_consultation_metadata": "2026-11-04",
+      "evidence": [
+        "producer:data/raw/geography/elevation/usgs/srtm/SRTM_Colombia_DIVIPOLA_altitud_municipal.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Terrain",
+      "field": "altitud_media_m",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "Static measurement does not prove historical applicability of 2025 geometry/municipal aggregation",
+      "source_id": "USGS_SRTMGL1_003_GEE_MUNICIPAL_2025",
+      "source_identity": {
+        "bytes": 166922,
+        "sha256": "d6150cc6d793956f0e5c685140e0dd2bc31569fcd8f0bef086ba998c87309d45"
+      },
+      "status": "UNVERIFIED",
+      "version": "USGS/SRTMGL1_003|extraccion_GEE_mgn2025_municipalities_recovery",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "static observation, current geometry",
+      "download_or_consultation_metadata": "No disponible; tarea de exportación municipal ya ejecutada",
+      "evidence": [
+        "producer:data/raw/geography/elevation/usgs/srtm/SRTM_Colombia_DIVIPOLA_pendiente_municipal.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Terrain",
+      "field": "pendiente_media_grados",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "Static measurement does not prove historical applicability of 2025 geometry/municipal aggregation",
+      "source_id": "USGS_SRTM_PENDIENTE_MUNICIPIO_2026",
+      "source_identity": {
+        "bytes": 254573,
+        "sha256": "b0bab9e05e90ab9e966413e8957955cf6070f5038830f0f613eee946c5652abe"
+      },
+      "status": "UNVERIFIED",
+      "version": "SRTMGL1_003",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2024",
+      "download_or_consultation_metadata": "No disponible; tarea de exportación municipal ya ejecutada",
+      "evidence": [
+        "producer:data/raw/environment/land_cover/modis_mcd12q1/MODIS_CoberturaSuelo_Colombia_DIVIPOLA_anual_2007_2024.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "MODIS land cover",
+      "field": "natural_vegetation",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MCD12Q1_COBERTURA_MUNICIPIO_ANIO_2026",
+      "source_identity": {
+        "bytes": 4812009,
+        "sha256": "7cc1755e39728f43fd1784c2fd8d428e483a602afd2dd5492541a12e263c698b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MCD12Q1 Collection 6.1",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2024",
+      "download_or_consultation_metadata": "No disponible; tarea de exportación municipal ya ejecutada",
+      "evidence": [
+        "producer:data/raw/environment/land_cover/modis_mcd12q1/MODIS_CoberturaSuelo_Colombia_DIVIPOLA_anual_2007_2024.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "MODIS land cover",
+      "field": "agriculture",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MCD12Q1_COBERTURA_MUNICIPIO_ANIO_2026",
+      "source_identity": {
+        "bytes": 4812009,
+        "sha256": "7cc1755e39728f43fd1784c2fd8d428e483a602afd2dd5492541a12e263c698b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MCD12Q1 Collection 6.1",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2024",
+      "download_or_consultation_metadata": "No disponible; tarea de exportación municipal ya ejecutada",
+      "evidence": [
+        "producer:data/raw/environment/land_cover/modis_mcd12q1/MODIS_CoberturaSuelo_Colombia_DIVIPOLA_anual_2007_2024.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "MODIS land cover",
+      "field": "urban",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MCD12Q1_COBERTURA_MUNICIPIO_ANIO_2026",
+      "source_identity": {
+        "bytes": 4812009,
+        "sha256": "7cc1755e39728f43fd1784c2fd8d428e483a602afd2dd5492541a12e263c698b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MCD12Q1 Collection 6.1",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2024",
+      "download_or_consultation_metadata": "No disponible; tarea de exportación municipal ya ejecutada",
+      "evidence": [
+        "producer:data/raw/environment/land_cover/modis_mcd12q1/MODIS_CoberturaSuelo_Colombia_DIVIPOLA_anual_2007_2024.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "MODIS land cover",
+      "field": "bare_other",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MCD12Q1_COBERTURA_MUNICIPIO_ANIO_2026",
+      "source_identity": {
+        "bytes": 4812009,
+        "sha256": "7cc1755e39728f43fd1784c2fd8d428e483a602afd2dd5492541a12e263c698b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MCD12Q1 Collection 6.1",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007/2024",
+      "download_or_consultation_metadata": "No disponible; tarea de exportación municipal ya ejecutada",
+      "evidence": [
+        "producer:data/raw/environment/land_cover/modis_mcd12q1/MODIS_CoberturaSuelo_Colombia_DIVIPOLA_anual_2007_2024.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "MODIS land cover",
+      "field": "mosaic_unassigned",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "NASA_MODIS_MCD12Q1_COBERTURA_MUNICIPIO_ANIO_2026",
+      "source_identity": {
+        "bytes": 4812009,
+        "sha256": "7cc1755e39728f43fd1784c2fd8d428e483a602afd2dd5492541a12e263c698b"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "MCD12Q1 Collection 6.1",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "2007-01/2021-12",
+      "download_or_consultation_metadata": "No disponible; identificador de tarea Earth Engine no documentado",
+      "evidence": [
+        "producer:data/raw/environment/surface_water/jrc/JRC_AguaSuperficial_Colombia_DIVIPOLA_mensual_2007_2021.csv",
+        "repository:data/sources/dataset_v3/source_registry.csv"
+      ],
+      "family": "Surface water",
+      "field": "fraccion_agua_superficial_pct_area_observada",
+      "observation_date": "row observation interval, not publication",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "publication_evidence_status": "reported registry metadata only; no historical exact-value release archive",
+      "reason": "No origin-specific released snapshot/value proof; coverage and observation/consultation dates are insufficient",
+      "source_id": "JRC_GSW1_4_AGUA_SUPERFICIAL_MUNICIPIO_MES_2026",
+      "source_identity": {
+        "bytes": 44629123,
+        "sha256": "32fa3f6b706bb7084ca4d94ec97cd9b72956fc898f6820057b8a1faee6f48f63"
+      },
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "JRC Global Surface Water v1.4",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": "at T by deterministic construction, no externally published measurement",
+      "covered_period": "2007-01/2025-12; learning excludes 2025",
+      "evidence": [
+        "repository:src/sat_dengue/data/exp_delta03.py"
+      ],
+      "family": "Calendar",
+      "field": "month_sin",
+      "observation_date": "origin T",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "PERMITTED_CALENDAR",
+      "publication_date": null,
+      "reason": "No data release, learned statistic or future value is required",
+      "source_id": "deterministic_calendar",
+      "status": "VERIFIED_POINT_IN_TIME",
+      "version": "existing exp_delta03.prepare_features",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": "at T by deterministic construction, no externally published measurement",
+      "covered_period": "2007-01/2025-12; learning excludes 2025",
+      "evidence": [
+        "repository:src/sat_dengue/data/exp_delta03.py"
+      ],
+      "family": "Calendar",
+      "field": "month_cos",
+      "observation_date": "origin T",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "PERMITTED_CALENDAR",
+      "publication_date": null,
+      "reason": "No data release, learned statistic or future value is required",
+      "source_id": "deterministic_calendar",
+      "status": "VERIFIED_POINT_IN_TIME",
+      "version": "existing exp_delta03.prepare_features",
+      "operational_PIT_claim": false
+    },
+    {
+      "availability_date": null,
+      "covered_period": "approved historical target calendar/context",
+      "evidence": [
+        "source-correspondence.json"
+      ],
+      "family": "Notifications",
+      "field": "all epidemiological HISTORY predictors",
+      "observation_date": "INI_SIN",
+      "permitted_use": "Authorized retrospective snapshot preparation only; no model fitting, operational availability or deployment claim",
+      "primary_use": "APPROVED_RETROSPECTIVE_PREPARATION",
+      "publication_date": null,
+      "reason": "FEC_NOT/FEC_AJU/export fields are not exact snapshot release archives",
+      "source_id": "same immutable SIVIGILA 210/220 streams",
+      "status": "RETROSPECTIVE_ONLY",
+      "version": "consolidated snapshot",
+      "operational_PIT_claim": false
+    }
+  ],
+  "schema": "exp-delta03-approved-retrospective-source-ledger-v1",
+  "water": "retained secondary audit; genuine observations only through 2021; never fill later years",
+  "availability_regime": "RETROSPECTIVE_CONSOLIDATED",
+  "operational_PIT_claim": false,
+  "authorization": {
+    "status": "APPROVED",
+    "authority": "Mauricio",
+    "document": "docs/product/experiments/EXP-DELTA03/PHASE1-AUTHORIZATION.md",
+    "document_sha256": "b570261ddb9291c3a33f3d8ca89659e1fc26859527891b5eaba1baabd5a5720b",
+    "human_reply_sha256": "3b0380c21e112631865c043ac840899db8b662cb0c679ff585706914c2d30724",
+    "scope": "phase1_preparation_only",
+    "operational_PIT": false,
+    "training_authorized": false,
+    "phase2_authorized": false,
+    "merge_authorized": false
+  },
+  "previous_evidence_bundle": "8d19d0958b33db6d2afed0dabe99aa7c330db7222d2baa449dc7b56864388c3c",
+  "retrospective_use": "Approved preparation only; original statuses retain actual evidentiary limits; no fabricated released-at dates",
+  "admissible_retrospective_features": "closed54-feature contract including four separate MODIS fractions",
+  "origin_state_use": "approved historical consolidated cohort, not operationally known E(T)"
+}

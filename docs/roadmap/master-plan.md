@@ -359,3 +359,40 @@ coverage exists for 481 rows; 2,172 remain honestly missing. The original
 EXP-DELTA02 `NOT_EVALUABLE` record is unchanged. No promotion, T+2,
 EXP-DELTA03, new spatial search, G5/champion change, deployment, or merge is
 authorized by this closure.
+
+### EXP-DELTA03 — approved retrospective Phase 1 preparation
+
+Mauricio approved [proposal A](../product/experiments/EXP-DELTA03/PHASE1-AUTHORIZATION.md)
+on existing PR #78: preserve historical V2 residence/INI_SIN labels and cohorts,
+prepare consolidated-data retrospective matrices, and use four separate MODIS
+fractions with bare/other reference. Main national expansion is training only;
+regional development/evaluation and explicit transfer boundaries remain fixed.
+The [handoff](../product/experiments/EXP-DELTA03/PHASE1.md) owns actual publications,
+reproduction, focused validation and final CI evidence. PLAN055 revision3 records
+the bounded acceptance amendment; PLAN054 and prior failures remain preserved.
+
+The [reconciliation](../product/experiments/EXP-DELTA03/SCIENTIFIC-RECONCILIATION.md)
+explains all observed source differences and reproduces historical H5/cohort keys.
+Current occurrence counts are audit-only. Historical release/value vintages and
+operational E(T) availability remain unproved; results cannot imply PIT or
+deployment readiness.2024 remains consumed retrospective stress;2025 excluded.
+Water uses genuine observations through2021 without later-source fill; unsupported
+2024 water pairs remain unavailable. No predictive experiment has run.
+
+Mauricio subsequently authorized Phase 2 implementation and generated-only
+validation on the same branch/PR78. PLAN_056 owns this bounded execution; PLAN054,
+PLAN055 and the Phase 1 native matrix bundle remain unchanged. The
+[implementation record](../product/experiments/EXP-DELTA03/PHASE2.md) and
+[Phase 3 handoff](../product/experiments/EXP-DELTA03/PHASE3-HANDOFF.md) are the
+current consumers. Technical synthetic runs do not grant a scientific freeze.
+
+Mauricio approved the complete bundled scientific proposal on 2026-11-06,
+recorded in [Phase 2 authority](../product/experiments/EXP-DELTA03/PHASE2-AUTHORIZATION.md)
+and PLAN_056 revision 2. Model/calibration, experimental B=1 and paired block
+uncertainty are `APPROVED_FOR_PHASE2_IMPLEMENTATION`. The separate
+[annex preparation](../product/experiments/EXP-DELTA03/ANNEX.md) preserves the
+Phase 1 core and copies national primary cohort/calendar keys with explicit
+pending executable inputs. Original learned roles and regional evaluation remain
+frozen. Final closure requires independent review and final-head green CI.
+Protocol execution remains not_authorized; no Phase 3, real training/calibration/
+prediction, permanent MLflow, merge, G5 approval or champion selection is authorized.

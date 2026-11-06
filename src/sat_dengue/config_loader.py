@@ -151,6 +151,51 @@ CATALOG["exp_delta01_bundle"] = {
 }
 
 
+CATALOG.update(
+    {
+        "exp_delta03_context": {"type": "MemoryDataset", "copy_mode": "assign"},
+        "exp_delta03_quality": {"type": "MemoryDataset", "copy_mode": "assign"},
+        "exp_delta03_sources": {"type": "sat_dengue.datasets.exp_delta03.Delta03SourcesDataset"},
+        "exp_delta03_admission": {
+            "type": "sat_dengue.datasets.exp_delta03_training.Delta03Phase2ReceiptDataset",
+            "filepath": "tmp/exp-delta03-phase2/preflight",
+        },
+        "exp_delta03_prepared": {
+            "type": "sat_dengue.datasets.exp_delta03.Delta03PublicationDataset",
+            "filepath": "tmp/exp-delta03-phase1/products",
+        },
+        "exp_delta03_synthetic_receipt": {
+            "type": "sat_dengue.datasets.exp_delta03.Delta03PublicationDataset",
+            "filepath": "tmp/exp-delta03-phase1/synthetic",
+        },
+    }
+)
+
+
+for _profile in ("exp_delta03_training", "exp_delta03_synthetic"):
+    for _phase in (
+        "sources",
+        "admitted",
+        "planned",
+        "trained",
+        "calibrated",
+        "selected",
+        "predicted",
+        "evaluated",
+        "compared",
+        "published",
+    ):
+        CATALOG[_profile + "_" + _phase] = {"type": "MemoryDataset", "copy_mode": "assign"}
+CATALOG["exp_delta03_receipt"] = {
+    "type": "sat_dengue.datasets.exp_delta03_training.Delta03Phase2ReceiptDataset",
+    "filepath": "tmp/exp-delta03-phase2/delivery",
+}
+CATALOG["exp_delta03_synthetic_training_receipt"] = {
+    "type": "sat_dengue.datasets.exp_delta03_training.Delta03Phase2ReceiptDataset",
+    "filepath": "tmp/exp-delta03-phase2/synthetic-receipts",
+}
+
+
 class ValidatedConfigLoader(OmegaConfigLoader):
     """Allow only the operational catalog exercised by implemented pipelines."""
 

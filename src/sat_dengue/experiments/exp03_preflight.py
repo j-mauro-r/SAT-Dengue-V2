@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import re
@@ -11,7 +10,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import quote
 
-from sat_dengue.configuration import canonical_bytes, validate_parameters
+from sat_dengue.configuration import canonical_bytes, matches_frozen_authority, validate_parameters
 from sat_dengue.datasets.stage2 import NATIVE_IDENTITIES, NATIVE_MANIFEST, SOURCE_IDENTITIES
 from sat_dengue.experiments.exp01 import digest
 from sat_dengue.experiments.exp01_preflight import (
@@ -95,7 +94,7 @@ def preflight(parameters: dict[str, Any], sources: dict[str, Any]) -> dict[str, 
     for declared in sources["declared_paths"]:
         safe_path(declared)
     for relative, sha in p["reproducibility"]["authority_sha256"].items():
-        if hashlib.sha256(safe_path(relative).read_bytes()).hexdigest() != sha:
+        if not matches_frozen_authority(relative, safe_path(relative).read_bytes(), sha):
             raise ValueError("Scientific authority changed")
     catalog = ValidatedConfigLoader("conf", base_env="base", default_run_env="base")["catalog"]
     from kedro.io import DataCatalog

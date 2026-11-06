@@ -1,5 +1,65 @@
 # Testing and Validation Guide
 
+## EXP-DELTA03 Phase 1 preparation
+
+The [Phase 1 handoff](product/experiments/EXP-DELTA03/PHASE1.md) owns real source
+admission, descriptive EDA, unavailable historical vintages, H5/count/cohort
+correspondence and the explicitly approved retrospective matrices. Pure `data/exp_delta03*.py`, the
+`datasets/exp_delta03.py` adapter and the three explicitly selected Kedro profiles
+map to generated admission/identity/path, temporal/release/vintage, label/cohort,
+block/pairing/transfer, deterministic publication and real Kedro-session tests:
+
+```bash
+mkdir -p tmp/exp-delta03-phase1/pytest
+PYTEST_DEBUG_TEMPROOT="$PWD/tmp/exp-delta03-phase1/pytest" KEDRO_DISABLE_TELEMETRY=yes .venv/bin/python -m pytest tests/unit/test_exp_delta03_preparation.py tests/unit/test_exp_delta03_reconciliation.py tests/unit/test_exp_delta03_retrospective.py tests/integration/test_exp_delta03_preparation_integration.py -q
+```
+
+The focused scientific companion `data/exp_delta03_reconciliation.py` maps to
+`tests/unit/test_exp_delta03_reconciliation.py`: independent observed-event key
+unions, complete-key/null-sensitive parity, residence/INI_SIN-only aggregation,
+annual MODIS closure/zeros/roundoff and rejection of within-year changes. Combine
+that file with the preparation suites above. The local private-data companion
+and its generated manifest-tampering regressions remain under
+`tmp/exp-delta03-phase1/`; they never run producer entry points or fit models.
+The [scientific report](product/experiments/EXP-DELTA03/SCIENTIFIC-RECONCILIATION.md)
+owns reproduction, frozen identity pins and current scientific gates.
+
+The authorized pure `data/exp_delta03_retrospective.py` maps to
+`tests/unit/test_exp_delta03_retrospective.py`: complete frozen cohort parity,
+training-only national expansion, transfer reference isolation,2025 invariance,
+prior-year annual observations, genuine water through2021, closed X selectors
+(including cross-fold cache renaming and removed-block reintroduction), and actual
+CSV readback/tampering. The generated authorized Kedro integration runs twice and
+verifies one immutable feature publication. The original strict-PIT negative
+fixtures remain separate; retrospective approval does not make them operational.
+Actual private preparation runs twice through the maintained Kedro route; the
+outer reproduction receipt binds current input/code/contract and all logical X,
+key/label hashes. `check_readiness.py` verifies the approved retrospective contract,
+never pretends historical release evidence was established.
+
+Run changed-file Ruff/format/mypy and changed-document links/privacy checks.
+The real preflight/preparation commands in the handoff perform no estimator fits,
+calibration, policy selection or MLflow writes. They may publish diagnostic
+reports while withholding affected matrices. Reproduction must verify identical
+payload identities without source modification or overwrite; a successful
+preparation command does not establish scientific admission or Phase 1 completion.
+
+The inherited Shapely correction adds only `shapely==2.1.2` to the dev extra, which
+CI already installs; base runtime dependencies are unchanged. Generated geography
+and prefix-invariance tests run with that extra, while an explicit test covers the
+controlled missing-dependency error. Private MGN tests still require private
+sources/optional readers and do not become generated evidence. Validate the
+existing diagnostic/domain tests and current engineering metadata/constraints
+when touching those repairs; preserve original scientific identities and tests.
+The exact dev-only authority amendment in `configuration.matches_frozen_authority`
+and the three frozen preflights map to `tests/contracts/test_kedro_configuration.py`,
+`tests/integration/test_exp01_catalog.py::test_real_context_preflight_is_structural_and_creates_no_output`,
+`tests/integration/test_exp02_catalog.py` and
+`tests/integration/test_exp03_admission.py`. These check structural admission and
+strict hash drift without estimator execution; frozen protocol pins stay unchanged.
+GitHub owns the full required suite; no full local suite or notebook execution.
+
+
 ## EXP-DELTA02-R1 fixed-MGN spatial candidate
 
 The independent EXP-DELTA02-R1 revision preserves the original EXP-DELTA02
@@ -1225,17 +1285,23 @@ not provision those inputs or authorize scientific extensions.
 
 ## Bounded national notification diagnostics
 
-For `data/national_diagnostics.py` and notebook 09, run scoped Ruff/format/mypy and
+For pure `data/national_diagnostics.py` and its `datasets/national_diagnostics.py`
+adapter, run scoped Ruff/format/mypy and
 `pytest tests/unit/test_national_diagnostics.py -q`. These synthetic engineering fixtures cover
 count conservation, chunk-independent duplicates, rejected-row versus absent-row indicators,
 empty/missing streams, strict execution JSON, source preservation and future-density independence.
 They are not national epidemiological evidence.
 
-Validate notebook 09 with `nbformat` and execute it top-to-bottom with `nbclient` using the project
-kernel. Missing private CSVs must produce `READY_FOR_LOCAL_EXECUTION` and no calendar. Inspect real
-coverage/consistency conclusions locally only with the original CSVs. Preserve ignored private
-outputs under `data/interim/canonical-nacional-data/`; clear private notebook outputs before commit.
-No scientific pipeline, BETA run or model fit is part of this gate.
+The maintained entrypoint is `sat_dengue.datasets.national_diagnostics.run_analysis`;
+`AnalysisConfig` and calculations remain in the pure domain. Source identity now
+includes the adapter, pure diagnostic module and consolidation module. Generated
+tests verify that pure-code identity changes the execution key. Missing private
+CSVs produce `READY_FOR_LOCAL_EXECUTION`, never a fake calendar. Notebook 09 is
+frozen historical identity evidence: its old import is recovered in its historical
+Git checkout, not executed against the current package or repaired with a domain-
+to-infrastructure shim. Private outputs remain under
+`data/interim/canonical-nacional-data/`. No scientific pipeline, BETA run or model
+fit is part of this gate.
 
 ## National canonical construction
 
@@ -1274,3 +1340,37 @@ verification, exact frozen G0/R0 evaluation pairing, actual G1 execution and
 byte-identical prediction/metric replay. Do not rerun V1 fits for reproduction.
 Keep the inherited data-diagnostics architecture test and local legacy private
 preservation failure explicit; do not modify tests or old baselines to hide them.
+
+
+### EXP-DELTA03 Phase 2 generated learning surface
+
+For the Phase 2 training adapters, pure learning/evaluation modules, execution
+reservation, isolated tracking and graph/configuration changes, run the relevant
+`tests/unit/test_exp_delta03_{training_contract,training_model,learning,evaluation,execution,tracking}.py`
+files. These use generated fixtures or hash/JSON metadata admission only.
+`tests/integration/test_exp_delta03_training_integration.py` owns the complete
+synthetic Kedro flow, exact native replay without duplicate fits/runs, annex
+admission failures and unauthorized real-graph refusal. It never loads real
+matrix rows. Its generated models and temporary MLflow stay under
+`tmp/exp-delta03-phase2/synthetic`.
+
+Run modified-file Ruff/format/mypy and the affected configuration/bootstrap
+checks, including `tests/integration/base_bootstrap.py`. Preserve Phase 1 generated
+regressions in `test_exp_delta03_preparation_integration.py`; the historical
+zero-fit synthetic probe is tested by node selection, while the new integration
+test owns the complete generated learning graph. GitHub owns the full suite.
+No real matrix reads for fitting, real scientific adjustments/predictions or
+permanent MLflow writes are part of Phase 2 tests.
+
+Phase 2 scientific freeze and bounded annex preparation use
+`tests/unit/test_exp_delta03_annex.py` (generated cohorts/tampering and public
+approval boundaries), the affected contract/learning/evaluation/execution tests,
+and the `real_registered_graph` / `generated_annex` selections from
+`test_exp_delta03_training_integration.py`. No complete synthetic fit/reload
+rerun is required for metadata/approval-only changes. The native delivery gate
+also verifies the actual protected annex bytes, exact Phase 1 identities and
+seven final-head CI checks; it never parses private feature or score rows.
+The annex source-read allowlist is keys, onset/eligibility/evaluability cohort
+columns and Phase 1 membership. Its preparation script and receipt are local
+under `tmp/exp-delta03-phase2`; public aggregates/identities and pending inputs
+are owned by EXP-DELTA03 `ANNEX-PREPARATION.json` and `ANNEX.md`.

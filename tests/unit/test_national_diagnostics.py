@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd  # type: ignore[import-untyped]
 import pytest
 
-from sat_dengue.data import national_diagnostics as diagnostics
+from sat_dengue.datasets import national_diagnostics as diagnostics
 
 
 def catalog() -> pd.DataFrame:
@@ -243,3 +243,22 @@ def test_empty_stream_does_not_publish_calendar(
     result = diagnostics.run_analysis(root)
     assert result["summary"]["status"] == "BLOCKED"
     assert "municipality_month" not in result["tables"]
+
+
+def test_pure_calculation_identity_changes_execution_key(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    local_sources(tmp_path, monkeypatch)
+    first = diagnostics.run_analysis(tmp_path)["summary"]
+    original = diagnostics.fingerprint
+
+    def changed(path: Path) -> dict:
+        record = original(path)
+        if path.name == "national_diagnostics.py" and path.parent.name == "data":
+            return {**record, "sha256": "a" * 64}
+        return record
+
+    monkeypatch.setattr(diagnostics, "fingerprint", changed)
+    second = diagnostics.run_analysis(tmp_path)["summary"]
+    assert first["execution_id"] != second["execution_id"]
+    assert first["domain_code_sha256"] != second["domain_code_sha256"]

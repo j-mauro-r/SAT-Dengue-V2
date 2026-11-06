@@ -35,6 +35,16 @@ class TrackingHooks:
         if pipeline in {"replay", "replay_synthetic"}:
             parameters = {**parameters, "profile": pipeline}
         parameters = validate_parameters(parameters)
+        delta_profiles = {
+            "exp_delta03",
+            "exp_delta03_preflight",
+            "exp_delta03_preparation",
+            "exp_delta03_synthetic",
+        }
+        if pipeline in delta_profiles or parameters["profile"] in delta_profiles:
+            if pipeline != parameters["profile"]:
+                raise ValueError("EXP-DELTA03 profile must match its exact pipeline")
+            return  # Its dedicated admission/publication boundary owns tracking.
         if pipeline in {"exp03", "exp03_preflight", "exp03_synthetic"} or parameters["profile"] in {
             "exp03",
             "exp03_preflight",

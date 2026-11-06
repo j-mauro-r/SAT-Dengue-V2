@@ -71,6 +71,10 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Only operational profile, tracking and experiment_id parameters are allowed"
         )
     if value["profile"] not in (
+        "exp_delta03",
+        "exp_delta03_preflight",
+        "exp_delta03_preparation",
+        "exp_delta03_synthetic",
         "exp_delta01",
         "exp_beta03",
         "exp_beta02",
@@ -106,7 +110,16 @@ def validate_parameters(value: dict[str, Any]) -> dict[str, Any]:
             "Unknown profile/tracking: use an approved profile with enabled or disabled tracking"
         )
     experiment_id = value.get("experiment_id")
+    if value["profile"] == "exp_delta03" and (
+        value["tracking"] != "enabled" or experiment_id is not None
+    ):
+        raise ValueError(
+            "EXP-DELTA03 real graph requires bound Phase3 authorization and enabled tracking"
+        )
     if value["profile"] in {
+        "exp_delta03_preflight",
+        "exp_delta03_preparation",
+        "exp_delta03_synthetic",
         "exp_delta01",
         "canonical_model_table_v1",
         "canonical_model_table_national_v1",
@@ -173,3 +186,25 @@ def resolve_configuration(inputs: dict[str, Any], parameters: dict[str, Any]) ->
             raise ValueError("Invalid scientific document schema")
     body = {"schema": "sat-dengue-resolved-configuration-v1", "operational": operational, **inputs}
     return {**body, "configuration_sha256": hashlib.sha256(canonical_bytes(body)).hexdigest()}
+
+
+def matches_frozen_authority(relative: str, raw: bytes, expected: str) -> bool:
+    """Verify exact frozen bytes or the single reviewed dev-only Shapely addition.
+
+    This engineering amendment preserves every byte outside its exact added line;
+    it never rewrites protocol pins or permits scientific/runtime dependency drift.
+    Execution receipts still bind the actual current configuration/code/environment.
+    """
+    actual = hashlib.sha256(raw).hexdigest()
+    if actual == expected:
+        return True
+    frozen = "92ab435ccad1e0844c433d82d54ffb7b5374f029c5895a9bca80ddbc97e9e123"
+    amended = "64243055f4a06e97b2f372232f86a1d4af6da668b2e99ce105960dd34e08bdd1"
+    addition = b'    "shapely==2.1.2",\n'
+    return (
+        relative == "pyproject.toml"
+        and expected == frozen
+        and actual == amended
+        and raw.count(addition) == 1
+        and hashlib.sha256(raw.replace(addition, b"", 1)).hexdigest() == frozen
+    )

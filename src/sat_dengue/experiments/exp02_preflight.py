@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import re
@@ -10,7 +9,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from sat_dengue.configuration import canonical_bytes, validate_parameters
+from sat_dengue.configuration import canonical_bytes, matches_frozen_authority, validate_parameters
 from sat_dengue.datasets.stage2 import NATIVE_IDENTITIES, NATIVE_MANIFEST
 from sat_dengue.experiments import exp01_preflight as shared
 from sat_dengue.experiments.exp01 import digest
@@ -43,7 +42,7 @@ def load_protocol() -> dict[str, Any]:
     if resolve_experiment("EXP02")["protocol_sha256"] != digest(protocol):
         raise ValueError("EXP02 registry/protocol identity mismatch")
     for relative, expected in protocol["reproducibility"]["authority_sha256"].items():
-        if hashlib.sha256(safe_path(relative).read_bytes()).hexdigest() != expected:
+        if not matches_frozen_authority(relative, safe_path(relative).read_bytes(), expected):
             raise ValueError("EXP02 frozen authority changed")
     return protocol
 

@@ -638,8 +638,15 @@ kedro run --pipeline=foundation
 For an intentional dependency update, edit the canonical pyproject, resolve all
 extras in a *new* isolated environment, run
 `python scripts/export_kedro_constraints.py`, then validate the regenerated
-constraints through a clean install. Update the engineering metadata ledger and
-re-run acceptance. Do not hand-maintain divergent requirements pins. The observed
+constraints through a clean install. For an isolated new direct dependency whose
+runtime requirements are already satisfied by every preserved baseline pin,
+`python scripts/export_kedro_constraints.py --preserve-baseline` retains all
+existing versions and verifies the new installed pin against its declared
+requirements. Its header records the baseline identity and explicitly does not
+claim a new full-environment freeze. Validate the new dependency in isolated
+storage; changed existing pins or new transitive requirements still require the
+full clean resolution above. Update the engineering metadata ledger and re-run
+its focused acceptance. Do not hand-maintain divergent requirements pins. The observed
 constraints target Python 3.12.11/macOS arm64; Linux CI resolves the canonical
 direct pins and still requires its own platform/native validation.
 
@@ -1176,3 +1183,16 @@ publications remain authoritative. Scientific limitations, consumed 2025, G5
 NOT_APPROVED, champion not_selected, the 13 historical exceptions and 17 immutable
 KEEP / UNVERIFIED bundles remain unchanged. Session 7 stops before cleanup or Final
 Review; no runtime model approval, deployment or release follows from this replay.
+
+### EXP-DELTA03 test-dependency engineering amendment
+
+Mauricio's bounded Phase 1 CI-repair request authorizes the single dev-extra
+addition `shapely==2.1.2`. EXP01–EXP03 retain their immutable protocol authority
+pin `92ab435c…9e123` for the original pyproject. Structural validation accepts
+only the exact current engineering pyproject (`64243055…8bdd1`) whose removal of
+that one literal added line reproduces the frozen bytes exactly. All other bytes,
+including every base/modeling/tracking/notebook dependency, remain unchanged;
+any other edit, duplicated line, version change or unrelated authority path fails.
+This is not a general dev-field exemption or a frozen-protocol hash update.
+Actual runtime/configuration/code identities and fresh human execution approvals
+remain required; no historical authorization or scientific result changes.

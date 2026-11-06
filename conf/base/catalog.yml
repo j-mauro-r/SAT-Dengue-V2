@@ -133,3 +133,110 @@ exp_delta01_sources:
 exp_delta01_bundle:
   type: sat_dengue.datasets.exp_delta01.DeltaBundleDataset
   filepath: data/processed/exp_delta01
+
+exp_delta03_sources:
+  type: sat_dengue.datasets.exp_delta03.Delta03SourcesDataset
+exp_delta03_admission:
+  type: sat_dengue.datasets.exp_delta03_training.Delta03Phase2ReceiptDataset
+  filepath: tmp/exp-delta03-phase2/preflight
+exp_delta03_prepared:
+  type: sat_dengue.datasets.exp_delta03.Delta03PublicationDataset
+  filepath: tmp/exp-delta03-phase1/products
+exp_delta03_synthetic_receipt:
+  type: sat_dengue.datasets.exp_delta03.Delta03PublicationDataset
+  filepath: tmp/exp-delta03-phase1/synthetic
+
+exp_delta03_context:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_quality:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_receipt:
+  type: sat_dengue.datasets.exp_delta03_training.Delta03Phase2ReceiptDataset
+  filepath: tmp/exp-delta03-phase2/delivery
+exp_delta03_synthetic_training_receipt:
+  type: sat_dengue.datasets.exp_delta03_training.Delta03Phase2ReceiptDataset
+  filepath: tmp/exp-delta03-phase2/synthetic-receipts
+
+exp_delta03_training_sources:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_admitted:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_planned:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_trained:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_calibrated:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_selected:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_predicted:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_evaluated:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_compared:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_training_published:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_sources:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_admitted:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_planned:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_trained:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_calibrated:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_selected:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_predicted:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_evaluated:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_compared:
+  type: MemoryDataset
+  copy_mode: assign
+
+exp_delta03_synthetic_published:
+  type: MemoryDataset
+  copy_mode: assign

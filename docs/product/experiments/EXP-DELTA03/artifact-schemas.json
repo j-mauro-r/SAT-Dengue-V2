@@ -1,0 +1,175 @@
+{
+  "schema": "exp-delta03-artifact-catalog-v1",
+  "binding": "Every native member is SHA256/byte-bound by its parent manifest; the manifest execution_identity_sha256 binds protocol, training contract, matrix manifest, commit, runtime and code. Opaque model bytes use the corresponding model metadata and native reload check.",
+  "schemas": {
+    "exp-delta03-model-v1": {
+      "format": "ubj",
+      "required": [
+        "columns",
+        "parameters",
+        "parameters_sha256",
+        "xgboost_version",
+        "cohort_sha256",
+        "training_X_sha256",
+        "model_sha256"
+      ]
+    },
+    "exp-delta03-calibrator-v1": {
+      "required": [
+        "method",
+        "penalty",
+        "offset",
+        "model_sha256",
+        "cohort_sha256",
+        "score_sha256",
+        "rows",
+        "positive",
+        "negative",
+        "brier_before",
+        "brier_after",
+        "base_model_changed"
+      ]
+    },
+    "exp-delta03-policy-v1": {
+      "required": [
+        "cohort_sha256",
+        "calibrator_sha256",
+        "budget",
+        "unit",
+        "selection_rows",
+        "status",
+        "threshold"
+      ]
+    },
+    "exp-delta03-metrics-v1": {
+      "required": [
+        "cell_id",
+        "roles",
+        "scopes",
+        "outcome_definition",
+        "regime",
+        "operational_PIT"
+      ]
+    },
+    "exp-delta03-comparisons-v1": {
+      "required": [
+        "pairs",
+        "uncertainty",
+        "causal_claim",
+        "tracking_link_owner"
+      ]
+    },
+    "exp-delta03-provenance-v1": {
+      "required": [
+        "identity",
+        "identity_sha256",
+        "execution_plan",
+        "input_source",
+        "activity_counters"
+      ]
+    },
+    "exp-delta03-columns-v1": {
+      "required": [
+        "cells",
+        "numeric_only",
+        "identifiers_in_X"
+      ]
+    },
+    "exp-delta03-predictions-v1": {
+      "format": "protected_csv",
+      "columns": [
+        "divipola_municipio",
+        "periodo_mes",
+        "horizon",
+        "target_month",
+        "role",
+        "truth",
+        "score",
+        "alert"
+      ],
+      "optional": [
+        "target_excess",
+        "episode_id"
+      ],
+      "MLflow_allowed": false
+    },
+    "exp-delta03-cohort-v1": {
+      "format": "protected_csv",
+      "columns": [
+        "divipola_municipio",
+        "periodo_mes",
+        "horizon",
+        "target_month",
+        "role",
+        "truth"
+      ],
+      "MLflow_allowed": false
+    },
+    "exp-delta03-native-bundle-v1": {
+      "required": [
+        "bundle_id",
+        "execution_identity_sha256",
+        "files"
+      ],
+      "members": "flat safe filenames with sha256 and bytes; no unexpected members"
+    },
+    "exp-delta03-delivery-receipt-v1": {
+      "required": [
+        "native_publication",
+        "tracking",
+        "execution_identity_sha256",
+        "activity_counters",
+        "status"
+      ]
+    },
+    "exp-delta03-results-v1": {
+      "required": [
+        "identity",
+        "identity_sha256",
+        "regime",
+        "operational_PIT",
+        "cells",
+        "comparisons",
+        "activity_counters",
+        "counts",
+        "unsupported"
+      ]
+    },
+    "exp-delta03-execution-plan-v1": {
+      "required": [
+        "metadata_sha256",
+        "regime",
+        "operational_PIT",
+        "cells",
+        "unsupported",
+        "pairs",
+        "counts"
+      ]
+    },
+    "exp-delta03-evaluation-annex-v1": {
+      "required": [
+        "outcomes",
+        "calendar",
+        "national_cells",
+        "comparators"
+      ],
+      "table_binding": "Each table descriptor has a canonical repository-relative path under data/processed/exp_delta03-inputs, SHA256 and byte size. National cell descriptors contain separate rows and X tables; comparator descriptors contain R0/G0_OFF/G0_ON/G1 keyed by execution cell. Tables are captured and verified before parsing, after a distinct Phase3 authorization.",
+      "national_cell": {
+        "required": [
+          "rows",
+          "X",
+          "cohort"
+        ],
+        "cohort": {
+          "required": [
+            "rows",
+            "key_label_sha256",
+            "X_sha256"
+          ],
+          "rows": "full national evaluation row count, independent of original regional membership"
+        }
+      }
+    }
+  },
+  "validation": "Lightweight required-field/header validation plus native model/identity/semantic domain guards, not a complete JSON Schema type validator."
+}

@@ -1,0 +1,208 @@
+schema: exp-delta03-ablation-draft-v1
+experiment_id: EXP-DELTA03
+status: APPROVED_FOR_PHASE2_IMPLEMENTATION
+execution: not_authorized
+primary_reference: FULL_COMMON
+scientific_reconciliation:
+  owner: SCIENTIFIC-RECONCILIATION.md
+  state: HISTORICAL_ESTIMAND_RECONCILABLE
+  proposed_amendment: A;APPROVED only retrospective Phase1 preparation
+  verified_PIT_candidates:
+  - month_sin
+  - month_cos
+  current_climate_ablation_evaluable: Retrospective matrix prepared; predictive utility untested; no model
+    execution authorized
+  rule: Do not emit identical calendar-only FULL_COMMON and HISTORY as climate evidence
+  MODIS_primary: four separate natural/agriculture/urban/mosaic fractions;bare_other omitted reference
+  regime: RETROSPECTIVE_CONSOLIDATED
+  operational_PIT: false
+global_rules:
+  same_primary_rows_labels_weights: true
+  same_model_parameters: true
+  recalibrate_each_arm_on_authorized_calibration_only: true
+  threshold_selection: Y-1 only
+  false_onset_budget: same B and floor(B * eligible_rows / 12) within each comparison; B=1 approved for Phase2 implementation
+  whole_score_ties: true
+  evaluation_budget_transport: realized false alerts may differ; report them, never retune on evaluation
+  remove_block: remove all descendants and associated availability flags
+  individual_column_stage: not included; only separately frozen follow-up inside material blocks
+  unverified_blocks: Approval permits declared consolidated snapshots only. Preserve evidence status,
+    event-time controls and training-only references; no operational PIT/deployment claim.
+block_definitions: protocol.draft.json#/variable_blocks
+variants:
+- id: HISTORY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  role: secondary_joint_addition_control
+  cohort: PRIMARY_COMMON
+- id: FULL_COMMON
+  blocks: &id001
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  role: primary_reference
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_THERMAL_HUMIDITY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: THERMAL_HUMIDITY
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_RAINFALL_HYDROLOGY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: RAINFALL_HYDROLOGY
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_NDVI
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: NDVI
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_TERRAIN
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - DEMOGRAPHY
+  - LAND_COVER
+  remove_all_descendants_and_flags: TERRAIN
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_DEMOGRAPHY
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - LAND_COVER
+  remove_all_descendants_and_flags: DEMOGRAPHY
+  role: secondary_demography_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_MINUS_LAND_COVER
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  remove_all_descendants_and_flags: LAND_COVER
+  role: primary_block_ablation
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON
+- id: FULL_PLUS_SURFACE_WATER
+  blocks:
+  - HISTORY
+  - CALENDAR
+  - THERMAL_HUMIDITY
+  - RAINFALL_HYDROLOGY
+  - ENSO
+  - NDVI
+  - TERRAIN
+  - DEMOGRAPHY
+  - LAND_COVER
+  - SURFACE_WATER
+  role: secondary_water
+  reference: FULL_COMMON
+  reference_fit: refit both arms on WATER_COMMON in every role
+  cohort: WATER_COMMON
+  evaluation_years_prepared:
+  - 2020
+  - 2021
+  - 2022
+  max_source_observation: 2021-12
+  '2022': partial genuine T-1 support;Jan2022 may use Dec2021;no fill
+  '2024': UNAVAILABLE_GENUINE_SOURCE_COVERAGE;retain primary stress fold
+- id: FULL_ERA5_PRECIPITATION
+  blocks: *id001
+  role: secondary_precipitation
+  reference: FULL_COMMON
+  reference_fit: refit both arms on ERA5_COMMON in every role
+  cohort: ERA5_COMMON
+  replace_sources:
+    precipitacion_chirps_total_mm: precipitacion_total_mm
+    precipitacion_chirps_max_diaria_mm: precipitacion_max_diaria_mm
+    racha_seca_chirps_max_dias_promedio: racha_seca_max_dias
+  same_temporal_operators: true
+  concatenate_precipitation_sources: false
+- id: TRANSFER_EXCLUDE_META_TOLIMA
+  blocks: *id001
+  role: secondary_geographic_transfer
+  reference: FULL_COMMON
+  cohort: PRIMARY_COMMON_EVALUATION
+  exclude_departments_all_learned_roles:
+  - '50'
+  - '73'
+  target_past_features: allowed if available; no fitting/calibration/selection on target rows
+  reference_fit: paired national FULL reference; training-national month NDVI climatology for both members;
+    same evaluation keys
+  replace_primary_comparison: false
+planning_counts:
+  common_models: 64
+  water_pair_models: 8
+  era5_pair_models: 16
+  transfer_pair_models: 16
+  maximum_models: 104
+  maximum_calibrators: 104
+  proposed_parent_plus_children_runs: 105
+  counts_status: historical initial estimate above preserved; superseded by verified derived counts below
+  basis: Historical initial estimate using water2020/2021 only; not an execution budget
+  verified_derived_counts:
+    descriptors: 112
+    supported_model_calibrator_cells: 108
+    unsupported_water2024: 4
+    paired_comparisons: 78
+    future_parent_plus_children_runs: 109
+  derived_owner: ANNEX-PREPARATION.json; no real models/calibrators/runs created
+
+phase2_implementation:
+  owner: PHASE2.md
+  training_contract: training-contract.json
+  status: APPROVED_FOR_PHASE2_IMPLEMENTATION
+  phase3_authorized: false
+  training_authorized: false
+  national_evaluation: separate additive annex preparation approved; executable inputs pending; original regional roles unchanged
+  derived_counts: computed from verified matrices.json; never copied into execution configuration
