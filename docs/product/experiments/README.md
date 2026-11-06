@@ -1,5 +1,12 @@
 # Scientific Experiment Registry
 
+[EXP-DELTA03 — Phase 3 manual operational preparation](EXP-DELTA03/PHASE3.md)
+starts from merged PR78/e266b9c under PLAN_057. Existing Phase 1/2 architecture and
+scientific settings are preserved; PLAN056 remains recorded7/8 without invented
+CI evidence. Complete executable input connections, an isolated installed wheel
+and independent no-fit admission prepare Mauricio's manual command. The agent
+does not run the experiment. No real results, G5/champion or deployment follow.
+
 [EXP-DELTA03 — approved retrospective Phase 1 preparation](EXP-DELTA03/PHASE1.md)
 records source reconciliation, exact historical V2 H5/cohort preservation and
 reproducible no-fit Kedro matrices. [Proposal A approval](EXP-DELTA03/PHASE1-AUTHORIZATION.md)

@@ -56,8 +56,10 @@ def role_inputs(
     return cells
 
 
-def generated_outcomes(sources: dict[str, Any]) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """A generated-only companion with actual H5 target excess, comparator and episode identity."""
+def bound_outcomes(
+    sources: dict[str, Any], *, episode_namespace: str
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Bind distinct H5 excess/onset and deterministic episode IDs to admitted count history."""
     from sat_dengue.data.exp_delta03 import h5_labels
 
     native = sources["historical_panel"].rename(
@@ -80,9 +82,15 @@ def generated_outcomes(sources: dict[str, Any]) -> tuple[pd.DataFrame, pd.DataFr
             excess = bool(pd.notna(row.excess) and row.excess == 1)
             if excess and not previous:
                 serial += 1
-            episodes.append(f"generated_{code}_{serial}" if excess else None)
+            episodes.append(f"{episode_namespace}_{code}_{serial}" if excess else None)
             previous = excess
     state["episode_id"] = episodes
+    state["episode_start"] = state.periodo_mes.where(state.episode_id.notna())
+    state["episode_start"] = (
+        state.groupby("episode_id", dropna=False)
+        .episode_start.transform("min")
+        .where(state.episode_id.notna())
+    )
     lookup = state.set_index(KEYS)
     records = []
     for horizon in sources["contract"]["horizons"]:
@@ -100,18 +108,19 @@ def generated_outcomes(sources: dict[str, Any]) -> tuple[pd.DataFrame, pd.DataFr
         row["target_excess"] = lookup.excess.reindex(future).to_numpy()
         row["target_p75"] = lookup.p75.reindex(future).to_numpy()
         row["episode_id"] = lookup.episode_id.reindex(future).to_numpy()
+        row["episode_start"] = lookup.episode_start.reindex(future).to_numpy()
         records.append(row)
     return pd.concat(records, ignore_index=True), history
 
 
-def generated_national_annex(
+def national_evaluation_annex(
     sources: dict[str, Any],
     prepared: dict[str, Any],
     plan: dict[str, Any],
     outcomes: pd.DataFrame,
     history: pd.DataFrame,
 ) -> dict[str, Any]:
-    """Additional generated evaluation only; never relabel the original regional cohort."""
+    """Additional evaluation only, using original training-only references; no models."""
     full = sources["frame"]
     ordinary, manifest = static_features(full, history, sources["contract"])
     native = sources["historical_panel"].rename(
@@ -175,6 +184,22 @@ def generated_national_annex(
     return result
 
 
+def generated_outcomes(sources: dict[str, Any]) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Generated fixture wrapper around the shared historical-count transformation."""
+    return bound_outcomes(sources, episode_namespace="generated")
+
+
+def generated_national_annex(
+    sources: dict[str, Any],
+    prepared: dict[str, Any],
+    plan: dict[str, Any],
+    outcomes: pd.DataFrame,
+    history: pd.DataFrame,
+) -> dict[str, Any]:
+    """Keep the existing generated consumer on the shared national preparation path."""
+    return national_evaluation_annex(sources, prepared, plan, outcomes, history)
+
+
 def validate_national_annex(
     cell: dict[str, Any], part: dict[str, Any], expected: dict[str, Any], original: pd.DataFrame
 ) -> None:
@@ -226,6 +251,8 @@ def validate_national_annex(
         "origin_excess",
         "target_p75",
     ]
+    if "episode_start" in rows or "episode_start" in original:
+        columns.append("episode_start")
     left = rows.loc[regional, columns].sort_values(KEYS).reset_index(drop=True)
     right = original[columns].sort_values(KEYS).reset_index(drop=True)
     for values in [left, right]:
@@ -273,6 +300,26 @@ def validate_bound_outcomes(rows: pd.DataFrame) -> None:
         raise ValueError("Bound onset/excess outcome correspondence changed")
     if rows.loc[rows.target_excess.eq(1), "episode_id"].isna().any():
         raise ValueError("Missing excess episode identity")
+    if "episode_start" in rows:
+        active = rows.target_excess.eq(1)
+        starts = rows.loc[active, "episode_start"].astype("string")
+        targets = (
+            rows.loc[active, "target_month"].astype("string")
+            if "target_month" in rows
+            else (
+                pd.PeriodIndex(rows.loc[active, "periodo_mes"], freq="M")
+                + rows.loc[active, "horizon"].to_numpy()
+            ).astype(str)
+        )
+        if starts.isna().any() or not starts.str.fullmatch(r"\d{4}-(0[1-9]|1[0-2])").all():
+            raise ValueError("Missing/invalid episode start")
+        targets = pd.Series(targets, index=starts.index)
+        if (starts > targets).any() or not starts.loc[rows.loc[active].truth.eq(1)].eq(
+            targets.loc[rows.loc[active].truth.eq(1)]
+        ).all():
+            raise ValueError("Episode start/onset correspondence changed")
+        if rows.loc[active].groupby([KEYS[0], "episode_id"]).episode_start.nunique().gt(1).any():
+            raise ValueError("Inconsistent episode start")
     for column in ["origin_count", "target_p75"]:
         if (
             not pd.api.types.is_numeric_dtype(rows[column])

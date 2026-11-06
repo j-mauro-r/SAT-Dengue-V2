@@ -17,9 +17,11 @@ import pandas as pd  # type: ignore[import-untyped]
 from kedro.io import AbstractDataset, DatasetError
 
 from sat_dengue.data.exp_delta03 import KEYS, normalize
+from sat_dengue.datasets.legacy_training.contract import resolve_root
 
 CONTRACT = "docs/product/experiments/EXP-DELTA03/phase1-contract.json"
-ROOT = Path(__file__).resolve().parents[3]
+
+ROOT = resolve_root()
 CODE_FILES = [
     "src/sat_dengue/data/exp_delta03.py",
     "src/sat_dengue/data/exp_delta03_quality.py",
@@ -159,7 +161,11 @@ def canonical(payload: Any) -> bytes:
 
 def publish(root: Path, relative: str, payloads: dict[str, bytes]) -> dict[str, Any]:
     """One atomic, content-addressed publication; identical verified repeats are read-only."""
-    parent = safe_path(root, relative, "tmp/exp-delta03-phase1")
+    prefixes = ("tmp/exp-delta03-phase1", "data/processed/exp_delta03-inputs")
+    prefix = next((p for p in prefixes if relative == p or relative.startswith(p + "/")), None)
+    if prefix is None:
+        raise ValueError("Unapproved preparation publication root")
+    parent = safe_path(root, relative, prefix)
     parent.mkdir(parents=True, exist_ok=True)
     records = {
         name: {"sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data)}
@@ -168,7 +174,7 @@ def publish(root: Path, relative: str, payloads: dict[str, bytes]) -> dict[str, 
     if any(Path(name).name != name or name == "manifest.json" for name in payloads):
         raise ValueError("Unsafe payload name")
     bundle = hashlib.sha256(canonical(records)).hexdigest()
-    destination = safe_path(root, relative + "/" + bundle, "tmp/exp-delta03-phase1")
+    destination = safe_path(root, relative + "/" + bundle, prefix)
     manifest = canonical(
         {"schema": "exp-delta03-publication-v1", "bundle_id": bundle, "files": records}
     )
@@ -177,9 +183,7 @@ def publish(root: Path, relative: str, payloads: dict[str, bytes]) -> dict[str, 
         if not destination.is_dir() or {p.name for p in destination.iterdir()} != set(complete):
             raise ValueError("Existing publication inventory changed")
         for name, data in complete.items():
-            file = safe_path(
-                root, str((destination / name).relative_to(root)), "tmp/exp-delta03-phase1"
-            )
+            file = safe_path(root, str((destination / name).relative_to(root)), prefix)
             if file.read_bytes() != data:
                 raise ValueError("Existing publication changed")
         return {

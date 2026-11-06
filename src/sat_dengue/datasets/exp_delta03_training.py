@@ -87,6 +87,21 @@ def _public_contract() -> tuple[dict[str, Any], str]:
     return json.loads(raw), hashlib.sha256(raw).hexdigest()
 
 
+def resolve_evaluation_annex(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
+    """Resolve pinned metadata only for explicit preflight or authorization admission."""
+    annex = contract.get("evaluation_annex")
+    if not annex or "path" not in annex:
+        return contract
+    path = safe_path(root, annex["path"], "data/processed/exp_delta03-inputs")
+    captured = path.read_bytes()
+    if {"sha256": hashlib.sha256(captured).hexdigest(), "bytes": len(captured)} != {
+        "sha256": annex["sha256"],
+        "bytes": annex["bytes"],
+    }:
+        raise ValueError("Executable evaluation annex descriptor changed")
+    return {**contract, "evaluation_annex": json.loads(captured)}
+
+
 def _validate_artifacts(payloads: dict[str, bytes]) -> None:
     from sat_dengue.experiments.exp_delta03_artifacts import validate_payloads
 
@@ -247,6 +262,8 @@ def authorize_and_load(context: dict[str, Any]) -> dict[str, Any]:
         raise PermissionError(
             "Separate manual Phase3 authorization required before private row loading"
         )
+    contract = resolve_evaluation_annex(ROOT, contract)
+    context["contract"] = contract
     validate_freeze(contract, synthetic=False)
     context.update(read_metadata(ROOT, contract))
     if contract["national_evaluation"]["status"] != "APPROVED_ADDITIVE_ANNEX":
@@ -357,13 +374,8 @@ def _assert_identity(context: dict[str, Any]) -> None:
         raise ValueError("Code/configuration/runtime changed after execution admission")
 
 
-@_checked_node
-def build_training_plan(context: dict[str, Any]) -> dict[str, Any]:
-    from sat_dengue.datasets.exp_delta03_execution import (
-        ExecutionStore,
-        fingerprint,
-        verify_publication,
-    )
+def validate_training_inputs(context: dict[str, Any]) -> dict[str, Any]:
+    """Shared read-only admission for preflight and scientific graph; never reserves or fits."""
     from sat_dengue.experiments.exp_delta03_contract import validate_freeze
     from sat_dengue.experiments.exp_delta03_learning import validate_parts
 
@@ -399,6 +411,18 @@ def build_training_plan(context: dict[str, Any]) -> dict[str, Any]:
         if context["synthetic"]
         else context["contract"]["resources"]["wall_seconds"],
     }
+    return context
+
+
+@_checked_node
+def build_training_plan(context: dict[str, Any]) -> dict[str, Any]:
+    from sat_dengue.datasets.exp_delta03_execution import (
+        ExecutionStore,
+        fingerprint,
+        verify_publication,
+    )
+
+    validate_training_inputs(context)
     current = fingerprint(ROOT, context, context["roots"])
     context["identity"] = current
     store = ExecutionStore(
@@ -1052,6 +1076,40 @@ def track_results(context: dict[str, Any]) -> dict[str, Any]:
     return receipt
 
 
+def verify_executable_annex(
+    root: Path, annex: dict[str, Any], plan: dict[str, Any]
+) -> dict[str, Any]:
+    """Structural admission hashes every pinned input without reading private table rows."""
+    if annex.get("schema") != "exp-delta03-evaluation-annex-v1":
+        raise ValueError("Unsupported executable annex")
+    expected = {c["id"] for c in plan["cells"]}
+    national = {c["id"] for c in plan["cells"] if c["reference"] != "transfer"}
+    if set(annex["national_cells"]) != national or set(annex["comparators"]) != expected:
+        raise ValueError("Executable annex cell inventory differs")
+    descriptors = [annex["outcomes"], annex["calendar"]]
+    if "exposure" not in annex:
+        raise ValueError("Explicit municipality-year exposure ledger required")
+    descriptors.append(annex["exposure"])
+    for record in annex["national_cells"].values():
+        descriptors.extend([record["rows"], record["X"]])
+        if record["cohort"]["rows"] < 1:
+            raise ValueError("Empty national cohort")
+    for arms in annex["comparators"].values():
+        if set(arms) != {"R0", "G0_OFF", "G0_ON", "G1"}:
+            raise ValueError("Frozen comparator inventory differs")
+        descriptors.extend(arms.values())
+    for descriptor in descriptors:
+        path = safe_path(root, descriptor["path"], "data/processed/exp_delta03-inputs")
+        if identity(path) != {k: descriptor[k] for k in ["sha256", "bytes"]}:
+            raise ValueError("Executable input payload changed")
+    return {
+        "tables": len(descriptors),
+        "national_cells": len(national),
+        "regional_comparator_cells": len(expected),
+        "rows_parsed": 0,
+    }
+
+
 def phase2_preflight(parameters: dict[str, Any]) -> dict[str, Any]:
     from sat_dengue.configuration import validate_parameters
 
@@ -1061,9 +1119,14 @@ def phase2_preflight(parameters: dict[str, Any]) -> dict[str, Any]:
     }:
         raise ValueError("Metadata preflight requires its exact disabled-tracking profile")
     contract, sha = _public_contract()
+    contract = resolve_evaluation_annex(ROOT, contract)
     context = read_metadata(ROOT, contract)
+    executable = None
+    if contract.get("evaluation_annex"):
+        executable = verify_executable_annex(ROOT, contract["evaluation_annex"], context["plan"])
     return {
         "schema": "exp-delta03-training-preflight-v1",
+        "executable_annex": executable,
         "training_contract_sha256": sha,
         "matrix_manifest_sha256": contract["matrix_bundle"]["manifest_sha256"],
         "counts": context["plan"]["counts"],

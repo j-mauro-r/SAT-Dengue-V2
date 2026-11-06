@@ -396,3 +396,15 @@ pending executable inputs. Original learned roles and regional evaluation remain
 frozen. Final closure requires independent review and final-head green CI.
 Protocol execution remains not_authorized; no Phase 3, real training/calibration/
 prediction, permanent MLflow, merge, G5 approval or champion selection is authorized.
+
+
+### EXP-DELTA03 — bounded manual Phase 3 preparation
+
+Mauricio requests PLAN_057 with three substantive tasks: operational preparation,
+verification after his manual execution, and analysis/documentary closure with
+Final Review. [PHASE3.md](../product/experiments/EXP-DELTA03/PHASE3.md) owns this
+scope from merged PR78/e266b9c. PLAN056 remains recorded7/8; merge is not CI evidence.
+The agent completes missing executable connections and installed-runtime no-fit
+admission using the existing graph and architecture, then stops at the manual
+handoff. No scientific execution, automatic champion/G5, deployment or merge is
+performed. Later tasks require Mauricio's actual completion report.
