@@ -22,9 +22,10 @@ def read_metadata(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
     manifest_path = safe_path(
         root, spec["path"] + "/manifest.json", "tmp/exp-delta03-phase1/products"
     )
-    if identity(manifest_path)["sha256"] != spec["manifest_sha256"]:
+    manifest_bytes = manifest_path.read_bytes()
+    if hashlib.sha256(manifest_bytes).hexdigest() != spec["manifest_sha256"]:
         raise ValueError("Phase1 manifest identity changed")
-    manifest = json.loads(manifest_path.read_bytes())
+    manifest = json.loads(manifest_bytes)
     if hashlib.sha256(canonical(manifest["files"])).hexdigest() != folder.name or spec[
         "matrices"
     ] != manifest["files"].get("matrices.json"):
@@ -43,7 +44,15 @@ def read_metadata(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
         "bytes": source["bytes"],
     }:
         raise ValueError("Preparation source contract changed")
-    metadata = json.loads((folder / "matrices.json").read_bytes())
+    metadata_path = safe_path(
+        root, spec["path"] + "/matrices.json", "tmp/exp-delta03-phase1/products"
+    )
+    metadata_bytes = metadata_path.read_bytes()
+    if {"sha256": hashlib.sha256(metadata_bytes).hexdigest(), "bytes": len(metadata_bytes)} != spec[
+        "matrices"
+    ]:
+        raise ValueError("Parsed metadata snapshot identity changed")
+    metadata = json.loads(metadata_bytes)
     return {
         "metadata": metadata,
         "plan": derive_plan(metadata, metadata_sha256=spec["matrices"]["sha256"]),

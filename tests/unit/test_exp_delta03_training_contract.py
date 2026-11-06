@@ -83,7 +83,7 @@ def test_unapproved_contract_cannot_be_real_authority():
         )
 
 
-def test_metadata_adapter_hashes_generated_csv_without_parsing(tmp_path):
+def test_metadata_adapter_hashes_generated_csv_without_parsing(tmp_path, monkeypatch):
     import json
     from pathlib import Path
 
@@ -110,6 +110,21 @@ def test_metadata_adapter_hashes_generated_csv_without_parsing(tmp_path):
         "source_contract": {"path": str(source.relative_to(tmp_path)), **identity(source)},
     }
     assert read_metadata(tmp_path, contract)["real_table_rows_parsed"] == 0
+    import sat_dengue.datasets.exp_delta03_training as adapter
+
+    original = adapter.identity
+
+    def replace_after_check(path):
+        result = original(path)
+        if path.name == "prepared_features.csv":
+            (folder / "matrices.json").write_bytes(b"{}")
+        return result
+
+    monkeypatch.setattr(adapter, "identity", replace_after_check)
+    with pytest.raises(ValueError, match="snapshot identity"):
+        read_metadata(tmp_path, contract)
+    monkeypatch.setattr(adapter, "identity", original)
+    (folder / "matrices.json").write_bytes(payloads["matrices.json"])
     (folder / "prepared_features.csv").write_bytes(b"changed")
     with pytest.raises(ValueError, match="member changed"):
         read_metadata(tmp_path, contract)
