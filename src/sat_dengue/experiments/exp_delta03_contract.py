@@ -160,5 +160,23 @@ def validate_freeze(contract: dict[str, Any], *, synthetic: bool) -> None:
         raise ValueError("Invalid penalty or budget")
     if contract["policy"]["unit"] != "false_onset_alerts_per_eligible_municipality_year":
         raise ValueError("Budget unit mismatch")
-    if not (0 < contract["uncertainty"]["confidence"] < 1) or contract["uncertainty"]["draws"] < 1:
-        raise ValueError("Invalid uncertainty configuration")
+    validate_uncertainty(contract["uncertainty"])
+
+
+UNCERTAINTY_METHOD = "paired municipality and episode-preserving connected calendar-year blocks"
+
+
+def validate_uncertainty(specification: dict[str, Any]) -> None:
+    import math
+
+    if specification["method"] != UNCERTAINTY_METHOD:
+        raise ValueError("Unsupported uncertainty method")
+    for key in ["draws", "minimum_municipalities", "minimum_temporal_blocks"]:
+        if type(specification[key]) is not int or specification[key] < 2:
+            raise ValueError("Invalid uncertainty count: " + key)
+    if type(specification["seed"]) is not int or specification["seed"] < 0:
+        raise ValueError("Invalid uncertainty seed")
+    for key in ["confidence", "minimum_valid_fraction"]:
+        value = specification[key]
+        if not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 < value < 1:
+            raise ValueError("Invalid uncertainty fraction: " + key)

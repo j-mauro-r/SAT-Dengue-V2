@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 from sklearn.metrics import average_precision_score, roc_auc_score  # type: ignore[import-untyped]
 
+from sat_dengue.experiments.exp_delta03_contract import validate_uncertainty
 from sat_dengue.experiments.exp_delta03_learning import probabilities
 
 KEYS = ["divipola_municipio", "periodo_mes", "horizon", "target_month"]
@@ -113,7 +114,31 @@ def metrics(
         "academic_excess_FAR": false_excess / alerts
         if false_excess is not None and alerts
         else None,
-        "excess_status": "EVALUABLE" if excess_available else "UNAVAILABLE_TARGET_EXCESS",
+        "excess_status": (
+            "UNAVAILABLE_TARGET_EXCESS"
+            if not excess_available
+            else "EVALUABLE"
+            if alerts
+            else "NO_EVALUABLE_NO_ALERTS"
+        ),
+        "metric_status": {
+            "sensitivity": "EVALUABLE" if positive else "NO_EVALUABLE_NO_ONSETS",
+            "precision": "EVALUABLE" if alerts else "NO_EVALUABLE_NO_ALERTS",
+            "academic_excess_FAR": (
+                "UNAVAILABLE_TARGET_EXCESS"
+                if not excess_available
+                else "EVALUABLE"
+                if alerts
+                else "NO_EVALUABLE_NO_ALERTS"
+            ),
+            "average_precision": "EVALUABLE"
+            if positive and negative
+            else "NO_EVALUABLE_CLASS_SUPPORT",
+            "auroc_secondary": "EVALUABLE"
+            if positive and negative
+            else "NO_EVALUABLE_CLASS_SUPPORT",
+            "brier": "EVALUABLE",
+        },
         "eligible_exposure_municipality_years": exposure,
         "monitored_exposure_municipality_years": monitored_exposure,
         "false_onset_alerts_per_eligible_municipality_year": fp / exposure,
@@ -191,6 +216,7 @@ def uncertainty(
     specification: dict[str, Any],
 ) -> dict[str, Any]:
     """Paired municipality × connected-year blocks, with episode boundaries preserved."""
+    validate_uncertainty(specification)
     a, b = paired(left, right)
     if a.empty:
         return {"status": "NO_EVALUABLE_EMPTY"}

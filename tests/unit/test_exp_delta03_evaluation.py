@@ -70,9 +70,13 @@ def test_zero_alerts_no_positives_missing_outcome_and_exposure_never_fake_zero()
     f["alert"] = False
     m = metrics(f)
     assert m["precision"] is None and m["academic_excess_FAR"] is None
+    assert m["metric_status"]["precision"] == "NO_EVALUABLE_NO_ALERTS"
+    assert m["excess_status"] == "NO_EVALUABLE_NO_ALERTS"
     assert m["false_onset_alerts_per_monitored_municipality_year"] is None
     f["truth"] = 0
     m = metrics(f)
+    assert m["metric_status"]["sensitivity"] == "NO_EVALUABLE_NO_ONSETS"
+    assert m["metric_status"]["average_precision"] == "NO_EVALUABLE_CLASS_SUPPORT"
     assert (
         m["sensitivity"] is None and m["average_precision"] is None and m["auroc_secondary"] is None
     )
@@ -124,3 +128,21 @@ def test_episode_year_connections_can_collapse_all_blocks_without_iid_fallback()
     with pytest.raises(ValueError, match="exposure"):
         f = predictions()
         uncertainty(f, f, exposures(f).iloc[1:], spec())
+
+
+@pytest.mark.parametrize(
+    "key,value",
+    [
+        ("method", "iid"),
+        ("draws", 0),
+        ("confidence", 1.0),
+        ("minimum_valid_fraction", float("nan")),
+        ("minimum_temporal_blocks", 1),
+    ],
+)
+def test_uncertainty_method_and_parameter_identity_cannot_lie(key, value):
+    f = predictions()
+    config = spec()
+    config[key] = value
+    with pytest.raises(ValueError):
+        uncertainty(f, f, exposures(f), config)
