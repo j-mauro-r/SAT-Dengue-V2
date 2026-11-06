@@ -1,0 +1,155 @@
+{
+  "schema": "exp-delta03-training-contract-v1",
+  "experiment_id": "EXP-DELTA03",
+  "regime": "RETROSPECTIVE_CONSOLIDATED",
+  "operational_PIT": false,
+  "execution": "not_authorized",
+  "phase3_authorized": false,
+  "training_authorized": false,
+  "decision_status": "PENDING_HUMAN_FREEZE",
+  "seed": 1729,
+  "evidence_type": "implementation_only",
+  "source_contract": {
+    "path": "docs/product/experiments/EXP-DELTA03/phase1-contract.json",
+    "sha256": "fcbc58127ceef76a24133e0ca1667c4eb4708012d30017895368a3a888571c12",
+    "bytes": 17026
+  },
+  "matrix_bundle": {
+    "path": "tmp/exp-delta03-phase1/products/7c0af9d13c6ec53aae094c177162434b549370d8adc8fd98b56dca974e6cc6a7",
+    "manifest_sha256": "ddaea8041eb2299e2f3926c3e5941c172a233f86f58765d3dce963e473844c03",
+    "matrices": {
+      "bytes": 492090,
+      "sha256": "758d61e7364ade18a58ac0fdd98fbc51c040b93967ce166e964da85b8336f3a0"
+    },
+    "files": {
+      "admission.json": {
+        "bytes": 378,
+        "sha256": "5090837826b25250895c7651cd96438018b6e5ed60b43d7e3258cbfc167405e4"
+      },
+      "cohort-key-hashes.json": {
+        "bytes": 161925,
+        "sha256": "614bb4667d82e6c505d8f43c96af9fa8f5045c0d37f20e4281a7375848ad2032"
+      },
+      "cohort-parity.json": {
+        "bytes": 10592,
+        "sha256": "368c2ef36e90fe917d9dea239212b3a4a0553796958c79870cd22afaab3669e3"
+      },
+      "cohort_membership.csv": {
+        "bytes": 26999668,
+        "sha256": "8d15e3c5c51d794b3618352a33bd6038526686404a1379a6ad5a19051243a5da"
+      },
+      "labels.csv": {
+        "bytes": 4391276,
+        "sha256": "c6fcb78680810be27fb9b8b8769af3cb848f6c307bbc8a5998579bd69b51e7ff"
+      },
+      "leakage.json": {
+        "bytes": 637,
+        "sha256": "7074746341ca975aa58a99a2a50cd3bd7852001f04d91373cf05ada43b68c9b8"
+      },
+      "matrices.json": {
+        "bytes": 492090,
+        "sha256": "758d61e7364ade18a58ac0fdd98fbc51c040b93967ce166e964da85b8336f3a0"
+      },
+      "ndvi-references.json": {
+        "bytes": 14546,
+        "sha256": "a156bc901db36c86a3b7c68878b6f374a5d2cbc0ab24b4343137e7b8d378de04"
+      },
+      "prepared_features.csv": {
+        "bytes": 125669823,
+        "sha256": "7ad651adf588d58051f7e6955ae46b94c2353473a412809a60570d9d2e66186e"
+      },
+      "provenance.json": {
+        "bytes": 11573,
+        "sha256": "d3b334d34ecc7fef0d75471677935dd046eb5bb5a9ec77825d1761cb317fa5f4"
+      },
+      "quality.json": {
+        "bytes": 4652290,
+        "sha256": "3b1fc11064047f86585bcf20a81021d77a6846aa5582636a214f5aacbcf5a0da"
+      },
+      "readiness.json": {
+        "bytes": 923,
+        "sha256": "bee87ccddc6904db61477177ee62d95951e60a081a2b04092d8e5ca537aaaa1b"
+      },
+      "transformations.json": {
+        "bytes": 15008,
+        "sha256": "9595c23429aaaf0393b9922e79c05ca80fd1e1063aa0732e3c0dd477e91d0521"
+      },
+      "vintage-ledger.json": {
+        "bytes": 42425,
+        "sha256": "f5d772c6b47506beb256df0bf79b44859ce5df438d9d18e04b40b4c14c2c98f2"
+      }
+    }
+  },
+  "model": {
+    "objective": "binary:logistic",
+    "n_estimators": 80,
+    "max_depth": 2,
+    "learning_rate": 0.05,
+    "tree_method": "hist",
+    "random_state": 1729,
+    "n_jobs": 1,
+    "max_bin": 128,
+    "min_child_weight": 5,
+    "reg_alpha": 0,
+    "reg_lambda": 1,
+    "subsample": 1,
+    "colsample_bytree": 1,
+    "colsample_bylevel": 1,
+    "colsample_bynode": 1,
+    "gamma": 0,
+    "max_delta_step": 0,
+    "scale_pos_weight": 1,
+    "base_score": 0.5,
+    "grow_policy": "depthwise",
+    "max_leaves": 0,
+    "sampling_method": "uniform",
+    "device": "cpu",
+    "verbosity": 0
+  },
+  "model_status": "PROPOSED explicit core DESIGN values; remaining defaults anchored to V2, awaiting bundled decision",
+  "calibration": {
+    "method": "regularized_intercept",
+    "penalty": 1,
+    "minimum_per_class": 1,
+    "status": "PROPOSED V2 pooled-intercept practice; no new subgroup adaptation"
+  },
+  "policy": {
+    "B": 1.0,
+    "unit": "false_onset_alerts_per_eligible_municipality_year",
+    "exposure": "selection eligible rows / 12",
+    "rounding": "floor",
+    "ties": "whole score ties",
+    "objective": "maximum detected onset; fewer false onset alerts; fewer total alerts; higher threshold",
+    "no_alert_threshold": null,
+    "no_selection_positives": "NO_EVALUABLE",
+    "status": "PROPOSED; V2 matched unit/cohorts precedent, not automatic authorization or operational capacity"
+  },
+  "uncertainty": {
+    "method": "paired municipality and episode-preserving connected calendar-year blocks",
+    "draws": 1000,
+    "confidence": 0.95,
+    "seed": 1729,
+    "minimum_municipalities": 2,
+    "minimum_temporal_blocks": 2,
+    "stress2024": "separate descriptive stratum; no mixing with development2020-2022",
+    "materiality": "descriptive estimates only; no formal superiority/materiality or champion decision",
+    "status": "PROPOSED; short year support must remain explicit"
+  },
+  "national_evaluation": {
+    "status": "PENDING_SCOPE_DECISION",
+    "original_population": "Meta_Tolima",
+    "rule": "No relabeling of existing cohort roles; national evaluation requires separately approved additive preparation with original bundle unchanged"
+  },
+  "excess_comparators": {
+    "status": "REQUIRED_SEPARATE_PINNED_JOIN",
+    "onset_not_excess": true,
+    "rule": "Never substitute onset negatives for target excess truth; original frozen comparator policy remains immutable"
+  },
+  "artifact_schema": "docs/product/experiments/EXP-DELTA03/artifact-schemas.json",
+  "outputs": {
+    "synthetic_root": "tmp/exp-delta03-phase2/synthetic",
+    "future_protected_root": "data/processed/exp_delta03",
+    "future_authorization": "tmp/exp-delta03-phase3/authorization.json",
+    "tracking": "isolated aggregate-only mirror after verified native publication"
+  }
+}
