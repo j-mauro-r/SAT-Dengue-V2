@@ -108,8 +108,9 @@ def test_generated_annex_rejects_misalignment_dates_and_duplicate_exposure():
     cell = next(c for c in context["plan"]["cells"] if c["reference"] == "primary")
     expected = context["national_expected"][cell["id"]]
     part = context["national_annex"][cell["id"]]
-    validate_national_annex(cell, part, expected)
-    for mutation in ["date", "X", "keys", "department"]:
+    original = context["parts"][cell["id"]]["evaluation"]["rows"]
+    validate_national_annex(cell, part, expected, original)
+    for mutation in ["date", "X", "keys", "department", "excess"]:
         changed = copy.deepcopy(part)
         if mutation == "date":
             changed["rows"].loc[0, "periodo_mes"] = "2025-01"
@@ -117,10 +118,16 @@ def test_generated_annex_rejects_misalignment_dates_and_duplicate_exposure():
             changed["X"] = changed["X"].iloc[::-1].reset_index(drop=True)
         elif mutation == "keys":
             changed["rows"].iloc[0] = changed["rows"].iloc[1]
-        else:
+        elif mutation == "department":
             changed["rows"].loc[0, "divipola_departamento"] = "99"
+        else:
+            rows = changed["rows"]
+            index = rows.index[rows.divipola_departamento.isin(["50", "73"]) & rows.truth.eq(0)][0]
+            excess = 1 - int(rows.loc[index, "target_excess"])
+            rows.loc[index, "target_excess"] = excess
+            rows.loc[index, "episode_id"] = "tampered" if excess else None
         with pytest.raises(ValueError):
-            validate_national_annex(cell, changed, expected)
+            validate_national_annex(cell, changed, expected, original)
     calendar = context["calendar"]
     validate_calendar(calendar)
     import pandas as pd  # type: ignore[import-untyped]

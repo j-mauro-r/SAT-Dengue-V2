@@ -176,12 +176,13 @@ def generated_national_annex(
 
 
 def validate_national_annex(
-    cell: dict[str, Any], part: dict[str, Any], expected: dict[str, Any]
+    cell: dict[str, Any], part: dict[str, Any], expected: dict[str, Any], original: pd.DataFrame
 ) -> None:
     """Additional evaluation has its own full identity plus unchanged regional correspondence."""
     from sat_dengue.data.exp_delta03_retrospective import row_hash, values_hash
 
     rows, x = part["rows"], part["X"]
+    validate_bound_outcomes(rows)
     if rows.empty or rows.duplicated(KEYS).any() or not rows.index.equals(x.index):
         raise ValueError("Invalid national annex alignment")
     if not rows[KEYS].equals(rows[KEYS].sort_values(KEYS).reset_index(drop=True)):
@@ -208,12 +209,39 @@ def validate_national_annex(
     if actual != expected:
         raise ValueError("Full national evaluation cohort identity changed")
     regional = rows.divipola_departamento.isin(["50", "73"])
-    original = cell["roles"]["evaluation"]
+    regional_identity = cell["roles"]["evaluation"]
     if (
-        row_hash(rows.loc[regional], KEYS + ["truth"]) != original["key_label_sha256"]
-        or values_hash(x.loc[regional]) != original["X_sha256"]
+        row_hash(rows.loc[regional], KEYS + ["truth"]) != regional_identity["key_label_sha256"]
+        or values_hash(x.loc[regional]) != regional_identity["X_sha256"]
     ):
         raise ValueError("National annex changed frozen regional correspondence")
+    columns = KEYS + [
+        "horizon",
+        "target_month",
+        "truth",
+        "onset_truth",
+        "target_excess",
+        "episode_id",
+        "origin_count",
+        "origin_excess",
+        "target_p75",
+    ]
+    left = rows.loc[regional, columns].sort_values(KEYS).reset_index(drop=True)
+    right = original[columns].sort_values(KEYS).reset_index(drop=True)
+    for values in [left, right]:
+        for column in [
+            "horizon",
+            "truth",
+            "onset_truth",
+            "target_excess",
+            "origin_count",
+            "origin_excess",
+            "target_p75",
+        ]:
+            values[column] = values[column].astype(float)
+        values["episode_id"] = values.episode_id.astype("string")
+    if not left.equals(right):
+        raise ValueError("National annex changed frozen regional outcome/comparator correspondence")
 
 
 def validate_calendar(rows: pd.DataFrame) -> None:
@@ -231,3 +259,24 @@ def validate_calendar(rows: pd.DataFrame) -> None:
     for column in ["coverage_water", "coverage_era5"]:
         if not rows[column].isin([True, False]).all():
             raise ValueError("Invalid monitored calendar coverage flag")
+
+
+def validate_bound_outcomes(rows: pd.DataFrame) -> None:
+    """Onset truth cannot substitute excess, episodes or origin-safe comparator inputs."""
+    for column in ["truth", "onset_truth", "target_excess", "origin_excess"]:
+        if not rows[column].isin([0, 1]).all():
+            raise ValueError("Invalid bound binary onset/excess outcome")
+    if (
+        not rows.truth.eq(rows.onset_truth).all()
+        or (rows.truth.eq(1) & rows.target_excess.ne(1)).any()
+    ):
+        raise ValueError("Bound onset/excess outcome correspondence changed")
+    if rows.loc[rows.target_excess.eq(1), "episode_id"].isna().any():
+        raise ValueError("Missing excess episode identity")
+    for column in ["origin_count", "target_p75"]:
+        if (
+            not pd.api.types.is_numeric_dtype(rows[column])
+            or not np.isfinite(rows[column]).all()
+            or rows[column].lt(0).any()
+        ):
+            raise ValueError("Invalid bound comparator input")

@@ -370,13 +370,15 @@ def build_training_plan(context: dict[str, Any]) -> dict[str, Any]:
     validate_freeze(context["contract"], synthetic=context["synthetic"])
     plan = context["plan"]
     from sat_dengue.experiments.exp_delta03_evaluation import paired
-    from sat_dengue.experiments.exp_delta03_inputs import validate_calendar
+    from sat_dengue.experiments.exp_delta03_inputs import validate_bound_outcomes, validate_calendar
     from sat_dengue.experiments.exp_delta03_learning import probabilities
 
     validate_calendar(context["calendar"])
     for cell in plan["cells"]:
         parts = context["parts"][cell["id"]]
         validate_parts(cell, parts, context["contract"]["calibration"]["minimum_per_class"])
+        for part in parts.values():
+            validate_bound_outcomes(part["rows"])
         for control in context["comparators"][cell["id"]].values():
             paired(parts["evaluation"]["rows"], control)
             probabilities(control.score, control.truth)
@@ -386,7 +388,9 @@ def build_training_plan(context: dict[str, Any]) -> dict[str, Any]:
         if extra is not None:
             from sat_dengue.experiments.exp_delta03_inputs import validate_national_annex
 
-            validate_national_annex(cell, extra, context["national_expected"][cell["id"]])
+            validate_national_annex(
+                cell, extra, context["national_expected"][cell["id"]], parts["evaluation"]["rows"]
+            )
     context["limits"] = {
         "max_models": plan["counts"]["models"],
         "max_calibrators": plan["counts"]["calibrators"],
@@ -607,7 +611,10 @@ def generate_predictions(context: dict[str, Any]) -> dict[str, Any]:
             from sat_dengue.experiments.exp_delta03_inputs import validate_national_annex
 
             validate_national_annex(
-                cell, context["national_annex"][ident], context["national_expected"][ident]
+                cell,
+                context["national_annex"][ident],
+                context["national_expected"][ident],
+                context["parts"][ident]["evaluation"]["rows"],
             )
             parts["evaluation_national"] = context["national_annex"][ident]
         frames = []
