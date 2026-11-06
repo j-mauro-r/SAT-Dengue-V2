@@ -1,0 +1,131 @@
+# Phase 2 implementation and synthetic validation
+
+## Authority and current boundary
+
+The [training contract](training-contract.json) owns the proposed model, calibration,
+selection budget and uncertainty settings. Its `PENDING_HUMAN_FREEZE` state is a
+real gate: synthetic success does not approve these choices. The original
+[Phase 1 handoff](PHASE1.md), labels, roles and matrix bytes remain unchanged.
+Execution remains `not_authorized`; Phase 3, real training, deployment and G5
+approval remain outside this implementation.
+
+The original bundle contains national training but Meta/Tolima calibration,
+selection and evaluation. National evaluation therefore requires a separately
+approved additive annex. It must preserve exact original regional key/label/X
+correspondence and have its own complete national cohort identity. It cannot
+reclassify existing training roles or present regional metrics as national.
+A distinct pinned H5 excess/comparator/exposure join is also required: onset
+negatives do not establish absence of excess.
+
+## Implemented consumers
+
+`exp_delta03_preflight` verifies public contracts and immutable bundle hashes,
+parses only JSON matrix metadata and derives counts. It never parses real table
+rows, reserves a scientific execution or fits a model.
+
+`exp_delta03_synthetic` adds a full generated-only execution to the preserved
+Phase 1 zero-fit probe. It traverses contract loading, admission, plan building,
+model fitting, calibration, selection, prediction/reload, evaluation, paired
+comparison, protected publication and isolated tracking. Generated national
+annexes and arbitrary generated frozen-comparator controls exercise these paths;
+they are not scientific evidence or reproductions of private V2 scores.
+
+`exp_delta03` has the same learning responsibilities and requires a separate
+manual Phase 3 grant before private row loading. Contract freeze alone is
+insufficient. The [Phase 3 handoff](PHASE3-HANDOFF.md) owns its operational gates.
+
+All variants, roles, predictor order, supported cells, comparison links and run
+counts derive from verified Phase 1 metadata. Four unsupported 2024 surface-water
+cells remain explicit. Transfer excludes Meta/Tolima from every learned role;
+main models retain their approved national training population. NDVI references
+remain tied to the appropriate training population. No imputation or HPO is added.
+
+## Native artifacts and tracking
+
+The [artifact catalogue](artifact-schemas.json) provides lightweight required-field
+and header validation, supplemented by semantic domain guards. It is consumed before native
+publication and completed-bundle reuse. Models use UBJ plus metadata; calibrators,
+policies, metrics, comparisons, columns, provenance and the execution plan use
+JSON. Protected prediction and cohort tables use CSV. Byte hashes and the
+execution identity bind every native member to protocol, matrix bundle, commit,
+code/configuration, parameters, resource limits and runtime versions. Native
+reload must reproduce raw/calibrated probabilities and alerts exactly.
+
+Publication uses a locked execution reservation, immutable stage checkpoints,
+explicit incomplete states and atomic visibility. An interrupted fit without a
+verified checkpoint requires inspection; resume never silently repeats an
+unknown adjustment. Completed publications cannot be replaced. Model/calibrator
+attempt caps are derived from the admitted plan. The wall budget is checked at
+node/loop boundaries and around fits, before publication and tracking; it is a
+cooperative execution deadline, not a process-killing CPU quota.
+
+MLflow receives one parent and dynamically derived children only after native
+verification. Stored tags, parameters, aggregate metrics and lineage are checked
+on reuse. Detailed identifiable rows and predictions stay in protected native
+storage. Synthetic tracking always uses an isolated ignored namespace under
+`tmp/exp-delta03-phase2/synthetic`, independent of the permanent-store environment.
+
+## Interpretation
+
+Onset, excess, row and episode outcomes remain distinct. Undefined metrics carry
+explicit non-evaluable statuses. Monitored exposure comes from a separate unique
+calendar, while eligible rows/12 define the experimental selection denominator.
+CHANNEL and PERSISTENCE retain deterministic alerts and have no invented
+probabilities. Frozen comparator tables must have exactly paired keys/outcomes;
+no convenient population intersection is allowed. A frozen comparator's original
+alert policy is not asserted to share a new experimental budget.
+
+Paired contrasts report absolute/relative differences and gained/lost/shared
+onsets. Development years and consumed 2024 stress are reported separately.
+The proposed uncertainty method shares municipality and connected calendar-year
+block draws across arms and preserves episodes spanning years. Insufficient
+independent blocks remain non-evaluable; no independent-row fallback is used.
+Missing inherited transmission-profile mapping is explicitly non-evaluable and
+never filters the primary cohort. Ablations support descriptive predictive
+comparisons only, without causal, operational or champion claims.
+
+## Validation status
+
+A development Kedro CLI run completed all 12 generated nodes, including native
+publication and temporary MLflow. Focused automated E2E, replay, admission and
+review evidence is being completed in PLAN_056. Phase 2 remains open until the
+human scientific decision, final independent review and final-head CI pass.
+
+## Concrete pending human freeze proposal
+
+The recommended bundled decision is:
+
+1. Preserve the complete Phase 1 core and authorize preparation of a **separate
+   additive national evaluation/excess/comparator/monitored-calendar annex**.
+   Do not change historical V2 labels or roles. Publish new annex identities
+   separately, with exact regional correspondence, without any real fit.
+2. Retain the DESIGN core: 80 trees, depth 2, learning rate 0.05, histogram
+   trees, seed 1729, one CPU thread and native missing values. Freeze all other
+   explicit settings in the [training contract](training-contract.json), including
+   max-bin 128, minimum-child-weight 5, L1 0/L2 1, full row/column sampling,
+   base-score 0.5 and no HPO.
+3. Use V2's pooled regularized intercept, penalty 1, separately for each
+   admitted cell/horizon. Minimum one observation per class is an admission
+   guard, not a robustness claim. JSON-only Phase 1 metadata show the smallest
+   calibration supports are 45 positives and 256 negatives; no evaluation
+   scores were inspected to propose the method.
+4. Freeze experimental budget **B=1 false onset alert per eligible
+   municipality-year**, with eligible selection rows/12, floor rounding,
+   whole-score ties and the explicit lexicographic policy in the contract.
+   No-alert uses a null threshold; no selection positives is non-evaluable.
+   This carries the V2 matched-cohort experimental convention into the new
+   comparison, subject to approval; it is not measured operational capacity.
+   The academic five-percentage-point excess-FAR margin is a different rule.
+5. Use paired municipality and episode-preserving connected calendar-year block
+   resampling: 1,000 draws, 95% intervals, seed 1729, at least two municipalities
+   and two connected temporal blocks, at least 80% valid draws. Keep 2024
+   separate. Episode connections may collapse all development years to one
+   block; then uncertainty is explicitly non-evaluable, with no IID fallback.
+   Report descriptive estimates only; no formal superiority/materiality,
+   champion or deployment conclusion is authorized.
+
+This decision would freeze design choices and permit the bounded annex
+preparation only. Phase 3 and every real model/calibrator fit or scientific
+prediction still require separate authorization. Without the additive annex
+choice, the national-evaluation acceptance criterion cannot be met by the
+original regional-only evaluation bundle.

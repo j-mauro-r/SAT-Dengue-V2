@@ -9,16 +9,19 @@
 | Execution | `not_authorized` |
 | Protocol | `draft`, not frozen |
 | Real training / calibration performed for this experiment | **0 / 0** |
-| Scientific executions / MLflow writes for this experiment | **0 / 0** |
+| Real scientific executions / permanent MLflow writes | **0 / 0** |
 | G5 / champion | `NOT_APPROVED` / `not_selected` |
 
 Mauricio approved [proposal A](PHASE1-AUTHORIZATION.md) for consolidated-data
 retrospective Phase 1 preparation on the same branch and PR #78. Historical V2
 residence/INI_SIN labels, approved calendar assumptions, H5/cohorts/roles, temporal
 controls,2025 exclusion and separate consumed2024 stress remain fixed. The
-[handoff](PHASE1.md) owns actual matrices, reproduction and gates. No model fit,
-calibration, threshold/HPO, predictive execution, permanent tracking, Phase2/3 or
-merge is authorized. The protocol remains draft. Historical release/value vintages
+[handoff](PHASE1.md) owns actual matrices, reproduction and gates. Mauricio
+subsequently authorized [Phase 2 implementation](PHASE2.md) and generated-only
+validation under PLAN_056. The [training contract](training-contract.json) owns
+the concrete pending bundled freeze; it does not change the original Phase 1
+scope. Real model/calibrator fits, scientific predictions, permanent tracking,
+Phase 3 and merge remain unauthorized. The protocol remains draft. Historical release/value vintages
 and operational E(T) availability remain unproved; no PIT or deployment inference
 may follow. The [reconciliation](SCIENTIFIC-RECONCILIATION.md) disproves aliasing
 new-mart occurrence fields as historical residence counts.

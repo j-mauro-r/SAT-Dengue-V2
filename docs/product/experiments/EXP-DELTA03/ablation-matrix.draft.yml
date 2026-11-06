@@ -191,3 +191,12 @@ planning_counts:
   counts_status: provisional later-phase planning only;recalculate including partial water2022 and class-support
     rules before authorization;zero models/calibrators/runs created
   basis: Historical initial estimate using water2020/2021 only;not108 prepared views or an execution budget
+
+phase2_implementation:
+  owner: PHASE2.md
+  training_contract: training-contract.json
+  status: generated implementation; scientific freeze pending
+  phase3_authorized: false
+  training_authorized: false
+  national_evaluation: separate additive annex decision pending; original regional roles unchanged
+  derived_counts: computed from verified matrices.json; never copied into execution configuration

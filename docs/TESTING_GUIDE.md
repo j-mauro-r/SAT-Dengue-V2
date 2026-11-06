@@ -1340,3 +1340,24 @@ verification, exact frozen G0/R0 evaluation pairing, actual G1 execution and
 byte-identical prediction/metric replay. Do not rerun V1 fits for reproduction.
 Keep the inherited data-diagnostics architecture test and local legacy private
 preservation failure explicit; do not modify tests or old baselines to hide them.
+
+
+### EXP-DELTA03 Phase 2 generated learning surface
+
+For the Phase 2 training adapters, pure learning/evaluation modules, execution
+reservation, isolated tracking and graph/configuration changes, run the relevant
+`tests/unit/test_exp_delta03_{training_contract,training_model,learning,evaluation,execution,tracking}.py`
+files. These use generated fixtures or hash/JSON metadata admission only.
+`tests/integration/test_exp_delta03_training_integration.py` owns the complete
+synthetic Kedro flow, exact native replay without duplicate fits/runs, annex
+admission failures and unauthorized real-graph refusal. It never loads real
+matrix rows. Its generated models and temporary MLflow stay under
+`tmp/exp-delta03-phase2/synthetic`.
+
+Run modified-file Ruff/format/mypy and the affected configuration/bootstrap
+checks, including `tests/integration/base_bootstrap.py`. Preserve Phase 1 generated
+regressions in `test_exp_delta03_preparation_integration.py`; the historical
+zero-fit synthetic probe is tested by node selection, while the new integration
+test owns the complete generated learning graph. GitHub owns the full suite.
+No real matrix reads for fitting, real scientific adjustments/predictions or
+permanent MLflow writes are part of Phase 2 tests.

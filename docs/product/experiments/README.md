@@ -8,7 +8,10 @@ it does not prove operational PIT availability or deployment. The design/protoco
 and modeling matrix remain draft; predictive execution is not_authorized.
 Water uses genuine observations through2021 only;2024 stress stays separate and
 2025 excluded. Zero training/calibration/permanent MLflow; G5 NOT_APPROVED,
-champion not_selected. Phase2 and merge remain unauthorized.
+champion not_selected. [Phase 2 implementation](EXP-DELTA03/PHASE2.md) is now
+explicitly authorized for generated-only validation under PLAN_056. Scientific
+freeze and the additive national/outcome-source decision remain pending. Real
+execution, Phase 3, permanent MLflow and merge remain unauthorized.
 
 [EXP-DELTA02-R1 — fixed-MGN spatial candidate `NOT_SUPPORTED`](EXP-DELTA02-R1/README.md)
 is the independently authorized revision that treats DANE MGN 2018 as one

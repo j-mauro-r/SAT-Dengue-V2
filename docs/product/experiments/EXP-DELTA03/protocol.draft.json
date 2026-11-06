@@ -698,5 +698,15 @@
   "retrospective_source_ledger": {
     "path": "docs/product/experiments/EXP-DELTA03/RETROSPECTIVE-SOURCES.json",
     "sha256": "a2a62b205027155b9cce38fcb426f225c8ca6ba4ca63d00e2cb400fa40f5ba37"
-  }
+  },
+  "phase2_implementation": {
+    "status": "IMPLEMENTED_PENDING_SCIENTIFIC_FREEZE_AND_FINAL_VALIDATION",
+    "authority": "Mauricio explicit Phase2 implementation request, preserved in PLAN_056 HUMAN_REQUEST.md",
+    "scope": "generated-only fitting/calibration/prediction; isolated temporary tracking; original Phase1 bundle unchanged",
+    "owner": "docs/product/experiments/EXP-DELTA03/PHASE2.md",
+    "training_contract": "docs/product/experiments/EXP-DELTA03/training-contract.json",
+    "national_evaluation": "PENDING separate additive annex decision; original regional cohorts unchanged"
+  },
+  "phase3_authorized": false,
+  "training_authorized": false
 }
