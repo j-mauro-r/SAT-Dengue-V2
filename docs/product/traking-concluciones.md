@@ -2158,3 +2158,14 @@ into the input identity. This agent analysis is not independent human model
 acceptance. PLAN057 Final Review/final-head CI and Mauricio's merge decision remain
 separate. PLAN_056 remains 7/8; no prior acceptance is fabricated. Any later
 experiment requires a new bounded, human-approved question and evidence design.
+
+### National V4 extension authorization — 2026-11-07
+
+Mauricio explicitly authorized a reproducible national V4 through 2025-12 from
+existing V2 sources and scientific definitions, excluding the external V3 and
+EXP-DELTA03 expanded mart. Presence of 2025 means
+`consumed_retrospective_evidence`, never permission to train, fit preparation,
+select, calibrate or choose thresholds/champions on that year. This is a data
+construction authorization; G5 remains NOT_APPROVED and no model or operational
+release is approved. The [national table owner](../data/canonical-national-table.md#national-v4-through-december-2025)
+owns construction, explicit target maturity changes, parity and license limits.
