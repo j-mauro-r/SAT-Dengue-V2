@@ -165,3 +165,42 @@ review**. Existing limits on official extraction completeness, unresolved
 geography, historical territorial applicability, pre-window H5 asymmetry and
 operational point-in-time availability remain in the manifest. No training,
 calibration, model selection or permanent MLflow write is part of this route.
+
+### V4 local acceptance — 2026-11-07
+
+PASS: actual Kedro publication from clean implementation commit
+`e5fc87ae79efa87e8526643626ecb494d1dcbb76`, followed by an independent raw-source reconstruction.
+All five deterministic payloads (CSV, effective contract, column schema, parity
+and long-form temporal roles) reproduced byte for byte. All source/reference
+hashes were reverified; manifest consistency, atomic publication and refusal to
+replace an existing identity passed. Call-level guards observed zero forbidden
+fitting/tracking calls. Generation timestamps/provenance and manifest bundle
+identities are execution-specific; the table hash is deterministic.
+
+Exact local CSV:
+
+`data/processed/canonical_model_table_national_v4/df509492e3e8205e1b9435641469da4e881c82246ffe8338120078db79d818e0/canonical_model_table_national_v4.csv`
+
+CSV SHA-256: `eb5f4e960a323cbaa1c881d6a4c09428520bb8471d85d655b73efc5b0b488207`.
+Size: 151,522,677 bytes; 196,350 rows × 95 columns;
+1,122 municipalities and 175 complete monthly origins, 2011-06–2025-12.
+
+| Horizon | Mature targets | Outside panel | Evaluable excess labels | Insufficient H5 |
+|---|---:|---:|---:|---:|
+| T+1 | 195,228 | 1,122 | 133,514 | 61,714 |
+| T+2 | 194,106 | 2,244 | 133,438 | 60,668 |
+
+National original-window parity covers all 182,886 keys and 88 columns; regional
+Meta/Tolima parity covers all 13,300 common keys and 70 shared columns. The
+explicit national 2025 maturity and regional January 2026 exclusion differences
+are detailed in `parity.json`; unexplained material differences: zero. Maximum
+climate serialization difference: 3.410605131648481e-13, below 1e-10. All 13,464
+2025 origin rows have the consumed retrospective role; counting consumed origins
+**or** targets yields 14,586 T+1 and 15,708 T+2 role rows.
+
+Focused acceptance: 119 unit/contract tests plus the required private integration
+test passed; modified-file Ruff, format and mypy passed. Repository-only and
+current-plan DWP conformance are separate from the two pre-existing historical
+all-plan failures. Required remote CI and Mauricio's merge decision remain
+separate integration gates. Real model fits: zero; MLflow writes: zero; no
+Hugging Face upload or merge.
