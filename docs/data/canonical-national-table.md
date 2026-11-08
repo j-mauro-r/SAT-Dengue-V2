@@ -86,3 +86,121 @@ G1 protocol; the original EXP-BETA protocols and findings remain unchanged.
 The [2026-11-02 real local acceptance](canonical-national-validation.md) records
 the explicit final publication, exact parity scope, technical eligibility and
 reproduction/preservation evidence.
+
+## National V4 through December 2025
+
+`canonical_model_table_national_v4` is the additive national source intended for
+SAT-Dengue V3 and a future `sat-dengue-v3-through-2025-v1` release. The external
+experimental V3 added variables without demonstrated value and is excluded from
+this construction. No external V3 or EXP-DELTA03 expanded mart is read.
+
+Mauricio's 2026-11-07 request authorizes this bounded extension: the same 1,122
+national V1 territories, 175 monthly origins from 2011-06 through 2025-12, and
+196,350 unique municipality-month rows. All original national V1 columns retain
+their names, order, units and physical types; seven temporal control columns are
+appended. No new predictor family or methodological change is introduced.
+
+V4 reconstructs residence/`INI_SIN` notification aggregates from the two pinned
+raw SIVIGILA CSVs. It reuses V2 admission, no-deduplication, zero-calendar, climate,
+H5, excess and direct-onset functions. The approved climate union includes the
+pinned January 2020 national gap supplement; CHIRPS
+`UCSB-CHG/CHIRPS/DAILY` and `ECMWF/ERA5_LAND/DAILY_AGGR` are known collection
+references, not verified immutable original product vintages. The final national
+V1 publication fixes territory identity. Regional V1 contributes only approved
+pre-window H5 context for its original 76 municipalities and serves as an
+independent Meta/Tolima parity reference; its later rows are never copied.
+
+```bash
+KEDRO_DISABLE_TELEMETRY=1 .venv/bin/kedro run \
+  --pipeline=canonical_model_table_national_v4 \
+  --params=profile=canonical_model_table_national_v4,tracking=disabled
+```
+
+The independent graph is excluded from default/replay and all training routes.
+It admits explicit content identities, reconstructs raw aggregates, validates
+both parities and only then publishes atomically under
+`data/processed/canonical_model_table_national_v4/<bundle_sha256>/`.
+An existing identity is never replaced. The CSV, schema, effective inherited
+contract, long-form `temporal_roles.csv`, parity and provenance have individual
+SHA-256 records in `manifest.json`. Generation time, Git revision and actual code
+hashes are recorded separately from the deterministic table bytes.
+
+### Maturity and learned-role boundaries
+
+The panel deliberately ends in 2025-12 even though the raw snapshot contains
+some January 2026 notifications. T+1 targets run 2011-07–2026-01; T+2 targets run
+2011-08–2026-02. T+1 can mature through origin 2025-11, T+2 through 2025-10.
+Targets outside the panel retain null excess/onset labels and future counts,
+false evaluability and stable `target_outside_panel` status. A mature target can
+still have `insufficient_history`; maturity and evaluability are distinct.
+
+Origin and horizon-specific scientific roles mark 2025 origins **or targets**
+`consumed_retrospective_evidence`. Historical roles describe evidence and grant
+no training authorization. The shared Kedro preparation boundary invokes
+`require_learnable`: it rejects 2025 or later origins/targets for training,
+preparer fitting, learned imputation/scaling, feature/hyperparameter selection,
+calibration, threshold selection and champion selection. Unknown chronology,
+roles or maturity metadata fail closed. Existing frozen training contracts and
+source pins stay unchanged; V4 is not wired into a fitting graph.
+
+### Parity interpretation and redistribution
+
+All national V1 keys and columns are compared after independent reconstruction
+under V1's original end date, including physical dtypes and missingness. Extended
+V4 common rows also match except for explicitly enumerated target-dependent
+fields whose 2025 outcomes were outside V1's panel. Those necessary maturity
+changes are reported by column, never silently normalized. Origin-safe H5
+features do not change. Regional Meta/Tolima comparison uses every shared column
+and key over the common period, with existing numeric-container differences
+reported. Regional V1 extends through 2026-01: its January 2026 labels differ
+for 76 municipalities at T+1 origin 2025-12 and T+2 origin 2025-11. V4 retains
+null labels for these deliberately excluded targets; every affected column and
+origin is explicitly classified as a necessary coverage incompatibility. Only climate serialization differences at or below the already
+approved absolute tolerance 1e-10 are accepted; other material differences block
+publication.
+
+All CSVs remain private and ignored. Neither aggregation nor this request grants
+redistribution rights. Hugging Face publication remains **pending license
+review**. Existing limits on official extraction completeness, unresolved
+geography, historical territorial applicability, pre-window H5 asymmetry and
+operational point-in-time availability remain in the manifest. No training,
+calibration, model selection or permanent MLflow write is part of this route.
+
+### V4 local acceptance — 2026-11-07
+
+PASS: actual Kedro publication from clean implementation commit
+`e5fc87ae79efa87e8526643626ecb494d1dcbb76`, followed by an independent raw-source reconstruction.
+All five deterministic payloads (CSV, effective contract, column schema, parity
+and long-form temporal roles) reproduced byte for byte. All source/reference
+hashes were reverified; manifest consistency, atomic publication and refusal to
+replace an existing identity passed. Call-level guards observed zero forbidden
+fitting/tracking calls. Generation timestamps/provenance and manifest bundle
+identities are execution-specific; the table hash is deterministic.
+
+Exact local CSV:
+
+`data/processed/canonical_model_table_national_v4/df509492e3e8205e1b9435641469da4e881c82246ffe8338120078db79d818e0/canonical_model_table_national_v4.csv`
+
+CSV SHA-256: `eb5f4e960a323cbaa1c881d6a4c09428520bb8471d85d655b73efc5b0b488207`.
+Size: 151,522,677 bytes; 196,350 rows × 95 columns;
+1,122 municipalities and 175 complete monthly origins, 2011-06–2025-12.
+
+| Horizon | Mature targets | Outside panel | Evaluable excess labels | Insufficient H5 |
+|---|---:|---:|---:|---:|
+| T+1 | 195,228 | 1,122 | 133,514 | 61,714 |
+| T+2 | 194,106 | 2,244 | 133,438 | 60,668 |
+
+National original-window parity covers all 182,886 keys and 88 columns; regional
+Meta/Tolima parity covers all 13,300 common keys and 70 shared columns. The
+explicit national 2025 maturity and regional January 2026 exclusion differences
+are detailed in `parity.json`; unexplained material differences: zero. Maximum
+climate serialization difference: 3.410605131648481e-13, below 1e-10. All 13,464
+2025 origin rows have the consumed retrospective role; counting consumed origins
+**or** targets yields 14,586 T+1 and 15,708 T+2 role rows.
+
+Focused acceptance: 119 unit/contract tests plus the required private integration
+test passed; modified-file Ruff, format and mypy passed. Repository-only and
+current-plan DWP conformance are separate from the two pre-existing historical
+all-plan failures. Required remote CI and Mauricio's merge decision remain
+separate integration gates. Real model fits: zero; MLflow writes: zero; no
+Hugging Face upload or merge.

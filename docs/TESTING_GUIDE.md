@@ -1388,3 +1388,42 @@ the same input validators without ExecutionStore, fitting or tracking. Exact
 receipts and the manual-only command are owned by EXP-DELTA03 PHASE3.md and its
 local handoff. GitHub owns integral validation. After Mauricio's manual execution,
 validate native/tracking artifacts; do not rerun training to produce evidence.
+
+## National V4 construction through 2025
+
+For `canonical/national_v4.py`, `datasets/national_v4.py`,
+`pipelines/national_v4/`, learned-role admission and their catalog/registry/profile
+changes, use the focused gate:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=1 .venv/bin/python -m pytest tests/unit/test_national_v4.py tests/unit/test_national_canonical.py tests/unit/test_national_diagnostics.py tests/unit/test_training_temporal.py tests/contracts/test_kedro_configuration.py -q
+```
+
+Run Ruff, format and mypy only on modified Python files. V4 fixtures cover full
+monthly keys, counts, temporal maturity, null future labels, every learned-role
+refusal, national/regional parity failures, byte-identical payloads, manifest
+consistency and atomic no-overwrite/failure cleanup. They perform no scientific
+fits, calibration or tracking. The separate private acceptance uses the actual
+Kedro V4 graph from the [single construction owner](data/canonical-national-table.md),
+verifies both fixed V1 publications and every source before/after, checks all
+common columns and dtypes, compares a fresh raw reconstruction's table bytes,
+reads back all publication hashes and refuses overwrite. Report necessary 2025
+boundary maturity changes explicitly. Do not run notebooks, training, replay,
+permanent MLflow writes, dashboard validation or upload data. GitHub owns full
+suite validation. Repo-only, current-plan and historical all-plan conformance
+are separate results.
+
+The maintained private gate is explicit and fails on missing or changed inputs:
+
+```bash
+KEDRO_DISABLE_TELEMETRY=1 .venv/bin/python -m pytest tests/integration/test_national_v4_private.py --require-migration-evidence -q
+```
+
+This selected acceptance test runs the actual Kedro graph into the V4 production
+root, independently reconstructs the raw sources again, compares all five
+deterministic payloads byte for byte, and writes its local aggregate receipt to
+`tmp/canonical-v4/private-acceptance.json`. Generation timestamps/provenance and
+manifest identities can differ between generations; the table, effective
+contract, columns, parity and temporal rows must match exactly. Call-level guards
+refuse fitting and MLflow writes. Default CI deselects this private construction;
+this does not substitute synthetic fixtures for required real parity.

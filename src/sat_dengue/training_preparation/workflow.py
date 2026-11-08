@@ -23,6 +23,7 @@ from .preprocessing import (
     runtime_versions,
     transform_predictors,
 )
+from .roles import require_learnable
 from .serialization import bytes_record, json_bytes, serialize_table
 from .temporal import select_window
 
@@ -104,6 +105,9 @@ def validate_partition(
     split: str,
 ) -> None:
     """Reject role/order/alignment violations and unavailable labels or origins."""
+    require_learnable(
+        controls, horizon, "preparer_fit" if split == "train" else "hyperparameter_selection"
+    )
     if (
         split not in ("train", "validation")
         or horizon not in (1, 2)

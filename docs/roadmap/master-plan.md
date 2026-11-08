@@ -279,6 +279,14 @@ is one national table; G1 fitting and all national BETA extensions remain future
 bounded work. Integration requires Mauricio's review and required CI, without
 automatic merge. Existing scientific gates and BETA publications are preserved.
 
+On 2026-11-07 Mauricio authorized the bounded national V4 extension through
+2025-12 on `feature/canonical-national-v4-through-2025`. The same
+[construction owner](../data/canonical-national-table.md#national-v4-through-december-2025)
+owns sources, maturity, explicit boundary parity and publication evidence. This
+authorizes data construction only; 2025 stays consumed retrospective evidence,
+all learned roles remain prohibited for that year, and Hugging Face licensing
+review and Mauricio's merge decision remain pending.
+
 ## Bounded EXP-BETA01 V2 national transfer
 
 The [V2 owner](../product/experiments/EXP-BETA01-V2/README.md) records Mauricio's

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Protocol
 
 import pandas as pd  # type: ignore[import-untyped]
 
@@ -68,8 +68,18 @@ class AnalysisConfig:
             raise ValueError("Keep diagnostic outputs inside the dedicated interim directory")
 
 
+class CalendarWindow(Protocol):
+    """Bounds shared by historical diagnostics and explicitly authorized new panels."""
+
+    @property
+    def start_month(self) -> str: ...
+
+    @property
+    def end_month(self) -> str: ...
+
+
 def classify_notifications(
-    raw: pd.DataFrame, catalog: pd.DataFrame, expected_event: str, config: AnalysisConfig
+    raw: pd.DataFrame, catalog: pd.DataFrame, expected_event: str, config: CalendarWindow
 ) -> pd.DataFrame:
     """Classify rows without changing raw fields or removing duplicate notifications.
 
@@ -125,7 +135,7 @@ def classify_notifications(
 def build_review_calendar(
     catalog: pd.DataFrame,
     monthly: pd.DataFrame,
-    config: AnalysisConfig,
+    config: CalendarWindow,
     located_rows: pd.DataFrame,
 ) -> pd.DataFrame:
     """Complete the fixed territorial calendar with epidemiological zeros only.
